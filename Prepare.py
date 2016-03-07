@@ -6,4 +6,4 @@ if not os.path.isdir('Bin'):
 if not os.path.isdir('Temp'):
 	os.mkdir('Temp')
 
-shutil.copyfile('ModernGL.h', 'Bin\\ModernGL.h')
+shutil.copyfile('Source\\ModernGL.h', 'Bin\\ModernGL.h')

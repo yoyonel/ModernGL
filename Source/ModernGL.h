@@ -4,14 +4,19 @@ enum EnableEnum {
 	ENABLE_BLEND = 0x01,
 	ENABLE_CULL_FACE = 0x02,
 	ENABLE_DEPTH_TEST = 0x04,
-	ENABLE_STENCIL_TEST = 0x08,
-	ENABLE_MULTISAMPLE = 0x10,
+	ENABLE_MULTISAMPLE = 0x08,
 };
 
 enum FramebufferEnum {
 	FBO_MULTISAMPLE = 0x01,
 	FBO_COLOR_BUFFERED = 0x02,
 	FBO_DEPTH_BUFFERED = 0x04,
+};
+
+enum TextureFilterEnum {
+	TEXTURE_PIXELATED,
+	TEXTURE_FILTERED,
+	TEXTURE_MIPMAPPED,
 };
 
 struct Info {
@@ -47,8 +52,6 @@ extern "C" {
 	void DisableDepthTest();
 	void EnableMultisample();
 	void DisableMultisample();
-	void EnableStencilTest();
-	void DisableStencilTest();
 
 	void EnableOnly(unsigned mask);
 
@@ -78,11 +81,14 @@ extern "C" {
 	void Uniform2i(unsigned location, int v0, int v1);
 	void Uniform3i(unsigned location, int v0, int v1, int v2);
 	void Uniform4i(unsigned location, int v0, int v1, int v2, int v3);
+	void UniformMatrix(unsigned location, const float * matrix);
 	void UniformBlock(unsigned location, unsigned buffer);
 
-	unsigned NewTexture2D(int width, int height, const void * data, int components = 3);
-	void DeleteTexture2D(unsigned texture);
-	void UseTexture2D(unsigned texture, unsigned location = 0);
+	unsigned NewTexture(int width, int height, const void * data, int components = 3);
+	void SetTextureFilter(unsigned texture, unsigned mode);
+	void DeleteTexture(unsigned texture);
+	void UseTexture(unsigned texture, unsigned location = 0);
+	void BuildMipmap(unsigned texture, int base = 0, int max = 1000);
 
 	unsigned NewVertexArray();
 	void DeleteVertexArray(unsigned array);

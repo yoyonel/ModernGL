@@ -96,7 +96,8 @@ namespace Font {
 		float sh = -(float)DroidSansMono.glyph_height;
 		Uniform2f(size, sw, sh);
 
-		tex = NewTexture2D(DroidSansMono.texture_width, DroidSansMono.texture_height, DroidSansMono.texture_pixels, 1);
+		tex = NewTexture(DroidSansMono.texture_width, DroidSansMono.texture_height, DroidSansMono.texture_pixels, 1);
+		SetTextureFilter(tex, TEXTURE_PIXELATED);
 
 		return true;
 	}
@@ -109,7 +110,6 @@ Info GetInfo() {
 
 	GL::glGetIntegerv(GL::GL_MAJOR_VERSION, &major);
 	GL::glGetIntegerv(GL::GL_MINOR_VERSION, &minor);
-	// GL::glGetIntegerv(GL::GL_MAX_INTEGER_SAMPLES, &samples);
 	GL::glGetIntegerv(GL::GL_MAX_SAMPLES, &samples);
 	const char * vendor = (const char *)GL::glGetString(GL::GL_VENDOR);
 	const char * renderer = (const char *)GL::glGetString(GL::GL_RENDERER);
@@ -142,7 +142,6 @@ void Clear(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
 	GL::glClearColor(r * c, g * c, b * c, a * c);
 	unsigned GL_ALL_BUFFER_BIT = 0;
 	GL_ALL_BUFFER_BIT |= GL::GL_DEPTH_BUFFER_BIT;
-	GL_ALL_BUFFER_BIT |= GL::GL_STENCIL_BUFFER_BIT;
 	GL_ALL_BUFFER_BIT |= GL::GL_COLOR_BUFFER_BIT;
 	GL::glClear(GL_ALL_BUFFER_BIT);
 }
@@ -159,7 +158,6 @@ void EnableOnly(unsigned mask) {
 	(mask & ENABLE_BLEND ? GL::glEnable : GL::glDisable)(GL::GL_BLEND);
 	(mask & ENABLE_CULL_FACE ? GL::glEnable : GL::glDisable)(GL::GL_CULL_FACE);
 	(mask & ENABLE_DEPTH_TEST ? GL::glEnable : GL::glDisable)(GL::GL_DEPTH_TEST);
-	(mask & ENABLE_STENCIL_TEST ? GL::glEnable : GL::glDisable)(GL::GL_STENCIL_TEST);
 	(mask & ENABLE_MULTISAMPLE ? GL::glEnable : GL::glDisable)(GL::GL_MULTISAMPLE);
 }
 
@@ -193,14 +191,6 @@ void EnableMultisample() {
 
 void DisableMultisample() {
 	GL::glDisable(GL::GL_MULTISAMPLE);
-}
-
-void EnableStencilTest() {
-	GL::glEnable(GL::GL_STENCIL_TEST);
-}
-
-void DisableStencilTest() {
-	GL::glDisable(GL::GL_STENCIL_TEST);
 }
 
 bool InitializeModernGL() {
@@ -349,11 +339,15 @@ void Uniform4i(unsigned location, int v0, int v1, int v2, int v3) {
 	GL::glUniform4i(location, v0, v1, v2, v3);
 }
 
+void UniformMatrix(unsigned location, const float * matrix) {
+	GL::glUniformMatrix4fv(location, 1, GL::GL_FALSE, matrix);
+}
+
 void UniformBlock(unsigned location, unsigned buffer) {
 	GL::glBindBufferBase(GL::GL_UNIFORM_BUFFER, location, buffer);
 }
 
-unsigned NewTexture2D(int width, int height, const void * data, int components) {
+unsigned NewTexture(int width, int height, const void * data, int components) {
 	const int formats[] = {0, GL::GL_RED, GL::GL_RG, GL::GL_RGB, GL::GL_RGBA};
 	int format = formats[components];
 
@@ -365,21 +359,54 @@ unsigned NewTexture2D(int width, int height, const void * data, int components) 
 	}
 
 	GL::GLuint texture = 0;
+	GL::glActiveTexture(GL::GL_TEXTURE0);
 	GL::glGenTextures(1, &texture);
 	GL::glBindTexture(GL::GL_TEXTURE_2D, texture);
-	GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_MIN_FILTER, GL::GL_NEAREST);
-	GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_MAG_FILTER, GL::GL_NEAREST);
+	GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_MIN_FILTER, GL::GL_LINEAR);
+	GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_MAG_FILTER, GL::GL_LINEAR);
 	GL::glTexImage2D(GL::GL_TEXTURE_2D, 0, format, width, height, 0, format, GL::GL_UNSIGNED_BYTE, data);
 	return texture;
 }
 
-void DeleteTexture2D(unsigned texture) {
+void DeleteTexture(unsigned texture) {
 	GL::glDeleteTextures(1, &texture);
 }
 
-void UseTexture2D(unsigned texture, unsigned location) {
+void SetTextureFilter(unsigned texture, unsigned mode) {
+	GL::glActiveTexture(GL::GL_TEXTURE0);
+	GL::glBindTexture(GL::GL_TEXTURE_2D, texture);
+	switch (mode) {
+		case TEXTURE_PIXELATED: {
+			GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_MIN_FILTER, GL::GL_NEAREST);
+			GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_MAG_FILTER, GL::GL_NEAREST);
+			break;
+		}
+		case TEXTURE_FILTERED: {
+			GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_MIN_FILTER, GL::GL_LINEAR);
+			GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_MAG_FILTER, GL::GL_LINEAR);
+			break;
+		}
+		case TEXTURE_MIPMAPPED: {
+			GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_MIN_FILTER, GL::GL_LINEAR_MIPMAP_LINEAR);
+			GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_MAG_FILTER, GL::GL_LINEAR);
+			break;
+		}
+	}
+}
+
+void UseTexture(unsigned texture, unsigned location) {
 	GL::glActiveTexture(GL::GL_TEXTURE0 + location);
 	GL::glBindTexture(GL::GL_TEXTURE_2D, texture);
+}
+
+void BuildMipmap(unsigned texture, int base, int max) {
+	GL::glActiveTexture(GL::GL_TEXTURE0);
+	GL::glBindTexture(GL::GL_TEXTURE_2D, texture);
+	GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_BASE_LEVEL, base);
+	GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_MAX_LEVEL, max);
+	GL::glGenerateMipmap(GL::GL_TEXTURE_2D);
+	GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_MIN_FILTER, GL::GL_LINEAR_MIPMAP_LINEAR);
+	GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_MAG_FILTER, GL::GL_LINEAR);
 }
 
 unsigned NewVertexArray() {
@@ -501,57 +528,57 @@ void RenderTrianglesAdjacency(int count, int first) {
 }
 
 void RenderIndexedTriangles(int count, int first) {
-	const void * ptr = (const void *)(first * 4);
+	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElements(GL::GL_TRIANGLES, count, GL::GL_UNSIGNED_INT, ptr);
 }
 
 void RenderIndexedTriangleStrip(int count, int first) {
-	const void * ptr = (const void *)(first * 4);
+	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElements(GL::GL_TRIANGLE_STRIP, count, GL::GL_UNSIGNED_INT, ptr);
 }
 
 void RenderIndexedTriangleFan(int count, int first) {
-	const void * ptr = (const void *)(first * 4);
+	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElements(GL::GL_TRIANGLE_FAN, count, GL::GL_UNSIGNED_INT, ptr);
 }
 
 void RenderIndexedLines(int count, int first) {
-	const void * ptr = (const void *)(first * 4);
+	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElements(GL::GL_LINES, count, GL::GL_UNSIGNED_INT, ptr);
 }
 
 void RenderIndexedLineStrip(int count, int first) {
-	const void * ptr = (const void *)(first * 4);
+	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElements(GL::GL_LINE_STRIP, count, GL::GL_UNSIGNED_INT, ptr);
 }
 
 void RenderIndexedLineLoop(int count, int first) {
-	const void * ptr = (const void *)(first * 4);
+	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElements(GL::GL_LINE_LOOP, count, GL::GL_UNSIGNED_INT, ptr);
 }
 
 void RenderIndexedPoints(int count, int first) {
-	const void * ptr = (const void *)(first * 4);
+	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElements(GL::GL_POINTS, count, GL::GL_UNSIGNED_INT, ptr);
 }
 
 void RenderIndexedLineStripAdjacency(int count, int first) {
-	const void * ptr = (const void *)(first * 4);
+	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElements(GL::GL_LINE_STRIP_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr);
 }
 
 void RenderIndexedLinesAdjacency(int count, int first) {
-	const void * ptr = (const void *)(first * 4);
+	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElements(GL::GL_LINES_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr);
 }
 
 void RenderIndexedTriangleStripAdjacency(int count, int first) {
-	const void * ptr = (const void *)(first * 4);
+	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElements(GL::GL_TRIANGLE_STRIP_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr);
 }
 
 void RenderIndexedTrianglesAdjacency(int count, int first) {
-	const void * ptr = (const void *)(first * 4);
+	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElements(GL::GL_TRIANGLES_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr);
 }
 
@@ -642,8 +669,8 @@ Framebuffer * NewFramebuffer(int width, int height, unsigned mask) {
 	} else {
 		GL::glGenTextures(1, &color);
 		GL::glBindTexture(target, color);
-		GL::glTexParameteri(target, GL::GL_TEXTURE_MIN_FILTER, GL::GL_NEAREST);
-		GL::glTexParameteri(target, GL::GL_TEXTURE_MAG_FILTER, GL::GL_NEAREST);
+		GL::glTexParameteri(target, GL::GL_TEXTURE_MIN_FILTER, GL::GL_LINEAR);
+		GL::glTexParameteri(target, GL::GL_TEXTURE_MAG_FILTER, GL::GL_LINEAR);
 		GL::glTexImage2D(target, 0, GL::GL_RGB, width, height, 0, GL::GL_RGB, GL::GL_FLOAT, 0);
 		GL::glFramebufferTexture2D(GL::GL_FRAMEBUFFER, GL::GL_COLOR_ATTACHMENT0, target, color, 0);
 	}
@@ -651,19 +678,19 @@ Framebuffer * NewFramebuffer(int width, int height, unsigned mask) {
 	if (mask & FBO_DEPTH_BUFFERED) {
 		GL::glGenRenderbuffers(1, &depth);
 		GL::glBindRenderbuffer(GL::GL_RENDERBUFFER, depth);
-		GL::glRenderbufferStorage(GL::GL_RENDERBUFFER, GL::GL_DEPTH24_STENCIL8, width, height);
+		GL::glRenderbufferStorage(GL::GL_RENDERBUFFER, GL::GL_DEPTH_COMPONENT, width, height);
 		if (mask & FBO_MULTISAMPLE) {
-			GL::glRenderbufferStorageMultisample(GL::GL_RENDERBUFFER, samples, GL::GL_DEPTH24_STENCIL8, width, height);
+			GL::glRenderbufferStorageMultisample(GL::GL_RENDERBUFFER, samples, GL::GL_DEPTH_COMPONENT, width, height);
 		} else {
-			GL::glFramebufferRenderbuffer(GL::GL_FRAMEBUFFER, GL::GL_DEPTH_STENCIL_ATTACHMENT, GL::GL_RENDERBUFFER, depth);
+			GL::glFramebufferRenderbuffer(GL::GL_FRAMEBUFFER, GL::GL_DEPTH_ATTACHMENT, GL::GL_RENDERBUFFER, depth);
 		}
 	} else {
 		GL::glGenTextures(1, &depth);
 		GL::glBindTexture(target, depth);
-		GL::glTexParameteri(target, GL::GL_TEXTURE_MIN_FILTER, GL::GL_NEAREST);
-		GL::glTexParameteri(target, GL::GL_TEXTURE_MAG_FILTER, GL::GL_NEAREST);
-		GL::glTexImage2D(target, 0, GL::GL_DEPTH24_STENCIL8, width, height, 0, GL::GL_DEPTH_STENCIL, GL::GL_UNSIGNED_INT_24_8, 0);
-		GL::glFramebufferTexture2D(GL::GL_FRAMEBUFFER, GL::GL_DEPTH_STENCIL_ATTACHMENT, target, depth, 0);
+		GL::glTexParameteri(target, GL::GL_TEXTURE_MIN_FILTER, GL::GL_LINEAR);
+		GL::glTexParameteri(target, GL::GL_TEXTURE_MAG_FILTER, GL::GL_LINEAR);
+		GL::glTexImage2D(target, 0, GL::GL_DEPTH_COMPONENT, width, height, 0, GL::GL_DEPTH_COMPONENT, GL::GL_FLOAT, 0);
+		GL::glFramebufferTexture2D(GL::GL_FRAMEBUFFER, GL::GL_DEPTH_ATTACHMENT, target, depth, 0);
 	}
 
 	return new Framebuffer {
@@ -732,7 +759,7 @@ void DebugFontPrint(float x, float y, const char * fmt, ...) {
 
 	EnableOnly(ENABLE_BLEND);
 	UseProgram(Font::prog);
-	UseTexture2D(Font::tex);
+	UseTexture(Font::tex);
 	UseVertexArray(Font::vao);
 
 	int viewport[4] = {};

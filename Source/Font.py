@@ -1,10 +1,10 @@
 from PIL import Image, ImageDraw, ImageFont
-import struct, textwrap
+import struct, textwrap, sys
 
 size = 16
 
 alphabet = ''.join(chr(i) if i in range(32, 127) else '•' for i in range(256))
-font = ImageFont.truetype('DroidSansMono\\DroidSansMono.ttf', size)
+font = ImageFont.truetype('Data\\DroidSansMono\\DroidSansMono.ttf', size)
 width, height = (0, 0)
 wpad, hpad = (2, 2)
 
@@ -38,7 +38,8 @@ pixels = ', '.join('0x%02X' % b for b in pixels)
 pixels = '\n'.join(textwrap.wrap(pixels))
 pixels = textwrap.indent(pixels, '\t\t')
 
-dump = open("Temp\\DroidSansMono.h", "w")
+dump = sys.stdout
+
 dump.write('''
 struct DroidSansMonoStructure {
 	int char_width;
@@ -63,3 +64,4 @@ const DroidSansMonoStructure DroidSansMono = {
 };
 '''.strip() % (w * h, width, height, padded_width, padded_height, w, h, pixels))
 
+dump.close()

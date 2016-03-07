@@ -1,5 +1,7 @@
 #define Debug //
 
+#include <OpenGL.h>
+
 #include <Windows.h>
 #include <cstring>
 #include <cstdio>
@@ -20,21 +22,17 @@ const void * wglGetProcFromExtension(const char * name) {
 	return (const void *)wglGetProcAddressImplementation(name);
 }
 
+extern bool __stdcall Initialize() asm("_Initialize");
 extern bool LoadCoreGL() asm("_LoadCoreGL");
-extern const void * wglGetProcAuto(const char * name) asm("_wglGetProcAuto");
-extern int wglNotImplementedSafe(const char * name, ...) asm("_wglNotImplementedSafe");
-extern int wglNotImplemented() asm("_wglNotImplemented");
 
-int wglNotImplementedSafe(const char * name, ...) {
-	MessageBox(0, name, "Not Implemented!", 0);
+extern const void * GetProcAuto(const char * name) asm("_GetProcAuto");
+extern int NotImplemented() asm("_NotImplemented");
+
+int NotImplemented() {
 	return 0;
 }
 
-int wglNotImplemented() {
-	return 0;
-}
-
-const void * wglGetProcAuto(const char * name) {
+const void * GetProcAuto(const char * name) {
 	const void * result = wglGetProcFromModule(name);
 	if (result) {
 		return result;
@@ -72,7 +70,7 @@ const void * wglGetProcAuto(const char * name) {
 	}
 
 	free(guess);
-	return(0);
+	return((void *)NotImplemented);
 }
 
 bool LoadOpenGL32() {
@@ -103,11 +101,7 @@ bool LoadOpenGL32() {
 	return true;
 }
 
-extern "C" {
-	bool Initialize();
-}
-
-bool Initialize() {
+bool __stdcall Initialize() {
 	if (!LoadOpenGL32()) {
 		Debug("!LoadOpenGL32()");
 		return false;
