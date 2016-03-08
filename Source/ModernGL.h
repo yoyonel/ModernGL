@@ -7,16 +7,10 @@ enum EnableEnum {
 	ENABLE_MULTISAMPLE = 0x08,
 };
 
-enum FramebufferEnum {
-	FBO_MULTISAMPLE = 0x01,
-	FBO_COLOR_BUFFERED = 0x02,
-	FBO_DEPTH_BUFFERED = 0x04,
-};
-
 enum TextureFilterEnum {
-	TEXTURE_PIXELATED,
-	TEXTURE_FILTERED,
-	TEXTURE_MIPMAPPED,
+	TEXTURE_PIXELATED = 0x01,
+	TEXTURE_FILTERED = 0x02,
+	TEXTURE_MIPMAPPED = 0x03,
 };
 
 struct Info {
@@ -31,7 +25,6 @@ struct Framebuffer {
 	unsigned framebuffer;
 	unsigned color;
 	unsigned depth;
-	unsigned mask;
 };
 
 extern "C" {
@@ -143,8 +136,8 @@ extern "C" {
 	void Attribute3i(unsigned buffer, unsigned target, const void * ptr = 0);
 	void Attribute4i(unsigned buffer, unsigned target, const void * ptr = 0);
 
-	Framebuffer * NewFramebuffer(int width = 0, int height = 0, unsigned mask = FBO_MULTISAMPLE);
-	void DeleteFramebuffer(Framebuffer * framebuffer);
+	Framebuffer NewFramebuffer(int width = 0, int height = 0, bool mutisample = true);
+	void DeleteFramebuffer(unsigned framebuffer);
 	void UseFramebuffer(unsigned framebuffer);
 	void UseDefaultFramebuffer();
 

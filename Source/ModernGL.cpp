@@ -641,79 +641,49 @@ void Attribute4i(unsigned buffer, unsigned target, const void * ptr) {
 	SetAttribute<GL::GL_INT, 4>(buffer, target, ptr);
 }
 
-Framebuffer * NewFramebuffer(int width, int height, unsigned mask) {
+Framebuffer NewFramebuffer(int width, int height, bool multisample) {
 	GL::GLuint framebuffer = 0;
 	GL::GLuint color = 0;
 	GL::GLuint depth = 0;
-
-	GL::GLint samples = 0;
-	GL::glGetIntegerv(GL::GL_MAX_SAMPLES, &samples);
 
 	GL::glGenFramebuffers(1, &framebuffer);
 	GL::glBindFramebuffer(GL::GL_FRAMEBUFFER, framebuffer);
 
 	GL::GLuint target = GL::GL_TEXTURE_2D;
-	if (mask & FBO_MULTISAMPLE) {
+	if (multisample) {
 		target = GL::GL_TEXTURE_2D_MULTISAMPLE;
 	}
 
-	if (mask & FBO_COLOR_BUFFERED) {
-		GL::glGenRenderbuffers(1, &color);
-		GL::glBindRenderbuffer(GL::GL_RENDERBUFFER, color);
-		GL::glRenderbufferStorage(GL::GL_RENDERBUFFER, GL::GL_RGBA, width, height);
-		if (mask & FBO_MULTISAMPLE) {
-			GL::glRenderbufferStorageMultisample(GL::GL_RENDERBUFFER, samples, GL::GL_RGBA, width, height);
-		} else {
-			GL::glFramebufferRenderbuffer(GL::GL_FRAMEBUFFER, GL::GL_COLOR_ATTACHMENT0, GL::GL_RENDERBUFFER, color);
-		}
-	} else {
-		GL::glGenTextures(1, &color);
-		GL::glBindTexture(target, color);
-		GL::glTexParameteri(target, GL::GL_TEXTURE_MIN_FILTER, GL::GL_LINEAR);
-		GL::glTexParameteri(target, GL::GL_TEXTURE_MAG_FILTER, GL::GL_LINEAR);
-		GL::glTexImage2D(target, 0, GL::GL_RGB, width, height, 0, GL::GL_RGB, GL::GL_FLOAT, 0);
-		GL::glFramebufferTexture2D(GL::GL_FRAMEBUFFER, GL::GL_COLOR_ATTACHMENT0, target, color, 0);
+	if (!width && !height) {
+		int viewport[4] = {};
+		GL::glGetIntegerv(GL::GL_VIEWPORT, viewport);
+		width = viewport[2];
+		height = viewport[3];
 	}
 
-	if (mask & FBO_DEPTH_BUFFERED) {
-		GL::glGenRenderbuffers(1, &depth);
-		GL::glBindRenderbuffer(GL::GL_RENDERBUFFER, depth);
-		GL::glRenderbufferStorage(GL::GL_RENDERBUFFER, GL::GL_DEPTH_COMPONENT, width, height);
-		if (mask & FBO_MULTISAMPLE) {
-			GL::glRenderbufferStorageMultisample(GL::GL_RENDERBUFFER, samples, GL::GL_DEPTH_COMPONENT, width, height);
-		} else {
-			GL::glFramebufferRenderbuffer(GL::GL_FRAMEBUFFER, GL::GL_DEPTH_ATTACHMENT, GL::GL_RENDERBUFFER, depth);
-		}
-	} else {
-		GL::glGenTextures(1, &depth);
-		GL::glBindTexture(target, depth);
-		GL::glTexParameteri(target, GL::GL_TEXTURE_MIN_FILTER, GL::GL_LINEAR);
-		GL::glTexParameteri(target, GL::GL_TEXTURE_MAG_FILTER, GL::GL_LINEAR);
-		GL::glTexImage2D(target, 0, GL::GL_DEPTH_COMPONENT, width, height, 0, GL::GL_DEPTH_COMPONENT, GL::GL_FLOAT, 0);
-		GL::glFramebufferTexture2D(GL::GL_FRAMEBUFFER, GL::GL_DEPTH_ATTACHMENT, target, depth, 0);
-	}
+	GL::glGenTextures(1, &color);
+	GL::glBindTexture(target, color);
+	GL::glTexParameteri(target, GL::GL_TEXTURE_MIN_FILTER, GL::GL_LINEAR);
+	GL::glTexParameteri(target, GL::GL_TEXTURE_MAG_FILTER, GL::GL_LINEAR);
+	GL::glTexImage2D(target, 0, GL::GL_RGB, width, height, 0, GL::GL_RGB, GL::GL_FLOAT, 0);
+	GL::glFramebufferTexture2D(GL::GL_FRAMEBUFFER, GL::GL_COLOR_ATTACHMENT0, target, color, 0);
 
-	return new Framebuffer {
+	GL::glGenTextures(1, &depth);
+	GL::glBindTexture(target, depth);
+	GL::glTexParameteri(target, GL::GL_TEXTURE_MIN_FILTER, GL::GL_LINEAR);
+	GL::glTexParameteri(target, GL::GL_TEXTURE_MAG_FILTER, GL::GL_LINEAR);
+	GL::glTexImage2D(target, 0, GL::GL_DEPTH_COMPONENT, width, height, 0, GL::GL_DEPTH_COMPONENT, GL::GL_FLOAT, 0);
+	GL::glFramebufferTexture2D(GL::GL_FRAMEBUFFER, GL::GL_DEPTH_ATTACHMENT, target, depth, 0);
+
+	return Framebuffer {
 		framebuffer,
 		color,
 		depth,
-		mask,
 	};
 }
 
-void DeleteFramebuffer(Framebuffer * framebuffer) {
-	GL::glDeleteFramebuffers(1, &framebuffer->framebuffer);
-	if (framebuffer->mask & FBO_COLOR_BUFFERED) {
-		GL::glDeleteRenderbuffers(1, &framebuffer->color);
-	} else {
-		GL::glDeleteTextures(1, &framebuffer->color);
-	}
-	if (framebuffer->mask & FBO_DEPTH_BUFFERED) {
-		GL::glDeleteRenderbuffers(1, &framebuffer->depth);
-	} else {
-		GL::glDeleteTextures(1, &framebuffer->depth);
-	}
-	delete framebuffer;
+void DeleteFramebuffer(unsigned framebuffer) {
+	GL::glDeleteFramebuffers(1, &framebuffer);
 }
 
 void UseFramebuffer(unsigned framebuffer) {
