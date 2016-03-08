@@ -2,6 +2,7 @@
 
 # structure
 
+```
 {
 	"constants": [
 		{
@@ -28,10 +29,12 @@
 		...
 	]
 }
+```
+
+----------------------------------------------------
 
 Later documentation will be added to this format
 
 ----------------------------------------------------
 
-Thank you dzhibas for SublimePrettyJson :)
-https://github.com/dzhibas/SublimePrettyJson 
+Thank you dzhibas for [SublimePrettyJson](https://github.com/dzhibas/SublimePrettyJson) :)
