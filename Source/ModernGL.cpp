@@ -133,6 +133,20 @@ Info GetInfo() {
 	return result;
 }
 
+const char * GetError() {
+	switch (GL::glGetError()) {
+		case GL::GL_NO_ERROR: return "GL_NO_ERROR";
+		case GL::GL_INVALID_ENUM: return "GL_INVALID_ENUM";
+		case GL::GL_INVALID_VALUE: return "GL_INVALID_VALUE";
+		case GL::GL_INVALID_OPERATION: return "GL_INVALID_OPERATION";
+		case GL::GL_INVALID_FRAMEBUFFER_OPERATION: return "GL_INVALID_FRAMEBUFFER_OPERATION";
+		case GL::GL_OUT_OF_MEMORY: return "GL_OUT_OF_MEMORY";
+		case GL::GL_STACK_UNDERFLOW: return "GL_STACK_UNDERFLOW";
+		case GL::GL_STACK_OVERFLOW: return "GL_STACK_OVERFLOW";
+		default: return "Unknown Error";
+	}
+}
+
 void Viewport(int x, int y, int w, int h) {
 	GL::glViewport(x, y, w, h);
 }
@@ -261,6 +275,11 @@ unsigned NewProgram(unsigned * shader, int count) {
 
 const char * CompilerLog() {
 	return compiler_log;
+}
+
+void DispatchCompute(unsigned x, unsigned y, unsigned z) {
+	// GL::glBindImageTexture(0, 2, 0, 0, GL::GL_FALSE, GL::GL_WRITE_ONLY, GL::GL_RGBA8);
+	GL::glDispatchCompute(x, y, z);
 }
 
 unsigned DeleteProgram(unsigned program) {
@@ -477,6 +496,15 @@ void UpdateIndexBuffer(unsigned buffer, unsigned offset, const void * data, int 
 void UpdateUniformBuffer(unsigned buffer, unsigned offset, const void * data, int size) {
 	GL::glBindBuffer(GL::GL_UNIFORM_BUFFER, buffer);
 	GL::glBufferSubData(GL::GL_UNIFORM_BUFFER, (GL::GLintptr)offset, size, data);
+}
+
+void * ReadUniformBuffer(unsigned buffer, unsigned offset, int size) {
+	GL::glBindBuffer(GL::GL_UNIFORM_BUFFER, buffer);
+	void * map = GL::glMapBufferRange(GL::GL_UNIFORM_BUFFER, offset, size, GL::GL_READ_ONLY);
+	void * content = malloc(size);
+	memcpy(content, map, size);
+	GL::glUnmapBuffer(GL::GL_UNIFORM_BUFFER);
+	return content;
 }
 
 void DeleteBuffer(unsigned buffer) {

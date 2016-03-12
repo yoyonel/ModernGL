@@ -1,6 +1,7 @@
 EXPORTS
 InitializeModernGL                     InitializeModernGL
 GetInfo                                GetInfo
+GetError                               GetError
 Viewport                               Viewport
 Clear                                  Clear
 PointSize                              PointSize
@@ -25,6 +26,7 @@ NewProgram                             NewProgram
 DeleteProgram                          DeleteProgram
 UseProgram                             UseProgram
 CompilerLog                            CompilerLog
+DispatchCompute                        DispatchCompute
 AttribLocation                         AttribLocation
 UniformLocation                        UniformLocation
 UniformBlockLocation                   UniformBlockLocation
@@ -54,6 +56,7 @@ NewUniformBuffer                       NewUniformBuffer
 UpdateVertexBuffer                     UpdateVertexBuffer
 UpdateIndexBuffer                      UpdateIndexBuffer
 UpdateUniformBuffer                    UpdateUniformBuffer
+ReadUniformBuffer                      ReadUniformBuffer
 DeleteBuffer                           DeleteBuffer
 RenderTriangles                        RenderTriangles
 RenderTriangleStrip                    RenderTriangleStrip

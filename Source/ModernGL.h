@@ -31,6 +31,8 @@ extern "C" {
 	bool InitializeModernGL();
 	Info GetInfo();
 
+	const char * GetError();
+
 	void Viewport(int x, int y, int w, int h);
 	void Clear(unsigned char r = 0, unsigned char g = 0, unsigned char b = 0, unsigned char a = 255);
 
@@ -61,6 +63,8 @@ extern "C" {
 	void UseProgram(unsigned program);
 
 	const char * CompilerLog();
+
+	void DispatchCompute(unsigned x = 1, unsigned y = 1, unsigned z = 1);
 
 	unsigned AttribLocation(unsigned program, const char * name);
 	unsigned UniformLocation(unsigned program, const char * name);
@@ -96,6 +100,8 @@ extern "C" {
 	void UpdateVertexBuffer(unsigned buffer, unsigned offset, const void * data, int size);
 	void UpdateIndexBuffer(unsigned buffer, unsigned offset, const void * data, int size);
 	void UpdateUniformBuffer(unsigned buffer, unsigned offset, const void * data, int size);
+
+	void * ReadUniformBuffer(unsigned buffer, unsigned offset, int size);
 
 	void DeleteBuffer(unsigned buffer);
 
