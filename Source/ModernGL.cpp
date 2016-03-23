@@ -278,7 +278,6 @@ const char * CompilerLog() {
 }
 
 void DispatchCompute(unsigned x, unsigned y, unsigned z) {
-	// GL::glBindImageTexture(0, 2, 0, 0, GL::GL_FALSE, GL::GL_WRITE_ONLY, GL::GL_RGBA8);
 	GL::glDispatchCompute(x, y, z);
 }
 
@@ -359,7 +358,7 @@ void Uniform4i(unsigned location, int v0, int v1, int v2, int v3) {
 }
 
 void UniformMatrix(unsigned location, const float * matrix) {
-	GL::glUniformMatrix4fv(location, 1, GL::GL_FALSE, matrix);
+	GL::glUniformMatrix4fv(location, 1, GL::GL_TRUE, matrix);
 }
 
 void UniformBlock(unsigned location, unsigned buffer) {
@@ -459,6 +458,14 @@ unsigned NewIndexBuffer(const void * data, int size) {
 	return buffer;
 }
 
+unsigned NewStorageBuffer(const void * data, int size) {
+	GL::GLuint buffer = 0;
+	GL::glGenBuffers(1, &buffer);
+	GL::glBindBuffer(GL::GL_SHADER_STORAGE_BUFFER, buffer);
+	GL::glBufferData(GL::GL_SHADER_STORAGE_BUFFER, size, data, GL::GL_STATIC_DRAW);
+	return buffer;
+}
+
 unsigned NewDynamicVertexBuffer(const void * data, int size) {
 	GL::GLuint buffer = 0;
 	GL::glGenBuffers(1, &buffer);
@@ -472,6 +479,14 @@ unsigned NewDynamicIndexBuffer(const void * data, int size) {
 	GL::glGenBuffers(1, &buffer);
 	GL::glBindBuffer(GL::GL_ELEMENT_ARRAY_BUFFER, buffer);
 	GL::glBufferData(GL::GL_ELEMENT_ARRAY_BUFFER, size, data, GL::GL_DYNAMIC_DRAW);
+	return buffer;
+}
+
+unsigned NewDynamicStorageBuffer(const void * data, int size) {
+	GL::GLuint buffer = 0;
+	GL::glGenBuffers(1, &buffer);
+	GL::glBindBuffer(GL::GL_SHADER_STORAGE_BUFFER, buffer);
+	GL::glBufferData(GL::GL_SHADER_STORAGE_BUFFER, size, data, GL::GL_DYNAMIC_DRAW);
 	return buffer;
 }
 
@@ -493,17 +508,26 @@ void UpdateIndexBuffer(unsigned buffer, unsigned offset, const void * data, int 
 	GL::glBufferSubData(GL::GL_ELEMENT_ARRAY_BUFFER, (GL::GLintptr)offset, size, data);
 }
 
+void UpdateStorageBuffer(unsigned buffer, unsigned offset, const void * data, int size) {
+	GL::glBindBuffer(GL::GL_SHADER_STORAGE_BUFFER, buffer);
+	GL::glBufferSubData(GL::GL_SHADER_STORAGE_BUFFER, (GL::GLintptr)offset, size, data);
+}
+
 void UpdateUniformBuffer(unsigned buffer, unsigned offset, const void * data, int size) {
 	GL::glBindBuffer(GL::GL_UNIFORM_BUFFER, buffer);
 	GL::glBufferSubData(GL::GL_UNIFORM_BUFFER, (GL::GLintptr)offset, size, data);
 }
 
-void * ReadUniformBuffer(unsigned buffer, unsigned offset, int size) {
-	GL::glBindBuffer(GL::GL_UNIFORM_BUFFER, buffer);
-	void * map = GL::glMapBufferRange(GL::GL_UNIFORM_BUFFER, offset, size, GL::GL_READ_ONLY);
+void UseStorageBuffer(unsigned buffer, unsigned binding) {
+	GL::glBindBufferBase(GL::GL_SHADER_STORAGE_BUFFER, binding, buffer);
+}
+
+void * ReadStorageBuffer(unsigned buffer, unsigned offset, int size) {
+	GL::glBindBuffer(GL::GL_SHADER_STORAGE_BUFFER, buffer);
+	void * map = GL::glMapBufferRange(GL::GL_SHADER_STORAGE_BUFFER, offset, size, GL::GL_READ_ONLY);
 	void * content = malloc(size);
 	memcpy(content, map, size);
-	GL::glUnmapBuffer(GL::GL_UNIFORM_BUFFER);
+	GL::glUnmapBuffer(GL::GL_SHADER_STORAGE_BUFFER);
 	return content;
 }
 

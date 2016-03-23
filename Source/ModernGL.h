@@ -93,15 +93,19 @@ extern "C" {
 
 	unsigned NewVertexBuffer(const void * data, int size);
 	unsigned NewIndexBuffer(const void * data, int size);
+	unsigned NewStorageBuffer(const void * data, int size);
 	unsigned NewDynamicVertexBuffer(const void * data, int size);
 	unsigned NewDynamicIndexBuffer(const void * data, int size);
+	unsigned NewDynamicStorageBuffer(const void * data, int size);
 	unsigned NewUniformBuffer(const void * data, int size);
 
 	void UpdateVertexBuffer(unsigned buffer, unsigned offset, const void * data, int size);
 	void UpdateIndexBuffer(unsigned buffer, unsigned offset, const void * data, int size);
+	void UpdateStorageBuffer(unsigned buffer, unsigned offset, const void * data, int size);
 	void UpdateUniformBuffer(unsigned buffer, unsigned offset, const void * data, int size);
 
-	void * ReadUniformBuffer(unsigned buffer, unsigned offset, int size);
+	void UseStorageBuffer(unsigned buffer, unsigned binding);
+	void * ReadStorageBuffer(unsigned buffer, unsigned offset, int size);
 
 	void DeleteBuffer(unsigned buffer);
 
