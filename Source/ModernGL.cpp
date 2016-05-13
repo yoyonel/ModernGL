@@ -244,12 +244,12 @@ inline unsigned NewShader(const char * source) {
 	return shader;
 }
 
-unsigned DeleteShader(unsigned shader) {
+void DeleteShader(unsigned shader) {
 	GL::glDeleteShader(shader);
 }
 
 unsigned NewProgram(unsigned * shader, int count) {
-	int program = GL::glCreateProgram();
+	GL::GLuint program = GL::glCreateProgram();
 
 	for (int i = 0; i < count; ++i) {
 		GL::glAttachShader(program, shader[i]);
@@ -281,7 +281,7 @@ void DispatchCompute(unsigned x, unsigned y, unsigned z) {
 	GL::glDispatchCompute(x, y, z);
 }
 
-unsigned DeleteProgram(unsigned program) {
+void DeleteProgram(unsigned program) {
 	GL::glDeleteProgram(program);
 }
 
@@ -535,103 +535,103 @@ void DeleteBuffer(unsigned buffer) {
 	GL::glDeleteBuffers(1, &buffer);
 }
 
-void RenderTriangles(int count, int first) {
-	GL::glDrawArrays(GL::GL_TRIANGLES, first, count);
+void RenderTriangles(int count, int first, int instances) {
+	GL::glDrawArraysInstanced(GL::GL_TRIANGLES, first, count, instances);
 }
 
-void RenderTriangleStrip(int count, int first) {
-	GL::glDrawArrays(GL::GL_TRIANGLE_STRIP, first, count);
+void RenderTriangleStrip(int count, int first, int instances) {
+	GL::glDrawArraysInstanced(GL::GL_TRIANGLE_STRIP, first, count, instances);
 }
 
-void RenderTriangleFan(int count, int first) {
-	GL::glDrawArrays(GL::GL_TRIANGLE_FAN, first, count);
+void RenderTriangleFan(int count, int first, int instances) {
+	GL::glDrawArraysInstanced(GL::GL_TRIANGLE_FAN, first, count, instances);
 }
 
-void RenderLines(int count, int first) {
-	GL::glDrawArrays(GL::GL_LINES, first, count);
+void RenderLines(int count, int first, int instances) {
+	GL::glDrawArraysInstanced(GL::GL_LINES, first, count, instances);
 }
 
-void RenderLineStrip(int count, int first) {
-	GL::glDrawArrays(GL::GL_LINE_STRIP, first, count);
+void RenderLineStrip(int count, int first, int instances) {
+	GL::glDrawArraysInstanced(GL::GL_LINE_STRIP, first, count, instances);
 }
 
-void RenderLineLoop(int count, int first) {
-	GL::glDrawArrays(GL::GL_LINE_LOOP, first, count);
+void RenderLineLoop(int count, int first, int instances) {
+	GL::glDrawArraysInstanced(GL::GL_LINE_LOOP, first, count, instances);
 }
 
-void RenderPoints(int count, int first) {
-	GL::glDrawArrays(GL::GL_POINTS, first, count);
+void RenderPoints(int count, int first, int instances) {
+	GL::glDrawArraysInstanced(GL::GL_POINTS, first, count, instances);
 }
 
-void RenderLineStripAdjacency(int count, int first) {
-	GL::glDrawArrays(GL::GL_LINE_STRIP_ADJACENCY, first, count);
+void RenderLineStripAdjacency(int count, int first, int instances) {
+	GL::glDrawArraysInstanced(GL::GL_LINE_STRIP_ADJACENCY, first, count, instances);
 }
 
-void RenderLinesAdjacency(int count, int first) {
-	GL::glDrawArrays(GL::GL_LINES_ADJACENCY, first, count);
+void RenderLinesAdjacency(int count, int first, int instances) {
+	GL::glDrawArraysInstanced(GL::GL_LINES_ADJACENCY, first, count, instances);
 }
 
-void RenderTriangleStripAdjacency(int count, int first) {
-	GL::glDrawArrays(GL::GL_TRIANGLE_STRIP_ADJACENCY, first, count);
+void RenderTriangleStripAdjacency(int count, int first, int instances) {
+	GL::glDrawArraysInstanced(GL::GL_TRIANGLE_STRIP_ADJACENCY, first, count, instances);
 }
 
-void RenderTrianglesAdjacency(int count, int first) {
-	GL::glDrawArrays(GL::GL_TRIANGLES_ADJACENCY, first, count);
+void RenderTrianglesAdjacency(int count, int first, int instances) {
+	GL::glDrawArraysInstanced(GL::GL_TRIANGLES_ADJACENCY, first, count, instances);
 }
 
-void RenderIndexedTriangles(int count, int first) {
+void RenderIndexedTriangles(int count, int first, int instances) {
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
-	GL::glDrawElements(GL::GL_TRIANGLES, count, GL::GL_UNSIGNED_INT, ptr);
+	GL::glDrawElementsInstanced(GL::GL_TRIANGLES, count, GL::GL_UNSIGNED_INT, ptr, instances);
 }
 
-void RenderIndexedTriangleStrip(int count, int first) {
+void RenderIndexedTriangleStrip(int count, int first, int instances) {
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
-	GL::glDrawElements(GL::GL_TRIANGLE_STRIP, count, GL::GL_UNSIGNED_INT, ptr);
+	GL::glDrawElementsInstanced(GL::GL_TRIANGLE_STRIP, count, GL::GL_UNSIGNED_INT, ptr, instances);
 }
 
-void RenderIndexedTriangleFan(int count, int first) {
+void RenderIndexedTriangleFan(int count, int first, int instances) {
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
-	GL::glDrawElements(GL::GL_TRIANGLE_FAN, count, GL::GL_UNSIGNED_INT, ptr);
+	GL::glDrawElementsInstanced(GL::GL_TRIANGLE_FAN, count, GL::GL_UNSIGNED_INT, ptr, instances);
 }
 
-void RenderIndexedLines(int count, int first) {
+void RenderIndexedLines(int count, int first, int instances) {
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
-	GL::glDrawElements(GL::GL_LINES, count, GL::GL_UNSIGNED_INT, ptr);
+	GL::glDrawElementsInstanced(GL::GL_LINES, count, GL::GL_UNSIGNED_INT, ptr, instances);
 }
 
-void RenderIndexedLineStrip(int count, int first) {
+void RenderIndexedLineStrip(int count, int first, int instances) {
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
-	GL::glDrawElements(GL::GL_LINE_STRIP, count, GL::GL_UNSIGNED_INT, ptr);
+	GL::glDrawElementsInstanced(GL::GL_LINE_STRIP, count, GL::GL_UNSIGNED_INT, ptr, instances);
 }
 
-void RenderIndexedLineLoop(int count, int first) {
+void RenderIndexedLineLoop(int count, int first, int instances) {
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
-	GL::glDrawElements(GL::GL_LINE_LOOP, count, GL::GL_UNSIGNED_INT, ptr);
+	GL::glDrawElementsInstanced(GL::GL_LINE_LOOP, count, GL::GL_UNSIGNED_INT, ptr, instances);
 }
 
-void RenderIndexedPoints(int count, int first) {
+void RenderIndexedPoints(int count, int first, int instances) {
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
-	GL::glDrawElements(GL::GL_POINTS, count, GL::GL_UNSIGNED_INT, ptr);
+	GL::glDrawElementsInstanced(GL::GL_POINTS, count, GL::GL_UNSIGNED_INT, ptr, instances);
 }
 
-void RenderIndexedLineStripAdjacency(int count, int first) {
+void RenderIndexedLineStripAdjacency(int count, int first, int instances) {
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
-	GL::glDrawElements(GL::GL_LINE_STRIP_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr);
+	GL::glDrawElementsInstanced(GL::GL_LINE_STRIP_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr, instances);
 }
 
-void RenderIndexedLinesAdjacency(int count, int first) {
+void RenderIndexedLinesAdjacency(int count, int first, int instances) {
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
-	GL::glDrawElements(GL::GL_LINES_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr);
+	GL::glDrawElementsInstanced(GL::GL_LINES_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr, instances);
 }
 
-void RenderIndexedTriangleStripAdjacency(int count, int first) {
+void RenderIndexedTriangleStripAdjacency(int count, int first, int instances) {
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
-	GL::glDrawElements(GL::GL_TRIANGLE_STRIP_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr);
+	GL::glDrawElementsInstanced(GL::GL_TRIANGLE_STRIP_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr, instances);
 }
 
-void RenderIndexedTrianglesAdjacency(int count, int first) {
+void RenderIndexedTrianglesAdjacency(int count, int first, int instances) {
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
-	GL::glDrawElements(GL::GL_TRIANGLES_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr);
+	GL::glDrawElementsInstanced(GL::GL_TRIANGLES_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr, instances);
 }
 
 template <unsigned Type, unsigned Dimension>

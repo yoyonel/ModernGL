@@ -56,10 +56,10 @@ extern "C" {
 	unsigned NewComputeShader(const char * source);
 	unsigned NewTessControlShader(const char * source);
 	unsigned NewTessEvaluationShader(const char * source);
-	unsigned DeleteShader(unsigned shader);
+	void DeleteShader(unsigned shader);
 	
 	unsigned NewProgram(unsigned * shader, int count);
-	unsigned DeleteProgram(unsigned program);
+	void DeleteProgram(unsigned program);
 	void UseProgram(unsigned program);
 
 	const char * CompilerLog();
@@ -109,28 +109,28 @@ extern "C" {
 
 	void DeleteBuffer(unsigned buffer);
 
-	void RenderTriangles(int count, int first = 0);
-	void RenderTriangleStrip(int count, int first = 0);
-	void RenderTriangleFan(int count, int first = 0);
-	void RenderLines(int count, int first = 0);
-	void RenderLineStrip(int count, int first = 0);
-	void RenderLineLoop(int count, int first = 0);
-	void RenderPoints(int count, int first = 0);
-	void RenderLineStripAdjacency(int count, int first = 0);
-	void RenderLinesAdjacency(int count, int first = 0);
-	void RenderTriangleStripAdjacency(int count, int first = 0);
-	void RenderTrianglesAdjacency(int count, int first = 0);
-	void RenderIndexedTriangles(int count, int first = 0);
-	void RenderIndexedTriangleStrip(int count, int first = 0);
-	void RenderIndexedTriangleFan(int count, int first = 0);
-	void RenderIndexedLines(int count, int first = 0);
-	void RenderIndexedLineStrip(int count, int first = 0);
-	void RenderIndexedLineLoop(int count, int first = 0);
-	void RenderIndexedPoints(int count, int first = 0);
-	void RenderIndexedLineStripAdjacency(int count, int first = 0);
-	void RenderIndexedLinesAdjacency(int count, int first = 0);
-	void RenderIndexedTriangleStripAdjacency(int count, int first = 0);
-	void RenderIndexedTrianglesAdjacency(int count, int first = 0);
+	void RenderTriangles(int count, int first = 0, int instances = 1);
+	void RenderTriangleStrip(int count, int first = 0, int instances = 1);
+	void RenderTriangleFan(int count, int first = 0, int instances = 1);
+	void RenderLines(int count, int first = 0, int instances = 1);
+	void RenderLineStrip(int count, int first = 0, int instances = 1);
+	void RenderLineLoop(int count, int first = 0, int instances = 1);
+	void RenderPoints(int count, int first = 0, int instances = 1);
+	void RenderLineStripAdjacency(int count, int first = 0, int instances = 1);
+	void RenderLinesAdjacency(int count, int first = 0, int instances = 1);
+	void RenderTriangleStripAdjacency(int count, int first = 0, int instances = 1);
+	void RenderTrianglesAdjacency(int count, int first = 0, int instances = 1);
+	void RenderIndexedTriangles(int count, int first = 0, int instances = 1);
+	void RenderIndexedTriangleStrip(int count, int first = 0, int instances = 1);
+	void RenderIndexedTriangleFan(int count, int first = 0, int instances = 1);
+	void RenderIndexedLines(int count, int first = 0, int instances = 1);
+	void RenderIndexedLineStrip(int count, int first = 0, int instances = 1);
+	void RenderIndexedLineLoop(int count, int first = 0, int instances = 1);
+	void RenderIndexedPoints(int count, int first = 0, int instances = 1);
+	void RenderIndexedLineStripAdjacency(int count, int first = 0, int instances = 1);
+	void RenderIndexedLinesAdjacency(int count, int first = 0, int instances = 1);
+	void RenderIndexedTriangleStripAdjacency(int count, int first = 0, int instances = 1);
+	void RenderIndexedTrianglesAdjacency(int count, int first = 0, int instances = 1);
 
 	void EnableAttribute(unsigned target);
 	void DisableAttribute(unsigned target);
