@@ -29,7 +29,7 @@ struct Framebuffer {
 };
 
 extern "C" {
-	bool InitializeModernGL();
+	bool InitializeModernGL(bool font = true);
 	Info GetInfo();
 
 	const char * GetError();

@@ -114,7 +114,7 @@ namespace GL {
 // 	}
 // }
 
-bool InitializeModernGL() {
+bool InitializeModernGL(bool font) {
 	if (!GL::Initialize()) {
 		return false;
 	}
