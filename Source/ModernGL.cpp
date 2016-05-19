@@ -5,102 +5,137 @@
 #include <cstdarg>
 #include <malloc.h>
 
+namespace {
+	unsigned defaultVertexArray;
+	unsigned defaultFramebuffer;
+	unsigned defaultProgram;
+
+	unsigned defaultTextureUnit;
+
+	const int maxCompilerLog = 16 * 1024;
+	char compilerLog[maxCompilerLog + 1];
+}
+
 namespace GL {
 	#include <OpenGL.h>
 }
 
-namespace Font {
-	unsigned vertShader;
-	unsigned fragShader;
-	unsigned prog;
-	unsigned vao;
-	unsigned vbo;
+// namespace Font {
+// 	unsigned vertShader;
+// 	unsigned fragShader;
+// 	unsigned prog;
+// 	unsigned vao;
+// 	unsigned vbo;
 
-	unsigned glyph;
-	unsigned texture;
-	unsigned position;
-	unsigned viewport;
-	unsigned color;
-	unsigned size;
-	unsigned vert;
-	unsigned tex;
+// 	unsigned glyph;
+// 	unsigned texture;
+// 	unsigned position;
+// 	unsigned viewport;
+// 	unsigned color;
+// 	unsigned size;
+// 	unsigned vert;
+// 	unsigned tex;
 
-	float align_x;
-	float align_y;
+// 	float align_x;
+// 	float align_y;
 
-	#include <DroidSansMono.h>
+// 	#include <DroidSansMono.h>
 
-	bool InitializeFont() {
-		vertShader = NewVertexShader(R"(
-			#version 400
+// 	bool InitializeFont() {
+// 		vertShader = NewVertexShader(R"(
+// 			#version 400
 
-			const int unit = 16;
-			const float piece = 1.0 / unit;
+// 			const int unit = 16;
+// 			const float piece = 1.0 / unit;
 
-			in vec2 vert;
+// 			in vec2 vert;
 
-			uniform int glyph;
-			uniform vec2 glyph_position;
-			uniform vec2 glyph_size;
-			uniform vec2 viewport_size;
+// 			uniform int glyph;
+// 			uniform vec2 glyph_position;
+// 			uniform vec2 glyph_size;
+// 			uniform vec2 viewport_size;
 
-			out vec2 text;
+// 			out vec2 text;
 
-			void main() {
-				gl_Position = vec4((glyph_position + vert * glyph_size) * 2 / viewport_size - vec2(1.0, 1.0), 0.0, 1.0);
-				text = vec2(float(glyph % unit) / unit, float(glyph / unit) / unit) + vert / unit;
-			}
-		)");
+// 			void main() {
+// 				gl_Position = vec4((glyph_position + vert * glyph_size) * 2 / viewport_size - vec2(1.0, 1.0), 0.0, 1.0);
+// 				text = vec2(float(glyph % unit) / unit, float(glyph / unit) / unit) + vert / unit;
+// 			}
+// 		)");
 
-		fragShader = NewFragmentShader(R"(
-			#version 400
+// 		fragShader = NewFragmentShader(R"(
+// 			#version 400
 
-			in vec2 text;
+// 			in vec2 text;
 
-			uniform sampler2D glyph_texture;
-			uniform vec4 glyph_color;
+// 			uniform sampler2D glyph_texture;
+// 			uniform vec4 glyph_color;
 
-			out vec4 color;
+// 			out vec4 color;
 
-			void main() {
-				color = glyph_color;
-				color.a *= texture(glyph_texture, text).r;
-			}
-		)");
+// 			void main() {
+// 				color = glyph_color;
+// 				color.a *= texture(glyph_texture, text).r;
+// 			}
+// 		)");
 
-		unsigned shaders[] = {vertShader, fragShader};
-		prog = NewProgram(shaders, 2);
+// 		unsigned shaders[] = {vertShader, fragShader};
+// 		prog = NewProgram(shaders, 2);
 
-		float verts[] = {
-			0, 0,
-			0, 1,
-			1, 0,
-			1, 1,
-		};
+// 		float verts[] = {
+// 			0, 0,
+// 			0, 1,
+// 			1, 0,
+// 			1, 1,
+// 		};
 
-		vao = NewVertexArray();
-		vbo = NewVertexBuffer(verts, sizeof(verts));
-		vert = AttribLocation(prog, "vert");
-		glyph = UniformLocation(prog, "glyph");
-		texture = UniformLocation(prog, "glyph_texture");
-		position = UniformLocation(prog, "glyph_position");
-		color = UniformLocation(prog, "glyph_color");
-		size = UniformLocation(prog, "glyph_size");
-		viewport = UniformLocation(prog, "viewport_size");
+// 		vao = NewVertexArray();
+// 		vbo = NewVertexBuffer(verts, sizeof(verts));
+// 		vert = AttribLocation(prog, "vert");
+// 		glyph = UniformLocation(prog, "glyph");
+// 		texture = UniformLocation(prog, "glyph_texture");
+// 		position = UniformLocation(prog, "glyph_position");
+// 		color = UniformLocation(prog, "glyph_color");
+// 		size = UniformLocation(prog, "glyph_size");
+// 		viewport = UniformLocation(prog, "viewport_size");
 
-		Attribute2f(vbo, vert);
-		Uniform1i(texture, 0);
-		Uniform4f(color, 0.0, 0.0, 0.0, 1.0);
+// 		Attribute2f(vbo, vert);
+// 		Uniform1i(texture, 0);
+// 		Uniform4f(color, 0.0, 0.0, 0.0, 1.0);
 	
-		float sw = (float)DroidSansMono.glyph_width;
-		float sh = -(float)DroidSansMono.glyph_height;
-		Uniform2f(size, sw, sh);
+// 		float sw = (float)DroidSansMono.glyph_width;
+// 		float sh = -(float)DroidSansMono.glyph_height;
+// 		Uniform2f(size, sw, sh);
 
-		tex = NewTexture(DroidSansMono.texture_width, DroidSansMono.texture_height, DroidSansMono.texture_pixels, 1);
-		SetTextureFilter(tex, TEXTURE_PIXELATED);
+// 		tex = NewTexture(DroidSansMono.texture_width, DroidSansMono.texture_height, DroidSansMono.texture_pixels, 1);
+// 		SetTextureFilter(tex, TEXTURE_PIXELATED);
 
-		return true;
+// 		return true;
+// 	}
+// }
+
+bool InitializeModernGL() {
+	if (!GL::Initialize()) {
+		return false;
 	}
+
+	// if (!Font::InitializeFont()) {
+	// 	return false;
+	// }
+
+	GL::glBlendFunc(GL::GL_SRC_ALPHA, GL::GL_ONE_MINUS_SRC_ALPHA);
+	GL::glEnable(GL::GL_PRIMITIVE_RESTART_FIXED_INDEX);
+
+	GL::glGenVertexArrays(1, &defaultVertexArray);
+	GL::glBindVertexArray(defaultVertexArray);
+
+	GL::glGetIntegerv(GL::GL_DRAW_FRAMEBUFFER_BINDING, (GL::GLint *)&defaultFramebuffer);
+	GL::glGetIntegerv(GL::GL_CURRENT_PROGRAM, (GL::GLint *)&defaultProgram);
+
+	unsigned maxTextureUnits = 1;
+	GL::glGetIntegerv(GL::GL_MAX_TEXTURE_IMAGE_UNITS, (GL::GLint *)&maxTextureUnits);
+	defaultTextureUnit = maxTextureUnits - 1;
+	return true;
 }
 
 Info GetInfo() {
@@ -207,47 +242,6 @@ void DisableMultisample() {
 	GL::glDisable(GL::GL_MULTISAMPLE);
 }
 
-bool InitializeModernGL() {
-	if (!GL::Initialize()) {
-		return false;
-	}
-
-	if (!Font::InitializeFont()) {
-		return false;
-	}
-
-	GL::glBlendFunc(GL::GL_SRC_ALPHA, GL::GL_ONE_MINUS_SRC_ALPHA);
-	GL::glEnable(GL::GL_PRIMITIVE_RESTART_FIXED_INDEX);
-	return true;
-}
-
-char compiler_log[16 * 1024 + 1];
-
-template <unsigned Type>
-inline unsigned NewShader(const char * source) {
-	GL::GLuint shader = GL::glCreateShader(Type);
-	GL::glShaderSource(shader, 1, &source, 0);
-	GL::glCompileShader(shader);
-
-	GL::GLint compiled = GL::GL_FALSE;
-	GL::glGetShaderiv(shader, GL::GL_COMPILE_STATUS, &compiled);
-	if (!compiled) {
-		int log_size = 0;
-		GL::glGetShaderInfoLog(shader, 16 * 1024, &log_size, compiler_log);
-		compiler_log[log_size] = 0;
-		GL::glDeleteShader(shader);
-		shader = 0;
-	} else {
-		compiler_log[0] = 0;
-	}
-
-	return shader;
-}
-
-void DeleteShader(unsigned shader) {
-	GL::glDeleteShader(shader);
-}
-
 unsigned NewProgram(unsigned * shader, int count) {
 	GL::GLuint program = GL::glCreateProgram();
 
@@ -260,29 +254,57 @@ unsigned NewProgram(unsigned * shader, int count) {
 	GL::GLint linked = GL::GL_FALSE;
 	GL::glGetProgramiv(program, GL::GL_LINK_STATUS, &linked);
 	if (!linked) {
-		int log_size = 0;
-		GL::glGetProgramInfoLog(program, 16 * 1024, &log_size, compiler_log);
-		compiler_log[log_size] = 0;
+		int logSize = 0;
+		GL::glGetProgramInfoLog(program, maxCompilerLog, &logSize, compilerLog);
+		compilerLog[logSize] = 0;
 		GL::glDeleteProgram(program);
 		program = 0;
 	} else {
-		compiler_log[0] = 0;
+		compilerLog[0] = 0;
 		GL::glUseProgram(program);
 	} 
 
 	return program;
 }
 
-const char * CompilerLog() {
-	return compiler_log;
-}
-
-void DispatchCompute(unsigned x, unsigned y, unsigned z) {
-	GL::glDispatchCompute(x, y, z);
-}
-
 void DeleteProgram(unsigned program) {
+	unsigned shaders[8] = {};
+	int numShaders = 0;
+
+	GL::glGetAttachedShaders(program, 8, &numShaders, shaders);
+	for (int i = 0; i < numShaders; ++i) {
+		GL::glDeleteShader(shaders[i]);
+	}
 	GL::glDeleteProgram(program);
+}
+
+void UseProgram(unsigned program) {
+	GL::glUseProgram(program);
+}
+
+void UseDefaultProgram() {
+	GL::glUseProgram(defaultProgram);
+}
+
+template <unsigned Type>
+inline unsigned NewShader(const char * source) {
+	GL::GLuint shader = GL::glCreateShader(Type);
+	GL::glShaderSource(shader, 1, &source, 0);
+	GL::glCompileShader(shader);
+
+	GL::GLint compiled = GL::GL_FALSE;
+	GL::glGetShaderiv(shader, GL::GL_COMPILE_STATUS, &compiled);
+	if (!compiled) {
+		int logSize = 0;
+		GL::glGetShaderInfoLog(shader, maxCompilerLog, &logSize, compilerLog);
+		compilerLog[logSize] = 0;
+		GL::glDeleteShader(shader);
+		shader = 0;
+	} else {
+		compilerLog[0] = 0;
+	}
+
+	return shader;
 }
 
 unsigned NewFragmentShader(const char * source) {
@@ -309,8 +331,12 @@ unsigned NewTessEvaluationShader(const char * source) {
 	return NewShader<GL::GL_TESS_EVALUATION_SHADER>(source);
 }
 
-void UseProgram(unsigned program) {
-	GL::glUseProgram(program);
+void DeleteShader(unsigned shader) {
+	GL::glDeleteShader(shader);
+}
+
+const char * CompilerLog() {
+	return compilerLog;
 }
 
 unsigned AttribLocation(unsigned program, const char * name) {
@@ -358,6 +384,10 @@ void Uniform4i(unsigned location, int v0, int v1, int v2, int v3) {
 }
 
 void UniformMatrix(unsigned location, const float * matrix) {
+	GL::glUniformMatrix4fv(location, 1, GL::GL_FALSE, matrix);
+}
+
+void UniformTransposeMatrix(unsigned location, const float * matrix) {
 	GL::glUniformMatrix4fv(location, 1, GL::GL_TRUE, matrix);
 }
 
@@ -376,8 +406,9 @@ unsigned NewTexture(int width, int height, const void * data, int components) {
 		height = viewportValue[3];
 	}
 
+	GL::glActiveTexture(GL::GL_TEXTURE0 + defaultTextureUnit);
+
 	GL::GLuint texture = 0;
-	GL::glActiveTexture(GL::GL_TEXTURE0);
 	GL::glGenTextures(1, &texture);
 	GL::glBindTexture(GL::GL_TEXTURE_2D, texture);
 	GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_MIN_FILTER, GL::GL_LINEAR);
@@ -390,8 +421,13 @@ void DeleteTexture(unsigned texture) {
 	GL::glDeleteTextures(1, &texture);
 }
 
+void UseTexture(unsigned texture, unsigned location) {
+	GL::glActiveTexture(GL::GL_TEXTURE0 + location);
+	GL::glBindTexture(GL::GL_TEXTURE_2D, texture);
+}
+
 void SetTextureFilter(unsigned texture, unsigned mode) {
-	GL::glActiveTexture(GL::GL_TEXTURE0);
+	GL::glActiveTexture(GL::GL_TEXTURE0 + defaultTextureUnit);
 	GL::glBindTexture(GL::GL_TEXTURE_2D, texture);
 	switch (mode) {
 		case TEXTURE_PIXELATED: {
@@ -412,11 +448,6 @@ void SetTextureFilter(unsigned texture, unsigned mode) {
 	}
 }
 
-void UseTexture(unsigned texture, unsigned location) {
-	GL::glActiveTexture(GL::GL_TEXTURE0 + location);
-	GL::glBindTexture(GL::GL_TEXTURE_2D, texture);
-}
-
 void BuildMipmap(unsigned texture, int base, int max) {
 	GL::glActiveTexture(GL::GL_TEXTURE0);
 	GL::glBindTexture(GL::GL_TEXTURE_2D, texture);
@@ -427,19 +458,68 @@ void BuildMipmap(unsigned texture, int base, int max) {
 	GL::glTexParameteri(GL::GL_TEXTURE_2D, GL::GL_TEXTURE_MAG_FILTER, GL::GL_LINEAR);
 }
 
-unsigned NewVertexArray() {
-	GL::GLuint array = 0;
-	GL::glGenVertexArrays(1, &array);
-	GL::glBindVertexArray(array);
-	return array;
+unsigned NewVertexArray(const char * format, int * attribs, unsigned vertexBuffer, unsigned indexBuffer) {
+	// format regex: '([1-4][if])+'
+
+	GL::GLuint vertexArray = 0;
+	GL::glGenVertexArrays(1, &vertexArray);
+
+	int stride = 0;
+	for (int i = 0; format[i]; i += 2) {
+		stride += (format[i] - '0') * 4;
+	}
+
+	GL::glBindVertexArray(vertexArray);
+	GL::glBindBuffer(GL::GL_ARRAY_BUFFER, vertexBuffer);
+	char * ptr = 0;
+	for (int i = 0; format[i]; i += 2) {
+		int dimension = format[i] - '0';
+		int index = attribs[i / 2];
+		if (format[i + 1] == 'f') {
+			GL::glVertexAttribPointer(index, dimension, GL::GL_FLOAT, false, stride, ptr);
+		}
+		else
+		if (format[i + 1] == 'i') {
+			GL::glVertexAttribPointer(index, dimension, GL::GL_INT, false, stride, ptr);
+		}
+		GL::glEnableVertexAttribArray(index);
+		ptr += dimension * 4;
+	}
+	GL::glBindBuffer(GL::GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+	GL::glBindVertexArray(defaultVertexArray);
+	return vertexArray;
 }
 
 void DeleteVertexArray(unsigned array) {
 	GL::glDeleteVertexArrays(1, &array);
 }
 
-void UseVertexArray(unsigned array) {
-	GL::glBindVertexArray(array);
+void EnableAttribute(unsigned vao, unsigned target) {
+	GL::glBindVertexArray(vao);
+	GL::glEnableVertexAttribArray(target);
+	GL::glBindVertexArray(defaultVertexArray);
+}
+
+void DisableAttribute(unsigned vao, unsigned target) {
+	GL::glBindVertexArray(vao);
+	GL::glDisableVertexAttribArray(target);
+	GL::glBindVertexArray(defaultVertexArray);
+}
+
+void EnableAttributes(unsigned vao, unsigned * target, int count) {
+	GL::glBindVertexArray(vao);
+	for (int i = 0; i < count; ++i) {
+		GL::glEnableVertexAttribArray(target[i]);
+	}
+	GL::glBindVertexArray(defaultVertexArray);
+}
+
+void DisableAttributes(unsigned vao, unsigned * target, int count) {
+	GL::glBindVertexArray(vao);
+	for (int i = 0; i < count; ++i) {
+		GL::glDisableVertexAttribArray(target[i]);
+	}
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
 unsigned NewVertexBuffer(const void * data, int size) {
@@ -463,6 +543,14 @@ unsigned NewStorageBuffer(const void * data, int size) {
 	GL::glGenBuffers(1, &buffer);
 	GL::glBindBuffer(GL::GL_SHADER_STORAGE_BUFFER, buffer);
 	GL::glBufferData(GL::GL_SHADER_STORAGE_BUFFER, size, data, GL::GL_STATIC_DRAW);
+	return buffer;
+}
+
+unsigned NewUniformBuffer(const void * data, int size) {
+	GL::GLuint buffer = 0;
+	GL::glGenBuffers(1, &buffer);
+	GL::glBindBuffer(GL::GL_UNIFORM_BUFFER, buffer);
+	GL::glBufferData(GL::GL_UNIFORM_BUFFER, size, data, GL::GL_STATIC_DRAW);
 	return buffer;
 }
 
@@ -490,12 +578,16 @@ unsigned NewDynamicStorageBuffer(const void * data, int size) {
 	return buffer;
 }
 
-unsigned NewUniformBuffer(const void * data, int size) {
+unsigned NewDynamicUniformBuffer(const void * data, int size) {
 	GL::GLuint buffer = 0;
 	GL::glGenBuffers(1, &buffer);
 	GL::glBindBuffer(GL::GL_UNIFORM_BUFFER, buffer);
-	GL::glBufferData(GL::GL_UNIFORM_BUFFER, size, data, GL::GL_STATIC_DRAW);
+	GL::glBufferData(GL::GL_UNIFORM_BUFFER, size, data, GL::GL_DYNAMIC_DRAW);
 	return buffer;
+}
+
+void DeleteBuffer(unsigned buffer) {
+	GL::glDeleteBuffers(1, &buffer);
 }
 
 void UpdateVertexBuffer(unsigned buffer, unsigned offset, const void * data, int size) {
@@ -531,166 +623,147 @@ void * ReadStorageBuffer(unsigned buffer, unsigned offset, int size) {
 	return content;
 }
 
-void DeleteBuffer(unsigned buffer) {
-	GL::glDeleteBuffers(1, &buffer);
-}
-
-void RenderTriangles(int count, int first, int instances) {
+void RenderTriangles(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	GL::glDrawArraysInstanced(GL::GL_TRIANGLES, first, count, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderTriangleStrip(int count, int first, int instances) {
+void RenderTriangleStrip(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	GL::glDrawArraysInstanced(GL::GL_TRIANGLE_STRIP, first, count, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderTriangleFan(int count, int first, int instances) {
+void RenderTriangleFan(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	GL::glDrawArraysInstanced(GL::GL_TRIANGLE_FAN, first, count, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderLines(int count, int first, int instances) {
+void RenderLines(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	GL::glDrawArraysInstanced(GL::GL_LINES, first, count, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderLineStrip(int count, int first, int instances) {
+void RenderLineStrip(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	GL::glDrawArraysInstanced(GL::GL_LINE_STRIP, first, count, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderLineLoop(int count, int first, int instances) {
+void RenderLineLoop(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	GL::glDrawArraysInstanced(GL::GL_LINE_LOOP, first, count, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderPoints(int count, int first, int instances) {
+void RenderPoints(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	GL::glDrawArraysInstanced(GL::GL_POINTS, first, count, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderLineStripAdjacency(int count, int first, int instances) {
+void RenderLineStripAdjacency(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	GL::glDrawArraysInstanced(GL::GL_LINE_STRIP_ADJACENCY, first, count, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderLinesAdjacency(int count, int first, int instances) {
+void RenderLinesAdjacency(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	GL::glDrawArraysInstanced(GL::GL_LINES_ADJACENCY, first, count, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderTriangleStripAdjacency(int count, int first, int instances) {
+void RenderTriangleStripAdjacency(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	GL::glDrawArraysInstanced(GL::GL_TRIANGLE_STRIP_ADJACENCY, first, count, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderTrianglesAdjacency(int count, int first, int instances) {
+void RenderTrianglesAdjacency(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	GL::glDrawArraysInstanced(GL::GL_TRIANGLES_ADJACENCY, first, count, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderIndexedTriangles(int count, int first, int instances) {
+void RenderIndexedTriangles(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElementsInstanced(GL::GL_TRIANGLES, count, GL::GL_UNSIGNED_INT, ptr, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderIndexedTriangleStrip(int count, int first, int instances) {
+void RenderIndexedTriangleStrip(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElementsInstanced(GL::GL_TRIANGLE_STRIP, count, GL::GL_UNSIGNED_INT, ptr, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderIndexedTriangleFan(int count, int first, int instances) {
+void RenderIndexedTriangleFan(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElementsInstanced(GL::GL_TRIANGLE_FAN, count, GL::GL_UNSIGNED_INT, ptr, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderIndexedLines(int count, int first, int instances) {
+void RenderIndexedLines(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElementsInstanced(GL::GL_LINES, count, GL::GL_UNSIGNED_INT, ptr, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderIndexedLineStrip(int count, int first, int instances) {
+void RenderIndexedLineStrip(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElementsInstanced(GL::GL_LINE_STRIP, count, GL::GL_UNSIGNED_INT, ptr, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderIndexedLineLoop(int count, int first, int instances) {
+void RenderIndexedLineLoop(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElementsInstanced(GL::GL_LINE_LOOP, count, GL::GL_UNSIGNED_INT, ptr, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderIndexedPoints(int count, int first, int instances) {
+void RenderIndexedPoints(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElementsInstanced(GL::GL_POINTS, count, GL::GL_UNSIGNED_INT, ptr, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderIndexedLineStripAdjacency(int count, int first, int instances) {
+void RenderIndexedLineStripAdjacency(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElementsInstanced(GL::GL_LINE_STRIP_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderIndexedLinesAdjacency(int count, int first, int instances) {
+void RenderIndexedLinesAdjacency(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElementsInstanced(GL::GL_LINES_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderIndexedTriangleStripAdjacency(int count, int first, int instances) {
+void RenderIndexedTriangleStripAdjacency(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElementsInstanced(GL::GL_TRIANGLE_STRIP_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr, instances);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
-void RenderIndexedTrianglesAdjacency(int count, int first, int instances) {
+void RenderIndexedTrianglesAdjacency(unsigned vao, int count, int first, int instances) {
+	GL::glBindVertexArray(vao);
 	const void * ptr = (const void *)((GL::GLintptr)first * 4);
 	GL::glDrawElementsInstanced(GL::GL_TRIANGLES_ADJACENCY, count, GL::GL_UNSIGNED_INT, ptr, instances);
-}
-
-template <unsigned Type, unsigned Dimension>
-inline void SetAttribute(unsigned buffer, unsigned target, const void * ptr = 0) {
-	GL::glBindBuffer(GL::GL_ARRAY_BUFFER, buffer);
-	GL::glVertexAttribPointer(target, Dimension, Type, false, 0, ptr);
-	GL::glEnableVertexAttribArray(target);
-}
-
-void EnableAttribute(unsigned target) {
-	GL::glEnableVertexAttribArray(target);
-}
-
-void DisableAttribute(unsigned target) {
-	GL::glDisableVertexAttribArray(target);
-}
-
-void EnableAttributes(unsigned * target, int count) {
-	for (int i = 0; i < count; ++i) {
-		GL::glEnableVertexAttribArray(target[i]);
-	}
-}
-
-void DisableAttributes(unsigned * target, int count) {
-	for (int i = 0; i < count; ++i) {
-		GL::glDisableVertexAttribArray(target[i]);
-	}
-}
-
-void Attribute1f(unsigned buffer, unsigned target, const void * ptr) {
-	SetAttribute<GL::GL_FLOAT, 1>(buffer, target, ptr);
-}
-
-void Attribute2f(unsigned buffer, unsigned target, const void * ptr) {
-	SetAttribute<GL::GL_FLOAT, 2>(buffer, target, ptr);
-}
-
-void Attribute3f(unsigned buffer, unsigned target, const void * ptr) {
-	SetAttribute<GL::GL_FLOAT, 3>(buffer, target, ptr);
-}
-
-void Attribute4f(unsigned buffer, unsigned target, const void * ptr) {
-	SetAttribute<GL::GL_FLOAT, 4>(buffer, target, ptr);
-}
-
-void Attribute1i(unsigned buffer, unsigned target, const void * ptr) {
-	SetAttribute<GL::GL_INT, 1>(buffer, target, ptr);
-}
-
-void Attribute2i(unsigned buffer, unsigned target, const void * ptr) {
-	SetAttribute<GL::GL_INT, 2>(buffer, target, ptr);
-}
-
-void Attribute3i(unsigned buffer, unsigned target, const void * ptr) {
-	SetAttribute<GL::GL_INT, 3>(buffer, target, ptr);
-}
-
-void Attribute4i(unsigned buffer, unsigned target, const void * ptr) {
-	SetAttribute<GL::GL_INT, 4>(buffer, target, ptr);
+	GL::glBindVertexArray(defaultVertexArray);
 }
 
 Framebuffer NewFramebuffer(int width, int height, bool multisample) {
@@ -732,9 +805,25 @@ Framebuffer NewFramebuffer(int width, int height, bool multisample) {
 		color,
 		depth,
 	};
+
+	GL::glBindFramebuffer(GL::GL_FRAMEBUFFER, defaultFramebuffer);
 }
 
 void DeleteFramebuffer(unsigned framebuffer) {
+	unsigned color = 0;
+	GL::glGetFramebufferAttachmentParameteriv(GL::GL_FRAMEBUFFER, GL::GL_COLOR_ATTACHMENT0, GL::GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME, (GL::GLint *)&color);
+
+	if (color) {
+		GL::glDeleteTextures(1, &color);
+	}
+
+	unsigned depth = 0;
+	GL::glGetFramebufferAttachmentParameteriv(GL::GL_FRAMEBUFFER, GL::GL_DEPTH_ATTACHMENT, GL::GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME, (GL::GLint *)&depth);
+
+	if (depth) {
+		GL::glDeleteTextures(1, &depth);
+	}
+
 	GL::glDeleteFramebuffers(1, &framebuffer);
 }
 
@@ -761,45 +850,57 @@ float * ReadDepthPixels(int x, int y, int width, int height) {
 	return data;
 }
 
-void DebugFontColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
-	const float c = 1.0 / 255.0;
-	UseProgram(Font::prog);
-	Uniform4f(Font::color, r * c, g * c, b * c, a * c);
+unsigned ReadPixel(int x, int y) {
+	unsigned rgba = 0;
+	GL::glReadPixels(x, y, 1, 1, GL::GL_RGBA, GL::GL_UNSIGNED_BYTE, &rgba);
+	return rgba;
 }
 
-void DebugFontAlign(float px, float py) {
-	Font::align_x = px;
-	Font::align_y = py;
+float ReadDepthPixel(int x, int y) {
+	float depth = 0.0;
+	GL::glReadPixels(x, y, 1, 1, GL::GL_DEPTH_COMPONENT, GL::GL_FLOAT, &depth);
+	return depth;
 }
 
-void DebugFontPrint(float x, float y, const char * fmt, ...) {
-	va_list ap;
-	char str[2048];
-	va_start(ap, fmt);
-	vsprintf(str, fmt, ap);
-	va_end(ap);
+// void DebugFontColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+// 	const float c = 1.0 / 255.0;
+// 	UseProgram(Font::prog);
+// 	Uniform4f(Font::color, r * c, g * c, b * c, a * c);
+// }
 
-	EnableOnly(ENABLE_BLEND);
-	UseProgram(Font::prog);
-	UseTexture(Font::tex);
-	UseVertexArray(Font::vao);
+// void DebugFontAlign(float px, float py) {
+// 	Font::align_x = px;
+// 	Font::align_y = py;
+// }
 
-	int viewport[4] = {};
-	GL::glGetIntegerv(GL::GL_VIEWPORT, viewport);
-	Uniform2f(Font::viewport, viewport[2], viewport[3]);
+// void DebugFontPrint(float x, float y, const char * fmt, ...) {
+// 	va_list ap;
+// 	char str[2048];
+// 	va_start(ap, fmt);
+// 	vsprintf(str, fmt, ap);
+// 	va_end(ap);
 
-	x -= strlen(str) * Font::DroidSansMono.char_width * Font::align_x;
-	y -= Font::DroidSansMono.char_height * Font::align_y;
-	y += Font::DroidSansMono.char_height;
-	x = (int)x;
-	y = (int)y;
+// 	EnableOnly(ENABLE_BLEND);
+// 	UseProgram(Font::prog);
+// 	UseTexture(Font::tex);
+// 	UseVertexArray(Font::vao);
 
-	float step = (float)Font::DroidSansMono.char_width;
-	const unsigned char * bytes = (const unsigned char *)str;
-	for (int i = 0; i < bytes[i]; ++i) {
-		Uniform2f(Font::position, x, y);
-		Uniform1i(Font::glyph, bytes[i]);
-		RenderTriangleStrip(4);
-		x += step;
-	}
-}
+// 	int viewport[4] = {};
+// 	GL::glGetIntegerv(GL::GL_VIEWPORT, viewport);
+// 	Uniform2f(Font::viewport, viewport[2], viewport[3]);
+
+// 	x -= strlen(str) * Font::DroidSansMono.char_width * Font::align_x;
+// 	y -= Font::DroidSansMono.char_height * Font::align_y;
+// 	y += Font::DroidSansMono.char_height;
+// 	x = (int)x;
+// 	y = (int)y;
+
+// 	float step = (float)Font::DroidSansMono.char_width;
+// 	const unsigned char * bytes = (const unsigned char *)str;
+// 	for (int i = 0; i < bytes[i]; ++i) {
+// 		Uniform2f(Font::position, x, y);
+// 		Uniform1i(Font::glyph, bytes[i]);
+// 		RenderTriangleStrip(4);
+// 		x += step;
+// 	}
+// }
