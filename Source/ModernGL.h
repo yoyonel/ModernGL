@@ -86,7 +86,7 @@ extern "C" {
 	void UseTexture(unsigned texture, unsigned location = 0);
 
 	void SetTextureFilter(unsigned texture, unsigned mode);
-	void BuildMipmap(unsigned texture, int base, int max);
+	void BuildMipmap(unsigned texture, int base = 0, int max = 1000);
 
 	unsigned NewVertexArray(const char * format, int * attribs, unsigned vertexBuffer, unsigned indexBuffer = 0);
 	void DeleteVertexArray(unsigned array);
