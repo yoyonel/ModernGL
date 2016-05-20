@@ -35,7 +35,7 @@ namespace ModernGL {
 
 	extern const char * GetError();
 	extern void Viewport(int x, int y, int w, int h);
-	extern void Clear(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+	extern void Clear(unsigned char r = 0, unsigned char g = 0, unsigned char b = 0, unsigned char a = 255);
 
 	extern void PointSize(float size);
 	extern void LineWidth(float size);
