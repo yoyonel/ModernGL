@@ -23,8 +23,8 @@ ModernGL64:
 	$(MK) Bin\ModernGL64.dll
 	$(MK) Bin\libModernGL64.a
 
-Bin\ModernGL32.dll: prepare Temp\OpenGL32-cpp.o Temp\OpenGL32-asm.o Temp\ModernGL32.o Source\ModernGL.def
-	$(L32) -shared Temp\OpenGL32-cpp.o Temp\OpenGL32-asm.o Temp\ModernGL32.o Source\ModernGL.def -o Bin\ModernGL32.dll
+Bin\ModernGL32.dll: prepare Temp\OpenGL32-cpp.o Temp\OpenGL32-asm.o Temp\ModernGL32.o
+	$(L32) -shared Temp\OpenGL32-cpp.o Temp\OpenGL32-asm.o Temp\ModernGL32.o -o Bin\ModernGL32.dll
 
 Bin\libModernGL32.a: prepare Temp\OpenGL32-cpp.o Temp\OpenGL32-asm.o Temp\ModernGL32.o
 	$(AR32) rcs Bin\libModernGL32.a Temp\OpenGL32-cpp.o Temp\OpenGL32-asm.o Temp\ModernGL32.o
@@ -41,8 +41,8 @@ Temp\OpenGL32-asm.o: prepare Temp\OpenGL32.asm
 Temp\OpenGL32-cpp.o: prepare Source\OpenGL.cpp Temp\OpenGL.h
 	$(C32) -c Source\OpenGL.cpp -o Temp\OpenGL32-cpp.o
 
-Bin\ModernGL64.dll: prepare Temp\OpenGL64-cpp.o Temp\OpenGL64-asm.o Temp\ModernGL64.o Source\ModernGL.def
-	$(L64) -shared Temp\OpenGL64-cpp.o Temp\OpenGL64-asm.o Temp\ModernGL64.o Source\ModernGL.def -o Bin\ModernGL64.dll
+Bin\ModernGL64.dll: prepare Temp\OpenGL64-cpp.o Temp\OpenGL64-asm.o Temp\ModernGL64.o
+	$(L64) -shared Temp\OpenGL64-cpp.o Temp\OpenGL64-asm.o Temp\ModernGL64.o -o Bin\ModernGL64.dll
 
 Bin\libModernGL64.a: prepare Temp\OpenGL64-cpp.o Temp\OpenGL64-asm.o Temp\ModernGL64.o
 	$(AR64) rcs Bin\libModernGL64.a Temp\OpenGL64-cpp.o Temp\OpenGL64-asm.o Temp\ModernGL64.o
