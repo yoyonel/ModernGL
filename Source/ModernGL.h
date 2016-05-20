@@ -1,154 +1,152 @@
 #pragma once
 
-enum EnableEnum {
-	ENABLE_NOTHING = 0x00,
-	ENABLE_BLEND = 0x01,
-	ENABLE_CULL_FACE = 0x02,
-	ENABLE_DEPTH_TEST = 0x04,
-	ENABLE_MULTISAMPLE = 0x08,
-};
+namespace ModernGL {
 
-enum TextureFilterEnum {
-	TEXTURE_PIXELATED = 0x01,
-	TEXTURE_FILTERED = 0x02,
-	TEXTURE_MIPMAPPED = 0x03,
-};
+	enum EnableEnum {
+		ENABLE_NOTHING = 0x00,
+		ENABLE_BLEND = 0x01,
+		ENABLE_CULL_FACE = 0x02,
+		ENABLE_DEPTH_TEST = 0x04,
+		ENABLE_MULTISAMPLE = 0x08,
+	};
 
-struct Info {
-	int major;
-	int minor;
-	int samples;
-	const char * vendor;
-	const char * renderer;
-};
+	enum TextureFilterEnum {
+		TEXTURE_PIXELATED = 0x01,
+		TEXTURE_FILTERED = 0x02,
+		TEXTURE_MIPMAPPED = 0x03,
+	};
 
-struct Framebuffer {
-	unsigned framebuffer;
-	unsigned color;
-	unsigned depth;
-};
+	struct Info {
+		int major;
+		int minor;
+		int samples;
+		const char * vendor;
+		const char * renderer;
+	};
 
-extern "C" {
-	bool InitializeModernGL(bool font = true);
-	Info GetInfo();
+	struct Framebuffer {
+		unsigned framebuffer;
+		unsigned color;
+		unsigned depth;
+	};
 
-	const char * GetError();
-	void Viewport(int x, int y, int w, int h);
-	void Clear(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+	extern bool InitializeModernGL(bool font = true);
+	extern Info GetInfo();
 
-	void PointSize(float size);
-	void LineWidth(float size);
+	extern const char * GetError();
+	extern void Viewport(int x, int y, int w, int h);
+	extern void Clear(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
-	void EnableOnly(unsigned mask);
-	void EnableBlend();
-	void DisableBlend();
-	void EnableCullFace();
-	void DisableCullFace();
-	void EnableDepthTest();
-	void DisableDepthTest();
-	void EnableMultisample();
-	void DisableMultisample();
+	extern void PointSize(float size);
+	extern void LineWidth(float size);
 
-	unsigned NewProgram(unsigned * shader, int count);
-	void DeleteProgram(unsigned program);
-	void UseProgram(unsigned program);
-	void UseDefaultProgram();
+	extern void EnableOnly(unsigned mask);
+	extern void EnableBlend();
+	extern void DisableBlend();
+	extern void EnableCullFace();
+	extern void DisableCullFace();
+	extern void EnableDepthTest();
+	extern void DisableDepthTest();
+	extern void EnableMultisample();
+	extern void DisableMultisample();
 
-	unsigned NewFragmentShader(const char * source);
-	unsigned NewGeometryShader(const char * source);
-	unsigned NewVertexShader(const char * source);
-	unsigned NewComputeShader(const char * source);
-	unsigned NewTessControlShader(const char * source);
-	unsigned NewTessEvaluationShader(const char * source);
-	void DeleteShader(unsigned shader);
+	extern unsigned NewProgram(unsigned * shader, int count);
+	extern void DeleteProgram(unsigned program);
+	extern void UseProgram(unsigned program);
+	extern void UseDefaultProgram();
 
-	const char * CompilerLog();
+	extern unsigned NewFragmentShader(const char * source);
+	extern unsigned NewGeometryShader(const char * source);
+	extern unsigned NewVertexShader(const char * source);
+	extern unsigned NewComputeShader(const char * source);
+	extern unsigned NewTessControlShader(const char * source);
+	extern unsigned NewTessEvaluationShader(const char * source);
+	extern void DeleteShader(unsigned shader);
 
-	unsigned AttribLocation(unsigned program, const char * name);
-	unsigned UniformLocation(unsigned program, const char * name);
-	unsigned UniformBlockLocation(unsigned program, const char * name);
+	extern const char * CompilerLog();
 
-	void Uniform1f(unsigned location, float v0);
-	void Uniform2f(unsigned location, float v0, float v1);
-	void Uniform3f(unsigned location, float v0, float v1, float v2);
-	void Uniform4f(unsigned location, float v0, float v1, float v2, float v3);
-	void Uniform1i(unsigned location, int v0);
-	void Uniform2i(unsigned location, int v0, int v1);
-	void Uniform3i(unsigned location, int v0, int v1, int v2);
-	void Uniform4i(unsigned location, int v0, int v1, int v2, int v3);
+	extern unsigned AttribLocation(unsigned program, const char * name);
+	extern unsigned UniformLocation(unsigned program, const char * name);
+	extern unsigned UniformBlockLocation(unsigned program, const char * name);
 
-	void UniformMatrix(unsigned location, const float * matrix);
-	void UniformTransposeMatrix(unsigned location, const float * matrix);
-	void UniformBlock(unsigned location, unsigned buffer);
+	extern void Uniform1f(unsigned location, float v0);
+	extern void Uniform2f(unsigned location, float v0, float v1);
+	extern void Uniform3f(unsigned location, float v0, float v1, float v2);
+	extern void Uniform4f(unsigned location, float v0, float v1, float v2, float v3);
+	extern void Uniform1i(unsigned location, int v0);
+	extern void Uniform2i(unsigned location, int v0, int v1);
+	extern void Uniform3i(unsigned location, int v0, int v1, int v2);
+	extern void Uniform4i(unsigned location, int v0, int v1, int v2, int v3);
 
-	unsigned NewTexture(int width, int height, const void * data, int components = 3);
-	void DeleteTexture(unsigned texture);
-	void UseTexture(unsigned texture, unsigned location = 0);
+	extern void UniformMatrix(unsigned location, const float * matrix);
+	extern void UniformTransposeMatrix(unsigned location, const float * matrix);
+	extern void UniformBlock(unsigned location, unsigned buffer);
 
-	void SetTextureFilter(unsigned texture, unsigned mode);
-	void BuildMipmap(unsigned texture, int base = 0, int max = 1000);
+	extern unsigned NewTexture(int width, int height, const void * data, int components = 3);
+	extern void DeleteTexture(unsigned texture);
+	extern void UseTexture(unsigned texture, unsigned location = 0);
 
-	unsigned NewVertexArray(const char * format, int * attribs, unsigned vertexBuffer, unsigned indexBuffer = 0);
-	void DeleteVertexArray(unsigned array);
+	extern void SetTextureFilter(unsigned texture, unsigned mode);
+	extern void BuildMipmap(unsigned texture, int base = 0, int max = 1000);
 
-	void EnableAttribute(unsigned vao, unsigned target);
-	void DisableAttribute(unsigned vao, unsigned target);
-	void EnableAttributes(unsigned vao, unsigned * target, int count);
-	void DisableAttributes(unsigned vao, unsigned * target, int count);
+	extern unsigned NewVertexArray(const char * format, int * attribs, unsigned vertexBuffer, unsigned indexBuffer = 0);
+	extern void DeleteVertexArray(unsigned array);
 
-	unsigned NewVertexBuffer(const void * data, int size);
-	unsigned NewIndexBuffer(const void * data, int size);
-	unsigned NewStorageBuffer(const void * data, int size);
-	unsigned NewUniformBuffer(const void * data, int size);
-	unsigned NewDynamicVertexBuffer(const void * data, int size);
-	unsigned NewDynamicIndexBuffer(const void * data, int size);
-	unsigned NewDynamicStorageBuffer(const void * data, int size);
-	unsigned NewDynamicUniformBuffer(const void * data, int size);
-	void DeleteBuffer(unsigned buffer);
+	extern void EnableAttribute(unsigned vao, unsigned target);
+	extern void DisableAttribute(unsigned vao, unsigned target);
+	extern void EnableAttributes(unsigned vao, unsigned * target, int count);
+	extern void DisableAttributes(unsigned vao, unsigned * target, int count);
 
-	void UpdateVertexBuffer(unsigned buffer, unsigned offset, const void * data, int size);
-	void UpdateIndexBuffer(unsigned buffer, unsigned offset, const void * data, int size);
-	void UpdateStorageBuffer(unsigned buffer, unsigned offset, const void * data, int size);
-	void UpdateUniformBuffer(unsigned buffer, unsigned offset, const void * data, int size);
+	extern unsigned NewVertexBuffer(const void * data, int size);
+	extern unsigned NewIndexBuffer(const void * data, int size);
+	extern unsigned NewStorageBuffer(const void * data, int size);
+	extern unsigned NewUniformBuffer(const void * data, int size);
+	extern unsigned NewDynamicVertexBuffer(const void * data, int size);
+	extern unsigned NewDynamicIndexBuffer(const void * data, int size);
+	extern unsigned NewDynamicStorageBuffer(const void * data, int size);
+	extern unsigned NewDynamicUniformBuffer(const void * data, int size);
+	extern void DeleteBuffer(unsigned buffer);
 
-	void UseStorageBuffer(unsigned buffer, unsigned binding);
-	void * ReadStorageBuffer(unsigned buffer, unsigned offset, int size);
+	extern void UpdateVertexBuffer(unsigned buffer, unsigned offset, const void * data, int size);
+	extern void UpdateIndexBuffer(unsigned buffer, unsigned offset, const void * data, int size);
+	extern void UpdateStorageBuffer(unsigned buffer, unsigned offset, const void * data, int size);
+	extern void UpdateUniformBuffer(unsigned buffer, unsigned offset, const void * data, int size);
 
-	void RenderTriangles(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderTriangleStrip(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderTriangleFan(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderLines(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderLineStrip(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderLineLoop(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderPoints(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderLineStripAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderLinesAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderTriangleStripAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderTrianglesAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderIndexedTriangles(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderIndexedTriangleStrip(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderIndexedTriangleFan(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderIndexedLines(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderIndexedLineStrip(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderIndexedLineLoop(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderIndexedPoints(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderIndexedLineStripAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderIndexedLinesAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderIndexedTriangleStripAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
-	void RenderIndexedTrianglesAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void UseStorageBuffer(unsigned buffer, unsigned binding);
+	extern void * ReadStorageBuffer(unsigned buffer, unsigned offset, int size);
 
-	Framebuffer NewFramebuffer(int width, int height, bool multisample = true);
-	void DeleteFramebuffer(unsigned framebuffer);
-	void UseFramebuffer(unsigned framebuffer);
-	void UseDefaultFramebuffer();
+	extern void RenderTriangles(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderTriangleStrip(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderTriangleFan(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderLines(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderLineStrip(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderLineLoop(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderPoints(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderLineStripAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderLinesAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderTriangleStripAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderTrianglesAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderIndexedTriangles(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderIndexedTriangleStrip(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderIndexedTriangleFan(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderIndexedLines(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderIndexedLineStrip(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderIndexedLineLoop(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderIndexedPoints(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderIndexedLineStripAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderIndexedLinesAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderIndexedTriangleStripAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
+	extern void RenderIndexedTrianglesAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
 
-	unsigned char * ReadPixels(int x, int y, int width, int height, int components = 3);
-	float * ReadDepthPixels(int x, int y, int width, int height);
+	extern Framebuffer NewFramebuffer(int width, int height, bool multisample = true);
+	extern void DeleteFramebuffer(unsigned framebuffer);
+	extern void UseFramebuffer(unsigned framebuffer);
+	extern void UseDefaultFramebuffer();
 
-	unsigned ReadPixel(int x, int y);
-	float ReadDepthPixel(int x, int y);
+	extern unsigned char * ReadPixels(int x, int y, int width, int height, int components = 3);
+	extern float * ReadDepthPixels(int x, int y, int width, int height);
 
-	// void DebugFontColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a = 255);
-	// void DebugFontAlign(float px, float py);
-	// void DebugFontPrint(float x, float y, const char * fmt, ...);
+	extern unsigned ReadPixel(int x, int y);
+	extern float ReadDepthPixel(int x, int y);
+
 }
