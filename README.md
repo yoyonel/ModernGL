@@ -2,6 +2,8 @@
 
 ```
 git clone https://github.com/cprogrammer1994/ModernGL --recursive
+make submodules
+make
 ```
 
 # Supported Versions

@@ -14,6 +14,9 @@ LINK = $(CXX) -O3
 
 all: prepare Bin/ModernGL.dll Bin/libModernGL.a finish
 
+submodules:
+	cd libOpenGL.a && $(MK) MAJOR=3 MINOR=3
+
 Bin/ModernGL.dll: Temp/libOpenGL.a Temp/ModernGL.o
 	$(LINK) -shared Temp/ModernGL.o Temp/libOpenGL.a -o Bin/ModernGL.dll
 
@@ -23,13 +26,10 @@ Bin/libModernGL.a: Temp/libOpenGL.a Temp/ModernGL.o
 Temp/ModernGL.o: Source/ModernGL.cpp Source/ModernGL.h Temp/OpenGL.h
 	$(COMPILE) Source/ModernGL.cpp -o Temp/ModernGL.o
 
-build-libOpenGL.a:
-	cd libOpenGL.a && $(MK) MAJOR=3 MINOR=3
-
-Temp/libOpenGL.a: build-libOpenGL.a
+Temp/libOpenGL.a: # submodules
 	$(PY) -c "import shutil; shutil.copyfile('libOpenGL.a/Bin/libOpenGL.a', 'Temp/libOpenGL.a')"
 
-Temp/OpenGL.h: build-libOpenGL.a
+Temp/OpenGL.h: # submodules
 	$(PY) -c "import shutil; shutil.copyfile('libOpenGL.a/Bin/OpenGL.h', 'Temp/OpenGL.h')"
 
 clean:
