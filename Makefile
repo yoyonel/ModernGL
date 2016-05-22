@@ -12,17 +12,15 @@ ASM += -f win$(BITS)
 COMPILE = $(CXX) -std=c++11 -I Temp -c
 LINK = $(CXX) -O3
 
-all: ModernGL finish
+all: prepare Bin/ModernGL.dll Bin/libModernGL.a finish
 
-ModernGL: Bin/ModernGL.dll Bin/libModernGL.a
-
-Bin/ModernGL.dll: prepare Temp/libOpenGL.a Temp/ModernGL.o
+Bin/ModernGL.dll: Temp/libOpenGL.a Temp/ModernGL.o
 	$(LINK) -shared Temp/ModernGL.o Temp/libOpenGL.a -o Bin/ModernGL.dll
 
-Bin/libModernGL.a: prepare Temp/libOpenGL.a Temp/ModernGL.o
+Bin/libModernGL.a: Temp/libOpenGL.a Temp/ModernGL.o
 	$(AR) rcs Bin/libModernGL.a Temp/ModernGL.o
 
-Temp/ModernGL.o: prepare Source/ModernGL.cpp Source/ModernGL.h Temp/OpenGL.h
+Temp/ModernGL.o: Source/ModernGL.cpp Source/ModernGL.h Temp/OpenGL.h
 	$(COMPILE) Source/ModernGL.cpp -o Temp/ModernGL.o
 
 build-libOpenGL.a:
