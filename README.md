@@ -18,10 +18,15 @@ Checkout the [OpenGL Registry](https://www.opengl.org/registry/) for core specif
 
 # Description
 
+SOON
+> ModernGL simply implements a set of OpenGL functions
+
 # Concept
 
+SOON
 > ModernGL simply implements a set of OpenGL functions
 
 # Example
 
+SOON
 > [Julia Fractal](https://gist.github.com/cprogrammer1994/ecd69bc181e159305ad6)
