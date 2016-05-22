@@ -12,7 +12,7 @@ ASM += -f win$(BITS)
 COMPILE = $(CXX) -std=c++11 -I Temp -c
 LINK = $(CXX) -O3
 
-all: clean ModernGL finish
+all: ModernGL finish
 
 ModernGL: Bin/ModernGL.dll Bin/libModernGL.a
 
