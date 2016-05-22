@@ -1,10 +1,10 @@
 BITS ?= 32
 
-ASM ?= nasm
-CXX ?= g++
-AR ?= ar
-PY ?= python
-MK ?= make
+ASM = nasm
+CXX = g++
+AR = ar
+PY = python
+MK = make
 
 CXX += -m$(BITS)
 ASM += -f win$(BITS)
