@@ -18,8 +18,6 @@ Checkout the [OpenGL Registry](https://www.opengl.org/registry/) for core specif
 
 # Description
 
-> OpenGL is easy to use
-
 # Concept
 
 > ModernGL simply implements a set of OpenGL functions
