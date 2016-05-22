@@ -1,0 +1,3 @@
+[submodule "libOpenGL.a"]
+	path = libOpenGL.a
+	url = https://github.com/cprogrammer1994/libOpenGL.a
