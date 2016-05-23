@@ -12,10 +12,12 @@ ASM += -f win$(BITS)
 COMPILE = $(CXX) -std=c++11 -I Temp -c
 LINK = $(CXX) -O3
 
-all: prepare Bin/ModernGL.dll Bin/libModernGL.a finish
+all: submodules ModernGL
 
 submodules:
 	cd libOpenGL.a && $(MK) MAJOR=3 MINOR=3
+
+ModernGL: prepare Bin/ModernGL.dll Bin/libModernGL.a finish
 
 Bin/ModernGL.dll: Temp/libOpenGL.a Temp/ModernGL.o
 	$(LINK) -shared Temp/ModernGL.o Temp/libOpenGL.a -o Bin/ModernGL.dll
