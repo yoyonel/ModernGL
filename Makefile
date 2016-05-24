@@ -1,5 +1,6 @@
 BITS ?= 32
 
+GIT = git
 ASM = nasm
 CXX = g++
 AR = ar
@@ -12,35 +13,29 @@ ASM += -f win$(BITS)
 COMPILE = $(CXX) -std=c++11 -I Temp -c
 LINK = $(CXX) -O3
 
-all: submodules ModernGL
-
-submodules:
-	cd libOpenGL.a && $(MK) MAJOR=3 MINOR=3
-
-ModernGL: prepare Bin/ModernGL.dll Bin/libModernGL.a finish
-
-Bin/ModernGL.dll: Temp/libOpenGL.a Temp/ModernGL.o
-	$(LINK) -shared Temp/ModernGL.o Temp/libOpenGL.a -o Bin/ModernGL.dll
-
-Bin/libModernGL.a: Temp/libOpenGL.a Temp/ModernGL.o
-	$(AR) rcs Bin/libModernGL.a Temp/ModernGL.o
-
-Temp/ModernGL.o: Source/ModernGL.cpp Source/ModernGL.h Temp/OpenGL.h
-	$(COMPILE) Source/ModernGL.cpp -o Temp/ModernGL.o
-
-Temp/libOpenGL.a: # submodules
-	$(PY) -c "import shutil; shutil.copyfile('libOpenGL.a/Bin/libOpenGL.a', 'Temp/libOpenGL.a')"
-
-Temp/OpenGL.h: # submodules
-	$(PY) -c "import shutil; shutil.copyfile('libOpenGL.a/Bin/OpenGL.h', 'Temp/OpenGL.h')"
+all: Temp/prepare Bin/ModernGL.dll Bin/libModernGL.a Temp/finish
 
 clean:
 	$(PY) Clean.py
 
-finish:
-	$(PY) Finish.py
+libOpenGL.a/Makefile:
+	$(GIT) submodule init
+	$(GIT) submodule update
 
-prepare:
+libOpenGL.a/Bin/libOpenGL.a: libOpenGL.a/Makefile
+	cd libOpenGL.a && $(MK) MAJOR=3 MINOR=3
+
+Bin/ModernGL.dll: Temp/prepare Temp/libOpenGL.a Temp/ModernGL.o
+	$(LINK) -shared Temp/ModernGL.o Temp/libOpenGL.a -o Bin/ModernGL.dll
+
+Bin/libModernGL.a: Temp/prepare Temp/libOpenGL.a Temp/ModernGL.o
+	$(AR) rcs Bin/libModernGL.a Temp/ModernGL.o
+
+Temp/ModernGL.o: Temp/prepare Source/ModernGL.cpp Source/ModernGL.h Temp/OpenGL.h
+	$(COMPILE) Source/ModernGL.cpp -o Temp/ModernGL.o
+
+Temp/prepare: libOpenGL.a/Bin/libOpenGL.a
 	$(PY) Prepare.py
 
-Run:
+Temp/finish:
+	$(PY) Finish.py
