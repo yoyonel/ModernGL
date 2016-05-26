@@ -5,13 +5,6 @@ git clone https://github.com/cprogrammer1994/ModernGL --recursive
 make
 ```
 
-```
-git clone https://github.com/cprogrammer1994/ModernGL
-git submodule init --recursive
-git submodule update --recursive
-make
-```
-
 # Supported Versions
 
 ![OpenGL-3.3](https://raw.githubusercontent.com/cprogrammer1994/libOpenGL.a/master/Badges/OpenGL-33.png)
