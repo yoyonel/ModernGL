@@ -22,271 +22,271 @@ namespace {
 
 namespace ModernGL {
 	bool TestFunctions() {
-		if (!OpenGL::ptr_glActiveTexture()) {
+		if (!OpenGL::isglActiveTexture()) {
 			errorMessage = "glActiveTexture not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glAttachShader()) {
+		if (!OpenGL::isglAttachShader()) {
 			errorMessage = "glAttachShader not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glBindBuffer()) {
+		if (!OpenGL::isglBindBuffer()) {
 			errorMessage = "glBindBuffer not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glBindBufferBase()) {
+		if (!OpenGL::isglBindBufferBase()) {
 			errorMessage = "glBindBufferBase not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glBindFramebuffer()) {
+		if (!OpenGL::isglBindFramebuffer()) {
 			errorMessage = "glBindFramebuffer not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glBindTexture()) {
+		if (!OpenGL::isglBindTexture()) {
 			errorMessage = "glBindTexture not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glBindVertexArray()) {
+		if (!OpenGL::isglBindVertexArray()) {
 			errorMessage = "glBindVertexArray not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glBlendFunc()) {
+		if (!OpenGL::isglBlendFunc()) {
 			errorMessage = "glBlendFunc not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glBufferData()) {
+		if (!OpenGL::isglBufferData()) {
 			errorMessage = "glBufferData not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glBufferSubData()) {
+		if (!OpenGL::isglBufferSubData()) {
 			errorMessage = "glBufferSubData not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glClear()) {
+		if (!OpenGL::isglClear()) {
 			errorMessage = "glClear not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glClearColor()) {
+		if (!OpenGL::isglClearColor()) {
 			errorMessage = "glClearColor not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glCompileShader()) {
+		if (!OpenGL::isglCompileShader()) {
 			errorMessage = "glCompileShader not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glCreateProgram()) {
+		if (!OpenGL::isglCreateProgram()) {
 			errorMessage = "glCreateProgram not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glCreateShader()) {
+		if (!OpenGL::isglCreateShader()) {
 			errorMessage = "glCreateShader not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glDeleteBuffers()) {
+		if (!OpenGL::isglDeleteBuffers()) {
 			errorMessage = "glDeleteBuffers not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glDeleteFramebuffers()) {
+		if (!OpenGL::isglDeleteFramebuffers()) {
 			errorMessage = "glDeleteFramebuffers not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glDeleteProgram()) {
+		if (!OpenGL::isglDeleteProgram()) {
 			errorMessage = "glDeleteProgram not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glDeleteShader()) {
+		if (!OpenGL::isglDeleteShader()) {
 			errorMessage = "glDeleteShader not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glDeleteTextures()) {
+		if (!OpenGL::isglDeleteTextures()) {
 			errorMessage = "glDeleteTextures not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glDeleteVertexArrays()) {
+		if (!OpenGL::isglDeleteVertexArrays()) {
 			errorMessage = "glDeleteVertexArrays not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glDisable()) {
+		if (!OpenGL::isglDisable()) {
 			errorMessage = "glDisable not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glDisableVertexAttribArray()) {
+		if (!OpenGL::isglDisableVertexAttribArray()) {
 			errorMessage = "glDisableVertexAttribArray not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glDrawArraysInstanced()) {
+		if (!OpenGL::isglDrawArraysInstanced()) {
 			errorMessage = "glDrawArraysInstanced not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glDrawElementsInstanced()) {
+		if (!OpenGL::isglDrawElementsInstanced()) {
 			errorMessage = "glDrawElementsInstanced not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glEnable()) {
+		if (!OpenGL::isglEnable()) {
 			errorMessage = "glEnable not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glEnableVertexAttribArray()) {
+		if (!OpenGL::isglEnableVertexAttribArray()) {
 			errorMessage = "glEnableVertexAttribArray not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glFramebufferTexture2D()) {
+		if (!OpenGL::isglFramebufferTexture2D()) {
 			errorMessage = "glFramebufferTexture2D not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGenBuffers()) {
+		if (!OpenGL::isglGenBuffers()) {
 			errorMessage = "glGenBuffers not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGenerateMipmap()) {
+		if (!OpenGL::isglGenerateMipmap()) {
 			errorMessage = "glGenerateMipmap not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGenFramebuffers()) {
+		if (!OpenGL::isglGenFramebuffers()) {
 			errorMessage = "glGenFramebuffers not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGenTextures()) {
+		if (!OpenGL::isglGenTextures()) {
 			errorMessage = "glGenTextures not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGenVertexArrays()) {
+		if (!OpenGL::isglGenVertexArrays()) {
 			errorMessage = "glGenVertexArrays not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGetAttachedShaders()) {
+		if (!OpenGL::isglGetAttachedShaders()) {
 			errorMessage = "glGetAttachedShaders not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGetAttribLocation()) {
+		if (!OpenGL::isglGetAttribLocation()) {
 			errorMessage = "glGetAttribLocation not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGetError()) {
+		if (!OpenGL::isglGetError()) {
 			errorMessage = "glGetError not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGetFramebufferAttachmentParameteriv()) {
+		if (!OpenGL::isglGetFramebufferAttachmentParameteriv()) {
 			errorMessage = "glGetFramebufferAttachmentParameteriv not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGetIntegerv()) {
+		if (!OpenGL::isglGetIntegerv()) {
 			errorMessage = "glGetIntegerv not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGetProgramInfoLog()) {
+		if (!OpenGL::isglGetProgramInfoLog()) {
 			errorMessage = "glGetProgramInfoLog not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGetProgramiv()) {
+		if (!OpenGL::isglGetProgramiv()) {
 			errorMessage = "glGetProgramiv not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGetShaderInfoLog()) {
+		if (!OpenGL::isglGetShaderInfoLog()) {
 			errorMessage = "glGetShaderInfoLog not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGetShaderiv()) {
+		if (!OpenGL::isglGetShaderiv()) {
 			errorMessage = "glGetShaderiv not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGetString()) {
+		if (!OpenGL::isglGetString()) {
 			errorMessage = "glGetString not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGetUniformBlockIndex()) {
+		if (!OpenGL::isglGetUniformBlockIndex()) {
 			errorMessage = "glGetUniformBlockIndex not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glGetUniformLocation()) {
+		if (!OpenGL::isglGetUniformLocation()) {
 			errorMessage = "glGetUniformLocation not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glLineWidth()) {
+		if (!OpenGL::isglLineWidth()) {
 			errorMessage = "glLineWidth not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glLinkProgram()) {
+		if (!OpenGL::isglLinkProgram()) {
 			errorMessage = "glLinkProgram not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glMapBufferRange()) {
+		if (!OpenGL::isglMapBufferRange()) {
 			errorMessage = "glMapBufferRange not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glPointSize()) {
+		if (!OpenGL::isglPointSize()) {
 			errorMessage = "glPointSize not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glPrimitiveRestartIndex()) {
+		if (!OpenGL::isglPrimitiveRestartIndex()) {
 			errorMessage = "glPrimitiveRestartIndex not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glReadPixels()) {
+		if (!OpenGL::isglReadPixels()) {
 			errorMessage = "glReadPixels not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glShaderSource()) {
+		if (!OpenGL::isglShaderSource()) {
 			errorMessage = "glShaderSource not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glTexImage2D()) {
+		if (!OpenGL::isglTexImage2D()) {
 			errorMessage = "glTexImage2D not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glTexParameteri()) {
+		if (!OpenGL::isglTexParameteri()) {
 			errorMessage = "glTexParameteri not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glUniform1f()) {
+		if (!OpenGL::isglUniform1f()) {
 			errorMessage = "glUniform1f not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glUniform1i()) {
+		if (!OpenGL::isglUniform1i()) {
 			errorMessage = "glUniform1i not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glUniform2f()) {
+		if (!OpenGL::isglUniform2f()) {
 			errorMessage = "glUniform2f not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glUniform2i()) {
+		if (!OpenGL::isglUniform2i()) {
 			errorMessage = "glUniform2i not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glUniform3f()) {
+		if (!OpenGL::isglUniform3f()) {
 			errorMessage = "glUniform3f not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glUniform3i()) {
+		if (!OpenGL::isglUniform3i()) {
 			errorMessage = "glUniform3i not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glUniform4f()) {
+		if (!OpenGL::isglUniform4f()) {
 			errorMessage = "glUniform4f not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glUniform4i()) {
+		if (!OpenGL::isglUniform4i()) {
 			errorMessage = "glUniform4i not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glUniformMatrix4fv()) {
+		if (!OpenGL::isglUniformMatrix4fv()) {
 			errorMessage = "glUniformMatrix4fv not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glUnmapBuffer()) {
+		if (!OpenGL::isglUnmapBuffer()) {
 			errorMessage = "glUnmapBuffer not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glUseProgram()) {
+		if (!OpenGL::isglUseProgram()) {
 			errorMessage = "glUseProgram not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glVertexAttribPointer()) {
+		if (!OpenGL::isglVertexAttribPointer()) {
 			errorMessage = "glVertexAttribPointer not loaded.";
 			return false;
 		}
-		if (!OpenGL::ptr_glViewport()) {
+		if (!OpenGL::isglViewport()) {
 			errorMessage = "glViewport not loaded.";
 			return false;
 		}
