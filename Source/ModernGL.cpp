@@ -18,7 +18,7 @@ namespace {
 	const char * errorMessage = 0;
 }
 
-#include <OpenGL.h>
+#include "OpenGL.h"
 
 namespace ModernGL {
 	bool TestFunctions() {
