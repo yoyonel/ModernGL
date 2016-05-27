@@ -43,12 +43,14 @@ PIXELFORMATDESCRIPTOR pfd = {
 
 bool CreateGLContext(int major, int minor) {
 	if (!WindowsGL::InitializeWindowsGL()) {
+		printf("Code: 1\n");
 		return false;
 	}
 
 	HMODULE hinst = GetModuleHandle(0);
 
 	if (!hinst) {
+		printf("Code: 2\n");
 		return false;
 	}
 
@@ -66,6 +68,7 @@ bool CreateGLContext(int major, int minor) {
 	};
 
 	if (!RegisterClass(&wndClass)) {
+		printf("Code: 3\n");
 		return false;
 	}
 
@@ -85,12 +88,14 @@ bool CreateGLContext(int major, int minor) {
 	);
 
 	if (!hwnd) {
+		printf("Code: 4\n");
 		return false;
 	}
 
 	hdc = GetDC(hwnd);
 
 	if (!hdc) {
+		printf("Code: 5\n");
 		return false;
 	}
 
@@ -113,12 +118,14 @@ bool CreateGLContext(int major, int minor) {
 		unsigned numFormats = 0;
 
 		if (!WindowsGL::wglChoosePixelFormat(hdc, attributes, 0, 1, &pixelformat, &numFormats)) {
+			printf("Code: 6\n");
 			return false;
 		}
 		if (numFormats) {
 			break;
 		}
 		if (!samples) {
+			printf("Code: 7\n");
 			return false;
 		}
 		samples /= 2;
