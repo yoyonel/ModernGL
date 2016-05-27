@@ -20,6 +20,7 @@ test: Temp/prepare Bin/Test.exe
 
 clean:
 	$(PY) Clean.py
+	cd libOpenGL.a && $(MK) clean
 
 libOpenGL.a/Makefile:
 	$(GIT) submodule init
