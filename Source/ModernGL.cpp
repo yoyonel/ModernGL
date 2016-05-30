@@ -297,7 +297,7 @@ namespace ModernGL {
 	}
 
 	bool TestExtensions() {
-		const char * ext = glGetString(OpenGL::GL_EXTENSIONS);
+		const char * ext = (const char *)OpenGL::glGetString(OpenGL::GL_EXTENSIONS);
 
 		if (!strstr("GL_ARB_shader_storage_buffer_object", ext)) {
 			return false;
