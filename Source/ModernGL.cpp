@@ -373,7 +373,7 @@ namespace ModernGL {
 		OpenGL::glPointSize(size);
 	}
 
-	void LineWidth(float size) {
+	void LineSize(float size) {
 		OpenGL::glLineWidth(size);
 	}
 

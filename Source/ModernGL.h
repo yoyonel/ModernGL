@@ -38,7 +38,7 @@ namespace ModernGL {
 	extern void Clear(unsigned char r = 0, unsigned char g = 0, unsigned char b = 0, unsigned char a = 255);
 
 	extern void PointSize(float size);
-	extern void LineWidth(float size);
+	extern void LineSize(float size);
 
 	extern void EnableOnly(unsigned mask);
 	extern void EnableBlend();
@@ -65,7 +65,7 @@ namespace ModernGL {
 
 	extern const char * CompilerLog();
 
-	extern unsigned AttribLocation(unsigned program, const char * name);
+	extern unsigned AttributeLocation(unsigned program, const char * name);
 	extern unsigned UniformLocation(unsigned program, const char * name);
 	extern unsigned UniformBlockLocation(unsigned program, const char * name);
 
