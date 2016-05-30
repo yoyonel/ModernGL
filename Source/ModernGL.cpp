@@ -303,7 +303,6 @@ namespace ModernGL {
 		}
 
 		OpenGL::glBlendFunc(OpenGL::GL_SRC_ALPHA, OpenGL::GL_ONE_MINUS_SRC_ALPHA);
-		// OpenGL::glEnable(OpenGL::GL_PRIMITIVE_RESTART_FIXED_INDEX);
 		OpenGL::glEnable(OpenGL::GL_PRIMITIVE_RESTART_INDEX);
 		OpenGL::glPrimitiveRestartIndex(-1);
 
@@ -351,21 +350,9 @@ namespace ModernGL {
 
 	const char * GetError() {
 		if (errorMessage) {
-			return errorMessage; // TODO: separate error report
+			return errorMessage;
 		}
-		return "No Error"; // glGetError is not important
-
-		// switch (OpenGL::glGetError()) {
-		// 	case OpenGL::GL_NO_ERROR: return "GL_NO_ERROR";
-		// 	case OpenGL::GL_INVALID_ENUM: return "GL_INVALID_ENUM";
-		// 	case OpenGL::GL_INVALID_VALUE: return "GL_INVALID_VALUE";
-		// 	case OpenGL::GL_INVALID_OPERATION: return "GL_INVALID_OPERATION";
-		// 	case OpenGL::GL_INVALID_FRAMEBUFFER_OPERATION: return "GL_INVALID_FRAMEBUFFER_OPERATION";
-		// 	case OpenGL::GL_OUT_OF_MEMORY: return "GL_OUT_OF_MEMORY";
-		// 	case OpenGL::GL_STACK_UNDERFLOW: return "GL_STACK_UNDERFLOW";
-		// 	case OpenGL::GL_STACK_OVERFLOW: return "GL_STACK_OVERFLOW";
-		// 	default: return "Unknown Error";
-		// }
+		return "No Error";
 	}
 
 	void Viewport(int x, int y, int w, int h) {
@@ -504,18 +491,6 @@ namespace ModernGL {
 	unsigned NewVertexShader(const char * source) {
 		return NewShader<OpenGL::GL_VERTEX_SHADER>(source);
 	}
-
-	// unsigned NewComputeShader(const char * source) {
-	// 	return NewShader<OpenGL::GL_COMPUTE_SHADER>(source);
-	// }
-
-	// unsigned NewTessControlShader(const char * source) {
-	// 	return NewShader<OpenGL::GL_TESS_CONTROL_SHADER>(source);
-	// }
-
-	// unsigned NewTessEvaluationShader(const char * source) {
-	// 	return NewShader<OpenGL::GL_TESS_EVALUATION_SHADER>(source);
-	// }
 
 	void DeleteShader(unsigned shader) {
 		OpenGL::glDeleteShader(shader);
@@ -724,14 +699,6 @@ namespace ModernGL {
 		return buffer;
 	}
 
-	// unsigned NewStorageBuffer(const void * data, int size) {
-	// 	OpenGL::GLuint buffer = 0;
-	// 	OpenGL::glGenBuffers(1, &buffer);
-	// 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
-	// 	OpenGL::glBufferData(OpenGL::GL_SHADER_STORAGE_BUFFER, size, data, OpenGL::GL_STATIC_DRAW);
-	// 	return buffer;
-	// }
-
 	unsigned NewUniformBuffer(const void * data, int size) {
 		OpenGL::GLuint buffer = 0;
 		OpenGL::glGenBuffers(1, &buffer);
@@ -756,14 +723,6 @@ namespace ModernGL {
 		return buffer;
 	}
 
-	// unsigned NewDynamicStorageBuffer(const void * data, int size) {
-	// 	OpenGL::GLuint buffer = 0;
-	// 	OpenGL::glGenBuffers(1, &buffer);
-	// 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
-	// 	OpenGL::glBufferData(OpenGL::GL_SHADER_STORAGE_BUFFER, size, data, OpenGL::GL_DYNAMIC_DRAW);
-	// 	return buffer;
-	// }
-
 	unsigned NewDynamicUniformBuffer(const void * data, int size) {
 		OpenGL::GLuint buffer = 0;
 		OpenGL::glGenBuffers(1, &buffer);
@@ -786,28 +745,10 @@ namespace ModernGL {
 		OpenGL::glBufferSubData(OpenGL::GL_ELEMENT_ARRAY_BUFFER, (OpenGL::GLintptr)offset, size, data);
 	}
 
-	// void UpdateStorageBuffer(unsigned buffer, unsigned offset, const void * data, int size) {
-	// 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
-	// 	OpenGL::glBufferSubData(OpenGL::GL_SHADER_STORAGE_BUFFER, (OpenGL::GLintptr)offset, size, data);
-	// }
-
 	void UpdateUniformBuffer(unsigned buffer, unsigned offset, const void * data, int size) {
 		OpenGL::glBindBuffer(OpenGL::GL_UNIFORM_BUFFER, buffer);
 		OpenGL::glBufferSubData(OpenGL::GL_UNIFORM_BUFFER, (OpenGL::GLintptr)offset, size, data);
 	}
-
-	// void UseStorageBuffer(unsigned buffer, unsigned binding) {
-	// 	OpenGL::glBindBufferBase(OpenGL::GL_SHADER_STORAGE_BUFFER, binding, buffer);
-	// }
-
-	// void * ReadStorageBuffer(unsigned buffer, unsigned offset, int size) {
-	// 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
-	// 	void * map = OpenGL::glMapBufferRange(OpenGL::GL_SHADER_STORAGE_BUFFER, offset, size, OpenGL::GL_READ_ONLY);
-	// 	void * content = malloc(size);
-	// 	memcpy(content, map, size);
-	// 	OpenGL::glUnmapBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER);
-	// 	return content;
-	// }
 
 	void RenderTriangles(unsigned vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
@@ -1048,4 +989,56 @@ namespace ModernGL {
 		return depth;
 	}
 
+
+	// OpenGL 4.3+
+
+	unsigned NewTessControlShader(const char * source) {
+		return NewShader<OpenGL::GL_TESS_CONTROL_SHADER>(source);
+	}
+
+	unsigned NewTessEvaluationShader(const char * source) {
+		return NewShader<OpenGL::GL_TESS_EVALUATION_SHADER>(source);
+	}
+
+	// unsigned NewComputeShader(const char * source) {
+	// 	return NewShader<OpenGL::GL_COMPUTE_SHADER>(source);
+	// }
+
+	// unsigned DeleteComputeShader(const char * source) {
+	// 	return NewShader<OpenGL::GL_COMPUTE_SHADER>(source);
+	// }
+
+	// unsigned NewStorageBuffer(const void * data, int size) {
+	// 	OpenGL::GLuint buffer = 0;
+	// 	OpenGL::glGenBuffers(1, &buffer);
+	// 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
+	// 	OpenGL::glBufferData(OpenGL::GL_SHADER_STORAGE_BUFFER, size, data, OpenGL::GL_STATIC_DRAW);
+	// 	return buffer;
+	// }
+
+	// unsigned NewDynamicStorageBuffer(const void * data, int size) {
+	// 	OpenGL::GLuint buffer = 0;
+	// 	OpenGL::glGenBuffers(1, &buffer);
+	// 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
+	// 	OpenGL::glBufferData(OpenGL::GL_SHADER_STORAGE_BUFFER, size, data, OpenGL::GL_DYNAMIC_DRAW);
+	// 	return buffer;
+	// }
+
+	// void UpdateStorageBuffer(unsigned buffer, unsigned offset, const void * data, int size) {
+	// 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
+	// 	OpenGL::glBufferSubData(OpenGL::GL_SHADER_STORAGE_BUFFER, (OpenGL::GLintptr)offset, size, data);
+	// }
+
+	// void UseStorageBuffer(unsigned buffer, unsigned binding) {
+	// 	OpenGL::glBindBufferBase(OpenGL::GL_SHADER_STORAGE_BUFFER, binding, buffer);
+	// }
+
+	// void * ReadStorageBuffer(unsigned buffer, unsigned offset, int size) {
+	// 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
+	// 	void * map = OpenGL::glMapBufferRange(OpenGL::GL_SHADER_STORAGE_BUFFER, offset, size, OpenGL::GL_READ_ONLY);
+	// 	void * content = malloc(size);
+	// 	memcpy(content, map, size);
+	// 	OpenGL::glUnmapBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER);
+	// 	return content;
+	// }
 }
