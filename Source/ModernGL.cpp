@@ -315,6 +315,7 @@ namespace ModernGL {
 		unsigned maxTextureUnits = 1;
 		OpenGL::glGetIntegerv(OpenGL::GL_MAX_TEXTURE_IMAGE_UNITS, (OpenGL::GLint *)&maxTextureUnits);
 		defaultTextureUnit = maxTextureUnits - 1;
+
 		return true;
 	}
 
@@ -500,7 +501,7 @@ namespace ModernGL {
 		return compilerLog;
 	}
 
-	unsigned AttribLocation(unsigned program, const char * name) {
+	unsigned AttributeLocation(unsigned program, const char * name) {
 		return OpenGL::glGetAttribLocation(program, name);
 	}
 
@@ -989,7 +990,6 @@ namespace ModernGL {
 		return depth;
 	}
 
-
 	// OpenGL 4.3+
 
 	unsigned NewTessControlShader(const char * source) {
@@ -1000,45 +1000,57 @@ namespace ModernGL {
 		return NewShader<OpenGL::GL_TESS_EVALUATION_SHADER>(source);
 	}
 
-	// unsigned NewComputeShader(const char * source) {
-	// 	return NewShader<OpenGL::GL_COMPUTE_SHADER>(source);
-	// }
+	unsigned NewComputeShader(const char * source) {
+		unsigned shader = NewShader<OpenGL::GL_COMPUTE_SHADER>(source);
+		return NewProgram(&shader, 1);
+	}
 
-	// unsigned DeleteComputeShader(const char * source) {
-	// 	return NewShader<OpenGL::GL_COMPUTE_SHADER>(source);
-	// }
+	unsigned DeleteComputeShader(unsigned program) {
+		unsigned shader;
+		OpenGL::glGetAttachedShaders(program, 1, 0, &shader);
+		OpenGL::glDeleteShader(shader);
+		OpenGL::glDeleteProgram(program);
+	}
 
-	// unsigned NewStorageBuffer(const void * data, int size) {
-	// 	OpenGL::GLuint buffer = 0;
-	// 	OpenGL::glGenBuffers(1, &buffer);
-	// 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
-	// 	OpenGL::glBufferData(OpenGL::GL_SHADER_STORAGE_BUFFER, size, data, OpenGL::GL_STATIC_DRAW);
-	// 	return buffer;
-	// }
+	void RunComputeShader(unsigned program, unsigned x, unsigned y, unsigned z) {
+		OpenGL::glUseProgram(program);
+		OpenGL::glDispatchCompute(x, y, z);
+	}
 
-	// unsigned NewDynamicStorageBuffer(const void * data, int size) {
-	// 	OpenGL::GLuint buffer = 0;
-	// 	OpenGL::glGenBuffers(1, &buffer);
-	// 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
-	// 	OpenGL::glBufferData(OpenGL::GL_SHADER_STORAGE_BUFFER, size, data, OpenGL::GL_DYNAMIC_DRAW);
-	// 	return buffer;
-	// }
+	unsigned NewStorageBuffer(const void * data, int size) {
+		OpenGL::GLuint buffer = 0;
+		OpenGL::glGenBuffers(1, &buffer);
+		OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
+		OpenGL::glBufferData(OpenGL::GL_SHADER_STORAGE_BUFFER, size, data, OpenGL::GL_STATIC_DRAW);
+		return buffer;
+	}
 
-	// void UpdateStorageBuffer(unsigned buffer, unsigned offset, const void * data, int size) {
-	// 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
-	// 	OpenGL::glBufferSubData(OpenGL::GL_SHADER_STORAGE_BUFFER, (OpenGL::GLintptr)offset, size, data);
-	// }
+	unsigned NewDynamicStorageBuffer(const void * data, int size) {
+		OpenGL::GLuint buffer = 0;
+		OpenGL::glGenBuffers(1, &buffer);
+		OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
+		OpenGL::glBufferData(OpenGL::GL_SHADER_STORAGE_BUFFER, size, data, OpenGL::GL_DYNAMIC_DRAW);
+		return buffer;
+	}
 
-	// void UseStorageBuffer(unsigned buffer, unsigned binding) {
-	// 	OpenGL::glBindBufferBase(OpenGL::GL_SHADER_STORAGE_BUFFER, binding, buffer);
-	// }
+	void UpdateStorageBuffer(unsigned buffer, unsigned offset, const void * data, int size) {
+		OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
+		OpenGL::glBufferSubData(OpenGL::GL_SHADER_STORAGE_BUFFER, (OpenGL::GLintptr)offset, size, data);
+	}
 
-	// void * ReadStorageBuffer(unsigned buffer, unsigned offset, int size) {
-	// 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
-	// 	void * map = OpenGL::glMapBufferRange(OpenGL::GL_SHADER_STORAGE_BUFFER, offset, size, OpenGL::GL_READ_ONLY);
-	// 	void * content = malloc(size);
-	// 	memcpy(content, map, size);
-	// 	OpenGL::glUnmapBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER);
-	// 	return content;
-	// }
+	void UseStorageBuffer(unsigned buffer, unsigned program, unsigned binding) {
+		OpenGL::glUseProgram(program);
+		OpenGL::glBindBufferBase(OpenGL::GL_SHADER_STORAGE_BUFFER, binding, buffer);
+	}
+
+	void * ReadStorageBuffer(unsigned buffer, unsigned offset, int size) {
+		OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
+		void * map = OpenGL::glMapBufferRange(OpenGL::GL_SHADER_STORAGE_BUFFER, offset, size, OpenGL::GL_READ_ONLY);
+		void * content = malloc(size);
+		memcpy(content, map, size);
+		OpenGL::glUnmapBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER);
+		return content;
+	}
+
+	// Better than nothing font
 }

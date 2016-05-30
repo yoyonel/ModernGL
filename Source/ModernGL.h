@@ -143,10 +143,26 @@ namespace ModernGL {
 	extern void UseFramebuffer(unsigned framebuffer);
 	extern void UseDefaultFramebuffer();
 
+	// OpenGL 4.3+
+	
 	extern unsigned char * ReadPixels(int x, int y, int width, int height, int components = 3);
 	extern float * ReadDepthPixels(int x, int y, int width, int height);
 
 	extern unsigned ReadPixel(int x, int y);
 	extern float ReadDepthPixel(int x, int y);
 
+	extern unsigned NewTessControlShader(const char * source);
+	extern unsigned NewTessEvaluationShader(const char * source);
+
+	extern unsigned NewComputeShader(const char * source);
+	extern unsigned DeleteComputeShader(unsigned program);
+	extern void RunComputeShader(unsigned program, unsigned x = 1, unsigned y = 1, unsigned z = 1);
+
+	extern unsigned NewStorageBuffer(const void * data, int size);
+	extern unsigned NewDynamicStorageBuffer(const void * data, int size);
+	extern void UpdateStorageBuffer(unsigned buffer, unsigned offset, const void * data, int size);
+	extern void UseStorageBuffer(unsigned buffer, unsigned program, unsigned binding = 0);
+	extern void * ReadStorageBuffer(unsigned buffer, unsigned offset, int size);
+
+	// Better than nothing font
 }
