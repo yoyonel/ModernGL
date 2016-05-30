@@ -1031,7 +1031,7 @@ namespace ModernGL {
 		return NewProgram(&shader, 1);
 	}
 
-	unsigned DeleteComputeShader(unsigned program) {
+	void DeleteComputeShader(unsigned program) {
 		unsigned shader;
 		OpenGL::glGetAttachedShaders(program, 1, 0, &shader);
 		OpenGL::glDeleteShader(shader);

@@ -157,7 +157,7 @@ namespace ModernGL {
 	extern unsigned NewTessEvaluationShader(const char * source);
 
 	extern unsigned NewComputeShader(const char * source);
-	extern unsigned DeleteComputeShader(unsigned program);
+	extern void DeleteComputeShader(unsigned program);
 	extern void RunComputeShader(unsigned program, unsigned x = 1, unsigned y = 1, unsigned z = 1);
 
 	extern unsigned NewStorageBuffer(const void * data, int size);
