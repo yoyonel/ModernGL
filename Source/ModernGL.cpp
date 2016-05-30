@@ -299,6 +299,10 @@ namespace ModernGL {
 	bool TestExtensions() {
 		const char * ext = (const char *)OpenGL::glGetString(OpenGL::GL_EXTENSIONS);
 
+		if (!ext) {
+			return false;
+		}
+
 		if (!strstr("GL_ARB_shader_storage_buffer_object", ext)) {
 			return false;
 		}
@@ -319,6 +323,10 @@ namespace ModernGL {
 	bool InitializeModernGL(bool font) {
 		if (!OpenGL::InitializeOpenGL()) {
 			errorMessage = "InitializeOpenGL failed.";
+			return false;
+		}
+
+		if (!TestFunctions()) {
 			return false;
 		}
 
