@@ -31,9 +31,11 @@ namespace ModernGL {
 	};
 
 	extern bool InitializeModernGL(bool font = true);
+	extern bool ExtensionActive();
+	
+	extern const char * GetError();
 	extern Info GetInfo();
 
-	extern const char * GetError();
 	extern void Viewport(int x, int y, int w, int h);
 	extern void Clear(unsigned char r = 0, unsigned char g = 0, unsigned char b = 0, unsigned char a = 255);
 

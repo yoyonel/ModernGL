@@ -15,6 +15,8 @@ namespace {
 	const int maxCompilerLog = 16 * 1024;
 	char compilerLog[maxCompilerLog + 1];
 
+	bool extensionActive = false;
+
 	const char * errorMessage = 0;
 }
 
@@ -290,18 +292,38 @@ namespace ModernGL {
 			errorMessage = "glViewport not loaded.";
 			return false;
 		}
+
 		return true;
+	}
+
+	bool TestExtensions() {
+		const char * ext = glGetString(OpenGL::GL_EXTENSIONS);
+
+		if (!strstr("GL_ARB_shader_storage_buffer_object", ext)) {
+			return false;
+		}
+
+		if (!strstr("GL_ARB_tessellation_shader", ext)) {
+			return false;
+		}
+
+		if (!strstr("GL_ARB_compute_shader", ext)) {
+			return false;
+		}
+
+		if (!OpenGL::isglDispatchCompute()) {
+			return false;
+		}
 	}
 
 	bool InitializeModernGL(bool font) {
 		if (!OpenGL::InitializeOpenGL()) {
+			errorMessage = "InitializeOpenGL failed.";
 			return false;
 		}
 
-		if (!TestFunctions()) {
-			return false;
-		}
-
+		extensionActive = TestExtensions();
+		
 		OpenGL::glBlendFunc(OpenGL::GL_SRC_ALPHA, OpenGL::GL_ONE_MINUS_SRC_ALPHA);
 		OpenGL::glEnable(OpenGL::GL_PRIMITIVE_RESTART_INDEX);
 		OpenGL::glPrimitiveRestartIndex(-1);
@@ -317,6 +339,10 @@ namespace ModernGL {
 		defaultTextureUnit = maxTextureUnits - 1;
 
 		return true;
+	}
+
+	bool ExtensionActive() {
+		return extensionActive;
 	}
 
 	Info GetInfo() {
