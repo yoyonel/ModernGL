@@ -2,3 +2,10 @@ __pycache__
 
 Bin
 Temp
+
+PythonPackage/build
+PythonPackage/dist
+
+PythonPackage/files.txt
+PythonPackage/ModernGL.egg-info
+PythonPackage/MANIFEST
