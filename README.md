@@ -1,7 +1,7 @@
 # ModernGL
 
 ```
-git clone https://github.com/cprogrammer1994/ModernGL --recursive
+git clone https://github.com/cprogrammer1994/ModernGL
 make
 ```
 

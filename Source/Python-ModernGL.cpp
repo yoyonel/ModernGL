@@ -1,5 +1,4 @@
-#include <Python.h>
-
+#include "Python.h"
 #include "ModernGL.h"
 
 PyObject * InitializeModernGL(PyObject * self, PyObject * args) {
