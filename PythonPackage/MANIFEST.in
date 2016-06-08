@@ -1,3 +1,0 @@
-include ../Source/WindowsGL.h
-include ../Source/OpenGL.h
-include ../Source/ModernGL.h
