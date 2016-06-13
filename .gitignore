@@ -6,6 +6,7 @@ Temp
 build
 dist
 
+log.txt
 files.txt
 ModernGL.egg-info
 MANIFEST

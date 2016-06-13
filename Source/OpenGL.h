@@ -99,7 +99,7 @@ namespace OpenGL {
 	const GLenum GL_FRAMEBUFFER                        = 0x8D40;
 	const GLenum GL_MAX_SAMPLES                        = 0x8D57;
 	const GLenum GL_RG                                 = 0x8227;
-	const GLenum GL_PRIMITIVE_RESTART_INDEX            = 0x8F9E;
+	const GLenum GL_PRIMITIVE_RESTART                  = 0x8F9D;
 	const GLenum GL_UNIFORM_BUFFER                     = 0x8A11;
 	const GLenum GL_LINES_ADJACENCY                    = 0x000A;
 	const GLenum GL_LINE_STRIP_ADJACENCY               = 0x000B;
@@ -112,6 +112,7 @@ namespace OpenGL {
 	const GLenum GL_PRIMITIVE_RESTART_FIXED_INDEX      = 0x8D69;
 	const GLenum GL_COMPUTE_SHADER                     = 0x91B9;
 	const GLenum GL_SHADER_STORAGE_BUFFER              = 0x90D2;
+	const GLenum GL_MAP_READ_BIT                       = 0x0001;
 
 	bool __stdcall InitializeOpenGL();
 

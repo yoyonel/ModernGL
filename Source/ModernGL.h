@@ -60,9 +60,6 @@ namespace ModernGL {
 	extern unsigned NewFragmentShader(const char * source);
 	extern unsigned NewGeometryShader(const char * source);
 	extern unsigned NewVertexShader(const char * source);
-	extern unsigned NewComputeShader(const char * source);
-	extern unsigned NewTessControlShader(const char * source);
-	extern unsigned NewTessEvaluationShader(const char * source);
 	extern void DeleteShader(unsigned shader);
 
 	extern const char * CompilerLog();
@@ -101,21 +98,15 @@ namespace ModernGL {
 
 	extern unsigned NewVertexBuffer(const void * data, int size);
 	extern unsigned NewIndexBuffer(const void * data, int size);
-	extern unsigned NewStorageBuffer(const void * data, int size);
 	extern unsigned NewUniformBuffer(const void * data, int size);
 	extern unsigned NewDynamicVertexBuffer(const void * data, int size);
 	extern unsigned NewDynamicIndexBuffer(const void * data, int size);
-	extern unsigned NewDynamicStorageBuffer(const void * data, int size);
 	extern unsigned NewDynamicUniformBuffer(const void * data, int size);
 	extern void DeleteBuffer(unsigned buffer);
 
 	extern void UpdateVertexBuffer(unsigned buffer, unsigned offset, const void * data, int size);
 	extern void UpdateIndexBuffer(unsigned buffer, unsigned offset, const void * data, int size);
-	extern void UpdateStorageBuffer(unsigned buffer, unsigned offset, const void * data, int size);
 	extern void UpdateUniformBuffer(unsigned buffer, unsigned offset, const void * data, int size);
-
-	extern void UseStorageBuffer(unsigned buffer, unsigned binding);
-	extern void * ReadStorageBuffer(unsigned buffer, unsigned offset, int size);
 
 	extern void RenderTriangles(unsigned vao, int count, int first = 0, int instances = 1);
 	extern void RenderTriangleStrip(unsigned vao, int count, int first = 0, int instances = 1);
@@ -128,6 +119,7 @@ namespace ModernGL {
 	extern void RenderLinesAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
 	extern void RenderTriangleStripAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
 	extern void RenderTrianglesAdjacency(unsigned vao, int count, int first = 0, int instances = 1);
+
 	extern void RenderIndexedTriangles(unsigned vao, int count, int first = 0, int instances = 1);
 	extern void RenderIndexedTriangleStrip(unsigned vao, int count, int first = 0, int instances = 1);
 	extern void RenderIndexedTriangleFan(unsigned vao, int count, int first = 0, int instances = 1);
@@ -144,14 +136,14 @@ namespace ModernGL {
 	extern void DeleteFramebuffer(unsigned framebuffer);
 	extern void UseFramebuffer(unsigned framebuffer);
 	extern void UseDefaultFramebuffer();
-
-	// OpenGL 4.3+
 	
 	extern unsigned char * ReadPixels(int x, int y, int width, int height, int components = 3);
 	extern float * ReadDepthPixels(int x, int y, int width, int height);
 
 	extern unsigned ReadPixel(int x, int y);
 	extern float ReadDepthPixel(int x, int y);
+
+	// OpenGL 4.3+
 
 	extern unsigned NewTessControlShader(const char * source);
 	extern unsigned NewTessEvaluationShader(const char * source);
@@ -163,7 +155,7 @@ namespace ModernGL {
 	extern unsigned NewStorageBuffer(const void * data, int size);
 	extern unsigned NewDynamicStorageBuffer(const void * data, int size);
 	extern void UpdateStorageBuffer(unsigned buffer, unsigned offset, const void * data, int size);
-	extern void UseStorageBuffer(unsigned buffer, unsigned program, unsigned binding = 0);
+	extern void UseStorageBuffer(unsigned buffer, unsigned binding = 0);
 	extern void * ReadStorageBuffer(unsigned buffer, unsigned offset, int size);
 
 	// Better than nothing font

@@ -13,7 +13,7 @@ ModernGL = Extension(
 
 setup(
 	name = 'ModernGL',
-	version = '0.9.2',
+	version = '0.9.4',
 	description = 'ModernGL',
 	url = 'https://github.com/cprogrammer1994/ModernGL',
 	author = 'Szabolcs Dombi',

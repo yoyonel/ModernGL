@@ -412,7 +412,7 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 
 	int count = PyList_Size(lst);
 	for (int i = 0; i < count; ++i) {
-		matrix[i] = PyFloat_AsDouble(PyList_GetItem(lst, i));
+		matrix[i] = (float)PyFloat_AsDouble(PyList_GetItem(lst, i));
 	}
 
 	ModernGL::UniformMatrix(location, matrix);
@@ -431,7 +431,7 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 
 	int count = PyList_Size(lst);
 	for (int i = 0; i < count; ++i) {
-		matrix[i] = PyFloat_AsDouble(PyList_GetItem(lst, i));
+		matrix[i] = (float)PyFloat_AsDouble(PyList_GetItem(lst, i));
 	}
 
 	ModernGL::UniformTransposeMatrix(location, matrix);
@@ -1240,14 +1240,13 @@ PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args) {
 
 PyObject * UseStorageBuffer(PyObject * self, PyObject * args) {
 	unsigned buffer;
-	unsigned program;
 	unsigned binding = 0;
 
-	if (!PyArg_ParseTuple(args, "II|I:UseStorageBuffer", &buffer, &program, &binding)) {
+	if (!PyArg_ParseTuple(args, "I|I:UseStorageBuffer", &buffer, &binding)) {
 		return 0;
 	}
 
-	ModernGL::UseStorageBuffer(buffer, program, binding);
+	ModernGL::UseStorageBuffer(buffer, binding);
 	Py_RETURN_NONE;
 }
 
@@ -1261,6 +1260,10 @@ PyObject * ReadStorageBuffer(PyObject * self, PyObject * args) {
 	}
 
 	void * content = ModernGL::ReadStorageBuffer(buffer, offset, size);
+	if (!content) {
+		return 0;
+	}
+	
 	PyObject * data = PyBytes_FromStringAndSize((const char *)content, size);
 	free(content);
 
