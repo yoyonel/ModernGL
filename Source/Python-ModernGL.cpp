@@ -1,5 +1,6 @@
 #include "Python.h"
-#include "ModernGL.h"
+
+#include "ModernGL.hpp"
 
 PyObject * InitializeModernGL(PyObject * self, PyObject * args) {
 	bool font = true;
@@ -20,7 +21,7 @@ PyObject * GetInfo(PyObject * self, PyObject * args) {
 	}
 
 	ModernGL::Info info = ModernGL::GetInfo();
-	return Py_BuildValue("IIIss", info.major, info.minor, info.samples, info.vendor, info.renderer);
+	return Py_BuildValue("iiiss", info.major, info.minor, info.samples, info.vendor, info.renderer);
 }
 
 PyObject * GetError(PyObject * self, PyObject * args) {
@@ -48,7 +49,7 @@ PyObject * Viewport(PyObject * self, PyObject * args) {
 PyObject * Clear(PyObject * self, PyObject * args) {
 	unsigned char r = 0, g = 0, b = 0, a = 255;
 
-	if (!PyArg_ParseTuple(args, "bbb|b:Clear", &r, &g, &b, &a)) {
+	if (!PyArg_ParseTuple(args, "|bbbb:Clear", &r, &g, &b, &a)) {
 		return 0;
 	}
 
@@ -192,9 +193,9 @@ PyObject * NewVertexShader(PyObject * self, PyObject * args) {
 }
 
 PyObject * DeleteShader(PyObject * self, PyObject * args) {
-	unsigned shader;
+	int shader;
 
-	if (!PyArg_ParseTuple(args, "I:DeleteShader", &shader)) {
+	if (!PyArg_ParseTuple(args, "i:DeleteShader", &shader)) {
 		return 0;
 	}
 
@@ -210,20 +211,20 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	}
 
 	int count = PyList_Size(lst);
-	unsigned * shader = new unsigned[count];
+	int * shader = new int[count];
 	for (int i = 0; i < count; ++i) {
 		shader[i] = PyLong_AsLong(PyList_GetItem(lst, i));
 	}
-	unsigned program = ModernGL::NewProgram(shader, count);
+	int program = ModernGL::NewProgram(shader, count);
 	delete[] shader;
 
 	return PyLong_FromLong(program);
 }
 
 PyObject * DeleteProgram(PyObject * self, PyObject * args) {
-	unsigned program;
+	int program;
 
-	if (!PyArg_ParseTuple(args, "I:DeleteProgram", &program)) {
+	if (!PyArg_ParseTuple(args, "i:DeleteProgram", &program)) {
 		return 0;
 	}
 
@@ -232,9 +233,9 @@ PyObject * DeleteProgram(PyObject * self, PyObject * args) {
 }
 
 PyObject * UseProgram(PyObject * self, PyObject * args) {
-	unsigned program;
+	int program;
 
-	if (!PyArg_ParseTuple(args, "I:UseProgram", &program)) {
+	if (!PyArg_ParseTuple(args, "i:UseProgram", &program)) {
 		return 0;
 	}
 
@@ -260,10 +261,10 @@ PyObject * CompilerLog(PyObject * self, PyObject * args) {
 }
 
 PyObject * AttributeLocation(PyObject * self, PyObject * args) {
-	unsigned program;
+	int program;
 	const char * name;
 
-	if (!PyArg_ParseTuple(args, "Is:AttributeLocation", &program, &name)) {
+	if (!PyArg_ParseTuple(args, "is:AttributeLocation", &program, &name)) {
 		return 0;
 	}
 
@@ -271,10 +272,10 @@ PyObject * AttributeLocation(PyObject * self, PyObject * args) {
 }
 
 PyObject * UniformLocation(PyObject * self, PyObject * args) {
-	unsigned program;
+	int program;
 	const char * name;
 
-	if (!PyArg_ParseTuple(args, "Is:UniformLocation", &program, &name)) {
+	if (!PyArg_ParseTuple(args, "is:UniformLocation", &program, &name)) {
 		return 0;
 	}
 
@@ -282,10 +283,10 @@ PyObject * UniformLocation(PyObject * self, PyObject * args) {
 }
 
 PyObject * UniformBlockLocation(PyObject * self, PyObject * args) {
-	unsigned program;
+	int program;
 	const char * name;
 
-	if (!PyArg_ParseTuple(args, "Is:UniformBlockLocation", &program, &name)) {
+	if (!PyArg_ParseTuple(args, "is:UniformBlockLocation", &program, &name)) {
 		return 0;
 	}
 
@@ -293,10 +294,10 @@ PyObject * UniformBlockLocation(PyObject * self, PyObject * args) {
 }
 
 PyObject * Uniform1f(PyObject * self, PyObject * args) {
-	unsigned location;
+	int location;
 	float v0;
 
-	if (!PyArg_ParseTuple(args, "If:Uniform1f", &location, &v0)) {
+	if (!PyArg_ParseTuple(args, "if:Uniform1f", &location, &v0)) {
 		return 0;
 	}
 
@@ -305,11 +306,11 @@ PyObject * Uniform1f(PyObject * self, PyObject * args) {
 }
 
 PyObject * Uniform2f(PyObject * self, PyObject * args) {
-	unsigned location;
+	int location;
 	float v0;
 	float v1;
 
-	if (!PyArg_ParseTuple(args, "Iff:Uniform2f", &location, &v0, &v1)) {
+	if (!PyArg_ParseTuple(args, "iff:Uniform2f", &location, &v0, &v1)) {
 		return 0;
 	}
 
@@ -318,12 +319,12 @@ PyObject * Uniform2f(PyObject * self, PyObject * args) {
 }
 
 PyObject * Uniform3f(PyObject * self, PyObject * args) {
-	unsigned location;
+	int location;
 	float v0;
 	float v1;
 	float v2;
 
-	if (!PyArg_ParseTuple(args, "Ifff:Uniform3f", &location, &v0, &v1, &v2)) {
+	if (!PyArg_ParseTuple(args, "ifff:Uniform3f", &location, &v0, &v1, &v2)) {
 		return 0;
 	}
 
@@ -332,13 +333,13 @@ PyObject * Uniform3f(PyObject * self, PyObject * args) {
 }
 
 PyObject * Uniform4f(PyObject * self, PyObject * args) {
-	unsigned location;
+	int location;
 	float v0;
 	float v1;
 	float v2;
 	float v3;
 
-	if (!PyArg_ParseTuple(args, "Iffff:Uniform4f", &location, &v0, &v1, &v2, &v3)) {
+	if (!PyArg_ParseTuple(args, "iffff:Uniform4f", &location, &v0, &v1, &v2, &v3)) {
 		return 0;
 	}
 
@@ -347,10 +348,10 @@ PyObject * Uniform4f(PyObject * self, PyObject * args) {
 }
 
 PyObject * Uniform1i(PyObject * self, PyObject * args) {
-	unsigned location;
+	int location;
 	int v0;
 
-	if (!PyArg_ParseTuple(args, "Ii:Uniform1i", &location, &v0)) {
+	if (!PyArg_ParseTuple(args, "ii:Uniform1i", &location, &v0)) {
 		return 0;
 	}
 
@@ -359,11 +360,11 @@ PyObject * Uniform1i(PyObject * self, PyObject * args) {
 }
 
 PyObject * Uniform2i(PyObject * self, PyObject * args) {
-	unsigned location;
+	int location;
 	int v0;
 	int v1;
 
-	if (!PyArg_ParseTuple(args, "Iii:Uniform2i", &location, &v0, &v1)) {
+	if (!PyArg_ParseTuple(args, "iii:Uniform2i", &location, &v0, &v1)) {
 		return 0;
 	}
 
@@ -372,12 +373,12 @@ PyObject * Uniform2i(PyObject * self, PyObject * args) {
 }
 
 PyObject * Uniform3i(PyObject * self, PyObject * args) {
-	unsigned location;
+	int location;
 	int v0;
 	int v1;
 	int v2;
 
-	if (!PyArg_ParseTuple(args, "Iiii:Uniform3i", &location, &v0, &v1, &v2)) {
+	if (!PyArg_ParseTuple(args, "iiii:Uniform3i", &location, &v0, &v1, &v2)) {
 		return 0;
 	}
 
@@ -386,13 +387,13 @@ PyObject * Uniform3i(PyObject * self, PyObject * args) {
 }
 
 PyObject * Uniform4i(PyObject * self, PyObject * args) {
-	unsigned location;
+	int location;
 	int v0;
 	int v1;
 	int v2;
 	int v3;
 
-	if (!PyArg_ParseTuple(args, "Iiiii:Uniform4i", &location, &v0, &v1, &v2, &v3)) {
+	if (!PyArg_ParseTuple(args, "iiiii:Uniform4i", &location, &v0, &v1, &v2, &v3)) {
 		return 0;
 	}
 
@@ -401,10 +402,10 @@ PyObject * Uniform4i(PyObject * self, PyObject * args) {
 }
 
 PyObject * UniformMatrix(PyObject * self, PyObject * args) {
-	unsigned location;
+	int location;
 	PyObject * lst;
 
-	if (!PyArg_ParseTuple(args, "IO:UniformMatrix", &location, &lst)) {
+	if (!PyArg_ParseTuple(args, "iO:UniformMatrix", &location, &lst)) {
 		return 0;
 	}
 
@@ -420,10 +421,10 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 }
 
 PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
-	unsigned location;
+	int location;
 	PyObject * lst;
 
-	if (!PyArg_ParseTuple(args, "IO:UniformTransposeMatrix", &location, &lst)) {
+	if (!PyArg_ParseTuple(args, "iO:UniformTransposeMatrix", &location, &lst)) {
 		return 0;
 	}
 
@@ -439,10 +440,10 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 }
 
 PyObject * UniformBlock(PyObject * self, PyObject * args) {
-	unsigned location;
-	unsigned buffer;
+	int location;
+	int buffer;
 
-	if (!PyArg_ParseTuple(args, "II:UniformBlock", &location, &buffer)) {
+	if (!PyArg_ParseTuple(args, "ii:UniformBlock", &location, &buffer)) {
 		return 0;
 	}
 
@@ -451,13 +452,13 @@ PyObject * UniformBlock(PyObject * self, PyObject * args) {
 }
 
 PyObject * NewTexture(PyObject * self, PyObject * args) {
-	unsigned width;
-	unsigned height;
+	int width;
+	int height;
 	const void * data;
-	unsigned components = 3;
+	int components = 3;
 	int size;
 
-	if (!PyArg_ParseTuple(args, "IIy#|I:NewTexture", &width, &height, &data, &size, &components)) {
+	if (!PyArg_ParseTuple(args, "iiy#|i:NewTexture", &width, &height, &data, &size, &components)) {
 		return 0;
 	}
 
@@ -465,9 +466,9 @@ PyObject * NewTexture(PyObject * self, PyObject * args) {
 }
 
 PyObject * DeleteTexture(PyObject * self, PyObject * args) {
-	unsigned texture;
+	int texture;
 
-	if (!PyArg_ParseTuple(args, "I:DeleteTexture", &texture)) {
+	if (!PyArg_ParseTuple(args, "i:DeleteTexture", &texture)) {
 		return 0;
 	}
 
@@ -476,10 +477,10 @@ PyObject * DeleteTexture(PyObject * self, PyObject * args) {
 }
 
 PyObject * UseTexture(PyObject * self, PyObject * args) {
-	unsigned texture;
-	unsigned location = 0;
+	int texture;
+	int location = 0;
 
-	if (!PyArg_ParseTuple(args, "I|I:UseTexture", &texture, &location)) {
+	if (!PyArg_ParseTuple(args, "i|i:UseTexture", &texture, &location)) {
 		return 0;
 	}
 
@@ -487,24 +488,36 @@ PyObject * UseTexture(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * SetTextureFilter(PyObject * self, PyObject * args) {
-	unsigned texture;
-	unsigned mode;
-
-	if (!PyArg_ParseTuple(args, "II:SetTextureFilter", &texture, &mode)) {
+PyObject * SetTexturePixelated(PyObject * self, PyObject * args) {
+	int texture;
+	if (!PyArg_ParseTuple(args, "i:SetTexturePixelated", &texture)) {
 		return 0;
 	}
+	Py_RETURN_NONE;
+}
 
-	ModernGL::SetTextureFilter(texture, mode);
+PyObject * SetTextureFiltered(PyObject * self, PyObject * args) {
+	int texture;
+	if (!PyArg_ParseTuple(args, "i:SetTextureFiltered", &texture)) {
+		return 0;
+	}
+	Py_RETURN_NONE;
+}
+
+PyObject * SetTextureMipmapped(PyObject * self, PyObject * args) {
+	int texture;
+	if (!PyArg_ParseTuple(args, "i:SetTextureMipmapped", &texture)) {
+		return 0;
+	}
 	Py_RETURN_NONE;
 }
 
 PyObject * BuildMipmap(PyObject * self, PyObject * args) {
-	unsigned texture;
-	unsigned base = 0;
-	unsigned max = 1000;
+	int texture;
+	int base = 0;
+	int max = 1000;
 
-	if (!PyArg_ParseTuple(args, "I|II:BuildMipmap", &texture, &base, &max)) {
+	if (!PyArg_ParseTuple(args, "i|ii:BuildMipmap", &texture, &base, &max)) {
 		return 0;
 	}
 
@@ -516,40 +529,43 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	const char * format;
 	PyObject * lst;
 
-	unsigned vertexBuffer;
-	unsigned indexBuffer = 0;
+	int indexBuffer = 0;
 
-	if (!PyArg_ParseTuple(args, "sOI|I:NewVertexArray", &format, &lst, &vertexBuffer, &indexBuffer)) {
+	if (!PyArg_ParseTuple(args, "sO|i:NewVertexArray", &format, &lst, &indexBuffer)) {
 		return 0;
 	}
 
 	int count = PyList_Size(lst);
-	int * attribs = new int[count];
+	ModernGL::VertexBufferAndAttribute * attribs = new ModernGL::VertexBufferAndAttribute[count];
 	for (int i = 0; i < count; ++i) {
-		attribs[i] = PyLong_AsLong(PyList_GetItem(lst, i));
+		PyObject * tuple = PyList_GetItem(lst, i);
+		attribs[i] = {
+			PyLong_AsLong(PyTuple_GetItem(tuple, 0)),
+			PyLong_AsLong(PyTuple_GetItem(tuple, 1)),
+		};
 	}
 
-	PyObject * result = PyLong_FromLong(ModernGL::NewVertexArray(format, attribs, vertexBuffer, indexBuffer));
+	PyObject * result = PyLong_FromLong(ModernGL::NewVertexArray(format, attribs, indexBuffer));
 	delete[] attribs;
 	return result;
 }
 
 PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {
-	unsigned array;
+	int vao;
 
-	if (!PyArg_ParseTuple(args, "I:DeleteVertexArray", &array)) {
+	if (!PyArg_ParseTuple(args, "i:DeleteVertexArray", &vao)) {
 		return 0;
 	}
 
-	ModernGL::DeleteVertexArray(array);
+	ModernGL::DeleteVertexArray(vao);
 	Py_RETURN_NONE;
 }
 
 PyObject * EnableAttribute(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned target;
+	int vao;
+	int target;
 
-	if (!PyArg_ParseTuple(args, "II:EnableAttribute", &vao, &target)) {
+	if (!PyArg_ParseTuple(args, "ii:EnableAttribute", &vao, &target)) {
 		return 0;
 	}
 
@@ -558,10 +574,10 @@ PyObject * EnableAttribute(PyObject * self, PyObject * args) {
 }
 
 PyObject * DisableAttribute(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned target;
+	int vao;
+	int target;
 
-	if (!PyArg_ParseTuple(args, "II:DisableAttribute", &vao, &target)) {
+	if (!PyArg_ParseTuple(args, "ii:DisableAttribute", &vao, &target)) {
 		return 0;
 	}
 
@@ -570,38 +586,38 @@ PyObject * DisableAttribute(PyObject * self, PyObject * args) {
 }
 
 PyObject * EnableAttributes(PyObject * self, PyObject * args) {
-	unsigned vao;
+	int vao;
 	PyObject * attribs;
 
-	if (!PyArg_ParseTuple(args, "IO:EnableAttributes", &vao, &attribs)) {
+	if (!PyArg_ParseTuple(args, "iO:EnableAttributes", &vao, &attribs)) {
 		return 0;
 	}
 
 	int size = PyList_Size(attribs);
-	unsigned * attrib_array = new unsigned[size];
+	int * attrib_array = new int[size];
 	for (int i = 0; i < size; ++i) {
 		attrib_array[i] = PyLong_AsLong(PyList_GetItem(attribs, i));
 	}
 	ModernGL::EnableAttributes(vao, attrib_array, size);
-	free(attrib_array);
+	delete[] attrib_array;
 	Py_RETURN_NONE;
 }
 
 PyObject * DisableAttributes(PyObject * self, PyObject * args) {
-	unsigned vao;
+	int vao;
 	PyObject * attribs;
 
-	if (!PyArg_ParseTuple(args, "IO:DisableAttributes", &vao, &attribs)) {
+	if (!PyArg_ParseTuple(args, "iO:DisableAttributes", &vao, &attribs)) {
 		return 0;
 	}
 
 	int size = PyList_Size(attribs);
-	unsigned * attrib_array = new unsigned[size];
+	int * attrib_array = new int[size];
 	for (int i = 0; i < size; ++i) {
 		attrib_array[i] = PyLong_AsLong(PyList_GetItem(attribs, i));
 	}
 	ModernGL::DisableAttributes(vao, attrib_array, size);
-	free(attrib_array);
+	delete[] attrib_array;
 	Py_RETURN_NONE;
 }
 
@@ -661,9 +677,9 @@ PyObject * NewDynamicIndexBuffer(PyObject * self, PyObject * args) {
 }
 
 PyObject * DeleteBuffer(PyObject * self, PyObject * args) {
-	unsigned buffer;
+	int buffer;
 
-	if (!PyArg_ParseTuple(args, "I:DeleteBuffer", &buffer)) {
+	if (!PyArg_ParseTuple(args, "i:DeleteBuffer", &buffer)) {
 		return 0;
 	}
 
@@ -683,12 +699,12 @@ PyObject * NewDynamicUniformBuffer(PyObject * self, PyObject * args) {
 }
 
 PyObject * UpdateVertexBuffer(PyObject * self, PyObject * args) {
-	unsigned buffer;
-	unsigned offset;
+	int buffer;
+	int offset;
 	const void * data;
 	int size;
 
-	if (!PyArg_ParseTuple(args, "IIy#:UpdateVertexBuffer", &buffer, &offset, &data, &size)) {
+	if (!PyArg_ParseTuple(args, "iiy#:UpdateVertexBuffer", &buffer, &offset, &data, &size)) {
 		return 0;
 	}
 
@@ -697,12 +713,12 @@ PyObject * UpdateVertexBuffer(PyObject * self, PyObject * args) {
 }
 
 PyObject * UpdateIndexBuffer(PyObject * self, PyObject * args) {
-	unsigned buffer;
-	unsigned offset;
+	int buffer;
+	int offset;
 	const void * data;
 	int size;
 
-	if (!PyArg_ParseTuple(args, "IIy#:UpdateIndexBuffer", &buffer, &offset, &data, &size)) {
+	if (!PyArg_ParseTuple(args, "iiy#:UpdateIndexBuffer", &buffer, &offset, &data, &size)) {
 		return 0;
 	}
 
@@ -711,12 +727,12 @@ PyObject * UpdateIndexBuffer(PyObject * self, PyObject * args) {
 }
 
 PyObject * UpdateUniformBuffer(PyObject * self, PyObject * args) {
-	unsigned buffer;
-	unsigned offset;
+	int buffer;
+	int offset;
 	const void * data;
 	int size;
 
-	if (!PyArg_ParseTuple(args, "IIy#:UpdateUniformBuffer", &buffer, &offset, &data, &size)) {
+	if (!PyArg_ParseTuple(args, "iiy#:UpdateUniformBuffer", &buffer, &offset, &data, &size)) {
 		return 0;
 	}
 
@@ -725,12 +741,12 @@ PyObject * UpdateUniformBuffer(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderTriangles(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderTriangles", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderTriangles", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -739,12 +755,12 @@ PyObject * RenderTriangles(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderTriangleStrip(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderTriangleStrip", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderTriangleStrip", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -753,12 +769,12 @@ PyObject * RenderTriangleStrip(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderTriangleFan(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderTriangleFan", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderTriangleFan", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -767,12 +783,12 @@ PyObject * RenderTriangleFan(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderLines(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderLines", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderLines", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -781,12 +797,12 @@ PyObject * RenderLines(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderLineStrip(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderLineStrip", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderLineStrip", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -795,12 +811,12 @@ PyObject * RenderLineStrip(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderLineLoop(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderLineLoop", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderLineLoop", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -809,12 +825,12 @@ PyObject * RenderLineLoop(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderPoints(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderPoints", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderPoints", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -823,12 +839,12 @@ PyObject * RenderPoints(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderLineStripAdjacency(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderLineStripAdjacency", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderLineStripAdjacency", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -837,12 +853,12 @@ PyObject * RenderLineStripAdjacency(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderLinesAdjacency(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderLinesAdjacency", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderLinesAdjacency", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -851,12 +867,12 @@ PyObject * RenderLinesAdjacency(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderTriangleStripAdjacency(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderTriangleStripAdjacency", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderTriangleStripAdjacency", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -865,12 +881,12 @@ PyObject * RenderTriangleStripAdjacency(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderTrianglesAdjacency", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderTrianglesAdjacency", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -879,12 +895,12 @@ PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderIndexedTriangles(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderIndexedTriangles", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedTriangles", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -893,12 +909,12 @@ PyObject * RenderIndexedTriangles(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderIndexedTriangleStrip(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderIndexedTriangleStrip", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedTriangleStrip", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -907,12 +923,12 @@ PyObject * RenderIndexedTriangleStrip(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderIndexedTriangleFan(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderIndexedTriangleFan", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedTriangleFan", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -921,12 +937,12 @@ PyObject * RenderIndexedTriangleFan(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderIndexedLines(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderIndexedLines", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedLines", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -935,12 +951,12 @@ PyObject * RenderIndexedLines(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderIndexedLineStrip(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderIndexedLineStrip", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedLineStrip", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -949,12 +965,12 @@ PyObject * RenderIndexedLineStrip(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderIndexedLineLoop(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderIndexedLineLoop", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedLineLoop", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -963,12 +979,12 @@ PyObject * RenderIndexedLineLoop(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderIndexedPoints(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderIndexedPoints", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedPoints", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -977,12 +993,12 @@ PyObject * RenderIndexedPoints(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderIndexedLineStripAdjacency(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderIndexedLineStripAdjacency", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedLineStripAdjacency", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -991,12 +1007,12 @@ PyObject * RenderIndexedLineStripAdjacency(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderIndexedLinesAdjacency(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderIndexedLinesAdjacency", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedLinesAdjacency", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -1005,12 +1021,12 @@ PyObject * RenderIndexedLinesAdjacency(PyObject * self, PyObject * args) {
 }
 
 PyObject * RenderIndexedTriangleStripAdjacency(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderIndexedTriangleStripAdjacency", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedTriangleStripAdjacency", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -1019,12 +1035,12 @@ PyObject * RenderIndexedTriangleStripAdjacency(PyObject * self, PyObject * args)
 }
 
 PyObject * RenderIndexedTrianglesAdjacency(PyObject * self, PyObject * args) {
-	unsigned vao;
-	unsigned count;
-	unsigned first = 0;
-	unsigned instances = 1;
+	int vao;
+	int count;
+	int first = 0;
+	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "II|II:RenderIndexedTrianglesAdjacency", &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedTrianglesAdjacency", &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -1033,22 +1049,22 @@ PyObject * RenderIndexedTrianglesAdjacency(PyObject * self, PyObject * args) {
 }
 
 PyObject * NewFramebuffer(PyObject * self, PyObject * args) {
-	unsigned width = 0;
-	unsigned height = 0;
+	int width = 0;
+	int height = 0;
 	bool multisample = true;
 
-	if (!PyArg_ParseTuple(args, "|IIp:NewFramebuffer", &width, &height, &multisample)) {
+	if (!PyArg_ParseTuple(args, "|iip:NewFramebuffer", &width, &height, &multisample)) {
 		return 0;
 	}
 
 	ModernGL::Framebuffer framebuffer = ModernGL::NewFramebuffer(width, height, multisample);
-	return Py_BuildValue("III", framebuffer.framebuffer, framebuffer.color, framebuffer.depth);
+	return Py_BuildValue("iii", framebuffer.framebuffer, framebuffer.color, framebuffer.depth);
 }
 
 PyObject * DeleteFramebuffer(PyObject * self, PyObject * args) {
-	unsigned framebuffer;
+	int framebuffer;
 
-	if (!PyArg_ParseTuple(args, "I:DeleteFramebuffer", &framebuffer)) {
+	if (!PyArg_ParseTuple(args, "i:DeleteFramebuffer", &framebuffer)) {
 		return 0;
 	}
 
@@ -1057,9 +1073,9 @@ PyObject * DeleteFramebuffer(PyObject * self, PyObject * args) {
 }
 
 PyObject * UseFramebuffer(PyObject * self, PyObject * args) {
-	unsigned framebuffer;
+	int framebuffer;
 
-	if (!PyArg_ParseTuple(args, "I:UseFramebuffer", &framebuffer)) {
+	if (!PyArg_ParseTuple(args, "i:UseFramebuffer", &framebuffer)) {
 		return 0;
 	}
 
@@ -1077,13 +1093,13 @@ PyObject * UseDefaultFramebuffer(PyObject * self, PyObject * args) {
 }
 
 PyObject * ReadPixels(PyObject * self, PyObject * args) {
-	unsigned x;
-	unsigned y;
-	unsigned width;
-	unsigned height;
-	unsigned components = 3;
+	int x;
+	int y;
+	int width;
+	int height;
+	int components = 3;
 
-	if (!PyArg_ParseTuple(args, "IIII|I:ReadPixels", &x, &y, &width, &height, &components)) {
+	if (!PyArg_ParseTuple(args, "iiii|i:ReadPixels", &x, &y, &width, &height, &components)) {
 		return 0;
 	}
 
@@ -1096,13 +1112,12 @@ PyObject * ReadPixels(PyObject * self, PyObject * args) {
 }
 
 PyObject * ReadDepthPixels(PyObject * self, PyObject * args) {
-	unsigned x;
-	unsigned y;
-	unsigned width;
-	unsigned height;
-	unsigned components = 3;
+	int x;
+	int y;
+	int width;
+	int height;
 
-	if (!PyArg_ParseTuple(args, "IIII:ReadDepthPixels", &x, &y, &width, &height)) {
+	if (!PyArg_ParseTuple(args, "iiii:ReadDepthPixels", &x, &y, &width, &height)) {
 		return 0;
 	}
 
@@ -1115,10 +1130,10 @@ PyObject * ReadDepthPixels(PyObject * self, PyObject * args) {
 }
 
 PyObject * ReadPixel(PyObject * self, PyObject * args) {
-	unsigned x;
-	unsigned y;
+	int x;
+	int y;
 
-	if (!PyArg_ParseTuple(args, "II:ReadPixel", &x, &y)) {
+	if (!PyArg_ParseTuple(args, "ii:ReadPixel", &x, &y)) {
 		return 0;
 	}
 
@@ -1126,10 +1141,10 @@ PyObject * ReadPixel(PyObject * self, PyObject * args) {
 }
 
 PyObject * ReadDepthPixel(PyObject * self, PyObject * args) {
-	unsigned x;
-	unsigned y;
+	int x;
+	int y;
 
-	if (!PyArg_ParseTuple(args, "II:ReadDepthPixel", &x, &y)) {
+	if (!PyArg_ParseTuple(args, "ii:ReadDepthPixel", &x, &y)) {
 		return 0;
 	}
 
@@ -1181,9 +1196,9 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 }
 
 PyObject * DeleteComputeShader(PyObject * self, PyObject * args) {
-	unsigned program;
+	int program;
 
-	if (!PyArg_ParseTuple(args, "I:DeleteComputeShader", &program)) {
+	if (!PyArg_ParseTuple(args, "i:DeleteComputeShader", &program)) {
 		return 0;
 	}
 
@@ -1192,9 +1207,9 @@ PyObject * DeleteComputeShader(PyObject * self, PyObject * args) {
 }
 
 PyObject * RunComputeShader(PyObject * self, PyObject * args) {
-	unsigned program;
+	int program;
 
-	if (!PyArg_ParseTuple(args, "I:RunComputeShader", &program)) {
+	if (!PyArg_ParseTuple(args, "i:RunComputeShader", &program)) {
 		return 0;
 	}
 
@@ -1225,12 +1240,12 @@ PyObject * NewDynamicStorageBuffer(PyObject * self, PyObject * args) {
 }
 
 PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args) {
-	unsigned buffer;
-	unsigned offset;
+	int buffer;
+	int offset;
 	const void * data;
 	int size;
 
-	if (!PyArg_ParseTuple(args, "IIy#:UpdateStorageBuffer", &buffer, &offset, &data, &size)) {
+	if (!PyArg_ParseTuple(args, "iiy#:UpdateStorageBuffer", &buffer, &offset, &data, &size)) {
 		return 0;
 	}
 
@@ -1239,10 +1254,10 @@ PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args) {
 }
 
 PyObject * UseStorageBuffer(PyObject * self, PyObject * args) {
-	unsigned buffer;
-	unsigned binding = 0;
+	int buffer;
+	int binding = 0;
 
-	if (!PyArg_ParseTuple(args, "I|I:UseStorageBuffer", &buffer, &binding)) {
+	if (!PyArg_ParseTuple(args, "i|i:UseStorageBuffer", &buffer, &binding)) {
 		return 0;
 	}
 
@@ -1251,11 +1266,11 @@ PyObject * UseStorageBuffer(PyObject * self, PyObject * args) {
 }
 
 PyObject * ReadStorageBuffer(PyObject * self, PyObject * args) {
-	unsigned buffer;
-	unsigned offset;
+	int buffer;
+	int offset;
 	int size;
 
-	if (!PyArg_ParseTuple(args, "IIi:ReadStorageBuffer", &buffer, &offset, &size)) {
+	if (!PyArg_ParseTuple(args, "iii:ReadStorageBuffer", &buffer, &offset, &size)) {
 		return 0;
 	}
 
@@ -1324,7 +1339,9 @@ static PyMethodDef methods[] = {
 	{"DeleteTexture", DeleteTexture, METH_VARARGS, 0},
 	{"UseTexture", UseTexture, METH_VARARGS, 0},
 
-	{"SetTextureFilter", SetTextureFilter, METH_VARARGS, 0},
+	{"SetTexturePixelated", SetTexturePixelated, METH_VARARGS, 0},
+	{"SetTextureFiltered", SetTextureFiltered, METH_VARARGS, 0},
+	{"SetTextureMipmapped", SetTextureMipmapped, METH_VARARGS, 0},
 	{"BuildMipmap", BuildMipmap, METH_VARARGS, 0},
 
 	{"NewVertexArray", NewVertexArray, METH_VARARGS, 0},
@@ -1382,7 +1399,7 @@ static PyMethodDef methods[] = {
 	{"ReadPixel", ReadPixel, METH_VARARGS, 0},
 	{"ReadDepthPixel", ReadDepthPixel, METH_VARARGS, 0},
 
-	// Only OpenGL 4.3+
+	// Extension
 
 	{"ExtensionActive", ExtensionActive, METH_VARARGS, 0},
 	
@@ -1422,10 +1439,6 @@ PyObject * PyInit_ModernGL() {
 	PyModule_AddIntConstant(m, "ENABLE_CULL_FACE", 0x02);
 	PyModule_AddIntConstant(m, "ENABLE_DEPTH_TEST", 0x04);
 	PyModule_AddIntConstant(m, "ENABLE_MULTISAMPLE", 0x08);
-
-	PyModule_AddIntConstant(m, "TEXTURE_PIXELATED", 0x01);
-	PyModule_AddIntConstant(m, "TEXTURE_FILTERED", 0x02);
-	PyModule_AddIntConstant(m, "TEXTURE_MIPMAPPED", 0x03);
 
 	PyModule_AddStringConstant(m, "AUTHOR_NAME", "Szabolcs Dombi");
 	PyModule_AddStringConstant(m, "AUTHOR_EMAIL", "cprogrammer1994@gmail.com");

@@ -2,7 +2,7 @@ from setuptools import setup, Extension
 
 ModernGL = Extension(
 	'ModernGL.ModernGL',
-	libraries = ['User32'],
+	libraries = ['user32', 'gdi32'],
 	sources = [
 		'Source/WindowsGL.cpp',
 		'Source/OpenGL.cpp',
@@ -13,7 +13,7 @@ ModernGL = Extension(
 
 setup(
 	name = 'ModernGL',
-	version = '0.9.4',
+	version = '2.0.1',
 	description = 'ModernGL',
 	url = 'https://github.com/cprogrammer1994/ModernGL',
 	author = 'Szabolcs Dombi',

@@ -1,13 +1,9 @@
-#include "WindowsGL.h"
+#include "WindowsGL.hpp"
 
 namespace WindowsGL {
 
-	HMODULE gdi32;
 	HMODULE opengl32;
 
-	PROC_ChoosePixelFormat ChoosePixelFormat;
-	PROC_SetPixelFormat SetPixelFormat;
-	PROC_SwapBuffers SwapBuffers;
 	PROC_wglGetCurrentContext wglGetCurrentContext;
 	PROC_wglCreateContext wglCreateContext;
 	PROC_wglDeleteContext wglDeleteContext;
@@ -16,22 +12,6 @@ namespace WindowsGL {
 	PROC_wglChoosePixelFormat wglChoosePixelFormat;
 	PROC_wglCreateContextAttribs wglCreateContextAttribs;
 	PROC_wglSwapInterval wglSwapInterval;
-
-	bool LoadWindowsFunctionsFromGDI() {
-		ChoosePixelFormat = (PROC_ChoosePixelFormat)GetProcAddress(gdi32, "ChoosePixelFormat");
-		if (!ChoosePixelFormat) {
-			return false;
-		}
-		SetPixelFormat = (PROC_SetPixelFormat)GetProcAddress(gdi32, "SetPixelFormat");
-		if (!SetPixelFormat) {
-			return false;
-		}
-		SwapBuffers = (PROC_SwapBuffers)GetProcAddress(gdi32, "SwapBuffers");
-		if (!SwapBuffers) {
-			return false;
-		}
-		return true;
-	}
 
 	bool LoadWindowsFunctionsFromOpenGL() {
 		wglGetCurrentContext = (PROC_wglGetCurrentContext)GetProcAddress(opengl32, "wglGetCurrentContext");
@@ -116,15 +96,6 @@ namespace WindowsGL {
 			return true;
 		}
 
-		gdi32 = LoadLibrary("gdi32.dll");
-		if (!gdi32) {
-			return false;
-		}
-
-		if (!LoadWindowsFunctionsFromGDI()) {
-			return false;
-		}
-
 		opengl32 = LoadLibrary("opengl32.dll");
 		if (!opengl32) {
 			return false;
@@ -206,13 +177,13 @@ namespace WindowsGL {
 			return false;
 		}
 
-		int loader_pixelformat = WindowsGL::ChoosePixelFormat(loader_hdc, &default_pfd);
+		int loader_pixelformat = ChoosePixelFormat(loader_hdc, &default_pfd);
 
 		if (!loader_pixelformat) {
 			return false;
 		}
 
-		if (!WindowsGL::SetPixelFormat(loader_hdc, loader_pixelformat, &default_pfd)) {
+		if (!SetPixelFormat(loader_hdc, loader_pixelformat, &default_pfd)) {
 			return false;
 		}
 

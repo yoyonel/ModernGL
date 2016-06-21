@@ -1,5 +1,5 @@
-#include "OpenGL.h"
-#include "WindowsGL.h"
+#include "OpenGL.hpp"
+#include "WindowsGL.hpp"
 
 namespace OpenGL {
 
@@ -63,7 +63,6 @@ namespace OpenGL {
 	}
 
 	bool LoadCoreOpenGLFunctions() {
-
 		glLineWidth = (PROC_glLineWidth)GetOpenGLFunction("glLineWidth");
 		glPointSize = (PROC_glPointSize)GetOpenGLFunction("glPointSize");
 		glTexParameteri = (PROC_glTexParameteri)GetOpenGLFunction("glTexParameteri");
@@ -77,6 +76,7 @@ namespace OpenGL {
 		glGetError = (PROC_glGetError)GetOpenGLFunction("glGetError");
 		glGetIntegerv = (PROC_glGetIntegerv)GetOpenGLFunction("glGetIntegerv");
 		glGetString = (PROC_glGetString)GetOpenGLFunction("glGetString");
+		glGetStringi = (PROC_glGetStringi)GetOpenGLFunction("glGetStringi");
 		glViewport = (PROC_glViewport)GetOpenGLFunction("glViewport");
 		glBindTexture = (PROC_glBindTexture)GetOpenGLFunction("glBindTexture");
 		glDeleteTextures = (PROC_glDeleteTextures)GetOpenGLFunction("glDeleteTextures");
@@ -186,6 +186,10 @@ namespace OpenGL {
 
 	bool __stdcall isglGetString() {
 		return glGetString != 0;
+	}
+
+	bool __stdcall isglGetStringi() {
+		return glGetStringi != 0;
 	}
 
 	bool __stdcall isglViewport() {
@@ -408,7 +412,6 @@ namespace OpenGL {
 		return glDispatchCompute != 0;
 	}
 
-
 	PROC_glLineWidth glLineWidth;
 	PROC_glPointSize glPointSize;
 	PROC_glTexParameteri glTexParameteri;
@@ -422,6 +425,7 @@ namespace OpenGL {
 	PROC_glGetError glGetError;
 	PROC_glGetIntegerv glGetIntegerv;
 	PROC_glGetString glGetString;
+	PROC_glGetStringi glGetStringi;
 	PROC_glViewport glViewport;
 	PROC_glBindTexture glBindTexture;
 	PROC_glDeleteTextures glDeleteTextures;

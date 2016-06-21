@@ -1,19 +1,20 @@
-#include "ModernGL.h"
+#include "ModernGL.hpp"
+#include "OpenGL.hpp"
 
 #include <cstdio>
 #include <cstring>
 #include <cstdarg>
 #include <malloc.h>
 
-// #define CHECK_GL_ERROR(func, line) if (int err = OpenGL::glGetError()) printf("Error in %s at line: %d Error: %d\n", func, line, err);
-#define CHECK_GL_ERROR(...)
+#define CHECK_GL_ERROR(func, line) if (int err = OpenGL::glGetError()) printf("Error in %s at line: %d Error: %d\n", func, line, err);
+// #define CHECK_GL_ERROR(...)
 
 namespace {
-	unsigned defaultVertexArray;
-	unsigned defaultFramebuffer;
-	unsigned defaultProgram;
+	int defaultVertexArray;
+	int defaultFramebuffer;
+	int defaultProgram;
 
-	unsigned defaultTextureUnit;
+	int defaultTextureUnit;
 
 	const int maxCompilerLog = 16 * 1024;
 	char compilerLog[maxCompilerLog + 1];
@@ -22,8 +23,6 @@ namespace {
 
 	const char * errorMessage = 0;
 }
-
-#include "OpenGL.h"
 
 namespace ModernGL {
 	bool TestFunctions() {
@@ -199,6 +198,10 @@ namespace ModernGL {
 			errorMessage = "glGetString not loaded.";
 			return false;
 		}
+		if (!OpenGL::isglGetStringi()) {
+			errorMessage = "glGetStringi not loaded.";
+			return false;
+		}
 		if (!OpenGL::isglGetUniformBlockIndex()) {
 			errorMessage = "glGetUniformBlockIndex not loaded.";
 			return false;
@@ -300,28 +303,50 @@ namespace ModernGL {
 	}
 
 	bool TestExtensions() {
-		// const char * ext = (const char *)OpenGL::glGetString(OpenGL::GL_EXTENSIONS);
-		// CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+		int extensions = 0;
+		OpenGL::glGetIntegerv(OpenGL::GL_NUM_EXTENSIONS, &extensions);
+		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 
-		// if (!ext) {
-		// 	return false;
-		// }
+		bool shader_storage_buffer_object = false;
+		bool tessellation_shader = false;
+		bool compute_shader = false;
 
-		// if (!strstr("GL_ARB_shader_storage_buffer_object", ext)) {
-		// 	return false;
-		// }
+		for (int i = 0; i < extensions; ++i) {
+			const char * ext = (const char *)OpenGL::glGetStringi(OpenGL::GL_EXTENSIONS, i);
+			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+			if (!ext) {
+				continue;
+			}
 
-		// if (!strstr("GL_ARB_tessellation_shader", ext)) {
-		// 	return false;
-		// }
+			if (!shader_storage_buffer_object && !strcmp("GL_ARB_shader_storage_buffer_object", ext)) {
+				shader_storage_buffer_object = true;
+			}
 
-		// if (!strstr("GL_ARB_compute_shader", ext)) {
-		// 	return false;
-		// }
+			if (!tessellation_shader && !strcmp("GL_ARB_tessellation_shader", ext)) {
+				tessellation_shader = true;
+			}
+
+			if (!compute_shader && !strcmp("GL_ARB_compute_shader", ext)) {
+				compute_shader = true;
+			}
+		}
+
+		if (!shader_storage_buffer_object) {
+			return false;
+		}
+
+		if (!tessellation_shader) {
+			return false;
+		}
+		
+		if (!compute_shader) {
+			return false;
+		}
 
 		if (!OpenGL::isglDispatchCompute()) {
 			return false;
 		}
+
 		return true;
 	}
 
@@ -331,37 +356,24 @@ namespace ModernGL {
 			return false;
 		}
 
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-
 		if (!TestFunctions()) {
 			return false;
 		}
 
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-
 		extensionActive = TestExtensions();
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		
 		OpenGL::glBlendFunc(OpenGL::GL_SRC_ALPHA, OpenGL::GL_ONE_MINUS_SRC_ALPHA);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glEnable(OpenGL::GL_PRIMITIVE_RESTART);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glPrimitiveRestartIndex(-1);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 
-		OpenGL::glGenVertexArrays(1, &defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+		OpenGL::glGenVertexArrays(1, (OpenGL::GLuint *)&defaultVertexArray);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 
 		OpenGL::glGetIntegerv(OpenGL::GL_DRAW_FRAMEBUFFER_BINDING, (OpenGL::GLint *)&defaultFramebuffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&defaultProgram);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 
-		unsigned maxTextureUnits = 1;
+		int maxTextureUnits = 1;
 		OpenGL::glGetIntegerv(OpenGL::GL_MAX_TEXTURE_IMAGE_UNITS, (OpenGL::GLint *)&maxTextureUnits);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		defaultTextureUnit = maxTextureUnits - 1;
 
 		return true;
@@ -372,20 +384,15 @@ namespace ModernGL {
 	}
 
 	Info GetInfo() {
-		OpenGL::GLint major = 0;
-		OpenGL::GLint minor = 0;
-		OpenGL::GLint samples = 0;
+		int major = 0;
+		int minor = 0;
+		int samples = 0;
 
 		OpenGL::glGetIntegerv(OpenGL::GL_MAJOR_VERSION, &major);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glGetIntegerv(OpenGL::GL_MINOR_VERSION, &minor);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glGetIntegerv(OpenGL::GL_MAX_SAMPLES, &samples);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		const char * vendor = (const char *)OpenGL::glGetString(OpenGL::GL_VENDOR);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		const char * renderer = (const char *)OpenGL::glGetString(OpenGL::GL_RENDERER);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 
 		if (!vendor) {
 			vendor = "";
@@ -415,156 +422,121 @@ namespace ModernGL {
 
 	void Viewport(int x, int y, int w, int h) {
 		OpenGL::glViewport(x, y, w, h);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	void Clear(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
 		const float c = 1.0f / 255.0f;
 		OpenGL::glClearColor(r * c, g * c, b * c, a * c);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		unsigned GL_ALL_BUFFER_BIT = 0;
 		GL_ALL_BUFFER_BIT |= OpenGL::GL_DEPTH_BUFFER_BIT;
 		GL_ALL_BUFFER_BIT |= OpenGL::GL_COLOR_BUFFER_BIT;
 		OpenGL::glClear(GL_ALL_BUFFER_BIT);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	void PointSize(float size) {
 		OpenGL::glPointSize(size);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	void LineSize(float size) {
 		OpenGL::glLineWidth(size);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	void EnableOnly(unsigned mask) {
 		(mask & ENABLE_BLEND ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_BLEND);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		(mask & ENABLE_CULL_FACE ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_CULL_FACE);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		(mask & ENABLE_DEPTH_TEST ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_DEPTH_TEST);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		(mask & ENABLE_MULTISAMPLE ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_MULTISAMPLE);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	void EnableBlend() {
 		OpenGL::glEnable(OpenGL::GL_BLEND);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	void DisableBlend() {
 		OpenGL::glDisable(OpenGL::GL_BLEND);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	void EnableCullFace() {
 		OpenGL::glEnable(OpenGL::GL_CULL_FACE);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	void DisableCullFace() {
 		OpenGL::glDisable(OpenGL::GL_CULL_FACE);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	void EnableDepthTest() {
 		OpenGL::glEnable(OpenGL::GL_DEPTH_TEST);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	void DisableDepthTest() {
 		OpenGL::glDisable(OpenGL::GL_DEPTH_TEST);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	void EnableMultisample() {
 		OpenGL::glEnable(OpenGL::GL_MULTISAMPLE);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	void DisableMultisample() {
 		OpenGL::glDisable(OpenGL::GL_MULTISAMPLE);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	unsigned NewProgram(unsigned * shader, int count) {
-		OpenGL::GLuint program = OpenGL::glCreateProgram();
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+	int NewProgram(int * shader, int count) {
+		int program = OpenGL::glCreateProgram();
 
 		for (int i = 0; i < count; ++i) {
 			OpenGL::glAttachShader(program, shader[i]);
-			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		}
 
+		int linked = OpenGL::GL_FALSE;
 		OpenGL::glLinkProgram(program);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-		OpenGL::GLint linked = OpenGL::GL_FALSE;
 		OpenGL::glGetProgramiv(program, OpenGL::GL_LINK_STATUS, &linked);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 
 		if (!linked) {
 			int logSize = 0;
 			OpenGL::glGetProgramInfoLog(program, maxCompilerLog, &logSize, compilerLog);
-			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 			compilerLog[logSize] = 0;
 			OpenGL::glDeleteProgram(program);
-			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 			program = 0;
 		} else {
 			compilerLog[0] = 0;
 			OpenGL::glUseProgram(program);
-			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		} 
 
 		return program;
 	}
 
-	void DeleteProgram(unsigned program) {
-		unsigned shaders[8] = {};
+	void DeleteProgram(int program) {
+		int shaders[8] = {};
 		int numShaders = 0;
 
-		OpenGL::glGetAttachedShaders(program, 8, &numShaders, shaders);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+		OpenGL::glGetAttachedShaders(program, 8, &numShaders, (OpenGL::GLuint *)shaders);
 		for (int i = 0; i < numShaders; ++i) {
 			OpenGL::glDeleteShader(shaders[i]);
-			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		}
 		OpenGL::glDeleteProgram(program);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void UseProgram(unsigned program) {
+	void UseProgram(int program) {
 		OpenGL::glUseProgram(program);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	void UseDefaultProgram() {
 		OpenGL::glUseProgram(defaultProgram);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	template <unsigned Type>
-	inline unsigned NewShader(const char * source) {
-		OpenGL::GLuint shader = OpenGL::glCreateShader(Type);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+	inline int NewShader(const char * source) {
+		int shader = OpenGL::glCreateShader(Type);
 		OpenGL::glShaderSource(shader, 1, &source, 0);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glCompileShader(shader);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 
-		OpenGL::GLint compiled = OpenGL::GL_FALSE;
+		int compiled = OpenGL::GL_FALSE;
 		OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		if (!compiled) {
 			int logSize = 0;
 			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog, &logSize, compilerLog);
-			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 			compilerLog[logSize] = 0;
 			OpenGL::glDeleteShader(shader);
-			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 			shader = 0;
 		} else {
 			compilerLog[0] = 0;
@@ -573,191 +545,149 @@ namespace ModernGL {
 		return shader;
 	}
 
-	unsigned NewFragmentShader(const char * source) {
+	int NewFragmentShader(const char * source) {
 		return NewShader<OpenGL::GL_FRAGMENT_SHADER>(source);
 	}
 
-	unsigned NewGeometryShader(const char * source) {
+	int NewGeometryShader(const char * source) {
 		return NewShader<OpenGL::GL_GEOMETRY_SHADER>(source);
 	}
 
-	unsigned NewVertexShader(const char * source) {
+	int NewVertexShader(const char * source) {
 		return NewShader<OpenGL::GL_VERTEX_SHADER>(source);
 	}
 
-	void DeleteShader(unsigned shader) {
+	void DeleteShader(int shader) {
 		OpenGL::glDeleteShader(shader);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	const char * CompilerLog() {
 		return compilerLog;
 	}
 
-	unsigned AttributeLocation(unsigned program, const char * name) {
+	int AttributeLocation(int program, const char * name) {
 		return OpenGL::glGetAttribLocation(program, name);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	unsigned UniformLocation(unsigned program, const char * name) {
+	int UniformLocation(int program, const char * name) {
 		return OpenGL::glGetUniformLocation(program, name);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	unsigned UniformBlockLocation(unsigned program, const char * name) {
+	int UniformBlockLocation(int program, const char * name) {
 		return OpenGL::glGetUniformBlockIndex(program, name);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void Uniform1f(unsigned location, float v0) {
+	void Uniform1f(int location, float v0) {
 		OpenGL::glUniform1f(location, v0);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void Uniform2f(unsigned location, float v0, float v1) {
+	void Uniform2f(int location, float v0, float v1) {
 		OpenGL::glUniform2f(location, v0, v1);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void Uniform3f(unsigned location, float v0, float v1, float v2) {
+	void Uniform3f(int location, float v0, float v1, float v2) {
 		OpenGL::glUniform3f(location, v0, v1, v2);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void Uniform4f(unsigned location, float v0, float v1, float v2, float v3) {
+	void Uniform4f(int location, float v0, float v1, float v2, float v3) {
 		OpenGL::glUniform4f(location, v0, v1, v2, v3);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void Uniform1i(unsigned location, int v0) {
+	void Uniform1i(int location, int v0) {
 		OpenGL::glUniform1i(location, v0);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void Uniform2i(unsigned location, int v0, int v1) {
+	void Uniform2i(int location, int v0, int v1) {
 		OpenGL::glUniform2i(location, v0, v1);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void Uniform3i(unsigned location, int v0, int v1, int v2) {
+	void Uniform3i(int location, int v0, int v1, int v2) {
 		OpenGL::glUniform3i(location, v0, v1, v2);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void Uniform4i(unsigned location, int v0, int v1, int v2, int v3) {
+	void Uniform4i(int location, int v0, int v1, int v2, int v3) {
 		OpenGL::glUniform4i(location, v0, v1, v2, v3);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void UniformMatrix(unsigned location, const float * matrix) {
+	void UniformMatrix(int location, const float * matrix) {
 		OpenGL::glUniformMatrix4fv(location, 1, OpenGL::GL_FALSE, matrix);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void UniformTransposeMatrix(unsigned location, const float * matrix) {
+	void UniformTransposeMatrix(int location, const float * matrix) {
 		OpenGL::glUniformMatrix4fv(location, 1, OpenGL::GL_TRUE, matrix);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void UniformBlock(unsigned location, unsigned buffer) {
+	void UniformBlock(int location, int buffer) {
 		OpenGL::glBindBufferBase(OpenGL::GL_UNIFORM_BUFFER, location, buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	unsigned NewTexture(int width, int height, const void * data, int components) {
+	int NewTexture(int width, int height, const void * data, int components) {
 		const int formats[] = {0, OpenGL::GL_RED, OpenGL::GL_RG, OpenGL::GL_RGB, OpenGL::GL_RGBA};
 		int format = formats[components];
 
 		if (!width && !height) {
 			int viewportValue[4];
 			OpenGL::glGetIntegerv(OpenGL::GL_VIEWPORT, viewportValue);
-			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 			width = viewportValue[2];
 			height = viewportValue[3];
 		}
 
 		OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 
-		OpenGL::GLuint texture = 0;
-		OpenGL::glGenTextures(1, &texture);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+		int texture = 0;
+		OpenGL::glGenTextures(1, (OpenGL::GLuint *)&texture);
 		OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glTexImage2D(OpenGL::GL_TEXTURE_2D, 0, format, width, height, 0, format, OpenGL::GL_UNSIGNED_BYTE, data);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		return texture;
 	}
 
-	void DeleteTexture(unsigned texture) {
-		OpenGL::glDeleteTextures(1, &texture);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+	void DeleteTexture(int texture) {
+		OpenGL::glDeleteTextures(1, (OpenGL::GLuint *)&texture);
 	}
 
-	void UseTexture(unsigned texture, unsigned location) {
+	void UseTexture(int texture, int location) {
 		OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + location);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void SetTextureFilter(unsigned texture, unsigned mode) {
+	void SetTexturePixelated(int texture) {
 		OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-		switch (mode) {
-			case TEXTURE_PIXELATED: {
-				OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_NEAREST);
-				CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-				OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_NEAREST);
-				CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-				break;
-			}
-			case TEXTURE_FILTERED: {
-				OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
-				CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-				OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
-				CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-				break;
-			}
-			case TEXTURE_MIPMAPPED: {
-				OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR_MIPMAP_LINEAR);
-				CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-				OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
-				CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-				break;
-			}
-		}
+		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_NEAREST);
+		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_NEAREST);
 	}
-
-	void BuildMipmap(unsigned texture, int base, int max) {
-		OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+	
+	void SetTextureFiltered(int texture) {
+		OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
 		OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_BASE_LEVEL, base);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAX_LEVEL, max);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-		OpenGL::glGenerateMipmap(OpenGL::GL_TEXTURE_2D);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR_MIPMAP_LINEAR);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
 		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	unsigned NewVertexArray(const char * format, int * attribs, unsigned vertexBuffer, unsigned indexBuffer) {
+	void SetTextureMipmapped(int texture) {
+		OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
+		OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture);
+		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR_MIPMAP_LINEAR);
+		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
+	}
+
+	void BuildMipmap(int texture, int base, int max) {
+		OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0);
+		OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture);
+		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_BASE_LEVEL, base);
+		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAX_LEVEL, max);
+		OpenGL::glGenerateMipmap(OpenGL::GL_TEXTURE_2D);
+		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR_MIPMAP_LINEAR);
+		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
+	}
+
+	int NewVertexArray(const char * format, VertexBufferAndAttribute * attribs, int indexBuffer) {
 		// format regex: '([1-4][if])+'
 
-		OpenGL::GLuint vertexArray = 0;
-		OpenGL::glGenVertexArrays(1, &vertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+		int vertexArray = 0;
+		OpenGL::glGenVertexArrays(1, (OpenGL::GLuint *)&vertexArray);
 
 		int stride = 0;
 		for (int i = 0; format[i]; i += 2) {
@@ -765,391 +695,277 @@ namespace ModernGL {
 		}
 
 		OpenGL::glBindVertexArray(vertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-		OpenGL::glBindBuffer(OpenGL::GL_ARRAY_BUFFER, vertexBuffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		char * ptr = 0;
 		for (int i = 0; format[i]; i += 2) {
 			int dimension = format[i] - '0';
-			int index = attribs[i / 2];
+			int index = attribs[i / 2].attribute;
+			OpenGL::glBindBuffer(OpenGL::GL_ARRAY_BUFFER, attribs[i / 2].buffer);
 			if (format[i + 1] == 'f') {
 				OpenGL::glVertexAttribPointer(index, dimension, OpenGL::GL_FLOAT, false, stride, ptr);
-				CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 			}
 			else
 			if (format[i + 1] == 'i') {
 				OpenGL::glVertexAttribPointer(index, dimension, OpenGL::GL_INT, false, stride, ptr);
-				CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 			}
 			OpenGL::glEnableVertexAttribArray(index);
-			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 			ptr += dimension * 4;
 		}
 		OpenGL::glBindBuffer(OpenGL::GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		return vertexArray;
 	}
 
-	void DeleteVertexArray(unsigned array) {
-		OpenGL::glDeleteVertexArrays(1, &array);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+	void DeleteVertexArray(int array) {
+		OpenGL::glDeleteVertexArrays(1, (OpenGL::GLuint *)&array);
 	}
 
-	void EnableAttribute(unsigned vao, unsigned target) {
+	void EnableAttribute(int vao, int target) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glEnableVertexAttribArray(target);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void DisableAttribute(unsigned vao, unsigned target) {
+	void DisableAttribute(int vao, int target) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glDisableVertexAttribArray(target);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void EnableAttributes(unsigned vao, unsigned * target, int count) {
+	void EnableAttributes(int vao, int * target, int count) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		for (int i = 0; i < count; ++i) {
 			OpenGL::glEnableVertexAttribArray(target[i]);
-			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		}
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void DisableAttributes(unsigned vao, unsigned * target, int count) {
+	void DisableAttributes(int vao, int * target, int count) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		for (int i = 0; i < count; ++i) {
 			OpenGL::glDisableVertexAttribArray(target[i]);
-			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		}
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	unsigned NewVertexBuffer(const void * data, int size) {
-		OpenGL::GLuint buffer = 0;
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
-		OpenGL::glGenBuffers(1, &buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+	int NewVertexBuffer(const void * data, int size) {
+		int buffer = 0;
+		OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&buffer);
 		OpenGL::glBindBuffer(OpenGL::GL_ARRAY_BUFFER, buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBufferData(OpenGL::GL_ARRAY_BUFFER, size, data, OpenGL::GL_STATIC_DRAW);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		return buffer;
 	}
 
-	unsigned NewIndexBuffer(const void * data, int size) {
-		OpenGL::GLuint buffer = 0;
-		OpenGL::glGenBuffers(1, &buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+	int NewIndexBuffer(const void * data, int size) {
+		int buffer = 0;
+		OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&buffer);
 		OpenGL::glBindBuffer(OpenGL::GL_ELEMENT_ARRAY_BUFFER, buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBufferData(OpenGL::GL_ELEMENT_ARRAY_BUFFER, size, data, OpenGL::GL_STATIC_DRAW);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		return buffer;
 	}
 
-	unsigned NewUniformBuffer(const void * data, int size) {
-		OpenGL::GLuint buffer = 0;
-		OpenGL::glGenBuffers(1, &buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+	int NewUniformBuffer(const void * data, int size) {
+		int buffer = 0;
+		OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&buffer);
 		OpenGL::glBindBuffer(OpenGL::GL_UNIFORM_BUFFER, buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBufferData(OpenGL::GL_UNIFORM_BUFFER, size, data, OpenGL::GL_STATIC_DRAW);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		return buffer;
 	}
 
-	unsigned NewDynamicVertexBuffer(const void * data, int size) {
-		OpenGL::GLuint buffer = 0;
-		OpenGL::glGenBuffers(1, &buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+	int NewDynamicVertexBuffer(const void * data, int size) {
+		int buffer = 0;
+		OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&buffer);
 		OpenGL::glBindBuffer(OpenGL::GL_ARRAY_BUFFER, buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBufferData(OpenGL::GL_ARRAY_BUFFER, size, data, OpenGL::GL_DYNAMIC_DRAW);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		return buffer;
 	}
 
-	unsigned NewDynamicIndexBuffer(const void * data, int size) {
-		OpenGL::GLuint buffer = 0;
-		OpenGL::glGenBuffers(1, &buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+	int NewDynamicIndexBuffer(const void * data, int size) {
+		int buffer = 0;
+		OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&buffer);
 		OpenGL::glBindBuffer(OpenGL::GL_ELEMENT_ARRAY_BUFFER, buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBufferData(OpenGL::GL_ELEMENT_ARRAY_BUFFER, size, data, OpenGL::GL_DYNAMIC_DRAW);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		return buffer;
 	}
 
-	unsigned NewDynamicUniformBuffer(const void * data, int size) {
-		OpenGL::GLuint buffer = 0;
-		OpenGL::glGenBuffers(1, &buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+	int NewDynamicUniformBuffer(const void * data, int size) {
+		int buffer = 0;
+		OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&buffer);
 		OpenGL::glBindBuffer(OpenGL::GL_UNIFORM_BUFFER, buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBufferData(OpenGL::GL_UNIFORM_BUFFER, size, data, OpenGL::GL_DYNAMIC_DRAW);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		return buffer;
 	}
 
-	void DeleteBuffer(unsigned buffer) {
-		OpenGL::glDeleteBuffers(1, &buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+	void DeleteBuffer(int buffer) {
+		OpenGL::glDeleteBuffers(1, (OpenGL::GLuint *)&buffer);
 	}
 
-	void UpdateVertexBuffer(unsigned buffer, unsigned offset, const void * data, int size) {
+	void UpdateVertexBuffer(int buffer, int offset, const void * data, int size) {
 		OpenGL::glBindBuffer(OpenGL::GL_ARRAY_BUFFER, buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBufferSubData(OpenGL::GL_ARRAY_BUFFER, (OpenGL::GLintptr)offset, size, data);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void UpdateIndexBuffer(unsigned buffer, unsigned offset, const void * data, int size) {
+	void UpdateIndexBuffer(int buffer, int offset, const void * data, int size) {
 		OpenGL::glBindBuffer(OpenGL::GL_ELEMENT_ARRAY_BUFFER, buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBufferSubData(OpenGL::GL_ELEMENT_ARRAY_BUFFER, (OpenGL::GLintptr)offset, size, data);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void UpdateUniformBuffer(unsigned buffer, unsigned offset, const void * data, int size) {
+	void UpdateUniformBuffer(int buffer, int offset, const void * data, int size) {
 		OpenGL::glBindBuffer(OpenGL::GL_UNIFORM_BUFFER, buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBufferSubData(OpenGL::GL_UNIFORM_BUFFER, (OpenGL::GLintptr)offset, size, data);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderTriangles(unsigned vao, int count, int first, int instances) {
+	void RenderTriangles(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glDrawArraysInstanced(OpenGL::GL_TRIANGLES, first, count, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderTriangleStrip(unsigned vao, int count, int first, int instances) {
+	void RenderTriangleStrip(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glDrawArraysInstanced(OpenGL::GL_TRIANGLE_STRIP, first, count, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderTriangleFan(unsigned vao, int count, int first, int instances) {
+	void RenderTriangleFan(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glDrawArraysInstanced(OpenGL::GL_TRIANGLE_FAN, first, count, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderLines(unsigned vao, int count, int first, int instances) {
+	void RenderLines(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glDrawArraysInstanced(OpenGL::GL_LINES, first, count, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderLineStrip(unsigned vao, int count, int first, int instances) {
+	void RenderLineStrip(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glDrawArraysInstanced(OpenGL::GL_LINE_STRIP, first, count, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderLineLoop(unsigned vao, int count, int first, int instances) {
+	void RenderLineLoop(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glDrawArraysInstanced(OpenGL::GL_LINE_LOOP, first, count, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderPoints(unsigned vao, int count, int first, int instances) {
+	void RenderPoints(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glDrawArraysInstanced(OpenGL::GL_POINTS, first, count, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderLineStripAdjacency(unsigned vao, int count, int first, int instances) {
+	void RenderLineStripAdjacency(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glDrawArraysInstanced(OpenGL::GL_LINE_STRIP_ADJACENCY, first, count, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderLinesAdjacency(unsigned vao, int count, int first, int instances) {
+	void RenderLinesAdjacency(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glDrawArraysInstanced(OpenGL::GL_LINES_ADJACENCY, first, count, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderTriangleStripAdjacency(unsigned vao, int count, int first, int instances) {
+	void RenderTriangleStripAdjacency(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glDrawArraysInstanced(OpenGL::GL_TRIANGLE_STRIP_ADJACENCY, first, count, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderTrianglesAdjacency(unsigned vao, int count, int first, int instances) {
+	void RenderTrianglesAdjacency(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glDrawArraysInstanced(OpenGL::GL_TRIANGLES_ADJACENCY, first, count, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderIndexedTriangles(unsigned vao, int count, int first, int instances) {
+	void RenderIndexedTriangles(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_TRIANGLES, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderIndexedTriangleStrip(unsigned vao, int count, int first, int instances) {
+	void RenderIndexedTriangleStrip(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_TRIANGLE_STRIP, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderIndexedTriangleFan(unsigned vao, int count, int first, int instances) {
+	void RenderIndexedTriangleFan(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_TRIANGLE_FAN, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderIndexedLines(unsigned vao, int count, int first, int instances) {
+	void RenderIndexedLines(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_LINES, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderIndexedLineStrip(unsigned vao, int count, int first, int instances) {
+	void RenderIndexedLineStrip(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_LINE_STRIP, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderIndexedLineLoop(unsigned vao, int count, int first, int instances) {
+	void RenderIndexedLineLoop(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_LINE_LOOP, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderIndexedPoints(unsigned vao, int count, int first, int instances) {
+	void RenderIndexedPoints(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_POINTS, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderIndexedLineStripAdjacency(unsigned vao, int count, int first, int instances) {
+	void RenderIndexedLineStripAdjacency(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_LINE_STRIP_ADJACENCY, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderIndexedLinesAdjacency(unsigned vao, int count, int first, int instances) {
+	void RenderIndexedLinesAdjacency(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_LINES_ADJACENCY, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderIndexedTriangleStripAdjacency(unsigned vao, int count, int first, int instances) {
+	void RenderIndexedTriangleStripAdjacency(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_TRIANGLE_STRIP_ADJACENCY, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RenderIndexedTrianglesAdjacency(unsigned vao, int count, int first, int instances) {
+	void RenderIndexedTrianglesAdjacency(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_TRIANGLES_ADJACENCY, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBindVertexArray(defaultVertexArray);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	Framebuffer NewFramebuffer(int width, int height, bool multisample) {
-		OpenGL::GLuint framebuffer = 0;
-		OpenGL::GLuint color = 0;
-		OpenGL::GLuint depth = 0;
+		int framebuffer = 0;
+		int color = 0;
+		int depth = 0;
 
-		OpenGL::glGenFramebuffers(1, &framebuffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+		OpenGL::glGenFramebuffers(1, (OpenGL::GLuint *)&framebuffer);
 		OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, framebuffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 
-		OpenGL::GLuint target = OpenGL::GL_TEXTURE_2D;
+		unsigned target = OpenGL::GL_TEXTURE_2D;
 		if (multisample) {
 			target = OpenGL::GL_TEXTURE_2D_MULTISAMPLE;
 		}
@@ -1157,36 +973,23 @@ namespace ModernGL {
 		if (!width && !height) {
 			int viewport[4] = {};
 			OpenGL::glGetIntegerv(OpenGL::GL_VIEWPORT, viewport);
-			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 			width = viewport[2];
 			height = viewport[3];
 		}
 
-		OpenGL::glGenTextures(1, &color);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+		OpenGL::glGenTextures(1, (OpenGL::GLuint *)&color);
 		OpenGL::glBindTexture(target, color);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glTexParameteri(target, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glTexParameteri(target, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glTexImage2D(target, 0, OpenGL::GL_RGB, width, height, 0, OpenGL::GL_RGB, OpenGL::GL_FLOAT, 0);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_COLOR_ATTACHMENT0, target, color, 0);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 
-		OpenGL::glGenTextures(1, &depth);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+		OpenGL::glGenTextures(1, (OpenGL::GLuint *)&depth);
 		OpenGL::glBindTexture(target, depth);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glTexParameteri(target, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glTexParameteri(target, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glTexImage2D(target, 0, OpenGL::GL_DEPTH_COMPONENT, width, height, 0, OpenGL::GL_DEPTH_COMPONENT, OpenGL::GL_FLOAT, 0);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_DEPTH_ATTACHMENT, target, depth, 0);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 
 		return Framebuffer {
 			framebuffer,
@@ -1195,40 +998,32 @@ namespace ModernGL {
 		};
 
 		OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, defaultFramebuffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void DeleteFramebuffer(unsigned framebuffer) {
-		unsigned color = 0;
+	void DeleteFramebuffer(int framebuffer) {
+		int color = 0;
 		OpenGL::glGetFramebufferAttachmentParameteriv(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_COLOR_ATTACHMENT0, OpenGL::GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME, (OpenGL::GLint *)&color);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 
 		if (color) {
-			OpenGL::glDeleteTextures(1, &color);
-			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+			OpenGL::glDeleteTextures(1, (OpenGL::GLuint *)&color);
 		}
 
-		unsigned depth = 0;
+		int depth = 0;
 		OpenGL::glGetFramebufferAttachmentParameteriv(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_DEPTH_ATTACHMENT, OpenGL::GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME, (OpenGL::GLint *)&depth);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 
 		if (depth) {
-			OpenGL::glDeleteTextures(1, &depth);
-			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+			OpenGL::glDeleteTextures(1, (OpenGL::GLuint *)&depth);
 		}
 
-		OpenGL::glDeleteFramebuffers(1, &framebuffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+		OpenGL::glDeleteFramebuffers(1, (OpenGL::GLuint *)&framebuffer);
 	}
 
-	void UseFramebuffer(unsigned framebuffer) {
+	void UseFramebuffer(int framebuffer) {
 		OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, framebuffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	void UseDefaultFramebuffer() {
 		OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, 0);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
 	unsigned char * ReadPixels(int x, int y, int width, int height, int components) {
@@ -1237,102 +1032,85 @@ namespace ModernGL {
 
 		unsigned char * data = (unsigned char *)malloc(width * height * components);
 		OpenGL::glReadPixels(x, y, width, height, format, OpenGL::GL_UNSIGNED_BYTE, data);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		return data;
 	}
 
 	float * ReadDepthPixels(int x, int y, int width, int height) {
 		float * data = (float *)malloc(width * height * sizeof(float));
 		OpenGL::glReadPixels(x, y, width, height, OpenGL::GL_DEPTH_COMPONENT, OpenGL::GL_FLOAT, data);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		return data;
 	}
 
 	unsigned ReadPixel(int x, int y) {
 		unsigned rgba = 0;
 		OpenGL::glReadPixels(x, y, 1, 1, OpenGL::GL_RGBA, OpenGL::GL_UNSIGNED_BYTE, &rgba);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		return rgba;
 	}
 
 	float ReadDepthPixel(int x, int y) {
 		float depth = 0.0;
 		OpenGL::glReadPixels(x, y, 1, 1, OpenGL::GL_DEPTH_COMPONENT, OpenGL::GL_FLOAT, &depth);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		return depth;
 	}
 
 	// OpenGL 4.3+
 
-	unsigned NewTessControlShader(const char * source) {
+	int NewTessControlShader(const char * source) {
 		return NewShader<OpenGL::GL_TESS_CONTROL_SHADER>(source);
 	}
 
-	unsigned NewTessEvaluationShader(const char * source) {
+	int NewTessEvaluationShader(const char * source) {
 		return NewShader<OpenGL::GL_TESS_EVALUATION_SHADER>(source);
 	}
 
-	unsigned NewComputeShader(const char * source) {
-		unsigned shader = NewShader<OpenGL::GL_COMPUTE_SHADER>(source);
+	int NewComputeShader(const char * source) {
+		int shader = NewShader<OpenGL::GL_COMPUTE_SHADER>(source);
+		if (!shader) {
+			return 0;
+		}
 		return NewProgram(&shader, 1);
 	}
 
-	void DeleteComputeShader(unsigned program) {
-		unsigned shader;
-		OpenGL::glGetAttachedShaders(program, 1, 0, &shader);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+	void DeleteComputeShader(int program) {
+		int shader;
+		OpenGL::glGetAttachedShaders(program, 1, 0, (OpenGL::GLuint *)&shader);
 		OpenGL::glDeleteShader(shader);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glDeleteProgram(program);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void RunComputeShader(unsigned program, unsigned x, unsigned y, unsigned z) {
+	void RunComputeShader(int program, int x, int y, int z) {
 		OpenGL::glUseProgram(program);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glDispatchCompute(x, y, z);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	unsigned NewStorageBuffer(const void * data, int size) {
-		OpenGL::GLuint buffer = 0;
-		OpenGL::glGenBuffers(1, &buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+	int NewStorageBuffer(const void * data, int size) {
+		int buffer = 0;
+		OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&buffer);
 		OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBufferData(OpenGL::GL_SHADER_STORAGE_BUFFER, size, data, OpenGL::GL_STATIC_DRAW);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		return buffer;
 	}
 
-	unsigned NewDynamicStorageBuffer(const void * data, int size) {
-		OpenGL::GLuint buffer = 0;
-		OpenGL::glGenBuffers(1, &buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
+	int NewDynamicStorageBuffer(const void * data, int size) {
+		int buffer = 0;
+		OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&buffer);
 		OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBufferData(OpenGL::GL_SHADER_STORAGE_BUFFER, size, data, OpenGL::GL_DYNAMIC_DRAW);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		return buffer;
 	}
 
-	void UpdateStorageBuffer(unsigned buffer, unsigned offset, const void * data, int size) {
+	void UpdateStorageBuffer(int buffer, int offset, const void * data, int size) {
 		OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		OpenGL::glBufferSubData(OpenGL::GL_SHADER_STORAGE_BUFFER, (OpenGL::GLintptr)offset, size, data);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void UseStorageBuffer(unsigned buffer, unsigned binding) {
+	void UseStorageBuffer(int buffer, int binding) {
 		OpenGL::glBindBufferBase(OpenGL::GL_SHADER_STORAGE_BUFFER, binding, buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 	}
 
-	void * ReadStorageBuffer(unsigned buffer, unsigned offset, int size) {
+	void * ReadStorageBuffer(int buffer, int offset, int size) {
 		OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		void * map = OpenGL::glMapBufferRange(OpenGL::GL_SHADER_STORAGE_BUFFER, offset, size, OpenGL::GL_MAP_READ_BIT);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		if (!map) {
 			return 0;
 		}
@@ -1342,7 +1120,6 @@ namespace ModernGL {
 		}
 		memcpy(content, map, size);
 		OpenGL::glUnmapBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 		return content;
 	}
 

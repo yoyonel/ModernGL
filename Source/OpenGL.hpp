@@ -10,28 +10,16 @@ namespace OpenGL {
 		typedef int GLintptr;
 	#endif 
 
-	typedef char GLbyte;
 	typedef char GLchar;
-	typedef double GLclampd;
-	typedef double GLdouble;
-	typedef float GLclampf;
 	typedef float GLfloat;
 	typedef int GLint;
 	typedef int GLsizei;
-	typedef long long int GLint64;
-	typedef short GLshort;
-	typedef struct __GLsync * GLsync;
 	typedef unsigned char GLboolean;
 	typedef unsigned char GLubyte;
 	typedef unsigned int GLbitfield;
 	typedef unsigned int GLenum;
 	typedef unsigned int GLuint;
-	typedef unsigned long long int GLuint64;
-	typedef unsigned short GLhalf;
-	typedef unsigned short GLushort;
 	typedef void GLvoid;
-
-	typedef void (* GLDEBUGPROC) (GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar * message, const void * userParam);
 
 	const GLenum GL_DEPTH_BUFFER_BIT                   = 0x0100;
 	const GLenum GL_COLOR_BUFFER_BIT                   = 0x4000;
@@ -91,6 +79,7 @@ namespace OpenGL {
 	const GLenum GL_CURRENT_PROGRAM                    = 0x8B8D;
 	const GLenum GL_MAJOR_VERSION                      = 0x821B;
 	const GLenum GL_MINOR_VERSION                      = 0x821C;
+	const GLenum GL_NUM_EXTENSIONS                     = 0x821D;
 	const GLenum GL_INVALID_FRAMEBUFFER_OPERATION      = 0x0506;
 	const GLenum GL_DRAW_FRAMEBUFFER_BINDING           = 0x8CA6;
 	const GLenum GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME = 0x8CD1;
@@ -129,6 +118,7 @@ namespace OpenGL {
 	typedef GLenum (__stdcall * PROC_glGetError)();
 	typedef GLvoid (__stdcall * PROC_glGetIntegerv)(GLenum pname, GLint * data);
 	typedef const GLubyte * (__stdcall * PROC_glGetString)(GLenum name);
+	typedef const GLubyte * (__stdcall * PROC_glGetStringi)(GLenum name, GLuint index);
 	typedef GLvoid (__stdcall * PROC_glViewport)(GLint x, GLint y, GLsizei width, GLsizei height);
 	typedef GLvoid (__stdcall * PROC_glBindTexture)(GLenum target, GLuint texture);
 	typedef GLvoid (__stdcall * PROC_glDeleteTextures)(GLsizei n, const GLuint * textures);
@@ -156,7 +146,7 @@ namespace OpenGL {
 	typedef GLvoid (__stdcall * PROC_glGetShaderInfoLog)(GLuint shader, GLsizei bufSize, GLsizei * length, GLchar * infoLog);
 	typedef GLint (__stdcall * PROC_glGetUniformLocation)(GLuint program, const GLchar * name);
 	typedef GLvoid (__stdcall * PROC_glLinkProgram)(GLuint program);
-	typedef GLvoid (__stdcall * PROC_glShaderSource)(GLuint shader, GLsizei count, const GLchar * const* string, const GLint * length);
+	typedef GLvoid (__stdcall * PROC_glShaderSource)(GLuint shader, GLsizei count, const GLchar * const * string, const GLint * length);
 	typedef GLvoid (__stdcall * PROC_glUseProgram)(GLuint program);
 	typedef GLvoid (__stdcall * PROC_glUniform1f)(GLint location, GLfloat v0);
 	typedef GLvoid (__stdcall * PROC_glUniform2f)(GLint location, GLfloat v0, GLfloat v1);
@@ -198,6 +188,7 @@ namespace OpenGL {
 	extern PROC_glGetError glGetError;
 	extern PROC_glGetIntegerv glGetIntegerv;
 	extern PROC_glGetString glGetString;
+	extern PROC_glGetStringi glGetStringi;
 	extern PROC_glViewport glViewport;
 	extern PROC_glBindTexture glBindTexture;
 	extern PROC_glDeleteTextures glDeleteTextures;
@@ -267,6 +258,7 @@ namespace OpenGL {
 	extern bool __stdcall isglGetError();
 	extern bool __stdcall isglGetIntegerv();
 	extern bool __stdcall isglGetString();
+	extern bool __stdcall isglGetStringi();
 	extern bool __stdcall isglViewport();
 	extern bool __stdcall isglBindTexture();
 	extern bool __stdcall isglDeleteTextures();

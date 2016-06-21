@@ -24,12 +24,6 @@ namespace WindowsGL {
 	extern bool InitializeWindowsGLModule();
 	extern bool InitializeWindowsGLContextFunctions();
 
-	extern PIXELFORMATDESCRIPTOR default_pfd;
-
-	typedef int (WINAPI * PROC_ChoosePixelFormat)(HDC hdc, const PIXELFORMATDESCRIPTOR * ppfd);
-	typedef BOOL (WINAPI * PROC_SetPixelFormat)(HDC hdc, int iPixelFormat, const PIXELFORMATDESCRIPTOR * ppfd);
-	typedef BOOL (WINAPI * PROC_SwapBuffers)(HDC hdc);
-
 	typedef HGLRC (WINAPI * PROC_wglGetCurrentContext)();
 	typedef HGLRC (WINAPI * PROC_wglCreateContext)(HDC hdc);
 	typedef BOOL (WINAPI * PROC_wglDeleteContext)(HGLRC hglrc);
@@ -40,13 +34,8 @@ namespace WindowsGL {
 	typedef HGLRC (WINAPI * PROC_wglCreateContextAttribs)(HDC hdc, HGLRC hglrc, const int * attribList);
 	typedef BOOL (WINAPI * PROC_wglSwapInterval)(int interval);
 
-	// 
-
 	extern bool InitializeWindowsGL();
 
-	extern PROC_ChoosePixelFormat ChoosePixelFormat;
-	extern PROC_SetPixelFormat SetPixelFormat;
-	extern PROC_SwapBuffers SwapBuffers;
 	extern PROC_wglGetCurrentContext wglGetCurrentContext;
 	extern PROC_wglCreateContext wglCreateContext;
 	extern PROC_wglDeleteContext wglDeleteContext;
@@ -55,4 +44,5 @@ namespace WindowsGL {
 	extern PROC_wglChoosePixelFormat wglChoosePixelFormat;
 	extern PROC_wglCreateContextAttribs wglCreateContextAttribs;
 	extern PROC_wglSwapInterval wglSwapInterval;
+
 }
