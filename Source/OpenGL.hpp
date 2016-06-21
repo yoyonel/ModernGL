@@ -115,6 +115,7 @@ namespace OpenGL {
 	typedef GLvoid (__stdcall * PROC_glPointSize)(GLfloat size);
 	typedef GLvoid (__stdcall * PROC_glTexParameteri)(GLenum target, GLenum pname, GLint param);
 	typedef GLvoid (__stdcall * PROC_glTexImage2D)(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid * pixels);
+	typedef GLvoid (__stdcall * PROC_glTexSubImage2D)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid * pixels);
 	typedef GLvoid (__stdcall * PROC_glClear)(GLbitfield mask);
 	typedef GLvoid (__stdcall * PROC_glClearColor)(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
 	typedef GLvoid (__stdcall * PROC_glDisable)(GLenum cap);
@@ -186,6 +187,7 @@ namespace OpenGL {
 	extern PROC_glPointSize glPointSize;
 	extern PROC_glTexParameteri glTexParameteri;
 	extern PROC_glTexImage2D glTexImage2D;
+	extern PROC_glTexSubImage2D glTexSubImage2D;
 	extern PROC_glClear glClear;
 	extern PROC_glClearColor glClearColor;
 	extern PROC_glDisable glDisable;
@@ -257,6 +259,7 @@ namespace OpenGL {
 	extern bool __stdcall isglPointSize();
 	extern bool __stdcall isglTexParameteri();
 	extern bool __stdcall isglTexImage2D();
+	extern bool __stdcall isglTexSubImage2D();
 	extern bool __stdcall isglClear();
 	extern bool __stdcall isglClearColor();
 	extern bool __stdcall isglDisable();

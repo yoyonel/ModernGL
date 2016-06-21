@@ -477,6 +477,7 @@ PyObject * DeleteTexture(PyObject * self, PyObject * args) {
 }
 
 PyObject * UpdateTexture(PyObject * self, PyObject * args) {
+	int texture;
 	int x;
 	int y;
 	int width;
@@ -485,11 +486,11 @@ PyObject * UpdateTexture(PyObject * self, PyObject * args) {
 	int components = 3;
 	int size;
 
-	if (!PyArg_ParseTuple(args, "iiiiy#|i:UpdateTexture", &x, &y, &width, &height, &data, &size, &components)) {
+	if (!PyArg_ParseTuple(args, "iiiiiy#|i:UpdateTexture", &texture, &x, &y, &width, &height, &data, &size, &components)) {
 		return 0;
 	}
 
-	ModernGL::UpdateTexture(x, y, width, height, data, components);
+	ModernGL::UpdateTexture(texture, x, y, width, height, data, components);
 	Py_RETURN_NONE;
 }
 
@@ -1367,7 +1368,7 @@ static PyMethodDef methods[] = {
 
 	{"NewTexture", NewTexture, METH_VARARGS, 0},
 	{"DeleteTexture", DeleteTexture, METH_VARARGS, 0},
-	
+
 	{"UpdateTexture", UpdateTexture, METH_VARARGS, 0},
 	{"UseTexture", UseTexture, METH_VARARGS, 0},
 
