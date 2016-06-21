@@ -610,11 +610,11 @@ namespace ModernGL {
 	}
 
 	void UniformMatrix(int location, const float * matrix) {
-		OpenGL::glUniformMatrix4fv(location, 1, OpenGL::GL_FALSE, matrix);
+		OpenGL::glUniformMatrix4fv(location, 1, false, matrix);
 	}
 
 	void UniformTransposeMatrix(int location, const float * matrix) {
-		OpenGL::glUniformMatrix4fv(location, 1, OpenGL::GL_TRUE, matrix);
+		OpenGL::glUniformMatrix4fv(location, 1, true, matrix);
 	}
 
 	void UniformBlock(int location, int buffer) {
@@ -1072,7 +1072,7 @@ namespace ModernGL {
 		const int formats[] = {0, OpenGL::GL_R8UI, OpenGL::GL_RG8UI, OpenGL::GL_RGB8UI, OpenGL::GL_RGBA8UI};
 		int format = formats[components];
 		
-		OpenGL::glBindImageTexture(binding, texture, 0, OpenGL::GL_FALSE, 0, OpenGL::GL_READ_WRITE, format);
+		OpenGL::glBindImageTexture(binding, texture, 0, false, 0, OpenGL::GL_READ_WRITE, format);
 	}
 
 	int NewTessControlShader(const char * source) {
