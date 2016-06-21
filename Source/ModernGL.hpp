@@ -82,6 +82,7 @@ namespace ModernGL {
 	extern int NewTexture(int width, int height, const void * data, int components = 3);
 	extern void DeleteTexture(int texture);
 
+	extern void UpdateTexture(int x, int y, int width, int height, const void * data, int components = 3);
 	extern void UseTexture(int texture, int location = 0);
 
 	extern void SetTexturePixelated(int texture);

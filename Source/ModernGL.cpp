@@ -652,6 +652,12 @@ namespace ModernGL {
 		OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture);
 	}
 
+	void UpdateTexture(int x, int y, int width, int height, const void * data, int components) {
+		OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + location);
+		OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture);
+		glTexSubImage2D(OpenGL::GL_TEXTURE_2D, 0, x, y, width, height, format, OpenGL::GL_UNSIGNED_BYTE, data);
+	}
+
 	void SetTexturePixelated(int texture) {
 		OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
 		OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture);
