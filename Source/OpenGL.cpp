@@ -131,6 +131,7 @@ namespace OpenGL {
 		glDrawElementsInstanced = (PROC_glDrawElementsInstanced)GetOpenGLFunction("glDrawElementsInstanced");
 		glPrimitiveRestartIndex = (PROC_glPrimitiveRestartIndex)GetOpenGLFunction("glPrimitiveRestartIndex");
 		glGetUniformBlockIndex = (PROC_glGetUniformBlockIndex)GetOpenGLFunction("glGetUniformBlockIndex");
+		glBindImageTexture = (PROC_glBindImageTexture)GetOpenGLFunction("glBindImageTexture");
 		glDispatchCompute = (PROC_glDispatchCompute)GetOpenGLFunction("glDispatchCompute");
 
 		return true;
@@ -408,6 +409,10 @@ namespace OpenGL {
 		return glGetUniformBlockIndex != 0;
 	}
 
+	bool __stdcall isglBindImageTexture() {
+		return glBindImageTexture != 0;
+	}
+
 	bool __stdcall isglDispatchCompute() {
 		return glDispatchCompute != 0;
 	}
@@ -480,6 +485,7 @@ namespace OpenGL {
 	PROC_glDrawElementsInstanced glDrawElementsInstanced;
 	PROC_glPrimitiveRestartIndex glPrimitiveRestartIndex;
 	PROC_glGetUniformBlockIndex glGetUniformBlockIndex;
+	PROC_glBindImageTexture glBindImageTexture;
 	PROC_glDispatchCompute glDispatchCompute;
 
 }

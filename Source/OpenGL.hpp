@@ -102,6 +102,12 @@ namespace OpenGL {
 	const GLenum GL_COMPUTE_SHADER                     = 0x91B9;
 	const GLenum GL_SHADER_STORAGE_BUFFER              = 0x90D2;
 	const GLenum GL_MAP_READ_BIT                       = 0x0001;
+	const GLenum GL_READ_WRITE                         = 0x88BA;
+	const GLenum GL_RGBA8UI                            = 0x8D7C;
+	const GLenum GL_RGB8UI                             = 0x8D7D;
+	const GLenum GL_RG8UI                              = 0x8238;
+	const GLenum GL_R8UI                               = 0x8232;
+
 
 	bool __stdcall InitializeOpenGL();
 
@@ -173,6 +179,7 @@ namespace OpenGL {
 	typedef GLvoid (__stdcall * PROC_glDrawElementsInstanced)(GLenum mode, GLsizei count, GLenum type, const GLvoid * indices, GLsizei instancecount);
 	typedef GLvoid (__stdcall * PROC_glPrimitiveRestartIndex)(GLuint index);
 	typedef GLuint (__stdcall * PROC_glGetUniformBlockIndex)(GLuint program, const GLchar * uniformBlockName);
+	typedef GLvoid (__stdcall * PROC_glBindImageTexture)(GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format);
 	typedef GLvoid (__stdcall * PROC_glDispatchCompute)(GLuint num_groups_x, GLuint num_groups_y, GLuint num_groups_z);
 	
 	extern PROC_glLineWidth glLineWidth;
@@ -243,6 +250,7 @@ namespace OpenGL {
 	extern PROC_glDrawElementsInstanced glDrawElementsInstanced;
 	extern PROC_glPrimitiveRestartIndex glPrimitiveRestartIndex;
 	extern PROC_glGetUniformBlockIndex glGetUniformBlockIndex;
+	extern PROC_glBindImageTexture glBindImageTexture;
 	extern PROC_glDispatchCompute glDispatchCompute;
 
 	extern bool __stdcall isglLineWidth();
@@ -313,6 +321,7 @@ namespace OpenGL {
 	extern bool __stdcall isglDrawElementsInstanced();
 	extern bool __stdcall isglPrimitiveRestartIndex();
 	extern bool __stdcall isglGetUniformBlockIndex();
+	extern bool __stdcall isglBindImageTexture();
 	extern bool __stdcall isglDispatchCompute();
 
 }

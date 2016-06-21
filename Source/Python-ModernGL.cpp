@@ -1151,7 +1151,7 @@ PyObject * ReadDepthPixel(PyObject * self, PyObject * args) {
 	return PyFloat_FromDouble(ModernGL::ReadDepthPixel(x, y));
 }
 
-// OpenGL 4.3+
+// Extension
 
 PyObject * ExtensionActive(PyObject * self, PyObject * args) {
 	if (!PyArg_ParseTuple(args, ":ExtensionActive")) {
@@ -1163,6 +1163,19 @@ PyObject * ExtensionActive(PyObject * self, PyObject * args) {
 	} else {
 		Py_RETURN_FALSE;
 	}
+}
+
+PyObject * UseTextureAsImage(PyObject * self, PyObject * args) {
+	int texture;
+	int binding = 0;
+	int components = 3;
+
+	if (!PyArg_ParseTuple(args, "i|ii:UseTextureAsImage", &texture, &binding, &components)) {
+		return 0;
+	}
+
+	ModernGL::UseTextureAsImage(texture, binding, components);
+	Py_RETURN_NONE;
 }
 
 PyObject * NewTessEvaluationShader(PyObject * self, PyObject * args) {
@@ -1402,6 +1415,8 @@ static PyMethodDef methods[] = {
 	// Extension
 
 	{"ExtensionActive", ExtensionActive, METH_VARARGS, 0},
+
+	{"UseTextureAsImage", UseTextureAsImage, METH_VARARGS, 0},
 	
 	{"NewTessEvaluationShader", NewTessEvaluationShader, METH_VARARGS, 0},
 	{"NewTessControlShader", NewTessControlShader, METH_VARARGS, 0},

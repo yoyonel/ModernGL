@@ -343,6 +343,10 @@ namespace ModernGL {
 			return false;
 		}
 
+		if (!OpenGL::isglBindImageTexture()) {
+			return false;
+		}
+
 		if (!OpenGL::isglDispatchCompute()) {
 			return false;
 		}
@@ -377,10 +381,6 @@ namespace ModernGL {
 		defaultTextureUnit = maxTextureUnits - 1;
 
 		return true;
-	}
-
-	bool ExtensionActive() {
-		return extensionActive;
 	}
 
 	Info GetInfo() {
@@ -1053,7 +1053,18 @@ namespace ModernGL {
 		return depth;
 	}
 
-	// OpenGL 4.3+
+	// Extension
+
+	bool ExtensionActive() {
+		return extensionActive;
+	}
+
+	void UseTextureAsImage(int texture, int binding, int components) {
+		const int formats[] = {0, OpenGL::GL_R8UI, OpenGL::GL_RG8UI, OpenGL::GL_RGB8UI, OpenGL::GL_RGBA8UI};
+		int format = formats[components];
+		
+		OpenGL::glBindImageTexture(binding, texture, 0, OpenGL::GL_FALSE, 0, OpenGL::GL_READ_WRITE, format);
+	}
 
 	int NewTessControlShader(const char * source) {
 		return NewShader<OpenGL::GL_TESS_CONTROL_SHADER>(source);

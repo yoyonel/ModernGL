@@ -30,7 +30,6 @@ namespace ModernGL {
 	};
 
 	extern bool InitializeModernGL(bool font = true);
-	extern bool ExtensionActive();
 	
 	extern const char * GetError();
 	extern Info GetInfo();
@@ -82,6 +81,7 @@ namespace ModernGL {
 
 	extern int NewTexture(int width, int height, const void * data, int components = 3);
 	extern void DeleteTexture(int texture);
+
 	extern void UseTexture(int texture, int location = 0);
 
 	extern void SetTexturePixelated(int texture);
@@ -145,7 +145,11 @@ namespace ModernGL {
 	extern float ReadDepthPixel(int x, int y);
 
 	// Extensions
+	
+	extern bool ExtensionActive();
 
+	extern void UseTextureAsImage(int texture, int binding = 0, int components = 3);
+	
 	extern int NewTessControlShader(const char * source);
 	extern int NewTessEvaluationShader(const char * source);
 
