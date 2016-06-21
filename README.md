@@ -26,11 +26,24 @@ SOON
 InitializeModernGL(font = True)
 GetError()
 GetInfo()
+
 Viewport(x, y, w, h)
 Clear(r = 0, g = 0, b = 0, a = 255)
+
 PointSize(size)
 LineSize(size)
-EnableOnly(unsigned mask)
+
+EnableOnly(mask)
+  # Parameters:
+    ENABLE_NOTHING
+    ENABLE_BLEND
+    ENABLE_CULL_FACE
+    ENABLE_DEPTH_TEST
+    ENABLE_MULTISAMPLE
+  
+  # Example:
+    EnableOnly(ENABLE_CULL_FACE | ENABLE_DEPTH_TEST)
+
 EnableBlend()
 DisableBlend()
 EnableCullFace()
@@ -39,18 +52,28 @@ EnableDepthTest()
 DisableDepthTest()
 EnableMultisample()
 DisableMultisample()
+
 NewProgram(shaders)
+  # Example:
+    NewProgram([NewVertexShader(...), NewFragmentShader(...)])
+
 DeleteProgram(program)
+  # This will delete all the shaders linked to this program
+
 UseProgram(program)
 UseDefaultProgram()
+
 NewFragmentShader(source)
 NewGeometryShader(source)
 NewVertexShader(source)
 DeleteShader(shader)
+
 CompilerLog()
+
 AttributeLocation(program, name)
 UniformLocation(program, name)
 UniformBlockLocation(program, name)
+
 Uniform1f(location, v0)
 Uniform2f(location, v0, v1)
 Uniform3f(location, v0, v1, v2)
@@ -59,23 +82,32 @@ Uniform1i(location, v0)
 Uniform2i(location, v0, v1)
 Uniform3i(location, v0, v1, v2)
 Uniform4i(location, v0, v1, v2, v3)
-UniformMatrix(location, const * matrix)
-UniformTransposeMatrix(location, const * matrix)
+
+UniformMatrix(location, matrix)
+  # Example:
+    UniformMatrix([1, 2, 3 ... 15, 16])
+
+UniformTransposeMatrix(location, matrix)
 UniformBlock(location, buffer)
-NewTexture(width, height, data = 3)
+
+NewTexture(width, height, data, components = 3)
 DeleteTexture(texture)
-UpdateTexture(texture, x, y, width, height, data = 3)
+UpdateTexture(texture, x, y, width, height, data, components = 3)
 UseTexture(texture, location = 0)
+
 SetTexturePixelated(texture)
 SetTextureFiltered(texture)
 SetTextureMipmapped(texture)
+
 BuildMipmap(texture, base = 0, max = 1000)
+
 NewVertexArray(format, attribs, indexBuffer = 0)
 DeleteVertexArray(array)
 EnableAttribute(vao, target)
 DisableAttribute(vao, target)
 EnableAttributes(vao, targets)
 DisableAttributes(vao, targets)
+
 NewVertexBuffer(data)
 NewIndexBuffer(data)
 NewUniformBuffer(data)
@@ -83,9 +115,11 @@ NewDynamicVertexBuffer(data)
 NewDynamicIndexBuffer(data)
 NewDynamicUniformBuffer(data)
 DeleteBuffer(buffer)
+
 UpdateVertexBuffer(buffer, offset, data)
 UpdateIndexBuffer(buffer, offset, data)
 UpdateUniformBuffer(buffer, offset, data)
+
 RenderTriangles(vao, count, first = 0, instances = 1)
 RenderTriangleStrip(vao, count, first = 0, instances = 1)
 RenderTriangleFan(vao, count, first = 0, instances = 1)
@@ -97,6 +131,7 @@ RenderLineStripAdjacency(vao, count, first = 0, instances = 1)
 RenderLinesAdjacency(vao, count, first = 0, instances = 1)
 RenderTriangleStripAdjacency(vao, count, first = 0, instances = 1)
 RenderTrianglesAdjacency(vao, count, first = 0, instances = 1)
+
 RenderIndexedTriangles(vao, count, first = 0, instances = 1)
 RenderIndexedTriangleStrip(vao, count, first = 0, instances = 1)
 RenderIndexedTriangleFan(vao, count, first = 0, instances = 1)
@@ -108,21 +143,30 @@ RenderIndexedLineStripAdjacency(vao, count, first = 0, instances = 1)
 RenderIndexedLinesAdjacency(vao, count, first = 0, instances = 1)
 RenderIndexedTriangleStripAdjacency(vao, count, first = 0, instances = 1)
 RenderIndexedTrianglesAdjacency(vao, count, first = 0, instances = 1)
+
 NewFramebuffer(width, height, multisample = True)
 DeleteFramebuffer(framebuffer)
 UseFramebuffer(framebuffer)
 UseDefaultFramebuffer()
+
 ReadPixels(x, y, width, height, components = 3)
 ReadDepthPixels(x, y, width, height)
 ReadPixel(x, y)
 ReadDepthPixel(x, y)
+```
+
+```
 ExtensionActive()
+
 UseTextureAsImage(texture, binding = 0, components = 3)
+
 NewTessControlShader(source)
 NewTessEvaluationShader(source)
+
 NewComputeShader(source)
 DeleteComputeShader(program)
 RunComputeShader(program, x = 1, y = 1, z = 1)
+
 NewStorageBuffer(data)
 NewDynamicStorageBuffer(data)
 UpdateStorageBuffer(buffer, offset, data)
