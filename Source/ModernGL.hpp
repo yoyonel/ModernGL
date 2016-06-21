@@ -91,7 +91,7 @@ namespace ModernGL {
 	extern void BuildMipmap(int texture, int base = 0, int max = 1000);
 
 	extern int NewVertexArray(const char * format, VertexBufferAndAttribute * attribs, int indexBuffer = 0);
-	extern void DeleteVertexArray(int array);
+	extern void DeleteVertexArray(int vao);
 
 	extern void EnableAttribute(int vao, int target);
 	extern void DisableAttribute(int vao, int target);

@@ -724,8 +724,8 @@ namespace ModernGL {
 		return vertexArray;
 	}
 
-	void DeleteVertexArray(int array) {
-		OpenGL::glDeleteVertexArrays(1, (OpenGL::GLuint *)&array);
+	void DeleteVertexArray(int vao) {
+		OpenGL::glDeleteVertexArrays(1, (OpenGL::GLuint *)&vao);
 	}
 
 	void EnableAttribute(int vao, int target) {
