@@ -47,7 +47,10 @@ PyObject * Viewport(PyObject * self, PyObject * args) {
 }
 
 PyObject * Clear(PyObject * self, PyObject * args) {
-	unsigned char r = 0, g = 0, b = 0, a = 255;
+	unsigned char r = 0;
+	unsigned char g = 0;
+	unsigned char b = 0;
+	unsigned char a = 255;
 
 	if (!PyArg_ParseTuple(args, "|bbbb:Clear", &r, &g, &b, &a)) {
 		return 0;
@@ -508,25 +511,34 @@ PyObject * UseTexture(PyObject * self, PyObject * args) {
 
 PyObject * SetTexturePixelated(PyObject * self, PyObject * args) {
 	int texture;
+	
 	if (!PyArg_ParseTuple(args, "i:SetTexturePixelated", &texture)) {
 		return 0;
 	}
+
+	ModernGL::SetTexturePixelated(texture);
 	Py_RETURN_NONE;
 }
 
 PyObject * SetTextureFiltered(PyObject * self, PyObject * args) {
 	int texture;
+	
 	if (!PyArg_ParseTuple(args, "i:SetTextureFiltered", &texture)) {
 		return 0;
 	}
+
+	ModernGL::SetTextureFiltered(texture);
 	Py_RETURN_NONE;
 }
 
 PyObject * SetTextureMipmapped(PyObject * self, PyObject * args) {
 	int texture;
+	
 	if (!PyArg_ParseTuple(args, "i:SetTextureMipmapped", &texture)) {
 		return 0;
 	}
+
+	ModernGL::SetTextureMipmapped(texture);
 	Py_RETURN_NONE;
 }
 
