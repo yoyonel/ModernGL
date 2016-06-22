@@ -1329,25 +1329,25 @@ PyObject * ReadStorageBuffer(PyObject * self, PyObject * args) {
 }
 
 static PyMethodDef methods[] = {
-	{"InitializeModernGL", InitializeModernGL, METH_VARARGS, 0},
-	{"GetInfo", GetInfo, METH_VARARGS, 0},
-	{"GetError", GetError, METH_VARARGS, 0},
+	{"InitializeModernGL", InitializeModernGL, METH_VARARGS, "Initialize the ModernGL module inside a valid OpenGL context."},
+	{"GetInfo", GetInfo, METH_VARARGS, "Get information about the OpenGL context."},
+	{"GetError", GetError, METH_VARARGS, "Get the error when Initialization failed."},
 
-	{"Viewport", Viewport, METH_VARARGS, 0},
-	{"Clear", Clear, METH_VARARGS, 0},
+	{"Viewport", Viewport, METH_VARARGS, "Set the viewport for rendering.\nParameters: (x, y, width, height)"},
+	{"Clear", Clear, METH_VARARGS, "Clear the viewport with the specified colors.\nParameters: (r = 0, g = 0, b = 0, a = 255)."},
 
-	{"PointSize", PointSize, METH_VARARGS, 0},
-	{"LineSize", LineSize, METH_VARARGS, 0},
+	{"PointSize", PointSize, METH_VARARGS, "Set the size of the point primitive."},
+	{"LineSize", LineSize, METH_VARARGS, "Set the with of the line primitive."},
 
 	{"EnableOnly", EnableOnly, METH_VARARGS, 0},
-	{"EnableBlend", EnableBlend, METH_VARARGS, 0},
-	{"DisableBlend", DisableBlend, METH_VARARGS, 0},
-	{"EnableCullFace", EnableCullFace, METH_VARARGS, 0},
-	{"DisableCullFace", DisableCullFace, METH_VARARGS, 0},
-	{"EnableDepthTest", EnableDepthTest, METH_VARARGS, 0},
-	{"DisableDepthTest", DisableDepthTest, METH_VARARGS, 0},
-	{"EnableMultisample", EnableMultisample, METH_VARARGS, 0},
-	{"DisableMultisample", DisableMultisample, METH_VARARGS, 0},
+	{"EnableBlend", EnableBlend, METH_VARARGS, "Enable blending."},
+	{"DisableBlend", DisableBlend, METH_VARARGS, "Disable blending."},
+	{"EnableCullFace", EnableCullFace, METH_VARARGS, "Enable face culling."},
+	{"DisableCullFace", DisableCullFace, METH_VARARGS, "Disable face culling."},
+	{"EnableDepthTest", EnableDepthTest, METH_VARARGS, "Enable depth testing."},
+	{"DisableDepthTest", DisableDepthTest, METH_VARARGS, "Disable depth testing."},
+	{"EnableMultisample", EnableMultisample, METH_VARARGS, "Enable multisampling."},
+	{"DisableMultisample", DisableMultisample, METH_VARARGS, "Disable multisampling."},
 
 	{"NewFragmentShader", NewFragmentShader, METH_VARARGS, 0},
 	{"NewGeometryShader", NewGeometryShader, METH_VARARGS, 0},
@@ -1359,20 +1359,20 @@ static PyMethodDef methods[] = {
 	{"UseProgram", UseProgram, METH_VARARGS, 0},
 	{"UseDefaultProgram", UseDefaultProgram, METH_VARARGS, 0},
 
-	{"CompilerLog", CompilerLog, METH_VARARGS, 0},
+	{"CompilerLog", CompilerLog, METH_VARARGS, "Get the compiler log for the following methods:\nNewFragmentShader\nNewGeometryShader\nNewVertexShader\nNewProgram\nNewTessEvaluationShader\nNewTessControlShader\nNewComputeShader"},
 
 	{"AttributeLocation", AttributeLocation, METH_VARARGS, 0},
 	{"UniformLocation", UniformLocation, METH_VARARGS, 0},
 	{"UniformBlockLocation", UniformBlockLocation, METH_VARARGS, 0},
 
-	{"Uniform1f", Uniform1f, METH_VARARGS, 0},
-	{"Uniform2f", Uniform2f, METH_VARARGS, 0},
-	{"Uniform3f", Uniform3f, METH_VARARGS, 0},
-	{"Uniform4f", Uniform4f, METH_VARARGS, 0},
-	{"Uniform1i", Uniform1i, METH_VARARGS, 0},
-	{"Uniform2i", Uniform2i, METH_VARARGS, 0},
-	{"Uniform3i", Uniform3i, METH_VARARGS, 0},
-	{"Uniform4i", Uniform4i, METH_VARARGS, 0},
+	{"Uniform1f", Uniform1f, METH_VARARGS, "Set the value of the uniform. The value must have the type of `vec1` in the shader. The location of the uniform can be queried by the UniformLocation method. Parameters: (location, v0)"},
+	{"Uniform2f", Uniform2f, METH_VARARGS, "Set the value of the uniform. The value must have the type of `vec2` in the shader. The location of the uniform can be queried by the UniformLocation method. Parameters: (location, v0, v1)"},
+	{"Uniform3f", Uniform3f, METH_VARARGS, "Set the value of the uniform. The value must have the type of `vec3` in the shader. The location of the uniform can be queried by the UniformLocation method. Parameters: (location, v0, v1, v2)"},
+	{"Uniform4f", Uniform4f, METH_VARARGS, "Set the value of the uniform. The value must have the type of `vec4` in the shader. The location of the uniform can be queried by the UniformLocation method. Parameters: (location, v0, v1, v2, v3)"},
+	{"Uniform1i", Uniform1i, METH_VARARGS, "Set the value of the uniform. The value must have the type of `ivec1` in the shader. The location of the uniform can be queried by the UniformLocation method. Parameters: (location, v0)"},
+	{"Uniform2i", Uniform2i, METH_VARARGS, "Set the value of the uniform. The value must have the type of `ivec2` in the shader. The location of the uniform can be queried by the UniformLocation method. Parameters: (location, v0, v1)"},
+	{"Uniform3i", Uniform3i, METH_VARARGS, "Set the value of the uniform. The value must have the type of `ivec3` in the shader. The location of the uniform can be queried by the UniformLocation method. Parameters: (location, v0, v1, v2)"},
+	{"Uniform4i", Uniform4i, METH_VARARGS, "Set the value of the uniform. The value must have the type of `ivec4` in the shader. The location of the uniform can be queried by the UniformLocation method. Parameters: (location, v0, v1, v2, v3)"},
 
 	{"UniformMatrix", UniformMatrix, METH_VARARGS, 0},
 	{"UniformTransposeMatrix", UniformTransposeMatrix, METH_VARARGS, 0},
@@ -1384,18 +1384,18 @@ static PyMethodDef methods[] = {
 	{"UpdateTexture", UpdateTexture, METH_VARARGS, 0},
 	{"UseTexture", UseTexture, METH_VARARGS, 0},
 
-	{"SetTexturePixelated", SetTexturePixelated, METH_VARARGS, 0},
-	{"SetTextureFiltered", SetTextureFiltered, METH_VARARGS, 0},
-	{"SetTextureMipmapped", SetTextureMipmapped, METH_VARARGS, 0},
-	{"BuildMipmap", BuildMipmap, METH_VARARGS, 0},
+	{"SetTexturePixelated", SetTexturePixelated, METH_VARARGS, "Set texture filter to nearest."},
+	{"SetTextureFiltered", SetTextureFiltered, METH_VARARGS, "Set texture filter to linear."},
+	{"SetTextureMipmapped", SetTextureMipmapped, METH_VARARGS, "Set texture filter to mipmap linear."},
+	{"BuildMipmap", BuildMipmap, METH_VARARGS, "Build the mipmaps for a texture."},
 
 	{"NewVertexArray", NewVertexArray, METH_VARARGS, 0},
 	{"DeleteVertexArray", DeleteVertexArray, METH_VARARGS, 0},
 
-	{"EnableAttribute", EnableAttribute, METH_VARARGS, 0},
-	{"DisableAttribute", DisableAttribute, METH_VARARGS, 0},
-	{"EnableAttributes", EnableAttributes, METH_VARARGS, 0},
-	{"DisableAttributes", DisableAttributes, METH_VARARGS, 0},
+	{"EnableAttribute", EnableAttribute, METH_VARARGS, "Enable an attribute in the vertex array object."},
+	{"DisableAttribute", DisableAttribute, METH_VARARGS, "Disable an attribute in the vertex array object."},
+	{"EnableAttributes", EnableAttributes, METH_VARARGS, "Enable attributes in the vertex array object."},
+	{"DisableAttributes", DisableAttributes, METH_VARARGS, "Disable attributes in the vertex array object."},
 
 	{"NewVertexBuffer", NewVertexBuffer, METH_VARARGS, 0},
 	{"NewIndexBuffer", NewIndexBuffer, METH_VARARGS, 0},
@@ -1411,51 +1411,51 @@ static PyMethodDef methods[] = {
 	{"UpdateIndexBuffer", UpdateIndexBuffer, METH_VARARGS, 0},
 	{"UpdateUniformBuffer", UpdateUniformBuffer, METH_VARARGS, 0},
 
-	{"RenderTriangles", RenderTriangles, METH_VARARGS, 0},
-	{"RenderTriangleStrip", RenderTriangleStrip, METH_VARARGS, 0},
-	{"RenderTriangleFan", RenderTriangleFan, METH_VARARGS, 0},
-	{"RenderLines", RenderLines, METH_VARARGS, 0},
-	{"RenderLineStrip", RenderLineStrip, METH_VARARGS, 0},
-	{"RenderLineLoop", RenderLineLoop, METH_VARARGS, 0},
-	{"RenderPoints", RenderPoints, METH_VARARGS, 0},
-	{"RenderLineStripAdjacency", RenderLineStripAdjacency, METH_VARARGS, 0},
-	{"RenderLinesAdjacency", RenderLinesAdjacency, METH_VARARGS, 0},
-	{"RenderTriangleStripAdjacency", RenderTriangleStripAdjacency, METH_VARARGS, 0},
-	{"RenderTrianglesAdjacency", RenderTrianglesAdjacency, METH_VARARGS, 0},
-	{"RenderIndexedTriangles", RenderIndexedTriangles, METH_VARARGS, 0},
-	{"RenderIndexedTriangleStrip", RenderIndexedTriangleStrip, METH_VARARGS, 0},
-	{"RenderIndexedTriangleFan", RenderIndexedTriangleFan, METH_VARARGS, 0},
-	{"RenderIndexedLines", RenderIndexedLines, METH_VARARGS, 0},
-	{"RenderIndexedLineStrip", RenderIndexedLineStrip, METH_VARARGS, 0},
-	{"RenderIndexedLineLoop", RenderIndexedLineLoop, METH_VARARGS, 0},
-	{"RenderIndexedPoints", RenderIndexedPoints, METH_VARARGS, 0},
-	{"RenderIndexedLineStripAdjacency", RenderIndexedLineStripAdjacency, METH_VARARGS, 0},
-	{"RenderIndexedLinesAdjacency", RenderIndexedLinesAdjacency, METH_VARARGS, 0},
-	{"RenderIndexedTriangleStripAdjacency", RenderIndexedTriangleStripAdjacency, METH_VARARGS, 0},
-	{"RenderIndexedTrianglesAdjacency", RenderIndexedTrianglesAdjacency, METH_VARARGS, 0},
+	{"RenderTriangles", RenderTriangles, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderTriangleStrip", RenderTriangleStrip, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderTriangleFan", RenderTriangleFan, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderLines", RenderLines, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderLineStrip", RenderLineStrip, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderLineLoop", RenderLineLoop, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderPoints", RenderPoints, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderLineStripAdjacency", RenderLineStripAdjacency, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderLinesAdjacency", RenderLinesAdjacency, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderTriangleStripAdjacency", RenderTriangleStripAdjacency, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderTrianglesAdjacency", RenderTrianglesAdjacency, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderIndexedTriangles", RenderIndexedTriangles, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderIndexedTriangleStrip", RenderIndexedTriangleStrip, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderIndexedTriangleFan", RenderIndexedTriangleFan, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderIndexedLines", RenderIndexedLines, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderIndexedLineStrip", RenderIndexedLineStrip, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderIndexedLineLoop", RenderIndexedLineLoop, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderIndexedPoints", RenderIndexedPoints, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderIndexedLineStripAdjacency", RenderIndexedLineStripAdjacency, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderIndexedLinesAdjacency", RenderIndexedLinesAdjacency, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderIndexedTriangleStripAdjacency", RenderIndexedTriangleStripAdjacency, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
+	{"RenderIndexedTrianglesAdjacency", RenderIndexedTrianglesAdjacency, METH_VARARGS, "Parameters: (vao, count, first = 0, instances = 1)."},
 
-	{"NewFramebuffer", NewFramebuffer, METH_VARARGS, 0},
+	{"NewFramebuffer", NewFramebuffer, METH_VARARGS, "Creates a new framebuffer with two texture attachment (color and depth) the color attachment will have rgba format 8bit for each channel. the depth texture contains float values. Return value: (framebuffer, color, depth). Parameters: (width, height, multisample = True)."},
 	{"DeleteFramebuffer", DeleteFramebuffer, METH_VARARGS, 0},
 	{"UseFramebuffer", UseFramebuffer, METH_VARARGS, 0},
 	{"UseDefaultFramebuffer", UseDefaultFramebuffer, METH_VARARGS, 0},
 	
-	{"ReadPixels", ReadPixels, METH_VARARGS, 0},
-	{"ReadDepthPixels", ReadDepthPixels, METH_VARARGS, 0},
-	{"ReadPixel", ReadPixel, METH_VARARGS, 0},
-	{"ReadDepthPixel", ReadDepthPixel, METH_VARARGS, 0},
+	{"ReadPixels", ReadPixels, METH_VARARGS, ""},
+	{"ReadDepthPixels", ReadDepthPixels, METH_VARARGS, ""},
+	{"ReadPixel", ReadPixel, METH_VARARGS, ""},
+	{"ReadDepthPixel", ReadDepthPixel, METH_VARARGS, ""},
 
 	// Extension
 
-	{"ExtensionActive", ExtensionActive, METH_VARARGS, 0},
+	{"ExtensionActive", ExtensionActive, METH_VARARGS, "Check for full ModernGL support. The initialization of the extensions are not affected by this method."},
 
-	{"UseTextureAsImage", UseTextureAsImage, METH_VARARGS, 0},
+	{"UseTextureAsImage", UseTextureAsImage, METH_VARARGS, "To use image2D instead of sampler2D."},
 	
 	{"NewTessEvaluationShader", NewTessEvaluationShader, METH_VARARGS, 0},
 	{"NewTessControlShader", NewTessControlShader, METH_VARARGS, 0},
 
-	{"NewComputeShader", NewComputeShader, METH_VARARGS, 0},
-	{"DeleteComputeShader", DeleteComputeShader, METH_VARARGS, 0},
-	{"RunComputeShader", RunComputeShader, METH_VARARGS, 0},
+	{"NewComputeShader", NewComputeShader, METH_VARARGS, "Compiles and links a compute shader from source."},
+	{"DeleteComputeShader", DeleteComputeShader, METH_VARARGS, "Compute shader is a standalone shader program. NOT part of the rendering pipeline. Equivalent to the DeleteProgram."},
+	{"RunComputeShader", RunComputeShader, METH_VARARGS, "Run the compute shader. Parameters: (x = 1, y = 1, z = 1)"},
 
 	{"NewStorageBuffer", NewStorageBuffer, METH_VARARGS, 0},
 	{"NewDynamicStorageBuffer", NewDynamicStorageBuffer, METH_VARARGS, 0},
@@ -1487,8 +1487,8 @@ PyObject * PyInit_ModernGL() {
 	PyModule_AddIntConstant(m, "ENABLE_DEPTH_TEST", 0x04);
 	PyModule_AddIntConstant(m, "ENABLE_MULTISAMPLE", 0x08);
 
-	PyModule_AddStringConstant(m, "AUTHOR_NAME", "Szabolcs Dombi");
-	PyModule_AddStringConstant(m, "AUTHOR_EMAIL", "cprogrammer1994@gmail.com");
+	PyModule_AddStringConstant(m, "__AUTHOR_NAME__", "Szabolcs Dombi");
+	PyModule_AddStringConstant(m, "__AUTHOR_EMAIL__", "cprogrammer1994@gmail.com");
 
 	return m;
 }
