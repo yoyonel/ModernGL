@@ -1344,7 +1344,9 @@ static PyMethodDef methods[] = {
 		"\tfont: (bool) Load a better than nothing font. By default is True\n"
 
 		"\n"
-		"Returns: (bool) True on success, False on failure.\n"
+		"Returns:\n"
+		"\tokey (bool) True on success, False on failure.\n"
+		"\n"
 	},
 	{
 		"GetInfo",
@@ -1354,10 +1356,12 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tNO PARAMETERS\n"
+		"\tNone\n"
 
 		"\n"
-		"Returns: (tuple) Information about the OpenGL context.\n"
+		"Returns:\n"
+		"\tinfo (tuple) Information about the OpenGL context.\n"
+		"\n"
 	},
 	{
 		"GetError",
@@ -1367,10 +1371,12 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tNO PARAMETERS\n"
+		"\tNone\n"
 
 		"\n"
-		"Returns: (str) The reason, why the InitializeModernGL failed.\n"
+		"Returns:\n"
+		"\terror (str) The reason, why the InitializeModernGL failed.\n"
+		"\n"
 	},
 	{
 		"Viewport",
@@ -1386,13 +1392,16 @@ static PyMethodDef methods[] = {
 		"\theight (int) Height of the viewport.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"Clear",
 		Clear,
 		METH_VARARGS,
 		"Clear the viewport with the specified colors.\n"
+		"Also clears the depth attachments.\n"
 
 		"\n"
 		"Parameters:\n"
@@ -1402,7 +1411,9 @@ static PyMethodDef methods[] = {
 		"\ta (int) Clear value for the alpha channel. By default is 255\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"PointSize",
@@ -1415,7 +1426,9 @@ static PyMethodDef methods[] = {
 		"\tsize (float) Size of the point.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"LineSize",
@@ -1428,19 +1441,25 @@ static PyMethodDef methods[] = {
 		"\tsize (float) Width of the line.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"EnableOnly",
 		EnableOnly,
 		METH_VARARGS,
+		"Enables only the specified flags.\n"
+		"The enable flags are: ENABLE_NOTHING, ENABLE_BLEND, ENABLE_DEPTH_TEST, ENABLE_CULL_FACE and ENABLE_MULTISAMPLE.\n"
 
 		"\n"
 		"Parameters:\n"
-		"\tflags (int) A combination of ENABLE_NOTHING, ENABLE_BLEND, ENABLE_DEPTH_TEST, ENABLE_CULL_FACE and ENABLE_MULTISAMPLE using bitwise OR operator.\n"
+		"\tflags (int) A combination of the enable flags using bitwise OR operator.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"EnableBlend",
@@ -1450,10 +1469,12 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tNO PARAMETERS\n"
+		"\tNone\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"DisableBlend",
@@ -1463,10 +1484,12 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tNO PARAMETERS\n"
+		"\tNone\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"EnableCullFace",
@@ -1476,10 +1499,12 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tNO PARAMETERS\n"
+		"\tNone\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"DisableCullFace",
@@ -1489,10 +1514,12 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tNO PARAMETERS\n"
+		"\tNone\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"EnableDepthTest",
@@ -1502,10 +1529,12 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tNO PARAMETERS\n"
+		"\tNone\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"DisableDepthTest",
@@ -1515,10 +1544,12 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tNO PARAMETERS\n"
+		"\tNone\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"EnableMultisample",
@@ -1528,10 +1559,12 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tNO PARAMETERS\n"
+		"\tNone\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"DisableMultisample",
@@ -1541,10 +1574,12 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tNO PARAMETERS\n"
+		"\tNone\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"NewVertexShader",
@@ -1557,7 +1592,9 @@ static PyMethodDef methods[] = {
 		"\tsource (str) Source code in GLSL.\n"
 
 		"\n"
-		"Returns: (int) The index of the new shader object.\n"
+		"Returns:\n"
+		"\tshader (int) The index of the new shader object.\n"
+		"\n"
 	},
 	{
 		"NewFragmentShader",
@@ -1570,7 +1607,9 @@ static PyMethodDef methods[] = {
 		"\tsource (str) Source code in GLSL.\n"
 
 		"\n"
-		"Returns: (int) The index of the new shader object.\n"
+		"Returns:\n"
+		"\tshader (int) The index of the new shader object.\n"
+		"\n"
 	},
 	{
 		"NewGeometryShader",
@@ -1583,20 +1622,24 @@ static PyMethodDef methods[] = {
 		"\tsource (str) Source code in GLSL.\n"
 
 		"\n"
-		"Returns: (int) The index of the new shader object.\n"
+		"Returns:\n"
+		"\tshader (int) The index of the new shader object.\n"
+		"\n"
 	},
 	{
 		"DeleteShader",
 		DeleteShader,
 		METH_VARARGS,
-		""
+		"Delete shader object created by the NewFragmentShader, the NewGeometryShader, the NewTessControlShader, the NewTessEvaluationShader or the NewVertexShader.\n"
 
 		"\n"
 		"Parameters:\n"
-		"\tshader (int) Index of a shader object returned by the NewFragmentShader, the NewGeometryShader, the NewTessControlShader, the NewTessEvaluationShader or the NewVertexShader function.\n"
+		"\tshader (int) Index of a shader object.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"NewProgram",
@@ -1609,7 +1652,9 @@ static PyMethodDef methods[] = {
 		"\tshaders (list of ints) List containing shader indices.\n"
 
 		"\n"
-		"Returns: (int) The index of the new program object.\n"
+		"Returns:\n"
+		"\tprogram (int) The index of the new program object.\n"
+		"\n"
 	},
 	{
 		"DeleteProgram",
@@ -1622,7 +1667,9 @@ static PyMethodDef methods[] = {
 		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"UseProgram",
@@ -1635,7 +1682,9 @@ static PyMethodDef methods[] = {
 		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"UseDefaultProgram",
@@ -1645,10 +1694,12 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tNO PARAMETERS\n"
+		"\tNone\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"CompilerLog",
@@ -1666,10 +1717,12 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tNO PARAMETERS\n"
+		"\tNone\n"
 
 		"\n"
-		"Returns: (str) The GLSL compiler log.\n"
+		"Returns:\n"
+		"\tlog (str) The GLSL compiler log.\n"
+		"\n"
 	},
 	{
 		"AttributeLocation",
@@ -1683,7 +1736,9 @@ static PyMethodDef methods[] = {
 		"\tname (str) Name of the attribute.\n"
 
 		"\n"
-		"Returns: (int) The location of the attribute.\n"
+		"Returns:\n"
+		"\tlocation (int) The location of the attribute.\n"
+		"\n"
 	},
 	{
 		"UniformLocation",
@@ -1697,7 +1752,9 @@ static PyMethodDef methods[] = {
 		"\tname (str) Name of the uniform.\n"
 
 		"\n"
-		"Returns: (int) The location of the uniform.\n"
+		"Returns:\n"
+		"\tlocation (int) The location of the uniform.\n"
+		"\n"
 	},
 	{
 		"UniformBlockLocation",
@@ -1711,7 +1768,9 @@ static PyMethodDef methods[] = {
 		"\tname (str) Name of the uniform block.\n"
 
 		"\n"
-		"Returns: (int) The location of the uniform block.\n"
+		"Returns:\n"
+		"\tlocation (int) The location of the uniform block.\n"
+		"\n"
 	},
 	{
 		"Uniform1f",
@@ -1728,7 +1787,9 @@ static PyMethodDef methods[] = {
 		"\tv0 (float) Value to set.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"Uniform2f",
@@ -1746,7 +1807,9 @@ static PyMethodDef methods[] = {
 		"\tv1 (float) Value to set.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"Uniform3f",
@@ -1765,7 +1828,9 @@ static PyMethodDef methods[] = {
 		"\tv2 (float) Value to set.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"Uniform4f",
@@ -1785,7 +1850,9 @@ static PyMethodDef methods[] = {
 		"\tv3 (float) Value to set.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"Uniform1i",
@@ -1803,7 +1870,9 @@ static PyMethodDef methods[] = {
 
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"Uniform2i",
@@ -1821,7 +1890,9 @@ static PyMethodDef methods[] = {
 		"\tv1 (int) Value to set.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"Uniform3i",
@@ -1840,7 +1911,9 @@ static PyMethodDef methods[] = {
 		"\tv2 (int) Value to set.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"Uniform4i",
@@ -1860,7 +1933,9 @@ static PyMethodDef methods[] = {
 		"\tv3 (int) Value to set.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"UniformMatrix",
@@ -1874,7 +1949,9 @@ static PyMethodDef methods[] = {
 		"\tmatrix (list of floats) List containing 4x4=16 float values.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"UniformTransposeMatrix",
@@ -1888,7 +1965,9 @@ static PyMethodDef methods[] = {
 		"\tmatrix (list of floats) List containing 4x4=16 float values.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"UniformBlock",
@@ -1902,7 +1981,9 @@ static PyMethodDef methods[] = {
 		"\tubo (int) Index of a uniform buffer returned by a NewUniformBuffer.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"NewTexture",
@@ -1918,7 +1999,9 @@ static PyMethodDef methods[] = {
 		"\tcomponents (int) By default is 3.\n"
 
 		"\n"
-		"Returns: (int) The index of the new texture object.\n"
+		"Returns:\n"
+		"\ttexture (int) The index of the new texture object.\n"
+		"\n"
 	},
 	{
 		"DeleteTexture",
@@ -1931,7 +2014,9 @@ static PyMethodDef methods[] = {
 		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"UpdateTexture",
@@ -1950,7 +2035,9 @@ static PyMethodDef methods[] = {
 		"\tcomponents (int) By default is 3.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"UseTexture",
@@ -1964,7 +2051,9 @@ static PyMethodDef methods[] = {
 		"\tlocation (int) Location of the texture. By default is 0\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"SetTexturePixelated",
@@ -1977,7 +2066,9 @@ static PyMethodDef methods[] = {
 		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"SetTextureFiltered",
@@ -1990,7 +2081,9 @@ static PyMethodDef methods[] = {
 		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"SetTextureMipmapped",
@@ -2003,44 +2096,57 @@ static PyMethodDef methods[] = {
 		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"BuildMipmap",
 		BuildMipmap,
 		METH_VARARGS,
-		"Build the mipmaps for a texture.\n"
+		"Generate the mipmaps for the texture.\n"
 
 		"\n"
 		"Parameters:\n"
 		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
+		"\tbase (int) Base mipmap level to build.\n"
+		"\tmax (int) Maximum mipmap level to build.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"NewVertexArray",
 		NewVertexArray,
 		METH_VARARGS,
-		""
+		"The foreach int or float attribute an index of a vertex buffer object and the location of a vertex attribute must be specified.\n"
 
 		"\n"
 		"Parameters:\n"
 		"\tformat (str) Format of the vertex array attrubites. ([1-4][if])+\n"
-		"\tattribs (list of int pairs) The foreach int or float attribute an index of a vertex buffer object and the location of a vertex attribute must be specified.\n"
+		"\tattribs (list of int pairs) List of vertex buffer object and vertex location pairs.\n"
 		"\tibo (int) Index of an index buffer object. By default is 0\n"
 
 		"\n"
-		"Returns: (int) The index of the new vertex array object.\n"
+		"Returns:\n"
+		"\tvao (int) The index of the new vertex array object.\n"
+		"\n"
 	},
 	{
 		"DeleteVertexArray",
 		DeleteVertexArray,
 		METH_VARARGS,
 		""
+		"\n"
+		"Parameters:\n"
+		"\tNone\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"EnableAttribute",
@@ -2054,9 +2160,9 @@ static PyMethodDef methods[] = {
 		"\tattrib (int) The location of the vertex attribute returned by the AttributeLocation function.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
 		"\n"
-		"Parameters:\n"
 	},
 	{
 		"DisableAttribute",
@@ -2070,7 +2176,9 @@ static PyMethodDef methods[] = {
 		"\tattrib (int) The location of the vertex attribute returned by the AttributeLocation function.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"EnableAttributes",
@@ -2084,7 +2192,9 @@ static PyMethodDef methods[] = {
 		"\tattribs (list of ints) The locations of the vertex attributes returned by the AttributeLocation function.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"DisableAttributes",
@@ -2098,7 +2208,9 @@ static PyMethodDef methods[] = {
 		"\tattribs (list of ints) The locations of the vertex attributes returned by the AttributeLocation function.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"NewVertexBuffer",
@@ -2111,7 +2223,9 @@ static PyMethodDef methods[] = {
 		"\tdata (bytes) The content of the buffer.\n"
 
 		"\n"
-		"Returns: (int) The index of the new vertex buffer object.\n"
+		"Returns:\n"
+		"\tvbo (int) The index of the new vertex buffer object.\n"
+		"\n"
 	},
 	{
 		"NewIndexBuffer",
@@ -2124,7 +2238,9 @@ static PyMethodDef methods[] = {
 		"\tdata (bytes) The content of the buffer.\n"
 
 		"\n"
-		"Returns: (int) The index of the new index buffer object.\n"
+		"Returns:\n"
+		"\tibo (int) The index of the new index buffer object.\n"
+		"\n"
 	},
 	{
 		"NewUniformBuffer",
@@ -2137,7 +2253,9 @@ static PyMethodDef methods[] = {
 		"\tdata (bytes) The content of the buffer.\n"
 
 		"\n"
-		"Returns: (int) The index of the new uniform buffer object.\n"
+		"Returns:\n"
+		"\tubo (int) The index of the new uniform buffer object.\n"
+		"\n"
 	},
 	{
 		"NewDynamicVertexBuffer",
@@ -2150,7 +2268,9 @@ static PyMethodDef methods[] = {
 		"\tdata (bytes) The content of the buffer.\n"
 
 		"\n"
-		"Returns: (int) The index of the new vertex buffer object.\n"
+		"Returns:\n"
+		"\tvbo (int) The index of the new vertex buffer object.\n"
+		"\n"
 	},
 	{
 		"NewDynamicIndexBuffer",
@@ -2163,7 +2283,9 @@ static PyMethodDef methods[] = {
 		"\tdata (bytes) The content of the buffer.\n"
 
 		"\n"
-		"Returns: (int) The index of the new index buffer object.\n"
+		"Returns:\n"
+		"\tibo (int) The index of the new index buffer object.\n"
+		"\n"
 	},
 	{
 		"NewDynamicUniformBuffer",
@@ -2176,7 +2298,9 @@ static PyMethodDef methods[] = {
 		"\tdata (bytes) The content of the buffer.\n"
 
 		"\n"
-		"Returns: (int) The index of the new uniform buffer object.\n"
+		"Returns:\n"
+		"\tubo (int) The index of the new uniform buffer object.\n"
+		"\n"
 	},
 	{
 		"DeleteBuffer",
@@ -2189,7 +2313,9 @@ static PyMethodDef methods[] = {
 		"\tbuffer (int) The index of any buffer object except the framebuffer object.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"UpdateVertexBuffer",
@@ -2204,7 +2330,9 @@ static PyMethodDef methods[] = {
 		"\tdata (bytes) The content of the data to write to the buffer.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"UpdateIndexBuffer",
@@ -2219,7 +2347,9 @@ static PyMethodDef methods[] = {
 		"\tdata (bytes) The content of the data to write to the buffer.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"UpdateUniformBuffer",
@@ -2234,7 +2364,9 @@ static PyMethodDef methods[] = {
 		"\tdata (bytes) The content of the data to write to the buffer.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderTriangles",
@@ -2249,7 +2381,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderTriangleStrip",
@@ -2264,7 +2398,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderTriangleFan",
@@ -2279,7 +2415,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderLines",
@@ -2294,7 +2432,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderLineStrip",
@@ -2309,7 +2449,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderLineLoop",
@@ -2324,7 +2466,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderPoints",
@@ -2339,7 +2483,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderLineStripAdjacency",
@@ -2354,7 +2500,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderLinesAdjacency",
@@ -2369,7 +2517,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderTriangleStripAdjacency",
@@ -2384,7 +2534,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderTrianglesAdjacency",
@@ -2399,7 +2551,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderIndexedTriangles",
@@ -2414,7 +2568,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderIndexedTriangleStrip",
@@ -2429,7 +2585,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderIndexedTriangleFan",
@@ -2444,7 +2602,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderIndexedLines",
@@ -2459,7 +2619,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderIndexedLineStrip",
@@ -2474,7 +2636,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderIndexedLineLoop",
@@ -2489,7 +2653,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderIndexedPoints",
@@ -2504,7 +2670,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderIndexedLineStripAdjacency",
@@ -2519,7 +2687,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderIndexedLinesAdjacency",
@@ -2534,7 +2704,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderIndexedTriangleStripAdjacency",
@@ -2549,7 +2721,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RenderIndexedTrianglesAdjacency",
@@ -2564,7 +2738,9 @@ static PyMethodDef methods[] = {
 		"\tinstances (int) Number of instances. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"NewFramebuffer",
@@ -2584,7 +2760,9 @@ static PyMethodDef methods[] = {
 		"\tmultisample (bool) Multisampling flag. By default is True\n"
 
 		"\n"
-		"Returns: (int) The index of the new framebuffer object.\n"
+		"Returns:\n"
+		"\tfbo (int) The index of the new framebuffer object.\n"
+		"\n"
 	},
 	{
 		"DeleteFramebuffer",
@@ -2596,7 +2774,9 @@ static PyMethodDef methods[] = {
 		"\tframebuffer (int) Index of the framebuffer returned by the NewFramebuffer.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"UseFramebuffer",
@@ -2609,7 +2789,9 @@ static PyMethodDef methods[] = {
 		"\tframebuffer (int) Index of the framebuffer returned by the NewFramebuffer.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"UseDefaultFramebuffer",
@@ -2619,10 +2801,12 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tNO PARAMETERS\n"
+		"\tNone\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	
 	{
@@ -2639,7 +2823,9 @@ static PyMethodDef methods[] = {
 		"\theight (int) Height of the image to read.\n"
 
 		"\n"
-		"Returns: (bytes) The color channels selected by components from the active framebuffer.\n"
+		"Returns:\n"
+		"\tpixels (bytes) The color channels selected by components from the active framebuffer.\n"
+		"\n"
 	},
 	{
 		"ReadDepthPixels",
@@ -2655,7 +2841,9 @@ static PyMethodDef methods[] = {
 		"\theight (int) Height of the image to read.\n"
 
 		"\n"
-		"Returns: (bytes) The depth channel from the active framebuffer.\n"
+		"Returns:\n"
+		"\tpixels (bytes) The depth channel from the active framebuffer.\n"
+		"\n"
 	},
 	{
 		"ReadPixel",
@@ -2669,7 +2857,9 @@ static PyMethodDef methods[] = {
 		"\ty (int) Offset of the pixel to read.\n"
 
 		"\n"
-		"Returns: (int) The rgba value at (x, y) from the active framebuffer.\n"
+		"Returns:\n"
+		"\tpixels (int) The rgba value at (x, y) from the active framebuffer.\n"
+		"\n"
 	},
 	{
 		"ReadDepthPixel",
@@ -2683,7 +2873,9 @@ static PyMethodDef methods[] = {
 		"\ty (int) Offset of the pixel to read.\n"
 
 		"\n"
-		"Returns: (float) The depth value at (x, y) from the active framebuffer.\n"
+		"Returns:\n"
+		"\tpixels (float) The depth value at (x, y) from the active framebuffer.\n"
+		"\n"
 	},
 
 	// Extension
@@ -2697,10 +2889,12 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tNO PARAMETERS\n"
+		"\tNone\n"
 
 		"\n"
-		"Returns: (bool) True on supported extensions, False otherwise.\n"
+		"Returns:\n"
+		"\tactive (bool) True on supported extensions, False otherwise.\n"
+		"\n"
 	},
 	{
 		"UseTextureAsImage",
@@ -2715,7 +2909,9 @@ static PyMethodDef methods[] = {
 		"\tbinding (int) Image binding specified by the layout in GLSL. By default is 0\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"NewTessEvaluationShader",
@@ -2728,7 +2924,9 @@ static PyMethodDef methods[] = {
 		"\tsource (str) Source code in GLSL.\n"
 
 		"\n"
-		"Returns: (int) The index of the new shader object.\n"
+		"Returns:\n"
+		"\tshader (int) The index of the new shader object.\n"
+		"\n"
 	},
 	{
 		"NewTessControlShader",
@@ -2741,7 +2939,9 @@ static PyMethodDef methods[] = {
 		"\tsource (str) Source code in GLSL.\n"
 
 		"\n"
-		"Returns: (int) The index of the new shader object.\n"
+		"Returns:\n"
+		"\tshader (int) The index of the new shader object.\n"
+		"\n"
 	},
 	{
 		"NewComputeShader",
@@ -2754,7 +2954,9 @@ static PyMethodDef methods[] = {
 		"\tsource (str) Source code in GLSL.\n"
 
 		"\n"
-		"Returns: (int) The index of the new program object.\n"
+		"Returns:\n"
+		"\tprogram (int) The index of the new program object.\n"
+		"\n"
 	},
 	{
 		"DeleteComputeShader",
@@ -2768,7 +2970,9 @@ static PyMethodDef methods[] = {
 		"\tprogram (int) The index of a program object returned by the NewComputeShader function.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"RunComputeShader",
@@ -2784,7 +2988,9 @@ static PyMethodDef methods[] = {
 		"\tz (int) The z group size of the workers. By default is 1\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"NewStorageBuffer",
@@ -2797,7 +3003,9 @@ static PyMethodDef methods[] = {
 		"\tdata (bytes) The content of the buffer.\n"
 
 		"\n"
-		"Returns: (int) The index of the new shader storage buffer object.\n"
+		"Returns:\n"
+		"\tssbo (int) The index of the new shader storage buffer object.\n"
+		"\n"
 	},
 	{
 		"NewDynamicStorageBuffer",
@@ -2810,7 +3018,9 @@ static PyMethodDef methods[] = {
 		"\tdata (bytes) The content of the buffer.\n"
 
 		"\n"
-		"Returns: (int) The index of the new shader storage buffer object.\n"
+		"Returns:\n"
+		"\tssbo (int) The index of the new shader storage buffer object.\n"
+		"\n"
 	},
 	{
 		"UseStorageBuffer",
@@ -2824,7 +3034,9 @@ static PyMethodDef methods[] = {
 		"\tbinding (int) Buffer binding specified by the layout in GLSL. By default is 0\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"UpdateStorageBuffer",
@@ -2839,7 +3051,9 @@ static PyMethodDef methods[] = {
 		"\tdata (bytes) The content of the data to write to the buffer.\n"
 
 		"\n"
-		"Returns: None\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
 	},
 	{
 		"ReadStorageBuffer",
@@ -2854,7 +3068,9 @@ static PyMethodDef methods[] = {
 		"\tsize (int) The size of the data to read from the buffer.\n"
 
 		"\n"
-		"Returns: (bytes) The Content of the buffer.\n"
+		"Returns:\n"
+		"\tdata (bytes) The Content of the buffer.\n"
+		"\n"
 	},
 
 	// Better than nothing font

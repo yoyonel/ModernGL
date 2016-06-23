@@ -53,13 +53,11 @@ ul.home-ul {
 }
 
 pre {
-	/*background-color: #EEFFCC;*/
 	background-color: #F8F8F8;
 	color: #000000;
 }
 
 .token_glconst {
-	/*font-weight: bold;*/
 	color: #0033CC;
 }
 
@@ -87,7 +85,6 @@ pre {
 
 .token_sign {
 	font-weight: bold;
-	/*color: #0033CC;*/
 }
 
 .token_operator {
@@ -101,6 +98,10 @@ pre {
 
 .token_string {
 	color: #008822;
+}
+
+.token_none {
+	color: #CC3300;
 }
 
 .token_comment .token {
