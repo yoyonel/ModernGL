@@ -355,27 +355,36 @@ namespace ModernGL {
 	}
 
 	bool InitializeModernGL(bool font) {
+		// Initialize OpenGL
 		if (!OpenGL::InitializeOpenGL()) {
 			errorMessage = "InitializeOpenGL failed.";
 			return false;
 		}
 
+		// Test all the gl functions
 		if (!TestFunctions()) {
 			return false;
 		}
 
+		// Test for better support
 		extensionActive = TestExtensions();
 		
+		// Default blending
 		OpenGL::glBlendFunc(OpenGL::GL_SRC_ALPHA, OpenGL::GL_ONE_MINUS_SRC_ALPHA);
+
+		// Default primitive restart index
 		OpenGL::glEnable(OpenGL::GL_PRIMITIVE_RESTART);
 		OpenGL::glPrimitiveRestartIndex(-1);
 
+		// Default VAO for GL_ELEMENT_ARRAY operations
 		OpenGL::glGenVertexArrays(1, (OpenGL::GLuint *)&defaultVertexArray);
 		OpenGL::glBindVertexArray(defaultVertexArray);
 
+		// Default FBO and program
 		OpenGL::glGetIntegerv(OpenGL::GL_DRAW_FRAMEBUFFER_BINDING, (OpenGL::GLint *)&defaultFramebuffer);
 		OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&defaultProgram);
 
+		// Default texture unit for texture operations
 		int maxTextureUnits = 1;
 		OpenGL::glGetIntegerv(OpenGL::GL_MAX_TEXTURE_IMAGE_UNITS, (OpenGL::GLint *)&maxTextureUnits);
 		defaultTextureUnit = maxTextureUnits - 1;
@@ -524,9 +533,8 @@ namespace ModernGL {
 		OpenGL::glUseProgram(defaultProgram);
 	}
 
-	template <unsigned Type>
-	inline int NewShader(const char * source) {
-		int shader = OpenGL::glCreateShader(Type);
+	int NewFragmentShader(const char * source) {
+		int shader = OpenGL::glCreateShader(GL_FRAGMENT_SHADER);
 		OpenGL::glShaderSource(shader, 1, &source, 0);
 		OpenGL::glCompileShader(shader);
 
@@ -545,16 +553,44 @@ namespace ModernGL {
 		return shader;
 	}
 
-	int NewFragmentShader(const char * source) {
-		return NewShader<OpenGL::GL_FRAGMENT_SHADER>(source);
-	}
-
 	int NewGeometryShader(const char * source) {
-		return NewShader<OpenGL::GL_GEOMETRY_SHADER>(source);
+		int shader = OpenGL::glCreateShader(GL_GEOMETRY_SHADER);
+		OpenGL::glShaderSource(shader, 1, &source, 0);
+		OpenGL::glCompileShader(shader);
+
+		int compiled = OpenGL::GL_FALSE;
+		OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
+		if (!compiled) {
+			int logSize = 0;
+			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog, &logSize, compilerLog);
+			compilerLog[logSize] = 0;
+			OpenGL::glDeleteShader(shader);
+			shader = 0;
+		} else {
+			compilerLog[0] = 0;
+		}
+
+		return shader;
 	}
 
 	int NewVertexShader(const char * source) {
-		return NewShader<OpenGL::GL_VERTEX_SHADER>(source);
+		int shader = OpenGL::glCreateShader(GL_VERTEX_SHADER);
+		OpenGL::glShaderSource(shader, 1, &source, 0);
+		OpenGL::glCompileShader(shader);
+
+		int compiled = OpenGL::GL_FALSE;
+		OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
+		if (!compiled) {
+			int logSize = 0;
+			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog, &logSize, compilerLog);
+			compilerLog[logSize] = 0;
+			OpenGL::glDeleteShader(shader);
+			shader = 0;
+		} else {
+			compilerLog[0] = 0;
+		}
+
+		return shader;
 	}
 
 	void DeleteShader(int shader) {
@@ -1078,18 +1114,66 @@ namespace ModernGL {
 	}
 
 	int NewTessControlShader(const char * source) {
-		return NewShader<OpenGL::GL_TESS_CONTROL_SHADER>(source);
+		int shader = OpenGL::glCreateShader(GL_TESS_CONTROL_SHADER);
+		OpenGL::glShaderSource(shader, 1, &source, 0);
+		OpenGL::glCompileShader(shader);
+
+		int compiled = OpenGL::GL_FALSE;
+		OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
+		if (!compiled) {
+			int logSize = 0;
+			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog, &logSize, compilerLog);
+			compilerLog[logSize] = 0;
+			OpenGL::glDeleteShader(shader);
+			shader = 0;
+		} else {
+			compilerLog[0] = 0;
+		}
+
+		return shader;
 	}
 
 	int NewTessEvaluationShader(const char * source) {
-		return NewShader<OpenGL::GL_TESS_EVALUATION_SHADER>(source);
+		int shader = OpenGL::glCreateShader(GL_TESS_EVALUATION_SHADER);
+		OpenGL::glShaderSource(shader, 1, &source, 0);
+		OpenGL::glCompileShader(shader);
+
+		int compiled = OpenGL::GL_FALSE;
+		OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
+		if (!compiled) {
+			int logSize = 0;
+			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog, &logSize, compilerLog);
+			compilerLog[logSize] = 0;
+			OpenGL::glDeleteShader(shader);
+			shader = 0;
+		} else {
+			compilerLog[0] = 0;
+		}
+
+		return shader;
 	}
 
 	int NewComputeShader(const char * source) {
-		int shader = NewShader<OpenGL::GL_COMPUTE_SHADER>(source);
+		int shader = OpenGL::glCreateShader(GL_COMPUTE_SHADER);
+		OpenGL::glShaderSource(shader, 1, &source, 0);
+		OpenGL::glCompileShader(shader);
+
+		int compiled = OpenGL::GL_FALSE;
+		OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
+		if (!compiled) {
+			int logSize = 0;
+			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog, &logSize, compilerLog);
+			compilerLog[logSize] = 0;
+			OpenGL::glDeleteShader(shader);
+			shader = 0;
+		} else {
+			compilerLog[0] = 0;
+		}
+
 		if (!shader) {
 			return 0;
 		}
+
 		return NewProgram(&shader, 1);
 	}
 
