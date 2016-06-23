@@ -28,9 +28,6 @@ def func_with_name(func):
 func = open('FunctionTemplate.html').read()
 const = open('ConstantTemplate.html').read()
 
-if not os.path.isdir('Generated'):
-	os.mkdir('Generated')
-
 objs = sorted([x for x in dir(GL) if not x.startswith('__') and x != 'ModernGL'])
 
 for x in objs:
@@ -39,7 +36,14 @@ for x in objs:
 			'name' : x,
 			'value' : str(GL.__dict__[x]),
 		}
-		open('Generated/%s.html' % x, 'w').write(const.format_map(form))
+		open('Static/%s.html' % x, 'w').write(const.format_map(form))
+
+	if type(GL.__dict__[x]) is str:
+		form = {
+			'name' : x,
+			'value' : '"' + GL.__dict__[x] + '"',
+		}
+		open('Static/%s.html' % x, 'w').write(const.format_map(form))
 
 	else:
 		form = {
@@ -49,29 +53,33 @@ for x in objs:
 			'function': '',
 			'similar' : '',
 		}
-		open('Generated/%s.html' % x, 'w').write(func.format_map(form))
+		open('Static/%s.html' % x, 'w').write(func.format_map(form))
 
-index = open('Generated/index.html', 'w')
-index.write('<ul>')
+index = open('Static/index.html', 'w')
 
 index.write('''
 <!DOCTYPE html>
 <html>
 <head>
 	<title>ModernGL</title>
-	<link rel="stylesheet" type="text/css" href="../bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="../bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="bootstrap-theme.min.css">
 </head>
 <body>
 
 <div class="container">
+
+<h1>ModernGL</h1>
+
 ''')
 
 cat = ''
 for x in objs:
 	if cat != x[0]:
 		if cat:
-			index.write('</ul>\n\n')
+			index.write('</ul>\n')
+			index.write('<hr></hr>\n')
+
 		cat = x[0]
 		index.write('<label id="{0}">{0}</label>\n'.format(cat))
 		index.write('<ul>\n')
@@ -83,6 +91,66 @@ if cat:
 index.write('''
 </div>
 
+<style>
+body {
+	background-color: #FAFAFA;
+}
+
+h1 {
+	text-align: center;
+}
+
+.container {
+	background-color: #FEFEFE;
+	border: 1px solid #202020;
+	padding-bottom: 90px;
+	margin-bottom: 30px;
+	margin-top: 30px;
+}
+
+ul {
+	list-style-type: none;
+}
+
+ul {
+	columns: 1;
+	-webkit-columns: 1;
+	-moz-columns: 1;
+}
+
+@media (min-width: 768px) {
+	ul {
+		columns: 2;
+		-webkit-columns: 2;
+		-moz-columns: 2;
+	}
+}
+
+@media (min-width: 992px) {
+	ul {
+		columns: 3;
+		-webkit-columns: 3;
+		-moz-columns: 3;
+	}
+}
+
+@media (min-width: 1200px) {
+	ul {
+		columns: 4;
+		-webkit-columns: 4;
+		-moz-columns: 4;
+	}
+}
+
+</style>
+
 </body>
 </html>
 ''')
+
+import zipfile
+
+z = zipfile.ZipFile('ModernGL-Docs.zip', 'w')
+
+for f in os.listdir('Static'):
+	z.write(os.path.join('Static', f), f)
