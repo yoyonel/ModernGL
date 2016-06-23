@@ -1000,11 +1000,13 @@ namespace ModernGL {
 		OpenGL::glTexImage2D(target, 0, OpenGL::GL_DEPTH_COMPONENT, width, height, 0, OpenGL::GL_DEPTH_COMPONENT, OpenGL::GL_FLOAT, 0);
 		OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_DEPTH_ATTACHMENT, target, depth, 0);
 
-		return Framebuffer {
+		Framebuffer tuple = {
 			framebuffer,
 			color,
 			depth,
-		};
+		}
+
+		return tuple;
 
 		OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, defaultFramebuffer);
 	}
