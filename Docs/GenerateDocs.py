@@ -122,11 +122,13 @@ open('ModernGL/index.html', 'w').write(page.format_map({'title' : 'ModernGL', 's
 
 import zipfile
 
-# z = zipfile.ZipFile('ModernGL-Docs.zip', 'w')
-
-# for f in os.listdir('ModernGL'):
-# 	z.write(os.path.join('ModernGL', f), f)
+z = zipfile.ZipFile('ModernGL-Docs.zip', 'w')
 
 shutil.copyfile('Data/bootstrap.min.css', 'ModernGL/bootstrap.min.css')
 shutil.copyfile('Data/bootstrap-theme.min.css', 'ModernGL/bootstrap-theme.min.css')
 shutil.copyfile('Data/style.css', 'ModernGL/style.css')
+
+for path, folders, files in os.walk('ModernGL'):
+	for f in files:
+		f = os.path.join(path, f)
+		z.write(f, f[len('ModernGL/'):], zipfile.ZIP_DEFLATED)
