@@ -534,7 +534,7 @@ namespace ModernGL {
 	}
 
 	int NewFragmentShader(const char * source) {
-		int shader = OpenGL::glCreateShader(GL_FRAGMENT_SHADER);
+		int shader = OpenGL::glCreateShader(OpenGL::GL_FRAGMENT_SHADER);
 		OpenGL::glShaderSource(shader, 1, &source, 0);
 		OpenGL::glCompileShader(shader);
 
@@ -554,7 +554,7 @@ namespace ModernGL {
 	}
 
 	int NewGeometryShader(const char * source) {
-		int shader = OpenGL::glCreateShader(GL_GEOMETRY_SHADER);
+		int shader = OpenGL::glCreateShader(OpenGL::GL_GEOMETRY_SHADER);
 		OpenGL::glShaderSource(shader, 1, &source, 0);
 		OpenGL::glCompileShader(shader);
 
@@ -574,7 +574,7 @@ namespace ModernGL {
 	}
 
 	int NewVertexShader(const char * source) {
-		int shader = OpenGL::glCreateShader(GL_VERTEX_SHADER);
+		int shader = OpenGL::glCreateShader(OpenGL::GL_VERTEX_SHADER);
 		OpenGL::glShaderSource(shader, 1, &source, 0);
 		OpenGL::glCompileShader(shader);
 
@@ -658,6 +658,10 @@ namespace ModernGL {
 	}
 
 	int NewTexture(int width, int height, const void * data, int components) {
+		if (components < 1 || components > 4) {
+			return 0;
+		}
+
 		const int formats[] = {0, OpenGL::GL_RED, OpenGL::GL_RG, OpenGL::GL_RGB, OpenGL::GL_RGBA};
 		int format = formats[components];
 
@@ -689,6 +693,10 @@ namespace ModernGL {
 	}
 
 	void UpdateTexture(int texture, int x, int y, int width, int height, const void * data, int components) {
+		if (components < 1 || components > 4) {
+			return;
+		}
+
 		const int formats[] = {0, OpenGL::GL_RED, OpenGL::GL_RG, OpenGL::GL_RGB, OpenGL::GL_RGBA};
 		int format = formats[components];
 		
@@ -1074,6 +1082,10 @@ namespace ModernGL {
 	}
 
 	unsigned char * ReadPixels(int x, int y, int width, int height, int components) {
+		if (components < 1 || components > 4) {
+			return 0;
+		}
+
 		const int formats[] = {0, OpenGL::GL_RED, OpenGL::GL_RG, OpenGL::GL_RGB, OpenGL::GL_RGBA};
 		int format = formats[components];
 
@@ -1107,6 +1119,10 @@ namespace ModernGL {
 	}
 
 	void UseTextureAsImage(int texture, int binding, int components) {
+		if (components < 1 || components > 4) {
+			return;
+		}
+
 		const int formats[] = {0, OpenGL::GL_R8UI, OpenGL::GL_RG8UI, OpenGL::GL_RGB8UI, OpenGL::GL_RGBA8UI};
 		int format = formats[components];
 		
@@ -1114,7 +1130,7 @@ namespace ModernGL {
 	}
 
 	int NewTessControlShader(const char * source) {
-		int shader = OpenGL::glCreateShader(GL_TESS_CONTROL_SHADER);
+		int shader = OpenGL::glCreateShader(OpenGL::GL_TESS_CONTROL_SHADER);
 		OpenGL::glShaderSource(shader, 1, &source, 0);
 		OpenGL::glCompileShader(shader);
 
@@ -1134,7 +1150,7 @@ namespace ModernGL {
 	}
 
 	int NewTessEvaluationShader(const char * source) {
-		int shader = OpenGL::glCreateShader(GL_TESS_EVALUATION_SHADER);
+		int shader = OpenGL::glCreateShader(OpenGL::GL_TESS_EVALUATION_SHADER);
 		OpenGL::glShaderSource(shader, 1, &source, 0);
 		OpenGL::glCompileShader(shader);
 
@@ -1154,7 +1170,7 @@ namespace ModernGL {
 	}
 
 	int NewComputeShader(const char * source) {
-		int shader = OpenGL::glCreateShader(GL_COMPUTE_SHADER);
+		int shader = OpenGL::glCreateShader(OpenGL::GL_COMPUTE_SHADER);
 		OpenGL::glShaderSource(shader, 1, &source, 0);
 		OpenGL::glCompileShader(shader);
 
