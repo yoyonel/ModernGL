@@ -73,7 +73,7 @@ for x in objs:
 		if cat:
 			index.write('</ul>\n\n')
 		cat = x[0]
-		index.write('<label>{0}</label>\n'.format(cat))
+		index.write('<label id="{0}">{0}</label>\n'.format(cat))
 		index.write('<ul>\n')
 	index.write('<li><a href="{0}.html">{0}</a></li>\n'.format(x))
 

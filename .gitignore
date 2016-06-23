@@ -2,7 +2,7 @@ __pycache__
 
 Bin
 Temp
-Docs/Generated
+Docs/Static/*.html
 Docs/ModernGL-Docs.zip
 
 build
