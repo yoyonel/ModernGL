@@ -1032,7 +1032,7 @@ namespace ModernGL {
 		OpenGL::glBindTexture(target, color);
 		OpenGL::glTexParameteri(target, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
 		OpenGL::glTexParameteri(target, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
-		OpenGL::glTexImage2D(target, 0, OpenGL::GL_RGB, width, height, 0, OpenGL::GL_RGB, OpenGL::GL_FLOAT, 0);
+		OpenGL::glTexImage2D(target, 0, OpenGL::GL_RGBA, width, height, 0, OpenGL::GL_RGBA, OpenGL::GL_FLOAT, 0);
 		OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_COLOR_ATTACHMENT0, target, color, 0);
 
 		OpenGL::glGenTextures(1, (OpenGL::GLuint *)&depth);
