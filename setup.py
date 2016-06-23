@@ -74,7 +74,7 @@ ModernGL = Extension(
 
 setup(
 	name = 'ModernGL',
-	version = '2.0.4',
+	version = '2.0.5',
 	description = ShortDescription,
 	long_description = LongDescription,
 	url = 'https://github.com/cprogrammer1994/ModernGL',
