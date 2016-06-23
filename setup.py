@@ -1,6 +1,8 @@
 from setuptools import setup, Extension
 
-Description = '''OpenGL is a great environment for developing portable, platform independent,
+ShortDescription = 'Wrapper over OpenGL that simplifies the creation of simple graphics applications like scientific simulations, small games or user interfaces.'
+
+LongDescription = '''OpenGL is a great environment for developing portable, platform independent,
 interactive 2D and 3D graphics applications. The API implementation in Python
 is cumbersome, resulting in applications with high latency. To solve this
 problem we have developed ModernGL, a wrapper over OpenGL that simplifies the
@@ -73,8 +75,8 @@ ModernGL = Extension(
 setup(
 	name = 'ModernGL',
 	version = '2.0.4',
-	description = 'ModernGL',
-	long_description = Description,
+	description = ShortDescription,
+	long_description = LongDescription,
 	url = 'https://github.com/cprogrammer1994/ModernGL',
 	author = 'Szabolcs Dombi',
 	author_email = 'cprogrammer1994@gmail.com',
