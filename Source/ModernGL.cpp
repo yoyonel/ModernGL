@@ -933,77 +933,77 @@ namespace ModernGL {
 
 	void RenderIndexedTriangles(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
+		const void * ptr = (const void *)((OpenGL::GLintptr)(first * 4));
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_TRIANGLES, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
 		OpenGL::glBindVertexArray(defaultVertexArray);
 	}
 
 	void RenderIndexedTriangleStrip(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
+		const void * ptr = (const void *)((OpenGL::GLintptr)(first * 4));
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_TRIANGLE_STRIP, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
 		OpenGL::glBindVertexArray(defaultVertexArray);
 	}
 
 	void RenderIndexedTriangleFan(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
+		const void * ptr = (const void *)((OpenGL::GLintptr)(first * 4));
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_TRIANGLE_FAN, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
 		OpenGL::glBindVertexArray(defaultVertexArray);
 	}
 
 	void RenderIndexedLines(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
+		const void * ptr = (const void *)((OpenGL::GLintptr)(first * 4));
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_LINES, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
 		OpenGL::glBindVertexArray(defaultVertexArray);
 	}
 
 	void RenderIndexedLineStrip(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
+		const void * ptr = (const void *)((OpenGL::GLintptr)(first * 4));
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_LINE_STRIP, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
 		OpenGL::glBindVertexArray(defaultVertexArray);
 	}
 
 	void RenderIndexedLineLoop(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
+		const void * ptr = (const void *)((OpenGL::GLintptr)(first * 4));
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_LINE_LOOP, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
 		OpenGL::glBindVertexArray(defaultVertexArray);
 	}
 
 	void RenderIndexedPoints(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
+		const void * ptr = (const void *)((OpenGL::GLintptr)(first * 4));
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_POINTS, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
 		OpenGL::glBindVertexArray(defaultVertexArray);
 	}
 
 	void RenderIndexedLineStripAdjacency(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
+		const void * ptr = (const void *)((OpenGL::GLintptr)(first * 4));
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_LINE_STRIP_ADJACENCY, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
 		OpenGL::glBindVertexArray(defaultVertexArray);
 	}
 
 	void RenderIndexedLinesAdjacency(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
+		const void * ptr = (const void *)((OpenGL::GLintptr)(first * 4));
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_LINES_ADJACENCY, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
 		OpenGL::glBindVertexArray(defaultVertexArray);
 	}
 
 	void RenderIndexedTriangleStripAdjacency(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
+		const void * ptr = (const void *)((OpenGL::GLintptr)(first * 4));
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_TRIANGLE_STRIP_ADJACENCY, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
 		OpenGL::glBindVertexArray(defaultVertexArray);
 	}
 
 	void RenderIndexedTrianglesAdjacency(int vao, int count, int first, int instances) {
 		OpenGL::glBindVertexArray(vao);
-		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
+		const void * ptr = (const void *)((OpenGL::GLintptr)(first * 4));
 		OpenGL::glDrawElementsInstanced(OpenGL::GL_TRIANGLES_ADJACENCY, count, OpenGL::GL_UNSIGNED_INT, ptr, instances);
 		OpenGL::glBindVertexArray(defaultVertexArray);
 	}

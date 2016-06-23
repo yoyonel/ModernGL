@@ -146,14 +146,16 @@ for x in objs:
 		cats.append(cat)
 		content += '<label style="float: left;" id="{0}">{0}</label>\n'.format(cat)
 		content += '<ul class="home-ul">\n'
-	content += '<li><a href="{0}">{0}</a></li>\n'.format(x)
+	content += '<li><a href="/ModernGL/{0}">{0}</a></li>\n'.format(x)
 
 if cat:
 	content += '</ul>\n'
 
 # content = ' '.join('<a href="#{0}">{0}</a>'.format(x) for x in cats) + '<hr>' + content
 
-open('ModernGL/index.html', 'w').write(page.format_map({'title' : 'ModernGL', 'subtitle': 'Docs', 'content' : content}))
+os.mkdir('ModernGL/Docs')
+
+open('ModernGL/Docs/index.html', 'w').write(page.format_map({'title' : 'ModernGL', 'subtitle': 'Docs', 'content' : content}))
 
 import zipfile
 
