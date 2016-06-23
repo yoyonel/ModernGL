@@ -1,6 +1,6 @@
 from setuptools import setup, Extension
 
-ShortDescription = 'Wrapper over OpenGL that simplifies the creation of simple graphics applications.'
+ShortDescription = 'Wrapper over OpenGL'
 
 LongDescription = '''OpenGL is a great environment for developing portable, platform independent,
 interactive 2D and 3D graphics applications. The API implementation in Python
