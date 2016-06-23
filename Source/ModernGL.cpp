@@ -1004,7 +1004,7 @@ namespace ModernGL {
 			framebuffer,
 			color,
 			depth,
-		}
+		};
 
 		return tuple;
 
