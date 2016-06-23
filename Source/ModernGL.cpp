@@ -402,7 +402,7 @@ namespace ModernGL {
 			renderer = "";
 		}
 
-		Info result = {
+		Info tuple = {
 			major,
 			minor,
 			samples,
@@ -410,7 +410,7 @@ namespace ModernGL {
 			renderer,
 		};
 
-		return result;
+		return tuple;
 	}
 
 	const char * GetError() {
