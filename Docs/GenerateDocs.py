@@ -63,6 +63,8 @@ index.write('''
 	<link rel="stylesheet" type="text/css" href="../bootstrap-theme.min.css">
 </head>
 <body>
+
+<div class="container">
 ''')
 
 cat = ''
@@ -79,6 +81,8 @@ if cat:
 	index.write('</ul>\n')
 
 index.write('''
+</div>
+
 </body>
 </html>
 ''')
