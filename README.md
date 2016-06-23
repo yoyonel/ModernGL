@@ -1,8 +1,12 @@
 # ModernGL
 
 ```
+python -m pip install ModernGL
+```
+
+```
 git clone https://github.com/cprogrammer1994/ModernGL
-make
+install.bat
 ```
 
 # Supported Versions
@@ -19,8 +23,19 @@ Checkout the [OpenGL Registry](https://www.opengl.org/registry/) for core specif
 
 # Description
 
-SOON
-> ModernGL simply implements a set of OpenGL functions
+OpenGL is a great environment for developing portable, platform independent,
+interactive 2D and 3D graphics applications. The API implementation in Python
+is cumbersome, resulting in applications with high latency. To solve this
+problem we have developed ModernGL, a wrapper over OpenGL that simplifies the
+creation of simple graphics applications like scientific simulations, small
+games or user interfaces. Usually, acquiring in-depth knowledge of OpenGL
+requires a steep learning curve. In contrast, ModernGL is easy to learn and
+use, moreover it is capable of rendering with the same performance and
+quality, with less code written.
+
+# Docs
+
+[Python Documentation](https://pythonhosted.org/ModernGL/)
 
 ```
 InitializeModernGL(font = True)
