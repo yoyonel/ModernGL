@@ -154,9 +154,7 @@ if cat:
 
 # content = ' '.join('<a href="#{0}">{0}</a>'.format(x) for x in cats) + '<hr>' + content
 
-os.mkdir('ModernGL/Docs')
-
-open('ModernGL/Docs/index.html', 'w').write(page.format_map({'title' : 'ModernGL', 'subtitle': 'Docs', 'content' : content}))
+open('ModernGL/index.html', 'w').write(page.format_map({'title' : 'ModernGL', 'subtitle': '', 'content' : content}))
 
 import zipfile
 

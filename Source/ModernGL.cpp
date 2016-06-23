@@ -737,6 +737,24 @@ namespace ModernGL {
 	int NewVertexArray(const char * format, VertexBufferAndAttribute * attribs, int indexBuffer) {
 		// format regex: '([1-4][if])+'
 
+		int length = 0;
+		while (format[length]) {
+			if (length % 2) {
+				if (format[length] < '1' || format[length] > '3') {
+					return 0;
+				}
+			} else {
+				if (format[length] != 'i' && format[length] != 'f') {
+					return 0;
+				}
+			}
+			++length;
+		}
+
+		if (length % 2) {
+			return 0;
+		}
+
 		int vertexArray = 0;
 		OpenGL::glGenVertexArrays(1, (OpenGL::GLuint *)&vertexArray);
 

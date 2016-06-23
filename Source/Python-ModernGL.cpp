@@ -1360,7 +1360,12 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Returns:\n"
-		"\tinfo (tuple) Information about the OpenGL context.\n"
+		// "\tinfo (tuple) Information about the OpenGL context.\n"
+		"\tmajor (int) The major OpenGL version.\n"
+		"\tminor (int) The minor OpenGL version.\n"
+		"\tsamples (int) The samples supported by the default framebuffer.\n"
+		"\tvendor (int) The vendor.\n"
+		"\trenderer (int) The renderer.\n"
 		"\n"
 	},
 	{
@@ -2762,6 +2767,8 @@ static PyMethodDef methods[] = {
 		"\n"
 		"Returns:\n"
 		"\tfbo (int) The index of the new framebuffer object.\n"
+		"\tcolor (int) The index of the color attachment texture object.\n"
+		"\tdepth (int) The index of the depth attachment texture object.\n"
 		"\n"
 	},
 	{
