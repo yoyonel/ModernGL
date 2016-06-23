@@ -25,25 +25,34 @@ def func_with_name(func):
 
 # exit()
 
-func = open('FunctionTemplate.html').read()
-const = open('ConstantTemplate.html').read()
+page = open('Data/PageTemplate.html').read()
+func = open('Data/FunctionTemplate.html').read()
+const = open('Data/ConstantTemplate.html').read()
+
+if os.path.isdir('ModernGL'):
+	shutil.rmtree('ModernGL')
+
+os.mkdir('ModernGL')
 
 objs = sorted([x for x in dir(GL) if not x.startswith('__') and x != 'ModernGL'])
 
 for x in objs:
+	os.mkdir('ModernGL/%s' % x)
 	if type(GL.__dict__[x]) is int:
 		form = {
 			'name' : x,
 			'value' : str(GL.__dict__[x]),
 		}
-		open('Static/%s.html' % x, 'w').write(const.format_map(form))
+		done = page.format_map({'title' : x, 'subtitle': x, 'content' : const.format_map(form)})
+		open('ModernGL/%s/index.html' % x, 'w').write(done)
 
-	if type(GL.__dict__[x]) is str:
+	elif type(GL.__dict__[x]) is str:
 		form = {
 			'name' : x,
 			'value' : '"' + GL.__dict__[x] + '"',
 		}
-		open('Static/%s.html' % x, 'w').write(const.format_map(form))
+		done = page.format_map({'title' : x, 'subtitle': x, 'content' : const.format_map(form)})
+		open('ModernGL/%s/index.html' % x, 'w').write(done)
 
 	else:
 		form = {
@@ -53,104 +62,42 @@ for x in objs:
 			'function': '',
 			'similar' : '',
 		}
-		open('Static/%s.html' % x, 'w').write(func.format_map(form))
+		done = page.format_map({'title' : x, 'subtitle': x, 'content' : func.format_map(form)})
+		open('ModernGL/%s/index.html' % x, 'w').write(done)
 
-index = open('Static/index.html', 'w')
 
-index.write('''
-<!DOCTYPE html>
-<html>
-<head>
-	<title>ModernGL</title>
-	<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="bootstrap-theme.min.css">
-</head>
-<body>
-
-<div class="container">
-
-<h1>ModernGL</h1>
-
-''')
+content = ''
 
 cat = ''
 for x in objs:
 	if cat != x[0]:
 		if cat:
-			index.write('</ul>\n')
-			index.write('<hr></hr>\n')
+			content += '</ul>\n'
+			content += '<hr></hr>\n'
 
 		cat = x[0]
-		index.write('<label id="{0}">{0}</label>\n'.format(cat))
-		index.write('<ul>\n')
-	index.write('<li><a href="{0}.html">{0}</a></li>\n'.format(x))
+		content += '<label id="{0}">{0}</label>\n'.format(cat)
+		content += '<ul class="home-ul">\n'
+	content += '<li><a href="{0}">{0}</a></li>\n'.format(x)
 
 if cat:
-	index.write('</ul>\n')
+	content += '</ul>\n'
 
-index.write('''
-</div>
-
-<style>
-body {
-	background-color: #FAFAFA;
-}
-
-h1 {
-	text-align: center;
-}
-
-.container {
-	background-color: #FEFEFE;
-	border: 1px solid #202020;
-	padding-bottom: 90px;
-	margin-bottom: 30px;
-	margin-top: 30px;
-}
-
-ul {
-	list-style-type: none;
-}
-
-ul {
-	columns: 1;
-	-webkit-columns: 1;
-	-moz-columns: 1;
-}
-
-@media (min-width: 768px) {
-	ul {
-		columns: 2;
-		-webkit-columns: 2;
-		-moz-columns: 2;
-	}
-}
-
-@media (min-width: 992px) {
-	ul {
-		columns: 3;
-		-webkit-columns: 3;
-		-moz-columns: 3;
-	}
-}
-
-@media (min-width: 1200px) {
-	ul {
-		columns: 4;
-		-webkit-columns: 4;
-		-moz-columns: 4;
-	}
-}
-
-</style>
-
-</body>
-</html>
-''')
+open('ModernGL/index.html', 'w').write(page.format_map({'title' : 'ModernGL', 'subtitle': 'Docs', 'content' : content}))
 
 import zipfile
 
-z = zipfile.ZipFile('ModernGL-Docs.zip', 'w')
+# z = zipfile.ZipFile('ModernGL-Docs.zip', 'w')
 
-for f in os.listdir('Static'):
-	z.write(os.path.join('Static', f), f)
+# for f in os.listdir('ModernGL'):
+# 	z.write(os.path.join('ModernGL', f), f)
+
+shutil.copyfile('Data/bootstrap.min.css', 'ModernGL/bootstrap.min.css')
+shutil.copyfile('Data/bootstrap-theme.min.css', 'ModernGL/bootstrap-theme.min.css')
+shutil.copyfile('Data/style.css', 'ModernGL/style.css')
+
+import http.server
+import socketserver
+
+httpd = socketserver.TCPServer(('127.0.0.1', 80), http.server.SimpleHTTPRequestHandler)
+httpd.serve_forever()
