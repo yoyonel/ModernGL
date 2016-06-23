@@ -68,6 +68,8 @@ for x in objs:
 
 content = ''
 
+cats = []
+
 cat = ''
 for x in objs:
 	if cat != x[0]:
@@ -76,12 +78,15 @@ for x in objs:
 			content += '<hr></hr>\n'
 
 		cat = x[0]
+		cats.append(cat)
 		content += '<label id="{0}">{0}</label>\n'.format(cat)
 		content += '<ul class="home-ul">\n'
 	content += '<li><a href="{0}">{0}</a></li>\n'.format(x)
 
 if cat:
 	content += '</ul>\n'
+
+# content = ' '.join('<a href="#{0}">{0}</a>'.format(x) for x in cats) + '<hr>' + content
 
 open('ModernGL/index.html', 'w').write(page.format_map({'title' : 'ModernGL', 'subtitle': 'Docs', 'content' : content}))
 
