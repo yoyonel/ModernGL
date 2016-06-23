@@ -1378,7 +1378,7 @@ static PyMethodDef methods[] = {
 		"EnableOnly",
 		EnableOnly,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"EnableBlend",
@@ -1433,95 +1433,111 @@ static PyMethodDef methods[] = {
 		"NewFragmentShader",
 		NewFragmentShader,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"NewGeometryShader",
 		NewGeometryShader,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"NewVertexShader",
 		NewVertexShader,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"DeleteShader",
 		DeleteShader,
 		METH_VARARGS,
-		0
+		""
 	},
 
 	{
 		"NewProgram",
 		NewProgram,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"DeleteProgram",
 		DeleteProgram,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"UseProgram",
 		UseProgram,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"UseDefaultProgram",
 		UseDefaultProgram,
 		METH_VARARGS,
-		0
+		""
 	},
 
 	{
 		"CompilerLog",
 		CompilerLog,
 		METH_VARARGS,
-		"Get the compiler log for the following methods:\nNewFragmentShader\nNewGeometryShader\nNewVertexShader\nNewProgram\nNewTessEvaluationShader\nNewTessControlShader\nNewComputeShader"
+		"Get the compiler log for the following methods:\n"
+		"NewFragmentShader\n"
+		"NewGeometryShader\n"
+		"NewVertexShader\n"
+		"NewProgram\n"
+		"NewTessEvaluationShader\n"
+		"NewTessControlShader\n"
+		"NewComputeShader\n"
 	},
 
 	{
 		"AttributeLocation",
 		AttributeLocation,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"UniformLocation",
 		UniformLocation,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"UniformBlockLocation",
 		UniformBlockLocation,
 		METH_VARARGS,
-		0
+		""
 	},
 
 	{
 		"Uniform1f",
 		Uniform1f,
 		METH_VARARGS,
-		"Set the value of the uniform. The value must have the type of `vec1` in the shader. The location of the uniform can be queried by the UniformLocation method. Parameters: (location, v0)"
+		"Set the value of the uniform.\n"
+		"The value must have the type of `vec1` in the shader.\n"
+		"The location of the uniform can be queried by the UniformLocation method.\n"
+		"Parameters: (location, v0)\n"
 	},
 	{
 		"Uniform2f",
 		Uniform2f,
 		METH_VARARGS,
-		"Set the value of the uniform. The value must have the type of `vec2` in the shader. The location of the uniform can be queried by the UniformLocation method. Parameters: (location, v0, v1)"
+		"Set the value of the uniform.\n"
+		"The value must have the type of `vec2` in the shader.\n"
+		"The location of the uniform can be queried by the UniformLocation method.\n"
+		"Parameters: (location, v0, v1)\n"
 	},
 	{
 		"Uniform3f",
 		Uniform3f,
 		METH_VARARGS,
-		"Set the value of the uniform. The value must have the type of `vec3` in the shader. The location of the uniform can be queried by the UniformLocation method. Parameters: (location, v0, v1, v2)"
+		"Set the value of the uniform.\n"
+		"The value must have the type of `vec3` in the shader.\n"
+		"The location of the uniform can be queried by the UniformLocation method.\n"
+		"Parameters: (location, v0, v1, v2)\n"
 	},
 	{
 		"Uniform4f",
@@ -1573,45 +1589,45 @@ static PyMethodDef methods[] = {
 		"UniformMatrix",
 		UniformMatrix,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"UniformTransposeMatrix",
 		UniformTransposeMatrix,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"UniformBlock",
 		UniformBlock,
 		METH_VARARGS,
-		0
+		""
 	},
 
 	{
 		"NewTexture",
 		NewTexture,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"DeleteTexture",
 		DeleteTexture,
 		METH_VARARGS,
-		0
+		""
 	},
 
 	{
 		"UpdateTexture",
 		UpdateTexture,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"UseTexture",
 		UseTexture,
 		METH_VARARGS,
-		0
+		""
 	},
 
 	{
@@ -1643,13 +1659,13 @@ static PyMethodDef methods[] = {
 		"NewVertexArray",
 		NewVertexArray,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"DeleteVertexArray",
 		DeleteVertexArray,
 		METH_VARARGS,
-		0
+		""
 	},
 
 	{
@@ -1681,64 +1697,64 @@ static PyMethodDef methods[] = {
 		"NewVertexBuffer",
 		NewVertexBuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"NewIndexBuffer",
 		NewIndexBuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"NewUniformBuffer",
 		NewUniformBuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 
 	{
 		"NewDynamicVertexBuffer",
 		NewDynamicVertexBuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"NewDynamicIndexBuffer",
 		NewDynamicIndexBuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"NewDynamicUniformBuffer",
 		NewDynamicUniformBuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 
 	{
 		"DeleteBuffer",
 		DeleteBuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 
 	{
 		"UpdateVertexBuffer",
 		UpdateVertexBuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"UpdateIndexBuffer",
 		UpdateIndexBuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"UpdateUniformBuffer",
 		UpdateUniformBuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 
 	{
@@ -1878,25 +1894,29 @@ static PyMethodDef methods[] = {
 		"NewFramebuffer",
 		NewFramebuffer,
 		METH_VARARGS,
-		"Creates a new framebuffer with two texture attachment (color and depth) the color attachment will have rgba format 8bit for each channel. the depth texture contains float values. Return value: (framebuffer, color, depth). Parameters: (width, height, multisample = True)."
+		"Creates a framebuffer with two texture attachments. (color and depth)\n"
+		"The color attachment have RGBA format, 8bit for each channel\n."
+		"The depth texture contains float values.\n"
+		"Return value: (framebuffer, color, depth).\n"
+		"Parameters: (width, height, multisample = True)\n."
 	},
 	{
 		"DeleteFramebuffer",
 		DeleteFramebuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"UseFramebuffer",
 		UseFramebuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"UseDefaultFramebuffer",
 		UseDefaultFramebuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 	
 	{
@@ -1930,7 +1950,8 @@ static PyMethodDef methods[] = {
 		"ExtensionActive",
 		ExtensionActive,
 		METH_VARARGS,
-		"Check for full ModernGL support. The initialization of the extensions are not affected by this method."
+		"Check for full ModernGL support.\n"
+		"The initialization of the extensions are not affected by this method.\n"
 	},
 
 	{
@@ -1944,13 +1965,13 @@ static PyMethodDef methods[] = {
 		"NewTessEvaluationShader",
 		NewTessEvaluationShader,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"NewTessControlShader",
 		NewTessControlShader,
 		METH_VARARGS,
-		0
+		""
 	},
 
 	{
@@ -1963,44 +1984,46 @@ static PyMethodDef methods[] = {
 		"DeleteComputeShader",
 		DeleteComputeShader,
 		METH_VARARGS,
-		"Compute shader is a standalone shader program. NOT part of the rendering pipeline. Equivalent to the DeleteProgram."
+		"Compute shader is a standalone shader program. NOT part of the rendering pipeline.\n"
+		"Equivalent to the DeleteProgram.\n"
 	},
 	{
 		"RunComputeShader",
 		RunComputeShader,
 		METH_VARARGS,
-		"Run the compute shader. Parameters: (x = 1, y = 1, z = 1)"
+		"Run the compute shader.\n"
+		"Parameters: (x = 1, y = 1, z = 1)\n"
 	},
 
 	{
 		"NewStorageBuffer",
 		NewStorageBuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"NewDynamicStorageBuffer",
 		NewDynamicStorageBuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"UseStorageBuffer",
 		UseStorageBuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"UpdateStorageBuffer",
 		UpdateStorageBuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 	{
 		"ReadStorageBuffer",
 		ReadStorageBuffer,
 		METH_VARARGS,
-		0
+		""
 	},
 
 	// Better than nothing font
