@@ -1352,13 +1352,15 @@ static PyMethodDef methods[] = {
 		"Viewport",
 		Viewport,
 		METH_VARARGS,
-		"Set the viewport for rendering.\nParameters: (x, y, width, height)"
+		"Set the viewport for rendering.\n"
+		"Parameters: (x, y, width, height)"
 	},
 	{
 		"Clear",
 		Clear,
 		METH_VARARGS,
-		"Clear the viewport with the specified colors.\nParameters: (r = 0, g = 0, b = 0, a = 255)."
+		"Clear the viewport with the specified colors.\n"
+		"Parameters: (r = 0, g = 0, b = 0, a = 255)."
 	},
 
 	{
