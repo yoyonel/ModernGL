@@ -706,17 +706,6 @@ PyObject * NewDynamicIndexBuffer(PyObject * self, PyObject * args) {
 	return PyLong_FromLong(ModernGL::NewDynamicIndexBuffer(data, size));
 }
 
-PyObject * DeleteBuffer(PyObject * self, PyObject * args) {
-	int buffer;
-
-	if (!PyArg_ParseTuple(args, "i:DeleteBuffer", &buffer)) {
-		return 0;
-	}
-
-	ModernGL::DeleteBuffer(buffer);
-	Py_RETURN_NONE;
-}
-
 PyObject * NewDynamicUniformBuffer(PyObject * self, PyObject * args) {
 	const void * data;
 	int size;
@@ -726,6 +715,17 @@ PyObject * NewDynamicUniformBuffer(PyObject * self, PyObject * args) {
 	}
 
 	return PyLong_FromLong(ModernGL::NewDynamicUniformBuffer(data, size));
+}
+
+PyObject * DeleteBuffer(PyObject * self, PyObject * args) {
+	int buffer;
+
+	if (!PyArg_ParseTuple(args, "i:DeleteBuffer", &buffer)) {
+		return 0;
+	}
+
+	ModernGL::DeleteBuffer(buffer);
+	Py_RETURN_NONE;
 }
 
 PyObject * UpdateVertexBuffer(PyObject * self, PyObject * args) {
@@ -1251,12 +1251,15 @@ PyObject * DeleteComputeShader(PyObject * self, PyObject * args) {
 
 PyObject * RunComputeShader(PyObject * self, PyObject * args) {
 	int program;
+	int x = 1;
+	int y = 1;
+	int z = 1;
 
-	if (!PyArg_ParseTuple(args, "i:RunComputeShader", &program)) {
+	if (!PyArg_ParseTuple(args, "i|iii:RunComputeShader", &program, &x, &y, &z)) {
 		return 0;
 	}
 
-	ModernGL::RunComputeShader(program);
+	ModernGL::RunComputeShader(program, x, y, z);
 	Py_RETURN_NONE;
 }
 
@@ -1333,19 +1336,29 @@ static PyMethodDef methods[] = {
 		"InitializeModernGL",
 		InitializeModernGL,
 		METH_VARARGS,
-		"Initialize the ModernGL module inside a valid OpenGL context."
+		"Initialize the ModernGL module inside a valid OpenGL context.\n"
+		"A valid OpenGL context must exists before the function call.\n"
+
+		"Parameters:\n"
+		"\tfont: (bool) Load a better than nothing font. By default is True\n"
 	},
 	{
 		"GetInfo",
 		GetInfo,
 		METH_VARARGS,
-		"Get information about the OpenGL context."
+		"Get information about the OpenGL context.\n"
+
+		"Parameters:\n"
+		"\tNO PARAMETERS\n"
 	},
 	{
 		"GetError",
 		GetError,
 		METH_VARARGS,
-		"Get the error when Initialization failed."
+		"Get the error when Initialization failed.\n"
+
+		"Parameters:\n"
+		"\tNO PARAMETERS\n"
 	},
 
 	{
@@ -1353,107 +1366,161 @@ static PyMethodDef methods[] = {
 		Viewport,
 		METH_VARARGS,
 		"Set the viewport for rendering.\n"
-		"Parameters: (x, y, width, height)"
+
+		"Parameters:\n"
+		"\tx (int) Position of the viewport.\n"
+		"\ty (int) Position of the viewport.\n"
+		"\twidth (int) Width of the viewport.\n"
+		"\theight (int) Height of the viewport.\n"
 	},
 	{
 		"Clear",
 		Clear,
 		METH_VARARGS,
 		"Clear the viewport with the specified colors.\n"
-		"Parameters: (r = 0, g = 0, b = 0, a = 255)."
+
+		"Parameters:\n"
+		"\tr (int) Clear value for the red channel. By default is 0\n"
+		"\tg (int) Clear value for the green channel. By default is 0\n"
+		"\tb (int) Clear value for the blue channel. By default is 0\n"
+		"\ta (int) Clear value for the alpha channel. By default is 255\n"
 	},
 
 	{
 		"PointSize",
 		PointSize,
 		METH_VARARGS,
-		"Set the size of the point primitive."
+		"Set the size of the point primitive.\n"
+
+		"Parameters:\n"
+		"\tsize (float) Size of the point.\n"
 	},
 	{
 		"LineSize",
 		LineSize,
 		METH_VARARGS,
-		"Set the with of the line primitive."
+		"Set the with of the line primitive.\n"
+
+		"Parameters:\n"
+		"\tsize (float) Width of the line.\n"
 	},
 
 	{
 		"EnableOnly",
 		EnableOnly,
 		METH_VARARGS,
-		""
+
+		"Parameters:\n"
+		"\tflags (int) A combination of ENABLE_NOTHING, ENABLE_BLEND, ENABLE_DEPTH_TEST, ENABLE_CULL_FACE and ENABLE_MULTISAMPLE using bitwise OR operator.\n"
 	},
 	{
 		"EnableBlend",
 		EnableBlend,
 		METH_VARARGS,
-		"Enable blending."
+		"Enable blending.\n"
+
+		"Parameters:\n"
+		"\tNO PARAMETERS\n"
 	},
 	{
 		"DisableBlend",
 		DisableBlend,
 		METH_VARARGS,
-		"Disable blending."
+		"Disable blending.\n"
+
+		"Parameters:\n"
+		"\tNO PARAMETERS\n"
 	},
 	{
 		"EnableCullFace",
 		EnableCullFace,
 		METH_VARARGS,
-		"Enable face culling."
+		"Enable face culling.\n"
+
+		"Parameters:\n"
+		"\tNO PARAMETERS\n"
 	},
 	{
 		"DisableCullFace",
 		DisableCullFace,
 		METH_VARARGS,
-		"Disable face culling."
+		"Disable face culling.\n"
+
+		"Parameters:\n"
+		"\tNO PARAMETERS\n"
 	},
 	{
 		"EnableDepthTest",
 		EnableDepthTest,
 		METH_VARARGS,
-		"Enable depth testing."
+		"Enable depth testing.\n"
+
+		"Parameters:\n"
+		"\tNO PARAMETERS\n"
 	},
 	{
 		"DisableDepthTest",
 		DisableDepthTest,
 		METH_VARARGS,
-		"Disable depth testing."
+		"Disable depth testing.\n"
+
+		"Parameters:\n"
+		"\tNO PARAMETERS\n"
 	},
 	{
 		"EnableMultisample",
 		EnableMultisample,
 		METH_VARARGS,
-		"Enable multisampling."
+		"Enable multisampling.\n"
+
+		"Parameters:\n"
+		"\tNO PARAMETERS\n"
 	},
 	{
 		"DisableMultisample",
 		DisableMultisample,
 		METH_VARARGS,
-		"Disable multisampling."
+		"Disable multisampling.\n"
+
+		"Parameters:\n"
+		"\tNO PARAMETERS\n"
 	},
 
+	{
+		"NewVertexShader",
+		NewVertexShader,
+		METH_VARARGS,
+		""
+
+		"Parameters:\n"
+		"\tsource (str) Source code in GLSL.\n"
+	},
 	{
 		"NewFragmentShader",
 		NewFragmentShader,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tsource (str) Source code in GLSL.\n"
 	},
 	{
 		"NewGeometryShader",
 		NewGeometryShader,
 		METH_VARARGS,
 		""
-	},
-	{
-		"NewVertexShader",
-		NewVertexShader,
-		METH_VARARGS,
-		""
+
+		"Parameters:\n"
+		"\tsource (str) Source code in GLSL.\n"
 	},
 	{
 		"DeleteShader",
 		DeleteShader,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tshader (int) Index of a shader object returned by the NewFragmentShader, the NewGeometryShader, the NewTessControlShader, the NewTessEvaluationShader or the NewVertexShader function.\n"
 	},
 
 	{
@@ -1461,23 +1528,36 @@ static PyMethodDef methods[] = {
 		NewProgram,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tshaders (list of ints) List containing shader indices.\n"
 	},
 	{
 		"DeleteProgram",
 		DeleteProgram,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
 	},
 	{
 		"UseProgram",
 		UseProgram,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
 	},
 	{
 		"UseDefaultProgram",
 		UseDefaultProgram,
 		METH_VARARGS,
+		""
+
+		"Parameters:\n"
+		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
 		""
 	},
 
@@ -1493,6 +1573,10 @@ static PyMethodDef methods[] = {
 		"NewTessEvaluationShader\n"
 		"NewTessControlShader\n"
 		"NewComputeShader\n"
+		""
+
+		"Parameters:\n"
+		"\tNO PARAMETERS\n"
 	},
 
 	{
@@ -1500,18 +1584,30 @@ static PyMethodDef methods[] = {
 		AttributeLocation,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
+		"\tname (str) Name of the attribute.\n"
 	},
 	{
 		"UniformLocation",
 		UniformLocation,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
+		"\tname (str) Name of the uniform.\n"
 	},
 	{
 		"UniformBlockLocation",
 		UniformBlockLocation,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
+		"\tname (str) Name of the uniform block.\n"
 	},
 
 	{
@@ -1519,9 +1615,13 @@ static PyMethodDef methods[] = {
 		Uniform1f,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
-		"The value must have the type of `vec1` in the shader.\n"
+		"The value must have the type of `float` in the shader.\n"
 		"The location of the uniform can be queried by the UniformLocation method.\n"
-		"Parameters: (location, v0)\n"
+
+
+		"Parameters:\n"
+		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
+		"\tv0 (float) Value to set.\n"
 	},
 	{
 		"Uniform2f",
@@ -1530,7 +1630,12 @@ static PyMethodDef methods[] = {
 		"Set the value of the uniform.\n"
 		"The value must have the type of `vec2` in the shader.\n"
 		"The location of the uniform can be queried by the UniformLocation method.\n"
-		"Parameters: (location, v0, v1)\n"
+
+
+		"Parameters:\n"
+		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
+		"\tv0 (float) Value to set.\n"
+		"\tv1 (float) Value to set.\n"
 	},
 	{
 		"Uniform3f",
@@ -1539,7 +1644,13 @@ static PyMethodDef methods[] = {
 		"Set the value of the uniform.\n"
 		"The value must have the type of `vec3` in the shader.\n"
 		"The location of the uniform can be queried by the UniformLocation method.\n"
-		"Parameters: (location, v0, v1, v2)\n"
+
+
+		"Parameters:\n"
+		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
+		"\tv0 (float) Value to set.\n"
+		"\tv1 (float) Value to set.\n"
+		"\tv2 (float) Value to set.\n"
 	},
 	{
 		"Uniform4f",
@@ -1548,16 +1659,28 @@ static PyMethodDef methods[] = {
 		"Set the value of the uniform.\n"
 		"The value must have the type of `vec4` in the shader.\n"
 		"The location of the uniform can be queried by the UniformLocation method.\n"
-		"Parameters: (location, v0, v1, v2, v3).\n"
+
+
+		"Parameters:\n"
+		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
+		"\tv0 (float) Value to set.\n"
+		"\tv1 (float) Value to set.\n"
+		"\tv2 (float) Value to set.\n"
+		"\tv3 (float) Value to set.\n"
 	},
 	{
 		"Uniform1i",
 		Uniform1i,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
-		"The value must have the type of `ivec1` in the shader.\n"
+		"The value must have the type of `int` in the shader.\n"
 		"The location of the uniform can be queried by the UniformLocation method.\n"
-		"Parameters: (location, v0)\n"
+
+
+		"Parameters:\n"
+		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
+		"\tv0 (int) Value to set.\n"
+
 	},
 	{
 		"Uniform2i",
@@ -1566,7 +1689,12 @@ static PyMethodDef methods[] = {
 		"Set the value of the uniform.\n"
 		"The value must have the type of `ivec2` in the shader.\n"
 		"The location of the uniform can be queried by the UniformLocation method.\n"
-		"Parameters: (location, v0, v1)\n"
+
+
+		"Parameters:\n"
+		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
+		"\tv0 (int) Value to set.\n"
+		"\tv1 (int) Value to set.\n"
 	},
 	{
 		"Uniform3i",
@@ -1575,7 +1703,13 @@ static PyMethodDef methods[] = {
 		"Set the value of the uniform.\n"
 		"The value must have the type of `ivec3` in the shader.\n"
 		"The location of the uniform can be queried by the UniformLocation method.\n"
-		"Parameters: (location, v0, v1, v2)\n"
+
+
+		"Parameters:\n"
+		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
+		"\tv0 (int) Value to set.\n"
+		"\tv1 (int) Value to set.\n"
+		"\tv2 (int) Value to set.\n"
 	},
 	{
 		"Uniform4i",
@@ -1584,7 +1718,14 @@ static PyMethodDef methods[] = {
 		"Set the value of the uniform.\n"
 		"The value must have the type of `ivec4` in the shader.\n"
 		"The location of the uniform can be queried by the UniformLocation method.\n"
-		"Parameters: (location, v0, v1, v2, v3)\n"
+
+
+		"Parameters:\n"
+		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
+		"\tv0 (int) Value to set.\n"
+		"\tv1 (int) Value to set.\n"
+		"\tv2 (int) Value to set.\n"
+		"\tv3 (int) Value to set.\n"
 	},
 
 	{
@@ -1592,18 +1733,30 @@ static PyMethodDef methods[] = {
 		UniformMatrix,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
+		"\tmatrix (list of floats) List containing 4x4=16 float values.\n"
 	},
 	{
 		"UniformTransposeMatrix",
 		UniformTransposeMatrix,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
+		"\tmatrix (list of floats) List containing 4x4=16 float values.\n"
 	},
 	{
 		"UniformBlock",
 		UniformBlock,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
+		"\tubo (int) Index of a uniform buffer returned by a NewUniformBuffer.\n"
 	},
 
 	{
@@ -1611,12 +1764,21 @@ static PyMethodDef methods[] = {
 		NewTexture,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\twidth (int) Width of the texture.\n"
+		"\theight (int) Height of the texture.\n"
+		"\tpixels (bytes) Pixels stored in bytes.\n"
+		"\tcomponents (int) By default is 3.\n"
 	},
 	{
 		"DeleteTexture",
 		DeleteTexture,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
 	},
 
 	{
@@ -1624,37 +1786,62 @@ static PyMethodDef methods[] = {
 		UpdateTexture,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
+		"\tx (int) Offset of the new texture part.\n"
+		"\ty (int) Offset of the new texture part.\n"
+		"\twidth (int) Width of the texture.\n"
+		"\theight (int) Height of the texture.\n"
+		"\tpixels (bytes) Pixels stored in bytes.\n"
+		"\tcomponents (int) By default is 3.\n"
 	},
 	{
 		"UseTexture",
 		UseTexture,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
+		"\tlocation (int) Location of the texture. By default is 0\n"
 	},
 
 	{
 		"SetTexturePixelated",
 		SetTexturePixelated,
 		METH_VARARGS,
-		"Set texture filter to nearest."
+		"Set texture filter to nearest.\n"
+
+		"Parameters:\n"
+		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
 	},
 	{
 		"SetTextureFiltered",
 		SetTextureFiltered,
 		METH_VARARGS,
-		"Set texture filter to linear."
+		"Set texture filter to linear.\n"
+
+		"Parameters:\n"
+		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
 	},
 	{
 		"SetTextureMipmapped",
 		SetTextureMipmapped,
 		METH_VARARGS,
-		"Set texture filter to mipmap linear."
+		"Set texture filter to mipmap linear.\n"
+
+		"Parameters:\n"
+		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
 	},
 	{
 		"BuildMipmap",
 		BuildMipmap,
 		METH_VARARGS,
-		"Build the mipmaps for a texture."
+		"Build the mipmaps for a texture.\n"
+
+		"Parameters:\n"
+		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
 	},
 
 	{
@@ -1662,12 +1849,14 @@ static PyMethodDef methods[] = {
 		NewVertexArray,
 		METH_VARARGS,
 		""
+		"str object "
 	},
 	{
 		"DeleteVertexArray",
 		DeleteVertexArray,
 		METH_VARARGS,
 		""
+		"int "
 	},
 
 	{
@@ -1675,24 +1864,28 @@ static PyMethodDef methods[] = {
 		EnableAttribute,
 		METH_VARARGS,
 		"Enable an attribute in the vertex array object."
+		"int int "
 	},
 	{
 		"DisableAttribute",
 		DisableAttribute,
 		METH_VARARGS,
 		"Disable an attribute in the vertex array object."
+		"int int "
 	},
 	{
 		"EnableAttributes",
 		EnableAttributes,
 		METH_VARARGS,
 		"Enable attributes in the vertex array object."
+		"int object "
 	},
 	{
 		"DisableAttributes",
 		DisableAttributes,
 		METH_VARARGS,
 		"Disable attributes in the vertex array object."
+		"int object "
 	},
 
 	{
@@ -1700,18 +1893,27 @@ static PyMethodDef methods[] = {
 		NewVertexBuffer,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tdata (bytes) The content of the buffer."
 	},
 	{
 		"NewIndexBuffer",
 		NewIndexBuffer,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tdata (bytes) The content of the buffer."
 	},
 	{
 		"NewUniformBuffer",
 		NewUniformBuffer,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tdata (bytes) The content of the buffer."
 	},
 
 	{
@@ -1719,18 +1921,27 @@ static PyMethodDef methods[] = {
 		NewDynamicVertexBuffer,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tdata (bytes) The content of the buffer."
 	},
 	{
 		"NewDynamicIndexBuffer",
 		NewDynamicIndexBuffer,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tdata (bytes) The content of the buffer."
 	},
 	{
 		"NewDynamicUniformBuffer",
 		NewDynamicUniformBuffer,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tdata (bytes) The content of the buffer."
 	},
 
 	{
@@ -1738,6 +1949,7 @@ static PyMethodDef methods[] = {
 		DeleteBuffer,
 		METH_VARARGS,
 		""
+		"bytes "
 	},
 
 	{
@@ -1745,151 +1957,264 @@ static PyMethodDef methods[] = {
 		UpdateVertexBuffer,
 		METH_VARARGS,
 		""
+		"int int bytes "
 	},
 	{
 		"UpdateIndexBuffer",
 		UpdateIndexBuffer,
 		METH_VARARGS,
 		""
+		"int int bytes "
 	},
 	{
 		"UpdateUniformBuffer",
 		UpdateUniformBuffer,
 		METH_VARARGS,
 		""
+		"int int bytes "
 	},
 
 	{
 		"RenderTriangles",
 		RenderTriangles,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderTriangleStrip",
 		RenderTriangleStrip,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderTriangleFan",
 		RenderTriangleFan,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderLines",
 		RenderLines,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderLineStrip",
 		RenderLineStrip,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderLineLoop",
 		RenderLineLoop,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderPoints",
 		RenderPoints,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderLineStripAdjacency",
 		RenderLineStripAdjacency,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderLinesAdjacency",
 		RenderLinesAdjacency,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderTriangleStripAdjacency",
 		RenderTriangleStripAdjacency,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderTrianglesAdjacency",
 		RenderTrianglesAdjacency,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderIndexedTriangles",
 		RenderIndexedTriangles,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderIndexedTriangleStrip",
 		RenderIndexedTriangleStrip,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderIndexedTriangleFan",
 		RenderIndexedTriangleFan,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderIndexedLines",
 		RenderIndexedLines,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderIndexedLineStrip",
 		RenderIndexedLineStrip,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderIndexedLineLoop",
 		RenderIndexedLineLoop,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderIndexedPoints",
 		RenderIndexedPoints,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderIndexedLineStripAdjacency",
 		RenderIndexedLineStripAdjacency,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderIndexedLinesAdjacency",
 		RenderIndexedLinesAdjacency,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderIndexedTriangleStripAdjacency",
 		RenderIndexedTriangleStripAdjacency,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 	{
 		"RenderIndexedTrianglesAdjacency",
 		RenderIndexedTrianglesAdjacency,
 		METH_VARARGS,
-		"Parameters: (vao, count, first = 0, instances = 1)."
+
+		"Parameters:\n"
+		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
 	},
 
 	{
@@ -1901,24 +2226,33 @@ static PyMethodDef methods[] = {
 		"The depth texture contains float values.\n"
 		"Return value: (framebuffer, color, depth).\n"
 		"Parameters: (width, height, multisample = True)\n."
+		""
 	},
 	{
 		"DeleteFramebuffer",
 		DeleteFramebuffer,
 		METH_VARARGS,
-		""
+
+		"Parameters:\n"
+		"\tframebuffer (int) Index of the framebuffer returned by the NewFramebuffer.\n"
 	},
 	{
 		"UseFramebuffer",
 		UseFramebuffer,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tframebuffer (int) Index of the framebuffer returned by the NewFramebuffer.\n"
 	},
 	{
 		"UseDefaultFramebuffer",
 		UseDefaultFramebuffer,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tNO PARAMETERS\n"
 	},
 	
 	{
@@ -1926,24 +2260,28 @@ static PyMethodDef methods[] = {
 		ReadPixels,
 		METH_VARARGS,
 		""
+		"int int int int "
 	},
 	{
 		"ReadDepthPixels",
 		ReadDepthPixels,
 		METH_VARARGS,
 		""
+		"int int int int "
 	},
 	{
 		"ReadPixel",
 		ReadPixel,
 		METH_VARARGS,
 		""
+		"int int "
 	},
 	{
 		"ReadDepthPixel",
 		ReadDepthPixel,
 		METH_VARARGS,
 		""
+		"int int "
 	},
 
 	// Extension
@@ -1954,13 +2292,21 @@ static PyMethodDef methods[] = {
 		METH_VARARGS,
 		"Check for full ModernGL support.\n"
 		"The initialization of the extensions are not affected by this method.\n"
+
+		"Parameters:\n"
+		"\tNO PARAMETERS\n"
 	},
 
 	{
 		"UseTextureAsImage",
 		UseTextureAsImage,
 		METH_VARARGS,
-		"To use image2D instead of sampler2D."
+		"To use image2D instead of sampler2D.\n"
+
+
+		"Parameters:\n"
+		"\ttexture (int) .\n"
+		"\tbinding (int) Image binding specified by the layout in GLSL. By default is 0\n"
 	},
 	
 	{
@@ -1968,19 +2314,28 @@ static PyMethodDef methods[] = {
 		NewTessEvaluationShader,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tsource (str) Source code in GLSL.\n"
 	},
 	{
 		"NewTessControlShader",
 		NewTessControlShader,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tsource (str) Source code in GLSL.\n"
 	},
 
 	{
 		"NewComputeShader",
 		NewComputeShader,
 		METH_VARARGS,
-		"Compiles and links a compute shader from source."
+		"Compiles and links a compute shader from source.\n"
+
+		"Parameters:\n"
+		"\tsource (str) Source code in GLSL.\n"
 	},
 	{
 		"DeleteComputeShader",
@@ -1988,13 +2343,21 @@ static PyMethodDef methods[] = {
 		METH_VARARGS,
 		"Compute shader is a standalone shader program. NOT part of the rendering pipeline.\n"
 		"Equivalent to the DeleteProgram.\n"
+
+		"Parameters:\n"
+		"\tprogram (int) The index of a program object returned by the NewComputeShader function.\n"
 	},
 	{
 		"RunComputeShader",
 		RunComputeShader,
 		METH_VARARGS,
 		"Run the compute shader.\n"
-		"Parameters: (x = 1, y = 1, z = 1)\n"
+
+		"Parameters:\n"
+		"\tprogram (int) The index of a program object returned by the NewComputeShader function.\n"
+		"\tx (int) The x group size of the workers. By default is 1\n"
+		"\ty (int) The y group size of the workers. By default is 1\n"
+		"\tz (int) The z group size of the workers. By default is 1\n"
 	},
 
 	{
@@ -2002,30 +2365,50 @@ static PyMethodDef methods[] = {
 		NewStorageBuffer,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tdata (bytes) The content of the buffer."
 	},
 	{
 		"NewDynamicStorageBuffer",
 		NewDynamicStorageBuffer,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tdata (bytes) The content of the buffer."
 	},
 	{
 		"UseStorageBuffer",
 		UseStorageBuffer,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tssbo (int) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
+		"\tbinding (int) Buffer binding specified by the layout in GLSL. By default is 0\n"
 	},
 	{
 		"UpdateStorageBuffer",
 		UpdateStorageBuffer,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tssbo (int) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
+		"\toffset (int) The offset of the data in the buffer to update.\n"
+		"\tdata (bytes) The content of the data to write to the buffer.\n"
 	},
 	{
 		"ReadStorageBuffer",
 		ReadStorageBuffer,
 		METH_VARARGS,
 		""
+
+		"Parameters:\n"
+		"\tssbo (int) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
+		"\toffset (int) The offset of the data in the buffer to read.\n"
+		"\tsize (int) The size of the data to read from the buffer.\n"
 	},
 
 	// Better than nothing font

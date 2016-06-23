@@ -21,10 +21,6 @@ def func_with_name(func):
 
 	return textwrap.dedent(ccode[start + 1: end + 1].replace('OpenGL::', ''))
 
-# print(func_with_name('InitializeModernGL'))
-
-# exit()
-
 page = open('Data/PageTemplate.html').read()
 func = open('Data/FunctionTemplate.html').read()
 const = open('Data/ConstantTemplate.html').read()
