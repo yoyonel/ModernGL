@@ -93,10 +93,12 @@ pre {
 }
 
 .token_comment {
+	font-weight: normal;
 	color: #008822;
 }
 
 .token_string {
+	font-weight: normal;
 	color: #008822;
 }
 
@@ -105,5 +107,11 @@ pre {
 }
 
 .token_comment .token {
+	font-weight: normal;
+	color: #008822;
+}
+
+.token_string .token {
+	font-weight: normal;
 	color: #008822;
 }
