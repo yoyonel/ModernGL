@@ -21,6 +21,40 @@ def func_with_name(func):
 
 	return textwrap.dedent(ccode[start + 1: end + 1].replace('OpenGL::', ''))
 
+def params_from_docs(docs):
+	at = docs.find('Parameters:\n')
+	at += len('Parameters:\n')
+
+	result = []
+	while docs[at] == '\t':
+		end = docs.find('\n', at)
+		param, rest = docs[at + 1 : end].split(' ', 1)
+		default = rest.find('By default is ')
+		if default >= 0:
+			default += len('By default is ')
+			param += ' = ' + rest[default:]
+		result.append((param, docs[at + 1 : end]))
+		at = end + 1
+
+	return result
+
+def better_impl(code):
+	code = html.escape(code)
+	code = re.sub(r'([\+\*\=\-\|!]|&amp;|&lt;|&gt;)', r'<span class="token token_operator">\1</span>', code)
+	code = re.sub(r'(//[^\n]+)', r'<span class="token token_comment">\1</span>', code)
+	code = re.sub(r'(&quot;.+(?=(&quot;))&quot;)', r'<span class="token token_string">\1</span>', code)
+	code = re.sub(r'\b(gl[a-zA-Z0-9]+)\(', r'<span class="token token_glfunc">\1</span>(', code)
+	code = re.sub(r'\b([A-Z][a-zA-Z0-9]+)\(', r'<span class="token token_myfunc">\1</span>(', code)
+	code = re.sub(r'\b(GL_[A-Z_0-9]+)\b', r'<span class="token token_glconst">\1</span>', code)
+	code = re.sub(r'\b(GL[a-z]+)\b', r'<span class="token token_glkeyword">\1</span>', code)
+	code = re.sub(r'\b(GL[a-z]+|bool|int|float|return|unsigned|const|char|void|if|else|for|while)\b', r'<span class="token token_mykeyword">\1</span>', code)
+	code = re.sub(r'\b([0-9]+)\b', r'<span class="token token_integer">\1</span>', code)
+	code = re.sub(r'([\(\)\{\}\,])', r'<span class="token token_sign">\1</span>', code)
+	return code
+
+# print(params_from_docs(GL.NewVertexArray.__doc__))
+# exit()
+
 page = open('Data/PageTemplate.html').read()
 func = open('Data/FunctionTemplate.html').read()
 const = open('Data/ConstantTemplate.html').read()
@@ -54,8 +88,8 @@ for x in objs:
 		form = {
 			'name' : x,
 			'docs' : str(GL.__dict__[x].__doc__),
-			'implementation' : html.escape(func_with_name(x)),
-			'function': '',
+			'implementation' : better_impl(func_with_name(x)),
+			'function': '%s(%s)' % (x, ', '.join(y[0] for y in params_from_docs(GL.__dict__[x].__doc__))),
 			'similar' : '',
 		}
 		done = page.format_map({'title' : x, 'subtitle': x, 'content' : func.format_map(form)})
@@ -75,7 +109,7 @@ for x in objs:
 
 		cat = x[0]
 		cats.append(cat)
-		content += '<label id="{0}">{0}</label>\n'.format(cat)
+		content += '<label style="float: left;" id="{0}">{0}</label>\n'.format(cat)
 		content += '<ul class="home-ul">\n'
 	content += '<li><a href="{0}">{0}</a></li>\n'.format(x)
 
