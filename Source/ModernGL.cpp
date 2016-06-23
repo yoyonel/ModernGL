@@ -1032,7 +1032,7 @@ namespace ModernGL {
 	}
 
 	void UseDefaultFramebuffer() {
-		OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, 0);
+		OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, defaultFramebuffer);
 	}
 
 	unsigned char * ReadPixels(int x, int y, int width, int height, int components) {
