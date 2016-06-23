@@ -95,9 +95,3 @@ import zipfile
 shutil.copyfile('Data/bootstrap.min.css', 'ModernGL/bootstrap.min.css')
 shutil.copyfile('Data/bootstrap-theme.min.css', 'ModernGL/bootstrap-theme.min.css')
 shutil.copyfile('Data/style.css', 'ModernGL/style.css')
-
-import http.server
-import socketserver
-
-httpd = socketserver.TCPServer(('127.0.0.1', 80), http.server.SimpleHTTPRequestHandler)
-httpd.serve_forever()
