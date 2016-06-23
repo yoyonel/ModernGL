@@ -305,7 +305,6 @@ namespace ModernGL {
 	bool TestExtensions() {
 		int extensions = 0;
 		OpenGL::glGetIntegerv(OpenGL::GL_NUM_EXTENSIONS, &extensions);
-		CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 
 		bool shader_storage_buffer_object = false;
 		bool tessellation_shader = false;
@@ -313,7 +312,6 @@ namespace ModernGL {
 
 		for (int i = 0; i < extensions; ++i) {
 			const char * ext = (const char *)OpenGL::glGetStringi(OpenGL::GL_EXTENSIONS, i);
-			CHECK_GL_ERROR(__FUNCTION__, __LINE__);
 			if (!ext) {
 				continue;
 			}
