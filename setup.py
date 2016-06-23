@@ -1,6 +1,6 @@
 from setuptools import setup, Extension
 
-ShortDescription = 'ModernGL is a wrapper over OpenGL that simplifies the creation of simple graphics applications like scientific simulations, small games or user interfaces.'
+ShortDescription = 'Wrapper over OpenGL that simplifies the creation of simple graphics applications.'
 
 LongDescription = '''OpenGL is a great environment for developing portable, platform independent,
 interactive 2D and 3D graphics applications. The API implementation in Python
