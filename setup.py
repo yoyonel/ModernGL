@@ -15,7 +15,7 @@ quality, with less code written.
 '''
 
 Classifiers = [
-	'Development Status :: 2 - Pre-Alpha',
+	'Development Status :: 3 - Alpha',
 	'Environment :: Win32 (MS Windows)',
 	'Intended Audience :: Developers',
 	'Intended Audience :: Education',
@@ -57,6 +57,10 @@ Keywords = [
 	'ModernGL',
 	'modern OpenGL',
 	'OpenGL',
+	'GL',
+	'GLEXT',
+	'GLU',
+	'ARB',
 	'2D',
 	'3D',
 	'graphics',
@@ -76,7 +80,7 @@ ModernGL = Extension(
 
 setup(
 	name = 'ModernGL',
-	version = '2.0.5',
+	version = '2.0.6',
 	description = ShortDescription,
 	long_description = LongDescription,
 	url = 'https://github.com/cprogrammer1994/ModernGL',

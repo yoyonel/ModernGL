@@ -739,8 +739,8 @@ namespace ModernGL {
 
 		int length = 0;
 		while (format[length]) {
-			if (length % 2) {
-				if (format[length] < '1' || format[length] > '3') {
+			if (length % 2 == 0) {
+				if (format[length] < '1' || format[length] > '4') {
 					return 0;
 				}
 			} else {
