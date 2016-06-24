@@ -21,7 +21,7 @@ python -m pip install ModernGL
 [Github Page](http://cprogrammer1994.github.io/ModernGL/)<br>
 [Github Repository](https://github.com/cprogrammer1994/ModernGL/)<br>
 [Python Documentation](https://pythonhosted.org/ModernGL/)<br>
-[PyPi](https://pypi.python.org/pypi/ModernGL/)
+[PyPI](https://pypi.python.org/pypi/ModernGL/)
 
 # Supported Versions
 
@@ -203,12 +203,7 @@ UseStorageBuffer(buffer, binding = 0)
 ReadStorageBuffer(buffer, offset, size)
 ```
 
-# Concept
-
-SOON
-> ModernGL simply implements a set of OpenGL functions
-
-# Example
+# Examples
 
 SOON
 > [Julia Fractal](https://gist.github.com/cprogrammer1994/ecd69bc181e159305ad6)
