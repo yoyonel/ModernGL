@@ -1,8 +1,11 @@
 # ModernGL
 
 [![Join the chat at https://gitter.im/cprogrammer1994/ModernGL](https://badges.gitter.im/cprogrammer1994/ModernGL.svg)](https://gitter.im/cprogrammer1994/ModernGL?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![PyPI](https://img.shields.io/pypi/v/ModernGL.svg)]()
-[![PyPI](https://img.shields.io/github/tag/cprogrammer1994/ModernGL.svg)]()
+[![GITHUB](https://img.shields.io/github/tag/cprogrammer1994/ModernGL.svg)]()
+
+[![PyPI](https://img.shields.io/pypi/dm/ModernGL.svg)]()
 
 ```
 python -m pip install ModernGL
