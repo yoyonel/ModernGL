@@ -1,6 +1,6 @@
 from setuptools import setup, Extension
 
-ShortDescription = 'Wrapper over OpenGL'
+ShortDescription = 'modern OpenGL binding for Python'
 
 LongDescription = '''
 OpenGL is a great environment for developing portable, platform independent,
