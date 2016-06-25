@@ -13,13 +13,13 @@ vert = GL.NewVertexShader('''
 	#version 430
 
 	in vec2 vert;
-	out vec3 light;
+	out vec2 frag_vert;
 
 	uniform float ratio;
 
 	void main() {
 		gl_Position = vec4(vert, 0.0, 1.0);
-		light = vec3(vert.x * ratio, vert.y, -1.0);
+		frag_vert = -vec2(vert.x * ratio, vert.y);
 	}
 ''')
 
@@ -28,89 +28,78 @@ print('Vert:', GL.CompilerLog(), sep = '\n')
 frag = GL.NewFragmentShader('''
 	#version 430
 
-	struct Triangle {
+	struct Face {
 		vec4 color;
 		vec3 T1;
-		vec3 T2;
-		vec3 T3;
+		vec3 T2_T1;
+		vec3 T3_T1;
+		vec3 T2_T1_C_T3_T1;
 		vec3 N;
 	};
 	
-	in vec3 light;
+	in vec2 frag_vert;
 	out vec4 frag;
 
 	layout (binding = 1) buffer Input {
-		int triangles;
-		Triangle triangle[];
+		int faces;
+		Face face[];
 	};
 
-	float rand(vec2 co) {
-		return fract(sin(dot(co.xy ,vec2(12.9898, 78.233))) * 43758.5453);
-	}
+	void main() {
+		float factor = 1.0;
+		vec3 R1 = vec3(0.0, 0.0, 0.0);
+		vec3 R1_R2 = normalize(vec3(frag_vert, 1.0));
 
-	vec3 raycast(vec3 R1, vec3 R2, float factor) {
-		vec3 color = vec3(0, 0, 0);
+		vec3 color = vec3(0.0, 0.0, 0.0);
 		for (int h = 0; h < 5; ++h) {
 			int hit = 0;
 			float dist = -1;
 
-			for (int i = 0; i < triangles; ++i) {
-				vec3 T1 = triangle[i].T1;
-				vec3 T2 = triangle[i].T2;
-				vec3 T3 = triangle[i].T3;
+			for (int i = 0; i < faces; ++i) {
+				vec3 T1 = face[i].T1;
 
-				float f = dot(normalize(R1 - R2), triangle[i].N);
-				if (f <= 0) continue;
+				float f = dot(R1_R2, face[i].N);
+				if (f <= 0.0) continue;
 
-				float D = determinant(mat3(R1 - R2, T2 - T1, T3 - T1));
-				if (D == 0) continue;
+				float D = dot(R1_R2, face[i].T2_T1_C_T3_T1);
+				if (D == 0.0) continue;
 
-				float u = determinant(mat3(R1 - T1, T2 - T1, T3 - T1)) / D;
-				if (u < 0) continue;
+				vec3 R1_T1 = R1 - T1;
 
-				if (dist > 0 && dist < u) continue;
+				float u = dot(R1_T1, face[i].T2_T1_C_T3_T1) / D;
+				if (u < 0.0) continue;
 
-				float v = determinant(mat3(R1 - R2, R1 - T1, T3 - T1)) / D;
-				if (v < 0) continue;
+				if (dist > 0.0 && dist < u) continue;
 
-				float w = determinant(mat3(R1 - R2, T2 - T1, R1 - T1)) / D;
-				if (w < 0) continue;
+				vec3 R1_R2_C_R1_T1 = cross(R1_R2, R1_T1);
 
-				if (v + w > 1) continue;
+				float v = dot(face[i].T3_T1, R1_R2_C_R1_T1) / D;
+				if (v < 0.0) continue;
+
+				float w = -dot(face[i].T2_T1, R1_R2_C_R1_T1) / D;
+				if (w < 0.0) continue;
+
+				if (v + w > 1.0) continue;
 
 				dist = u;
 				hit = i;
 			}
 
 			if (dist > 0) {
-				int i = hit;
-				float u = dist;
+				float g = dot(R1_R2, face[hit].N);
+				color += face[hit].color.rgb * factor * g;
 
-				vec3 K1 = R1 + (R2 - R1) * u;
-				vec3 K2 = K1 + reflect(normalize(R2 - R1), normalize(triangle[i].N));
-
-				float g = abs(dot(normalize(R2 - R1), normalize(triangle[i].N)));
-				float a = triangle[i].color.a;
-				color += triangle[i].color.rgb * a * factor * g;
-
-				R1 = K1;
-				R2 = K2;
-				factor *= 1 - a;
+				R1 = R1 - R1_R2 * dist;
+				R1_R2 = reflect(R1_R2, face[hit].N);
+				factor *= 1.0 - face[hit].color.a;
 
 				if (factor < 0.01) break;
 			} else {
 				break;
 			}
 		}
-		return color;
-	}
 
-	void main() {
-//		if (rand(light.xy) < 0.1) {
-//			discard;
-//		}
-
-		frag = vec4(raycast(vec3(0, 0, 0), light, 1.0), 1.0);
+		frag = vec4(color, 1.0);
 	}
 ''')
 
@@ -129,14 +118,35 @@ color = [
 	(0.05, 0.85, 0.25, 0.25),
 ]
 
-triangles = []
+
+faces = []
 data = open('raytrace.dat', 'rb').read()
 for k, i in enumerate(range(0, len(data), 48)):
 	verts = struct.unpack('12f', data[i : i + 48])
-	triangles.append(color[k // 12] + verts)
+	faces.append(list(color[k // 12] + verts))
 
-data = struct.pack('I12x', len(triangles))
-data += b''.join(struct.pack('4f3f4x3f4x3f4x3f4x', *node) for node in triangles)
+for i in range(len(faces)):
+	faces[i][0] *= faces[i][3]
+	faces[i][1] *= faces[i][3]
+	faces[i][2] *= faces[i][3]
+	faces[i][7] = faces[i][7] - faces[i][4]
+	faces[i][8] = faces[i][8] - faces[i][5]
+	faces[i][9] = faces[i][9] - faces[i][6]
+	faces[i][10] = faces[i][10] - faces[i][4]
+	faces[i][11] = faces[i][11] - faces[i][5]
+	faces[i][12] = faces[i][12] - faces[i][6]
+#	faces[i][7]  faces[i][8]  faces[i][9]
+#	faces[i][10] faces[i][11] faces[i][12]
+	cross = [
+		faces[i][8] * faces[i][12] - faces[i][9] * faces[i][11],
+		faces[i][10] * faces[i][9] - faces[i][12] * faces[i][7],
+		faces[i][7] * faces[i][11] - faces[i][8] * faces[i][10],
+	]
+
+	faces[i] = faces[i][:13] + cross + faces[i][13:]
+
+data = struct.pack('I12x', len(faces))
+data += b''.join(struct.pack('4f3f4x3f4x3f4x3f4x3f4x', *node) for node in faces)
 
 ssbo = GL.NewStorageBuffer(data)
 GL.UseStorageBuffer(ssbo, 1)
