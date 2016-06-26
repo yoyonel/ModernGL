@@ -14,13 +14,15 @@ python -m pip install ModernGL
 [![PyPI](https://img.shields.io/pypi/status/ModernGL.svg)](https://pypi.python.org/pypi/ModernGL)
 [![PyPI](https://img.shields.io/pypi/dm/ModernGL.svg)](https://pypi.python.org/pypi/ModernGL)
 
-## Websites
+## Links
 
 [Examples](https://github.com/cprogrammer1994/ModernGL/tree/master/Examples)<br>
-[Github Page](http://cprogrammer1994.github.io/ModernGL/)<br>
-[Github Repository](https://github.com/cprogrammer1994/ModernGL/)<br>
 [Documentation](https://pythonhosted.org/ModernGL/)<br>
+[Questions](https://gitter.im/cprogrammer1994/ModernGL)<br>
 [PyPI](https://pypi.python.org/pypi/ModernGL/)
+[Github Repository](https://github.com/cprogrammer1994/ModernGL/)<br>
+[Github Page](http://cprogrammer1994.github.io/ModernGL/)<br>
+[Github Docs](https://github.com/cprogrammer1994/ModernGL/wiki)<br>
 
 # Supported Versions
 
