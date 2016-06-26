@@ -6,9 +6,6 @@
 #include <cstdarg>
 #include <malloc.h>
 
-#define CHECK_GL_ERROR(func, line) if (int err = OpenGL::glGetError()) printf("Error in %s at line: %d Error: %d\n", func, line, err);
-// #define CHECK_GL_ERROR(...)
-
 namespace {
 	int defaultVertexArray;
 	int defaultFramebuffer;
