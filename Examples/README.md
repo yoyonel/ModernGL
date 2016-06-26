@@ -14,6 +14,8 @@
 
 # Soon
 
+## JuliaFractal
+
 ## Particles
 
 ## AmbientOcclusion
