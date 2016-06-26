@@ -2828,6 +2828,7 @@ static PyMethodDef methods[] = {
 		"\ty (int) Offset of the image to read.\n"
 		"\twidth (int) Width of the image to read.\n"
 		"\theight (int) Height of the image to read.\n"
+		"\tcomponents (int) By default is 3.\n"
 
 		"\n"
 		"Returns:\n"
