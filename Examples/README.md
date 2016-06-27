@@ -18,12 +18,12 @@
 ![Raytrace](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Examples/Screenshots/Raytrace_02.png)
 ![Raytrace](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Examples/Screenshots/Raytrace_03.png)
 
-# Soon
-
 ## JuliaFractal
 
 ![JuliaFractal](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Examples/Screenshots/JuliaFractal_01.png)
 ![JuliaFractal](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Examples/Screenshots/JuliaFractal_02.png)
+
+# Soon
 
 ## Particles
 

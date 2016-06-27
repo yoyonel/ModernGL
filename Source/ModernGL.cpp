@@ -1023,18 +1023,13 @@ namespace ModernGL {
 		OpenGL::glBindVertexArray(defaultVertexArray);
 	}
 
-	Framebuffer NewFramebuffer(int width, int height, bool multisample) {
+	Framebuffer NewFramebuffer(int width, int height) {
 		int framebuffer = 0;
 		int color = 0;
 		int depth = 0;
 
 		OpenGL::glGenFramebuffers(1, (OpenGL::GLuint *)&framebuffer);
 		OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, framebuffer);
-
-		unsigned target = OpenGL::GL_TEXTURE_2D;
-		if (multisample) {
-			target = OpenGL::GL_TEXTURE_2D_MULTISAMPLE;
-		}
 
 		if (!width && !height) {
 			int viewport[4] = {};
@@ -1044,18 +1039,19 @@ namespace ModernGL {
 		}
 
 		OpenGL::glGenTextures(1, (OpenGL::GLuint *)&color);
-		OpenGL::glBindTexture(target, color);
-		OpenGL::glTexParameteri(target, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
-		OpenGL::glTexParameteri(target, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
-		OpenGL::glTexImage2D(target, 0, OpenGL::GL_RGBA, width, height, 0, OpenGL::GL_RGBA, OpenGL::GL_FLOAT, 0);
-		OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_COLOR_ATTACHMENT0, target, color, 0);
+		OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, color);
+
+		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
+		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
+		OpenGL::glTexImage2D(OpenGL::GL_TEXTURE_2D, 0, OpenGL::GL_RGBA, width, height, 0, OpenGL::GL_RGBA, OpenGL::GL_FLOAT, 0);
+		OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_COLOR_ATTACHMENT0, OpenGL::GL_TEXTURE_2D, color, 0);
 
 		OpenGL::glGenTextures(1, (OpenGL::GLuint *)&depth);
-		OpenGL::glBindTexture(target, depth);
-		OpenGL::glTexParameteri(target, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
-		OpenGL::glTexParameteri(target, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
-		OpenGL::glTexImage2D(target, 0, OpenGL::GL_DEPTH_COMPONENT, width, height, 0, OpenGL::GL_DEPTH_COMPONENT, OpenGL::GL_FLOAT, 0);
-		OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_DEPTH_ATTACHMENT, target, depth, 0);
+		OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, depth);
+		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
+		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
+		OpenGL::glTexImage2D(OpenGL::GL_TEXTURE_2D, 0, OpenGL::GL_DEPTH_COMPONENT, width, height, 0, OpenGL::GL_DEPTH_COMPONENT, OpenGL::GL_FLOAT, 0);
+		OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_DEPTH_ATTACHMENT, OpenGL::GL_TEXTURE_2D, depth, 0);
 
 		Framebuffer tuple = {
 			framebuffer,
@@ -1063,9 +1059,10 @@ namespace ModernGL {
 			depth,
 		};
 
-		return tuple;
-
 		OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, defaultFramebuffer);
+
+
+		return tuple;
 	}
 
 	void DeleteFramebuffer(int framebuffer) {

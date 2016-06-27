@@ -1081,13 +1081,12 @@ PyObject * RenderIndexedTrianglesAdjacency(PyObject * self, PyObject * args) {
 PyObject * NewFramebuffer(PyObject * self, PyObject * args) {
 	int width = 0;
 	int height = 0;
-	bool multisample = true;
 
-	if (!PyArg_ParseTuple(args, "|iip:NewFramebuffer", &width, &height, &multisample)) {
+	if (!PyArg_ParseTuple(args, "|ii:NewFramebuffer", &width, &height)) {
 		return 0;
 	}
 
-	ModernGL::Framebuffer framebuffer = ModernGL::NewFramebuffer(width, height, multisample);
+	ModernGL::Framebuffer framebuffer = ModernGL::NewFramebuffer(width, height);
 	return Py_BuildValue("iii", framebuffer.framebuffer, framebuffer.color, framebuffer.depth);
 }
 
@@ -2754,15 +2753,12 @@ static PyMethodDef methods[] = {
 		"Creates a framebuffer with two texture attachments. (color and depth)\n"
 		"The color attachment have RGBA format, 8bit for each channel.\n"
 		"The depth texture contains float values.\n"
-		"Return value: (framebuffer, color, depth).\n"
-		"Parameters: (width, height, multisample = True).\n"
 		""
 
 		"\n"
 		"Parameters:\n"
 		"\twidth (int) Width of the framebuffer. By default is 0\n"
 		"\theight (int) Height of the framebuffer. By default is 0\n"
-		"\tmultisample (bool) Multisampling flag. By default is True\n"
 
 		"\n"
 		"Returns:\n"

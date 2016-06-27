@@ -134,7 +134,7 @@ namespace ModernGL {
 	extern void RenderIndexedTriangleStripAdjacency(int vao, int count, int first = 0, int instances = 1);
 	extern void RenderIndexedTrianglesAdjacency(int vao, int count, int first = 0, int instances = 1);
 
-	extern Framebuffer NewFramebuffer(int width, int height, bool multisample = true);
+	extern Framebuffer NewFramebuffer(int width, int height);
 	extern void DeleteFramebuffer(int framebuffer);
 	extern void UseFramebuffer(int framebuffer);
 	extern void UseDefaultFramebuffer();
