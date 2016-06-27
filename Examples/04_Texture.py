@@ -1,3 +1,6 @@
+# python -m pip install Pillow
+
+from PIL import Image
 import ModernGL as GL
 import GLWindow as WND
 import struct
@@ -10,17 +13,15 @@ vert = GL.NewVertexShader('''
 	#version 400
 
 	in vec2 vert;
-
-	in vec3 vert_color;
-	out vec3 frag_color;
+	out vec2 tex_coord;
 
 	uniform vec2 scale;
 	uniform float rotation;
 
 	void main() {
-		frag_color = vert_color;
 		mat2 rot = mat2(cos(rotation), sin(rotation), -sin(rotation), cos(rotation));
 		gl_Position = vec4((rot * vert) * scale, 0.0, 1.0);
+		tex_coord = vert;
 	}
 ''')
 
@@ -30,12 +31,14 @@ if not vert:
 
 frag = GL.NewFragmentShader('''
 	#version 400
+
+	uniform sampler2D texture;
 	
-	in vec3 frag_color;
+	in vec2 tex_coord;
 	out vec4 color;
 
 	void main() {
-		color = vec4(frag_color, 1.0);
+		color = vec4(texture2D(texture, tex_coord).rgb, 1.0);
 	}
 ''')
 
@@ -56,6 +59,9 @@ vbo = GL.NewVertexBuffer(struct.pack('15f', 1.0, 0.0, 1.0, 0.0, 0.0, -0.5, 0.86,
 vao = GL.NewVertexArray('2f3f', [(vbo, vert_idx), (vbo, color_idx)], vbo)
 
 GL.Uniform2f(scale, height / width * 0.75, 0.75)
+
+tex = GL.NewTexture(256, 256, Image.open('Data/Noise.jpg').tobytes())
+GL.UseTexture(tex)
 
 while WND.Update():
 	GL.Clear(240, 240, 240)
