@@ -23,10 +23,13 @@
 ![JuliaFractal](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Examples/Screenshots/JuliaFractal_01.png)
 ![JuliaFractal](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Examples/Screenshots/JuliaFractal_02.png)
 
+## AmbientOcclusion
+
+![AmbientOcclusion](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Examples/Screenshots/AmbientOcclusion_01.png)
+![AmbientOcclusion](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Examples/Screenshots/AmbientOcclusion_02.png)
+
 # Soon
 
 ## Particles
-
-## AmbientOcclusion
 
 ## FieldOfDepth
