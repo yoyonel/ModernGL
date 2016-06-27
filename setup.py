@@ -15,8 +15,7 @@ quality, with less code written.
 '''
 
 Classifiers = [
-	'Development Status :: 3 - Alpha',
-#	'Development Status :: 4 - Beta',
+	'Development Status :: 4 - Beta',
 #	'Development Status :: 5 - Production/Stable',
 #	'Development Status :: 6 - Mature',
 	'Environment :: Win32 (MS Windows)',
@@ -83,7 +82,7 @@ ModernGL = Extension(
 
 setup(
 	name = 'ModernGL',
-	version = '2.0.6',
+	version = '2.0.7',
 	description = ShortDescription,
 	long_description = LongDescription,
 	url = 'https://github.com/cprogrammer1994/ModernGL',
