@@ -2001,7 +2001,7 @@ static PyMethodDef methods[] = {
 		"\twidth (int) Width of the texture.\n"
 		"\theight (int) Height of the texture.\n"
 		"\tpixels (bytes) Pixels stored in bytes.\n"
-		"\tcomponents (int) By default is 3.\n"
+		"\tcomponents (int) By default is 3\n"
 
 		"\n"
 		"Returns:\n"
@@ -2037,7 +2037,7 @@ static PyMethodDef methods[] = {
 		"\twidth (int) Width of the texture.\n"
 		"\theight (int) Height of the texture.\n"
 		"\tpixels (bytes) Pixels stored in bytes.\n"
-		"\tcomponents (int) By default is 3.\n"
+		"\tcomponents (int) By default is 3\n"
 
 		"\n"
 		"Returns:\n"
@@ -2828,7 +2828,7 @@ static PyMethodDef methods[] = {
 		"\ty (int) Offset of the image to read.\n"
 		"\twidth (int) Width of the image to read.\n"
 		"\theight (int) Height of the image to read.\n"
-		"\tcomponents (int) By default is 3.\n"
+		"\tcomponents (int) By default is 3\n"
 
 		"\n"
 		"Returns:\n"
