@@ -67,7 +67,6 @@ namespace OpenGL {
 		glPointSize = (PROC_glPointSize)GetOpenGLFunction("glPointSize");
 		glTexParameteri = (PROC_glTexParameteri)GetOpenGLFunction("glTexParameteri");
 		glTexImage2D = (PROC_glTexImage2D)GetOpenGLFunction("glTexImage2D");
-		glTexImage2DMultisample = (PROC_glTexImage2DMultisample)GetOpenGLFunction("glTexImage2DMultisample");
 		glTexSubImage2D = (PROC_glTexSubImage2D)GetOpenGLFunction("glTexSubImage2D");
 		glClear = (PROC_glClear)GetOpenGLFunction("glClear");
 		glClearColor = (PROC_glClearColor)GetOpenGLFunction("glClearColor");
@@ -153,10 +152,6 @@ namespace OpenGL {
 
 	bool __stdcall isglTexImage2D() {
 		return glTexImage2D != 0;
-	}
-
-	bool __stdcall isglTexImage2DMultisample() {
-		return glTexImage2DMultisample != 0;
 	}
 
 	bool __stdcall isglTexSubImage2D() {
@@ -431,7 +426,6 @@ namespace OpenGL {
 	PROC_glPointSize glPointSize;
 	PROC_glTexParameteri glTexParameteri;
 	PROC_glTexImage2D glTexImage2D;
-	PROC_glTexImage2DMultisample glTexImage2DMultisample;
 	PROC_glTexSubImage2D glTexSubImage2D;
 	PROC_glClear glClear;
 	PROC_glClearColor glClearColor;
