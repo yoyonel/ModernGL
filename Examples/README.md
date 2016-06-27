@@ -12,6 +12,10 @@
 
 ![03_Blending](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Examples/Screenshots/03_Blending.png)
 
+## 04_Texture
+
+![04_Texture](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Examples/Screenshots/04_Texture.png)
+
 ## Raytrace
 
 ![Raytrace](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Examples/Screenshots/Raytrace_01.png)
