@@ -213,7 +213,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	int count = PyList_Size(lst);
+	int count = (int)PyList_Size(lst);
 	int * shader = new int[count];
 	for (int i = 0; i < count; ++i) {
 		shader[i] = PyLong_AsLong(PyList_GetItem(lst, i));
@@ -414,7 +414,7 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 
 	float matrix[16];
 
-	int count = PyList_Size(lst);
+	int count = (int)PyList_Size(lst);
 	for (int i = 0; i < count; ++i) {
 		matrix[i] = (float)PyFloat_AsDouble(PyList_GetItem(lst, i));
 	}
@@ -433,7 +433,7 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 
 	float matrix[16];
 
-	int count = PyList_Size(lst);
+	int count = (int)PyList_Size(lst);
 	for (int i = 0; i < count; ++i) {
 		matrix[i] = (float)PyFloat_AsDouble(PyList_GetItem(lst, i));
 	}
@@ -565,7 +565,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	int count = PyList_Size(lst);
+	int count = (int)PyList_Size(lst);
 	ModernGL::VertexBufferAndAttribute * attribs = new ModernGL::VertexBufferAndAttribute[count];
 	for (int i = 0; i < count; ++i) {
 		PyObject * tuple = PyList_GetItem(lst, i);
@@ -621,7 +621,7 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	int size = PyList_Size(attribs);
+	int size = (int)PyList_Size(attribs);
 	int * attrib_array = new int[size];
 	for (int i = 0; i < size; ++i) {
 		attrib_array[i] = PyLong_AsLong(PyList_GetItem(attribs, i));
@@ -639,7 +639,7 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	int size = PyList_Size(attribs);
+	int size = (int)PyList_Size(attribs);
 	int * attrib_array = new int[size];
 	for (int i = 0; i < size; ++i) {
 		attrib_array[i] = PyLong_AsLong(PyList_GetItem(attribs, i));
