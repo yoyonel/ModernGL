@@ -569,10 +569,8 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	ModernGL::VertexBufferAndAttribute * attribs = new ModernGL::VertexBufferAndAttribute[count];
 	for (int i = 0; i < count; ++i) {
 		PyObject * tuple = PyList_GetItem(lst, i);
-		attribs[i] = {
-			PyLong_AsLong(PyTuple_GetItem(tuple, 0)),
-			PyLong_AsLong(PyTuple_GetItem(tuple, 1)),
-		};
+		attribs[i].buffer = PyLong_AsLong(PyTuple_GetItem(tuple, 0));
+		attribs[i].attribute = PyLong_AsLong(PyTuple_GetItem(tuple, 1));
 	}
 
 	PyObject * result = PyLong_FromLong(ModernGL::NewVertexArray(format, attribs, indexBuffer));
