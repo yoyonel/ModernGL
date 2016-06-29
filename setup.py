@@ -29,6 +29,11 @@ Classifiers = [
 #	'Development Status :: 5 - Production/Stable',
 #	'Development Status :: 6 - Mature',
 	'Environment :: Win32 (MS Windows)',
+#	'Environment :: X11 Applications',
+#	'Environment :: X11 Applications :: Gnome',
+#	'Environment :: X11 Applications :: GTK',
+#	'Environment :: X11 Applications :: KDE',
+#	'Environment :: X11 Applications :: Qt',
 	'Intended Audience :: Developers',
 	'Intended Audience :: Education',
 	'License :: Freely Distributable',
@@ -124,7 +129,7 @@ ModernGL = Extension(
 
 setup(
 	name = 'ModernGL',
-	version = '2.0.10',
+	version = '2.0.11',
 	description = ShortDescription,
 	long_description = LongDescription,
 	url = 'https://github.com/cprogrammer1994/ModernGL',
