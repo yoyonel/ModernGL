@@ -1,15 +1,7 @@
-import os
-
-if 'CUSTOM_GCC' in os.environ:
-	from cccompiler import CustomCCompiler
-	import distutils.msvccompiler
-	distutils.msvccompiler.MSVCCompiler = CustomCCompiler
-
-	try:
-		import distutils.msvccompiler
-		distutils._msvccompiler.MSVCCompiler = CustomCCompiler
-	except ImportError:
-		pass
+try:
+	import cccompiler
+except ImportError:
+	pass
 
 try:
 	from setuptools import setup, Extension
@@ -39,13 +31,15 @@ Classifiers = [
 	'Environment :: Win32 (MS Windows)',
 	'Intended Audience :: Developers',
 	'Intended Audience :: Education',
+	'License :: Freely Distributable',
 	'License :: Free For Educational Use',
 	'License :: Free For Home Use',
 	'License :: Freeware',
+	'License :: OSI Approved',
 	'License :: OSI Approved :: MIT License',
 	'Natural Language :: English',
+	'Operating System :: Microsoft',
 	'Operating System :: Microsoft :: Windows',
-	'Operating System :: Microsoft :: Windows :: Windows 3.1 or Earlier',
 	'Operating System :: Microsoft :: Windows :: Windows 7',
 	'Operating System :: Microsoft :: Windows :: Windows 95/98/2000',
 	'Operating System :: Microsoft :: Windows :: Windows CE',
@@ -53,13 +47,21 @@ Classifiers = [
 	'Operating System :: Microsoft :: Windows :: Windows Server 2003',
 	'Operating System :: Microsoft :: Windows :: Windows Server 2008',
 	'Operating System :: Microsoft :: Windows :: Windows Vista',
+	'Operating System :: Microsoft :: Windows :: Windows XP',
+#	'Operating System :: OS Independent',
+#	'Operating System :: POSIX',
+#	'Operating System :: POSIX :: Linux',
+#	'Operating System :: Unix',
+	'Programming Language :: C',
 	'Programming Language :: C++',
+	'Programming Language :: Cython',
 	'Programming Language :: Python',
+	'Programming Language :: Python :: 2.7',
 	'Programming Language :: Python :: 3.3',
 	'Programming Language :: Python :: 3.4',
 	'Programming Language :: Python :: 3.5',
 	'Programming Language :: Python :: 3.6',
-	'Programming Language :: Python :: 3 :: Only',
+	'Topic :: Documentation',
 	'Topic :: Desktop Environment',
 	'Topic :: Education',
 	'Topic :: Games/Entertainment',
@@ -67,8 +69,11 @@ Classifiers = [
 	'Topic :: Multimedia :: Graphics',
 	'Topic :: Multimedia :: Graphics :: 3D Modeling',
 	'Topic :: Multimedia :: Graphics :: 3D Rendering',
+	'Topic :: Multimedia :: Video',
 	'Topic :: Scientific/Engineering :: Visualization',
 	'Topic :: Software Development',
+	'Topic :: Software Development :: Documentation',
+	'Topic :: Software Development :: Libraries :: Python Modules',
 	'Topic :: System :: Monitoring',
 	'Topic :: Utilities',
 ]
@@ -77,14 +82,33 @@ Keywords = [
 	'ModernGL',
 	'modern OpenGL',
 	'OpenGL',
+	'visualization',
+	'ray-tracing',
+	'compute shader',
+	'shader',
+	'documentation',
+	'documented',
+	'graphics',
+	'vulkan',
+	'GLSL',
+	'GPU',
+	'GPGPU',
+	'nvidia',
+	'cuda',
+	'amd',
 	'GL',
-	'GLEXT',
 	'GLU',
+	'GLEXT',
+	'WGL',
+	'WGLEXT',
 	'ARB',
+	'GLX',
 	'2D',
 	'3D',
-	'graphics',
-	'cad',
+	'CAD',
+	'glm',
+	'design',
+	'video',
 ]
 
 ModernGL = Extension(

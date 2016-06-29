@@ -1,3 +1,9 @@
+#ifdef _WIN64
+#ifndef MS_WIN64
+#define MS_WIN64
+#endif
+#endif
+
 #include "Python.h"
 
 #include "ModernGL.hpp"
@@ -3080,18 +3086,10 @@ static PyMethodDef methods[] = {
 	// {"DebugFontColor", DebugFontColor, METH_VARARGS, 0},
 	// {"DebugFontAlight", DebugFontAlight, METH_VARARGS, 0},
 	// {"DebugFontPrint", DebugFontPrint, METH_VARARGS, 0},
-	{0, 0},
+	{0, 0, 0, 0},
 };
 
-static struct PyModuleDef moduledef = {PyModuleDef_HEAD_INIT, "ModernGL", 0, -1, methods, 0, 0, 0, 0};
-
-extern "C" {
-	PyObject * PyInit_ModernGL();
-}
-
-PyObject * PyInit_ModernGL() {
-	PyObject * m = PyModule_Create(&moduledef);
-
+void DeclareConstants(PyObject * m) {
 	PyModule_AddIntConstant(m, "ENABLE_NOTHING", 0x00);
 	PyModule_AddIntConstant(m, "ENABLE_BLEND", 0x01);
 	PyModule_AddIntConstant(m, "ENABLE_CULL_FACE", 0x02);
@@ -3102,6 +3100,32 @@ PyObject * PyInit_ModernGL() {
 	
 	PyModule_AddStringConstant(m, "__AUTHOR_NAME__", "Szabolcs Dombi");
 	PyModule_AddStringConstant(m, "__AUTHOR_EMAIL__", "cprogrammer1994@gmail.com");
+}
 
+#if PY_MAJOR_VERSION >= 3
+
+static struct PyModuleDef moduledef = {PyModuleDef_HEAD_INIT, "ModernGL", 0, -1, methods, 0, 0, 0, 0};
+
+extern "C" {
+	PyObject * PyInit_ModernGL();
+}
+
+PyObject * PyInit_ModernGL() {
+	PyObject * m = PyModule_Create(&moduledef);
+	DeclareConstants(m);
 	return m;
 }
+
+#else
+
+extern "C" {
+	PyObject * initModernGL();
+}
+
+PyObject * initModernGL() {
+	PyObject * m = Py_InitModule("ModernGL", methods);
+	DeclareConstants(m);
+	return m;
+}
+
+#endif

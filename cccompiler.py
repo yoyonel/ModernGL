@@ -2,32 +2,29 @@ import os, sys, platform
 
 class CustomCCompiler:
 	def __init__(self, verbose = 0, dry_run = 0, force = 0):
+		self.pyver = '%d%d' % (sys.hexversion >> 24, (sys.hexversion >> 16) & 0xff)
 		self.comp = 'g++ -m%s' % platform.architecture()[0][:2]
 		self.compiler_type = None
 
 	def set_include_dirs(self, dirs):
-		print('set_include_dirs')
-		self.inc_dirs = dirs.copy()
+		self.inc_dirs = dirs[:]
 
 	def set_libraries(self, *args):
-		print('set_libraries')
+		pass
 
 	def set_library_dirs(self, *args):
-		print('set_library_dirs')
+		pass
 
 	def set_runtime_library_dirs(self, *args):
-		print('set_runtime_library_dirs')
+		pass
 
 	def compile(self, sources, *args, **kwargs):
-		print('compile')
-
 		output_dir = kwargs['output_dir']
 		if not os.path.isdir(output_dir):
 			os.makedirs(output_dir)
 
 		objects = []
 		for source in sources:
-			print(source)
 			output_base = os.path.basename(source)
 			output_name = os.path.splitext(output_base)[0]
 			output_filename = os.path.join(output_dir, output_name + '.o')
@@ -43,11 +40,9 @@ class CustomCCompiler:
 		return objects
 
 	def detect_language(self, *args):
-		print('detect_language')
+		pass
 		
 	def link_shared_object(self, objects, output_filename, *args, **kwargs):
-		print('link_shared_object')
-
 		output_dir = os.path.dirname(output_filename)
 		if not os.path.isdir(output_dir):
 			os.makedirs(output_dir)
@@ -69,12 +64,35 @@ class CustomCCompiler:
 		libs = ' '.join('-l%s' % lib for lib in kwargs['libraries'])
 		objs = ' '.join(objects)
 
-		dll = 'python%d%d.dll' % (sys.hexversion >> 24, (sys.hexversion >> 16) & 0xff)
-		pydll = os.path.join(os.path.dirname(sys.executable), dll)
+		dll = 'python%s.dll' % self.pyver
+		py = os.path.join(os.path.dirname(sys.executable), dll)
 
-		todo = '%s -shared -O2 %s %s %s %s -o %s' % (self.comp, def_filename, objs, libs, pydll, output_filename)
+		if not os.path.isfile(py):
+			lib = 'libs/libpython%s.a' % self.pyver
+			py = os.path.join(os.path.dirname(sys.executable), lib)
+
+		todo = '%s -shared -O2 %s %s %s %s -o %s' % (self.comp, def_filename, objs, libs, py, output_filename)
 		print(todo)
 
 		ret = os.system(todo)
 		if ret:
 			exit(ret)
+
+if 'CUSTOM_GCC' in os.environ:
+	try:
+		import distutils.msvc9compiler
+		distutils.msvc9compiler.MSVCCompiler = CustomCCompiler
+	except ImportError:
+		pass
+
+	try:
+		import distutils.msvccompiler
+		distutils.msvccompiler.MSVCCompiler = CustomCCompiler
+	except ImportError:
+		pass
+	
+	try:
+		import distutils._msvccompiler
+		distutils._msvccompiler.MSVCCompiler = CustomCCompiler
+	except ImportError:
+		pass
