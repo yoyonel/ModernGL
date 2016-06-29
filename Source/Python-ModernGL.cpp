@@ -3098,7 +3098,7 @@ PyObject * PyInit_ModernGL() {
 	PyModule_AddIntConstant(m, "ENABLE_DEPTH_TEST", 0x04);
 	PyModule_AddIntConstant(m, "ENABLE_MULTISAMPLE", 0x08);
 
-	PyModule_AddStringConstant(m, "VERSION", "2.0.9");
+	PyModule_AddStringConstant(m, "VERSION", "2.0.10");
 	
 	PyModule_AddStringConstant(m, "__AUTHOR_NAME__", "Szabolcs Dombi");
 	PyModule_AddStringConstant(m, "__AUTHOR_EMAIL__", "cprogrammer1994@gmail.com");
