@@ -352,7 +352,7 @@ PyObject * GetUniformLocation(PyObject * self, PyObject * args, PyObject * kwarg
 		return 0;
 	}
 
-	return CreateUniformLocationType(ModernGL::GetUniformLocation(program, name));
+	return CreateUniformLocationType(ModernGL::GetUniformLocation(program->program, name));
 }
 
 PyObject * GetUniformBlockLocation(PyObject * self, PyObject * args, PyObject * kwargs) {
