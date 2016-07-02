@@ -830,11 +830,11 @@ PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {
 
 PyObject * EnableAttribute(PyObject * self, PyObject * args, PyObject * kwargs) {
 	VertexArray * vao;
-	int target;
+	AttributeLocation * location;
 
 	static const char * kwlist[] = {"vao", "target", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi:EnableAttribute", (char **)kwlist, &vao, &target)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:EnableAttribute", (char **)kwlist, &vao, &location)) {
 		PyErr_SetString(ModuleError, "itneqllz");
 		return 0;
 	}
@@ -844,22 +844,32 @@ PyObject * EnableAttribute(PyObject * self, PyObject * args, PyObject * kwargs) 
 		return 0;
 	}
 
-	ModernGL::EnableAttribute(vao->vao, target);
+	if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::EnableAttribute(vao->vao, location->location);
 	Py_RETURN_NONE;
 }
 
 PyObject * DisableAttribute(PyObject * self, PyObject * args, PyObject * kwargs) {
 	VertexArray * vao;
-	int target;
+	AttributeLocation * location;
 
 	static const char * kwlist[] = {"vao", "target", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi:DisableAttribute", (char **)kwlist, &vao, &target)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:DisableAttribute", (char **)kwlist, &vao, &location)) {
 		PyErr_SetString(ModuleError, "rklhgpmo");
 		return 0;
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
 		PyErr_SetString(ModuleError, "caoypwbf");
 		return 0;
 	}
@@ -887,7 +897,14 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 	int size = (int)PyList_Size(attribs);
 	int * attrib_array = new int[size];
 	for (int i = 0; i < size; ++i) {
-		attrib_array[i] = PyLong_AsLong(PyList_GetItem(attribs, i));
+		AttributeLocation * location = (AttributeLocation *)PyList_GetItem(attribs, i);
+
+		if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
+			PyErr_SetString(ModuleError, "caoypwbf");
+			return 0;
+		}
+
+		attrib_array[i] = location->location;
 	}
 	ModernGL::EnableAttributes(vao->vao, attrib_array, size);
 	delete[] attrib_array;
