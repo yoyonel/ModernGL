@@ -28,8 +28,8 @@ class CustomCCompiler:
 			output_base = os.path.basename(source)
 			output_name = os.path.splitext(output_base)[0]
 			output_filename = os.path.join(output_dir, output_name + '.o')
-			incs = ' '.join('-I %s' % inc for inc in self.inc_dirs)
-			todo = '%s -c %s %s -o %s' % (self.comp, incs, source, output_filename)
+			incs = ' '.join('-I "%s"' % inc for inc in self.inc_dirs)
+			todo = '%s -c %s %s -o "%s"' % (self.comp, incs, source, output_filename)
 			print(todo)
 			ret = os.system(todo)
 			objects.append(output_filename)
@@ -62,7 +62,7 @@ class CustomCCompiler:
 		def_file.close()
 
 		libs = ' '.join('-l%s' % lib for lib in kwargs['libraries'])
-		objs = ' '.join(objects)
+		objs = ' '.join('"%s"' % obj for obj in objects)
 
 		dll = 'python%s.dll' % self.pyver
 		py = os.path.join(os.path.dirname(sys.executable), dll)
@@ -71,7 +71,7 @@ class CustomCCompiler:
 			lib = 'libs/libpython%s.a' % self.pyver
 			py = os.path.join(os.path.dirname(sys.executable), lib)
 
-		todo = '%s -shared -O2 %s %s %s %s -o %s' % (self.comp, def_filename, objs, libs, py, output_filename)
+		todo = '%s -shared -O2 %s %s %s "%s" -o "%s"' % (self.comp, def_filename, objs, libs, py, output_filename)
 		print(todo)
 
 		ret = os.system(todo)

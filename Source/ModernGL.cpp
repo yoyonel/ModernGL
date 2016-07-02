@@ -600,15 +600,15 @@ namespace ModernGL {
 		return compilerLog;
 	}
 
-	int AttributeLocation(int program, const char * name) {
+	int GetAttributeLocation(int program, const char * name) {
 		return OpenGL::glGetAttribLocation(program, name);
 	}
 
-	int UniformLocation(int program, const char * name) {
+	int GetUniformLocation(int program, const char * name) {
 		return OpenGL::glGetUniformLocation(program, name);
 	}
 
-	int UniformBlockLocation(int program, const char * name) {
+	int GetUniformBlockLocation(int program, const char * name) {
 		return OpenGL::glGetUniformBlockIndex(program, name);
 	}
 

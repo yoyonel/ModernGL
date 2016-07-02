@@ -62,9 +62,9 @@ namespace ModernGL {
 
 	extern const char * CompilerLog();
 
-	extern int AttributeLocation(int program, const char * name);
-	extern int UniformLocation(int program, const char * name);
-	extern int UniformBlockLocation(int program, const char * name);
+	extern int GetAttributeLocation(int program, const char * name);
+	extern int GetUniformLocation(int program, const char * name);
+	extern int GetUniformBlockLocation(int program, const char * name);
 
 	extern void Uniform1f(int location, float v0);
 	extern void Uniform2f(int location, float v0, float v1);
