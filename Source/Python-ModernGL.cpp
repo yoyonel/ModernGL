@@ -248,6 +248,11 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
+	if (!PyObject_TypeCheck((PyObject *)lst, &PyList_Type)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
 	int count = (int)PyList_Size(lst);
 	int * shader_array = new int[count];
 	for (int i = 0; i < count; ++i) {
@@ -874,7 +879,7 @@ PyObject * DisableAttribute(PyObject * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
-	ModernGL::DisableAttribute(vao->vao, target);
+	ModernGL::DisableAttribute(vao->vao, location->location);
 	Py_RETURN_NONE;
 }
 
@@ -890,6 +895,11 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	if (!PyObject_TypeCheck((PyObject *)attribs, &PyList_Type)) {
 		PyErr_SetString(ModuleError, "caoypwbf");
 		return 0;
 	}
@@ -927,10 +937,22 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 		return 0;
 	}
 
+	if (!PyObject_TypeCheck((PyObject *)attribs, &PyList_Type)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
 	int size = (int)PyList_Size(attribs);
 	int * attrib_array = new int[size];
 	for (int i = 0; i < size; ++i) {
-		attrib_array[i] = PyLong_AsLong(PyList_GetItem(attribs, i));
+		AttributeLocation * location = (AttributeLocation *)PyList_GetItem(attribs, i);
+
+		if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
+			PyErr_SetString(ModuleError, "caoypwbf");
+			return 0;
+		}
+
+		attrib_array[i] = location->location;
 	}
 	ModernGL::DisableAttributes(vao->vao, attrib_array, size);
 	delete[] attrib_array;
