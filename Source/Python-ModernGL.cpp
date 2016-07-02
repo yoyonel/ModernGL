@@ -371,7 +371,7 @@ PyObject * GetUniformBlockLocation(PyObject * self, PyObject * args, PyObject * 
 		return 0;
 	}
 
-	return CreateUniformBlockLocationType(ModernGL::GetUniformBlockLocation(program, name));
+	return CreateUniformBlockLocationType(ModernGL::GetUniformBlockLocation(program->program, name));
 }
 
 PyObject * Uniform1f(PyObject * self, PyObject * args) {
@@ -600,7 +600,7 @@ PyObject * UseUniformBlock(PyObject * self, PyObject * args, PyObject * kwargs) 
 		return 0;
 	}
 
-	ModernGL::UseUniformBlock(location, buffer);
+	ModernGL::UseUniformBlock(location->location, buffer);
 	Py_RETURN_NONE;
 }
 
