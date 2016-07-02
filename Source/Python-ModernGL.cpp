@@ -544,7 +544,10 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	// typetest list
+	if (!PyObject_TypeCheck((PyObject *)lst, &PyList_Type)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
 
 	float matrix[16];
 
@@ -571,7 +574,10 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	// typetest list
+	if (!PyObject_TypeCheck((PyObject *)lst, &PyList_Type)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
 
 	float matrix[16];
 
@@ -758,22 +764,49 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	const char * format;
 	PyObject * lst;
 
-	int indexBuffer = 0;
+	IndexBuffer * indexBuffer = 0;
 
-	if (!PyArg_ParseTuple(args, "sO|i:NewVertexArray", &format, &lst, &indexBuffer)) {
+	if (!PyArg_ParseTuple(args, "sO|O:NewVertexArray", &format, &lst, &indexBuffer)) {
 		PyErr_SetString(ModuleError, "hjzalkdw");
 		return 0;
+	}
+
+	if (!PyObject_TypeCheck((PyObject *)lst, &PyList_Type)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	if (indexBuffer) {
+		if (!PyObject_TypeCheck((PyObject *)indexBuffer, &IndexBufferType)) {
+			PyErr_SetString(ModuleError, "caoypwbf");
+			return 0;
+		}
 	}
 
 	int count = (int)PyList_Size(lst);
 	ModernGL::VertexBufferAndAttribute * attribs = new ModernGL::VertexBufferAndAttribute[count];
 	for (int i = 0; i < count; ++i) {
 		PyObject * tuple = PyList_GetItem(lst, i);
-		attribs[i].buffer = PyLong_AsLong(PyTuple_GetItem(tuple, 0));
-		attribs[i].attribute = PyLong_AsLong(PyTuple_GetItem(tuple, 1));
+
+		VertexBuffer * buffer = (VertexBuffer *)PyTuple_GetItem(tuple, 0);
+
+		if (!PyObject_TypeCheck((PyObject *)buffer, &VertexBufferType)) {
+			PyErr_SetString(ModuleError, "caoypwbf");
+			return 0;
+		}
+
+		AttributeLocation * location = (AttributeLocation *)PyTuple_GetItem(tuple, 1);
+
+		if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
+			PyErr_SetString(ModuleError, "caoypwbf");
+			return 0;
+		}
+
+		attribs[i].buffer = buffer->vbo;
+		attribs[i].attribute = location->location;
 	}
 
-	PyObject * result = PyLong_FromLong(ModernGL::NewVertexArray(format, attribs, indexBuffer));
+	PyObject * result = PyLong_FromLong(ModernGL::NewVertexArray(format, attribs, indexBuffer ? indexBuffer->ibo : 0));
 	delete[] attribs;
 	return result;
 }
@@ -871,7 +904,7 @@ PyObject * NewVertexBuffer(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	return PyLong_FromLong(ModernGL::NewVertexBuffer(data, size));
+	return CreateVertexBufferType(ModernGL::NewVertexBuffer(data, size));
 }
 
 PyObject * NewIndexBuffer(PyObject * self, PyObject * args) {
@@ -883,7 +916,7 @@ PyObject * NewIndexBuffer(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	return PyLong_FromLong(ModernGL::NewIndexBuffer(data, size));
+	return CreateIndexBufferType(ModernGL::NewIndexBuffer(data, size));
 }
 
 PyObject * NewUniformBuffer(PyObject * self, PyObject * args) {
@@ -895,7 +928,7 @@ PyObject * NewUniformBuffer(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	return PyLong_FromLong(ModernGL::NewUniformBuffer(data, size));
+	return CreateUniformBufferType(ModernGL::NewUniformBuffer(data, size));
 }
 
 PyObject * NewDynamicVertexBuffer(PyObject * self, PyObject * args) {
@@ -907,7 +940,7 @@ PyObject * NewDynamicVertexBuffer(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	return PyLong_FromLong(ModernGL::NewDynamicVertexBuffer(data, size));
+	return CreateVertexBufferType(ModernGL::NewDynamicVertexBuffer(data, size));
 }
 
 PyObject * NewDynamicIndexBuffer(PyObject * self, PyObject * args) {
@@ -919,7 +952,7 @@ PyObject * NewDynamicIndexBuffer(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	return PyLong_FromLong(ModernGL::NewDynamicIndexBuffer(data, size));
+	return CreateIndexBufferType(ModernGL::NewDynamicIndexBuffer(data, size));
 }
 
 PyObject * NewDynamicUniformBuffer(PyObject * self, PyObject * args) {
@@ -931,18 +964,57 @@ PyObject * NewDynamicUniformBuffer(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	return PyLong_FromLong(ModernGL::NewDynamicUniformBuffer(data, size));
+	return CreateUniformBufferType(ModernGL::NewDynamicUniformBuffer(data, size));
 }
 
-PyObject * DeleteBuffer(PyObject * self, PyObject * args) {
-	int buffer;
+PyObject * DeleteVertexBuffer(PyObject * self, PyObject * args) {
+	VertexBuffer * buffer;
 
-	if (!PyArg_ParseTuple(args, "i:DeleteBuffer", &buffer)) {
+	if (!PyArg_ParseTuple(args, "O:DeleteVertexBuffer", &buffer)) {
 		PyErr_SetString(ModuleError, "snpklqxa");
 		return 0;
 	}
 
-	ModernGL::DeleteBuffer(buffer);
+	if (!PyObject_TypeCheck((PyObject *)buffer, &VertexBufferType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::DeleteVertexBuffer(buffer->vbo);
+	Py_RETURN_NONE;
+}
+
+PyObject * DeleteIndexBuffer(PyObject * self, PyObject * args) {
+	IndexBuffer * buffer;
+
+	if (!PyArg_ParseTuple(args, "O:DeleteIndexBuffer", &buffer)) {
+		PyErr_SetString(ModuleError, "snpklqxa");
+		return 0;
+	}
+
+	if (!PyObject_TypeCheck((PyObject *)buffer, &IndexBufferType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::DeleteIndexBuffer(buffer->ibo);
+	Py_RETURN_NONE;
+}
+
+PyObject * DeleteUniformBuffer(PyObject * self, PyObject * args) {
+	UniformBuffer * buffer;
+
+	if (!PyArg_ParseTuple(args, "O:DeleteUniformBuffer", &buffer)) {
+		PyErr_SetString(ModuleError, "snpklqxa");
+		return 0;
+	}
+
+	if (!PyObject_TypeCheck((PyObject *)buffer, &UniformBufferType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::DeleteUniformBuffer(buffer->ubo);
 	Py_RETURN_NONE;
 }
 
@@ -2666,8 +2738,38 @@ static PyMethodDef methods[] = {
 		"\n"
 	},
 	{
-		"DeleteBuffer",
-		Dummy, // DeleteBuffer,
+		"DeleteVertexBuffer",
+		Dummy, // DeleteVertexBuffer,
+		METH_VARARGS,
+		""
+
+		"\n"
+		"Parameters:\n"
+		"\tbuffer (int) The index of any buffer object except the framebuffer object.\n"
+
+		"\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+	},
+	{
+		"DeleteIndexBuffer",
+		Dummy, // DeleteIndexBuffer,
+		METH_VARARGS,
+		""
+
+		"\n"
+		"Parameters:\n"
+		"\tbuffer (int) The index of any buffer object except the framebuffer object.\n"
+
+		"\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+	},
+	{
+		"DeleteUniformBuffer",
+		Dummy, // DeleteUniformBuffer,
 		METH_VARARGS,
 		""
 
@@ -3502,7 +3604,9 @@ void LoadImplementation() {
 		(PyCFunction)NewDynamicVertexBuffer,
 		(PyCFunction)NewDynamicIndexBuffer,
 		(PyCFunction)NewDynamicUniformBuffer,
-		(PyCFunction)DeleteBuffer,
+		(PyCFunction)DeleteVertexBuffer,
+		(PyCFunction)DeleteIndexBuffer,
+		(PyCFunction)DeleteUniformBuffer,
 		(PyCFunction)UpdateVertexBuffer,
 		(PyCFunction)UpdateIndexBuffer,
 		(PyCFunction)UpdateUniformBuffer,

@@ -865,7 +865,15 @@ namespace ModernGL {
 		return buffer;
 	}
 
-	void DeleteBuffer(int buffer) {
+	void DeleteVertexBuffer(int buffer) {
+		OpenGL::glDeleteBuffers(1, (OpenGL::GLuint *)&buffer);
+	}
+
+	void DeleteIndexBuffer(int buffer) {
+		OpenGL::glDeleteBuffers(1, (OpenGL::GLuint *)&buffer);
+	}
+
+	void DeleteUniformBuffer(int buffer) {
 		OpenGL::glDeleteBuffers(1, (OpenGL::GLuint *)&buffer);
 	}
 

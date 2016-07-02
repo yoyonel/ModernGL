@@ -104,7 +104,9 @@ namespace ModernGL {
 	extern int NewDynamicVertexBuffer(const void * data, int size);
 	extern int NewDynamicIndexBuffer(const void * data, int size);
 	extern int NewDynamicUniformBuffer(const void * data, int size);
-	extern void DeleteBuffer(int buffer);
+	extern void DeleteVertexBuffer(int buffer);
+	extern void DeleteIndexBuffer(int buffer);
+	extern void DeleteUniformBuffer(int buffer);
 
 	extern void UpdateVertexBuffer(int buffer, int offset, const void * data, int size);
 	extern void UpdateIndexBuffer(int buffer, int offset, const void * data, int size);

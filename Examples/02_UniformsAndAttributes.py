@@ -47,13 +47,13 @@ width, height = WND.GetSize()
 
 prog = GL.NewProgram([vert, frag])
 
-vert_idx = GL.AttributeLocation(prog, 'vert')
-color_idx = GL.AttributeLocation(prog, 'vert_color')
-rotation = GL.UniformLocation(prog, 'rotation')
-scale = GL.UniformLocation(prog, 'scale')
+vert_idx = GL.GetAttributeLocation(prog, 'vert')
+color_idx = GL.GetAttributeLocation(prog, 'vert_color')
+rotation = GL.GetUniformLocation(prog, 'rotation')
+scale = GL.GetUniformLocation(prog, 'scale')
 
 vbo = GL.NewVertexBuffer(struct.pack('15f', 1.0, 0.0, 1.0, 0.0, 0.0, -0.5, 0.86, 0.0, 1.0, 0.0, -0.5, -0.86, 0.0, 0.0, 1.0))
-vao = GL.NewVertexArray('2f3f', [(vbo, vert_idx), (vbo, color_idx)], vbo)
+vao = GL.NewVertexArray('2f3f', [(vbo, vert_idx), (vbo, color_idx)])
 
 GL.Uniform2f(scale, height / width * 0.75, 0.75)
 
