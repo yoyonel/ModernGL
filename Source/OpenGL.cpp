@@ -55,6 +55,10 @@ namespace OpenGL {
 			return false;
 		}
 
+		if (!WindowsGL::wglGetCurrentContext()) {
+			return false;
+		}
+
 		if (!LoadCoreOpenGLFunctions()) {
 			return false;
 		}
@@ -134,6 +138,7 @@ namespace OpenGL {
 		glGetUniformBlockIndex = (PROC_glGetUniformBlockIndex)GetOpenGLFunction("glGetUniformBlockIndex");
 		glBindImageTexture = (PROC_glBindImageTexture)GetOpenGLFunction("glBindImageTexture");
 		glDispatchCompute = (PROC_glDispatchCompute)GetOpenGLFunction("glDispatchCompute");
+		glGetBufferParameteriv = (PROC_glGetBufferParameteriv)GetOpenGLFunction("glGetBufferParameteriv");
 
 		return true;
 	}
@@ -422,6 +427,10 @@ namespace OpenGL {
 		return glDispatchCompute != 0;
 	}
 
+	bool __stdcall isglGetBufferParameteriv() {
+		return glGetBufferParameteriv != 0;
+	}
+
 	PROC_glLineWidth glLineWidth;
 	PROC_glPointSize glPointSize;
 	PROC_glTexParameteri glTexParameteri;
@@ -493,5 +502,6 @@ namespace OpenGL {
 	PROC_glGetUniformBlockIndex glGetUniformBlockIndex;
 	PROC_glBindImageTexture glBindImageTexture;
 	PROC_glDispatchCompute glDispatchCompute;
+	PROC_glGetBufferParameteriv glGetBufferParameteriv;
 
 }

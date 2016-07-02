@@ -29,7 +29,7 @@ namespace ModernGL {
 		int attribute;
 	};
 
-	extern bool InitializeModernGL(bool font = true);
+	extern bool InitializeModernGL();
 	
 	extern const char * GetError();
 	extern Info GetInfo();
@@ -77,7 +77,7 @@ namespace ModernGL {
 
 	extern void UniformMatrix(int location, const float * matrix);
 	extern void UniformTransposeMatrix(int location, const float * matrix);
-	extern void UniformBlock(int location, int buffer);
+	extern void UseUniformBlock(int location, int buffer);
 
 	extern int NewTexture(int width, int height, const void * data, int components = 3);
 	extern void DeleteTexture(int texture);
@@ -137,6 +137,7 @@ namespace ModernGL {
 	extern Framebuffer NewFramebuffer(int width, int height);
 	extern void DeleteFramebuffer(int framebuffer);
 	extern void UseFramebuffer(int framebuffer);
+	extern void GetDefaultFramebuffer();
 	extern void UseDefaultFramebuffer();
 	
 	extern unsigned char * ReadPixels(int x, int y, int width, int height, int components = 3);

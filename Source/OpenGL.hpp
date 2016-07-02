@@ -43,6 +43,7 @@ namespace OpenGL {
 	const GLenum GL_DEPTH_TEST                         = 0x0B71;
 	const GLenum GL_VIEWPORT                           = 0x0BA2;
 	const GLenum GL_BLEND                              = 0x0BE2;
+	const GLenum GL_BUFFER_SIZE                        = 0x8764;
 	const GLenum GL_TEXTURE_2D                         = 0x0DE1;
 	const GLenum GL_UNSIGNED_BYTE                      = 0x1401;
 	const GLenum GL_INT                                = 0x1404;
@@ -181,6 +182,8 @@ namespace OpenGL {
 	typedef GLuint (__stdcall * PROC_glGetUniformBlockIndex)(GLuint program, const GLchar * uniformBlockName);
 	typedef GLvoid (__stdcall * PROC_glBindImageTexture)(GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format);
 	typedef GLvoid (__stdcall * PROC_glDispatchCompute)(GLuint num_groups_x, GLuint num_groups_y, GLuint num_groups_z);
+	typedef GLvoid (__stdcall * PROC_glGetBufferParameteriv)(GLenum target, GLenum pname, GLint * params);
+
 	
 	extern PROC_glLineWidth glLineWidth;
 	extern PROC_glPointSize glPointSize;
@@ -253,6 +256,7 @@ namespace OpenGL {
 	extern PROC_glGetUniformBlockIndex glGetUniformBlockIndex;
 	extern PROC_glBindImageTexture glBindImageTexture;
 	extern PROC_glDispatchCompute glDispatchCompute;
+	extern PROC_glGetBufferParameteriv glGetBufferParameteriv;
 
 	extern bool __stdcall isglLineWidth();
 	extern bool __stdcall isglPointSize();
@@ -325,5 +329,6 @@ namespace OpenGL {
 	extern bool __stdcall isglGetUniformBlockIndex();
 	extern bool __stdcall isglBindImageTexture();
 	extern bool __stdcall isglDispatchCompute();
+	extern bool __stdcall isglGetBufferParameteriv();
 
 }

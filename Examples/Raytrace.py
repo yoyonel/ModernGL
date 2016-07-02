@@ -92,6 +92,8 @@ vao = GL.NewVertexArray('2f', [(vbo, GL.AttributeLocation(prog, 'vert'))], vbo)
 ssbo = GL.NewStorageBuffer(open('Data/Raytrace-scene.dat', 'rb').read())
 GL.UseStorageBuffer(ssbo, 1)
 
+print(GL.ReadStorageBuffer(ssbo, 0, 0))
+
 x, y = 0.0, 0.0
 
 while WND.Update():

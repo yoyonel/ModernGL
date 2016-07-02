@@ -8,17 +8,31 @@
 
 #include "ModernGL.hpp"
 
-PyObject * InitializeModernGL(PyObject * self, PyObject * args) {
-	bool font = true;
-	if (!PyArg_ParseTuple(args, "|p:InitializeModernGL", &font)) {
+namespace {
+	PyObject * ModuleError;
+	bool initialized = false;
+}
+
+PyObject * InitializeModernGL(PyObject * self, PyObject * args);
+
+PyObject * ExtensionActive(PyObject * self, PyObject * args) {
+	if (!PyArg_ParseTuple(args, ":ExtensionActive")) {
 		return 0;
 	}
-	
-	if (ModernGL::InitializeModernGL(font)) {
+
+	if (ModernGL::ExtensionActive()) {
 		Py_RETURN_TRUE;
 	} else {
 		Py_RETURN_FALSE;
 	}
+}
+
+PyObject * GetError(PyObject * self, PyObject * args) {
+	if (!PyArg_ParseTuple(args, ":GetError")) {
+		return 0;
+	}
+
+	return PyUnicode_FromString(ModernGL::GetError());
 }
 
 PyObject * GetInfo(PyObject * self, PyObject * args) {
@@ -30,35 +44,31 @@ PyObject * GetInfo(PyObject * self, PyObject * args) {
 	return Py_BuildValue("iiiss", info.major, info.minor, info.samples, info.vendor, info.renderer);
 }
 
-PyObject * GetError(PyObject * self, PyObject * args) {
-	if (!PyArg_ParseTuple(args, ":GetError")) {
-		return 0;
-	}
-
-	return PyUnicode_FromString(ModernGL::GetError());
-}
-
-PyObject * Viewport(PyObject * self, PyObject * args) {
+PyObject * Viewport(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int x;
 	int y;
-	int w;
-	int h;
+	int width;
+	int height;
 
-	if (!PyArg_ParseTuple(args, "iiii:Viewport", &x, &y, &w, &h)) {
+	static char * kwlist[] = {"x", "y", "width", "height", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii:Viewport", kwlist, &x, &y, &width, &height)) {
 		return 0;
 	}
 
-	ModernGL::Viewport(x, y, w, h);
+	ModernGL::Viewport(x, y, width, height);
 	Py_RETURN_NONE;
 }
 
-PyObject * Clear(PyObject * self, PyObject * args) {
+PyObject * Clear(PyObject * self, PyObject * args, PyObject * kwargs) {
 	unsigned char r = 0;
 	unsigned char g = 0;
 	unsigned char b = 0;
 	unsigned char a = 255;
 
-	if (!PyArg_ParseTuple(args, "|bbbb:Clear", &r, &g, &b, &a)) {
+	static char * kwlist[] = {"r", "g", "b", "a", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|bbbb:Clear", kwlist, &r, &g, &b, &a)) {
 		return 0;
 	}
 
@@ -269,33 +279,39 @@ PyObject * CompilerLog(PyObject * self, PyObject * args) {
 	return PyUnicode_FromString(ModernGL::CompilerLog());
 }
 
-PyObject * AttributeLocation(PyObject * self, PyObject * args) {
+PyObject * AttributeLocation(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int program;
 	const char * name;
 
-	if (!PyArg_ParseTuple(args, "is:AttributeLocation", &program, &name)) {
+	static char * kwlist[] = {"program", "name", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "is:AttributeLocation", kwlist, &program, &name)) {
 		return 0;
 	}
 
 	return PyLong_FromLong(ModernGL::AttributeLocation(program, name));
 }
 
-PyObject * UniformLocation(PyObject * self, PyObject * args) {
+PyObject * UniformLocation(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int program;
 	const char * name;
 
-	if (!PyArg_ParseTuple(args, "is:UniformLocation", &program, &name)) {
+	static char * kwlist[] = {"program", "name", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "is:UniformLocation", kwlist, &program, &name)) {
 		return 0;
 	}
 
 	return PyLong_FromLong(ModernGL::UniformLocation(program, name));
 }
 
-PyObject * UniformBlockLocation(PyObject * self, PyObject * args) {
+PyObject * UniformBlockLocation(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int program;
 	const char * name;
 
-	if (!PyArg_ParseTuple(args, "is:UniformBlockLocation", &program, &name)) {
+	static char * kwlist[] = {"program", "name", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "is:UniformBlockLocation", kwlist, &program, &name)) {
 		return 0;
 	}
 
@@ -448,26 +464,30 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * UniformBlock(PyObject * self, PyObject * args) {
+PyObject * UseUniformBlock(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int location;
 	int buffer;
 
-	if (!PyArg_ParseTuple(args, "ii:UniformBlock", &location, &buffer)) {
+	static char * kwlist[] = {"location", "buffer", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii:UseUniformBlock", kwlist, &location, &buffer)) {
 		return 0;
 	}
 
-	ModernGL::UniformBlock(location, buffer);
+	ModernGL::UseUniformBlock(location, buffer);
 	Py_RETURN_NONE;
 }
 
-PyObject * NewTexture(PyObject * self, PyObject * args) {
+PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int width;
 	int height;
 	const void * data;
 	int components = 3;
 	int size;
 
-	if (!PyArg_ParseTuple(args, "iiy#|i:NewTexture", &width, &height, &data, &size, &components)) {
+	static char * kwlist[] = {"width", "height", "data", "components", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiy#|i:NewTexture", kwlist, &width, &height, &data, &size, &components)) {
 		return 0;
 	}
 
@@ -485,7 +505,7 @@ PyObject * DeleteTexture(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * UpdateTexture(PyObject * self, PyObject * args) {
+PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int texture;
 	int x;
 	int y;
@@ -495,7 +515,9 @@ PyObject * UpdateTexture(PyObject * self, PyObject * args) {
 	int components = 3;
 	int size;
 
-	if (!PyArg_ParseTuple(args, "iiiiiy#|i:UpdateTexture", &texture, &x, &y, &width, &height, &data, &size, &components)) {
+	static char * kwlist[] = {"texture", "x", "y", "width", "height", "data", "components", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiiiiy#|i:UpdateTexture", kwlist, &texture, &x, &y, &width, &height, &data, &size, &components)) {
 		return 0;
 	}
 
@@ -548,12 +570,14 @@ PyObject * SetTextureMipmapped(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * BuildMipmap(PyObject * self, PyObject * args) {
+PyObject * BuildMipmap(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int texture;
 	int base = 0;
 	int max = 1000;
 
-	if (!PyArg_ParseTuple(args, "i|ii:BuildMipmap", &texture, &base, &max)) {
+	static char * kwlist[] = {"texture", "base", "max", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i|ii:BuildMipmap", kwlist, &texture, &base, &max)) {
 		return 0;
 	}
 
@@ -595,11 +619,13 @@ PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * EnableAttribute(PyObject * self, PyObject * args) {
+PyObject * EnableAttribute(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int target;
 
-	if (!PyArg_ParseTuple(args, "ii:EnableAttribute", &vao, &target)) {
+	static char * kwlist[] = {"vao", "target", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii:EnableAttribute", kwlist, &vao, &target)) {
 		return 0;
 	}
 
@@ -607,11 +633,13 @@ PyObject * EnableAttribute(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * DisableAttribute(PyObject * self, PyObject * args) {
+PyObject * DisableAttribute(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int target;
 
-	if (!PyArg_ParseTuple(args, "ii:DisableAttribute", &vao, &target)) {
+	static char * kwlist[] = {"vao", "target", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii:DisableAttribute", kwlist, &vao, &target)) {
 		return 0;
 	}
 
@@ -619,11 +647,13 @@ PyObject * DisableAttribute(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * EnableAttributes(PyObject * self, PyObject * args) {
+PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	PyObject * attribs;
 
-	if (!PyArg_ParseTuple(args, "iO:EnableAttributes", &vao, &attribs)) {
+	static char * kwlist[] = {"vao", "targets", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iO:EnableAttributes", kwlist, &vao, &attribs)) {
 		return 0;
 	}
 
@@ -637,11 +667,13 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * DisableAttributes(PyObject * self, PyObject * args) {
+PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	PyObject * attribs;
 
-	if (!PyArg_ParseTuple(args, "iO:DisableAttributes", &vao, &attribs)) {
+	static char * kwlist[] = {"vao", "targets", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iO:DisableAttributes", kwlist, &vao, &attribs)) {
 		return 0;
 	}
 
@@ -732,13 +764,15 @@ PyObject * DeleteBuffer(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * UpdateVertexBuffer(PyObject * self, PyObject * args) {
+PyObject * UpdateVertexBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int buffer;
 	int offset;
 	const void * data;
 	int size;
 
-	if (!PyArg_ParseTuple(args, "iiy#:UpdateVertexBuffer", &buffer, &offset, &data, &size)) {
+	static char * kwlist[] = {"buffer", "offset", "data", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiy#:UpdateVertexBuffer", kwlist, &buffer, &offset, &data, &size)) {
 		return 0;
 	}
 
@@ -746,13 +780,15 @@ PyObject * UpdateVertexBuffer(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * UpdateIndexBuffer(PyObject * self, PyObject * args) {
+PyObject * UpdateIndexBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int buffer;
 	int offset;
 	const void * data;
 	int size;
 
-	if (!PyArg_ParseTuple(args, "iiy#:UpdateIndexBuffer", &buffer, &offset, &data, &size)) {
+	static char * kwlist[] = {"buffer", "offset", "data", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiy#:UpdateIndexBuffer", kwlist, &buffer, &offset, &data, &size)) {
 		return 0;
 	}
 
@@ -760,13 +796,15 @@ PyObject * UpdateIndexBuffer(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * UpdateUniformBuffer(PyObject * self, PyObject * args) {
+PyObject * UpdateUniformBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int buffer;
 	int offset;
 	const void * data;
 	int size;
 
-	if (!PyArg_ParseTuple(args, "iiy#:UpdateUniformBuffer", &buffer, &offset, &data, &size)) {
+	static char * kwlist[] = {"buffer", "offset", "data", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiy#:UpdateUniformBuffer", kwlist, &buffer, &offset, &data, &size)) {
 		return 0;
 	}
 
@@ -774,13 +812,15 @@ PyObject * UpdateUniformBuffer(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderTriangles(PyObject * self, PyObject * args) {
+PyObject * RenderTriangles(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderTriangles", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderTriangles", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -788,13 +828,15 @@ PyObject * RenderTriangles(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderTriangleStrip(PyObject * self, PyObject * args) {
+PyObject * RenderTriangleStrip(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderTriangleStrip", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderTriangleStrip", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -802,13 +844,15 @@ PyObject * RenderTriangleStrip(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderTriangleFan(PyObject * self, PyObject * args) {
+PyObject * RenderTriangleFan(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderTriangleFan", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderTriangleFan", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -816,13 +860,15 @@ PyObject * RenderTriangleFan(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderLines(PyObject * self, PyObject * args) {
+PyObject * RenderLines(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderLines", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderLines", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -830,13 +876,15 @@ PyObject * RenderLines(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderLineStrip(PyObject * self, PyObject * args) {
+PyObject * RenderLineStrip(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderLineStrip", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderLineStrip", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -844,13 +892,15 @@ PyObject * RenderLineStrip(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderLineLoop(PyObject * self, PyObject * args) {
+PyObject * RenderLineLoop(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderLineLoop", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderLineLoop", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -858,13 +908,15 @@ PyObject * RenderLineLoop(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderPoints(PyObject * self, PyObject * args) {
+PyObject * RenderPoints(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderPoints", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderPoints", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -872,13 +924,15 @@ PyObject * RenderPoints(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderLineStripAdjacency(PyObject * self, PyObject * args) {
+PyObject * RenderLineStripAdjacency(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderLineStripAdjacency", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderLineStripAdjacency", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -886,13 +940,15 @@ PyObject * RenderLineStripAdjacency(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderLinesAdjacency(PyObject * self, PyObject * args) {
+PyObject * RenderLinesAdjacency(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderLinesAdjacency", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderLinesAdjacency", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -900,13 +956,15 @@ PyObject * RenderLinesAdjacency(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderTriangleStripAdjacency(PyObject * self, PyObject * args) {
+PyObject * RenderTriangleStripAdjacency(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderTriangleStripAdjacency", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderTriangleStripAdjacency", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -914,13 +972,15 @@ PyObject * RenderTriangleStripAdjacency(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args) {
+PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderTrianglesAdjacency", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderTrianglesAdjacency", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -928,13 +988,15 @@ PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderIndexedTriangles(PyObject * self, PyObject * args) {
+PyObject * RenderIndexedTriangles(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedTriangles", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderIndexedTriangles", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -942,13 +1004,15 @@ PyObject * RenderIndexedTriangles(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderIndexedTriangleStrip(PyObject * self, PyObject * args) {
+PyObject * RenderIndexedTriangleStrip(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedTriangleStrip", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderIndexedTriangleStrip", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -956,13 +1020,15 @@ PyObject * RenderIndexedTriangleStrip(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderIndexedTriangleFan(PyObject * self, PyObject * args) {
+PyObject * RenderIndexedTriangleFan(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedTriangleFan", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderIndexedTriangleFan", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -970,13 +1036,15 @@ PyObject * RenderIndexedTriangleFan(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderIndexedLines(PyObject * self, PyObject * args) {
+PyObject * RenderIndexedLines(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedLines", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderIndexedLines", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -984,13 +1052,15 @@ PyObject * RenderIndexedLines(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderIndexedLineStrip(PyObject * self, PyObject * args) {
+PyObject * RenderIndexedLineStrip(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedLineStrip", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderIndexedLineStrip", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -998,13 +1068,15 @@ PyObject * RenderIndexedLineStrip(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderIndexedLineLoop(PyObject * self, PyObject * args) {
+PyObject * RenderIndexedLineLoop(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedLineLoop", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderIndexedLineLoop", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -1012,13 +1084,15 @@ PyObject * RenderIndexedLineLoop(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderIndexedPoints(PyObject * self, PyObject * args) {
+PyObject * RenderIndexedPoints(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedPoints", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderIndexedPoints", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -1026,13 +1100,15 @@ PyObject * RenderIndexedPoints(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderIndexedLineStripAdjacency(PyObject * self, PyObject * args) {
+PyObject * RenderIndexedLineStripAdjacency(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedLineStripAdjacency", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderIndexedLineStripAdjacency", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -1040,13 +1116,15 @@ PyObject * RenderIndexedLineStripAdjacency(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderIndexedLinesAdjacency(PyObject * self, PyObject * args) {
+PyObject * RenderIndexedLinesAdjacency(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedLinesAdjacency", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderIndexedLinesAdjacency", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -1054,13 +1132,15 @@ PyObject * RenderIndexedLinesAdjacency(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderIndexedTriangleStripAdjacency(PyObject * self, PyObject * args) {
+PyObject * RenderIndexedTriangleStripAdjacency(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedTriangleStripAdjacency", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderIndexedTriangleStripAdjacency", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -1068,13 +1148,15 @@ PyObject * RenderIndexedTriangleStripAdjacency(PyObject * self, PyObject * args)
 	Py_RETURN_NONE;
 }
 
-PyObject * RenderIndexedTrianglesAdjacency(PyObject * self, PyObject * args) {
+PyObject * RenderIndexedTrianglesAdjacency(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int vao;
 	int count;
 	int first = 0;
 	int instances = 1;
 
-	if (!PyArg_ParseTuple(args, "ii|ii:RenderIndexedTrianglesAdjacency", &vao, &count, &first, &instances)) {
+	static char * kwlist[] = {"vao", "count", "first", "instances", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ii:RenderIndexedTrianglesAdjacency", kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -1082,11 +1164,13 @@ PyObject * RenderIndexedTrianglesAdjacency(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * NewFramebuffer(PyObject * self, PyObject * args) {
+PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int width = 0;
 	int height = 0;
 
-	if (!PyArg_ParseTuple(args, "|ii:NewFramebuffer", &width, &height)) {
+	static char * kwlist[] = {"width", "height", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|ii:NewFramebuffer", kwlist, &width, &height)) {
 		return 0;
 	}
 
@@ -1116,6 +1200,15 @@ PyObject * UseFramebuffer(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
+PyObject * GetDefaultFramebuffer(PyObject * self, PyObject * args) {
+	if (!PyArg_ParseTuple(args, ":GetDefaultFramebuffer")) {
+		return 0;
+	}
+
+	ModernGL::GetDefaultFramebuffer();
+	Py_RETURN_NONE;
+}
+
 PyObject * UseDefaultFramebuffer(PyObject * self, PyObject * args) {
 	if (!PyArg_ParseTuple(args, ":UseDefaultFramebuffer")) {
 		return 0;
@@ -1125,14 +1218,16 @@ PyObject * UseDefaultFramebuffer(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * ReadPixels(PyObject * self, PyObject * args) {
+PyObject * ReadPixels(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int x;
 	int y;
 	int width;
 	int height;
 	int components = 3;
 
-	if (!PyArg_ParseTuple(args, "iiii|i:ReadPixels", &x, &y, &width, &height, &components)) {
+	static char * kwlist[] = {"x", "y", "width", "height", "components", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii|i:ReadPixels", kwlist, &x, &y, &width, &height, &components)) {
 		return 0;
 	}
 
@@ -1144,13 +1239,15 @@ PyObject * ReadPixels(PyObject * self, PyObject * args) {
 	return data;
 }
 
-PyObject * ReadDepthPixels(PyObject * self, PyObject * args) {
+PyObject * ReadDepthPixels(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int x;
 	int y;
 	int width;
 	int height;
 
-	if (!PyArg_ParseTuple(args, "iiii:ReadDepthPixels", &x, &y, &width, &height)) {
+	static char * kwlist[] = {"x", "y", "width", "height", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii:ReadDepthPixels", kwlist, &x, &y, &width, &height)) {
 		return 0;
 	}
 
@@ -1162,48 +1259,40 @@ PyObject * ReadDepthPixels(PyObject * self, PyObject * args) {
 	return data;
 }
 
-PyObject * ReadPixel(PyObject * self, PyObject * args) {
+PyObject * ReadPixel(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int x;
 	int y;
 
-	if (!PyArg_ParseTuple(args, "ii:ReadPixel", &x, &y)) {
+	static char * kwlist[] = {"x", "y", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii:ReadPixel", kwlist, &x, &y)) {
 		return 0;
 	}
 
 	return PyLong_FromUnsignedLong(ModernGL::ReadPixel(x, y));
 }
 
-PyObject * ReadDepthPixel(PyObject * self, PyObject * args) {
+PyObject * ReadDepthPixel(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int x;
 	int y;
 
-	if (!PyArg_ParseTuple(args, "ii:ReadDepthPixel", &x, &y)) {
+	static char * kwlist[] = {"x", "y", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii:ReadDepthPixel", kwlist, &x, &y)) {
 		return 0;
 	}
 
 	return PyFloat_FromDouble(ModernGL::ReadDepthPixel(x, y));
 }
 
-// Extension
-
-PyObject * ExtensionActive(PyObject * self, PyObject * args) {
-	if (!PyArg_ParseTuple(args, ":ExtensionActive")) {
-		return 0;
-	}
-
-	if (ModernGL::ExtensionActive()) {
-		Py_RETURN_TRUE;
-	} else {
-		Py_RETURN_FALSE;
-	}
-}
-
-PyObject * UseTextureAsImage(PyObject * self, PyObject * args) {
+PyObject * UseTextureAsImage(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int texture;
 	int binding = 0;
 	int components = 3;
 
-	if (!PyArg_ParseTuple(args, "i|ii:UseTextureAsImage", &texture, &binding, &components)) {
+	static char * kwlist[] = {"texture", "binding", "components", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i|ii:UseTextureAsImage", kwlist, &texture, &binding, &components)) {
 		return 0;
 	}
 
@@ -1252,13 +1341,15 @@ PyObject * DeleteComputeShader(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RunComputeShader(PyObject * self, PyObject * args) {
+PyObject * RunComputeShader(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int program;
 	int x = 1;
 	int y = 1;
 	int z = 1;
 
-	if (!PyArg_ParseTuple(args, "i|iii:RunComputeShader", &program, &x, &y, &z)) {
+	static char * kwlist[] = {"program", "x", "y", "z", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i|iii:RunComputeShader", kwlist, &program, &x, &y, &z)) {
 		return 0;
 	}
 
@@ -1288,13 +1379,15 @@ PyObject * NewDynamicStorageBuffer(PyObject * self, PyObject * args) {
 	return PyLong_FromLong(ModernGL::NewDynamicStorageBuffer(data, size));
 }
 
-PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args) {
+PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int buffer;
 	int offset;
 	const void * data;
 	int size;
 
-	if (!PyArg_ParseTuple(args, "iiy#:UpdateStorageBuffer", &buffer, &offset, &data, &size)) {
+	static char * kwlist[] = {"buffer", "offset", "data", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiy#:UpdateStorageBuffer", kwlist, &buffer, &offset, &data, &size)) {
 		return 0;
 	}
 
@@ -1302,11 +1395,13 @@ PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * UseStorageBuffer(PyObject * self, PyObject * args) {
+PyObject * UseStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int buffer;
 	int binding = 0;
 
-	if (!PyArg_ParseTuple(args, "i|i:UseStorageBuffer", &buffer, &binding)) {
+	static char * kwlist[] = {"buffer", "binding", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i|i:UseStorageBuffer", kwlist, &buffer, &binding)) {
 		return 0;
 	}
 
@@ -1314,12 +1409,14 @@ PyObject * UseStorageBuffer(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * ReadStorageBuffer(PyObject * self, PyObject * args) {
+PyObject * ReadStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int buffer;
 	int offset;
 	int size;
 
-	if (!PyArg_ParseTuple(args, "iii:ReadStorageBuffer", &buffer, &offset, &size)) {
+	static char * kwlist[] = {"buffer", "offset", "size", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iii:ReadStorageBuffer", kwlist, &buffer, &offset, &size)) {
 		return 0;
 	}
 
@@ -1334,6 +1431,20 @@ PyObject * ReadStorageBuffer(PyObject * self, PyObject * args) {
 	return data;
 }
 
+PyObject * Dummy(PyObject * self, PyObject * args) {
+	PyErr_SetString(ModuleError, "Module not initialized.\n\nCall InitializeModernGL() first.\n\n");
+	return 0;
+}
+
+PyObject * DummyExtension(PyObject * self, PyObject * args) {
+	if (initialized) {
+		PyErr_SetString(ModuleError, "Extension not initialized.\n\nCall ExtensionActive() to test the full extension support.\n\n");
+	} else {
+		PyErr_SetString(ModuleError, "Module not initialized.\n\nCall InitializeModernGL() first.\n\n");
+	}
+	return 0;
+}
+
 static PyMethodDef methods[] = {
 	{
 		"InitializeModernGL",
@@ -1344,7 +1455,7 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tfont: (bool) Load a better than nothing font. By default is True\n"
+		"\tNone\n"
 
 		"\n"
 		"Returns:\n"
@@ -1352,10 +1463,11 @@ static PyMethodDef methods[] = {
 		"\n"
 	},
 	{
-		"GetInfo",
-		GetInfo,
+		"ExtensionActive",
+		ExtensionActive,
 		METH_VARARGS,
-		"Get information about the OpenGL context.\n"
+		"Check for full ModernGL support.\n"
+		"The initialization of the extensions are not affected by this method.\n"
 
 		"\n"
 		"Parameters:\n"
@@ -1363,12 +1475,7 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Returns:\n"
-		// "\tinfo (tuple) Information about the OpenGL context.\n"
-		"\tmajor (int) The major OpenGL version.\n"
-		"\tminor (int) The minor OpenGL version.\n"
-		"\tsamples (int) The samples supported by the default framebuffer.\n"
-		"\tvendor (int) The vendor.\n"
-		"\trenderer (int) The renderer.\n"
+		"\tactive (bool) True on supported extensions, False otherwise.\n"
 		"\n"
 	},
 	{
@@ -1386,10 +1493,30 @@ static PyMethodDef methods[] = {
 		"\terror (str) The reason, why the InitializeModernGL failed.\n"
 		"\n"
 	},
+
+	{
+		"GetInfo",
+		Dummy, // GetInfo,
+		METH_VARARGS,
+		"Get information about the OpenGL context.\n"
+
+		"\n"
+		"Parameters:\n"
+		"\tNone\n"
+
+		"\n"
+		"Returns:\n"
+		"\tmajor (int) The major OpenGL version.\n"
+		"\tminor (int) The minor OpenGL version.\n"
+		"\tsamples (int) The samples supported by the default framebuffer.\n"
+		"\tvendor (int) The vendor.\n"
+		"\trenderer (int) The renderer.\n"
+		"\n"
+	},
 	{
 		"Viewport",
-		Viewport,
-		METH_VARARGS,
+		Dummy, // Viewport,
+		METH_VARARGS | METH_KEYWORDS,
 		"Set the viewport for rendering.\n"
 
 		"\n"
@@ -1406,8 +1533,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Clear",
-		Clear,
-		METH_VARARGS,
+		Dummy, // Clear,
+		METH_VARARGS | METH_KEYWORDS,
 		"Clear the viewport with the specified colors.\n"
 		"Also clears the depth attachments.\n"
 
@@ -1425,7 +1552,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"PointSize",
-		PointSize,
+		Dummy, // PointSize,
 		METH_VARARGS,
 		"Set the size of the point primitive.\n"
 
@@ -1440,7 +1567,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"LineSize",
-		LineSize,
+		Dummy, // LineSize,
 		METH_VARARGS,
 		"Set the with of the line primitive.\n"
 
@@ -1455,7 +1582,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"EnableOnly",
-		EnableOnly,
+		Dummy, // EnableOnly,
 		METH_VARARGS,
 		"Enables only the specified flags.\n"
 		"The enable flags are: ENABLE_NOTHING, ENABLE_BLEND, ENABLE_DEPTH_TEST, ENABLE_CULL_FACE and ENABLE_MULTISAMPLE.\n"
@@ -1471,7 +1598,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"EnableBlend",
-		EnableBlend,
+		Dummy, // EnableBlend,
 		METH_VARARGS,
 		"Enable blending.\n"
 
@@ -1486,7 +1613,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DisableBlend",
-		DisableBlend,
+		Dummy, // DisableBlend,
 		METH_VARARGS,
 		"Disable blending.\n"
 
@@ -1501,7 +1628,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"EnableCullFace",
-		EnableCullFace,
+		Dummy, // EnableCullFace,
 		METH_VARARGS,
 		"Enable face culling.\n"
 
@@ -1516,7 +1643,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DisableCullFace",
-		DisableCullFace,
+		Dummy, // DisableCullFace,
 		METH_VARARGS,
 		"Disable face culling.\n"
 
@@ -1531,7 +1658,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"EnableDepthTest",
-		EnableDepthTest,
+		Dummy, // EnableDepthTest,
 		METH_VARARGS,
 		"Enable depth testing.\n"
 
@@ -1546,7 +1673,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DisableDepthTest",
-		DisableDepthTest,
+		Dummy, // DisableDepthTest,
 		METH_VARARGS,
 		"Disable depth testing.\n"
 
@@ -1561,7 +1688,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"EnableMultisample",
-		EnableMultisample,
+		Dummy, // EnableMultisample,
 		METH_VARARGS,
 		"Enable multisampling.\n"
 
@@ -1576,7 +1703,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DisableMultisample",
-		DisableMultisample,
+		Dummy, // DisableMultisample,
 		METH_VARARGS,
 		"Disable multisampling.\n"
 
@@ -1591,7 +1718,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewVertexShader",
-		NewVertexShader,
+		Dummy, // NewVertexShader,
 		METH_VARARGS,
 		""
 
@@ -1606,7 +1733,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewFragmentShader",
-		NewFragmentShader,
+		Dummy, // NewFragmentShader,
 		METH_VARARGS,
 		""
 
@@ -1621,7 +1748,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewGeometryShader",
-		NewGeometryShader,
+		Dummy, // NewGeometryShader,
 		METH_VARARGS,
 		""
 
@@ -1636,7 +1763,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteShader",
-		DeleteShader,
+		Dummy, // DeleteShader,
 		METH_VARARGS,
 		"Delete shader object created by the NewFragmentShader, the NewGeometryShader, the NewTessControlShader, the NewTessEvaluationShader or the NewVertexShader.\n"
 
@@ -1651,7 +1778,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewProgram",
-		NewProgram,
+		Dummy, // NewProgram,
 		METH_VARARGS,
 		""
 
@@ -1666,7 +1793,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteProgram",
-		DeleteProgram,
+		Dummy, // DeleteProgram,
 		METH_VARARGS,
 		""
 
@@ -1681,7 +1808,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UseProgram",
-		UseProgram,
+		Dummy, // UseProgram,
 		METH_VARARGS,
 		""
 
@@ -1696,7 +1823,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UseDefaultProgram",
-		UseDefaultProgram,
+		Dummy, // UseDefaultProgram,
 		METH_VARARGS,
 		""
 
@@ -1711,7 +1838,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"CompilerLog",
-		CompilerLog,
+		Dummy, // CompilerLog,
 		METH_VARARGS,
 		"Get the compiler log for the following methods:\n"
 		"NewFragmentShader\n"
@@ -1734,8 +1861,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"AttributeLocation",
-		AttributeLocation,
-		METH_VARARGS,
+		Dummy, // AttributeLocation,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -1750,8 +1877,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UniformLocation",
-		UniformLocation,
-		METH_VARARGS,
+		Dummy, // UniformLocation,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -1766,8 +1893,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UniformBlockLocation",
-		UniformBlockLocation,
-		METH_VARARGS,
+		Dummy, // UniformBlockLocation,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -1782,7 +1909,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform1f",
-		Uniform1f,
+		Dummy, // Uniform1f,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `float` in the shader.\n"
@@ -1801,7 +1928,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform2f",
-		Uniform2f,
+		Dummy, // Uniform2f,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `vec2` in the shader.\n"
@@ -1821,7 +1948,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform3f",
-		Uniform3f,
+		Dummy, // Uniform3f,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `vec3` in the shader.\n"
@@ -1842,7 +1969,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform4f",
-		Uniform4f,
+		Dummy, // Uniform4f,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `vec4` in the shader.\n"
@@ -1864,7 +1991,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform1i",
-		Uniform1i,
+		Dummy, // Uniform1i,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `int` in the shader.\n"
@@ -1884,7 +2011,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform2i",
-		Uniform2i,
+		Dummy, // Uniform2i,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `ivec2` in the shader.\n"
@@ -1904,7 +2031,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform3i",
-		Uniform3i,
+		Dummy, // Uniform3i,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `ivec3` in the shader.\n"
@@ -1925,7 +2052,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform4i",
-		Uniform4i,
+		Dummy, // Uniform4i,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `ivec4` in the shader.\n"
@@ -1947,7 +2074,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UniformMatrix",
-		UniformMatrix,
+		Dummy, // UniformMatrix,
 		METH_VARARGS,
 		""
 
@@ -1963,7 +2090,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UniformTransposeMatrix",
-		UniformTransposeMatrix,
+		Dummy, // UniformTransposeMatrix,
 		METH_VARARGS,
 		""
 
@@ -1978,9 +2105,9 @@ static PyMethodDef methods[] = {
 		"\n"
 	},
 	{
-		"UniformBlock",
-		UniformBlock,
-		METH_VARARGS,
+		"UseUniformBlock",
+		Dummy, // UseUniformBlock,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -1995,8 +2122,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewTexture",
-		NewTexture,
-		METH_VARARGS,
+		Dummy, // NewTexture,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -2013,7 +2140,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteTexture",
-		DeleteTexture,
+		Dummy, // DeleteTexture,
 		METH_VARARGS,
 		""
 
@@ -2028,8 +2155,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UpdateTexture",
-		UpdateTexture,
-		METH_VARARGS,
+		Dummy, // UpdateTexture,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -2049,7 +2176,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UseTexture",
-		UseTexture,
+		Dummy, // UseTexture,
 		METH_VARARGS,
 		""
 
@@ -2065,7 +2192,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"SetTexturePixelated",
-		SetTexturePixelated,
+		Dummy, // SetTexturePixelated,
 		METH_VARARGS,
 		"Set texture filter to nearest.\n"
 
@@ -2080,7 +2207,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"SetTextureFiltered",
-		SetTextureFiltered,
+		Dummy, // SetTextureFiltered,
 		METH_VARARGS,
 		"Set texture filter to linear.\n"
 
@@ -2095,7 +2222,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"SetTextureMipmapped",
-		SetTextureMipmapped,
+		Dummy, // SetTextureMipmapped,
 		METH_VARARGS,
 		"Set texture filter to mipmap linear.\n"
 
@@ -2110,8 +2237,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"BuildMipmap",
-		BuildMipmap,
-		METH_VARARGS,
+		Dummy, // BuildMipmap,
+		METH_VARARGS | METH_KEYWORDS,
 		"Generate the mipmaps for the texture.\n"
 
 		"\n"
@@ -2127,7 +2254,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewVertexArray",
-		NewVertexArray,
+		Dummy, // NewVertexArray,
 		METH_VARARGS,
 		"The foreach int or float attribute an index of a vertex buffer object and the location of a vertex attribute must be specified.\n"
 
@@ -2144,7 +2271,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteVertexArray",
-		DeleteVertexArray,
+		Dummy, // DeleteVertexArray,
 		METH_VARARGS,
 		""
 		"\n"
@@ -2158,8 +2285,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"EnableAttribute",
-		EnableAttribute,
-		METH_VARARGS,
+		Dummy, // EnableAttribute,
+		METH_VARARGS | METH_KEYWORDS,
 		"Enable an attribute in the vertex array object.\n"
 
 		"\n"
@@ -2174,8 +2301,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DisableAttribute",
-		DisableAttribute,
-		METH_VARARGS,
+		Dummy, // DisableAttribute,
+		METH_VARARGS | METH_KEYWORDS,
 		"Disable an attribute in the vertex array object.\n"
 
 		"\n"
@@ -2190,8 +2317,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"EnableAttributes",
-		EnableAttributes,
-		METH_VARARGS,
+		Dummy, // EnableAttributes,
+		METH_VARARGS | METH_KEYWORDS,
 		"Enable attributes in the vertex array object.\n"
 
 		"\n"
@@ -2206,8 +2333,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DisableAttributes",
-		DisableAttributes,
-		METH_VARARGS,
+		Dummy, // DisableAttributes,
+		METH_VARARGS | METH_KEYWORDS,
 		"Disable attributes in the vertex array object.\n"
 
 		"\n"
@@ -2222,7 +2349,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewVertexBuffer",
-		NewVertexBuffer,
+		Dummy, // NewVertexBuffer,
 		METH_VARARGS,
 		""
 
@@ -2237,7 +2364,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewIndexBuffer",
-		NewIndexBuffer,
+		Dummy, // NewIndexBuffer,
 		METH_VARARGS,
 		""
 
@@ -2252,7 +2379,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewUniformBuffer",
-		NewUniformBuffer,
+		Dummy, // NewUniformBuffer,
 		METH_VARARGS,
 		""
 
@@ -2267,7 +2394,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewDynamicVertexBuffer",
-		NewDynamicVertexBuffer,
+		Dummy, // NewDynamicVertexBuffer,
 		METH_VARARGS,
 		""
 
@@ -2282,7 +2409,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewDynamicIndexBuffer",
-		NewDynamicIndexBuffer,
+		Dummy, // NewDynamicIndexBuffer,
 		METH_VARARGS,
 		""
 
@@ -2297,7 +2424,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewDynamicUniformBuffer",
-		NewDynamicUniformBuffer,
+		Dummy, // NewDynamicUniformBuffer,
 		METH_VARARGS,
 		""
 
@@ -2312,7 +2439,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteBuffer",
-		DeleteBuffer,
+		Dummy, // DeleteBuffer,
 		METH_VARARGS,
 		""
 
@@ -2327,8 +2454,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UpdateVertexBuffer",
-		UpdateVertexBuffer,
-		METH_VARARGS,
+		Dummy, // UpdateVertexBuffer,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -2344,8 +2471,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UpdateIndexBuffer",
-		UpdateIndexBuffer,
-		METH_VARARGS,
+		Dummy, // UpdateIndexBuffer,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -2361,8 +2488,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UpdateUniformBuffer",
-		UpdateUniformBuffer,
-		METH_VARARGS,
+		Dummy, // UpdateUniformBuffer,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -2378,8 +2505,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderTriangles",
-		RenderTriangles,
-		METH_VARARGS,
+		Dummy, // RenderTriangles,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2395,8 +2522,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderTriangleStrip",
-		RenderTriangleStrip,
-		METH_VARARGS,
+		Dummy, // RenderTriangleStrip,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2412,8 +2539,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderTriangleFan",
-		RenderTriangleFan,
-		METH_VARARGS,
+		Dummy, // RenderTriangleFan,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2429,8 +2556,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderLines",
-		RenderLines,
-		METH_VARARGS,
+		Dummy, // RenderLines,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2446,8 +2573,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderLineStrip",
-		RenderLineStrip,
-		METH_VARARGS,
+		Dummy, // RenderLineStrip,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2463,8 +2590,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderLineLoop",
-		RenderLineLoop,
-		METH_VARARGS,
+		Dummy, // RenderLineLoop,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2480,8 +2607,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderPoints",
-		RenderPoints,
-		METH_VARARGS,
+		Dummy, // RenderPoints,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2497,8 +2624,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderLineStripAdjacency",
-		RenderLineStripAdjacency,
-		METH_VARARGS,
+		Dummy, // RenderLineStripAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2514,8 +2641,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderLinesAdjacency",
-		RenderLinesAdjacency,
-		METH_VARARGS,
+		Dummy, // RenderLinesAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2531,8 +2658,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderTriangleStripAdjacency",
-		RenderTriangleStripAdjacency,
-		METH_VARARGS,
+		Dummy, // RenderTriangleStripAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2548,8 +2675,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderTrianglesAdjacency",
-		RenderTrianglesAdjacency,
-		METH_VARARGS,
+		Dummy, // RenderTrianglesAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2565,8 +2692,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderIndexedTriangles",
-		RenderIndexedTriangles,
-		METH_VARARGS,
+		Dummy, // RenderIndexedTriangles,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2582,8 +2709,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderIndexedTriangleStrip",
-		RenderIndexedTriangleStrip,
-		METH_VARARGS,
+		Dummy, // RenderIndexedTriangleStrip,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2599,8 +2726,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderIndexedTriangleFan",
-		RenderIndexedTriangleFan,
-		METH_VARARGS,
+		Dummy, // RenderIndexedTriangleFan,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2616,8 +2743,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderIndexedLines",
-		RenderIndexedLines,
-		METH_VARARGS,
+		Dummy, // RenderIndexedLines,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2633,8 +2760,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderIndexedLineStrip",
-		RenderIndexedLineStrip,
-		METH_VARARGS,
+		Dummy, // RenderIndexedLineStrip,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2650,8 +2777,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderIndexedLineLoop",
-		RenderIndexedLineLoop,
-		METH_VARARGS,
+		Dummy, // RenderIndexedLineLoop,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2667,8 +2794,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderIndexedPoints",
-		RenderIndexedPoints,
-		METH_VARARGS,
+		Dummy, // RenderIndexedPoints,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2684,8 +2811,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderIndexedLineStripAdjacency",
-		RenderIndexedLineStripAdjacency,
-		METH_VARARGS,
+		Dummy, // RenderIndexedLineStripAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2701,8 +2828,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderIndexedLinesAdjacency",
-		RenderIndexedLinesAdjacency,
-		METH_VARARGS,
+		Dummy, // RenderIndexedLinesAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2718,8 +2845,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderIndexedTriangleStripAdjacency",
-		RenderIndexedTriangleStripAdjacency,
-		METH_VARARGS,
+		Dummy, // RenderIndexedTriangleStripAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2735,8 +2862,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderIndexedTrianglesAdjacency",
-		RenderIndexedTrianglesAdjacency,
-		METH_VARARGS,
+		Dummy, // RenderIndexedTrianglesAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
 		"Parameters:\n"
@@ -2752,8 +2879,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewFramebuffer",
-		NewFramebuffer,
-		METH_VARARGS,
+		Dummy, // NewFramebuffer,
+		METH_VARARGS | METH_KEYWORDS,
 		"Creates a framebuffer with two texture attachments. (color and depth)\n"
 		"The color attachment have RGBA format, 8bit for each channel.\n"
 		"The depth texture contains float values.\n"
@@ -2773,7 +2900,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteFramebuffer",
-		DeleteFramebuffer,
+		Dummy, // DeleteFramebuffer,
 		METH_VARARGS,
 
 		"\n"
@@ -2787,7 +2914,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UseFramebuffer",
-		UseFramebuffer,
+		Dummy, // UseFramebuffer,
 		METH_VARARGS,
 		""
 
@@ -2801,8 +2928,23 @@ static PyMethodDef methods[] = {
 		"\n"
 	},
 	{
+		"GetDefaultFramebuffer",
+		Dummy, // GetDefaultFramebuffer,
+		METH_VARARGS,
+		""
+
+		"\n"
+		"Parameters:\n"
+		"\tNone\n"
+
+		"\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+	},
+	{
 		"UseDefaultFramebuffer",
-		UseDefaultFramebuffer,
+		Dummy, // UseDefaultFramebuffer,
 		METH_VARARGS,
 		""
 
@@ -2818,8 +2960,8 @@ static PyMethodDef methods[] = {
 	
 	{
 		"ReadPixels",
-		ReadPixels,
-		METH_VARARGS,
+		Dummy, // ReadPixels,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -2837,8 +2979,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"ReadDepthPixels",
-		ReadDepthPixels,
-		METH_VARARGS,
+		Dummy, // ReadDepthPixels,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -2855,8 +2997,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"ReadPixel",
-		ReadPixel,
-		METH_VARARGS,
+		Dummy, // ReadPixel,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -2871,8 +3013,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"ReadDepthPixel",
-		ReadDepthPixel,
-		METH_VARARGS,
+		Dummy, // ReadDepthPixel,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -2885,29 +3027,10 @@ static PyMethodDef methods[] = {
 		"\tpixels (float) The depth value at (x, y) from the active framebuffer.\n"
 		"\n"
 	},
-
-	// Extension
-
-	{
-		"ExtensionActive",
-		ExtensionActive,
-		METH_VARARGS,
-		"Check for full ModernGL support.\n"
-		"The initialization of the extensions are not affected by this method.\n"
-
-		"\n"
-		"Parameters:\n"
-		"\tNone\n"
-
-		"\n"
-		"Returns:\n"
-		"\tactive (bool) True on supported extensions, False otherwise.\n"
-		"\n"
-	},
 	{
 		"UseTextureAsImage",
-		UseTextureAsImage,
-		METH_VARARGS,
+		DummyExtension, // UseTextureAsImage,
+		METH_VARARGS | METH_KEYWORDS,
 		"To use image2D instead of sampler2D.\n"
 
 
@@ -2923,7 +3046,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewTessEvaluationShader",
-		NewTessEvaluationShader,
+		DummyExtension, // NewTessEvaluationShader,
 		METH_VARARGS,
 		""
 
@@ -2938,7 +3061,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewTessControlShader",
-		NewTessControlShader,
+		DummyExtension, // NewTessControlShader,
 		METH_VARARGS,
 		""
 
@@ -2953,7 +3076,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewComputeShader",
-		NewComputeShader,
+		DummyExtension, // NewComputeShader,
 		METH_VARARGS,
 		"Compiles and links a compute shader from source.\n"
 
@@ -2968,7 +3091,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteComputeShader",
-		DeleteComputeShader,
+		DummyExtension, // DeleteComputeShader,
 		METH_VARARGS,
 		"Compute shader is a standalone shader program. NOT part of the rendering pipeline.\n"
 		"Equivalent to the DeleteProgram.\n"
@@ -2984,8 +3107,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RunComputeShader",
-		RunComputeShader,
-		METH_VARARGS,
+		DummyExtension, // RunComputeShader,
+		METH_VARARGS | METH_KEYWORDS,
 		"Run the compute shader.\n"
 
 		"\n"
@@ -3002,7 +3125,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewStorageBuffer",
-		NewStorageBuffer,
+		DummyExtension, // NewStorageBuffer,
 		METH_VARARGS,
 		""
 
@@ -3017,7 +3140,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewDynamicStorageBuffer",
-		NewDynamicStorageBuffer,
+		DummyExtension, // NewDynamicStorageBuffer,
 		METH_VARARGS,
 		""
 
@@ -3032,8 +3155,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UseStorageBuffer",
-		UseStorageBuffer,
-		METH_VARARGS,
+		DummyExtension, // UseStorageBuffer,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -3048,8 +3171,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UpdateStorageBuffer",
-		UpdateStorageBuffer,
-		METH_VARARGS,
+		DummyExtension, // UpdateStorageBuffer,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -3065,8 +3188,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"ReadStorageBuffer",
-		ReadStorageBuffer,
-		METH_VARARGS,
+		DummyExtension, // ReadStorageBuffer,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -3089,17 +3212,159 @@ static PyMethodDef methods[] = {
 	{0, 0, 0, 0},
 };
 
-void DeclareConstants(PyObject * m) {
-	PyModule_AddIntConstant(m, "ENABLE_NOTHING", 0x00);
-	PyModule_AddIntConstant(m, "ENABLE_BLEND", 0x01);
-	PyModule_AddIntConstant(m, "ENABLE_CULL_FACE", 0x02);
-	PyModule_AddIntConstant(m, "ENABLE_DEPTH_TEST", 0x04);
-	PyModule_AddIntConstant(m, "ENABLE_MULTISAMPLE", 0x08);
+void LoadImplementation() {
+	PyCFunction implementation[] = {
+		(PyCFunction)InitializeModernGL,
+		(PyCFunction)ExtensionActive,
+		(PyCFunction)GetError,
+		(PyCFunction)GetInfo,
+		(PyCFunction)Viewport,
+		(PyCFunction)Clear,
+		(PyCFunction)PointSize,
+		(PyCFunction)LineSize,
+		(PyCFunction)EnableOnly,
+		(PyCFunction)EnableBlend,
+		(PyCFunction)DisableBlend,
+		(PyCFunction)EnableCullFace,
+		(PyCFunction)DisableCullFace,
+		(PyCFunction)EnableDepthTest,
+		(PyCFunction)DisableDepthTest,
+		(PyCFunction)EnableMultisample,
+		(PyCFunction)DisableMultisample,
+		(PyCFunction)NewVertexShader,
+		(PyCFunction)NewFragmentShader,
+		(PyCFunction)NewGeometryShader,
+		(PyCFunction)DeleteShader,
+		(PyCFunction)NewProgram,
+		(PyCFunction)DeleteProgram,
+		(PyCFunction)UseProgram,
+		(PyCFunction)UseDefaultProgram,
+		(PyCFunction)CompilerLog,
+		(PyCFunction)AttributeLocation,
+		(PyCFunction)UniformLocation,
+		(PyCFunction)UniformBlockLocation,
+		(PyCFunction)Uniform1f,
+		(PyCFunction)Uniform2f,
+		(PyCFunction)Uniform3f,
+		(PyCFunction)Uniform4f,
+		(PyCFunction)Uniform1i,
+		(PyCFunction)Uniform2i,
+		(PyCFunction)Uniform3i,
+		(PyCFunction)Uniform4i,
+		(PyCFunction)UniformMatrix,
+		(PyCFunction)UniformTransposeMatrix,
+		(PyCFunction)UseUniformBlock,
+		(PyCFunction)NewTexture,
+		(PyCFunction)DeleteTexture,
+		(PyCFunction)UpdateTexture,
+		(PyCFunction)UseTexture,
+		(PyCFunction)SetTexturePixelated,
+		(PyCFunction)SetTextureFiltered,
+		(PyCFunction)SetTextureMipmapped,
+		(PyCFunction)BuildMipmap,
+		(PyCFunction)NewVertexArray,
+		(PyCFunction)DeleteVertexArray,
+		(PyCFunction)EnableAttribute,
+		(PyCFunction)DisableAttribute,
+		(PyCFunction)EnableAttributes,
+		(PyCFunction)DisableAttributes,
+		(PyCFunction)NewVertexBuffer,
+		(PyCFunction)NewIndexBuffer,
+		(PyCFunction)NewUniformBuffer,
+		(PyCFunction)NewDynamicVertexBuffer,
+		(PyCFunction)NewDynamicIndexBuffer,
+		(PyCFunction)NewDynamicUniformBuffer,
+		(PyCFunction)DeleteBuffer,
+		(PyCFunction)UpdateVertexBuffer,
+		(PyCFunction)UpdateIndexBuffer,
+		(PyCFunction)UpdateUniformBuffer,
+		(PyCFunction)RenderTriangles,
+		(PyCFunction)RenderTriangleStrip,
+		(PyCFunction)RenderTriangleFan,
+		(PyCFunction)RenderLines,
+		(PyCFunction)RenderLineStrip,
+		(PyCFunction)RenderLineLoop,
+		(PyCFunction)RenderPoints,
+		(PyCFunction)RenderLineStripAdjacency,
+		(PyCFunction)RenderLinesAdjacency,
+		(PyCFunction)RenderTriangleStripAdjacency,
+		(PyCFunction)RenderTrianglesAdjacency,
+		(PyCFunction)RenderIndexedTriangles,
+		(PyCFunction)RenderIndexedTriangleStrip,
+		(PyCFunction)RenderIndexedTriangleFan,
+		(PyCFunction)RenderIndexedLines,
+		(PyCFunction)RenderIndexedLineStrip,
+		(PyCFunction)RenderIndexedLineLoop,
+		(PyCFunction)RenderIndexedPoints,
+		(PyCFunction)RenderIndexedLineStripAdjacency,
+		(PyCFunction)RenderIndexedLinesAdjacency,
+		(PyCFunction)RenderIndexedTriangleStripAdjacency,
+		(PyCFunction)RenderIndexedTrianglesAdjacency,
+		(PyCFunction)NewFramebuffer,
+		(PyCFunction)DeleteFramebuffer,
+		(PyCFunction)UseFramebuffer,
+		(PyCFunction)GetDefaultFramebuffer,
+		(PyCFunction)UseDefaultFramebuffer,
+		(PyCFunction)ReadPixels,
+		(PyCFunction)ReadDepthPixels,
+		(PyCFunction)ReadPixel,
+		(PyCFunction)ReadDepthPixel,
+		(PyCFunction)UseTextureAsImage,
+		(PyCFunction)NewTessEvaluationShader,
+		(PyCFunction)NewTessControlShader,
+		(PyCFunction)NewComputeShader,
+		(PyCFunction)DeleteComputeShader,
+		(PyCFunction)RunComputeShader,
+		(PyCFunction)NewStorageBuffer,
+		(PyCFunction)NewDynamicStorageBuffer,
+		(PyCFunction)UseStorageBuffer,
+		(PyCFunction)UpdateStorageBuffer,
+		(PyCFunction)ReadStorageBuffer,
+	};
 
-	PyModule_AddStringConstant(m, "VERSION", "2.0.11");
+	bool extensionSupport = ModernGL::ExtensionActive();
+	int count = sizeof(implementation) / sizeof(implementation[0]);
+	for (int i = 0; i < count; ++i) {
+		if (methods[i].ml_meth == Dummy || extensionSupport) {
+			methods[i].ml_meth = implementation[i];
+		}
+	}
+}
+
+PyObject * InitializeModernGL(PyObject * self, PyObject * args) {
+	if (initialized) {
+		Py_RETURN_TRUE;
+	}
+
+	if (!PyArg_ParseTuple(args, ":InitializeModernGL")) {
+		return 0;
+	}
 	
-	PyModule_AddStringConstant(m, "__AUTHOR_NAME__", "Szabolcs Dombi");
-	PyModule_AddStringConstant(m, "__AUTHOR_EMAIL__", "cprogrammer1994@gmail.com");
+	if (ModernGL::InitializeModernGL()) {
+		initialized = true;
+		LoadImplementation();
+		Py_RETURN_TRUE;
+	} else {
+		Py_RETURN_FALSE;
+	}
+}
+
+void InitModule(PyObject * module) {
+	ModuleError = PyErr_NewException("ModernGL.Error", 0, 0);
+
+	Py_INCREF(ModuleError);
+	PyModule_AddObject(module, "Error", ModuleError);
+
+	PyModule_AddIntConstant(module, "ENABLE_NOTHING", 0x00);
+	PyModule_AddIntConstant(module, "ENABLE_BLEND", 0x01);
+	PyModule_AddIntConstant(module, "ENABLE_CULL_FACE", 0x02);
+	PyModule_AddIntConstant(module, "ENABLE_DEPTH_TEST", 0x04);
+	PyModule_AddIntConstant(module, "ENABLE_MULTISAMPLE", 0x08);
+
+	PyModule_AddStringConstant(module, "VERSION", "2.0.11");
+	
+	PyModule_AddStringConstant(module, "__AUTHOR_NAME__", "Szabolcs Dombi");
+	PyModule_AddStringConstant(module, "__AUTHOR_EMAIL__", "cprogrammer1994@gmail.com");
 }
 
 #if PY_MAJOR_VERSION >= 3
@@ -3111,9 +3376,9 @@ extern "C" {
 }
 
 PyObject * PyInit_ModernGL() {
-	PyObject * m = PyModule_Create(&moduledef);
-	DeclareConstants(m);
-	return m;
+	PyObject * module = PyModule_Create(&moduledef);
+	InitModule(module);
+	return module;
 }
 
 #else
@@ -3123,9 +3388,9 @@ extern "C" {
 }
 
 PyObject * initModernGL() {
-	PyObject * m = Py_InitModule("ModernGL", methods);
-	DeclareConstants(m);
-	return m;
+	PyObject * module = Py_InitModule("ModernGL", methods);
+	InitModule(module);
+	return module;
 }
 
 #endif

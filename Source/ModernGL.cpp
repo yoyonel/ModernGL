@@ -18,7 +18,7 @@ namespace {
 
 	bool extensionActive = false;
 
-	const char * errorMessage = 0;
+	const char * errorMessage = "Not initialized.";
 }
 
 namespace ModernGL {
@@ -295,6 +295,10 @@ namespace ModernGL {
 			errorMessage = "glViewport not loaded.";
 			return false;
 		}
+		if (!OpenGL::isglGetBufferParameteriv()) {
+			errorMessage = "glGetBufferParameteriv not loaded.";
+			return false;
+		}
 
 		return true;
 	}
@@ -349,7 +353,7 @@ namespace ModernGL {
 		return true;
 	}
 
-	bool InitializeModernGL(bool font) {
+	bool InitializeModernGL() {
 		// Initialize OpenGL
 		if (!OpenGL::InitializeOpenGL()) {
 			errorMessage = "InitializeOpenGL failed.";
@@ -504,7 +508,7 @@ namespace ModernGL {
 		} else {
 			compilerLog[0] = 0;
 			OpenGL::glUseProgram(program);
-		} 
+		}
 
 		return program;
 	}
@@ -648,7 +652,7 @@ namespace ModernGL {
 		OpenGL::glUniformMatrix4fv(location, 1, true, matrix);
 	}
 
-	void UniformBlock(int location, int buffer) {
+	void UseUniformBlock(int location, int buffer) {
 		OpenGL::glBindBufferBase(OpenGL::GL_UNIFORM_BUFFER, location, buffer);
 	}
 
@@ -1087,6 +1091,10 @@ namespace ModernGL {
 		OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, framebuffer);
 	}
 
+	void GetDefaultFramebuffer() {
+		OpenGL::glGetIntegerv(OpenGL::GL_DRAW_FRAMEBUFFER_BINDING, (OpenGL::GLint *)&defaultFramebuffer);
+	}
+
 	void UseDefaultFramebuffer() {
 		OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, defaultFramebuffer);
 	}
@@ -1242,6 +1250,12 @@ namespace ModernGL {
 
 	void * ReadStorageBuffer(int buffer, int offset, int size) {
 		OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, buffer);
+		if (size == 0) {
+			OpenGL::glGetBufferParameteriv(OpenGL::GL_SHADER_STORAGE_BUFFER, OpenGL::GL_BUFFER_SIZE, &size);
+			size -= offset;
+		}
+		printf("%d\n", OpenGL::glGetError());
+		printf("Size: %d\n", size);
 		void * map = OpenGL::glMapBufferRange(OpenGL::GL_SHADER_STORAGE_BUFFER, offset, size, OpenGL::GL_MAP_READ_BIT);
 		if (!map) {
 			return 0;

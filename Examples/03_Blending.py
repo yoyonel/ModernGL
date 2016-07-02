@@ -82,4 +82,4 @@ while WND.Update():
 	GL.UseProgram(prog)
 	GL.EnableOnly(GL.ENABLE_BLEND | GL.ENABLE_MULTISAMPLE)
 	GL.Uniform1f(rotation, WND.GetTime())
-	GL.RenderTriangles(vao, 3, 0, 10)
+	GL.RenderTriangles(vao, 3, instances = 10)
