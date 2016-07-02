@@ -333,162 +333,219 @@ PyObject * GetAttributeLocation(PyObject * self, PyObject * args, PyObject * kwa
 		return 0;
 	}
 
-	return PyLong_FromLong(ModernGL::GetAttributeLocation(program->program, name));
+	return CreateAttributeLocationType(ModernGL::GetAttributeLocation(program->program, name));
 }
 
 PyObject * GetUniformLocation(PyObject * self, PyObject * args, PyObject * kwargs) {
-	int program;
+	Program * program;
 	const char * name;
 
 	static const char * kwlist[] = {"program", "name", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "is:GetUniformLocation", (char **)kwlist, &program, &name)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os:GetUniformLocation", (char **)kwlist, &program, &name)) {
 		PyErr_SetString(ModuleError, "blaypukz");
 		return 0;
 	}
 
-	return PyLong_FromLong(ModernGL::GetUniformLocation(program, name));
+	if (!PyObject_TypeCheck((PyObject *)program, &ProgramType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	return CreateUniformLocationType(ModernGL::GetUniformLocation(program, name));
 }
 
 PyObject * GetUniformBlockLocation(PyObject * self, PyObject * args, PyObject * kwargs) {
-	int program;
+	Program * program;
 	const char * name;
 
 	static const char * kwlist[] = {"program", "name", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "is:GetUniformBlockLocation", (char **)kwlist, &program, &name)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os:GetUniformBlockLocation", (char **)kwlist, &program, &name)) {
 		PyErr_SetString(ModuleError, "zlfavgkq");
 		return 0;
 	}
 
-	return PyLong_FromLong(ModernGL::GetUniformBlockLocation(program, name));
+	if (!PyObject_TypeCheck((PyObject *)program, &ProgramType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	return CreateUniformBlockLocationType(ModernGL::GetUniformBlockLocation(program, name));
 }
 
 PyObject * Uniform1f(PyObject * self, PyObject * args) {
-	int location;
+	UniformLocation * location;
 	float v0;
 
-	if (!PyArg_ParseTuple(args, "if:Uniform1f", &location, &v0)) {
+	if (!PyArg_ParseTuple(args, "Of:Uniform1f", &location, &v0)) {
 		PyErr_SetString(ModuleError, "qaxfzicr");
 		return 0;
 	}
 
-	ModernGL::Uniform1f(location, v0);
+	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::Uniform1f(location->location, v0);
 	Py_RETURN_NONE;
 }
 
 PyObject * Uniform2f(PyObject * self, PyObject * args) {
-	int location;
+	UniformLocation * location;
 	float v0;
 	float v1;
 
-	if (!PyArg_ParseTuple(args, "iff:Uniform2f", &location, &v0, &v1)) {
+	if (!PyArg_ParseTuple(args, "Off:Uniform2f", &location, &v0, &v1)) {
 		PyErr_SetString(ModuleError, "kfqmuaoy");
 		return 0;
 	}
 
-	ModernGL::Uniform2f(location, v0, v1);
+	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::Uniform2f(location->location, v0, v1);
 	Py_RETURN_NONE;
 }
 
 PyObject * Uniform3f(PyObject * self, PyObject * args) {
-	int location;
+	UniformLocation * location;
 	float v0;
 	float v1;
 	float v2;
 
-	if (!PyArg_ParseTuple(args, "ifff:Uniform3f", &location, &v0, &v1, &v2)) {
+	if (!PyArg_ParseTuple(args, "Offf:Uniform3f", &location, &v0, &v1, &v2)) {
 		PyErr_SetString(ModuleError, "wlvzmscp");
 		return 0;
 	}
 
-	ModernGL::Uniform3f(location, v0, v1, v2);
+	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::Uniform3f(location->location, v0, v1, v2);
 	Py_RETURN_NONE;
 }
 
 PyObject * Uniform4f(PyObject * self, PyObject * args) {
-	int location;
+	UniformLocation * location;
 	float v0;
 	float v1;
 	float v2;
 	float v3;
 
-	if (!PyArg_ParseTuple(args, "iffff:Uniform4f", &location, &v0, &v1, &v2, &v3)) {
+	if (!PyArg_ParseTuple(args, "Offff:Uniform4f", &location, &v0, &v1, &v2, &v3)) {
 		PyErr_SetString(ModuleError, "ojkqtfcw");
 		return 0;
 	}
 
-	ModernGL::Uniform4f(location, v0, v1, v2, v3);
+	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::Uniform4f(location->location, v0, v1, v2, v3);
 	Py_RETURN_NONE;
 }
 
 PyObject * Uniform1i(PyObject * self, PyObject * args) {
-	int location;
+	UniformLocation * location;
 	int v0;
 
-	if (!PyArg_ParseTuple(args, "ii:Uniform1i", &location, &v0)) {
+	if (!PyArg_ParseTuple(args, "Oi:Uniform1i", &location, &v0)) {
 		PyErr_SetString(ModuleError, "xqpcozbk");
 		return 0;
 	}
 
-	ModernGL::Uniform1i(location, v0);
+	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::Uniform1i(location->location, v0);
 	Py_RETURN_NONE;
 }
 
 PyObject * Uniform2i(PyObject * self, PyObject * args) {
-	int location;
+	UniformLocation * location;
 	int v0;
 	int v1;
 
-	if (!PyArg_ParseTuple(args, "iii:Uniform2i", &location, &v0, &v1)) {
+	if (!PyArg_ParseTuple(args, "Oii:Uniform2i", &location, &v0, &v1)) {
 		PyErr_SetString(ModuleError, "ikcsvayz");
 		return 0;
 	}
 
-	ModernGL::Uniform2i(location, v0, v1);
+	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::Uniform2i(location->location, v0, v1);
 	Py_RETURN_NONE;
 }
 
 PyObject * Uniform3i(PyObject * self, PyObject * args) {
-	int location;
+	UniformLocation * location;
 	int v0;
 	int v1;
 	int v2;
 
-	if (!PyArg_ParseTuple(args, "iiii:Uniform3i", &location, &v0, &v1, &v2)) {
+	if (!PyArg_ParseTuple(args, "Oiii:Uniform3i", &location, &v0, &v1, &v2)) {
 		PyErr_SetString(ModuleError, "egurbpxt");
 		return 0;
 	}
 
-	ModernGL::Uniform3i(location, v0, v1, v2);
+	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::Uniform3i(location->location, v0, v1, v2);
 	Py_RETURN_NONE;
 }
 
 PyObject * Uniform4i(PyObject * self, PyObject * args) {
-	int location;
+	UniformLocation * location;
 	int v0;
 	int v1;
 	int v2;
 	int v3;
 
-	if (!PyArg_ParseTuple(args, "iiiii:Uniform4i", &location, &v0, &v1, &v2, &v3)) {
+	if (!PyArg_ParseTuple(args, "Oiiii:Uniform4i", &location, &v0, &v1, &v2, &v3)) {
 		PyErr_SetString(ModuleError, "uxhoveqg");
 		return 0;
 	}
 
-	ModernGL::Uniform4i(location, v0, v1, v2, v3);
+	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::Uniform4i(location->location, v0, v1, v2, v3);
 	Py_RETURN_NONE;
 }
 
 PyObject * UniformMatrix(PyObject * self, PyObject * args) {
-	int location;
+	UniformLocation * location;
 	PyObject * lst;
 
-	if (!PyArg_ParseTuple(args, "iO:UniformMatrix", &location, &lst)) {
+	if (!PyArg_ParseTuple(args, "OO:UniformMatrix", &location, &lst)) {
 		PyErr_SetString(ModuleError, "cswzjnvx");
 		return 0;
 	}
 
+	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	// typetest list
+
 	float matrix[16];
 
 	int count = (int)PyList_Size(lst);
@@ -496,18 +553,25 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 		matrix[i] = (float)PyFloat_AsDouble(PyList_GetItem(lst, i));
 	}
 
-	ModernGL::UniformMatrix(location, matrix);
+	ModernGL::UniformMatrix(location->location, matrix);
 	Py_RETURN_NONE;
 }
 
 PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
-	int location;
+	UniformLocation * location;
 	PyObject * lst;
 
-	if (!PyArg_ParseTuple(args, "iO:UniformTransposeMatrix", &location, &lst)) {
+	if (!PyArg_ParseTuple(args, "OO:UniformTransposeMatrix", &location, &lst)) {
 		PyErr_SetString(ModuleError, "buazcrsv");
 		return 0;
 	}
+
+	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	// typetest list
 
 	float matrix[16];
 
@@ -516,18 +580,23 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 		matrix[i] = (float)PyFloat_AsDouble(PyList_GetItem(lst, i));
 	}
 
-	ModernGL::UniformTransposeMatrix(location, matrix);
+	ModernGL::UniformTransposeMatrix(location->location, matrix);
 	Py_RETURN_NONE;
 }
 
 PyObject * UseUniformBlock(PyObject * self, PyObject * args, PyObject * kwargs) {
-	int location;
+	UniformBlockLocation * location;
 	int buffer;
 
 	static const char * kwlist[] = {"location", "buffer", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii:UseUniformBlock", (char **)kwlist, &location, &buffer)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi:UseUniformBlock", (char **)kwlist, &location, &buffer)) {
 		PyErr_SetString(ModuleError, "byviqlph");
+		return 0;
+	}
+
+	if (!PyObject_TypeCheck((PyObject *)location, &UniformBlockLocationType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
 		return 0;
 	}
 
@@ -549,23 +618,28 @@ PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
-	return PyLong_FromLong(ModernGL::NewTexture(width, height, data, components));
+	return CreateTextureType(ModernGL::NewTexture(width, height, data, components));
 }
 
 PyObject * DeleteTexture(PyObject * self, PyObject * args) {
-	int texture;
+	Texture * texture;
 
-	if (!PyArg_ParseTuple(args, "i:DeleteTexture", &texture)) {
+	if (!PyArg_ParseTuple(args, "O:DeleteTexture", &texture)) {
 		PyErr_SetString(ModuleError, "szncgvmh");
 		return 0;
 	}
 
-	ModernGL::DeleteTexture(texture);
+	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::DeleteTexture(texture->texture);
 	Py_RETURN_NONE;
 }
 
 PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
-	int texture;
+	Texture * texture;
 	int x;
 	int y;
 	int width;
@@ -576,77 +650,107 @@ PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"texture", "x", "y", "width", "height", "data", "components", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiiiiy#|i:UpdateTexture", (char **)kwlist, &texture, &x, &y, &width, &height, &data, &size, &components)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oiiiiy#|i:UpdateTexture", (char **)kwlist, &texture, &x, &y, &width, &height, &data, &size, &components)) {
 		PyErr_SetString(ModuleError, "khvglbpr");
 		return 0;
 	}
 
-	ModernGL::UpdateTexture(texture, x, y, width, height, data, components);
+	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::UpdateTexture(texture->texture, x, y, width, height, data, components);
 	Py_RETURN_NONE;
 }
 
 PyObject * UseTexture(PyObject * self, PyObject * args) {
-	int texture;
+	Texture * texture;
 	int location = 0;
 
-	if (!PyArg_ParseTuple(args, "i|i:UseTexture", &texture, &location)) {
+	if (!PyArg_ParseTuple(args, "O|i:UseTexture", &texture, &location)) {
 		PyErr_SetString(ModuleError, "hgpnyora");
 		return 0;
 	}
 
-	ModernGL::UseTexture(texture, location);
+	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::UseTexture(texture->texture, location);
 	Py_RETURN_NONE;
 }
 
 PyObject * SetTexturePixelated(PyObject * self, PyObject * args) {
-	int texture;
+	Texture * texture;
 	
-	if (!PyArg_ParseTuple(args, "i:SetTexturePixelated", &texture)) {
+	if (!PyArg_ParseTuple(args, "O:SetTexturePixelated", &texture)) {
 		PyErr_SetString(ModuleError, "rbqlyasl");
 		return 0;
 	}
 
-	ModernGL::SetTexturePixelated(texture);
+	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::SetTexturePixelated(texture->texture);
 	Py_RETURN_NONE;
 }
 
 PyObject * SetTextureFiltered(PyObject * self, PyObject * args) {
-	int texture;
+	Texture * texture;
 	
-	if (!PyArg_ParseTuple(args, "i:SetTextureFiltered", &texture)) {
+	if (!PyArg_ParseTuple(args, "O:SetTextureFiltered", &texture)) {
 		PyErr_SetString(ModuleError, "mfxizpan");
 		return 0;
 	}
 
-	ModernGL::SetTextureFiltered(texture);
+	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::SetTextureFiltered(texture->texture);
 	Py_RETURN_NONE;
 }
 
 PyObject * SetTextureMipmapped(PyObject * self, PyObject * args) {
-	int texture;
+	Texture * texture;
 	
-	if (!PyArg_ParseTuple(args, "i:SetTextureMipmapped", &texture)) {
+	if (!PyArg_ParseTuple(args, "O:SetTextureMipmapped", &texture)) {
 		PyErr_SetString(ModuleError, "pjfcsuly");
 		return 0;
 	}
 
-	ModernGL::SetTextureMipmapped(texture);
+	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::SetTextureMipmapped(texture->texture);
 	Py_RETURN_NONE;
 }
 
 PyObject * BuildMipmap(PyObject * self, PyObject * args, PyObject * kwargs) {
-	int texture;
+	Texture * texture;
 	int base = 0;
 	int max = 1000;
 
 	static const char * kwlist[] = {"texture", "base", "max", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i|ii:BuildMipmap", (char **)kwlist, &texture, &base, &max)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|ii:BuildMipmap", (char **)kwlist, &texture, &base, &max)) {
 		PyErr_SetString(ModuleError, "nugflxsc");
 		return 0;
 	}
 
-	ModernGL::BuildMipmap(texture, base, max);
+	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::BuildMipmap(texture->texture, base, max);
 	Py_RETURN_NONE;
 }
 
