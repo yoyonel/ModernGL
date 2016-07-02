@@ -65,6 +65,16 @@ struct UniformBlockLocation {
 	int location;
 };
 
+struct StorageBuffer {
+	PyObject_HEAD
+	int ssbo;
+};
+
+struct ComputeShader {
+	PyObject_HEAD
+	int shader;
+};
+
 extern PyTypeObject FramebufferType;
 extern PyTypeObject VertexArrayType;
 extern PyTypeObject VertexBufferType;
@@ -77,6 +87,8 @@ extern PyTypeObject ProgramType;
 extern PyTypeObject AttributeLocationType;
 extern PyTypeObject UniformLocationType;
 extern PyTypeObject UniformBlockLocationType;
+extern PyTypeObject StorageBufferType;
+extern PyTypeObject ComputeShaderType;
 
 PyObject * CreateFramebufferType(int fbo);
 PyObject * CreateVertexArrayType(int vao);
@@ -90,3 +102,5 @@ PyObject * CreateProgramType(int program);
 PyObject * CreateAttributeLocationType(int location);
 PyObject * CreateUniformLocationType(int location);
 PyObject * CreateUniformBlockLocationType(int location);
+PyObject * CreateStorageBufferType(int ssbo);
+PyObject * CreateComputeShaderType(int shader);

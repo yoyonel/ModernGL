@@ -698,6 +698,122 @@ PyTypeObject UniformBlockLocationType = {
 	UniformBlockLocation_new,
 };
 
+static PyObject * StorageBuffer_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+	return type->tp_alloc(type, 0);
+}
+
+int StorageBuffer_init(StorageBuffer * self, PyObject * args, PyObject * kwargs) {
+	PyErr_SetString(ModuleError, "krmpcvwg");
+	return -1;
+}
+
+void StorageBuffer_dealloc(StorageBuffer * self) {
+	Py_TYPE(self)->tp_free((PyObject*)self);
+}
+
+PyObject * StorageBuffer_str(StorageBuffer * self) {
+	PyUnicode_FromFormat("<StorageBuffer = %d>", self->vbo);
+}
+
+PyTypeObject StorageBufferType = {
+	PyVarObject_HEAD_INIT(0, 0)
+	"ModernGL.StorageBuffer",
+	sizeof(StorageBuffer),
+	0,
+	(destructor)StorageBuffer_dealloc,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	(unaryfunc)StorageBuffer_str,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+	"StorageBuffer",
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	(initproc)StorageBuffer_init,
+	0,
+	StorageBuffer_new,
+};
+
+static PyObject * ComputeShader_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+	return type->tp_alloc(type, 0);
+}
+
+int ComputeShader_init(ComputeShader * self, PyObject * args, PyObject * kwargs) {
+	PyErr_SetString(ModuleError, "krmpcvwg");
+	return -1;
+}
+
+void ComputeShader_dealloc(ComputeShader * self) {
+	Py_TYPE(self)->tp_free((PyObject*)self);
+}
+
+PyObject * ComputeShader_str(ComputeShader * self) {
+	PyUnicode_FromFormat("<ComputeShader = %d>", self->vbo);
+}
+
+PyTypeObject ComputeShaderType = {
+	PyVarObject_HEAD_INIT(0, 0)
+	"ModernGL.ComputeShader",
+	sizeof(ComputeShader),
+	0,
+	(destructor)ComputeShader_dealloc,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	(unaryfunc)ComputeShader_str,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+	"ComputeShader",
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	(initproc)ComputeShader_init,
+	0,
+	ComputeShader_new,
+};
+
 PyObject * CreateFramebufferType(int fbo) {
 	Framebuffer * obj = (Framebuffer *)FramebufferType.tp_alloc(&FramebufferType, 0);
 
@@ -813,6 +929,28 @@ PyObject * CreateUniformBlockLocationType(int location) {
 
 	if (obj != 0) {
 		obj->location = location;
+	}
+
+	return (PyObject *)obj;
+}
+
+
+PyObject * CreateStorageBufferType(int ssbo) {
+	StorageBuffer * obj = (StorageBuffer *)StorageBufferType.tp_alloc(&StorageBufferType, 0);
+
+	if (obj != 0) {
+		obj->ssbo = ssbo;
+	}
+
+	return (PyObject *)obj;
+}
+
+
+PyObject * CreateComputeShaderType(int shader) {
+	ComputeShader * obj = (ComputeShader *)ComputeShaderType.tp_alloc(&ComputeShaderType, 0);
+
+	if (obj != 0) {
+		obj->shader = shader;
 	}
 
 	return (PyObject *)obj;
