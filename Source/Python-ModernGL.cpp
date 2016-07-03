@@ -204,14 +204,14 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)lst, &PyList_Type)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
 	int count = (int)PyList_Size(lst);
 
 	if (count > MAX_NUM_SHADER) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(ModuleError, "List too long.");
 		return 0;
 	}
 
@@ -219,7 +219,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	for (int i = 0; i < count; ++i) {
 		Shader * shader = (Shader *)PyList_GetItem(lst, i);
 		if (!PyObject_TypeCheck((PyObject *)shader, &ShaderType)) {
-			PyErr_SetString(ModuleError, "fexnjdzq");
+			PyErr_SetString(PyExc_TypeError, "fexnjdzq");
 			return 0;
 		}
 		shader_array[i] = shader->shader;
@@ -237,7 +237,7 @@ PyObject * DeleteProgram(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)program, &ProgramType)) {
-		PyErr_SetString(ModuleError, "tnapjoqu");
+		PyErr_SetString(PyExc_TypeError, "tnapjoqu");
 		return 0;
 	}
 
@@ -253,7 +253,7 @@ PyObject * UseProgram(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)program, &ProgramType)) {
-		PyErr_SetString(ModuleError, "lalsmrdz");
+		PyErr_SetString(PyExc_TypeError, "lalsmrdz");
 		return 0;
 	}
 
@@ -277,7 +277,7 @@ PyObject * GetAttributeLocation(PyObject * self, PyObject * args, PyObject * kwa
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)program, &ProgramType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -295,7 +295,7 @@ PyObject * GetUniformLocation(PyObject * self, PyObject * args, PyObject * kwarg
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)program, &ProgramType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -313,7 +313,7 @@ PyObject * GetUniformBlockLocation(PyObject * self, PyObject * args, PyObject * 
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)program, &ProgramType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -329,7 +329,7 @@ PyObject * Uniform1f(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -347,7 +347,7 @@ PyObject * Uniform2f(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -366,7 +366,7 @@ PyObject * Uniform3f(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -386,7 +386,7 @@ PyObject * Uniform4f(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -403,7 +403,7 @@ PyObject * Uniform1i(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -421,7 +421,7 @@ PyObject * Uniform2i(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -440,7 +440,7 @@ PyObject * Uniform3i(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -460,7 +460,7 @@ PyObject * Uniform4i(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -477,12 +477,12 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)lst, &PyList_Type)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -499,7 +499,7 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 		PyObject * item = PyList_GET_ITEM(lst, i);
 
 		if (!PyObject_TypeCheck((PyObject *)item, &PyFloat_Type)) {
-			PyErr_SetString(ModuleError, "caoypwbf");
+			PyErr_SetString(PyExc_TypeError, "caoypwbf");
 			return 0;
 		}
 
@@ -519,12 +519,12 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)lst, &PyList_Type)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -541,7 +541,7 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 		PyObject * item = PyList_GET_ITEM(lst, i);
 
 		if (!PyObject_TypeCheck((PyObject *)item, &PyFloat_Type)) {
-			PyErr_SetString(ModuleError, "caoypwbf");
+			PyErr_SetString(PyExc_TypeError, "caoypwbf");
 			return 0;
 		}
 
@@ -563,12 +563,12 @@ PyObject * UseUniformBlock(PyObject * self, PyObject * args, PyObject * kwargs) 
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformBlockLocationType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)ubo, &UniformBufferType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -601,7 +601,7 @@ PyObject * DeleteTexture(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -625,7 +625,7 @@ PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -642,7 +642,7 @@ PyObject * UseTexture(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -658,7 +658,7 @@ PyObject * SetTexturePixelated(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -674,7 +674,7 @@ PyObject * SetTextureFiltered(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -690,7 +690,7 @@ PyObject * SetTextureMipmapped(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -710,7 +710,7 @@ PyObject * BuildMipmap(PyObject * self, PyObject * args, PyObject * kwargs) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -729,13 +729,13 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)lst, &PyList_Type)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
 	if (indexBuffer) {
 		if (!PyObject_TypeCheck((PyObject *)indexBuffer, &IndexBufferType)) {
-			PyErr_SetString(ModuleError, "caoypwbf");
+			PyErr_SetString(PyExc_TypeError, "caoypwbf");
 			return 0;
 		}
 	}
@@ -743,7 +743,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	int count = (int)PyList_Size(lst);
 
 	if (count > MAX_NUM_ATTRIBUTES) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(ModuleError, "List too long.");
 		return 0;
 	}
 
@@ -752,21 +752,21 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 		PyObject * tuple = PyList_GET_ITEM(lst, i);
 
 		if (!PyObject_TypeCheck((PyObject *)tuple, &PyTuple_Type)) {
-			PyErr_SetString(ModuleError, "caoypwbf");
+			PyErr_SetString(PyExc_TypeError, "caoypwbf");
 			return 0;
 		}
 
 		VertexBuffer * buffer = (VertexBuffer *)PyTuple_GetItem(tuple, 0);
 
 		if (!PyObject_TypeCheck((PyObject *)buffer, &VertexBufferType)) {
-			PyErr_SetString(ModuleError, "caoypwbf");
+			PyErr_SetString(PyExc_TypeError, "caoypwbf");
 			return 0;
 		}
 
 		AttributeLocation * location = (AttributeLocation *)PyTuple_GetItem(tuple, 1);
 
 		if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
-			PyErr_SetString(ModuleError, "caoypwbf");
+			PyErr_SetString(PyExc_TypeError, "caoypwbf");
 			return 0;
 		}
 
@@ -787,7 +787,7 @@ PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -806,12 +806,12 @@ PyObject * EnableAttribute(PyObject * self, PyObject * args, PyObject * kwargs) 
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -830,12 +830,12 @@ PyObject * DisableAttribute(PyObject * self, PyObject * args, PyObject * kwargs)
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -854,19 +854,19 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)attribs, &PyList_Type)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
 	int count = (int)PyList_Size(attribs);
 
 	if (count > MAX_NUM_ATTRIBUTES) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(ModuleError, "List too long.");
 		return 0;
 	}
 
@@ -875,7 +875,7 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 		AttributeLocation * location = (AttributeLocation *)PyList_GET_ITEM(attribs, i);
 
 		if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
-			PyErr_SetString(ModuleError, "caoypwbf");
+			PyErr_SetString(PyExc_TypeError, "caoypwbf");
 			return 0;
 		}
 
@@ -896,19 +896,19 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)attribs, &PyList_Type)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
 	int count = (int)PyList_Size(attribs);
 
 	if (count > MAX_NUM_ATTRIBUTES) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(ModuleError, "List too long.");
 		return 0;
 	}
 
@@ -917,7 +917,7 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 		AttributeLocation * location = (AttributeLocation *)PyList_GET_ITEM(attribs, i);
 
 		if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
-			PyErr_SetString(ModuleError, "caoypwbf");
+			PyErr_SetString(PyExc_TypeError, "caoypwbf");
 			return 0;
 		}
 
@@ -1001,7 +1001,7 @@ PyObject * DeleteVertexBuffer(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)buffer, &VertexBufferType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1017,7 +1017,7 @@ PyObject * DeleteIndexBuffer(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)buffer, &IndexBufferType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1033,7 +1033,7 @@ PyObject * DeleteUniformBuffer(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)buffer, &UniformBufferType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1102,7 +1102,7 @@ PyObject * RenderTriangles(PyObject * self, PyObject * args, PyObject * kwargs) 
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1123,7 +1123,7 @@ PyObject * RenderTriangleStrip(PyObject * self, PyObject * args, PyObject * kwar
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1144,7 +1144,7 @@ PyObject * RenderTriangleFan(PyObject * self, PyObject * args, PyObject * kwargs
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1165,7 +1165,7 @@ PyObject * RenderLines(PyObject * self, PyObject * args, PyObject * kwargs) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1186,7 +1186,7 @@ PyObject * RenderLineStrip(PyObject * self, PyObject * args, PyObject * kwargs) 
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1207,7 +1207,7 @@ PyObject * RenderLineLoop(PyObject * self, PyObject * args, PyObject * kwargs) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1228,7 +1228,7 @@ PyObject * RenderPoints(PyObject * self, PyObject * args, PyObject * kwargs) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1249,7 +1249,7 @@ PyObject * RenderLineStripAdjacency(PyObject * self, PyObject * args, PyObject *
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1270,7 +1270,7 @@ PyObject * RenderLinesAdjacency(PyObject * self, PyObject * args, PyObject * kwa
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1291,7 +1291,7 @@ PyObject * RenderTriangleStripAdjacency(PyObject * self, PyObject * args, PyObje
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1312,7 +1312,7 @@ PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args, PyObject *
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1333,7 +1333,7 @@ PyObject * RenderIndexedTriangles(PyObject * self, PyObject * args, PyObject * k
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1354,7 +1354,7 @@ PyObject * RenderIndexedTriangleStrip(PyObject * self, PyObject * args, PyObject
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1375,7 +1375,7 @@ PyObject * RenderIndexedTriangleFan(PyObject * self, PyObject * args, PyObject *
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1396,7 +1396,7 @@ PyObject * RenderIndexedLines(PyObject * self, PyObject * args, PyObject * kwarg
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1417,7 +1417,7 @@ PyObject * RenderIndexedLineStrip(PyObject * self, PyObject * args, PyObject * k
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1438,7 +1438,7 @@ PyObject * RenderIndexedLineLoop(PyObject * self, PyObject * args, PyObject * kw
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1459,7 +1459,7 @@ PyObject * RenderIndexedPoints(PyObject * self, PyObject * args, PyObject * kwar
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1480,7 +1480,7 @@ PyObject * RenderIndexedLineStripAdjacency(PyObject * self, PyObject * args, PyO
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1501,7 +1501,7 @@ PyObject * RenderIndexedLinesAdjacency(PyObject * self, PyObject * args, PyObjec
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1522,7 +1522,7 @@ PyObject * RenderIndexedTriangleStripAdjacency(PyObject * self, PyObject * args,
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 
@@ -1543,7 +1543,7 @@ PyObject * RenderIndexedTrianglesAdjacency(PyObject * self, PyObject * args, PyO
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		PyErr_SetString(ModuleError, "caoypwbf");
+		PyErr_SetString(PyExc_TypeError, "caoypwbf");
 		return 0;
 	}
 

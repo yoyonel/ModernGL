@@ -503,7 +503,7 @@ namespace ModernGL {
 			int logSize = 0;
 			static const char * logTitle = "Program:\n";
 			static int logTitleSize = strlen(logTitle);
-			strcpy(compilerLog, logTitle);
+			memcpy(compilerLog, logTitle, logTitleSize);
 			OpenGL::glGetProgramInfoLog(program, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
 			compilerLog[logTitleSize + logSize] = 0;
 			OpenGL::glDeleteProgram(program);
@@ -546,7 +546,7 @@ namespace ModernGL {
 			int logSize = 0;
 			static const char * logTitle = "VertexShader:\n";
 			static int logTitleSize = strlen(logTitle);
-			strcpy(compilerLog, logTitle);
+			memcpy(compilerLog, logTitle, logTitleSize);
 			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
 			compilerLog[logTitleSize + logSize] = 0;
 			OpenGL::glDeleteShader(shader);
@@ -569,7 +569,7 @@ namespace ModernGL {
 			int logSize = 0;
 			static const char * logTitle = "FragmentShader:\n";
 			static int logTitleSize = strlen(logTitle);
-			strcpy(compilerLog, logTitle);
+			memcpy(compilerLog, logTitle, logTitleSize);
 			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
 			compilerLog[logTitleSize + logSize] = 0;
 			OpenGL::glDeleteShader(shader);
@@ -592,7 +592,7 @@ namespace ModernGL {
 			int logSize = 0;
 			static const char * logTitle = "GeometryShader:\n";
 			static int logTitleSize = strlen(logTitle);
-			strcpy(compilerLog, logTitle);
+			memcpy(compilerLog, logTitle, logTitleSize);
 			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
 			compilerLog[logTitleSize + logSize] = 0;
 			OpenGL::glDeleteShader(shader);
@@ -1178,7 +1178,7 @@ namespace ModernGL {
 			int logSize = 0;
 			static const char * logTitle = "TessControlShader:\n";
 			static int logTitleSize = strlen(logTitle);
-			strcpy(compilerLog, logTitle);
+			memcpy(compilerLog, logTitle, logTitleSize);
 			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
 			compilerLog[logTitleSize + logSize] = 0;
 			OpenGL::glDeleteShader(shader);
@@ -1201,7 +1201,7 @@ namespace ModernGL {
 			int logSize = 0;
 			static const char * logTitle = "TessEvaluationShader:\n";
 			static int logTitleSize = strlen(logTitle);
-			strcpy(compilerLog, logTitle);
+			memcpy(compilerLog, logTitle, logTitleSize);
 			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
 			compilerLog[logTitleSize + logSize] = 0;
 			OpenGL::glDeleteShader(shader);
@@ -1224,7 +1224,7 @@ namespace ModernGL {
 			int logSize = 0;
 			static const char * logTitle = "ComputeShader:\n";
 			static int logTitleSize = strlen(logTitle);
-			strcpy(compilerLog, logTitle);
+			memcpy(compilerLog, logTitle, logTitleSize);
 			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
 			compilerLog[logTitleSize + logSize] = 0;
 			OpenGL::glDeleteShader(shader);

@@ -98,3 +98,17 @@ PyObject * CreateAttributeLocationType(int location);
 PyObject * CreateUniformLocationType(int location);
 PyObject * CreateUniformBlockLocationType(int location);
 PyObject * CreateComputeShaderType(int shader);
+
+bool ValidFramebufferType(Framebuffer * framebuffer);
+bool ValidVertexArrayType(VertexArray * vertexArray);
+bool ValidVertexBufferType(VertexBuffer * vertexBuffer);
+bool ValidIndexBufferType(IndexBuffer * indexBuffer);
+bool ValidUniformBufferType(UniformBuffer * uniformBuffer);
+bool ValidStorageBufferType(StorageBuffer * storageBuffer);
+bool ValidTextureType(Texture * texture);
+bool ValidShaderType(Shader * shader);
+bool ValidProgramType(Program * program);
+bool ValidAttributeLocationType(AttributeLocation * attributeLocation);
+bool ValidUniformLocationType(UniformLocation * uniformLocation);
+bool ValidUniformBlockLocationType(UniformBlockLocation * uniformBlockLocation);
+bool ValidComputeShaderType(ComputeShader * computeShader);
