@@ -52,11 +52,11 @@ frag = GL.NewFragmentShader('''
 prog = GL.NewProgram([vert, frag])
 
 vbo = GL.NewVertexBuffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
-vao = GL.NewVertexArray('2f', [(vbo, GL.AttributeLocation(prog, 'vert'))])
+vao = GL.NewVertexArray('2f', [(vbo, GL.GetAttributeLocation(prog, 'vert'))])
 
-iterUni = GL.UniformLocation(prog, 'iter')
-zoomUni = GL.UniformLocation(prog, 'zoom')
-posUni = GL.UniformLocation(prog, 'pos')
+iterUni = GL.GetUniformLocation(prog, 'iter')
+zoomUni = GL.GetUniformLocation(prog, 'zoom')
+posUni = GL.GetUniformLocation(prog, 'pos')
 
 GL.UseProgram(prog)
 GL.Uniform1i(iterUni, 100)

@@ -161,29 +161,29 @@ vbo = GL.NewVertexBuffer(data)
 ibo = GL.NewIndexBuffer(idata)
 
 attribs = [
-	(vbo, GL.AttributeLocation(grass_prog, 'vert')),
-	(vbo, GL.AttributeLocation(grass_prog, 'direction')),
-	(vbo, GL.AttributeLocation(grass_prog, 'color')),
-	(vbo, GL.AttributeLocation(grass_prog, 'thickness')),
-	(vbo, GL.AttributeLocation(grass_prog, 'power')),
+	(vbo, GL.GetAttributeLocation(grass_prog, 'vert')),
+	(vbo, GL.GetAttributeLocation(grass_prog, 'direction')),
+	(vbo, GL.GetAttributeLocation(grass_prog, 'color')),
+	(vbo, GL.GetAttributeLocation(grass_prog, 'thickness')),
+	(vbo, GL.GetAttributeLocation(grass_prog, 'power')),
 ]
 
 vao = GL.NewVertexArray('3f3f3f1f1f', attribs, ibo)
 
 ssao_vbo = GL.NewVertexBuffer(struct.pack('8f', 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0))
-ssao_vao = GL.NewVertexArray('2f', [(ssao_vbo, GL.AttributeLocation(ssao_prog, 'vert'))])
+ssao_vao = GL.NewVertexArray('2f', [(ssao_vbo, GL.GetAttributeLocation(ssao_prog, 'vert'))])
 
 GL.UseProgram(grass_prog)
-GL.UniformMatrix(GL.UniformLocation(grass_prog, 'mat'), camera)
+GL.UniformMatrix(GL.GetUniformLocation(grass_prog, 'mat'), camera)
 
 ubo = GL.NewUniformBuffer(b''.join(struct.pack('2f', x, y) for x, y in kernel))
 
 fbo, color, depth = GL.NewFramebuffer()
 
 GL.UseProgram(ssao_prog)
-GL.Uniform1i(GL.UniformLocation(ssao_prog, 'texture'), 0)
-GL.Uniform1i(GL.UniformLocation(ssao_prog, 'depth'), 1)
-GL.UseUniformBlock(GL.UniformBlockLocation(ssao_prog, 'Kernel'), ubo)
+GL.Uniform1i(GL.GetUniformLocation(ssao_prog, 'texture'), 0)
+GL.Uniform1i(GL.GetUniformLocation(ssao_prog, 'depth'), 1)
+GL.UseUniformBuffer(GL.GetUniformBufferLocation(ssao_prog, 'Kernel'), ubo)
 
 while WND.Update():
 	GL.UseFramebuffer(fbo)

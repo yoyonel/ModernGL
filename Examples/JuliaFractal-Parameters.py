@@ -47,11 +47,11 @@ frag = GL.NewFragmentShader('''
 prog = GL.NewProgram([vert, frag])
 
 vbo = GL.NewVertexBuffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
-vao = GL.NewVertexArray('2f', [(vbo, GL.AttributeLocation(prog, 'vert'))])
+vao = GL.NewVertexArray('2f', [(vbo, GL.GetAttributeLocation(prog, 'vert'))])
 
-iterUni = GL.UniformLocation(prog, 'iter')
-scaleUni = GL.UniformLocation(prog, 'scale')
-centerUni = GL.UniformLocation(prog, 'center')
+iterUni = GL.GetUniformLocation(prog, 'iter')
+scaleUni = GL.GetUniformLocation(prog, 'scale')
+centerUni = GL.GetUniformLocation(prog, 'center')
 
 GL.UseProgram(prog)
 GL.Uniform1i(iterUni, 100)

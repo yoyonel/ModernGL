@@ -65,14 +65,14 @@ verts = [
 vbo = GL.NewVertexBuffer(struct.pack('18f', *verts))
 
 attribs = [
-	(vbo, GL.AttributeLocation(prog, 'vert')),
-	(vbo, GL.AttributeLocation(prog, 'vert_color')),
+	(vbo, GL.GetAttributeLocation(prog, 'vert')),
+	(vbo, GL.GetAttributeLocation(prog, 'vert_color')),
 ]
 
-vao = GL.NewVertexArray('2f4f', attribs, vbo)
+vao = GL.NewVertexArray('2f4f', attribs)
 
-rotation = GL.UniformLocation(prog, 'rotation')
-scale = GL.UniformLocation(prog, 'scale')
+rotation = GL.GetUniformLocation(prog, 'rotation')
+scale = GL.GetUniformLocation(prog, 'scale')
 
 GL.Uniform2f(scale, height / width * 0.75, 0.75)
 

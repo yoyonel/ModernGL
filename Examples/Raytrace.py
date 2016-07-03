@@ -84,20 +84,17 @@ frag = GL.NewFragmentShader('''
 ''')
 
 prog = GL.NewProgram([vert, frag])
-GL.Uniform1f(GL.UniformLocation(prog, 'ratio'), 16 / 9)
+GL.Uniform1f(GL.GetUniformLocation(prog, 'ratio'), 16 / 9)
 
 vbo = GL.NewVertexBuffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
-vao = GL.NewVertexArray('2f', [(vbo, GL.AttributeLocation(prog, 'vert'))], vbo)
+vao = GL.NewVertexArray('2f', [(vbo, GL.GetAttributeLocation(prog, 'vert'))])
 
 ssbo = GL.NewStorageBuffer(open('Data/Raytrace-scene.dat', 'rb').read())
 GL.UseStorageBuffer(ssbo, 1)
 
-print(GL.ReadStorageBuffer(ssbo, 0, 0))
-
 x, y = 0.0, 0.0
 
 while WND.Update():
-	# GL.Viewport(0, 0, 800, 600)
 	GL.Clear(240, 240, 240)
 
 	if WND.GetKey(ord('A')) & 1:
@@ -109,6 +106,6 @@ while WND.Update():
 	if WND.GetKey(ord('S')) & 1:
 		y -= 0.04
 
-	GL.Uniform3f(GL.UniformLocation(prog, 'position'), math.cos(x) * math.cos(y), math.sin(x) * math.cos(y), math.sin(y))
-	GL.Uniform3f(GL.UniformLocation(prog, 'target'), 0, 0, 0)
+	GL.Uniform3f(GL.GetUniformLocation(prog, 'position'), math.cos(x) * math.cos(y), math.sin(x) * math.cos(y), math.sin(y))
+	GL.Uniform3f(GL.GetUniformLocation(prog, 'target'), 0, 0, 0)
 	GL.RenderTriangleStrip(vao, 4)

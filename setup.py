@@ -123,14 +123,22 @@ ModernGL = Extension(
 		'Source/WindowsGL.cpp',
 		'Source/OpenGL.cpp',
 		'Source/ModernGL.cpp',
-		'Source/Python-Types.cpp',
-		'Source/Python-ModernGL.cpp',
+		'Source/ModernGL-Buffer.cpp',
+		'Source/ModernGL-Compute.cpp',
+		'Source/ModernGL-Core.cpp',
+		'Source/ModernGL-Framebuffer.cpp',
+		'Source/ModernGL-Program.cpp',
+		'Source/ModernGL-Render.cpp',
+		'Source/ModernGL-Shader.cpp',
+		'Source/ModernGL-Texture.cpp',
+		'Source/ModernGL-Types.cpp',
+		'Source/ModernGL-VertexArray.cpp',
 	]
 )
 
 setup(
 	name = 'ModernGL',
-	version = '2.0.12',
+	version = '2.1.0',
 	description = ShortDescription,
 	long_description = LongDescription,
 	url = 'https://github.com/cprogrammer1994/ModernGL',

@@ -1,173 +1,270 @@
 #pragma once
 
-namespace ModernGL {
+#include "Global.hpp"
 
-	enum EnableEnum {
-		ENABLE_NOTHING = 0x00,
-		ENABLE_BLEND = 0x01,
-		ENABLE_CULL_FACE = 0x02,
-		ENABLE_DEPTH_TEST = 0x04,
-		ENABLE_MULTISAMPLE = 0x08,
-	};
+#include "Python.h"
+#include "structmember.h"
 
-	struct Info {
-		int major;
-		int minor;
-		int samples;
-		const char * vendor;
-		const char * renderer;
-	};
+const int ENABLE_NOTHING = 0x00;
+const int ENABLE_BLEND = 0x01;
+const int ENABLE_CULL_FACE = 0x02;
+const int ENABLE_DEPTH_TEST = 0x04;
+const int ENABLE_MULTISAMPLE = 0x08;
 
-	struct Framebuffer {
-		int framebuffer;
-		int color;
-		int depth;
-	};
+extern PyObject * ModuleError;
 
-	struct VertexBufferAndAttribute {
-		int buffer;
-		int attribute;
-	};
+extern int defaultTextureUnit;
+extern int defaultVertexArray;
+extern int defaultFramebuffer;
+extern int defaultProgram;
 
-	extern bool InitializeModernGL();
-	
-	extern const char * GetError();
-	extern Info GetInfo();
+const int maxCompilerLog = 16 * 1024;
+extern char compilerLog[maxCompilerLog + 1];
 
-	extern void Viewport(int x, int y, int w, int h);
-	extern void Clear(unsigned char r = 0, unsigned char g = 0, unsigned char b = 0, unsigned char a = 255);
+struct Framebuffer {
+	PyObject_HEAD
+	int fbo;
+	int color;
+	int depth;
+};
 
-	extern void PointSize(float size);
-	extern void LineSize(float size);
+struct VertexArray {
+	PyObject_HEAD
+	int vao;
+};
 
-	extern void EnableOnly(unsigned mask);
-	extern void EnableBlend();
-	extern void DisableBlend();
-	extern void EnableCullFace();
-	extern void DisableCullFace();
-	extern void EnableDepthTest();
-	extern void DisableDepthTest();
-	extern void EnableMultisample();
-	extern void DisableMultisample();
+struct VertexBuffer {
+	PyObject_HEAD
+	int vbo;
+};
 
-	extern int NewProgram(int * shader, int count);
-	extern void DeleteProgram(int program);
-	extern void UseProgram(int program);
-	extern void UseDefaultProgram();
+struct IndexBuffer {
+	PyObject_HEAD
+	int ibo;
+};
 
-	extern int NewFragmentShader(const char * source);
-	extern int NewGeometryShader(const char * source);
-	extern int NewVertexShader(const char * source);
-	extern void DeleteShader(int shader);
+struct UniformBuffer {
+	PyObject_HEAD
+	int ubo;
+};
 
-	extern const char * CompilerLog();
+struct StorageBuffer {
+	PyObject_HEAD
+	int ssbo;
+	int size;
+};
 
-	extern int GetAttributeLocation(int program, const char * name);
-	extern int GetUniformLocation(int program, const char * name);
-	extern int GetUniformBlockLocation(int program, const char * name);
+struct Texture {
+	PyObject_HEAD
+	int texture;
+	int components;
+};
 
-	extern void Uniform1f(int location, float v0);
-	extern void Uniform2f(int location, float v0, float v1);
-	extern void Uniform3f(int location, float v0, float v1, float v2);
-	extern void Uniform4f(int location, float v0, float v1, float v2, float v3);
-	extern void Uniform1i(int location, int v0);
-	extern void Uniform2i(int location, int v0, int v1);
-	extern void Uniform3i(int location, int v0, int v1, int v2);
-	extern void Uniform4i(int location, int v0, int v1, int v2, int v3);
+struct Shader {
+	PyObject_HEAD
+	int shader;
+};
 
-	extern void UniformMatrix(int location, const float * matrix);
-	extern void UniformTransposeMatrix(int location, const float * matrix);
-	extern void UseUniformBlock(int location, int buffer);
+struct Program {
+	PyObject_HEAD
+	int program;
+};
 
-	extern int NewTexture(int width, int height, const void * data, int components = 3);
-	extern void DeleteTexture(int texture);
+struct AttributeLocation {
+	PyObject_HEAD
+	int location;
+};
 
-	extern void UpdateTexture(int texture, int x, int y, int width, int height, const void * data, int components = 3);
-	extern void UseTexture(int texture, int location = 0);
+struct UniformLocation {
+	PyObject_HEAD
+	int location;
+};
 
-	extern void SetTexturePixelated(int texture);
-	extern void SetTextureFiltered(int texture);
-	extern void SetTextureMipmapped(int texture);
-	extern void BuildMipmap(int texture, int base = 0, int max = 1000);
+struct UniformBufferLocation {
+	PyObject_HEAD
+	int location;
+};
 
-	extern int NewVertexArray(const char * format, VertexBufferAndAttribute * attribs, int indexBuffer = 0);
-	extern void DeleteVertexArray(int vao);
+struct ComputeShader {
+	PyObject_HEAD
+	int shader;
+	int program;
+};
 
-	extern void EnableAttribute(int vao, int target);
-	extern void DisableAttribute(int vao, int target);
-	extern void EnableAttributes(int vao, int * target, int count);
-	extern void DisableAttributes(int vao, int * target, int count);
+extern PyTypeObject FramebufferType;
+extern PyTypeObject VertexArrayType;
+extern PyTypeObject VertexBufferType;
+extern PyTypeObject IndexBufferType;
+extern PyTypeObject UniformBufferType;
+extern PyTypeObject StorageBufferType;
+extern PyTypeObject TextureType;
+extern PyTypeObject ShaderType;
+extern PyTypeObject ProgramType;
+extern PyTypeObject AttributeLocationType;
+extern PyTypeObject UniformLocationType;
+extern PyTypeObject UniformBufferLocationType;
+extern PyTypeObject ComputeShaderType;
 
-	extern int NewVertexBuffer(const void * data, int size);
-	extern int NewIndexBuffer(const void * data, int size);
-	extern int NewUniformBuffer(const void * data, int size);
-	extern int NewDynamicVertexBuffer(const void * data, int size);
-	extern int NewDynamicIndexBuffer(const void * data, int size);
-	extern int NewDynamicUniformBuffer(const void * data, int size);
-	extern void DeleteVertexBuffer(int buffer);
-	extern void DeleteIndexBuffer(int buffer);
-	extern void DeleteUniformBuffer(int buffer);
+PyObject * CreateFramebufferType(int fbo, int color, int depth);
+PyObject * CreateVertexArrayType(int vao);
+PyObject * CreateVertexBufferType(int vbo);
+PyObject * CreateIndexBufferType(int ibo);
+PyObject * CreateUniformBufferType(int ubo);
+PyObject * CreateStorageBufferType(int ssbo, int size);
+PyObject * CreateTextureType(int texture, int components);
+PyObject * CreateShaderType(int shader);
+PyObject * CreateProgramType(int program);
+PyObject * CreateAttributeLocationType(int location);
+PyObject * CreateUniformLocationType(int location);
+PyObject * CreateUniformBufferLocationType(int location);
+PyObject * CreateComputeShaderType(int shader, int program);
 
-	extern void UpdateVertexBuffer(int buffer, int offset, const void * data, int size);
-	extern void UpdateIndexBuffer(int buffer, int offset, const void * data, int size);
-	extern void UpdateUniformBuffer(int buffer, int offset, const void * data, int size);
+bool ValidFramebufferType(Framebuffer * framebuffer);
+bool ValidVertexArrayType(VertexArray * vertexArray);
+bool ValidVertexBufferType(VertexBuffer * vertexBuffer);
+bool ValidIndexBufferType(IndexBuffer * indexBuffer);
+bool ValidUniformBufferType(UniformBuffer * uniformBuffer);
+bool ValidStorageBufferType(StorageBuffer * storageBuffer);
+bool ValidTextureType(Texture * texture);
+bool ValidShaderType(Shader * shader);
+bool ValidProgramType(Program * program);
+bool ValidAttributeLocationType(AttributeLocation * attributeLocation);
+bool ValidUniformLocationType(UniformLocation * uniformLocation);
+bool ValidUniformBufferLocationType(UniformBufferLocation * uniformBufferLocation);
+bool ValidComputeShaderType(ComputeShader * computeShader);
 
-	extern void RenderTriangles(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderTriangleStrip(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderTriangleFan(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderLines(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderLineStrip(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderLineLoop(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderPoints(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderLineStripAdjacency(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderLinesAdjacency(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderTriangleStripAdjacency(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderTrianglesAdjacency(int vao, int count, int first = 0, int instances = 1);
+PyObject * InitializeModernGL(PyObject * self, PyObject * args);
+PyObject * ExtensionActive(PyObject * self);
 
-	extern void RenderIndexedTriangles(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderIndexedTriangleStrip(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderIndexedTriangleFan(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderIndexedLines(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderIndexedLineStrip(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderIndexedLineLoop(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderIndexedPoints(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderIndexedLineStripAdjacency(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderIndexedLinesAdjacency(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderIndexedTriangleStripAdjacency(int vao, int count, int first = 0, int instances = 1);
-	extern void RenderIndexedTrianglesAdjacency(int vao, int count, int first = 0, int instances = 1);
+PyObject * Viewport(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * Clear(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * GetInfo(PyObject * self);
 
-	extern Framebuffer NewFramebuffer(int width, int height);
-	extern void DeleteFramebuffer(int framebuffer);
-	extern void UseFramebuffer(int framebuffer);
-	extern void GetDefaultFramebuffer();
-	extern void UseDefaultFramebuffer();
-	
-	extern unsigned char * ReadPixels(int x, int y, int width, int height, int components = 3);
-	extern float * ReadDepthPixels(int x, int y, int width, int height);
-	
-	extern unsigned ReadPixel(int x, int y);
-	extern float ReadDepthPixel(int x, int y);
+PyObject * PointSize(PyObject * self, PyObject * args);
+PyObject * LineSize(PyObject * self, PyObject * args);
 
-	// Extensions
-	
-	extern bool ExtensionActive();
+PyObject * EnableOnly(PyObject * self, PyObject * args);
 
-	extern void UseTextureAsImage(int texture, int binding = 0, int components = 3);
-	
-	extern int NewTessControlShader(const char * source);
-	extern int NewTessEvaluationShader(const char * source);
+PyObject * EnableBlend(PyObject * self);
+PyObject * EnableCullFace(PyObject * self);
+PyObject * EnableDepthTest(PyObject * self);
+PyObject * EnableMultisample(PyObject * self);
 
-	extern int NewComputeShader(const char * source);
-	extern void DeleteComputeShader(int program);
-	extern void RunComputeShader(int program, int x = 1, int y = 1, int z = 1);
+PyObject * DisableBlend(PyObject * self);
+PyObject * DisableCullFace(PyObject * self);
+PyObject * DisableDepthTest(PyObject * self);
+PyObject * DisableMultisample(PyObject * self);
 
-	extern int NewStorageBuffer(const void * data, int size);
-	extern int NewDynamicStorageBuffer(const void * data, int size);
-	extern void UpdateStorageBuffer(int buffer, int offset, const void * data, int size);
-	extern void UseStorageBuffer(int buffer, int binding = 0);
-	extern void * ReadStorageBuffer(int buffer, int offset, int size);
+PyObject * GetAttributeLocation(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * GetUniformBufferLocation(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * GetUniformLocation(PyObject * self, PyObject * args, PyObject * kwargs);
 
-	// Better than nothing font
-	// soon
+PyObject * NewComputeShader(PyObject * self, PyObject * args);
+PyObject * DeleteComputeShader(PyObject * self, PyObject * args);
+PyObject * RunComputeShader(PyObject * self, PyObject * args, PyObject * kwargs);
 
-}
+PyObject * NewVertexBuffer(PyObject * self, PyObject * args);
+PyObject * NewIndexBuffer(PyObject * self, PyObject * args);
+PyObject * NewUniformBuffer(PyObject * self, PyObject * args);
+PyObject * NewStorageBuffer(PyObject * self, PyObject * args);
+
+PyObject * UseStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * ReadStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
+
+PyObject * DeleteVertexBuffer(PyObject * self, PyObject * args);
+PyObject * DeleteIndexBuffer(PyObject * self, PyObject * args);
+PyObject * DeleteUniformBuffer(PyObject * self, PyObject * args);
+PyObject * DeleteStorageBuffer(PyObject * self, PyObject * args); // TODO: missing
+
+PyObject * NewDynamicVertexBuffer(PyObject * self, PyObject * args);
+PyObject * NewDynamicIndexBuffer(PyObject * self, PyObject * args);
+PyObject * NewDynamicUniformBuffer(PyObject * self, PyObject * args);
+PyObject * NewDynamicStorageBuffer(PyObject * self, PyObject * args);
+
+PyObject * NewVertexArray(PyObject * self, PyObject * args);
+PyObject * DeleteVertexArray(PyObject * self, PyObject * args);
+
+PyObject * EnableAttribute(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * DisableAttribute(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs);
+
+PyObject * NewVertexShader(PyObject * self, PyObject * args);
+PyObject * NewFragmentShader(PyObject * self, PyObject * args);
+PyObject * NewGeometryShader(PyObject * self, PyObject * args);
+PyObject * NewTessControlShader(PyObject * self, PyObject * args);
+PyObject * NewTessEvaluationShader(PyObject * self, PyObject * args);
+PyObject * DeleteShader(PyObject * self, PyObject * args);
+
+PyObject * NewProgram(PyObject * self, PyObject * args);
+PyObject * DeleteProgram(PyObject * self, PyObject * args);
+
+PyObject * RenderIndexedPoints(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderIndexedLines(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderIndexedLineStrip(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderIndexedLineLoop(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderIndexedTriangles(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderIndexedTriangleStrip(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderIndexedTriangleFan(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderIndexedLinesAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderIndexedLineStripAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderIndexedTrianglesAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderIndexedTriangleStripAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
+
+PyObject * RenderPoints(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderLines(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderLineStrip(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderLineLoop(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderTriangles(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderTriangleStrip(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderTriangleFan(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderLinesAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderLineStripAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * RenderTriangleStripAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
+
+PyObject * Uniform1f(PyObject * self, PyObject * args);
+PyObject * Uniform1i(PyObject * self, PyObject * args);
+PyObject * Uniform2f(PyObject * self, PyObject * args);
+PyObject * Uniform2i(PyObject * self, PyObject * args);
+PyObject * Uniform3f(PyObject * self, PyObject * args);
+PyObject * Uniform3i(PyObject * self, PyObject * args);
+PyObject * Uniform4f(PyObject * self, PyObject * args);
+PyObject * Uniform4i(PyObject * self, PyObject * args);
+PyObject * UniformMatrix(PyObject * self, PyObject * args);
+PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args);
+PyObject * UseUniformBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
+
+PyObject * UpdateVertexBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * UpdateUniformBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * UpdateIndexBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
+
+PyObject * UseProgram(PyObject * self, PyObject * args);
+PyObject * GetDefaultProgram(PyObject * self); // TODO:
+PyObject * UseDefaultProgram(PyObject * self);
+
+PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * DeleteFramebuffer(PyObject * self, PyObject * args);
+PyObject * UseFramebuffer(PyObject * self, PyObject * args);
+
+PyObject * GetDefaultFramebuffer(PyObject * self, PyObject * args);
+PyObject * UseDefaultFramebuffer(PyObject * self, PyObject * args);
+
+PyObject * ReadPixel(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * ReadPixels(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * ReadDepthPixel(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * ReadDepthPixels(PyObject * self, PyObject * args, PyObject * kwargs);
+
+PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * DeleteTexture(PyObject * self, PyObject * args);
+
+PyObject * BuildMipmap(PyObject * self, PyObject * args, PyObject * kwargs);
+
+PyObject * UseTexture(PyObject * self, PyObject * args);
+PyObject * UseTextureAsImage(PyObject * self, PyObject * args, PyObject * kwargs);
+
+PyObject * SetTextureFiltered(PyObject * self, PyObject * args);
+PyObject * SetTextureMipmapped(PyObject * self, PyObject * args);
+PyObject * SetTexturePixelated(PyObject * self, PyObject * args);
