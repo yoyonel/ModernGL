@@ -7,7 +7,7 @@ PyObject * Framebuffer_new(PyTypeObject * type, PyObject * args, PyObject * kwar
 }
 
 int Framebuffer_init(Framebuffer * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "wlzmfpcg");
+	PyErr_SetString(ModuleError, "Cannot instantiate Framebuffer. Use NewFramebuffer(...) to get a Framebuffer object.");
 	return -1;
 }
 
@@ -65,7 +65,7 @@ PyObject * VertexArray_new(PyTypeObject * type, PyObject * args, PyObject * kwar
 }
 
 int VertexArray_init(VertexArray * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "eqbtvwlu");
+	PyErr_SetString(ModuleError, "Cannot instantiate VertexArray. Use NewVertexArray(...) to get a VertexArray object.");
 	return -1;
 }
 
@@ -123,7 +123,7 @@ PyObject * VertexBuffer_new(PyTypeObject * type, PyObject * args, PyObject * kwa
 }
 
 int VertexBuffer_init(VertexBuffer * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "krmpcvwg");
+	PyErr_SetString(ModuleError, "Cannot instantiate VertexBuffer. Use NewVertexBuffer(...) to get a VertexBuffer object.");
 	return -1;
 }
 
@@ -181,7 +181,7 @@ PyObject * IndexBuffer_new(PyTypeObject * type, PyObject * args, PyObject * kwar
 }
 
 int IndexBuffer_init(IndexBuffer * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "xzsylcgt");
+	PyErr_SetString(ModuleError, "Cannot instantiate IndexBuffer. Use NewIndexBuffer(...) to get a IndexBuffer object.");
 	return -1;
 }
 
@@ -239,7 +239,7 @@ PyObject * UniformBuffer_new(PyTypeObject * type, PyObject * args, PyObject * kw
 }
 
 int UniformBuffer_init(UniformBuffer * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "odjxluah");
+	PyErr_SetString(ModuleError, "Cannot instantiate UniformBuffer. Use NewUniformBuffer(...) to get a UniformBuffer object.");
 	return -1;
 }
 
@@ -297,7 +297,7 @@ PyObject * StorageBuffer_new(PyTypeObject * type, PyObject * args, PyObject * kw
 }
 
 int StorageBuffer_init(StorageBuffer * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "owvcimbg");
+	PyErr_SetString(ModuleError, "Cannot instantiate StorageBuffer. Use NewStorageBuffer(...) to get a StorageBuffer object.");
 	return -1;
 }
 
@@ -355,7 +355,7 @@ PyObject * Texture_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) 
 }
 
 int Texture_init(Texture * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "gcvtomuy");
+	PyErr_SetString(ModuleError, "Cannot instantiate Texture. Use NewTexture(...) to get a Texture object.");
 	return -1;
 }
 
@@ -413,7 +413,7 @@ PyObject * Shader_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 }
 
 int Shader_init(Shader * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "iwgnpdxm");
+	PyErr_SetString(ModuleError, "Cannot instantiate Shader. Use NewShader(...) to get a Shader object.");
 	return -1;
 }
 
@@ -471,7 +471,7 @@ PyObject * Program_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) 
 }
 
 int Program_init(Program * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "oaxybdwi");
+	PyErr_SetString(ModuleError, "Cannot instantiate Program. Use NewProgram(...) to get a Program object.");
 	return -1;
 }
 
@@ -529,7 +529,7 @@ PyObject * AttributeLocation_new(PyTypeObject * type, PyObject * args, PyObject 
 }
 
 int AttributeLocation_init(AttributeLocation * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "nximrlyc");
+	PyErr_SetString(ModuleError, "Cannot instantiate AttributeLocation. Use NewAttributeLocation(...) to get a AttributeLocation object.");
 	return -1;
 }
 
@@ -587,7 +587,7 @@ PyObject * UniformLocation_new(PyTypeObject * type, PyObject * args, PyObject * 
 }
 
 int UniformLocation_init(UniformLocation * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "mfvqzrns");
+	PyErr_SetString(ModuleError, "Cannot instantiate UniformLocation. Use NewUniformLocation(...) to get a UniformLocation object.");
 	return -1;
 }
 
@@ -645,7 +645,7 @@ PyObject * UniformBlockLocation_new(PyTypeObject * type, PyObject * args, PyObje
 }
 
 int UniformBlockLocation_init(UniformBlockLocation * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "btgakmec");
+	PyErr_SetString(ModuleError, "Cannot instantiate UniformBlockLocation. Use NewUniformBlockLocation(...) to get a UniformBlockLocation object.");
 	return -1;
 }
 
@@ -703,7 +703,7 @@ PyObject * ComputeShader_new(PyTypeObject * type, PyObject * args, PyObject * kw
 }
 
 int ComputeShader_init(ComputeShader * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "krmpcvwg");
+	PyErr_SetString(ModuleError, "Cannot instantiate ComputeShader. Use NewComputeShader(...) to get a ComputeShader object.");
 	return -1;
 }
 
