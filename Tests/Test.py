@@ -7,15 +7,10 @@ class Importable(unittest.TestCase):
 	def test_init_fail(self):
 		import ModernGL as GL
 
-		self.assertEqual(GL.GetError(), 'Not initialized.')
-
-		GL.InitializeModernGL()
-
-		self.assertEqual(GL.GetError(), 'InitializeOpenGL failed.') 
-		self.assertEqual(GL.ExtensionActive(), False) 
-		
 		with self.assertRaises(GL.Error):
-			GL.GetInfo()
+			GL.InitializeModernGL()
+
+		self.assertEqual(GL.ExtensionActive(), False) 
 
 if __name__ == '__main__':
 	major = sys.hexversion >> 24
