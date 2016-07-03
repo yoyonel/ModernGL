@@ -16,7 +16,7 @@ void Framebuffer_dealloc(Framebuffer * self) {
 }
 
 PyObject * Framebuffer_str(Framebuffer * self) {
-	PyUnicode_FromFormat("<Framebuffer = %d>", self->fbo);
+	return PyUnicode_FromFormat("<Framebuffer = %d>", self->fbo);
 }
 
 PyTypeObject FramebufferType = {
@@ -74,7 +74,7 @@ void VertexArray_dealloc(VertexArray * self) {
 }
 
 PyObject * VertexArray_str(VertexArray * self) {
-	PyUnicode_FromFormat("<VertexArray = %d>", self->vao);
+	return PyUnicode_FromFormat("<VertexArray = %d>", self->vao);
 }
 
 PyTypeObject VertexArrayType = {
@@ -132,7 +132,7 @@ void VertexBuffer_dealloc(VertexBuffer * self) {
 }
 
 PyObject * VertexBuffer_str(VertexBuffer * self) {
-	PyUnicode_FromFormat("<VertexBuffer = %d>", self->vbo);
+	return PyUnicode_FromFormat("<VertexBuffer = %d>", self->vbo);
 }
 
 PyTypeObject VertexBufferType = {
@@ -190,7 +190,7 @@ void IndexBuffer_dealloc(IndexBuffer * self) {
 }
 
 PyObject * IndexBuffer_str(IndexBuffer * self) {
-	PyUnicode_FromFormat("<IndexBuffer = %d>", self->ibo);
+	return PyUnicode_FromFormat("<IndexBuffer = %d>", self->ibo);
 }
 
 PyTypeObject IndexBufferType = {
@@ -248,7 +248,7 @@ void UniformBuffer_dealloc(UniformBuffer * self) {
 }
 
 PyObject * UniformBuffer_str(UniformBuffer * self) {
-	PyUnicode_FromFormat("<UniformBuffer = %d>", self->ubo);
+	return PyUnicode_FromFormat("<UniformBuffer = %d>", self->ubo);
 }
 
 PyTypeObject UniformBufferType = {
@@ -306,7 +306,7 @@ void StorageBuffer_dealloc(StorageBuffer * self) {
 }
 
 PyObject * StorageBuffer_str(StorageBuffer * self) {
-	PyUnicode_FromFormat("<StorageBuffer = %d>", self->ssbo);
+	return PyUnicode_FromFormat("<StorageBuffer = %d>", self->ssbo);
 }
 
 PyTypeObject StorageBufferType = {
@@ -364,7 +364,7 @@ void Texture_dealloc(Texture * self) {
 }
 
 PyObject * Texture_str(Texture * self) {
-	PyUnicode_FromFormat("<Texture = %d>", self->texture);
+	return PyUnicode_FromFormat("<Texture = %d>", self->texture);
 }
 
 PyTypeObject TextureType = {
@@ -422,7 +422,7 @@ void Shader_dealloc(Shader * self) {
 }
 
 PyObject * Shader_str(Shader * self) {
-	PyUnicode_FromFormat("<Shader = %d>", self->shader);
+	return PyUnicode_FromFormat("<Shader = %d>", self->shader);
 }
 
 PyTypeObject ShaderType = {
@@ -480,7 +480,7 @@ void Program_dealloc(Program * self) {
 }
 
 PyObject * Program_str(Program * self) {
-	PyUnicode_FromFormat("<Program = %d>", self->program);
+	return PyUnicode_FromFormat("<Program = %d>", self->program);
 }
 
 PyTypeObject ProgramType = {
@@ -538,7 +538,7 @@ void AttributeLocation_dealloc(AttributeLocation * self) {
 }
 
 PyObject * AttributeLocation_str(AttributeLocation * self) {
-	PyUnicode_FromFormat("<AttributeLocation = %d>", self->location);
+	return PyUnicode_FromFormat("<AttributeLocation = %d>", self->location);
 }
 
 PyTypeObject AttributeLocationType = {
@@ -596,7 +596,7 @@ void UniformLocation_dealloc(UniformLocation * self) {
 }
 
 PyObject * UniformLocation_str(UniformLocation * self) {
-	PyUnicode_FromFormat("<UniformLocation = %d>", self->location);
+	return PyUnicode_FromFormat("<UniformLocation = %d>", self->location);
 }
 
 PyTypeObject UniformLocationType = {
@@ -654,7 +654,7 @@ void UniformBlockLocation_dealloc(UniformBlockLocation * self) {
 }
 
 PyObject * UniformBlockLocation_str(UniformBlockLocation * self) {
-	PyUnicode_FromFormat("<UniformBlockLocation = %d>", self->location);
+	return PyUnicode_FromFormat("<UniformBlockLocation = %d>", self->location);
 }
 
 PyTypeObject UniformBlockLocationType = {
@@ -712,7 +712,7 @@ void ComputeShader_dealloc(ComputeShader * self) {
 }
 
 PyObject * ComputeShader_str(ComputeShader * self) {
-	PyUnicode_FromFormat("<ComputeShader = %d>", self->shader);
+	return PyUnicode_FromFormat("<ComputeShader = %d>", self->shader);
 }
 
 PyTypeObject ComputeShaderType = {
@@ -816,11 +816,12 @@ PyObject * CreateStorageBufferType(int ssbo) {
 	return (PyObject *)obj;
 }
 
-PyObject * CreateTextureType(int texture) {
+PyObject * CreateTextureType(int texture, int components) {
 	Texture * obj = (Texture *)TextureType.tp_alloc(&TextureType, 0);
 
 	if (obj != 0) {
 		obj->texture = texture;
+		obj->components = components;
 	}
 
 	return (PyObject *)obj;

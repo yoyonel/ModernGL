@@ -589,7 +589,8 @@ PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
-	return CreateTextureType(ModernGL::NewTexture(width, height, data, components));
+	int texture = ModernGL::NewTexture(width, height, data, components);
+	return CreateTextureType(texture, components);
 }
 
 PyObject * DeleteTexture(PyObject * self, PyObject * args) {
@@ -615,12 +616,11 @@ PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int width;
 	int height;
 	const void * data;
-	int components = 3;
 	int size;
 
-	static const char * kwlist[] = {"texture", "x", "y", "width", "height", "data", "components", 0};
+	static const char * kwlist[] = {"texture", "x", "y", "width", "height", "data", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oiiiiy#|i:UpdateTexture", (char **)kwlist, &texture, &x, &y, &width, &height, &data, &size, &components)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oiiiiy#|i:UpdateTexture", (char **)kwlist, &texture, &x, &y, &width, &height, &data, &size)) {
 		return 0;
 	}
 
@@ -629,7 +629,7 @@ PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
-	ModernGL::UpdateTexture(texture->texture, x, y, width, height, data, components);
+	ModernGL::UpdateTexture(texture->texture, x, y, width, height, data, texture->components);
 	Py_RETURN_NONE;
 }
 
@@ -747,7 +747,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	ModernGL::VertexBufferAndAttribute attribs[MAX_NUM_ATTRIBUTES];
+	ModernGL::VertexBufferAndAttribute attrib_array[MAX_NUM_ATTRIBUTES];
 	for (int i = 0; i < count; ++i) {
 		PyObject * tuple = PyList_GET_ITEM(lst, i);
 
@@ -770,11 +770,12 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 			return 0;
 		}
 
-		attribs[i].buffer = buffer->vbo;
-		attribs[i].attribute = location->location;
+		attrib_array[i].buffer = buffer->vbo;
+		attrib_array[i].attribute = location->location;
 	}
 
-	PyObject * result = CreateVertexArrayType(ModernGL::NewVertexArray(format, attribs, indexBuffer ? indexBuffer->ibo : 0));
+	int vao = ModernGL::NewVertexArray(format, attrib_array, indexBuffer ? indexBuffer->ibo : 0);
+	PyObject * result = CreateVertexArrayType(vao);
 	return result;
 }
 
@@ -1562,8 +1563,8 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	ModernGL::Framebuffer framebuffer = ModernGL::NewFramebuffer(width, height);
 	PyObject * fbo = CreateFramebufferType(framebuffer.framebuffer);
-	PyObject * color = CreateTextureType(framebuffer.color);
-	PyObject * depth = CreateTextureType(framebuffer.depth);
+	PyObject * color = CreateTextureType(framebuffer.color, 4);
+	PyObject * depth = CreateTextureType(framebuffer.depth, 1);
 	return Py_BuildValue("OOO", fbo, color, depth);
 }
 
@@ -1675,17 +1676,16 @@ PyObject * ReadDepthPixel(PyObject * self, PyObject * args, PyObject * kwargs) {
 }
 
 PyObject * UseTextureAsImage(PyObject * self, PyObject * args, PyObject * kwargs) {
-	int texture;
+	Texture * texture;
 	int binding = 0;
-	int components = 3;
 
-	static const char * kwlist[] = {"texture", "binding", "components", 0};
+	static const char * kwlist[] = {"texture", "binding", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i|ii:UseTextureAsImage", (char **)kwlist, &texture, &binding, &components)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i|ii:UseTextureAsImage", (char **)kwlist, &texture, &binding)) {
 		return 0;
 	}
 
-	ModernGL::UseTextureAsImage(texture, binding, components);
+	ModernGL::UseTextureAsImage(texture->texture, binding, texture->components);
 	Py_RETURN_NONE;
 }
 

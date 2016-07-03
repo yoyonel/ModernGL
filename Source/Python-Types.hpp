@@ -38,6 +38,7 @@ struct StorageBuffer {
 struct Texture {
 	PyObject_HEAD
 	int texture;
+	int components;
 };
 
 struct Shader {
@@ -90,7 +91,7 @@ PyObject * CreateVertexBufferType(int vbo);
 PyObject * CreateIndexBufferType(int ibo);
 PyObject * CreateUniformBufferType(int ubo);
 PyObject * CreateStorageBufferType(int ssbo);
-PyObject * CreateTextureType(int texture);
+PyObject * CreateTextureType(int texture, int components);
 PyObject * CreateShaderType(int shader);
 PyObject * CreateProgramType(int program);
 PyObject * CreateAttributeLocationType(int location);

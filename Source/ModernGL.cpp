@@ -501,8 +501,11 @@ namespace ModernGL {
 
 		if (!linked) {
 			int logSize = 0;
-			OpenGL::glGetProgramInfoLog(program, maxCompilerLog, &logSize, compilerLog);
-			compilerLog[logSize] = 0;
+			static const char * logTitle = "Program:\n";
+			static int logTitleSize = strlen(logTitle);
+			strcpy(compilerLog, logTitle);
+			OpenGL::glGetProgramInfoLog(program, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
+			compilerLog[logTitleSize + logSize] = 0;
 			OpenGL::glDeleteProgram(program);
 			program = 0;
 		} else {
@@ -532,6 +535,29 @@ namespace ModernGL {
 		OpenGL::glUseProgram(defaultProgram);
 	}
 
+	int NewVertexShader(const char * source) {
+		int shader = OpenGL::glCreateShader(OpenGL::GL_VERTEX_SHADER);
+		OpenGL::glShaderSource(shader, 1, &source, 0);
+		OpenGL::glCompileShader(shader);
+
+		int compiled = OpenGL::GL_FALSE;
+		OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
+		if (!compiled) {
+			int logSize = 0;
+			static const char * logTitle = "VertexShader:\n";
+			static int logTitleSize = strlen(logTitle);
+			strcpy(compilerLog, logTitle);
+			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
+			compilerLog[logTitleSize + logSize] = 0;
+			OpenGL::glDeleteShader(shader);
+			shader = 0;
+		} else {
+			compilerLog[0] = 0;
+		}
+
+		return shader;
+	}
+
 	int NewFragmentShader(const char * source) {
 		int shader = OpenGL::glCreateShader(OpenGL::GL_FRAGMENT_SHADER);
 		OpenGL::glShaderSource(shader, 1, &source, 0);
@@ -541,8 +567,11 @@ namespace ModernGL {
 		OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 		if (!compiled) {
 			int logSize = 0;
-			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog, &logSize, compilerLog);
-			compilerLog[logSize] = 0;
+			static const char * logTitle = "FragmentShader:\n";
+			static int logTitleSize = strlen(logTitle);
+			strcpy(compilerLog, logTitle);
+			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
+			compilerLog[logTitleSize + logSize] = 0;
 			OpenGL::glDeleteShader(shader);
 			shader = 0;
 		} else {
@@ -561,28 +590,11 @@ namespace ModernGL {
 		OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 		if (!compiled) {
 			int logSize = 0;
-			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog, &logSize, compilerLog);
-			compilerLog[logSize] = 0;
-			OpenGL::glDeleteShader(shader);
-			shader = 0;
-		} else {
-			compilerLog[0] = 0;
-		}
-
-		return shader;
-	}
-
-	int NewVertexShader(const char * source) {
-		int shader = OpenGL::glCreateShader(OpenGL::GL_VERTEX_SHADER);
-		OpenGL::glShaderSource(shader, 1, &source, 0);
-		OpenGL::glCompileShader(shader);
-
-		int compiled = OpenGL::GL_FALSE;
-		OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
-		if (!compiled) {
-			int logSize = 0;
-			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog, &logSize, compilerLog);
-			compilerLog[logSize] = 0;
+			static const char * logTitle = "GeometryShader:\n";
+			static int logTitleSize = strlen(logTitle);
+			strcpy(compilerLog, logTitle);
+			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
+			compilerLog[logTitleSize + logSize] = 0;
 			OpenGL::glDeleteShader(shader);
 			shader = 0;
 		} else {
@@ -1164,8 +1176,11 @@ namespace ModernGL {
 		OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 		if (!compiled) {
 			int logSize = 0;
-			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog, &logSize, compilerLog);
-			compilerLog[logSize] = 0;
+			static const char * logTitle = "TessControlShader:\n";
+			static int logTitleSize = strlen(logTitle);
+			strcpy(compilerLog, logTitle);
+			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
+			compilerLog[logTitleSize + logSize] = 0;
 			OpenGL::glDeleteShader(shader);
 			shader = 0;
 		} else {
@@ -1184,8 +1199,11 @@ namespace ModernGL {
 		OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 		if (!compiled) {
 			int logSize = 0;
-			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog, &logSize, compilerLog);
-			compilerLog[logSize] = 0;
+			static const char * logTitle = "TessEvaluationShader:\n";
+			static int logTitleSize = strlen(logTitle);
+			strcpy(compilerLog, logTitle);
+			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
+			compilerLog[logTitleSize + logSize] = 0;
 			OpenGL::glDeleteShader(shader);
 			shader = 0;
 		} else {
@@ -1204,8 +1222,11 @@ namespace ModernGL {
 		OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 		if (!compiled) {
 			int logSize = 0;
-			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog, &logSize, compilerLog);
-			compilerLog[logSize] = 0;
+			static const char * logTitle = "ComputeShader:\n";
+			static int logTitleSize = strlen(logTitle);
+			strcpy(compilerLog, logTitle);
+			OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
+			compilerLog[logTitleSize + logSize] = 0;
 			OpenGL::glDeleteShader(shader);
 			shader = 0;
 		} else {
