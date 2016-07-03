@@ -24,10 +24,6 @@ vert = GL.NewVertexShader('''
 	}
 ''')
 
-if not vert:
-	print('NewVertexShader failed')
-	print(GL.CompilerLog())
-
 frag = GL.NewFragmentShader('''
 	#version 400
 	
@@ -38,10 +34,6 @@ frag = GL.NewFragmentShader('''
 		color = vec4(frag_color, 1.0);
 	}
 ''')
-
-if not frag:
-	print('NewFragmentShader failed')
-	print(GL.CompilerLog())
 
 width, height = WND.GetSize()
 

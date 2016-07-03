@@ -2,7 +2,7 @@
 
 #include "Python-ModernGL.hpp"
 
-static PyObject * Framebuffer_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+PyObject * Framebuffer_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
 
@@ -60,7 +60,7 @@ PyTypeObject FramebufferType = {
 	Framebuffer_new,
 };
 
-static PyObject * VertexArray_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+PyObject * VertexArray_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
 
@@ -118,7 +118,7 @@ PyTypeObject VertexArrayType = {
 	VertexArray_new,
 };
 
-static PyObject * VertexBuffer_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+PyObject * VertexBuffer_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
 
@@ -176,7 +176,7 @@ PyTypeObject VertexBufferType = {
 	VertexBuffer_new,
 };
 
-static PyObject * IndexBuffer_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+PyObject * IndexBuffer_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
 
@@ -234,7 +234,7 @@ PyTypeObject IndexBufferType = {
 	IndexBuffer_new,
 };
 
-static PyObject * UniformBuffer_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+PyObject * UniformBuffer_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
 
@@ -292,7 +292,7 @@ PyTypeObject UniformBufferType = {
 	UniformBuffer_new,
 };
 
-static PyObject * StorageBuffer_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+PyObject * StorageBuffer_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
 
@@ -350,7 +350,7 @@ PyTypeObject StorageBufferType = {
 	StorageBuffer_new,
 };
 
-static PyObject * Texture_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+PyObject * Texture_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
 
@@ -408,7 +408,7 @@ PyTypeObject TextureType = {
 	Texture_new,
 };
 
-static PyObject * Shader_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+PyObject * Shader_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
 
@@ -466,7 +466,7 @@ PyTypeObject ShaderType = {
 	Shader_new,
 };
 
-static PyObject * Program_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+PyObject * Program_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
 
@@ -524,7 +524,7 @@ PyTypeObject ProgramType = {
 	Program_new,
 };
 
-static PyObject * AttributeLocation_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+PyObject * AttributeLocation_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
 
@@ -582,7 +582,7 @@ PyTypeObject AttributeLocationType = {
 	AttributeLocation_new,
 };
 
-static PyObject * UniformLocation_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+PyObject * UniformLocation_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
 
@@ -640,7 +640,7 @@ PyTypeObject UniformLocationType = {
 	UniformLocation_new,
 };
 
-static PyObject * UniformBlockLocation_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+PyObject * UniformBlockLocation_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
 
@@ -698,7 +698,7 @@ PyTypeObject UniformBlockLocationType = {
 	UniformBlockLocation_new,
 };
 
-static PyObject * ComputeShader_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+PyObject * ComputeShader_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
 
@@ -801,6 +801,16 @@ PyObject * CreateUniformBufferType(int ubo) {
 
 	if (obj != 0) {
 		obj->ubo = ubo;
+	}
+
+	return (PyObject *)obj;
+}
+
+PyObject * CreateStorageBufferType(int ssbo) {
+	StorageBuffer * obj = (StorageBuffer *)StorageBufferType.tp_alloc(&StorageBufferType, 0);
+
+	if (obj != 0) {
+		obj->ssbo = ssbo;
 	}
 
 	return (PyObject *)obj;

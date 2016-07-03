@@ -75,13 +75,13 @@ extern PyTypeObject VertexArrayType;
 extern PyTypeObject VertexBufferType;
 extern PyTypeObject IndexBufferType;
 extern PyTypeObject UniformBufferType;
+extern PyTypeObject StorageBufferType;
 extern PyTypeObject TextureType;
 extern PyTypeObject ShaderType;
 extern PyTypeObject ProgramType;
 extern PyTypeObject AttributeLocationType;
 extern PyTypeObject UniformLocationType;
 extern PyTypeObject UniformBlockLocationType;
-extern PyTypeObject StorageBufferType;
 extern PyTypeObject ComputeShaderType;
 
 PyObject * CreateFramebufferType(int fbo);

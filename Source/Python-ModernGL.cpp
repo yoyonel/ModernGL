@@ -3,17 +3,15 @@
 #include "Python-Types.hpp"
 #include "ModernGL.hpp"
 
+const int MAX_NUM_SHADER = 16;
+const int MAX_NUM_ATTRIBUTES = 256;
+
 bool initialized = false;
 PyObject * ModuleError;
 
 PyObject * InitializeModernGL(PyObject * self, PyObject * args);
 
-PyObject * ExtensionActive(PyObject * self, PyObject * args) {
-	if (!PyArg_ParseTuple(args, ":ExtensionActive")) {
-		PyErr_SetString(ModuleError, "exlqbywv");
-		return 0;
-	}
-
+PyObject * ExtensionActive(PyObject * self) {
 	if (ModernGL::ExtensionActive()) {
 		Py_RETURN_TRUE;
 	} else {
@@ -21,21 +19,7 @@ PyObject * ExtensionActive(PyObject * self, PyObject * args) {
 	}
 }
 
-PyObject * GetError(PyObject * self, PyObject * args) {
-	if (!PyArg_ParseTuple(args, ":GetError")) {
-		PyErr_SetString(ModuleError, "nkwsmtfl");
-		return 0;
-	}
-
-	return PyUnicode_FromString(ModernGL::GetError());
-}
-
-PyObject * GetInfo(PyObject * self, PyObject * args) {
-	if (!PyArg_ParseTuple(args, ":GetInfo")) {
-		PyErr_SetString(ModuleError, "dmvirybw");
-		return 0;
-	}
-
+PyObject * GetInfo(PyObject * self) {
 	ModernGL::Info info = ModernGL::GetInfo();
 	return Py_BuildValue("iiiss", info.major, info.minor, info.samples, info.vendor, info.renderer);
 }
@@ -49,7 +33,6 @@ PyObject * Viewport(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"x", "y", "width", "height", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii:Viewport", (char **)kwlist, &x, &y, &width, &height)) {
-		PyErr_SetString(ModuleError, "mjckhbse");
 		return 0;
 	}
 
@@ -66,7 +49,6 @@ PyObject * Clear(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"r", "g", "b", "a", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|bbbb:Clear", (char **)kwlist, &r, &g, &b, &a)) {
-		PyErr_SetString(ModuleError, "rtlqkfcl");
 		return 0;
 	}
 
@@ -78,7 +60,6 @@ PyObject * PointSize(PyObject * self, PyObject * args) {
 	float size;
 
 	if (!PyArg_ParseTuple(args, "f:PointSize", &size)) {
-		PyErr_SetString(ModuleError, "jvbfqdwg");
 		return 0;
 	}
 
@@ -90,7 +71,6 @@ PyObject * LineSize(PyObject * self, PyObject * args) {
 	float size;
 
 	if (!PyArg_ParseTuple(args, "f:LineSize", &size)) {
-		PyErr_SetString(ModuleError, "iaphsgtx");
 		return 0;
 	}
 
@@ -102,7 +82,6 @@ PyObject * EnableOnly(PyObject * self, PyObject * args) {
 	unsigned mask;
 
 	if (!PyArg_ParseTuple(args, "I:EnableOnly", &mask)) {
-		PyErr_SetString(ModuleError, "ltvmyxzj");
 		return 0;
 	}
 
@@ -110,82 +89,42 @@ PyObject * EnableOnly(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * EnableBlend(PyObject * self, PyObject * args) {
-	if (!PyArg_ParseTuple(args, ":EnableBlend")) {
-		PyErr_SetString(ModuleError, "wrublzoc");
-		return 0;
-	}
-
+PyObject * EnableBlend(PyObject * self) {
 	ModernGL::EnableBlend();
 	Py_RETURN_NONE;
 }
 
-PyObject * DisableBlend(PyObject * self, PyObject * args) {
-	if (!PyArg_ParseTuple(args, ":DisableBlend")) {
-		PyErr_SetString(ModuleError, "iglmurfx");
-		return 0;
-	}
-
+PyObject * DisableBlend(PyObject * self) {
 	ModernGL::DisableBlend();
 	Py_RETURN_NONE;
 }
 
-PyObject * EnableCullFace(PyObject * self, PyObject * args) {
-	if (!PyArg_ParseTuple(args, ":EnableCullFace")) {
-		PyErr_SetString(ModuleError, "lgzfqlyh");
-		return 0;
-	}
-
+PyObject * EnableCullFace(PyObject * self) {
 	ModernGL::EnableCullFace();
 	Py_RETURN_NONE;
 }
 
-PyObject * DisableCullFace(PyObject * self, PyObject * args) {
-	if (!PyArg_ParseTuple(args, ":DisableCullFace")) {
-		PyErr_SetString(ModuleError, "mvkrwcph");
-		return 0;
-	}
-
+PyObject * DisableCullFace(PyObject * self) {
 	ModernGL::DisableCullFace();
 	Py_RETURN_NONE;
 }
 
-PyObject * EnableDepthTest(PyObject * self, PyObject * args) {
-	if (!PyArg_ParseTuple(args, ":EnableDepthTest")) {
-		PyErr_SetString(ModuleError, "fpgeoqdz");
-		return 0;
-	}
-
+PyObject * EnableDepthTest(PyObject * self) {
 	ModernGL::EnableDepthTest();
 	Py_RETURN_NONE;
 }
 
-PyObject * DisableDepthTest(PyObject * self, PyObject * args) {
-	if (!PyArg_ParseTuple(args, ":DisableDepthTest")) {
-		PyErr_SetString(ModuleError, "kqhdetyu");
-		return 0;
-	}
-
+PyObject * DisableDepthTest(PyObject * self) {
 	ModernGL::DisableDepthTest();
 	Py_RETURN_NONE;
 }
 
-PyObject * EnableMultisample(PyObject * self, PyObject * args) {
-	if (!PyArg_ParseTuple(args, ":EnableMultisample")) {
-		PyErr_SetString(ModuleError, "fmalwrvd");
-		return 0;
-	}
-
+PyObject * EnableMultisample(PyObject * self) {
 	ModernGL::EnableMultisample();
 	Py_RETURN_NONE;
 }
 
-PyObject * DisableMultisample(PyObject * self, PyObject * args) {
-	if (!PyArg_ParseTuple(args, ":DisableMultisample")) {
-		PyErr_SetString(ModuleError, "chbmiest");
-		return 0;
-	}
-
+PyObject * DisableMultisample(PyObject * self) {
 	ModernGL::DisableMultisample();
 	Py_RETURN_NONE;
 }
@@ -194,40 +133,57 @@ PyObject * NewVertexShader(PyObject * self, PyObject * args) {
 	const char * source;
 
 	if (!PyArg_ParseTuple(args, "s:NewVertexShader", &source)) {
-		PyErr_SetString(ModuleError, "wrljfqbi");
 		return 0;
 	}
 
-	return CreateShaderType(ModernGL::NewVertexShader(source));
+	int shader = ModernGL::NewVertexShader(source);
+
+	if (!shader) {
+		PyErr_SetString(ModuleError, ModernGL::CompilerLog());
+		return 0;
+	}
+
+	return CreateShaderType(shader);
 }
 
 PyObject * NewFragmentShader(PyObject * self, PyObject * args) {
 	const char * source;
 
 	if (!PyArg_ParseTuple(args, "s:NewFragmentShader", &source)) {
-		PyErr_SetString(ModuleError, "aswmpzdf");
 		return 0;
 	}
 
-	return CreateShaderType(ModernGL::NewFragmentShader(source));
+	int shader = ModernGL::NewFragmentShader(source);
+
+	if (!shader) {
+		PyErr_SetString(ModuleError, ModernGL::CompilerLog());
+		return 0;
+	}
+
+	return CreateShaderType(shader);
 }
 
 PyObject * NewGeometryShader(PyObject * self, PyObject * args) {
 	const char * source;
 
 	if (!PyArg_ParseTuple(args, "s:NewGeometryShader", &source)) {
-		PyErr_SetString(ModuleError, "yvdspmhl");
 		return 0;
 	}
 
-	return CreateShaderType(ModernGL::NewGeometryShader(source));
+	int shader = ModernGL::NewGeometryShader(source);
+
+	if (!shader) {
+		PyErr_SetString(ModuleError, ModernGL::CompilerLog());
+		return 0;
+	}
+
+	return CreateShaderType(shader);
 }
 
 PyObject * DeleteShader(PyObject * self, PyObject * args) {
 	Shader * shader;
 
 	if (!PyArg_ParseTuple(args, "O:DeleteShader", &shader)) {
-		PyErr_SetString(ModuleError, "sdhfalou");
 		return 0;
 	}
 
@@ -244,7 +200,6 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	PyObject * lst;
 
 	if (!PyArg_ParseTuple(args, "O:NewProgram", &lst)) {
-		PyErr_SetString(ModuleError, "avrnfotj");
 		return 0;
 	}
 
@@ -254,7 +209,13 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	}
 
 	int count = (int)PyList_Size(lst);
-	int * shader_array = new int[count];
+
+	if (count > MAX_NUM_SHADER) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	int shader_array[MAX_NUM_SHADER];
 	for (int i = 0; i < count; ++i) {
 		Shader * shader = (Shader *)PyList_GetItem(lst, i);
 		if (!PyObject_TypeCheck((PyObject *)shader, &ShaderType)) {
@@ -264,7 +225,6 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		shader_array[i] = shader->shader;
 	}
 	int program = ModernGL::NewProgram(shader_array, count);
-	delete[] shader_array;
 
 	return CreateProgramType(program);
 }
@@ -273,7 +233,6 @@ PyObject * DeleteProgram(PyObject * self, PyObject * args) {
 	Program * program;
 
 	if (!PyArg_ParseTuple(args, "O:DeleteProgram", &program)) {
-		PyErr_SetString(ModuleError, "lbltafke");
 		return 0;
 	}
 
@@ -290,7 +249,6 @@ PyObject * UseProgram(PyObject * self, PyObject * args) {
 	Program * program;
 
 	if (!PyArg_ParseTuple(args, "O:UseProgram", &program)) {
-		PyErr_SetString(ModuleError, "wdeayruv");
 		return 0;
 	}
 
@@ -303,23 +261,9 @@ PyObject * UseProgram(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * UseDefaultProgram(PyObject * self, PyObject * args) {
-	if (!PyArg_ParseTuple(args, ":UseDefaultProgram")) {
-		PyErr_SetString(ModuleError, "kijdpngu");
-		return 0;
-	}
-
+PyObject * UseDefaultProgram(PyObject * self) {
 	ModernGL::UseDefaultProgram();
 	Py_RETURN_NONE;
-}
-
-PyObject * CompilerLog(PyObject * self, PyObject * args) {
-	if (!PyArg_ParseTuple(args, ":CompilerLog")) {
-		PyErr_SetString(ModuleError, "gokalhcj");
-		return 0;
-	}
-
-	return PyUnicode_FromString(ModernGL::CompilerLog());
 }
 
 PyObject * GetAttributeLocation(PyObject * self, PyObject * args, PyObject * kwargs) {
@@ -329,7 +273,6 @@ PyObject * GetAttributeLocation(PyObject * self, PyObject * args, PyObject * kwa
 	static const char * kwlist[] = {"program", "name", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os:GetAttributeLocation", (char **)kwlist, &program, &name)) {
-		PyErr_SetString(ModuleError, "xwtudqbn");
 		return 0;
 	}
 
@@ -348,7 +291,6 @@ PyObject * GetUniformLocation(PyObject * self, PyObject * args, PyObject * kwarg
 	static const char * kwlist[] = {"program", "name", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os:GetUniformLocation", (char **)kwlist, &program, &name)) {
-		PyErr_SetString(ModuleError, "blaypukz");
 		return 0;
 	}
 
@@ -367,7 +309,6 @@ PyObject * GetUniformBlockLocation(PyObject * self, PyObject * args, PyObject * 
 	static const char * kwlist[] = {"program", "name", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Os:GetUniformBlockLocation", (char **)kwlist, &program, &name)) {
-		PyErr_SetString(ModuleError, "zlfavgkq");
 		return 0;
 	}
 
@@ -384,7 +325,6 @@ PyObject * Uniform1f(PyObject * self, PyObject * args) {
 	float v0;
 
 	if (!PyArg_ParseTuple(args, "Of:Uniform1f", &location, &v0)) {
-		PyErr_SetString(ModuleError, "qaxfzicr");
 		return 0;
 	}
 
@@ -403,7 +343,6 @@ PyObject * Uniform2f(PyObject * self, PyObject * args) {
 	float v1;
 
 	if (!PyArg_ParseTuple(args, "Off:Uniform2f", &location, &v0, &v1)) {
-		PyErr_SetString(ModuleError, "kfqmuaoy");
 		return 0;
 	}
 
@@ -423,7 +362,6 @@ PyObject * Uniform3f(PyObject * self, PyObject * args) {
 	float v2;
 
 	if (!PyArg_ParseTuple(args, "Offf:Uniform3f", &location, &v0, &v1, &v2)) {
-		PyErr_SetString(ModuleError, "wlvzmscp");
 		return 0;
 	}
 
@@ -444,7 +382,6 @@ PyObject * Uniform4f(PyObject * self, PyObject * args) {
 	float v3;
 
 	if (!PyArg_ParseTuple(args, "Offff:Uniform4f", &location, &v0, &v1, &v2, &v3)) {
-		PyErr_SetString(ModuleError, "ojkqtfcw");
 		return 0;
 	}
 
@@ -462,7 +399,6 @@ PyObject * Uniform1i(PyObject * self, PyObject * args) {
 	int v0;
 
 	if (!PyArg_ParseTuple(args, "Oi:Uniform1i", &location, &v0)) {
-		PyErr_SetString(ModuleError, "xqpcozbk");
 		return 0;
 	}
 
@@ -481,7 +417,6 @@ PyObject * Uniform2i(PyObject * self, PyObject * args) {
 	int v1;
 
 	if (!PyArg_ParseTuple(args, "Oii:Uniform2i", &location, &v0, &v1)) {
-		PyErr_SetString(ModuleError, "ikcsvayz");
 		return 0;
 	}
 
@@ -501,7 +436,6 @@ PyObject * Uniform3i(PyObject * self, PyObject * args) {
 	int v2;
 
 	if (!PyArg_ParseTuple(args, "Oiii:Uniform3i", &location, &v0, &v1, &v2)) {
-		PyErr_SetString(ModuleError, "egurbpxt");
 		return 0;
 	}
 
@@ -522,7 +456,6 @@ PyObject * Uniform4i(PyObject * self, PyObject * args) {
 	int v3;
 
 	if (!PyArg_ParseTuple(args, "Oiiii:Uniform4i", &location, &v0, &v1, &v2, &v3)) {
-		PyErr_SetString(ModuleError, "uxhoveqg");
 		return 0;
 	}
 
@@ -540,7 +473,6 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	PyObject * lst;
 
 	if (!PyArg_ParseTuple(args, "OO:UniformMatrix", &location, &lst)) {
-		PyErr_SetString(ModuleError, "cswzjnvx");
 		return 0;
 	}
 
@@ -557,8 +489,21 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	float matrix[16];
 
 	int count = (int)PyList_Size(lst);
+	
+	if (count != 16) {
+		PyErr_SetString(ModuleError, "acoypwfb");
+		return 0;
+	}
+
 	for (int i = 0; i < count; ++i) {
-		matrix[i] = (float)PyFloat_AsDouble(PyList_GetItem(lst, i));
+		PyObject * item = PyList_GET_ITEM(lst, i);
+
+		if (!PyObject_TypeCheck((PyObject *)item, &PyFloat_Type)) {
+			PyErr_SetString(ModuleError, "caoypwbf");
+			return 0;
+		}
+
+		matrix[i] = (float)PyFloat_AsDouble(item);
 	}
 
 	ModernGL::UniformMatrix(location->location, matrix);
@@ -570,7 +515,6 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	PyObject * lst;
 
 	if (!PyArg_ParseTuple(args, "OO:UniformTransposeMatrix", &location, &lst)) {
-		PyErr_SetString(ModuleError, "buazcrsv");
 		return 0;
 	}
 
@@ -587,8 +531,21 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	float matrix[16];
 
 	int count = (int)PyList_Size(lst);
+	
+	if (count != 16) {
+		PyErr_SetString(ModuleError, "acoypwfb");
+		return 0;
+	}
+
 	for (int i = 0; i < count; ++i) {
-		matrix[i] = (float)PyFloat_AsDouble(PyList_GetItem(lst, i));
+		PyObject * item = PyList_GET_ITEM(lst, i);
+
+		if (!PyObject_TypeCheck((PyObject *)item, &PyFloat_Type)) {
+			PyErr_SetString(ModuleError, "caoypwbf");
+			return 0;
+		}
+
+		matrix[i] = (float)PyFloat_AsDouble(item);
 	}
 
 	ModernGL::UniformTransposeMatrix(location->location, matrix);
@@ -597,12 +554,11 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 
 PyObject * UseUniformBlock(PyObject * self, PyObject * args, PyObject * kwargs) {
 	UniformBlockLocation * location;
-	int buffer;
+	UniformBuffer * ubo;
 
-	static const char * kwlist[] = {"location", "buffer", 0};
+	static const char * kwlist[] = {"location", "ubo", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi:UseUniformBlock", (char **)kwlist, &location, &buffer)) {
-		PyErr_SetString(ModuleError, "byviqlph");
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:UseUniformBlock", (char **)kwlist, &location, &ubo)) {
 		return 0;
 	}
 
@@ -611,7 +567,12 @@ PyObject * UseUniformBlock(PyObject * self, PyObject * args, PyObject * kwargs) 
 		return 0;
 	}
 
-	ModernGL::UseUniformBlock(location->location, buffer);
+	if (!PyObject_TypeCheck((PyObject *)ubo, &UniformBufferType)) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::UseUniformBlock(location->location, ubo->ubo);
 	Py_RETURN_NONE;
 }
 
@@ -625,7 +586,6 @@ PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"width", "height", "data", "components", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiy#|i:NewTexture", (char **)kwlist, &width, &height, &data, &size, &components)) {
-		PyErr_SetString(ModuleError, "lwnrkbjo");
 		return 0;
 	}
 
@@ -636,7 +596,6 @@ PyObject * DeleteTexture(PyObject * self, PyObject * args) {
 	Texture * texture;
 
 	if (!PyArg_ParseTuple(args, "O:DeleteTexture", &texture)) {
-		PyErr_SetString(ModuleError, "szncgvmh");
 		return 0;
 	}
 
@@ -662,7 +621,6 @@ PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"texture", "x", "y", "width", "height", "data", "components", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oiiiiy#|i:UpdateTexture", (char **)kwlist, &texture, &x, &y, &width, &height, &data, &size, &components)) {
-		PyErr_SetString(ModuleError, "khvglbpr");
 		return 0;
 	}
 
@@ -680,7 +638,6 @@ PyObject * UseTexture(PyObject * self, PyObject * args) {
 	int location = 0;
 
 	if (!PyArg_ParseTuple(args, "O|i:UseTexture", &texture, &location)) {
-		PyErr_SetString(ModuleError, "hgpnyora");
 		return 0;
 	}
 
@@ -697,7 +654,6 @@ PyObject * SetTexturePixelated(PyObject * self, PyObject * args) {
 	Texture * texture;
 	
 	if (!PyArg_ParseTuple(args, "O:SetTexturePixelated", &texture)) {
-		PyErr_SetString(ModuleError, "rbqlyasl");
 		return 0;
 	}
 
@@ -714,7 +670,6 @@ PyObject * SetTextureFiltered(PyObject * self, PyObject * args) {
 	Texture * texture;
 	
 	if (!PyArg_ParseTuple(args, "O:SetTextureFiltered", &texture)) {
-		PyErr_SetString(ModuleError, "mfxizpan");
 		return 0;
 	}
 
@@ -731,7 +686,6 @@ PyObject * SetTextureMipmapped(PyObject * self, PyObject * args) {
 	Texture * texture;
 	
 	if (!PyArg_ParseTuple(args, "O:SetTextureMipmapped", &texture)) {
-		PyErr_SetString(ModuleError, "pjfcsuly");
 		return 0;
 	}
 
@@ -752,7 +706,6 @@ PyObject * BuildMipmap(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"texture", "base", "max", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|ii:BuildMipmap", (char **)kwlist, &texture, &base, &max)) {
-		PyErr_SetString(ModuleError, "nugflxsc");
 		return 0;
 	}
 
@@ -772,7 +725,6 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	IndexBuffer * indexBuffer = 0;
 
 	if (!PyArg_ParseTuple(args, "sO|O:NewVertexArray", &format, &lst, &indexBuffer)) {
-		PyErr_SetString(ModuleError, "hjzalkdw");
 		return 0;
 	}
 
@@ -789,9 +741,20 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	}
 
 	int count = (int)PyList_Size(lst);
-	ModernGL::VertexBufferAndAttribute * attribs = new ModernGL::VertexBufferAndAttribute[count];
+
+	if (count > MAX_NUM_ATTRIBUTES) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	ModernGL::VertexBufferAndAttribute attribs[MAX_NUM_ATTRIBUTES];
 	for (int i = 0; i < count; ++i) {
-		PyObject * tuple = PyList_GetItem(lst, i);
+		PyObject * tuple = PyList_GET_ITEM(lst, i);
+
+		if (!PyObject_TypeCheck((PyObject *)tuple, &PyTuple_Type)) {
+			PyErr_SetString(ModuleError, "caoypwbf");
+			return 0;
+		}
 
 		VertexBuffer * buffer = (VertexBuffer *)PyTuple_GetItem(tuple, 0);
 
@@ -812,7 +775,6 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	}
 
 	PyObject * result = CreateVertexArrayType(ModernGL::NewVertexArray(format, attribs, indexBuffer ? indexBuffer->ibo : 0));
-	delete[] attribs;
 	return result;
 }
 
@@ -820,7 +782,6 @@ PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {
 	VertexArray * vao;
 
 	if (!PyArg_ParseTuple(args, "O:DeleteVertexArray", &vao)) {
-		PyErr_SetString(ModuleError, "sxueawod");
 		return 0;
 	}
 
@@ -840,7 +801,6 @@ PyObject * EnableAttribute(PyObject * self, PyObject * args, PyObject * kwargs) 
 	static const char * kwlist[] = {"vao", "target", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:EnableAttribute", (char **)kwlist, &vao, &location)) {
-		PyErr_SetString(ModuleError, "itneqllz");
 		return 0;
 	}
 
@@ -865,7 +825,6 @@ PyObject * DisableAttribute(PyObject * self, PyObject * args, PyObject * kwargs)
 	static const char * kwlist[] = {"vao", "target", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:DisableAttribute", (char **)kwlist, &vao, &location)) {
-		PyErr_SetString(ModuleError, "rklhgpmo");
 		return 0;
 	}
 
@@ -890,7 +849,6 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 	static const char * kwlist[] = {"vao", "targets", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:EnableAttributes", (char **)kwlist, &vao, &attribs)) {
-		PyErr_SetString(ModuleError, "tuqldrme");
 		return 0;
 	}
 
@@ -904,10 +862,16 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
-	int size = (int)PyList_Size(attribs);
-	int * attrib_array = new int[size];
-	for (int i = 0; i < size; ++i) {
-		AttributeLocation * location = (AttributeLocation *)PyList_GetItem(attribs, i);
+	int count = (int)PyList_Size(attribs);
+
+	if (count > MAX_NUM_ATTRIBUTES) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	int attrib_array[MAX_NUM_ATTRIBUTES];
+	for (int i = 0; i < count; ++i) {
+		AttributeLocation * location = (AttributeLocation *)PyList_GET_ITEM(attribs, i);
 
 		if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
 			PyErr_SetString(ModuleError, "caoypwbf");
@@ -916,8 +880,7 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 
 		attrib_array[i] = location->location;
 	}
-	ModernGL::EnableAttributes(vao->vao, attrib_array, size);
-	delete[] attrib_array;
+	ModernGL::EnableAttributes(vao->vao, attrib_array, count);
 	Py_RETURN_NONE;
 }
 
@@ -928,7 +891,6 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 	static const char * kwlist[] = {"vao", "targets", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:DisableAttributes", (char **)kwlist, &vao, &attribs)) {
-		PyErr_SetString(ModuleError, "aqtznkvh");
 		return 0;
 	}
 
@@ -942,10 +904,16 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 		return 0;
 	}
 
-	int size = (int)PyList_Size(attribs);
-	int * attrib_array = new int[size];
-	for (int i = 0; i < size; ++i) {
-		AttributeLocation * location = (AttributeLocation *)PyList_GetItem(attribs, i);
+	int count = (int)PyList_Size(attribs);
+
+	if (count > MAX_NUM_ATTRIBUTES) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
+	int attrib_array[MAX_NUM_ATTRIBUTES];
+	for (int i = 0; i < count; ++i) {
+		AttributeLocation * location = (AttributeLocation *)PyList_GET_ITEM(attribs, i);
 
 		if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
 			PyErr_SetString(ModuleError, "caoypwbf");
@@ -954,8 +922,7 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 
 		attrib_array[i] = location->location;
 	}
-	ModernGL::DisableAttributes(vao->vao, attrib_array, size);
-	delete[] attrib_array;
+	ModernGL::DisableAttributes(vao->vao, attrib_array, count);
 	Py_RETURN_NONE;
 }
 
@@ -964,7 +931,6 @@ PyObject * NewVertexBuffer(PyObject * self, PyObject * args) {
 	int size;
 
 	if (!PyArg_ParseTuple(args, "y#:NewVertexBuffer", &data, &size)) {
-		PyErr_SetString(ModuleError, "lljuhybq");
 		return 0;
 	}
 
@@ -976,7 +942,6 @@ PyObject * NewIndexBuffer(PyObject * self, PyObject * args) {
 	int size;
 
 	if (!PyArg_ParseTuple(args, "y#:NewIndexBuffer", &data, &size)) {
-		PyErr_SetString(ModuleError, "itcyrnos");
 		return 0;
 	}
 
@@ -988,7 +953,6 @@ PyObject * NewUniformBuffer(PyObject * self, PyObject * args) {
 	int size;
 
 	if (!PyArg_ParseTuple(args, "y#:NewUniformBuffer", &data, &size)) {
-		PyErr_SetString(ModuleError, "tgdsecul");
 		return 0;
 	}
 
@@ -1000,7 +964,6 @@ PyObject * NewDynamicVertexBuffer(PyObject * self, PyObject * args) {
 	int size;
 
 	if (!PyArg_ParseTuple(args, "y#:NewDynamicVertexBuffer", &data, &size)) {
-		PyErr_SetString(ModuleError, "slmdahqn");
 		return 0;
 	}
 
@@ -1012,7 +975,6 @@ PyObject * NewDynamicIndexBuffer(PyObject * self, PyObject * args) {
 	int size;
 
 	if (!PyArg_ParseTuple(args, "y#:NewDynamicIndexBuffer", &data, &size)) {
-		PyErr_SetString(ModuleError, "xmslqfur");
 		return 0;
 	}
 
@@ -1024,7 +986,6 @@ PyObject * NewDynamicUniformBuffer(PyObject * self, PyObject * args) {
 	int size;
 
 	if (!PyArg_ParseTuple(args, "y#:NewDynamicUniformBuffer", &data, &size)) {
-		PyErr_SetString(ModuleError, "vdbjqrsl");
 		return 0;
 	}
 
@@ -1035,7 +996,6 @@ PyObject * DeleteVertexBuffer(PyObject * self, PyObject * args) {
 	VertexBuffer * buffer;
 
 	if (!PyArg_ParseTuple(args, "O:DeleteVertexBuffer", &buffer)) {
-		PyErr_SetString(ModuleError, "snpklqxa");
 		return 0;
 	}
 
@@ -1052,7 +1012,6 @@ PyObject * DeleteIndexBuffer(PyObject * self, PyObject * args) {
 	IndexBuffer * buffer;
 
 	if (!PyArg_ParseTuple(args, "O:DeleteIndexBuffer", &buffer)) {
-		PyErr_SetString(ModuleError, "snpklqxa");
 		return 0;
 	}
 
@@ -1069,7 +1028,6 @@ PyObject * DeleteUniformBuffer(PyObject * self, PyObject * args) {
 	UniformBuffer * buffer;
 
 	if (!PyArg_ParseTuple(args, "O:DeleteUniformBuffer", &buffer)) {
-		PyErr_SetString(ModuleError, "snpklqxa");
 		return 0;
 	}
 
@@ -1083,53 +1041,50 @@ PyObject * DeleteUniformBuffer(PyObject * self, PyObject * args) {
 }
 
 PyObject * UpdateVertexBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
-	int buffer;
+	VertexBuffer * vbo;
 	int offset;
 	const void * data;
 	int size;
 
-	static const char * kwlist[] = {"buffer", "offset", "data", 0};
+	static const char * kwlist[] = {"vbo", "offset", "data", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiy#:UpdateVertexBuffer", (char **)kwlist, &buffer, &offset, &data, &size)) {
-		PyErr_SetString(ModuleError, "mypkwlav");
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oiy#:UpdateVertexBuffer", (char **)kwlist, &vbo, &offset, &data, &size)) {
 		return 0;
 	}
 
-	ModernGL::UpdateVertexBuffer(buffer, offset, data, size);
+	ModernGL::UpdateVertexBuffer(vbo->vbo, offset, data, size);
 	Py_RETURN_NONE;
 }
 
 PyObject * UpdateIndexBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
-	int buffer;
+	IndexBuffer * ibo;
 	int offset;
 	const void * data;
 	int size;
 
-	static const char * kwlist[] = {"buffer", "offset", "data", 0};
+	static const char * kwlist[] = {"ibo", "offset", "data", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiy#:UpdateIndexBuffer", (char **)kwlist, &buffer, &offset, &data, &size)) {
-		PyErr_SetString(ModuleError, "qlpozdbg");
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oiy#:UpdateIndexBuffer", (char **)kwlist, &ibo, &offset, &data, &size)) {
 		return 0;
 	}
 
-	ModernGL::UpdateIndexBuffer(buffer, offset, data, size);
+	ModernGL::UpdateIndexBuffer(ibo->ibo, offset, data, size);
 	Py_RETURN_NONE;
 }
 
 PyObject * UpdateUniformBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
-	int buffer;
+	UniformBuffer * ubo;
 	int offset;
 	const void * data;
 	int size;
 
-	static const char * kwlist[] = {"buffer", "offset", "data", 0};
+	static const char * kwlist[] = {"ubo", "offset", "data", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiy#:UpdateUniformBuffer", (char **)kwlist, &buffer, &offset, &data, &size)) {
-		PyErr_SetString(ModuleError, "akzvcsmq");
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oiy#:UpdateUniformBuffer", (char **)kwlist, &ubo, &offset, &data, &size)) {
 		return 0;
 	}
 
-	ModernGL::UpdateUniformBuffer(buffer, offset, data, size);
+	ModernGL::UpdateUniformBuffer(ubo->ubo, offset, data, size);
 	Py_RETURN_NONE;
 }
 
@@ -1142,7 +1097,6 @@ PyObject * RenderTriangles(PyObject * self, PyObject * args, PyObject * kwargs) 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderTriangles", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "ecgrpvbf");
 		return 0;
 	}
 
@@ -1164,7 +1118,6 @@ PyObject * RenderTriangleStrip(PyObject * self, PyObject * args, PyObject * kwar
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderTriangleStrip", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "kpmfixzn");
 		return 0;
 	}
 
@@ -1186,7 +1139,6 @@ PyObject * RenderTriangleFan(PyObject * self, PyObject * args, PyObject * kwargs
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderTriangleFan", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "yiajmwnl");
 		return 0;
 	}
 
@@ -1208,7 +1160,6 @@ PyObject * RenderLines(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderLines", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "invoulsq");
 		return 0;
 	}
 
@@ -1230,7 +1181,6 @@ PyObject * RenderLineStrip(PyObject * self, PyObject * args, PyObject * kwargs) 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderLineStrip", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "xloesbac");
 		return 0;
 	}
 
@@ -1252,7 +1202,6 @@ PyObject * RenderLineLoop(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderLineLoop", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "lcieazvy");
 		return 0;
 	}
 
@@ -1274,7 +1223,6 @@ PyObject * RenderPoints(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderPoints", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "qpkxbatg");
 		return 0;
 	}
 
@@ -1296,7 +1244,6 @@ PyObject * RenderLineStripAdjacency(PyObject * self, PyObject * args, PyObject *
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderLineStripAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "eyljxcdl");
 		return 0;
 	}
 
@@ -1318,7 +1265,6 @@ PyObject * RenderLinesAdjacency(PyObject * self, PyObject * args, PyObject * kwa
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderLinesAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "rcghsiwd");
 		return 0;
 	}
 
@@ -1340,7 +1286,6 @@ PyObject * RenderTriangleStripAdjacency(PyObject * self, PyObject * args, PyObje
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderTriangleStripAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "jbdnihco");
 		return 0;
 	}
 
@@ -1362,7 +1307,6 @@ PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args, PyObject *
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderTrianglesAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "swtnjvxk");
 		return 0;
 	}
 
@@ -1384,7 +1328,6 @@ PyObject * RenderIndexedTriangles(PyObject * self, PyObject * args, PyObject * k
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderIndexedTriangles", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "hcorzxjl");
 		return 0;
 	}
 
@@ -1406,7 +1349,6 @@ PyObject * RenderIndexedTriangleStrip(PyObject * self, PyObject * args, PyObject
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderIndexedTriangleStrip", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "clwgvaoj");
 		return 0;
 	}
 
@@ -1428,7 +1370,6 @@ PyObject * RenderIndexedTriangleFan(PyObject * self, PyObject * args, PyObject *
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderIndexedTriangleFan", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "yenpgwic");
 		return 0;
 	}
 
@@ -1450,7 +1391,6 @@ PyObject * RenderIndexedLines(PyObject * self, PyObject * args, PyObject * kwarg
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderIndexedLines", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "qltoasyl");
 		return 0;
 	}
 
@@ -1472,7 +1412,6 @@ PyObject * RenderIndexedLineStrip(PyObject * self, PyObject * args, PyObject * k
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderIndexedLineStrip", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "pwxzmqre");
 		return 0;
 	}
 
@@ -1494,7 +1433,6 @@ PyObject * RenderIndexedLineLoop(PyObject * self, PyObject * args, PyObject * kw
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderIndexedLineLoop", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "tfinleuv");
 		return 0;
 	}
 
@@ -1516,7 +1454,6 @@ PyObject * RenderIndexedPoints(PyObject * self, PyObject * args, PyObject * kwar
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderIndexedPoints", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "dzqutosc");
 		return 0;
 	}
 
@@ -1538,7 +1475,6 @@ PyObject * RenderIndexedLineStripAdjacency(PyObject * self, PyObject * args, PyO
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderIndexedLineStripAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "xzcmaikw");
 		return 0;
 	}
 
@@ -1560,7 +1496,6 @@ PyObject * RenderIndexedLinesAdjacency(PyObject * self, PyObject * args, PyObjec
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderIndexedLinesAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "xnlgisyz");
 		return 0;
 	}
 
@@ -1582,7 +1517,6 @@ PyObject * RenderIndexedTriangleStripAdjacency(PyObject * self, PyObject * args,
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderIndexedTriangleStripAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "ecygoziv");
 		return 0;
 	}
 
@@ -1604,7 +1538,6 @@ PyObject * RenderIndexedTrianglesAdjacency(PyObject * self, PyObject * args, PyO
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderIndexedTrianglesAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
-		PyErr_SetString(ModuleError, "hxodprlg");
 		return 0;
 	}
 
@@ -1624,41 +1557,40 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"width", "height", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|ii:NewFramebuffer", (char **)kwlist, &width, &height)) {
-		PyErr_SetString(ModuleError, "mnkbvopc");
 		return 0;
 	}
 
 	ModernGL::Framebuffer framebuffer = ModernGL::NewFramebuffer(width, height);
-	return Py_BuildValue("iii", framebuffer.framebuffer, framebuffer.color, framebuffer.depth);
+	PyObject * fbo = CreateFramebufferType(framebuffer.framebuffer);
+	PyObject * color = CreateTextureType(framebuffer.color);
+	PyObject * depth = CreateTextureType(framebuffer.depth);
+	return Py_BuildValue("OOO", fbo, color, depth);
 }
 
 PyObject * DeleteFramebuffer(PyObject * self, PyObject * args) {
-	int framebuffer;
+	Framebuffer * fbo;
 
-	if (!PyArg_ParseTuple(args, "i:DeleteFramebuffer", &framebuffer)) {
-		PyErr_SetString(ModuleError, "arvgifqk");
+	if (!PyArg_ParseTuple(args, "O:DeleteFramebuffer", &fbo)) {
 		return 0;
 	}
 
-	ModernGL::DeleteFramebuffer(framebuffer);
+	ModernGL::DeleteFramebuffer(fbo->fbo);
 	Py_RETURN_NONE;
 }
 
 PyObject * UseFramebuffer(PyObject * self, PyObject * args) {
-	int framebuffer;
+	Framebuffer * fbo;
 
-	if (!PyArg_ParseTuple(args, "i:UseFramebuffer", &framebuffer)) {
-		PyErr_SetString(ModuleError, "aklfjcve");
+	if (!PyArg_ParseTuple(args, "O:UseFramebuffer", &fbo)) {
 		return 0;
 	}
 
-	ModernGL::UseFramebuffer(framebuffer);
+	ModernGL::UseFramebuffer(fbo->fbo);
 	Py_RETURN_NONE;
 }
 
 PyObject * GetDefaultFramebuffer(PyObject * self, PyObject * args) {
 	if (!PyArg_ParseTuple(args, ":GetDefaultFramebuffer")) {
-		PyErr_SetString(ModuleError, "gjcfoblz");
 		return 0;
 	}
 
@@ -1668,7 +1600,6 @@ PyObject * GetDefaultFramebuffer(PyObject * self, PyObject * args) {
 
 PyObject * UseDefaultFramebuffer(PyObject * self, PyObject * args) {
 	if (!PyArg_ParseTuple(args, ":UseDefaultFramebuffer")) {
-		PyErr_SetString(ModuleError, "cvxbjigr");
 		return 0;
 	}
 
@@ -1686,7 +1617,6 @@ PyObject * ReadPixels(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"x", "y", "width", "height", "components", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii|i:ReadPixels", (char **)kwlist, &x, &y, &width, &height, &components)) {
-		PyErr_SetString(ModuleError, "iucebofd");
 		return 0;
 	}
 
@@ -1707,7 +1637,6 @@ PyObject * ReadDepthPixels(PyObject * self, PyObject * args, PyObject * kwargs) 
 	static const char * kwlist[] = {"x", "y", "width", "height", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii:ReadDepthPixels", (char **)kwlist, &x, &y, &width, &height)) {
-		PyErr_SetString(ModuleError, "hwoxlqtp");
 		return 0;
 	}
 
@@ -1726,7 +1655,6 @@ PyObject * ReadPixel(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"x", "y", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii:ReadPixel", (char **)kwlist, &x, &y)) {
-		PyErr_SetString(ModuleError, "aqklwzjm");
 		return 0;
 	}
 
@@ -1740,7 +1668,6 @@ PyObject * ReadDepthPixel(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"x", "y", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii:ReadDepthPixel", (char **)kwlist, &x, &y)) {
-		PyErr_SetString(ModuleError, "jmyulkio");
 		return 0;
 	}
 
@@ -1755,7 +1682,6 @@ PyObject * UseTextureAsImage(PyObject * self, PyObject * args, PyObject * kwargs
 	static const char * kwlist[] = {"texture", "binding", "components", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i|ii:UseTextureAsImage", (char **)kwlist, &texture, &binding, &components)) {
-		PyErr_SetString(ModuleError, "uyvpencs");
 		return 0;
 	}
 
@@ -1767,61 +1693,56 @@ PyObject * NewTessEvaluationShader(PyObject * self, PyObject * args) {
 	const char * source;
 
 	if (!PyArg_ParseTuple(args, "s:NewTessEvaluationShader", &source)) {
-		PyErr_SetString(ModuleError, "mgblcrdv");
 		return 0;
 	}
 
-	return PyLong_FromLong(ModernGL::NewTessEvaluationShader(source));
+	return CreateShaderType(ModernGL::NewTessEvaluationShader(source));
 }
 
 PyObject * NewTessControlShader(PyObject * self, PyObject * args) {
 	const char * source;
 
 	if (!PyArg_ParseTuple(args, "s:NewTessControlShader", &source)) {
-		PyErr_SetString(ModuleError, "zibhluoy");
 		return 0;
 	}
 
-	return PyLong_FromLong(ModernGL::NewTessControlShader(source));
+	return CreateShaderType(ModernGL::NewTessControlShader(source));
 }
 
 PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 	const char * source;
 
 	if (!PyArg_ParseTuple(args, "s:NewComputeShader", &source)) {
-		PyErr_SetString(ModuleError, "gzcndblk");
 		return 0;
 	}
 
-	return PyLong_FromLong(ModernGL::NewComputeShader(source));
+	return CreateComputeShaderType(ModernGL::NewComputeShader(source));
 }
 
 PyObject * DeleteComputeShader(PyObject * self, PyObject * args) {
-	int program;
+	ComputeShader * shader;
 
-	if (!PyArg_ParseTuple(args, "i:DeleteComputeShader", &program)) {
-		PyErr_SetString(ModuleError, "fagrulke");
+	if (!PyArg_ParseTuple(args, "O:DeleteComputeShader", &shader)) {
 		return 0;
 	}
 
-	ModernGL::DeleteComputeShader(program);
+	ModernGL::DeleteComputeShader(shader->shader);
 	Py_RETURN_NONE;
 }
 
 PyObject * RunComputeShader(PyObject * self, PyObject * args, PyObject * kwargs) {
-	int program;
+	ComputeShader * shader;
 	int x = 1;
 	int y = 1;
 	int z = 1;
 
-	static const char * kwlist[] = {"program", "x", "y", "z", 0};
+	static const char * kwlist[] = {"shader", "x", "y", "z", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i|iii:RunComputeShader", (char **)kwlist, &program, &x, &y, &z)) {
-		PyErr_SetString(ModuleError, "binlkwlv");
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|iii:RunComputeShader", (char **)kwlist, &shader, &x, &y, &z)) {
 		return 0;
 	}
 
-	ModernGL::RunComputeShader(program, x, y, z);
+	ModernGL::RunComputeShader(shader->shader, x, y, z);
 	Py_RETURN_NONE;
 }
 
@@ -1830,11 +1751,10 @@ PyObject * NewStorageBuffer(PyObject * self, PyObject * args) {
 	int size;
 
 	if (!PyArg_ParseTuple(args, "y#:NewStorageBuffer", &data, &size)) {
-		PyErr_SetString(ModuleError, "bqxjvkll");
 		return 0;
 	}
 
-	return PyLong_FromLong(ModernGL::NewStorageBuffer(data, size));
+	return CreateStorageBufferType(ModernGL::NewStorageBuffer(data, size));
 }
 
 PyObject * NewDynamicStorageBuffer(PyObject * self, PyObject * args) {
@@ -1842,58 +1762,54 @@ PyObject * NewDynamicStorageBuffer(PyObject * self, PyObject * args) {
 	int size;
 
 	if (!PyArg_ParseTuple(args, "y#:NewDynamicStorageBuffer", &data, &size)) {
-		PyErr_SetString(ModuleError, "fugqsblx");
 		return 0;
 	}
 
-	return PyLong_FromLong(ModernGL::NewDynamicStorageBuffer(data, size));
+	return CreateStorageBufferType(ModernGL::NewDynamicStorageBuffer(data, size));
 }
 
 PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
-	int buffer;
+	StorageBuffer * ssbo;
 	int offset;
 	const void * data;
 	int size;
 
-	static const char * kwlist[] = {"buffer", "offset", "data", 0};
+	static const char * kwlist[] = {"ssbo", "offset", "data", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiy#:UpdateStorageBuffer", (char **)kwlist, &buffer, &offset, &data, &size)) {
-		PyErr_SetString(ModuleError, "upgqxyha");
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oiy#:UpdateStorageBuffer", (char **)kwlist, &ssbo, &offset, &data, &size)) {
 		return 0;
 	}
 
-	ModernGL::UpdateStorageBuffer(buffer, offset, data, size);
+	ModernGL::UpdateStorageBuffer(ssbo->ssbo, offset, data, size);
 	Py_RETURN_NONE;
 }
 
 PyObject * UseStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
-	int buffer;
+	StorageBuffer * ssbo;
 	int binding = 0;
 
-	static const char * kwlist[] = {"buffer", "binding", 0};
+	static const char * kwlist[] = {"ssbo", "binding", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i|i:UseStorageBuffer", (char **)kwlist, &buffer, &binding)) {
-		PyErr_SetString(ModuleError, "vowsaubd");
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "i|i:UseStorageBuffer", (char **)kwlist, &ssbo, &binding)) {
 		return 0;
 	}
 
-	ModernGL::UseStorageBuffer(buffer, binding);
+	ModernGL::UseStorageBuffer(ssbo->ssbo, binding);
 	Py_RETURN_NONE;
 }
 
 PyObject * ReadStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
-	int buffer;
+	StorageBuffer * ssbo;
 	int offset;
 	int size;
 
-	static const char * kwlist[] = {"buffer", "offset", "size", 0};
+	static const char * kwlist[] = {"ssbo", "offset", "size", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iii:ReadStorageBuffer", (char **)kwlist, &buffer, &offset, &size)) {
-		PyErr_SetString(ModuleError, "omjpsgqz");
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iii:ReadStorageBuffer", (char **)kwlist, &ssbo, &offset, &size)) {
 		return 0;
 	}
 
-	void * content = ModernGL::ReadStorageBuffer(buffer, offset, size);
+	void * content = ModernGL::ReadStorageBuffer(ssbo->ssbo, offset, size);
 	if (!content) {
 		PyErr_SetString(ModuleError, "yrhzkblw");
 		return 0;
@@ -1922,7 +1838,7 @@ PyObject * DummyExtension(PyObject * self, PyObject * args) {
 static PyMethodDef methods[] = {
 	{
 		"InitializeModernGL",
-		InitializeModernGL,
+		(PyCFunction)InitializeModernGL,
 		METH_VARARGS,
 		"Initialize the ModernGL module inside a valid OpenGL context.\n"
 		"A valid OpenGL context must exists before the function call.\n"
@@ -1938,8 +1854,8 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"ExtensionActive",
-		ExtensionActive,
-		METH_VARARGS,
+		(PyCFunction)ExtensionActive,
+		METH_NOARGS,
 		"Check for full ModernGL support.\n"
 		"The initialization of the extensions are not affected by this method.\n"
 
@@ -1953,25 +1869,9 @@ static PyMethodDef methods[] = {
 		"\n"
 	},
 	{
-		"GetError",
-		GetError,
-		METH_VARARGS,
-		"Get the error when Initialization failed.\n"
-
-		"\n"
-		"Parameters:\n"
-		"\tNone\n"
-
-		"\n"
-		"Returns:\n"
-		"\terror (str) The reason, why the InitializeModernGL failed.\n"
-		"\n"
-	},
-
-	{
 		"GetInfo",
 		(PyCFunction)Dummy, // GetInfo,
-		METH_VARARGS,
+		METH_NOARGS,
 		"Get information about the OpenGL context.\n"
 
 		"\n"
@@ -2073,7 +1973,7 @@ static PyMethodDef methods[] = {
 	{
 		"EnableBlend",
 		(PyCFunction)Dummy, // EnableBlend,
-		METH_VARARGS,
+		METH_NOARGS,
 		"Enable blending.\n"
 
 		"\n"
@@ -2088,7 +1988,7 @@ static PyMethodDef methods[] = {
 	{
 		"DisableBlend",
 		(PyCFunction)Dummy, // DisableBlend,
-		METH_VARARGS,
+		METH_NOARGS,
 		"Disable blending.\n"
 
 		"\n"
@@ -2103,7 +2003,7 @@ static PyMethodDef methods[] = {
 	{
 		"EnableCullFace",
 		(PyCFunction)Dummy, // EnableCullFace,
-		METH_VARARGS,
+		METH_NOARGS,
 		"Enable face culling.\n"
 
 		"\n"
@@ -2118,7 +2018,7 @@ static PyMethodDef methods[] = {
 	{
 		"DisableCullFace",
 		(PyCFunction)Dummy, // DisableCullFace,
-		METH_VARARGS,
+		METH_NOARGS,
 		"Disable face culling.\n"
 
 		"\n"
@@ -2133,7 +2033,7 @@ static PyMethodDef methods[] = {
 	{
 		"EnableDepthTest",
 		(PyCFunction)Dummy, // EnableDepthTest,
-		METH_VARARGS,
+		METH_NOARGS,
 		"Enable depth testing.\n"
 
 		"\n"
@@ -2148,7 +2048,7 @@ static PyMethodDef methods[] = {
 	{
 		"DisableDepthTest",
 		(PyCFunction)Dummy, // DisableDepthTest,
-		METH_VARARGS,
+		METH_NOARGS,
 		"Disable depth testing.\n"
 
 		"\n"
@@ -2163,7 +2063,7 @@ static PyMethodDef methods[] = {
 	{
 		"EnableMultisample",
 		(PyCFunction)Dummy, // EnableMultisample,
-		METH_VARARGS,
+		METH_NOARGS,
 		"Enable multisampling.\n"
 
 		"\n"
@@ -2178,7 +2078,7 @@ static PyMethodDef methods[] = {
 	{
 		"DisableMultisample",
 		(PyCFunction)Dummy, // DisableMultisample,
-		METH_VARARGS,
+		METH_NOARGS,
 		"Disable multisampling.\n"
 
 		"\n"
@@ -2298,7 +2198,7 @@ static PyMethodDef methods[] = {
 	{
 		"UseDefaultProgram",
 		(PyCFunction)Dummy, // UseDefaultProgram,
-		METH_VARARGS,
+		METH_NOARGS,
 		""
 
 		"\n"
@@ -2308,29 +2208,6 @@ static PyMethodDef methods[] = {
 		"\n"
 		"Returns:\n"
 		"\tNone\n"
-		"\n"
-	},
-	{
-		"CompilerLog",
-		(PyCFunction)Dummy, // CompilerLog,
-		METH_VARARGS,
-		"Get the compiler log for the following methods:\n"
-		"NewFragmentShader\n"
-		"NewGeometryShader\n"
-		"NewVertexShader\n"
-		"NewProgram\n"
-		"NewTessEvaluationShader\n"
-		"NewTessControlShader\n"
-		"NewComputeShader\n"
-		""
-
-		"\n"
-		"Parameters:\n"
-		"\tNone\n"
-
-		"\n"
-		"Returns:\n"
-		"\tlog (str) The GLSL compiler log.\n"
 		"\n"
 	},
 	{
@@ -3720,7 +3597,6 @@ void LoadImplementation() {
 	PyCFunction implementation[] = {
 		(PyCFunction)InitializeModernGL,
 		(PyCFunction)ExtensionActive,
-		(PyCFunction)GetError,
 		(PyCFunction)GetInfo,
 		(PyCFunction)Viewport,
 		(PyCFunction)Clear,
@@ -3743,7 +3619,6 @@ void LoadImplementation() {
 		(PyCFunction)DeleteProgram,
 		(PyCFunction)UseProgram,
 		(PyCFunction)UseDefaultProgram,
-		(PyCFunction)CompilerLog,
 		(PyCFunction)GetAttributeLocation,
 		(PyCFunction)GetUniformLocation,
 		(PyCFunction)GetUniformBlockLocation,
@@ -3839,21 +3714,21 @@ void LoadImplementation() {
 
 PyObject * InitializeModernGL(PyObject * self, PyObject * args) {
 	if (initialized) {
-		Py_RETURN_TRUE;
+		Py_RETURN_NONE;
 	}
 
 	if (!PyArg_ParseTuple(args, ":InitializeModernGL")) {
-		PyErr_SetString(ModuleError, "ioladjtq");
 		return 0;
 	}
 	
-	if (ModernGL::InitializeModernGL()) {
-		initialized = true;
-		LoadImplementation();
-		Py_RETURN_TRUE;
-	} else {
-		Py_RETURN_FALSE;
+	if (!ModernGL::InitializeModernGL()) {
+		PyErr_SetString(ModuleError, ModernGL::GetError());
+		return 0;
 	}
+
+	LoadImplementation();
+	initialized = true;
+	Py_RETURN_NONE;
 }
 
 bool ModuleReady() {
