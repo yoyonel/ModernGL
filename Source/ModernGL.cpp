@@ -2104,7 +2104,7 @@ PyObject * InitModule(PyObject * module) {
 	Py_INCREF(&UniformLocationType);
 	Py_INCREF(&UniformBufferLocationType);
 	// Py_INCREF(&ComputeShaderType);
-	// Py_INCREF(&EnableFlagType);
+	Py_INCREF(&EnableFlagType);
 
 	PyModule_AddObject(module, "Framebuffer", (PyObject *)&FramebufferType);
 	PyModule_AddObject(module, "VertexArray", (PyObject *)&VertexArrayType);
@@ -2119,7 +2119,7 @@ PyObject * InitModule(PyObject * module) {
 	PyModule_AddObject(module, "UniformLocation", (PyObject *)&UniformLocationType);
 	PyModule_AddObject(module, "UniformBufferLocation", (PyObject *)&UniformBufferLocationType);
 	// PyModule_AddObject(module, "ComputeShader", (PyObject *)&ComputeShaderType);
-	// PyModule_AddObject(module, "EnableFlag", (PyObject *)&EnableFlagType);
+	PyModule_AddObject(module, "EnableFlag", (PyObject *)&EnableFlagType);
 
 	ModuleError = PyErr_NewException("ModernGL.Error", 0, 0);
 	Py_INCREF(ModuleError);
