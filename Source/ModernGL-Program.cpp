@@ -16,6 +16,8 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 
 	int program = OpenGL::glCreateProgram();
 
+	int category[NUM_SHADER_CATEGORIES] = {};
+
 	int count = (int)PyList_Size(lst);
 	for (int i = 0; i < count; ++i) {
 		Shader * shader = (Shader *)PyList_GetItem(lst, i);
@@ -24,6 +26,14 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 			return 0;
 		}
 		OpenGL::glAttachShader(program, shader->shader);
+		++category[shader->category];
+	}
+
+	for (int i = 0; i < NUM_SHADER_CATEGORIES; ++i) {
+		if (category[i] > 1) {
+			PyErr_SetString(ModuleError, "fexnjdzq");
+			return 0;
+		}
 	}
 
 	int linked = OpenGL::GL_FALSE;

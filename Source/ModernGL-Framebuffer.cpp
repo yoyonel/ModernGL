@@ -93,26 +93,35 @@ PyObject * UseDefaultFramebuffer(PyObject * self, PyObject * args) {
 }
 
 PyObject * ReadPixels(PyObject * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "No Imp.");
-	return 0;
-	// int x;
-	// int y;
-	// int width;
-	// int height;
-	// int components = 3;
+	int x;
+	int y;
+	int width;
+	int height;
+	int components = 3;
 
-	// static const char * kwlist[] = {"x", "y", "width", "height", "components", 0};
+	static const char * kwlist[] = {"x", "y", "width", "height", "components", 0};
 
-	// if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii|i:ReadPixels", (char **)kwlist, &x, &y, &width, &height, &components)) {
-	// 	return 0;
-	// }
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii|i:ReadPixels", (char **)kwlist, &x, &y, &width, &height, &components)) {
+		return 0;
+	}
 
-	// int size = height * ((width * components + 3) & ~3);
-	// unsigned char * pixels = ModernGL::ReadPixels(x, y, width, height, components);
-	// PyObject * data = PyBytes_FromStringAndSize((const char *)pixels, size);
-	// free(pixels);
+	if (components < 1 || components > 4) {
+		PyErr_SetString(ModuleError, "asdasd");
+		return 0;
+	}
 
-	// return data;
+	int size = height * ((width * components + 3) & ~3);
+
+	const int formats[] = {0, OpenGL::GL_RED, OpenGL::GL_RG, OpenGL::GL_RGB, OpenGL::GL_RGBA};
+	int format = formats[components];
+
+	PyObject * bytes = PyBytes_FromStringAndSize(0, size);
+	char * data = PyBytes_AS_STRING(bytes);
+
+	OpenGL::glReadPixels(x, y, width, height, format, OpenGL::GL_UNSIGNED_BYTE, data);
+	data[size] = 0;
+	
+	return bytes;
 }
 
 PyObject * ReadDepthPixels(PyObject * self, PyObject * args, PyObject * kwargs) {

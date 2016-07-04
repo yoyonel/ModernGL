@@ -21,6 +21,15 @@ extern int defaultProgram;
 const int maxCompilerLog = 16 * 1024;
 extern char compilerLog[maxCompilerLog + 1];
 
+enum ShaderCategory {
+	VERTEX_SHADER,
+	FRAGMENT_SHADER,
+	GEOMETRY_SHADER,
+	TESS_EVALUATION_SHADER,
+	TESS_CONTROL_SHADER,
+	NUM_SHADER_CATEGORIES,
+};
+
 struct Framebuffer {
 	PyObject_HEAD
 	int fbo;
@@ -31,6 +40,7 @@ struct Framebuffer {
 struct VertexArray {
 	PyObject_HEAD
 	int vao;
+	bool indexed;
 };
 
 struct VertexBuffer {
@@ -63,6 +73,7 @@ struct Texture {
 struct Shader {
 	PyObject_HEAD
 	int shader;
+	ShaderCategory category;
 };
 
 struct Program {
@@ -91,6 +102,11 @@ struct ComputeShader {
 	int program;
 };
 
+struct EnableFlag {
+	PyObject_HEAD
+	unsigned value;
+};
+
 extern PyTypeObject FramebufferType;
 extern PyTypeObject VertexArrayType;
 extern PyTypeObject VertexBufferType;
@@ -104,34 +120,22 @@ extern PyTypeObject AttributeLocationType;
 extern PyTypeObject UniformLocationType;
 extern PyTypeObject UniformBufferLocationType;
 extern PyTypeObject ComputeShaderType;
+extern PyTypeObject EnableFlagType;
 
 PyObject * CreateFramebufferType(int fbo, int color, int depth);
-PyObject * CreateVertexArrayType(int vao);
+PyObject * CreateVertexArrayType(int vao, bool indexed);
 PyObject * CreateVertexBufferType(int vbo);
 PyObject * CreateIndexBufferType(int ibo);
 PyObject * CreateUniformBufferType(int ubo);
 PyObject * CreateStorageBufferType(int ssbo, int size);
 PyObject * CreateTextureType(int texture, int components);
-PyObject * CreateShaderType(int shader);
+PyObject * CreateShaderType(int shader, ShaderCategory category);
 PyObject * CreateProgramType(int program);
 PyObject * CreateAttributeLocationType(int location);
 PyObject * CreateUniformLocationType(int location);
 PyObject * CreateUniformBufferLocationType(int location);
 PyObject * CreateComputeShaderType(int shader, int program);
-
-bool ValidFramebufferType(Framebuffer * framebuffer);
-bool ValidVertexArrayType(VertexArray * vertexArray);
-bool ValidVertexBufferType(VertexBuffer * vertexBuffer);
-bool ValidIndexBufferType(IndexBuffer * indexBuffer);
-bool ValidUniformBufferType(UniformBuffer * uniformBuffer);
-bool ValidStorageBufferType(StorageBuffer * storageBuffer);
-bool ValidTextureType(Texture * texture);
-bool ValidShaderType(Shader * shader);
-bool ValidProgramType(Program * program);
-bool ValidAttributeLocationType(AttributeLocation * attributeLocation);
-bool ValidUniformLocationType(UniformLocation * uniformLocation);
-bool ValidUniformBufferLocationType(UniformBufferLocation * uniformBufferLocation);
-bool ValidComputeShaderType(ComputeShader * computeShader);
+PyObject * CreateEnableFlagType(unsigned value);
 
 PyObject * InitializeModernGL(PyObject * self, PyObject * args);
 PyObject * ExtensionActive(PyObject * self);
@@ -174,7 +178,7 @@ PyObject * ReadStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs
 PyObject * DeleteVertexBuffer(PyObject * self, PyObject * args);
 PyObject * DeleteIndexBuffer(PyObject * self, PyObject * args);
 PyObject * DeleteUniformBuffer(PyObject * self, PyObject * args);
-PyObject * DeleteStorageBuffer(PyObject * self, PyObject * args); // TODO: missing
+PyObject * DeleteStorageBuffer(PyObject * self, PyObject * args);
 
 PyObject * NewDynamicVertexBuffer(PyObject * self, PyObject * args);
 PyObject * NewDynamicIndexBuffer(PyObject * self, PyObject * args);
@@ -198,18 +202,6 @@ PyObject * DeleteShader(PyObject * self, PyObject * args);
 
 PyObject * NewProgram(PyObject * self, PyObject * args);
 PyObject * DeleteProgram(PyObject * self, PyObject * args);
-
-PyObject * RenderIndexedPoints(PyObject * self, PyObject * args, PyObject * kwargs);
-PyObject * RenderIndexedLines(PyObject * self, PyObject * args, PyObject * kwargs);
-PyObject * RenderIndexedLineStrip(PyObject * self, PyObject * args, PyObject * kwargs);
-PyObject * RenderIndexedLineLoop(PyObject * self, PyObject * args, PyObject * kwargs);
-PyObject * RenderIndexedTriangles(PyObject * self, PyObject * args, PyObject * kwargs);
-PyObject * RenderIndexedTriangleStrip(PyObject * self, PyObject * args, PyObject * kwargs);
-PyObject * RenderIndexedTriangleFan(PyObject * self, PyObject * args, PyObject * kwargs);
-PyObject * RenderIndexedLinesAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
-PyObject * RenderIndexedLineStripAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
-PyObject * RenderIndexedTrianglesAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
-PyObject * RenderIndexedTriangleStripAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
 
 PyObject * RenderPoints(PyObject * self, PyObject * args, PyObject * kwargs);
 PyObject * RenderLines(PyObject * self, PyObject * args, PyObject * kwargs);
@@ -241,7 +233,7 @@ PyObject * UpdateIndexBuffer(PyObject * self, PyObject * args, PyObject * kwargs
 PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
 
 PyObject * UseProgram(PyObject * self, PyObject * args);
-PyObject * GetDefaultProgram(PyObject * self); // TODO:
+PyObject * GetDefaultProgram(PyObject * self);
 PyObject * UseDefaultProgram(PyObject * self);
 
 PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs);

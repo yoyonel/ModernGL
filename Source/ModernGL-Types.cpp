@@ -52,6 +52,10 @@ PyObject * ComputeShader_new(PyTypeObject * type, PyObject * args, PyObject * kw
 	return type->tp_alloc(type, 0);
 }
 
+PyObject * EnableFlag_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+	return type->tp_alloc(type, 0);
+}
+
 int Framebuffer_init(Framebuffer * self, PyObject * args, PyObject * kwargs) {
 	PyErr_SetString(ModuleError, "Cannot instantiate Framebuffer.\nCall NewFramebuffer(...) to get a Framebuffer object.");
 	return -1;
@@ -117,6 +121,11 @@ int ComputeShader_init(ComputeShader * self, PyObject * args, PyObject * kwargs)
 	return -1;
 }
 
+int EnableFlag_init(EnableFlag * self, PyObject * args, PyObject * kwargs) {
+	PyErr_SetString(ModuleError, "Cannot instantiate EnableFlag.");
+	return -1;
+}
+
 void Framebuffer_dealloc(Framebuffer * self) {
 	Py_TYPE(self)->tp_free((PyObject*)self);
 }
@@ -166,6 +175,10 @@ void UniformBufferLocation_dealloc(UniformBufferLocation * self) {
 }
 
 void ComputeShader_dealloc(ComputeShader * self) {
+	Py_TYPE(self)->tp_free((PyObject*)self);
+}
+
+void EnableFlag_dealloc(EnableFlag * self) {
 	Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
@@ -219,6 +232,10 @@ PyObject * UniformBufferLocation_str(UniformBufferLocation * self) {
 
 PyObject * ComputeShader_str(ComputeShader * self) {
 	return PyUnicode_FromFormat("<ComputeShader = %d>", self->shader);
+}
+
+PyObject * EnableFlag_str(ComputeShader * self) {
+	return PyUnicode_FromFormat("<EnableFlag: ... >");
 }
 
 PyTypeObject FramebufferType = {
@@ -754,6 +771,90 @@ PyTypeObject ComputeShaderType = {
 	ComputeShader_new,
 };
 
+PyObject * OperatorNotImplemented() {
+	Py_RETURN_NOTIMPLEMENTED;
+}
+
+PyNumberMethods EnableFlag_num = {
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_add;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_subtract;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_multiply;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_remainder;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_divmod;
+	(ternaryfunc)OperatorNotImplemented, // ternaryfunc nb_power;
+	(unaryfunc)OperatorNotImplemented, // unaryfunc nb_negative;
+	(unaryfunc)OperatorNotImplemented, // unaryfunc nb_positive;
+	(unaryfunc)OperatorNotImplemented, // unaryfunc nb_absolute;
+	(inquiry)OperatorNotImplemented, // inquiry nb_bool;
+	(unaryfunc)OperatorNotImplemented, // unaryfunc nb_invert;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_lshift;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_rshift;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_and;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_xor;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_or;
+	(unaryfunc)OperatorNotImplemented, // unaryfunc nb_int;
+	0, // void *nb_reserved;  /* the slot formerly known as nb_long */
+	(unaryfunc)OperatorNotImplemented, // unaryfunc nb_float;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_add;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_subtract;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_multiply;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_remainder;
+	(ternaryfunc)OperatorNotImplemented, // ternaryfunc nb_inplace_power;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_lshift;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_rshift;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_and;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_xor;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_or;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_floor_divide;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_true_divide;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_floor_divide;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_true_divide;
+	(unaryfunc)OperatorNotImplemented, // unaryfunc nb_index;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_matrix_multiply;
+	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_matrix_multiply;
+};
+
+PyTypeObject EnableFlagType = {
+	PyVarObject_HEAD_INIT(0, 0)
+	"ModernGL.EnableFlag",
+	sizeof(EnableFlag),
+	0,
+	(destructor)EnableFlag_dealloc,
+	0,
+	0,
+	0,
+	0,
+	0,
+	&EnableFlag_num,
+	0,
+	0,
+	0,
+	0,
+	(unaryfunc)EnableFlag_str,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+	"EnableFlag",
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	(initproc)EnableFlag_init,
+	0,
+	EnableFlag_new,
+};
+
 PyObject * CreateFramebufferType(int fbo, int color, int depth) {
 	Framebuffer * obj = (Framebuffer *)FramebufferType.tp_alloc(&FramebufferType, 0);
 
@@ -766,11 +867,12 @@ PyObject * CreateFramebufferType(int fbo, int color, int depth) {
 	return (PyObject *)obj;
 }
 
-PyObject * CreateVertexArrayType(int vao) {
+PyObject * CreateVertexArrayType(int vao, bool indexed) {
 	VertexArray * obj = (VertexArray *)VertexArrayType.tp_alloc(&VertexArrayType, 0);
 
 	if (obj != 0) {
 		obj->vao = vao;
+		obj->indexed = indexed;
 	}
 
 	return (PyObject *)obj;
@@ -828,11 +930,12 @@ PyObject * CreateTextureType(int texture, int components) {
 	return (PyObject *)obj;
 }
 
-PyObject * CreateShaderType(int shader) {
+PyObject * CreateShaderType(int shader, ShaderCategory category) {
 	Shader * obj = (Shader *)ShaderType.tp_alloc(&ShaderType, 0);
 
 	if (obj != 0) {
 		obj->shader = shader;
+		obj->category = category;
 	}
 
 	return (PyObject *)obj;
@@ -889,54 +992,12 @@ PyObject * CreateComputeShaderType(int shader, int program) {
 	return (PyObject *)obj;
 }
 
-bool ValidFramebufferType(Framebuffer * framebuffer) {
-	return PyObject_TypeCheck((PyObject *)framebuffer, &FramebufferType);
-}
+PyObject * CreateEnableFlagType(unsigned value) {
+	EnableFlag * obj = (EnableFlag *)EnableFlagType.tp_alloc(&EnableFlagType, 0);
 
-bool ValidVertexArrayType(VertexArray * vertexArray) {
-	return PyObject_TypeCheck((PyObject *)vertexArray, &VertexArrayType);
-}
+	if (obj != 0) {
+		obj->value = value;
+	}
 
-bool ValidVertexBufferType(VertexBuffer * vertexBuffer) {
-	return PyObject_TypeCheck((PyObject *)vertexBuffer, &VertexBufferType);
-}
-
-bool ValidIndexBufferType(IndexBuffer * indexBuffer) {
-	return PyObject_TypeCheck((PyObject *)indexBuffer, &IndexBufferType);
-}
-
-bool ValidUniformBufferType(UniformBuffer * uniformBuffer) {
-	return PyObject_TypeCheck((PyObject *)uniformBuffer, &UniformBufferType);
-}
-
-bool ValidStorageBufferType(StorageBuffer * storageBuffer) {
-	return PyObject_TypeCheck((PyObject *)storageBuffer, &StorageBufferType);
-}
-
-bool ValidTextureType(Texture * texture) {
-	return PyObject_TypeCheck((PyObject *)texture, &TextureType);
-}
-
-bool ValidShaderType(Shader * shader) {
-	return PyObject_TypeCheck((PyObject *)shader, &ShaderType);
-}
-
-bool ValidProgramType(Program * program) {
-	return PyObject_TypeCheck((PyObject *)program, &ProgramType);
-}
-
-bool ValidAttributeLocationType(AttributeLocation * attributeLocation) {
-	return PyObject_TypeCheck((PyObject *)attributeLocation, &AttributeLocationType);
-}
-
-bool ValidUniformLocationType(UniformLocation * uniformLocation) {
-	return PyObject_TypeCheck((PyObject *)uniformLocation, &UniformLocationType);
-}
-
-bool ValidUniformBufferLocationType(UniformBufferLocation * uniformBufferLocation) {
-	return PyObject_TypeCheck((PyObject *)uniformBufferLocation, &UniformBufferLocationType);
-}
-
-bool ValidComputeShaderType(ComputeShader * computeShader) {
-	return PyObject_TypeCheck((PyObject *)computeShader, &ComputeShaderType);
+	return (PyObject *)obj;
 }

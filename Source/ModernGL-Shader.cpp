@@ -33,7 +33,7 @@ PyObject * NewVertexShader(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	return CreateShaderType(shader);
+	return CreateShaderType(shader, VERTEX_SHADER);
 }
 
 PyObject * NewFragmentShader(PyObject * self, PyObject * args) {
@@ -67,7 +67,7 @@ PyObject * NewFragmentShader(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	return CreateShaderType(shader);
+	return CreateShaderType(shader, FRAGMENT_SHADER);
 }
 
 PyObject * NewGeometryShader(PyObject * self, PyObject * args) {
@@ -101,7 +101,7 @@ PyObject * NewGeometryShader(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	return CreateShaderType(shader);
+	return CreateShaderType(shader, GEOMETRY_SHADER);
 }
 
 PyObject * NewTessEvaluationShader(PyObject * self, PyObject * args) {
@@ -134,7 +134,7 @@ PyObject * NewTessEvaluationShader(PyObject * self, PyObject * args) {
 		PyErr_SetString(ModuleError, compilerLog);
 	}
 
-	return CreateShaderType(shader);
+	return CreateShaderType(shader, TESS_EVALUATION_SHADER);
 }
 
 PyObject * NewTessControlShader(PyObject * self, PyObject * args) {
@@ -167,7 +167,7 @@ PyObject * NewTessControlShader(PyObject * self, PyObject * args) {
 		PyErr_SetString(ModuleError, compilerLog);
 	}
 
-	return CreateShaderType(shader);
+	return CreateShaderType(shader, TESS_CONTROL_SHADER);
 }
 
 PyObject * DeleteShader(PyObject * self, PyObject * args) {

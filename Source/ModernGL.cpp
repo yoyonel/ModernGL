@@ -1272,193 +1272,6 @@ static PyMethodDef methods[] = {
 		"\n"
 	},
 	{
-		"RenderIndexedTriangles",
-		(PyCFunction)Dummy, // RenderIndexedTriangles,
-		METH_VARARGS | METH_KEYWORDS,
-
-		"\n"
-		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
-		"\tcount (int) Number of vertices to render.\n"
-		"\tfirst (int) Index of the first vertex. By default is 0\n"
-		"\tinstances (int) Number of instances. By default is 1\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		"RenderIndexedTriangleStrip",
-		(PyCFunction)Dummy, // RenderIndexedTriangleStrip,
-		METH_VARARGS | METH_KEYWORDS,
-
-		"\n"
-		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
-		"\tcount (int) Number of vertices to render.\n"
-		"\tfirst (int) Index of the first vertex. By default is 0\n"
-		"\tinstances (int) Number of instances. By default is 1\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		"RenderIndexedTriangleFan",
-		(PyCFunction)Dummy, // RenderIndexedTriangleFan,
-		METH_VARARGS | METH_KEYWORDS,
-
-		"\n"
-		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
-		"\tcount (int) Number of vertices to render.\n"
-		"\tfirst (int) Index of the first vertex. By default is 0\n"
-		"\tinstances (int) Number of instances. By default is 1\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		"RenderIndexedLines",
-		(PyCFunction)Dummy, // RenderIndexedLines,
-		METH_VARARGS | METH_KEYWORDS,
-
-		"\n"
-		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
-		"\tcount (int) Number of vertices to render.\n"
-		"\tfirst (int) Index of the first vertex. By default is 0\n"
-		"\tinstances (int) Number of instances. By default is 1\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		"RenderIndexedLineStrip",
-		(PyCFunction)Dummy, // RenderIndexedLineStrip,
-		METH_VARARGS | METH_KEYWORDS,
-
-		"\n"
-		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
-		"\tcount (int) Number of vertices to render.\n"
-		"\tfirst (int) Index of the first vertex. By default is 0\n"
-		"\tinstances (int) Number of instances. By default is 1\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		"RenderIndexedLineLoop",
-		(PyCFunction)Dummy, // RenderIndexedLineLoop,
-		METH_VARARGS | METH_KEYWORDS,
-
-		"\n"
-		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
-		"\tcount (int) Number of vertices to render.\n"
-		"\tfirst (int) Index of the first vertex. By default is 0\n"
-		"\tinstances (int) Number of instances. By default is 1\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		"RenderIndexedPoints",
-		(PyCFunction)Dummy, // RenderIndexedPoints,
-		METH_VARARGS | METH_KEYWORDS,
-
-		"\n"
-		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
-		"\tcount (int) Number of vertices to render.\n"
-		"\tfirst (int) Index of the first vertex. By default is 0\n"
-		"\tinstances (int) Number of instances. By default is 1\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		"RenderIndexedLineStripAdjacency",
-		(PyCFunction)Dummy, // RenderIndexedLineStripAdjacency,
-		METH_VARARGS | METH_KEYWORDS,
-
-		"\n"
-		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
-		"\tcount (int) Number of vertices to render.\n"
-		"\tfirst (int) Index of the first vertex. By default is 0\n"
-		"\tinstances (int) Number of instances. By default is 1\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		"RenderIndexedLinesAdjacency",
-		(PyCFunction)Dummy, // RenderIndexedLinesAdjacency,
-		METH_VARARGS | METH_KEYWORDS,
-
-		"\n"
-		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
-		"\tcount (int) Number of vertices to render.\n"
-		"\tfirst (int) Index of the first vertex. By default is 0\n"
-		"\tinstances (int) Number of instances. By default is 1\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		"RenderIndexedTriangleStripAdjacency",
-		(PyCFunction)Dummy, // RenderIndexedTriangleStripAdjacency,
-		METH_VARARGS | METH_KEYWORDS,
-
-		"\n"
-		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
-		"\tcount (int) Number of vertices to render.\n"
-		"\tfirst (int) Index of the first vertex. By default is 0\n"
-		"\tinstances (int) Number of instances. By default is 1\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		"RenderIndexedTrianglesAdjacency",
-		(PyCFunction)Dummy, // RenderIndexedTrianglesAdjacency,
-		METH_VARARGS | METH_KEYWORDS,
-
-		"\n"
-		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
-		"\tcount (int) Number of vertices to render.\n"
-		"\tfirst (int) Index of the first vertex. By default is 0\n"
-		"\tinstances (int) Number of instances. By default is 1\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
 		"NewFramebuffer",
 		(PyCFunction)Dummy, // NewFramebuffer,
 		METH_VARARGS | METH_KEYWORDS,
@@ -1870,17 +1683,6 @@ void LoadImplementation() {
 		(PyCFunction)RenderLinesAdjacency,
 		(PyCFunction)RenderTriangleStripAdjacency,
 		(PyCFunction)RenderTrianglesAdjacency,
-		(PyCFunction)RenderIndexedTriangles,
-		(PyCFunction)RenderIndexedTriangleStrip,
-		(PyCFunction)RenderIndexedTriangleFan,
-		(PyCFunction)RenderIndexedLines,
-		(PyCFunction)RenderIndexedLineStrip,
-		(PyCFunction)RenderIndexedLineLoop,
-		(PyCFunction)RenderIndexedPoints,
-		(PyCFunction)RenderIndexedLineStripAdjacency,
-		(PyCFunction)RenderIndexedLinesAdjacency,
-		(PyCFunction)RenderIndexedTriangleStripAdjacency,
-		(PyCFunction)RenderIndexedTrianglesAdjacency,
 		(PyCFunction)NewFramebuffer,
 		(PyCFunction)DeleteFramebuffer,
 		(PyCFunction)UseFramebuffer,
@@ -2273,6 +2075,14 @@ bool ModuleReady() {
 		return false;
 	}
 
+	if (PyType_Ready(&ComputeShaderType) < 0) {
+		return false;
+	}
+
+	if (PyType_Ready(&EnableFlagType) < 0) {
+		return false;
+	}
+
 	return true;
 }
 
@@ -2293,6 +2103,8 @@ PyObject * InitModule(PyObject * module) {
 	Py_INCREF(&AttributeLocationType);
 	Py_INCREF(&UniformLocationType);
 	Py_INCREF(&UniformBufferLocationType);
+	// Py_INCREF(&ComputeShaderType);
+	// Py_INCREF(&EnableFlagType);
 
 	PyModule_AddObject(module, "Framebuffer", (PyObject *)&FramebufferType);
 	PyModule_AddObject(module, "VertexArray", (PyObject *)&VertexArrayType);
@@ -2306,6 +2118,8 @@ PyObject * InitModule(PyObject * module) {
 	PyModule_AddObject(module, "AttributeLocation", (PyObject *)&AttributeLocationType);
 	PyModule_AddObject(module, "UniformLocation", (PyObject *)&UniformLocationType);
 	PyModule_AddObject(module, "UniformBufferLocation", (PyObject *)&UniformBufferLocationType);
+	// PyModule_AddObject(module, "ComputeShader", (PyObject *)&ComputeShaderType);
+	// PyModule_AddObject(module, "EnableFlag", (PyObject *)&EnableFlagType);
 
 	ModuleError = PyErr_NewException("ModernGL.Error", 0, 0);
 	Py_INCREF(ModuleError);
@@ -2317,6 +2131,12 @@ PyObject * InitModule(PyObject * module) {
 	PyModule_AddIntConstant(module, "ENABLE_CULL_FACE", ENABLE_CULL_FACE);
 	PyModule_AddIntConstant(module, "ENABLE_DEPTH_TEST", ENABLE_DEPTH_TEST);
 	PyModule_AddIntConstant(module, "ENABLE_MULTISAMPLE", ENABLE_MULTISAMPLE);
+
+	// PyModule_AddObject(module, "ENABLE_NOTHING", CreateEnableFlagType(ENABLE_NOTHING));
+	// PyModule_AddObject(module, "ENABLE_BLEND", CreateEnableFlagType(ENABLE_BLEND));
+	// PyModule_AddObject(module, "ENABLE_CULL_FACE", CreateEnableFlagType(ENABLE_CULL_FACE));
+	// PyModule_AddObject(module, "ENABLE_DEPTH_TEST", CreateEnableFlagType(ENABLE_DEPTH_TEST));
+	// PyModule_AddObject(module, "ENABLE_MULTISAMPLE", CreateEnableFlagType(ENABLE_MULTISAMPLE));
 
 	PyModule_AddStringConstant(module, "VERSION", "2.1.0");
 	

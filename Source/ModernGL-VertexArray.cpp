@@ -6,7 +6,8 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	const char * format;
 	PyObject * lst;
 
-	IndexBuffer * ibo = 0;
+	IndexBuffer * no_ibo = (IndexBuffer *)Py_None;
+	IndexBuffer * ibo = no_ibo;
 
 	if (!PyArg_ParseTuple(args, "sO|O:NewVertexArray", &format, &lst, &ibo)) {
 		return 0;
@@ -28,7 +29,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 		++length;
 	}
 
-	if (length % 2) {
+	if (!length || length % 2) {
 		PyErr_SetString(ModuleError, "Invalid format");
 		return 0;
 	}
@@ -42,7 +43,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	OpenGL::glGenVertexArrays(1, (OpenGL::GLuint *)&vao);
 	OpenGL::glBindVertexArray(vao);
 
-	if (ibo) {
+	if (ibo != no_ibo) {
 		if (!PyObject_TypeCheck((PyObject *)ibo, &IndexBufferType)) {
 			PyErr_SetString(PyExc_TypeError, "caoypwbf");
 			return 0;
@@ -58,6 +59,12 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 
 	char * ptr = 0;
 	int count = (int)PyList_Size(lst);
+
+	if (length / 2 != count) {
+		PyErr_SetString(ModuleError, "caoypwbf");
+		return 0;
+	}
+
 	for (int i = 0; i < count; ++i) {
 		PyObject * tuple = PyList_GET_ITEM(lst, i);
 
@@ -66,7 +73,11 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 			return 0;
 		}
 
-		// size check
+		int size = (int)PyTuple_Size(tuple);
+		if (size != 2) {
+			PyErr_SetString(ModuleError, "caoypwbf");
+			return 0;
+		}
 
 		VertexBuffer * vbo = (VertexBuffer *)PyTuple_GET_ITEM(tuple, 0);
 
@@ -96,7 +107,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	}
 
 	OpenGL::glBindVertexArray(defaultVertexArray);
-	return CreateVertexArrayType(vao);
+	return CreateVertexArrayType(vao, ibo != no_ibo);
 }
 
 PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {
