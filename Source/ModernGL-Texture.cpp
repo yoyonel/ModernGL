@@ -65,11 +65,7 @@ PyObject * DeleteTexture(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)texture))->tp_name;
-		PyErr_Format(PyExc_TypeError, "DeleteTexture() argument `texture` must be Texture, not %s", got);
-		return 0;
-	}
+	REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 
 	OpenGL::glDeleteTextures(1, (OpenGL::GLuint *)&texture->texture);
 	Py_RETURN_NONE;
@@ -110,11 +106,7 @@ PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)texture))->tp_name;
-		PyErr_Format(PyExc_TypeError, "UpdateTexture() argument `texture` must be Texture, not %s", got);
-		return 0;
-	}
+	REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 
 	const int formats[] = {0, OpenGL::GL_RED, OpenGL::GL_RG, OpenGL::GL_RGB, OpenGL::GL_RGBA};
 	int format = formats[texture->components];
@@ -133,11 +125,7 @@ PyObject * UseTexture(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)texture))->tp_name;
-		PyErr_Format(PyExc_TypeError, "UseTexture() argument `texture` must be Texture, not %s", got);
-		return 0;
-	}
+	REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 
 	OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + location);
 	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture->texture);
@@ -151,11 +139,7 @@ PyObject * SetTexturePixelated(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)texture))->tp_name;
-		PyErr_Format(PyExc_TypeError, "SetTexturePixelated() argument `texture` must be Texture, not %s", got);
-		return 0;
-	}
+	REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 
 	OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
 	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture->texture);
@@ -171,11 +155,7 @@ PyObject * SetTextureFiltered(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)texture))->tp_name;
-		PyErr_Format(PyExc_TypeError, "SetTextureFiltered() argument `texture` must be Texture, not %s", got);
-		return 0;
-	}
+	REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 
 	OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
 	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture->texture);
@@ -191,11 +171,7 @@ PyObject * SetTextureMipmapped(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)texture))->tp_name;
-		PyErr_Format(PyExc_TypeError, "SetTextureMipmapped() argument `texture` must be Texture, not %s", got);
-		return 0;
-	}
+	REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 
 	OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
 	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture->texture);
@@ -215,11 +191,7 @@ PyObject * BuildMipmap(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)texture))->tp_name;
-		PyErr_Format(PyExc_TypeError, "BuildMipmap() argument `texture` must be Texture, not %s", got);
-		return 0;
-	}
+	REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 
 	OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
 	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture->texture);
@@ -241,11 +213,7 @@ PyObject * UseTextureAsImage(PyObject * self, PyObject * args, PyObject * kwargs
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)texture, &TextureType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)texture))->tp_name;
-		PyErr_Format(PyExc_TypeError, "UseTextureAsImage() argument `texture` must be Texture, not %s", got);
-		return 0;
-	}
+	REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 
 	const int formats[] = {0, OpenGL::GL_R8UI, OpenGL::GL_RG8UI, OpenGL::GL_RGB8UI, OpenGL::GL_RGBA8UI};
 	int format = formats[texture->components];

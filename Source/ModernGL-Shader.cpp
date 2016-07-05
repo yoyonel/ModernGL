@@ -177,11 +177,7 @@ PyObject * DeleteShader(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)shader, &ShaderType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)shader))->tp_name;
-		PyErr_Format(PyExc_TypeError, "DeleteShader() argument `shader` must be Shader, not %s", got);
-		return 0;
-	}
+	REPORT_ARG_TYPE_ERROR("shader", shader, ShaderType);
 
 	OpenGL::glDeleteShader(shader->shader);
 	Py_RETURN_NONE;

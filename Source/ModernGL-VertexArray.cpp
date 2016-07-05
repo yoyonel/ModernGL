@@ -133,11 +133,7 @@ PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "DeleteVertexArray() argument `vao` must be VertexArray, not %s", got);
-		return 0;
-	}
+	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	OpenGL::glDeleteVertexArrays(1, (OpenGL::GLuint *)&vao->vao);
 	Py_RETURN_NONE;
@@ -145,56 +141,38 @@ PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {
 
 PyObject * EnableAttribute(PyObject * self, PyObject * args, PyObject * kwargs) {
 	VertexArray * vao;
-	AttributeLocation * location;
+	AttributeLocation * attribute;
 
 	static const char * kwlist[] = {"vao", "attribute", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:EnableAttribute", (char **)kwlist, &vao, &location)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:EnableAttribute", (char **)kwlist, &vao, &attribute)) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "EnableAttribute() argument `vao` must be VertexArray, not %s", got);
-		return 0;
-	}
-
-	if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
-		PyErr_Format(PyExc_TypeError, "EnableAttribute() argument `attribute` must be AttributeLocation, not %s", got);
-		return 0;
-	}
+	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
+	REPORT_ARG_TYPE_ERROR("attribute", attribute, AttributeLocationType);
 
 	OpenGL::glBindVertexArray(vao->vao);
-	OpenGL::glEnableVertexAttribArray(location->location);
+	OpenGL::glEnableVertexAttribArray(attribute->location);
 	OpenGL::glBindVertexArray(defaultVertexArray);
 	Py_RETURN_NONE;
 }
 
 PyObject * DisableAttribute(PyObject * self, PyObject * args, PyObject * kwargs) {
 	VertexArray * vao;
-	AttributeLocation * location;
+	AttributeLocation * attribute;
 
 	static const char * kwlist[] = {"vao", "attribute", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:DisableAttribute", (char **)kwlist, &vao, &location)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:DisableAttribute", (char **)kwlist, &vao, &attribute)) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "DisableAttribute() argument `vao` must be VertexArray, not %s", got);
-		return 0;
-	}
-
-	if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
-		PyErr_Format(PyExc_TypeError, "DisableAttribute() argument `attribute` must be AttributeLocation, not %s", got);
-		return 0;
-	}
+	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
+	REPORT_ARG_TYPE_ERROR("attribute", attribute, AttributeLocationType);
 
 	OpenGL::glBindVertexArray(vao->vao);
-	OpenGL::glDisableVertexAttribArray(location->location);
+	OpenGL::glDisableVertexAttribArray(attribute->location);
 	OpenGL::glBindVertexArray(defaultVertexArray);
 	Py_RETURN_NONE;
 }
@@ -209,31 +187,22 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "EnableAttributes() argument `vao` must be VertexArray, not %s", got);
-		return 0;
-	}
-
-	if (!PyObject_TypeCheck((PyObject *)attributes, &PyList_Type)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)attributes))->tp_name;
-		PyErr_Format(PyExc_TypeError, "EnableAttributes() argument `attributes` must be list, not %s", got);
-		return 0;
-	}
+	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
+	REPORT_ARG_TYPE_ERROR("attributes", attributes, PyList_Type);
 
 	OpenGL::glBindVertexArray(vao->vao);
 	int count = (int)PyList_Size(attributes);
 	for (int i = 0; i < count; ++i) {
-		AttributeLocation * location = (AttributeLocation *)PyList_GET_ITEM(attributes, i);
+		AttributeLocation * attribute = (AttributeLocation *)PyList_GET_ITEM(attributes, i);
 
-		if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
-			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+		if (!PyObject_TypeCheck((PyObject *)attribute, &AttributeLocationType)) {
+			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)attribute))->tp_name;
 			PyErr_Format(PyExc_TypeError, "EnableAttributes() attributes[%d] must be AttributeLocation, not %s", i, got);
 			OpenGL::glBindVertexArray(defaultVertexArray);
 			return 0;
 		}
 
-		OpenGL::glEnableVertexAttribArray(location->location);
+		OpenGL::glEnableVertexAttribArray(attribute->location);
 	}
 
 	OpenGL::glBindVertexArray(defaultVertexArray);
@@ -250,31 +219,22 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "DisableAttributes() argument `vao` must be VertexArray, not %s", got);
-		return 0;
-	}
-
-	if (!PyObject_TypeCheck((PyObject *)attributes, &PyList_Type)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)attributes))->tp_name;
-		PyErr_Format(PyExc_TypeError, "DisableAttributes() argument `attributes` must be list, not %s", got);
-		return 0;
-	}
+	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
+	REPORT_ARG_TYPE_ERROR("attributes", attributes, PyList_Type);
 
 	OpenGL::glBindVertexArray(vao->vao);
 	int count = (int)PyList_Size(attributes);
 	for (int i = 0; i < count; ++i) {
-		AttributeLocation * location = (AttributeLocation *)PyList_GET_ITEM(attributes, i);
+		AttributeLocation * attribute = (AttributeLocation *)PyList_GET_ITEM(attributes, i);
 
-		if (!PyObject_TypeCheck((PyObject *)location, &AttributeLocationType)) {
-			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+		if (!PyObject_TypeCheck((PyObject *)attribute, &AttributeLocationType)) {
+			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)attribute))->tp_name;
 			PyErr_Format(PyExc_TypeError, "DisableAttributes() attributes[%d] must be AttributeLocation, not %s", i, got);
 			OpenGL::glBindVertexArray(defaultVertexArray);
 			return 0;
 		}
 
-		OpenGL::glDisableVertexAttribArray(location->location);
+		OpenGL::glDisableVertexAttribArray(attribute->location);
 	}
 	OpenGL::glBindVertexArray(defaultVertexArray);
 	Py_RETURN_NONE;

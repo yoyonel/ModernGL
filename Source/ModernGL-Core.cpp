@@ -92,11 +92,7 @@ PyObject * EnableOnly(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)flags, &EnableFlagType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)flags))->tp_name;
-		PyErr_Format(PyExc_TypeError, "RenderTriangles() argument `flags` must be EnableFlag, not %s", got);
-		return 0;
-	}
+	REPORT_ARG_TYPE_ERROR("flags", flags, EnableFlagType);
 
 	(flags->value & ENABLE_BLEND ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_BLEND);
 	(flags->value & ENABLE_CULL_FACE ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_CULL_FACE);
