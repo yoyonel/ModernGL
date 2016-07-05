@@ -17,10 +17,6 @@ class Case1_Failsafe(unittest.TestCase):
 			GL.Viewport(0, 0, 10, 10)
 
 
-	# def test_flags(self):
-	# 	x = GL.ENABLE_NOTHING
-
-
 class Case2_Methods(unittest.TestCase):
 	def setUp(self):
 		GLContext.Context(True)

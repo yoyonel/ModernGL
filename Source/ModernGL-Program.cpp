@@ -2,6 +2,14 @@
 
 #include "OpenGL.hpp"
 
+const char * categoryNames[] = {
+	"VertexShader",
+	"FragmentShader",
+	"GeometryShader",
+	"TessEvaluationShader",
+	"TessControlShader",
+};
+
 PyObject * NewProgram(PyObject * self, PyObject * args) {
 	PyObject * lst;
 
@@ -10,7 +18,8 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)lst, &PyList_Type)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)lst))->tp_name;
+		PyErr_Format(PyExc_TypeError, "NewProgram() argument `shaders` must be list, not %s", got);
 		return 0;
 	}
 
@@ -22,7 +31,8 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	for (int i = 0; i < count; ++i) {
 		Shader * shader = (Shader *)PyList_GetItem(lst, i);
 		if (!PyObject_TypeCheck((PyObject *)shader, &ShaderType)) {
-			PyErr_SetString(PyExc_TypeError, "fexnjdzq");
+			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)shader))->tp_name;
+			PyErr_Format(PyExc_TypeError, "NewProgram() shaders[%d] must be Shader, not %s", i, got);
 			return 0;
 		}
 		OpenGL::glAttachShader(program, shader->shader);
@@ -31,7 +41,8 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 
 	for (int i = 0; i < NUM_SHADER_CATEGORIES; ++i) {
 		if (category[i] > 1) {
-			PyErr_SetString(ModuleError, "fexnjdzq");
+			const char * name = categoryNames[i];
+			PyErr_Format(PyExc_TypeError, "NewProgram() duplicate %s", i, name);
 			return 0;
 		}
 	}
@@ -42,7 +53,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 
 	if (!linked) {
 		int logSize = 0;
-		static const char * logTitle = "Program:\n";
+		static const char * logTitle = "NewProgram() linking failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetProgramInfoLog(program, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
@@ -55,7 +66,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	}
 
 	if (!program) {
-		PyErr_SetString(PyExc_TypeError, compilerLog);
+		PyErr_SetString(ModuleError, compilerLog);
 		return 0;
 	}
 	
@@ -70,7 +81,7 @@ PyObject * DeleteProgram(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)program, &ProgramType)) {
-		PyErr_SetString(PyExc_TypeError, "tnapjoqu");
+		PyErr_SetString(PyExc_TypeError, "DeleteProgram()");
 		return 0;
 	}
 
@@ -93,7 +104,8 @@ PyObject * UseProgram(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)program, &ProgramType)) {
-		PyErr_SetString(PyExc_TypeError, "lalsmrdz");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)program))->tp_name;
+		PyErr_Format(PyExc_TypeError, "UseProgram() argument `program` must be Program, not %s", got);
 		return 0;
 	}
 
@@ -118,7 +130,8 @@ PyObject * GetAttributeLocation(PyObject * self, PyObject * args, PyObject * kwa
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)program, &ProgramType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)program))->tp_name;
+		PyErr_Format(PyExc_TypeError, "GetAttributeLocation() argument `program` must be Program, not %s", got);
 		return 0;
 	}
 
@@ -128,7 +141,7 @@ PyObject * GetAttributeLocation(PyObject * self, PyObject * args, PyObject * kwa
 		return 0;
 	}
 
-	return CreateAttributeLocationType(location);
+	return CreateAttributeLocationType(location, program->program);
 }
 
 PyObject * GetUniformLocation(PyObject * self, PyObject * args, PyObject * kwargs) {
@@ -143,7 +156,8 @@ PyObject * GetUniformLocation(PyObject * self, PyObject * args, PyObject * kwarg
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)program, &ProgramType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)program))->tp_name;
+		PyErr_Format(PyExc_TypeError, "GetUniformLocation() argument `program` must be Program, not %s", got);
 		return 0;
 	}
 
@@ -153,7 +167,7 @@ PyObject * GetUniformLocation(PyObject * self, PyObject * args, PyObject * kwarg
 		return 0;
 	}
 
-	return CreateUniformLocationType(location);
+	return CreateUniformLocationType(location, program->program);
 }
 
 PyObject * GetUniformBufferLocation(PyObject * self, PyObject * args, PyObject * kwargs) {
@@ -168,7 +182,8 @@ PyObject * GetUniformBufferLocation(PyObject * self, PyObject * args, PyObject *
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)program, &ProgramType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)program))->tp_name;
+		PyErr_Format(PyExc_TypeError, "GetUniformBufferLocation() argument `program` must be Program, not %s", got);
 		return 0;
 	}
 
@@ -178,7 +193,7 @@ PyObject * GetUniformBufferLocation(PyObject * self, PyObject * args, PyObject *
 		return 0;
 	}
 
-	return CreateUniformBufferLocationType(location);
+	return CreateUniformBufferLocationType(location, program->program);
 }
 
 PyObject * Uniform1f(PyObject * self, PyObject * args) {
@@ -190,7 +205,8 @@ PyObject * Uniform1f(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+		PyErr_Format(PyExc_TypeError, "Uniform1f() argument `location` must be UniformLocation, not %s", got);
 		return 0;
 	}
 
@@ -208,7 +224,8 @@ PyObject * Uniform2f(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+		PyErr_Format(PyExc_TypeError, "Uniform2f() argument `location` must be UniformLocation, not %s", got);
 		return 0;
 	}
 
@@ -227,7 +244,8 @@ PyObject * Uniform3f(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+		PyErr_Format(PyExc_TypeError, "Uniform3f() argument `location` must be UniformLocation, not %s", got);
 		return 0;
 	}
 
@@ -247,7 +265,8 @@ PyObject * Uniform4f(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+		PyErr_Format(PyExc_TypeError, "Uniform4f() argument `location` must be UniformLocation, not %s", got);
 		return 0;
 	}
 
@@ -264,7 +283,8 @@ PyObject * Uniform1i(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+		PyErr_Format(PyExc_TypeError, "Uniform1i() argument `location` must be UniformLocation, not %s", got);
 		return 0;
 	}
 
@@ -282,7 +302,8 @@ PyObject * Uniform2i(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+		PyErr_Format(PyExc_TypeError, "Uniform2i() argument `location` must be UniformLocation, not %s", got);
 		return 0;
 	}
 
@@ -301,7 +322,8 @@ PyObject * Uniform3i(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+		PyErr_Format(PyExc_TypeError, "Uniform3i() argument `location` must be UniformLocation, not %s", got);
 		return 0;
 	}
 
@@ -321,7 +343,8 @@ PyObject * Uniform4i(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+		PyErr_Format(PyExc_TypeError, "Uniform4i() argument `location` must be UniformLocation, not %s", got);
 		return 0;
 	}
 
@@ -338,7 +361,8 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+		PyErr_Format(PyExc_TypeError, "UniformMatrix() argument `location` must be UniformLocation, not %s", got);
 		return 0;
 	}
 
@@ -380,7 +404,8 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+		PyErr_Format(PyExc_TypeError, "UniformTransposeMatrix() argument `location` must be UniformLocation, not %s", got);
 		return 0;
 	}
 

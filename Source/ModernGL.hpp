@@ -10,6 +10,7 @@ const int ENABLE_BLEND = 0x01;
 const int ENABLE_CULL_FACE = 0x02;
 const int ENABLE_DEPTH_TEST = 0x04;
 const int ENABLE_MULTISAMPLE = 0x08;
+const int ENABLE_ALL = 0x0F;
 
 extern PyObject * ModuleError;
 
@@ -84,16 +85,19 @@ struct Program {
 struct AttributeLocation {
 	PyObject_HEAD
 	int location;
+	int program;
 };
 
 struct UniformLocation {
 	PyObject_HEAD
 	int location;
+	int program;
 };
 
 struct UniformBufferLocation {
 	PyObject_HEAD
 	int location;
+	int program;
 };
 
 struct ComputeShader {
@@ -131,9 +135,9 @@ PyObject * CreateStorageBufferType(int ssbo, int size);
 PyObject * CreateTextureType(int texture, int components);
 PyObject * CreateShaderType(int shader, ShaderCategory category);
 PyObject * CreateProgramType(int program);
-PyObject * CreateAttributeLocationType(int location);
-PyObject * CreateUniformLocationType(int location);
-PyObject * CreateUniformBufferLocationType(int location);
+PyObject * CreateAttributeLocationType(int location, int program);
+PyObject * CreateUniformLocationType(int location, int program);
+PyObject * CreateUniformBufferLocationType(int location, int program);
 PyObject * CreateComputeShaderType(int shader, int program);
 PyObject * CreateEnableFlagType(unsigned value);
 

@@ -1,5 +1,24 @@
 #include "ModernGL.hpp"
 
+const char * enableTable[] = {
+	"Nothing",
+	"Blend",
+	"CullFace",
+	"Blend, CullFace",
+	"DepthTest",
+	"Blend, DepthTest",
+	"CullFace, DepthTest",
+	"Blend, CullFace, DepthTest",
+	"Multisample",
+	"Blend, Multisample",
+	"CullFace, Multisample",
+	"Blend, CullFace, Multisample",
+	"DepthTest, Multisample",
+	"Blend, DepthTest, Multisample",
+	"CullFace, DepthTest, Multisample",
+	"Blend, CullFace, DepthTest, Multisample",
+};
+
 PyObject * Framebuffer_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
@@ -234,8 +253,8 @@ PyObject * ComputeShader_str(ComputeShader * self) {
 	return PyUnicode_FromFormat("<ComputeShader = %d>", self->shader);
 }
 
-PyObject * EnableFlag_str(ComputeShader * self) {
-	return PyUnicode_FromFormat("<EnableFlag: ... >");
+PyObject * EnableFlag_str(EnableFlag * self) {
+	return PyUnicode_FromFormat("<EnableFlag = %s>", enableTable[self->value]);
 }
 
 PyTypeObject FramebufferType = {
@@ -771,47 +790,71 @@ PyTypeObject ComputeShaderType = {
 	ComputeShader_new,
 };
 
-PyObject * OperatorNotImplemented() {
-	Py_RETURN_NOTIMPLEMENTED;
+PyObject * EnableFlag_add(EnableFlag * a, EnableFlag * b) {
+	if (!PyObject_TypeCheck((PyObject *)a, &EnableFlagType)) {
+		PyErr_SetString(ModuleError, "hvbcirna");
+		return 0;
+	}
+
+	if (!PyObject_TypeCheck((PyObject *)b, &EnableFlagType)) {
+		PyErr_SetString(ModuleError, "hvbcirna");
+		return 0;
+	}
+
+	return CreateEnableFlagType(a->value | b->value);
+}
+
+PyObject * EnableFlag_sub(EnableFlag * a, EnableFlag * b) {
+	if (!PyObject_TypeCheck((PyObject *)a, &EnableFlagType)) {
+		PyErr_SetString(ModuleError, "hvbcirna");
+		return 0;
+	}
+
+	if (!PyObject_TypeCheck((PyObject *)b, &EnableFlagType)) {
+		PyErr_SetString(ModuleError, "hvbcirna");
+		return 0;
+	}
+
+	return CreateEnableFlagType(a->value & (~b->value));
 }
 
 PyNumberMethods EnableFlag_num = {
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_add;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_subtract;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_multiply;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_remainder;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_divmod;
-	(ternaryfunc)OperatorNotImplemented, // ternaryfunc nb_power;
-	(unaryfunc)OperatorNotImplemented, // unaryfunc nb_negative;
-	(unaryfunc)OperatorNotImplemented, // unaryfunc nb_positive;
-	(unaryfunc)OperatorNotImplemented, // unaryfunc nb_absolute;
-	(inquiry)OperatorNotImplemented, // inquiry nb_bool;
-	(unaryfunc)OperatorNotImplemented, // unaryfunc nb_invert;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_lshift;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_rshift;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_and;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_xor;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_or;
-	(unaryfunc)OperatorNotImplemented, // unaryfunc nb_int;
-	0, // void *nb_reserved;  /* the slot formerly known as nb_long */
-	(unaryfunc)OperatorNotImplemented, // unaryfunc nb_float;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_add;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_subtract;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_multiply;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_remainder;
-	(ternaryfunc)OperatorNotImplemented, // ternaryfunc nb_inplace_power;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_lshift;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_rshift;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_and;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_xor;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_or;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_floor_divide;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_true_divide;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_floor_divide;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_true_divide;
-	(unaryfunc)OperatorNotImplemented, // unaryfunc nb_index;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_matrix_multiply;
-	(binaryfunc)OperatorNotImplemented, // binaryfunc nb_inplace_matrix_multiply;
+	(binaryfunc)EnableFlag_add,
+	(binaryfunc)EnableFlag_sub,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
 };
 
 PyTypeObject EnableFlagType = {
@@ -951,31 +994,34 @@ PyObject * CreateProgramType(int program) {
 	return (PyObject *)obj;
 }
 
-PyObject * CreateAttributeLocationType(int location) {
+PyObject * CreateAttributeLocationType(int location, int program) {
 	AttributeLocation * obj = (AttributeLocation *)AttributeLocationType.tp_alloc(&AttributeLocationType, 0);
 
 	if (obj != 0) {
 		obj->location = location;
+		obj->program = program;
 	}
 
 	return (PyObject *)obj;
 }
 
-PyObject * CreateUniformLocationType(int location) {
+PyObject * CreateUniformLocationType(int location, int program) {
 	UniformLocation * obj = (UniformLocation *)UniformLocationType.tp_alloc(&UniformLocationType, 0);
 
 	if (obj != 0) {
 		obj->location = location;
+		obj->program = program;
 	}
 
 	return (PyObject *)obj;
 }
 
-PyObject * CreateUniformBufferLocationType(int location) {
+PyObject * CreateUniformBufferLocationType(int location, int program) {
 	UniformBufferLocation * obj = (UniformBufferLocation *)UniformBufferLocationType.tp_alloc(&UniformBufferLocationType, 0);
 
 	if (obj != 0) {
 		obj->location = location;
+		obj->program = program;
 	}
 
 	return (PyObject *)obj;
