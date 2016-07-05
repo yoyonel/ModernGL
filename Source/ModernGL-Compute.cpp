@@ -17,7 +17,7 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		int logSize = 0;
-		static const char * logTitle = "ComputeShader:\n";
+		static const char * logTitle = "NewComputeShader() compile failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
@@ -43,12 +43,13 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 
 	if (!linked) {
 		int logSize = 0;
-		static const char * logTitle = "ComputeShader:\n";
+		static const char * logTitle = "NewComputeShader() linking failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetProgramInfoLog(program, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
 		compilerLog[logTitleSize + logSize] = 0;
 		OpenGL::glDeleteProgram(program);
+		OpenGL::glDeleteShader(shader);
 		program = 0;
 	} else {
 		compilerLog[0] = 0;
@@ -64,30 +65,42 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 }
 
 PyObject * DeleteComputeShader(PyObject * self, PyObject * args) {
-	ComputeShader * computeShader;
+	ComputeShader * shader;
 
-	if (!PyArg_ParseTuple(args, "O:DeleteComputeShader", &computeShader)) {
+	if (!PyArg_ParseTuple(args, "O:DeleteComputeShader", &shader)) {
 		return 0;
 	}
 
-	OpenGL::glDeleteProgram(computeShader->program);
-	OpenGL::glDeleteShader(computeShader->shader);
+	if (!PyObject_TypeCheck((PyObject *)shader, &ComputeShaderType)) {
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)shader))->tp_name;
+		PyErr_Format(PyExc_TypeError, "NewProgram() argument `shader` must be ComputeShader, not %s", got);
+		return 0;
+	}
+
+	OpenGL::glDeleteProgram(shader->program);
+	OpenGL::glDeleteShader(shader->shader);
 	Py_RETURN_NONE;
 }
 
 PyObject * RunComputeShader(PyObject * self, PyObject * args, PyObject * kwargs) {
-	ComputeShader * computeShader;
+	ComputeShader * shader;
 	int x = 1;
 	int y = 1;
 	int z = 1;
 
-	static const char * kwlist[] = {"computeShader", "x", "y", "z", 0};
+	static const char * kwlist[] = {"shader", "x", "y", "z", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|iii:RunComputeShader", (char **)kwlist, &computeShader, &x, &y, &z)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|iii:RunComputeShader", (char **)kwlist, &shader, &x, &y, &z)) {
 		return 0;
 	}
 
-	OpenGL::glUseProgram(computeShader->program);
+	if (!PyObject_TypeCheck((PyObject *)shader, &ComputeShaderType)) {
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)shader))->tp_name;
+		PyErr_Format(PyExc_TypeError, "NewProgram() argument `shader` must be ComputeShader, not %s", got);
+		return 0;
+	}
+
+	OpenGL::glUseProgram(shader->program);
 	OpenGL::glDispatchCompute(x, y, z);
 	Py_RETURN_NONE;
 }
