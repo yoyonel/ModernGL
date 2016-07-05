@@ -30,6 +30,9 @@ PyObject * Viewport(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int width;
 	int height;
 
+	activeViewportWidth = width;
+	activeViewportHeight = height;
+
 	static const char * kwlist[] = {"x", "y", "width", "height", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii:Viewport", (char **)kwlist, &x, &y, &width, &height)) {

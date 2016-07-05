@@ -14,6 +14,9 @@ int defaultProgram;
 int activeFramebuffer;
 int activeProgram;
 
+int activeViewportWidth;
+int activeViewportHeight;
+
 char compilerLog[maxCompilerLog + 1];
 
 PyObject * ExtensionActive(PyObject * self) {
@@ -1946,6 +1949,11 @@ PyObject * InitializeModernGL(PyObject * self, PyObject * args) {
 
 	activeFramebuffer = defaultFramebuffer;
 	activeProgram = defaultProgram;
+
+	int viewport[4] = {};
+	OpenGL::glGetIntegerv(OpenGL::GL_VIEWPORT, viewport);
+	activeViewportWidth = viewport[2];
+	activeViewportHeight = viewport[3];
 
 	LoadImplementation();
 	initialized = true;
