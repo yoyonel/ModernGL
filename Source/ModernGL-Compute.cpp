@@ -53,7 +53,6 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 		program = 0;
 	} else {
 		compilerLog[0] = 0;
-		OpenGL::glUseProgram(program);
 	}
 
 	if (!program) {
@@ -102,5 +101,6 @@ PyObject * RunComputeShader(PyObject * self, PyObject * args, PyObject * kwargs)
 
 	OpenGL::glUseProgram(shader->program);
 	OpenGL::glDispatchCompute(x, y, z);
+	OpenGL::glUseProgram(activeProgram);
 	Py_RETURN_NONE;
 }
