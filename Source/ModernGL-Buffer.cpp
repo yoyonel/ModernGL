@@ -67,11 +67,11 @@ PyObject * NewStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
-	int ssbo = 0;
-	OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&ssbo);
-	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, ssbo);
+	int sbo = 0;
+	OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&sbo);
+	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, sbo);
 	OpenGL::glBufferData(OpenGL::GL_SHADER_STORAGE_BUFFER, size, data, dynamic ? OpenGL::GL_DYNAMIC_DRAW : OpenGL::GL_STATIC_DRAW);
-	return CreateStorageBufferType(ssbo, size);
+	return CreateStorageBufferType(sbo, size);
 }
 
 PyObject * DeleteVertexBuffer(PyObject * self, PyObject * args) {
@@ -126,19 +126,19 @@ PyObject * DeleteUniformBuffer(PyObject * self, PyObject * args) {
 }
 
 PyObject * DeleteStorageBuffer(PyObject * self, PyObject * args) {
-	StorageBuffer * ssbo;
+	StorageBuffer * sbo;
 
-	if (!PyArg_ParseTuple(args, "O:DeleteStorageBuffer", &ssbo)) {
+	if (!PyArg_ParseTuple(args, "O:DeleteStorageBuffer", &sbo)) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)ssbo, &StorageBufferType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)ssbo))->tp_name;
-		PyErr_Format(PyExc_TypeError, "DeleteStorageBuffer() argument `ssbo` must be StorageBuffer, not %s", got);
+	if (!PyObject_TypeCheck((PyObject *)sbo, &StorageBufferType)) {
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)sbo))->tp_name;
+		PyErr_Format(PyExc_TypeError, "DeleteStorageBuffer() argument `sbo` must be StorageBuffer, not %s", got);
 		return 0;
 	}
 
-	OpenGL::glDeleteBuffers(1, (OpenGL::GLuint *)&ssbo->ssbo);
+	OpenGL::glDeleteBuffers(1, (OpenGL::GLuint *)&sbo->sbo);
 	Py_RETURN_NONE;
 }
 
@@ -212,70 +212,70 @@ PyObject * UpdateUniformBuffer(PyObject * self, PyObject * args, PyObject * kwar
 }
 
 PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
-	StorageBuffer * ssbo;
+	StorageBuffer * sbo;
 	int offset;
 	const void * data;
 	int size;
 
-	static const char * kwlist[] = {"ssbo", "offset", "data", 0};
+	static const char * kwlist[] = {"sbo", "offset", "data", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oiy#:UpdateStorageBuffer", (char **)kwlist, &ssbo, &offset, &data, &size)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oiy#:UpdateStorageBuffer", (char **)kwlist, &sbo, &offset, &data, &size)) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)ssbo, &StorageBufferType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)ssbo))->tp_name;
-		PyErr_Format(PyExc_TypeError, "UpdateStorageBuffer() argument `ssbo` must be StorageBuffer, not %s", got);
+	if (!PyObject_TypeCheck((PyObject *)sbo, &StorageBufferType)) {
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)sbo))->tp_name;
+		PyErr_Format(PyExc_TypeError, "UpdateStorageBuffer() argument `sbo` must be StorageBuffer, not %s", got);
 		return 0;
 	}
 
-	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, ssbo->ssbo);
+	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, sbo->sbo);
 	OpenGL::glBufferSubData(OpenGL::GL_SHADER_STORAGE_BUFFER, (OpenGL::GLintptr)offset, size, data);
 	Py_RETURN_NONE;
 }
 
 PyObject * UseStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
-	StorageBuffer * ssbo;
+	StorageBuffer * sbo;
 	int binding = 0;
 
-	static const char * kwlist[] = {"ssbo", "binding", 0};
+	static const char * kwlist[] = {"sbo", "binding", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|i:UseStorageBuffer", (char **)kwlist, &ssbo, &binding)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|i:UseStorageBuffer", (char **)kwlist, &sbo, &binding)) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)ssbo, &StorageBufferType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)ssbo))->tp_name;
-		PyErr_Format(PyExc_TypeError, "UseStorageBuffer() argument `ssbo` must be StorageBuffer, not %s", got);
+	if (!PyObject_TypeCheck((PyObject *)sbo, &StorageBufferType)) {
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)sbo))->tp_name;
+		PyErr_Format(PyExc_TypeError, "UseStorageBuffer() argument `sbo` must be StorageBuffer, not %s", got);
 		return 0;
 	}
 
-	OpenGL::glBindBufferBase(OpenGL::GL_SHADER_STORAGE_BUFFER, binding, ssbo->ssbo);
+	OpenGL::glBindBufferBase(OpenGL::GL_SHADER_STORAGE_BUFFER, binding, sbo->sbo);
 	Py_RETURN_NONE;
 }
 
 PyObject * ReadStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
-	StorageBuffer * ssbo;
+	StorageBuffer * sbo;
 	int offset;
 	int size;
 
-	static const char * kwlist[] = {"ssbo", "offset", "size", 0};
+	static const char * kwlist[] = {"sbo", "offset", "size", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oii:ReadStorageBuffer", (char **)kwlist, &ssbo, &offset, &size)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oii:ReadStorageBuffer", (char **)kwlist, &sbo, &offset, &size)) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)ssbo, &StorageBufferType)) {
-		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)ssbo))->tp_name;
-		PyErr_Format(PyExc_TypeError, "ReadStorageBuffer() argument `ssbo` must be StorageBuffer, not %s", got);
+	if (!PyObject_TypeCheck((PyObject *)sbo, &StorageBufferType)) {
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)sbo))->tp_name;
+		PyErr_Format(PyExc_TypeError, "ReadStorageBuffer() argument `sbo` must be StorageBuffer, not %s", got);
 		return 0;
 	}
 
 	if (size == 0) {
-		size = ssbo->size - offset;
+		size = sbo->size - offset;
 	}
 
-	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, ssbo->ssbo);
+	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, sbo->sbo);
 	void * map = OpenGL::glMapBufferRange(OpenGL::GL_SHADER_STORAGE_BUFFER, offset, size, OpenGL::GL_MAP_READ_BIT);
 	if (!map) {
 		PyErr_SetString(ModuleError, "ReadStorageBuffer() cannot map the buffer");

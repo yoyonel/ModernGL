@@ -64,7 +64,7 @@ struct UniformBuffer {
 
 struct StorageBuffer {
 	PyObject_HEAD
-	int ssbo;
+	int sbo;
 	int size;
 };
 
@@ -136,7 +136,7 @@ PyObject * CreateVertexArrayType(int vao, bool indexed);
 PyObject * CreateVertexBufferType(int vbo);
 PyObject * CreateIndexBufferType(int ibo);
 PyObject * CreateUniformBufferType(int ubo);
-PyObject * CreateStorageBufferType(int ssbo, int size);
+PyObject * CreateStorageBufferType(int sbo, int size);
 PyObject * CreateTextureType(int texture, int width, int height, int components);
 PyObject * CreateShaderType(int shader, ShaderCategory category);
 PyObject * CreateProgramType(int program);

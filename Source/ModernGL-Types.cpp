@@ -222,7 +222,7 @@ PyObject * UniformBuffer_str(UniformBuffer * self) {
 }
 
 PyObject * StorageBuffer_str(StorageBuffer * self) {
-	return PyUnicode_FromFormat("<StorageBuffer = %d>", self->ssbo);
+	return PyUnicode_FromFormat("<StorageBuffer = %d>", self->sbo);
 }
 
 PyObject * Texture_str(Texture * self) {
@@ -951,11 +951,11 @@ PyObject * CreateUniformBufferType(int ubo) {
 	return (PyObject *)obj;
 }
 
-PyObject * CreateStorageBufferType(int ssbo, int size) {
+PyObject * CreateStorageBufferType(int sbo, int size) {
 	StorageBuffer * obj = (StorageBuffer *)StorageBufferType.tp_alloc(&StorageBufferType, 0);
 
 	if (obj != 0) {
-		obj->ssbo = ssbo;
+		obj->sbo = sbo;
 		obj->size = size;
 	}
 

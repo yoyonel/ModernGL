@@ -1472,7 +1472,7 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Returns:\n"
-		"\tssbo (int) The index of the new shader storage buffer object.\n"
+		"\tsbo (int) The index of the new shader storage buffer object.\n"
 		"\n"
 	},
 	{
@@ -1483,7 +1483,7 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tssbo (int) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
+		"\tsbo (int) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
 		"\tbinding (int) Buffer binding specified by the layout in GLSL. By default is 0\n"
 
 		"\n"
@@ -1499,7 +1499,7 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tssbo (int) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
+		"\tsbo (int) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
 		"\toffset (int) The offset of the data in the buffer to update.\n"
 		"\tdata (bytes) The content of the data to write to the buffer.\n"
 
@@ -1516,7 +1516,7 @@ static PyMethodDef methods[] = {
 
 		"\n"
 		"Parameters:\n"
-		"\tssbo (int) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
+		"\tsbo (int) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
 		"\toffset (int) The offset of the data in the buffer to read.\n"
 		"\tsize (int) The size of the data to read from the buffer.\n"
 
