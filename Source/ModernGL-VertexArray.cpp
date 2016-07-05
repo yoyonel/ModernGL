@@ -39,6 +39,39 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 		CHECK_AND_REPORT_ARG_TYPE_ERROR("ibo", ibo, IndexBufferType);
 	}
 
+	int count = (int)PyList_Size(content);
+
+	if (length / 2 != count) {
+		PyErr_Format(ModuleError, "NewVertexArray() size of `format` is %d, length of `pairs` is %d", length / 2, count);
+		return 0;
+	}
+
+	for (int i = 0; i < count; ++i) {
+		PyObject * tuple = PyList_GET_ITEM(content, i);
+		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("pairs", tuple, PyTuple_Type, i);
+		int size = (int)PyTuple_Size(tuple);
+		if (size != 2) {
+			PyErr_Format(ModuleError, "NewVertexArray() size of pairs[%d] must be 2.", i);
+			return 0;
+		}
+
+		VertexBuffer * vbo = (VertexBuffer *)PyTuple_GET_ITEM(tuple, 0);
+
+		if (!CHECK_TYPE_ERROR(vbo, VertexBufferType)) {
+			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vbo))->tp_name;
+			PyErr_Format(PyExc_TypeError, "NewVertexArray() first element of pairs[%d] must be VertexBuffer, not %s", i, got);
+			return 0;
+		}
+
+		AttributeLocation * location = (AttributeLocation *)PyTuple_GET_ITEM(tuple, 1);
+
+		if (!CHECK_TYPE_ERROR(location, AttributeLocationType)) {
+			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+			PyErr_Format(PyExc_TypeError, "NewVertexArray() second element of pairs[%d] must be AttributeLocation, not %s", i, got);
+			return 0;
+		}
+	}
+
 	int vao = 0;
 	OpenGL::glGenVertexArrays(1, (OpenGL::GLuint *)&vao);
 	OpenGL::glBindVertexArray(vao);
@@ -53,49 +86,12 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	}
 
 	char * ptr = 0;
-	int count = (int)PyList_Size(content);
-
-	if (length / 2 != count) {
-		PyErr_Format(ModuleError, "NewVertexArray() size of `format` is %d, length of `pairs` is %d", length / 2, count);
-		return 0;
-	}
-
 	for (int i = 0; i < count; ++i) {
 		PyObject * tuple = PyList_GET_ITEM(content, i);
 
-		if (!CHECK_TYPE_ERROR(tuple, PyTuple_Type)) {
-			OpenGL::glBindVertexArray(defaultVertexArray);
-			OpenGL::glDeleteVertexArrays(1, (OpenGL::GLuint *)&vao);
-			REPORT_ELEMENT_TYPE_ERROR("pairs", tuple, PyTuple_Type, i);
-		}
-
 		int size = (int)PyTuple_Size(tuple);
-		if (size != 2) {
-			OpenGL::glBindVertexArray(defaultVertexArray);
-			OpenGL::glDeleteVertexArrays(1, (OpenGL::GLuint *)&vao);
-			PyErr_Format(ModuleError, "NewVertexArray() size of pairs[%d] must be 2.", i);
-			return 0;
-		}
-
 		VertexBuffer * vbo = (VertexBuffer *)PyTuple_GET_ITEM(tuple, 0);
-
-		if (!CHECK_TYPE_ERROR(vbo, VertexBufferType)) {
-			OpenGL::glBindVertexArray(defaultVertexArray);
-			OpenGL::glDeleteVertexArrays(1, (OpenGL::GLuint *)&vao);
-			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vbo))->tp_name;
-			PyErr_Format(PyExc_TypeError, "NewVertexArray() first element of pairs[%d] must be VertexBuffer, not %s", i, got);
-			return 0;
-		}
-
 		AttributeLocation * location = (AttributeLocation *)PyTuple_GET_ITEM(tuple, 1);
-
-		if (!CHECK_TYPE_ERROR(location, AttributeLocationType)) {
-			OpenGL::glBindVertexArray(defaultVertexArray);
-			OpenGL::glDeleteVertexArrays(1, (OpenGL::GLuint *)&vao);
-			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
-			PyErr_Format(PyExc_TypeError, "NewVertexArray() second element of pairs[%d] must be AttributeLocation, not %s", i, got);
-			return 0;
-		}
 
 		OpenGL::glBindBuffer(OpenGL::GL_ARRAY_BUFFER, vbo->vbo);
 		int dimension = format[i * 2] - '0';
@@ -179,16 +175,15 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("attributes", attributes, PyList_Type);
 
-	OpenGL::glBindVertexArray(vao->vao);
 	int count = (int)PyList_Size(attributes);
 	for (int i = 0; i < count; ++i) {
 		AttributeLocation * attribute = (AttributeLocation *)PyList_GET_ITEM(attributes, i);
-
-		if (!CHECK_TYPE_ERROR(attribute, AttributeLocationType)) {
-			OpenGL::glBindVertexArray(defaultVertexArray);
-			REPORT_ELEMENT_TYPE_ERROR("attributes", attribute, AttributeLocationType, i);
-		}
-
+		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("attributes", attribute, AttributeLocationType, i);
+	}
+	
+	OpenGL::glBindVertexArray(vao->vao);
+	for (int i = 0; i < count; ++i) {
+		AttributeLocation * attribute = (AttributeLocation *)PyList_GET_ITEM(attributes, i);
 		OpenGL::glEnableVertexAttribArray(attribute->location);
 	}
 
@@ -209,18 +204,18 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("attributes", attributes, PyList_Type);
 
-	OpenGL::glBindVertexArray(vao->vao);
 	int count = (int)PyList_Size(attributes);
 	for (int i = 0; i < count; ++i) {
 		AttributeLocation * attribute = (AttributeLocation *)PyList_GET_ITEM(attributes, i);
-
-		if (!CHECK_TYPE_ERROR(attribute, AttributeLocationType)) {
-			OpenGL::glBindVertexArray(defaultVertexArray);
-			REPORT_ELEMENT_TYPE_ERROR("attributes", attribute, AttributeLocationType, i);
-		}
-
+		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("attributes", attribute, AttributeLocationType, i);
+	}
+	
+	OpenGL::glBindVertexArray(vao->vao);
+	for (int i = 0; i < count; ++i) {
+		AttributeLocation * attribute = (AttributeLocation *)PyList_GET_ITEM(attributes, i);
 		OpenGL::glDisableVertexAttribArray(attribute->location);
 	}
+
 	OpenGL::glBindVertexArray(defaultVertexArray);
 	Py_RETURN_NONE;
 }

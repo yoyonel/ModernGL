@@ -222,6 +222,23 @@ PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args, PyObject * kwar
 	Py_RETURN_NONE;
 }
 
+PyObject * UseUniformBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
+	UniformBuffer * ubo;
+	UniformBufferLocation * location;
+
+	static const char * kwlist[] = {"ubo", "location", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:UseUniformBuffer", (char **)kwlist, &ubo, &location)) {
+		return 0;
+	}
+
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("ubo", ubo, UniformBufferType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformBufferLocationType);
+
+	OpenGL::glBindBufferBase(OpenGL::GL_UNIFORM_BUFFER, location->location, ubo->ubo);
+	Py_RETURN_NONE;
+}
+
 PyObject * UseStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	StorageBuffer * sbo;
 	int binding = 0;

@@ -183,7 +183,7 @@ fbo, color, depth = GL.NewFramebuffer()
 GL.UseProgram(ssao_prog)
 GL.Uniform1i(GL.GetUniformLocation(ssao_prog, 'texture'), 0)
 GL.Uniform1i(GL.GetUniformLocation(ssao_prog, 'depth'), 1)
-GL.UseUniformBuffer(GL.GetUniformBufferLocation(ssao_prog, 'Kernel'), ubo)
+GL.UseUniformBuffer(ubo, GL.GetUniformBufferLocation(ssao_prog, 'Kernel'))
 
 while WND.Update():
 	GL.UseFramebuffer(fbo)

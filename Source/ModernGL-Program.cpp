@@ -11,36 +11,35 @@ const char * categoryNames[] = {
 };
 
 PyObject * NewProgram(PyObject * self, PyObject * args) {
-	PyObject * lst;
+	PyObject * shaders;
 
-	if (!PyArg_ParseTuple(args, "O:NewProgram", &lst)) {
+	if (!PyArg_ParseTuple(args, "O:NewProgram", &shaders)) {
 		return 0;
 	}
 
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("shaders", lst, PyList_Type);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("shaders", shaders, PyList_Type);
 
-	int program = OpenGL::glCreateProgram();
+	int count = (int)PyList_Size(shaders);
 
 	int category[NUM_SHADER_CATEGORIES] = {};
-
-	int count = (int)PyList_Size(lst);
 	for (int i = 0; i < count; ++i) {
-		Shader * shader = (Shader *)PyList_GetItem(lst, i);
-		if (!CHECK_TYPE_ERROR(shader, ShaderType)) {
-			OpenGL::glDeleteProgram(program);
-			REPORT_ELEMENT_TYPE_ERROR("shaders", shader, ShaderType, i);
-		}
-		OpenGL::glAttachShader(program, shader->shader);
+		Shader * shader = (Shader *)PyList_GetItem(shaders, i);
+		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("shaders", shader, ShaderType, i);
 		++category[shader->category];
 	}
 
 	for (int i = 0; i < NUM_SHADER_CATEGORIES; ++i) {
 		if (category[i] > 1) {
-			const char * name = categoryNames[i];
-			PyErr_Format(ModuleError, "NewProgram() duplicate %s", name);
-			OpenGL::glDeleteProgram(program);
+			PyErr_Format(ModuleError, "NewProgram() duplicate %s", categoryNames[i]);
 			return 0;
 		}
+	}
+	
+	int program = OpenGL::glCreateProgram();
+
+	for (int i = 0; i < count; ++i) {
+		Shader * shader = (Shader *)PyList_GetItem(shaders, i);
+		OpenGL::glAttachShader(program, shader->shader);
 	}
 
 	int linked = OpenGL::GL_FALSE;
@@ -406,22 +405,5 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	}
 
 	OpenGL::glUniformMatrix4fv(location->location, 1, true, matrix_data);
-	Py_RETURN_NONE;
-}
-
-PyObject * UseUniformBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
-	UniformBuffer * ubo;
-	UniformBufferLocation * location;
-
-	static const char * kwlist[] = {"ubo", "location", 0};
-
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:UseUniformBuffer", (char **)kwlist, &ubo, &location)) {
-		return 0;
-	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("ubo", ubo, UniformBufferType);
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformBufferLocationType);
-
-	OpenGL::glBindBufferBase(OpenGL::GL_UNIFORM_BUFFER, location->location, ubo->ubo);
 	Py_RETURN_NONE;
 }
