@@ -213,6 +213,11 @@ PyObject * Uniform1f(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
+	if (location->program != activeProgram) {
+		PyErr_SetString(ModuleError, "Uniform1f() the selected uniform does not belong to the active program");
+		return 0;
+	}
+
 	OpenGL::glUniform1f(location->location, v0);
 	Py_RETURN_NONE;
 }
@@ -229,6 +234,11 @@ PyObject * Uniform2f(PyObject * self, PyObject * args) {
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
 		PyErr_Format(PyExc_TypeError, "Uniform2f() argument `location` must be UniformLocation, not %s", got);
+		return 0;
+	}
+
+	if (location->program != activeProgram) {
+		PyErr_SetString(ModuleError, "Uniform2f() the selected uniform does not belong to the active program");
 		return 0;
 	}
 
@@ -249,6 +259,11 @@ PyObject * Uniform3f(PyObject * self, PyObject * args) {
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
 		PyErr_Format(PyExc_TypeError, "Uniform3f() argument `location` must be UniformLocation, not %s", got);
+		return 0;
+	}
+
+	if (location->program != activeProgram) {
+		PyErr_SetString(ModuleError, "Uniform3f() the selected uniform does not belong to the active program");
 		return 0;
 	}
 
@@ -273,6 +288,11 @@ PyObject * Uniform4f(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
+	if (location->program != activeProgram) {
+		PyErr_SetString(ModuleError, "Uniform4f() the selected uniform does not belong to the active program");
+		return 0;
+	}
+
 	OpenGL::glUniform4f(location->location, v0, v1, v2, v3);
 	Py_RETURN_NONE;
 }
@@ -288,6 +308,11 @@ PyObject * Uniform1i(PyObject * self, PyObject * args) {
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
 		PyErr_Format(PyExc_TypeError, "Uniform1i() argument `location` must be UniformLocation, not %s", got);
+		return 0;
+	}
+
+	if (location->program != activeProgram) {
+		PyErr_SetString(ModuleError, "Uniform1i() the selected uniform does not belong to the active program");
 		return 0;
 	}
 
@@ -310,6 +335,11 @@ PyObject * Uniform2i(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
+	if (location->program != activeProgram) {
+		PyErr_SetString(ModuleError, "Uniform2i() the selected uniform does not belong to the active program");
+		return 0;
+	}
+
 	OpenGL::glUniform2i(location->location, v0, v1);
 	Py_RETURN_NONE;
 }
@@ -327,6 +357,11 @@ PyObject * Uniform3i(PyObject * self, PyObject * args) {
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
 		PyErr_Format(PyExc_TypeError, "Uniform3i() argument `location` must be UniformLocation, not %s", got);
+		return 0;
+	}
+
+	if (location->program != activeProgram) {
+		PyErr_SetString(ModuleError, "Uniform3i() the selected uniform does not belong to the active program");
 		return 0;
 	}
 
@@ -351,6 +386,11 @@ PyObject * Uniform4i(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
+	if (location->program != activeProgram) {
+		PyErr_SetString(ModuleError, "Uniform4i() the selected uniform does not belong to the active program");
+		return 0;
+	}
+
 	OpenGL::glUniform4i(location->location, v0, v1, v2, v3);
 	Py_RETURN_NONE;
 }
@@ -372,6 +412,11 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	if (!PyObject_TypeCheck((PyObject *)matrix, &PyList_Type)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)matrix))->tp_name;
 		PyErr_Format(PyExc_TypeError, "UniformMatrix() argument `matrix` must be list, not %s", got);
+		return 0;
+	}
+
+	if (location->program != activeProgram) {
+		PyErr_SetString(ModuleError, "UniformMatrix() the selected uniform does not belong to the active program");
 		return 0;
 	}
 
@@ -417,6 +462,11 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	if (!PyObject_TypeCheck((PyObject *)matrix, &PyList_Type)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)matrix))->tp_name;
 		PyErr_Format(PyExc_TypeError, "UniformTransposeMatrix() argument `matrix` must be list, not %s", got);
+		return 0;
+	}
+
+	if (location->program != activeProgram) {
+		PyErr_SetString(ModuleError, "UniformTransposeMatrix() the selected uniform does not belong to the active program");
 		return 0;
 	}
 
