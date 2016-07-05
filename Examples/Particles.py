@@ -59,7 +59,7 @@ physics = GL.NewComputeShader('''
 	}
 ''')
 
-sbo = GL.NewStorageBuffer(b''.join(struct.pack('ffffff', 0, 0, random.uniform(-1, 1), random.uniform(-1, 1), 0, -0.1) for i in range(1024)))
+sbo = GL.NewStorageBuffer(b''.join(struct.pack('ffffff', 0, 0, random.uniform(-1, 1), random.uniform(-1, 1), 0, -0.1) for i in range(10240)))
 
 prog = GL.NewProgram([vert, frag])
 
@@ -77,7 +77,7 @@ while WND.Update():
 	GL.Clear(240, 240, 240)
 
 	GL.UpdateStorageBuffer(sbo, k * 24, b''.join(struct.pack('ffffff', 0, 0, random.uniform(-1, 1), random.uniform(-1, 1), 0, -0.1) for i in range(16)))
-	k = (k + 16) % 1024
+	k = (k + 16) % 10240
 
-	GL.RunComputeShader(physics, 2)
-	GL.RenderTriangles(vao, 3, instances = 1024)
+	GL.RunComputeShader(physics, 20)
+	GL.RenderTriangles(vao, 3, instances = 10240)
