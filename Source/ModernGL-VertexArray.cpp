@@ -21,7 +21,6 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 				return 0;
 			}
 		} else {
-			CHECK_AND_REPORT_ARG_VALUE_ERROR()
 			if (format[length] != 'i' && format[length] != 'f') {
 				PyErr_SetString(ModuleError, "NewVertexArray() argument `format` is invalid.");
 				return 0;

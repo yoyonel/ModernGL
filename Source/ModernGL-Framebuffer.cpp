@@ -136,11 +136,7 @@ PyObject * ReadDepthPixels(PyObject * self, PyObject * args, PyObject * kwargs) 
 	CHECK_AND_REPORT_ARG_VALUE_ERROR(width < 1, "width", width);
 	CHECK_AND_REPORT_ARG_VALUE_ERROR(height < 1, "height", height);
 
-	int size = height * height * 4;
-	float * pixels = ModernGL::ReadDepthPixels(x, y, width, height);
-	PyObject * data = PyBytes_FromStringAndSize((const char *)pixels, size);
-	free(pixels);
-
+	int size = width * height * 4;
 	PyObject * bytes = PyBytes_FromStringAndSize(0, size);
 	char * data = PyBytes_AS_STRING(bytes);
 	OpenGL::glReadPixels(x, y, width, height, OpenGL::GL_DEPTH_COMPONENT, OpenGL::GL_FLOAT, data);
