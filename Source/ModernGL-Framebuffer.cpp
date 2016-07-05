@@ -5,57 +5,47 @@
 PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int width = 0;
 	int height = 0;
-	int colors = 1;
-	bool depth = true;
 
-	static const char * kwlist[] = {"width", "height", "colors", "depth", 0};
+	static const char * kwlist[] = {"width", "height", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|iiip:NewFramebuffer", (char **)kwlist, &width, &height, &colors, &depth)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|ii:NewFramebuffer", (char **)kwlist, &width, &height)) {
 		return 0;
 	}
+
+	int framebuffer = 0;
+	int color = 0;
+	int depth = 0;
+
+	OpenGL::glGenFramebuffers(1, (OpenGL::GLuint *)&framebuffer);
+	OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, framebuffer);
 
 	if (!width && !height) {
 		width = activeViewportWidth;
 		height = activeViewportHeight;
 	}
 
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(width < 1, "width", width);
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(height < 1, "height", height);
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(colors < 0 || colors > 8, "colors", colors);
+	OpenGL::glGenTextures(1, (OpenGL::GLuint *)&color);
+	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, color);
 
-	int framebuffer = 0;
-	OpenGL::glGenFramebuffers(1, (OpenGL::GLuint *)&framebuffer);
-	OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, framebuffer);
+	OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
+	OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
+	OpenGL::glTexImage2D(OpenGL::GL_TEXTURE_2D, 0, OpenGL::GL_RGBA, width, height, 0, OpenGL::GL_RGBA, OpenGL::GL_FLOAT, 0);
+	OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_COLOR_ATTACHMENT0, OpenGL::GL_TEXTURE_2D, color, 0);
 
-	int depthTex = 0;
-	OpenGL::glGenTextures(1, (OpenGL::GLuint *)&depthTex);
-	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, depthTex);
+	OpenGL::glGenTextures(1, (OpenGL::GLuint *)&depth);
+	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, depth);
 	OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
 	OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
 	OpenGL::glTexImage2D(OpenGL::GL_TEXTURE_2D, 0, OpenGL::GL_DEPTH_COMPONENT, width, height, 0, OpenGL::GL_DEPTH_COMPONENT, OpenGL::GL_FLOAT, 0);
-	OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_DEPTH_ATTACHMENT, OpenGL::GL_TEXTURE_2D, depthTex, 0);
-
-	int colorTex[8] = {};
-	OpenGL::glGenTextures(colors, (OpenGL::GLuint *)colorTex);
-	for (int i = 0; i < colors; ++i) {
-		OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, colorTex);
-		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
-		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
-		OpenGL::glTexImage2D(OpenGL::GL_TEXTURE_2D, 0, OpenGL::GL_RGBA, width, height, 0, OpenGL::GL_RGBA, OpenGL::GL_FLOAT, 0);
-		OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_COLOR_ATTACHMENT0 + i, OpenGL::GL_TEXTURE_2D, colorTex, 0);
-	}
+	OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_DEPTH_ATTACHMENT, OpenGL::GL_TEXTURE_2D, depth, 0);
 
 	OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, defaultFramebuffer);
 
-	PyObject * tuple = PyTuple_New(2 + colors);
-	PyTuple_SET_ITEM(tuple, 0, CreateFramebufferType(framebuffer, colorTex, depthTex));
-	for (int i = 0; i < colors; ++i) {
-		PyObject * colorTexture = CreateTextureType(colorTex[i], width, height, 4);
-		PyTuple_SET_ITEM(tuple, i + 1, colorTexture);
-	}
-	PyTuple_SET_ITEM(tuple, colors + 1, CreateTextureType(depthTex, width, height, 1));
+	PyObject * fbo = CreateFramebufferType(framebuffer, color, depth);
+	PyObject * colorTexture = CreateTextureType(color, width, height, 4);
+	PyObject * depthTexture = CreateTextureType(depth, width, height, 1);
 
-	return tuple;
+	return Py_BuildValue("OOO", fbo, colorTexture, depthTexture);
 }
 
 PyObject * DeleteFramebuffer(PyObject * self, PyObject * args) {
