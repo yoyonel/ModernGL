@@ -21,6 +21,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 				return 0;
 			}
 		} else {
+			CHECK_AND_REPORT_ARG_VALUE_ERROR()
 			if (format[length] != 'i' && format[length] != 'f') {
 				PyErr_SetString(ModuleError, "NewVertexArray() argument `format` is invalid.");
 				return 0;
@@ -63,10 +64,10 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 			return 0;
 		}
 
-		AttributeLocation * location = (AttributeLocation *)PyTuple_GET_ITEM(tuple, 1);
+		AttributeLocation * attribute = (AttributeLocation *)PyTuple_GET_ITEM(tuple, 1);
 
-		if (!CHECK_TYPE_ERROR(location, AttributeLocationType)) {
-			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+		if (!CHECK_TYPE_ERROR(attribute, AttributeLocationType)) {
+			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)attribute))->tp_name;
 			PyErr_Format(PyExc_TypeError, "NewVertexArray() second element of pairs[%d] must be AttributeLocation, not %s", i, got);
 			return 0;
 		}
@@ -91,19 +92,19 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 
 		int size = (int)PyTuple_Size(tuple);
 		VertexBuffer * vbo = (VertexBuffer *)PyTuple_GET_ITEM(tuple, 0);
-		AttributeLocation * location = (AttributeLocation *)PyTuple_GET_ITEM(tuple, 1);
+		AttributeLocation * attribute = (AttributeLocation *)PyTuple_GET_ITEM(tuple, 1);
 
 		OpenGL::glBindBuffer(OpenGL::GL_ARRAY_BUFFER, vbo->vbo);
 		int dimension = format[i * 2] - '0';
 		switch (format[i * 2 + 1]) {
 			case 'f':
-				OpenGL::glVertexAttribPointer(location->location, dimension, OpenGL::GL_FLOAT, false, stride, ptr);
+				OpenGL::glVertexAttribPointer(attribute->location, dimension, OpenGL::GL_FLOAT, false, stride, ptr);
 				break;
 			case 'i':
-				OpenGL::glVertexAttribPointer(location->location, dimension, OpenGL::GL_INT, false, stride, ptr);
+				OpenGL::glVertexAttribPointer(attribute->location, dimension, OpenGL::GL_INT, false, stride, ptr);
 				break;
 		}
-		OpenGL::glEnableVertexAttribArray(location->location);
+		OpenGL::glEnableVertexAttribArray(attribute->location);
 		ptr += dimension * 4;
 	}
 
