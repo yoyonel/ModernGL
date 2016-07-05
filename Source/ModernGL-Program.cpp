@@ -33,6 +33,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		if (!PyObject_TypeCheck((PyObject *)shader, &ShaderType)) {
 			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)shader))->tp_name;
 			PyErr_Format(PyExc_TypeError, "NewProgram() shaders[%d] must be Shader, not %s", i, got);
+			OpenGL::glDeleteProgram(program);
 			return 0;
 		}
 		OpenGL::glAttachShader(program, shader->shader);
@@ -43,6 +44,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		if (category[i] > 1) {
 			const char * name = categoryNames[i];
 			PyErr_Format(ModuleError, "NewProgram() duplicate %s", name);
+			OpenGL::glDeleteProgram(program);
 			return 0;
 		}
 	}
@@ -378,7 +380,7 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	int count = (int)PyList_Size(matrix);
 	
 	if (count != 16) {
-		PyErr_SetString(ModuleError, "acoypwfb");
+		PyErr_Format(PyExc_TypeError, "UniformMatrix() matrix length must be 16, not %d", count);
 		return 0;
 	}
 
@@ -386,7 +388,8 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 		PyObject * item = PyList_GET_ITEM(matrix, i);
 
 		if (!PyObject_TypeCheck((PyObject *)item, &PyFloat_Type)) {
-			PyErr_SetString(PyExc_TypeError, "caoypwbf");
+			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)item))->tp_name;
+			PyErr_Format(PyExc_TypeError, "UniformMatrix() matrix[%d] must be float, not %s", i, got);
 			return 0;
 		}
 
@@ -422,7 +425,7 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	int count = (int)PyList_Size(matrix);
 	
 	if (count != 16) {
-		PyErr_SetString(ModuleError, "acoypwfb");
+		PyErr_Format(PyExc_TypeError, "UniformTransposeMatrix() matrix length must be 16, not %d", count);
 		return 0;
 	}
 
@@ -430,7 +433,8 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 		PyObject * item = PyList_GET_ITEM(matrix, i);
 
 		if (!PyObject_TypeCheck((PyObject *)item, &PyFloat_Type)) {
-			PyErr_SetString(PyExc_TypeError, "caoypwbf");
+			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)item))->tp_name;
+			PyErr_Format(PyExc_TypeError, "UniformTransposeMatrix() matrix[%d] must be float, not %s", i, got);
 			return 0;
 		}
 
