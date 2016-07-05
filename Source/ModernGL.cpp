@@ -2085,7 +2085,7 @@ extern "C" {
 
 PyObject * PyInit_ModernGL() {
 	if (!ModuleReady()) {
-		PyErr_SetString(ModuleError, "cdzvgkhl"); // TODO: fix
+		PyErr_SetString(PyExc_ImportError, "cannot import module");
 		return 0;
 	}
 	PyObject * module = PyModule_Create(&moduledef);
@@ -2100,7 +2100,7 @@ extern "C" {
 
 PyObject * initModernGL() {
 	if (!ModuleReady()) {
-		PyErr_SetString(ModuleError, "elbfngom"); // TODO: fix
+		PyErr_SetString(PyExc_ImportError, "cannot import module");
 		return 0;
 	}
 	PyObject * module = Py_InitModule("ModernGL", methods);
