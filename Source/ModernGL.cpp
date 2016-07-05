@@ -11,6 +11,9 @@ int defaultVertexArray;
 int defaultFramebuffer;
 int defaultProgram;
 
+int activeFramebuffer;
+int activeProgram;
+
 char compilerLog[maxCompilerLog + 1];
 
 PyObject * ExtensionActive(PyObject * self) {
@@ -389,21 +392,6 @@ static PyMethodDef methods[] = {
 		"\n"
 		"Parameters:\n"
 		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		"UseDefaultProgram",
-		(PyCFunction)Dummy, // UseDefaultProgram,
-		METH_NOARGS,
-		""
-
-		"\n"
-		"Parameters:\n"
-		"\tNone\n"
 
 		"\n"
 		"Returns:\n"
@@ -1324,7 +1312,7 @@ static PyMethodDef methods[] = {
 	{
 		"GetDefaultFramebuffer",
 		(PyCFunction)Dummy, // GetDefaultFramebuffer,
-		METH_VARARGS,
+		METH_NOARGS,
 		""
 
 		"\n"
@@ -1339,7 +1327,7 @@ static PyMethodDef methods[] = {
 	{
 		"UseDefaultFramebuffer",
 		(PyCFunction)Dummy, // UseDefaultFramebuffer,
-		METH_VARARGS,
+		METH_NOARGS,
 		""
 
 		"\n"
@@ -1631,7 +1619,6 @@ void LoadImplementation() {
 		(PyCFunction)NewProgram,
 		(PyCFunction)DeleteProgram,
 		(PyCFunction)UseProgram,
-		(PyCFunction)UseDefaultProgram,
 		(PyCFunction)GetAttributeLocation,
 		(PyCFunction)GetUniformLocation,
 		(PyCFunction)GetUniformBufferLocation,
@@ -2020,6 +2007,9 @@ PyObject * InitializeModernGL(PyObject * self, PyObject * args) {
 	int maxTextureUnits = 1;
 	OpenGL::glGetIntegerv(OpenGL::GL_MAX_TEXTURE_IMAGE_UNITS, (OpenGL::GLint *)&maxTextureUnits);
 	defaultTextureUnit = maxTextureUnits - 1;
+
+	activeFramebuffer = defaultFramebuffer;
+	activeProgram = defaultProgram;
 
 	LoadImplementation();
 	initialized = true;

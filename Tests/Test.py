@@ -25,8 +25,7 @@ class Case2_Methods(unittest.TestCase):
 
 	def test_init(self):
 		GL.Viewport(0, 0, 10, 10)
-		GL.UseDefaultProgram()
-
+	
 
 	def test_vert_frag_vao(self):
 		vert_sdr = GL.NewVertexShader('''
@@ -53,7 +52,7 @@ class Case2_Methods(unittest.TestCase):
 			prog = GL.NewProgram([vert_sdr, vert_sdr])
 		
 		prog = GL.NewProgram([vert_sdr, frag_sdr])
-		
+
 		self.assertIs(type(prog), GL.Program)
 
 		with self.assertRaises(GL.Error):

@@ -19,6 +19,9 @@ extern int defaultVertexArray;
 extern int defaultFramebuffer;
 extern int defaultProgram;
 
+extern int activeProgram;
+extern int activeFramebuffer;
+
 const int maxCompilerLog = 16 * 1024;
 extern char compilerLog[maxCompilerLog + 1];
 
@@ -237,15 +240,13 @@ PyObject * UpdateIndexBuffer(PyObject * self, PyObject * args, PyObject * kwargs
 PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
 
 PyObject * UseProgram(PyObject * self, PyObject * args);
-PyObject * GetDefaultProgram(PyObject * self);
-PyObject * UseDefaultProgram(PyObject * self);
 
 PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs);
 PyObject * DeleteFramebuffer(PyObject * self, PyObject * args);
 PyObject * UseFramebuffer(PyObject * self, PyObject * args);
 
-PyObject * GetDefaultFramebuffer(PyObject * self, PyObject * args);
-PyObject * UseDefaultFramebuffer(PyObject * self, PyObject * args);
+PyObject * GetDefaultFramebuffer(PyObject * self);
+PyObject * UseDefaultFramebuffer(PyObject * self);
 
 PyObject * ReadPixel(PyObject * self, PyObject * args, PyObject * kwargs);
 PyObject * ReadPixels(PyObject * self, PyObject * args, PyObject * kwargs);

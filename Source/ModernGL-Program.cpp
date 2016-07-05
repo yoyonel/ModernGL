@@ -42,7 +42,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	for (int i = 0; i < NUM_SHADER_CATEGORIES; ++i) {
 		if (category[i] > 1) {
 			const char * name = categoryNames[i];
-			PyErr_Format(PyExc_TypeError, "NewProgram() duplicate %s", i, name);
+			PyErr_Format(ModuleError, "NewProgram() duplicate %s", name);
 			return 0;
 		}
 	}
@@ -110,6 +110,7 @@ PyObject * UseProgram(PyObject * self, PyObject * args) {
 	}
 
 	OpenGL::glUseProgram(program->program);
+	activeProgram = program->program;
 	Py_RETURN_NONE;
 }
 
@@ -137,7 +138,7 @@ PyObject * GetAttributeLocation(PyObject * self, PyObject * args, PyObject * kwa
 
 	int location = OpenGL::glGetAttribLocation(program->program, name);
 	if (strict && location < 0) {
-		PyErr_SetString(ModuleError, "asd");
+		PyErr_Format(ModuleError, "GetAttributeLocation() `%s` not found", name);
 		return 0;
 	}
 
@@ -163,7 +164,7 @@ PyObject * GetUniformLocation(PyObject * self, PyObject * args, PyObject * kwarg
 
 	int location = OpenGL::glGetUniformLocation(program->program, name);
 	if (strict && location < 0) {
-		PyErr_SetString(ModuleError, "asd");
+		PyErr_Format(ModuleError, "GetUniformLocation() `%s` not found", name);
 		return 0;
 	}
 
@@ -189,7 +190,7 @@ PyObject * GetUniformBufferLocation(PyObject * self, PyObject * args, PyObject *
 
 	int location = OpenGL::glGetUniformBlockIndex(program->program, name);
 	if (strict && location < 0) {
-		PyErr_SetString(ModuleError, "asd");
+		PyErr_Format(ModuleError, "GetUniformBufferLocation() `%s` not found", name);
 		return 0;
 	}
 
@@ -354,9 +355,9 @@ PyObject * Uniform4i(PyObject * self, PyObject * args) {
 
 PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	UniformLocation * location;
-	PyObject * lst;
+	PyObject * matrix;
 
-	if (!PyArg_ParseTuple(args, "OO:UniformMatrix", &location, &lst)) {
+	if (!PyArg_ParseTuple(args, "OO:UniformMatrix", &location, &matrix)) {
 		return 0;
 	}
 
@@ -366,14 +367,15 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)lst, &PyList_Type)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+	if (!PyObject_TypeCheck((PyObject *)matrix, &PyList_Type)) {
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)matrix))->tp_name;
+		PyErr_Format(PyExc_TypeError, "UniformMatrix() argument `matrix` must be list, not %s", got);
 		return 0;
 	}
 
-	float matrix[16];
+	float matrix_data[16];
 
-	int count = (int)PyList_Size(lst);
+	int count = (int)PyList_Size(matrix);
 	
 	if (count != 16) {
 		PyErr_SetString(ModuleError, "acoypwfb");
@@ -381,25 +383,25 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	}
 
 	for (int i = 0; i < count; ++i) {
-		PyObject * item = PyList_GET_ITEM(lst, i);
+		PyObject * item = PyList_GET_ITEM(matrix, i);
 
 		if (!PyObject_TypeCheck((PyObject *)item, &PyFloat_Type)) {
 			PyErr_SetString(PyExc_TypeError, "caoypwbf");
 			return 0;
 		}
 
-		matrix[i] = (float)PyFloat_AsDouble(item);
+		matrix_data[i] = (float)PyFloat_AsDouble(item);
 	}
 
-	OpenGL::glUniformMatrix4fv(location->location, 1, false, matrix);
+	OpenGL::glUniformMatrix4fv(location->location, 1, false, matrix_data);
 	Py_RETURN_NONE;
 }
 
 PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	UniformLocation * location;
-	PyObject * lst;
+	PyObject * matrix;
 
-	if (!PyArg_ParseTuple(args, "OO:UniformTransposeMatrix", &location, &lst)) {
+	if (!PyArg_ParseTuple(args, "OO:UniformTransposeMatrix", &location, &matrix)) {
 		return 0;
 	}
 
@@ -409,14 +411,15 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)lst, &PyList_Type)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+	if (!PyObject_TypeCheck((PyObject *)matrix, &PyList_Type)) {
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)matrix))->tp_name;
+		PyErr_Format(PyExc_TypeError, "UniformTransposeMatrix() argument `matrix` must be list, not %s", got);
 		return 0;
 	}
 
-	float matrix[16];
+	float matrix_data[16];
 
-	int count = (int)PyList_Size(lst);
+	int count = (int)PyList_Size(matrix);
 	
 	if (count != 16) {
 		PyErr_SetString(ModuleError, "acoypwfb");
@@ -424,17 +427,17 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	}
 
 	for (int i = 0; i < count; ++i) {
-		PyObject * item = PyList_GET_ITEM(lst, i);
+		PyObject * item = PyList_GET_ITEM(matrix, i);
 
 		if (!PyObject_TypeCheck((PyObject *)item, &PyFloat_Type)) {
 			PyErr_SetString(PyExc_TypeError, "caoypwbf");
 			return 0;
 		}
 
-		matrix[i] = (float)PyFloat_AsDouble(item);
+		matrix_data[i] = (float)PyFloat_AsDouble(item);
 	}
 
-	OpenGL::glUniformMatrix4fv(location->location, 1, true, matrix);
+	OpenGL::glUniformMatrix4fv(location->location, 1, true, matrix_data);
 	Py_RETURN_NONE;
 }
 
@@ -449,12 +452,14 @@ PyObject * UseUniformBuffer(PyObject * self, PyObject * args, PyObject * kwargs)
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)location, &UniformBufferLocationType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+		PyErr_Format(PyExc_TypeError, "UseUniformBuffer() argument `location` must be UniformBufferLocation, not %s", got);
 		return 0;
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)ubo, &UniformBufferType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)location))->tp_name;
+		PyErr_Format(PyExc_TypeError, "UseUniformBuffer() argument `ubo` must be UniformBuffer, not %s", got);
 		return 0;
 	}
 
