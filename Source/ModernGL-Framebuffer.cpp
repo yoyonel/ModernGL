@@ -12,17 +12,20 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
+	if (!width && !height) {
+		width = activeViewportWidth;
+		height = activeViewportHeight;
+	}
+
+	CHECK_AND_REPORT_ARG_VALUE_ERROR(width < 1, "width", width);
+	CHECK_AND_REPORT_ARG_VALUE_ERROR(height < 1, "height", height);
+
 	int framebuffer = 0;
 	int color = 0;
 	int depth = 0;
 
 	OpenGL::glGenFramebuffers(1, (OpenGL::GLuint *)&framebuffer);
 	OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, framebuffer);
-
-	if (!width && !height) {
-		width = activeViewportWidth;
-		height = activeViewportHeight;
-	}
 
 	OpenGL::glGenTextures(1, (OpenGL::GLuint *)&color);
 	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, color);
