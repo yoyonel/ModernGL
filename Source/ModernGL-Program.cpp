@@ -65,6 +65,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	} else {
 		compilerLog[0] = 0;
 		OpenGL::glUseProgram(program);
+		activeProgram = program;
 	}
 
 	if (!program) {
