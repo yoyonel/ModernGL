@@ -48,7 +48,7 @@ class GLWidget(QOpenGLWidget):
 		self.prog = GL.NewProgram([vert, frag])
 
 		self.vbo = GL.NewVertexBuffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
-		self.vao = GL.NewVertexArray('2f', [(self.vbo, GL.AttributeLocation(self.prog, 'vert'))])
+		self.vao = GL.NewVertexArray('2f', [(self.vbo, GL.GetAttributeLocation(self.prog, 'vert'))])
 		self.init = True
 
 	def paintGL(self):

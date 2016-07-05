@@ -22,6 +22,9 @@ extern int defaultProgram;
 extern int activeProgram;
 extern int activeFramebuffer;
 
+extern int activeViewportWidth;
+extern int activeViewportHeight;
+
 const int maxCompilerLog = 16 * 1024;
 extern char compilerLog[maxCompilerLog + 1];
 
@@ -50,16 +53,19 @@ struct VertexArray {
 struct VertexBuffer {
 	PyObject_HEAD
 	int vbo;
+	int size;
 };
 
 struct IndexBuffer {
 	PyObject_HEAD
 	int ibo;
+	int size;
 };
 
 struct UniformBuffer {
 	PyObject_HEAD
 	int ubo;
+	int size;
 };
 
 struct StorageBuffer {
@@ -133,9 +139,9 @@ extern PyTypeObject EnableFlagType;
 
 PyObject * CreateFramebufferType(int fbo, int color, int depth);
 PyObject * CreateVertexArrayType(int vao, bool indexed);
-PyObject * CreateVertexBufferType(int vbo);
-PyObject * CreateIndexBufferType(int ibo);
-PyObject * CreateUniformBufferType(int ubo);
+PyObject * CreateVertexBufferType(int vbo, int size);
+PyObject * CreateIndexBufferType(int ibo, int size);
+PyObject * CreateUniformBufferType(int ubo, int size);
 PyObject * CreateStorageBufferType(int sbo, int size);
 PyObject * CreateTextureType(int texture, int width, int height, int components);
 PyObject * CreateShaderType(int shader, ShaderCategory category);

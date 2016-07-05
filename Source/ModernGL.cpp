@@ -2055,16 +2055,10 @@ PyObject * InitModule(PyObject * module) {
 	PyModule_AddObject(module, "ComputeShader", (PyObject *)&ComputeShaderType);
 	PyModule_AddObject(module, "EnableFlag", (PyObject *)&EnableFlagType);
 
-	ModuleError = PyErr_NewException("ModernGL.Error", 0, 0);
+	ModuleError = PyErr_NewException((char *)"ModernGL.Error", 0, 0);
 	Py_INCREF(ModuleError);
 
 	PyModule_AddObject(module, "Error", ModuleError);
-
-	// PyModule_AddIntConstant(module, "ENABLE_NOTHING", ENABLE_NOTHING);
-	// PyModule_AddIntConstant(module, "ENABLE_BLEND", ENABLE_BLEND);
-	// PyModule_AddIntConstant(module, "ENABLE_CULL_FACE", ENABLE_CULL_FACE);
-	// PyModule_AddIntConstant(module, "ENABLE_DEPTH_TEST", ENABLE_DEPTH_TEST);
-	// PyModule_AddIntConstant(module, "ENABLE_MULTISAMPLE", ENABLE_MULTISAMPLE);
 
 	PyModule_AddObject(module, "ENABLE_NOTHING", CreateEnableFlagType(ENABLE_NOTHING));
 	PyModule_AddObject(module, "ENABLE_BLEND", CreateEnableFlagType(ENABLE_BLEND));

@@ -821,40 +821,6 @@ PyObject * EnableFlag_sub(EnableFlag * a, EnableFlag * b) {
 PyNumberMethods EnableFlag_num = {
 	(binaryfunc)EnableFlag_add,
 	(binaryfunc)EnableFlag_sub,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
 };
 
 PyTypeObject EnableFlagType = {
@@ -921,31 +887,34 @@ PyObject * CreateVertexArrayType(int vao, bool indexed) {
 	return (PyObject *)obj;
 }
 
-PyObject * CreateVertexBufferType(int vbo) {
+PyObject * CreateVertexBufferType(int vbo, int size) {
 	VertexBuffer * obj = (VertexBuffer *)VertexBufferType.tp_alloc(&VertexBufferType, 0);
 
 	if (obj != 0) {
 		obj->vbo = vbo;
+		obj->size = size;
 	}
 
 	return (PyObject *)obj;
 }
 
-PyObject * CreateIndexBufferType(int ibo) {
+PyObject * CreateIndexBufferType(int ibo, int size) {
 	IndexBuffer * obj = (IndexBuffer *)IndexBufferType.tp_alloc(&IndexBufferType, 0);
 
 	if (obj != 0) {
 		obj->ibo = ibo;
+		obj->size = size;
 	}
 
 	return (PyObject *)obj;
 }
 
-PyObject * CreateUniformBufferType(int ubo) {
+PyObject * CreateUniformBufferType(int ubo, int size) {
 	UniformBuffer * obj = (UniformBuffer *)UniformBufferType.tp_alloc(&UniformBufferType, 0);
 
 	if (obj != 0) {
 		obj->ubo = ubo;
+		obj->size = size;
 	}
 
 	return (PyObject *)obj;

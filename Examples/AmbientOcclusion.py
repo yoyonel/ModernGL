@@ -190,7 +190,7 @@ while WND.Update():
 	GL.EnableDepthTest()
 	GL.Clear(0, 0, 0)
 	GL.UseProgram(grass_prog)
-	GL.RenderIndexedTriangleStrip(vao, 1000 * 8)
+	GL.RenderTriangleStrip(vao, 1000 * 8)
 
 	GL.UseDefaultFramebuffer()
 	GL.DisableDepthTest()

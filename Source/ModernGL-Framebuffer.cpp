@@ -20,10 +20,8 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, framebuffer);
 
 	if (!width && !height) {
-		int viewport[4] = {};
-		OpenGL::glGetIntegerv(OpenGL::GL_VIEWPORT, viewport);
-		width = viewport[2];
-		height = viewport[3];
+		width = activeViewportWidth;
+		height = activeViewportHeight;
 	}
 
 	OpenGL::glGenTextures(1, (OpenGL::GLuint *)&color);
@@ -76,7 +74,7 @@ PyObject * UseFramebuffer(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	if (!PyObject_TypeCheck((PyObject *)fbo, &PyList_Type)) {
+	if (!PyObject_TypeCheck((PyObject *)fbo, &FramebufferType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)fbo))->tp_name;
 		PyErr_Format(PyExc_TypeError, "UseFramebuffer() argument `fbo` must be Framebuffer, not %s", got);
 		return 0;
