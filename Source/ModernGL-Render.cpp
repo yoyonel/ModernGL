@@ -16,7 +16,7 @@ PyObject * RenderTriangles(PyObject * self, PyObject * args, PyObject * kwargs) 
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "Parameter vao should be a VertexArray, got %s", got);
+		PyErr_Format(PyExc_TypeError, "RenderTriangles() argument `vao` must be VertexArray, not %s", got);
 		return 0;
 	}
 
@@ -45,7 +45,7 @@ PyObject * RenderTriangleStrip(PyObject * self, PyObject * args, PyObject * kwar
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "Parameter vao should be a VertexArray, got %s", got);
+		PyErr_Format(PyExc_TypeError, "RenderTriangleStrip() argument `vao` must be VertexArray, not %s", got);
 		return 0;
 	}
 
@@ -74,7 +74,7 @@ PyObject * RenderTriangleFan(PyObject * self, PyObject * args, PyObject * kwargs
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "Parameter vao should be a VertexArray, got %s", got);
+		PyErr_Format(PyExc_TypeError, "RenderTriangleFan() argument `vao` must be VertexArray, not %s", got);
 		return 0;
 	}
 
@@ -103,7 +103,7 @@ PyObject * RenderLines(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "Parameter vao should be a VertexArray, got %s", got);
+		PyErr_Format(PyExc_TypeError, "RenderLines() argument `vao` must be VertexArray, not %s", got);
 		return 0;
 	}
 
@@ -132,7 +132,7 @@ PyObject * RenderLineStrip(PyObject * self, PyObject * args, PyObject * kwargs) 
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "Parameter vao should be a VertexArray, got %s", got);
+		PyErr_Format(PyExc_TypeError, "RenderLineStrip() argument `vao` must be VertexArray, not %s", got);
 		return 0;
 	}
 
@@ -161,7 +161,7 @@ PyObject * RenderLineLoop(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "Parameter vao should be a VertexArray, got %s", got);
+		PyErr_Format(PyExc_TypeError, "RenderLineLoop() argument `vao` must be VertexArray, not %s", got);
 		return 0;
 	}
 
@@ -190,7 +190,7 @@ PyObject * RenderPoints(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "Parameter vao should be a VertexArray, got %s", got);
+		PyErr_Format(PyExc_TypeError, "RenderPoints() argument `vao` must be VertexArray, not %s", got);
 		return 0;
 	}
 
@@ -219,7 +219,7 @@ PyObject * RenderLineStripAdjacency(PyObject * self, PyObject * args, PyObject *
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "Parameter vao should be a VertexArray, got %s", got);
+		PyErr_Format(PyExc_TypeError, "RenderLineStripAdjacency() argument `vao` must be VertexArray, not %s", got);
 		return 0;
 	}
 
@@ -248,7 +248,7 @@ PyObject * RenderLinesAdjacency(PyObject * self, PyObject * args, PyObject * kwa
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "Parameter vao should be a VertexArray, got %s", got);
+		PyErr_Format(PyExc_TypeError, "RenderLinesAdjacency() argument `vao` must be VertexArray, not %s", got);
 		return 0;
 	}
 
@@ -277,7 +277,7 @@ PyObject * RenderTriangleStripAdjacency(PyObject * self, PyObject * args, PyObje
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "Parameter vao should be a VertexArray, got %s", got);
+		PyErr_Format(PyExc_TypeError, "RenderTriangleStripAdjacency() argument `vao` must be VertexArray, not %s", got);
 		return 0;
 	}
 
@@ -306,7 +306,7 @@ PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args, PyObject *
 
 	if (!PyObject_TypeCheck((PyObject *)vao, &VertexArrayType)) {
 		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vao))->tp_name;
-		PyErr_Format(PyExc_TypeError, "Parameter vao should be a VertexArray, got %s", got);
+		PyErr_Format(PyExc_TypeError, "RenderTrianglesAdjacency() argument `vao` must be VertexArray, not %s", got);
 		return 0;
 	}
 

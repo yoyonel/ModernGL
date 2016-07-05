@@ -2,123 +2,75 @@
 
 #include "OpenGL.hpp"
 
-PyObject * NewVertexBuffer(PyObject * self, PyObject * args) {
+PyObject * NewVertexBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	const void * data;
 	int size;
+	bool dynamic = false;
 
-	if (!PyArg_ParseTuple(args, "y#:NewVertexBuffer", &data, &size)) {
+	static const char * kwlist[] = {"data", "dynamic", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "y#|p:NewVertexBuffer", (char **)kwlist, &data, &size, &dynamic)) {
 		return 0;
 	}
 
 	int vbo = 0;
 	OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&vbo);
 	OpenGL::glBindBuffer(OpenGL::GL_ARRAY_BUFFER, vbo);
-	OpenGL::glBufferData(OpenGL::GL_ARRAY_BUFFER, size, data, OpenGL::GL_STATIC_DRAW);
+	OpenGL::glBufferData(OpenGL::GL_ARRAY_BUFFER, size, data, dynamic ? OpenGL::GL_DYNAMIC_DRAW : OpenGL::GL_STATIC_DRAW);
 	return CreateVertexBufferType(vbo);
 }
 
-PyObject * NewIndexBuffer(PyObject * self, PyObject * args) {
+PyObject * NewIndexBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	const void * data;
 	int size;
+	bool dynamic = false;
 
-	if (!PyArg_ParseTuple(args, "y#:NewIndexBuffer", &data, &size)) {
+	static const char * kwlist[] = {"data", "dynamic", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "y#|p:NewIndexBuffer", (char **)kwlist, &data, &size, &dynamic)) {
 		return 0;
 	}
 
 	int ibo = 0;
 	OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&ibo);
 	OpenGL::glBindBuffer(OpenGL::GL_ELEMENT_ARRAY_BUFFER, ibo);
-	OpenGL::glBufferData(OpenGL::GL_ELEMENT_ARRAY_BUFFER, size, data, OpenGL::GL_STATIC_DRAW);
+	OpenGL::glBufferData(OpenGL::GL_ELEMENT_ARRAY_BUFFER, size, data, dynamic ? OpenGL::GL_DYNAMIC_DRAW : OpenGL::GL_STATIC_DRAW);
 	return CreateIndexBufferType(ibo);
 }
 
-PyObject * NewUniformBuffer(PyObject * self, PyObject * args) {
+PyObject * NewUniformBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	const void * data;
 	int size;
+	bool dynamic = false;
 
-	if (!PyArg_ParseTuple(args, "y#:NewUniformBuffer", &data, &size)) {
+	static const char * kwlist[] = {"data", "dynamic", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "y#|p:NewUniformBuffer", (char **)kwlist, &data, &size, &dynamic)) {
 		return 0;
 	}
 
 	int ubo = 0;
 	OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&ubo);
 	OpenGL::glBindBuffer(OpenGL::GL_UNIFORM_BUFFER, ubo);
-	OpenGL::glBufferData(OpenGL::GL_UNIFORM_BUFFER, size, data, OpenGL::GL_STATIC_DRAW);
+	OpenGL::glBufferData(OpenGL::GL_UNIFORM_BUFFER, size, data, dynamic ? OpenGL::GL_DYNAMIC_DRAW : OpenGL::GL_STATIC_DRAW);
 	return CreateUniformBufferType(ubo);
 }
 
-PyObject * NewStorageBuffer(PyObject * self, PyObject * args) {
+PyObject * NewStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	const void * data;
 	int size;
+	bool dynamic = false;
 
-	if (!PyArg_ParseTuple(args, "y#:NewStorageBuffer", &data, &size)) {
+	static const char * kwlist[] = {"data", "dynamic", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "y#|p:NewStorageBuffer", (char **)kwlist, &data, &size, &dynamic)) {
 		return 0;
 	}
 
 	int ssbo = 0;
 	OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&ssbo);
 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, ssbo);
-	OpenGL::glBufferData(OpenGL::GL_SHADER_STORAGE_BUFFER, size, data, OpenGL::GL_STATIC_DRAW);
-	return CreateStorageBufferType(ssbo, size);
-}
-
-PyObject * NewDynamicVertexBuffer(PyObject * self, PyObject * args) {
-	const void * data;
-	int size;
-
-	if (!PyArg_ParseTuple(args, "y#:NewDynamicVertexBuffer", &data, &size)) {
-		return 0;
-	}
-
-	int vbo = 0;
-	OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&vbo);
-	OpenGL::glBindBuffer(OpenGL::GL_ARRAY_BUFFER, vbo);
-	OpenGL::glBufferData(OpenGL::GL_ARRAY_BUFFER, size, data, OpenGL::GL_DYNAMIC_DRAW);
-	return CreateVertexBufferType(vbo);
-}
-
-PyObject * NewDynamicIndexBuffer(PyObject * self, PyObject * args) {
-	const void * data;
-	int size;
-
-	if (!PyArg_ParseTuple(args, "y#:NewDynamicIndexBuffer", &data, &size)) {
-		return 0;
-	}
-
-	int ibo = 0;
-	OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&ibo);
-	OpenGL::glBindBuffer(OpenGL::GL_ELEMENT_ARRAY_BUFFER, ibo);
-	OpenGL::glBufferData(OpenGL::GL_ELEMENT_ARRAY_BUFFER, size, data, OpenGL::GL_DYNAMIC_DRAW);
-	return CreateIndexBufferType(ibo);
-}
-
-PyObject * NewDynamicUniformBuffer(PyObject * self, PyObject * args) {
-	const void * data;
-	int size;
-
-	if (!PyArg_ParseTuple(args, "y#:NewDynamicUniformBuffer", &data, &size)) {
-		return 0;
-	}
-
-	int ubo = 0;
-	OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&ubo);
-	OpenGL::glBindBuffer(OpenGL::GL_UNIFORM_BUFFER, ubo);
-	OpenGL::glBufferData(OpenGL::GL_UNIFORM_BUFFER, size, data, OpenGL::GL_DYNAMIC_DRAW);
-	return CreateUniformBufferType(ubo);
-}
-
-PyObject * NewDynamicStorageBuffer(PyObject * self, PyObject * args) {
-	const void * data;
-	int size;
-
-	if (!PyArg_ParseTuple(args, "y#:NewDynamicStorageBuffer", &data, &size)) {
-		return 0;
-	}
-
-	int ssbo = 0;
-	OpenGL::glGenBuffers(1, (OpenGL::GLuint *)&ssbo);
-	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, ssbo);
-	OpenGL::glBufferData(OpenGL::GL_SHADER_STORAGE_BUFFER, size, data, OpenGL::GL_DYNAMIC_DRAW);
+	OpenGL::glBufferData(OpenGL::GL_SHADER_STORAGE_BUFFER, size, data, dynamic ? OpenGL::GL_DYNAMIC_DRAW : OpenGL::GL_STATIC_DRAW);
 	return CreateStorageBufferType(ssbo, size);
 }
 
@@ -130,7 +82,8 @@ PyObject * DeleteVertexBuffer(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)vbo, &VertexBufferType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vbo))->tp_name;
+		PyErr_Format(PyExc_TypeError, "DeleteVertexBuffer() argument `vbo` must be VertexBuffer, not %s", got);
 		return 0;
 	}
 
@@ -146,7 +99,8 @@ PyObject * DeleteIndexBuffer(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)ibo, &IndexBufferType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)ibo))->tp_name;
+		PyErr_Format(PyExc_TypeError, "DeleteIndexBuffer() argument `ibo` must be IndexBuffer, not %s", got);
 		return 0;
 	}
 
@@ -162,7 +116,8 @@ PyObject * DeleteUniformBuffer(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)ubo, &UniformBufferType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)ubo))->tp_name;
+		PyErr_Format(PyExc_TypeError, "DeleteUniformBuffer() argument `ubo` must be UniformBuffer, not %s", got);
 		return 0;
 	}
 
@@ -178,7 +133,8 @@ PyObject * DeleteStorageBuffer(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)ssbo, &StorageBufferType)) {
-		PyErr_SetString(PyExc_TypeError, "caoypwbf");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)ssbo))->tp_name;
+		PyErr_Format(PyExc_TypeError, "DeleteStorageBuffer() argument `ssbo` must be StorageBuffer, not %s", got);
 		return 0;
 	}
 
@@ -195,6 +151,12 @@ PyObject * UpdateVertexBuffer(PyObject * self, PyObject * args, PyObject * kwarg
 	static const char * kwlist[] = {"vbo", "offset", "data", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oiy#:UpdateVertexBuffer", (char **)kwlist, &vbo, &offset, &data, &size)) {
+		return 0;
+	}
+
+	if (!PyObject_TypeCheck((PyObject *)vbo, &VertexBufferType)) {
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)vbo))->tp_name;
+		PyErr_Format(PyExc_TypeError, "UpdateVertexBuffer() argument `vbo` must be VertexBuffer, not %s", got);
 		return 0;
 	}
 
@@ -215,6 +177,12 @@ PyObject * UpdateIndexBuffer(PyObject * self, PyObject * args, PyObject * kwargs
 		return 0;
 	}
 
+	if (!PyObject_TypeCheck((PyObject *)ibo, &IndexBufferType)) {
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)ibo))->tp_name;
+		PyErr_Format(PyExc_TypeError, "UpdateIndexBuffer() argument `ibo` must be IndexBuffer, not %s", got);
+		return 0;
+	}
+
 	OpenGL::glBindBuffer(OpenGL::GL_ELEMENT_ARRAY_BUFFER, ibo->ibo);
 	OpenGL::glBufferSubData(OpenGL::GL_ELEMENT_ARRAY_BUFFER, (OpenGL::GLintptr)offset, size, data);
 	Py_RETURN_NONE;
@@ -229,6 +197,12 @@ PyObject * UpdateUniformBuffer(PyObject * self, PyObject * args, PyObject * kwar
 	static const char * kwlist[] = {"ubo", "offset", "data", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oiy#:UpdateUniformBuffer", (char **)kwlist, &ubo, &offset, &data, &size)) {
+		return 0;
+	}
+
+	if (!PyObject_TypeCheck((PyObject *)ubo, &UniformBufferType)) {
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)ubo))->tp_name;
+		PyErr_Format(PyExc_TypeError, "UpdateUniformBuffer() argument `ubo` must be UniformBuffer, not %s", got);
 		return 0;
 	}
 
@@ -249,6 +223,12 @@ PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args, PyObject * kwar
 		return 0;
 	}
 
+	if (!PyObject_TypeCheck((PyObject *)ssbo, &StorageBufferType)) {
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)ssbo))->tp_name;
+		PyErr_Format(PyExc_TypeError, "UpdateStorageBuffer() argument `ssbo` must be StorageBuffer, not %s", got);
+		return 0;
+	}
+
 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, ssbo->ssbo);
 	OpenGL::glBufferSubData(OpenGL::GL_SHADER_STORAGE_BUFFER, (OpenGL::GLintptr)offset, size, data);
 	Py_RETURN_NONE;
@@ -261,6 +241,12 @@ PyObject * UseStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs)
 	static const char * kwlist[] = {"ssbo", "binding", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|i:UseStorageBuffer", (char **)kwlist, &ssbo, &binding)) {
+		return 0;
+	}
+
+	if (!PyObject_TypeCheck((PyObject *)ssbo, &StorageBufferType)) {
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)ssbo))->tp_name;
+		PyErr_Format(PyExc_TypeError, "UseStorageBuffer() argument `ssbo` must be StorageBuffer, not %s", got);
 		return 0;
 	}
 
@@ -279,14 +265,20 @@ PyObject * ReadStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs
 		return 0;
 	}
 
-	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, ssbo->ssbo);
+	if (!PyObject_TypeCheck((PyObject *)ssbo, &StorageBufferType)) {
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)ssbo))->tp_name;
+		PyErr_Format(PyExc_TypeError, "ReadStorageBuffer() argument `ssbo` must be StorageBuffer, not %s", got);
+		return 0;
+	}
+
 	if (size == 0) {
 		size = ssbo->size - offset;
 	}
 
+	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, ssbo->ssbo);
 	void * map = OpenGL::glMapBufferRange(OpenGL::GL_SHADER_STORAGE_BUFFER, offset, size, OpenGL::GL_MAP_READ_BIT);
 	if (!map) {
-		PyErr_SetString(ModuleError, "Cannot map the buffer.");
+		PyErr_SetString(ModuleError, "ReadStorageBuffer() cannot map the buffer");
 		return 0;
 	}
 

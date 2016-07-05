@@ -17,7 +17,7 @@ PyObject * NewVertexShader(PyObject * self, PyObject * args) {
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		int logSize = 0;
-		static const char * logTitle = "VertexShader:\n";
+		static const char * logTitle = "NewVertexShader() compile failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
@@ -51,7 +51,7 @@ PyObject * NewFragmentShader(PyObject * self, PyObject * args) {
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		int logSize = 0;
-		static const char * logTitle = "VertexShader:\n";
+		static const char * logTitle = "NewFragmentShader() compile failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
@@ -85,7 +85,7 @@ PyObject * NewGeometryShader(PyObject * self, PyObject * args) {
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		int logSize = 0;
-		static const char * logTitle = "VertexShader:\n";
+		static const char * logTitle = "NewGeometryShader() compile failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
@@ -119,7 +119,7 @@ PyObject * NewTessEvaluationShader(PyObject * self, PyObject * args) {
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		int logSize = 0;
-		static const char * logTitle = "VertexShader:\n";
+		static const char * logTitle = "NewTessEvaluationShader() compile failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
@@ -152,7 +152,7 @@ PyObject * NewTessControlShader(PyObject * self, PyObject * args) {
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		int logSize = 0;
-		static const char * logTitle = "VertexShader:\n";
+		static const char * logTitle = "NewTessControlShader() compile failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
@@ -178,7 +178,8 @@ PyObject * DeleteShader(PyObject * self, PyObject * args) {
 	}
 
 	if (!PyObject_TypeCheck((PyObject *)shader, &ShaderType)) {
-		PyErr_SetString(ModuleError, "hvbcirna");
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)shader))->tp_name;
+		PyErr_Format(PyExc_TypeError, "DeleteShader() argument `shader` must be Shader, not %s", got);
 		return 0;
 	}
 

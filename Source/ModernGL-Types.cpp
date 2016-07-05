@@ -962,11 +962,13 @@ PyObject * CreateStorageBufferType(int ssbo, int size) {
 	return (PyObject *)obj;
 }
 
-PyObject * CreateTextureType(int texture, int components) {
+PyObject * CreateTextureType(int texture, int width, int height, int components) {
 	Texture * obj = (Texture *)TextureType.tp_alloc(&TextureType, 0);
 
 	if (obj != 0) {
 		obj->texture = texture;
+		obj->width = width;
+		obj->height = height;
 		obj->components = components;
 	}
 

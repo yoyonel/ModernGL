@@ -84,16 +84,22 @@ PyObject * LineSize(PyObject * self, PyObject * args) {
 }
 
 PyObject * EnableOnly(PyObject * self, PyObject * args) {
-	unsigned mask;
+	EnableFlag * flags;
 
-	if (!PyArg_ParseTuple(args, "I:EnableOnly", &mask)) {
+	if (!PyArg_ParseTuple(args, "O:EnableOnly", &flags)) {
 		return 0;
 	}
 
-	(mask & ENABLE_BLEND ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_BLEND);
-	(mask & ENABLE_CULL_FACE ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_CULL_FACE);
-	(mask & ENABLE_DEPTH_TEST ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_DEPTH_TEST);
-	(mask & ENABLE_MULTISAMPLE ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_MULTISAMPLE);
+	if (!PyObject_TypeCheck((PyObject *)flags, &EnableFlagType)) {
+		const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)flags))->tp_name;
+		PyErr_Format(PyExc_TypeError, "RenderTriangles() argument `flags` must be EnableFlag, not %s", got);
+		return 0;
+	}
+
+	(flags->value & ENABLE_BLEND ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_BLEND);
+	(flags->value & ENABLE_CULL_FACE ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_CULL_FACE);
+	(flags->value & ENABLE_DEPTH_TEST ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_DEPTH_TEST);
+	(flags->value & ENABLE_MULTISAMPLE ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_MULTISAMPLE);
 	Py_RETURN_NONE;
 }
 

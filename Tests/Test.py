@@ -115,7 +115,7 @@ class Case2_Methods(unittest.TestCase):
 
 
 	def test_texture(self):
-		tex = GL.NewTexture(4, 4, b'\x00' * 1024)
+		tex = GL.NewTexture(4, 4, b'\x00' * 48)
 		self.assertIs(type(tex), GL.Texture)
 
 		GL.SetTexturePixelated(tex)

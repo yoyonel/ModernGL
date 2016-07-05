@@ -44,8 +44,8 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, defaultFramebuffer);
 
 	PyObject * fbo = CreateFramebufferType(framebuffer, color, depth);
-	PyObject * colorTexture = CreateTextureType(color, 4);
-	PyObject * depthTexture = CreateTextureType(depth, 1);
+	PyObject * colorTexture = CreateTextureType(color, width, height, 4);
+	PyObject * depthTexture = CreateTextureType(depth, width, height, 1);
 
 	return Py_BuildValue("OOO", fbo, colorTexture, depthTexture);
 }

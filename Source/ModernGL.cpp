@@ -889,7 +889,7 @@ static PyMethodDef methods[] = {
 	{
 		"NewVertexBuffer",
 		(PyCFunction)Dummy, // NewVertexBuffer,
-		METH_VARARGS,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -904,7 +904,7 @@ static PyMethodDef methods[] = {
 	{
 		"NewIndexBuffer",
 		(PyCFunction)Dummy, // NewIndexBuffer,
-		METH_VARARGS,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -919,52 +919,7 @@ static PyMethodDef methods[] = {
 	{
 		"NewUniformBuffer",
 		(PyCFunction)Dummy, // NewUniformBuffer,
-		METH_VARARGS,
-		""
-
-		"\n"
-		"Parameters:\n"
-		"\tdata (bytes) The content of the buffer.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tubo (int) The index of the new uniform buffer object.\n"
-		"\n"
-	},
-	{
-		"NewDynamicVertexBuffer",
-		(PyCFunction)Dummy, // NewDynamicVertexBuffer,
-		METH_VARARGS,
-		""
-
-		"\n"
-		"Parameters:\n"
-		"\tdata (bytes) The content of the buffer.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tvbo (int) The index of the new vertex buffer object.\n"
-		"\n"
-	},
-	{
-		"NewDynamicIndexBuffer",
-		(PyCFunction)Dummy, // NewDynamicIndexBuffer,
-		METH_VARARGS,
-		""
-
-		"\n"
-		"Parameters:\n"
-		"\tdata (bytes) The content of the buffer.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tibo (int) The index of the new index buffer object.\n"
-		"\n"
-	},
-	{
-		"NewDynamicUniformBuffer",
-		(PyCFunction)Dummy, // NewDynamicUniformBuffer,
-		METH_VARARGS,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -1508,22 +1463,7 @@ static PyMethodDef methods[] = {
 	{
 		"NewStorageBuffer",
 		(PyCFunction)DummyExtension, // NewStorageBuffer,
-		METH_VARARGS,
-		""
-
-		"\n"
-		"Parameters:\n"
-		"\tdata (bytes) The content of the buffer.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tssbo (int) The index of the new shader storage buffer object.\n"
-		"\n"
-	},
-	{
-		"NewDynamicStorageBuffer",
-		(PyCFunction)DummyExtension, // NewDynamicStorageBuffer,
-		METH_VARARGS,
+		METH_VARARGS | METH_KEYWORDS,
 		""
 
 		"\n"
@@ -1650,9 +1590,6 @@ void LoadImplementation() {
 		(PyCFunction)NewVertexBuffer,
 		(PyCFunction)NewIndexBuffer,
 		(PyCFunction)NewUniformBuffer,
-		(PyCFunction)NewDynamicVertexBuffer,
-		(PyCFunction)NewDynamicIndexBuffer,
-		(PyCFunction)NewDynamicUniformBuffer,
 		(PyCFunction)DeleteVertexBuffer,
 		(PyCFunction)DeleteIndexBuffer,
 		(PyCFunction)DeleteUniformBuffer,
@@ -1686,7 +1623,6 @@ void LoadImplementation() {
 		(PyCFunction)DeleteComputeShader,
 		(PyCFunction)RunComputeShader,
 		(PyCFunction)NewStorageBuffer,
-		(PyCFunction)NewDynamicStorageBuffer,
 		(PyCFunction)UseStorageBuffer,
 		(PyCFunction)UpdateStorageBuffer,
 		(PyCFunction)ReadStorageBuffer,

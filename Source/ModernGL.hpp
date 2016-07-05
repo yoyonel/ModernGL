@@ -71,6 +71,8 @@ struct StorageBuffer {
 struct Texture {
 	PyObject_HEAD
 	int texture;
+	int width;
+	int height;
 	int components;
 };
 
@@ -135,7 +137,7 @@ PyObject * CreateVertexBufferType(int vbo);
 PyObject * CreateIndexBufferType(int ibo);
 PyObject * CreateUniformBufferType(int ubo);
 PyObject * CreateStorageBufferType(int ssbo, int size);
-PyObject * CreateTextureType(int texture, int components);
+PyObject * CreateTextureType(int texture, int width, int height, int components);
 PyObject * CreateShaderType(int shader, ShaderCategory category);
 PyObject * CreateProgramType(int program);
 PyObject * CreateAttributeLocationType(int location, int program);
@@ -174,10 +176,10 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args);
 PyObject * DeleteComputeShader(PyObject * self, PyObject * args);
 PyObject * RunComputeShader(PyObject * self, PyObject * args, PyObject * kwargs);
 
-PyObject * NewVertexBuffer(PyObject * self, PyObject * args);
-PyObject * NewIndexBuffer(PyObject * self, PyObject * args);
-PyObject * NewUniformBuffer(PyObject * self, PyObject * args);
-PyObject * NewStorageBuffer(PyObject * self, PyObject * args);
+PyObject * NewVertexBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * NewIndexBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * NewUniformBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * NewStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
 
 PyObject * UseStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
 PyObject * ReadStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
@@ -186,11 +188,6 @@ PyObject * DeleteVertexBuffer(PyObject * self, PyObject * args);
 PyObject * DeleteIndexBuffer(PyObject * self, PyObject * args);
 PyObject * DeleteUniformBuffer(PyObject * self, PyObject * args);
 PyObject * DeleteStorageBuffer(PyObject * self, PyObject * args);
-
-PyObject * NewDynamicVertexBuffer(PyObject * self, PyObject * args);
-PyObject * NewDynamicIndexBuffer(PyObject * self, PyObject * args);
-PyObject * NewDynamicUniformBuffer(PyObject * self, PyObject * args);
-PyObject * NewDynamicStorageBuffer(PyObject * self, PyObject * args);
 
 PyObject * NewVertexArray(PyObject * self, PyObject * args);
 PyObject * DeleteVertexArray(PyObject * self, PyObject * args);
