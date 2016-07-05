@@ -15,20 +15,9 @@ PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
-	if (width < 1) {
-		PyErr_Format(ModuleError, "NewTexture() argument `width` must be positive, not %d", width);
-		return 0;
-	}
-
-	if (height < 1) {
-		PyErr_Format(ModuleError, "NewTexture() argument `height` must be positive, not %d", height);
-		return 0;
-	}
-
-	if (components < 1 || components > 4) {
-		PyErr_Format(ModuleError, "NewTexture() argument `components` must be in range 1 to 4, not %d", components);
-		return 0;
-	}
+	CHECK_AND_REPORT_ARG_VALUE_ERROR(width < 1, "width", width);
+	CHECK_AND_REPORT_ARG_VALUE_ERROR(height < 1, "height", height);
+	CHECK_AND_REPORT_ARG_VALUE_ERROR(components < 1 || components > 4, "components", components);
 
 	int expected_size = height * ((width * components + 3) & ~3);
 
@@ -86,27 +75,11 @@ PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
-	if (x < 1 || y > texture->width - 1) {
-		PyErr_Format(ModuleError, "UpdateTexture() argument `x` = %d is invalid", x);
-		return 0;
-	}
-
-	if (y < 1 || y > texture->width - 1) {
-		PyErr_Format(ModuleError, "UpdateTexture() argument `y` = %d is invalid", y);
-		return 0;
-	}
-
-	if (width < 1 || x + width > texture->width) {
-		PyErr_Format(ModuleError, "UpdateTexture() argument `width` = %d is invalid", width);
-		return 0;
-	}
-
-	if (height < 1 || y + height > texture->height) {
-		PyErr_Format(ModuleError, "UpdateTexture() argument `height` = %d is invalid", height);
-		return 0;
-	}
-
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
+	CHECK_AND_REPORT_ARG_VALUE_ERROR(x < 1 || x > texture->width - 1, "x", x);
+	CHECK_AND_REPORT_ARG_VALUE_ERROR(y < 1 || y > texture->height - 1, "y", y);
+	CHECK_AND_REPORT_ARG_VALUE_ERROR(width < 1 || x + width > texture->width, "width", width);
+	CHECK_AND_REPORT_ARG_VALUE_ERROR(height < 1 || y > height > texture->height, "height", height);
 
 	const int formats[] = {0, OpenGL::GL_RED, OpenGL::GL_RG, OpenGL::GL_RGB, OpenGL::GL_RGBA};
 	int format = formats[texture->components];
