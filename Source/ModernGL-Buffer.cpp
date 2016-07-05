@@ -141,7 +141,7 @@ PyObject * UpdateVertexBuffer(PyObject * self, PyObject * args, PyObject * kwarg
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("vbo", vbo, VertexBufferType);
 
 	if (offset < 0 || offset + size > vbo->size) {
-		PyErr_SetString(PyExc_TypeError, "UpdateVertexBuffer() `offset` and `size` error");
+		PyErr_SetString(ModuleError, "UpdateVertexBuffer() `offset` and `size` error");
 		return 0;
 	}
 
@@ -165,7 +165,7 @@ PyObject * UpdateIndexBuffer(PyObject * self, PyObject * args, PyObject * kwargs
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("ibo", ibo, IndexBufferType);
 
 	if (offset < 0 || offset + size > ibo->size) {
-		PyErr_SetString(PyExc_TypeError, "UpdateIndexBuffer() `offset` and `size` error");
+		PyErr_SetString(ModuleError, "UpdateIndexBuffer() `offset` and `size` error");
 		return 0;
 	}
 
@@ -189,7 +189,7 @@ PyObject * UpdateUniformBuffer(PyObject * self, PyObject * args, PyObject * kwar
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("ubo", ubo, UniformBufferType);
 
 	if (offset < 0 || offset + size > ubo->size) {
-		PyErr_SetString(PyExc_TypeError, "UpdateUniformBuffer() `offset` and `size` error");
+		PyErr_SetString(ModuleError, "UpdateUniformBuffer() `offset` and `size` error");
 		return 0;
 	}
 
@@ -213,7 +213,7 @@ PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args, PyObject * kwar
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("sbo", sbo, StorageBufferType);
 
 	if (offset < 0 || offset + size > sbo->size) {
-		PyErr_SetString(PyExc_TypeError, "UpdateStorageBuffer() `offset` and `size` error");
+		PyErr_SetString(ModuleError, "UpdateStorageBuffer() `offset` and `size` error");
 		return 0;
 	}
 

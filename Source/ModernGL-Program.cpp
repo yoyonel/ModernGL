@@ -360,7 +360,7 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	int count = (int)PyList_Size(matrix);
 	
 	if (count != 16) {
-		PyErr_Format(PyExc_TypeError, "UniformMatrix() matrix length must be 16, not %d", count);
+		PyErr_Format(ModuleError, "UniformMatrix() matrix length must be 16, not %d", count);
 		return 0;
 	}
 
@@ -395,7 +395,7 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	int count = (int)PyList_Size(matrix);
 	
 	if (count != 16) {
-		PyErr_Format(PyExc_TypeError, "UniformTransposeMatrix() matrix length must be 16, not %d", count);
+		PyErr_Format(ModuleError, "UniformTransposeMatrix() matrix length must be 16, not %d", count);
 		return 0;
 	}
 
