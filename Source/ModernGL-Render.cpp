@@ -14,7 +14,7 @@ PyObject * RenderTriangles(PyObject * self, PyObject * args, PyObject * kwargs) 
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	OpenGL::glBindVertexArray(vao->vao);
 	if (vao->indexed) {
@@ -39,7 +39,7 @@ PyObject * RenderTriangleStrip(PyObject * self, PyObject * args, PyObject * kwar
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	OpenGL::glBindVertexArray(vao->vao);
 	if (vao->indexed) {
@@ -64,7 +64,7 @@ PyObject * RenderTriangleFan(PyObject * self, PyObject * args, PyObject * kwargs
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	OpenGL::glBindVertexArray(vao->vao);
 	if (vao->indexed) {
@@ -89,7 +89,7 @@ PyObject * RenderLines(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	OpenGL::glBindVertexArray(vao->vao);
 	if (vao->indexed) {
@@ -114,7 +114,7 @@ PyObject * RenderLineStrip(PyObject * self, PyObject * args, PyObject * kwargs) 
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	OpenGL::glBindVertexArray(vao->vao);
 	if (vao->indexed) {
@@ -139,7 +139,7 @@ PyObject * RenderLineLoop(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	OpenGL::glBindVertexArray(vao->vao);
 	if (vao->indexed) {
@@ -164,7 +164,7 @@ PyObject * RenderPoints(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	OpenGL::glBindVertexArray(vao->vao);
 	if (vao->indexed) {
@@ -189,7 +189,7 @@ PyObject * RenderLineStripAdjacency(PyObject * self, PyObject * args, PyObject *
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	OpenGL::glBindVertexArray(vao->vao);
 	if (vao->indexed) {
@@ -214,7 +214,7 @@ PyObject * RenderLinesAdjacency(PyObject * self, PyObject * args, PyObject * kwa
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	OpenGL::glBindVertexArray(vao->vao);
 	if (vao->indexed) {
@@ -239,7 +239,7 @@ PyObject * RenderTriangleStripAdjacency(PyObject * self, PyObject * args, PyObje
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	OpenGL::glBindVertexArray(vao->vao);
 	if (vao->indexed) {
@@ -264,7 +264,7 @@ PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args, PyObject *
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	OpenGL::glBindVertexArray(vao->vao);
 	if (vao->indexed) {

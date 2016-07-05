@@ -70,7 +70,7 @@ PyObject * DeleteComputeShader(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("shader", shader, ComputeShaderType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("shader", shader, ComputeShaderType);
 
 	OpenGL::glDeleteProgram(shader->program);
 	OpenGL::glDeleteShader(shader->shader);
@@ -89,7 +89,7 @@ PyObject * RunComputeShader(PyObject * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("shader", shader, ComputeShaderType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("shader", shader, ComputeShaderType);
 
 	OpenGL::glUseProgram(shader->program);
 	OpenGL::glDispatchCompute(x, y, z);

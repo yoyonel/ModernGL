@@ -791,30 +791,14 @@ PyTypeObject ComputeShaderType = {
 };
 
 PyObject * EnableFlag_add(EnableFlag * a, EnableFlag * b) {
-	if (!PyObject_TypeCheck((PyObject *)a, &EnableFlagType)) {
-		PyErr_SetString(ModuleError, "hvbcirna");
-		return 0;
-	}
-
-	if (!PyObject_TypeCheck((PyObject *)b, &EnableFlagType)) {
-		PyErr_SetString(ModuleError, "hvbcirna");
-		return 0;
-	}
-
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("a", a, EnableFlagType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("b", b, EnableFlagType);
 	return CreateEnableFlagType(a->value | b->value);
 }
 
 PyObject * EnableFlag_sub(EnableFlag * a, EnableFlag * b) {
-	if (!PyObject_TypeCheck((PyObject *)a, &EnableFlagType)) {
-		PyErr_SetString(ModuleError, "hvbcirna");
-		return 0;
-	}
-
-	if (!PyObject_TypeCheck((PyObject *)b, &EnableFlagType)) {
-		PyErr_SetString(ModuleError, "hvbcirna");
-		return 0;
-	}
-
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("a", a, EnableFlagType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("b", b, EnableFlagType);
 	return CreateEnableFlagType(a->value & (~b->value));
 }
 

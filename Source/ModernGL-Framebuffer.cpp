@@ -55,7 +55,7 @@ PyObject * DeleteFramebuffer(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("fbo", fbo, FramebufferType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("fbo", fbo, FramebufferType);
 
 	OpenGL::glDeleteFramebuffers(1, (OpenGL::GLuint *)&fbo->fbo);
 	OpenGL::glDeleteTextures(1, (OpenGL::GLuint *)&fbo->color);
@@ -70,7 +70,7 @@ PyObject * UseFramebuffer(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("fbo", fbo, FramebufferType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("fbo", fbo, FramebufferType);
 
 	OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, fbo->fbo);
 	activeProgram = fbo->fbo;

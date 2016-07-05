@@ -92,7 +92,7 @@ PyObject * EnableOnly(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("flags", flags, EnableFlagType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("flags", flags, EnableFlagType);
 
 	(flags->value & ENABLE_BLEND ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_BLEND);
 	(flags->value & ENABLE_CULL_FACE ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_CULL_FACE);

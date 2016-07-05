@@ -81,7 +81,7 @@ PyObject * DeleteVertexBuffer(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("vbo", vbo, VertexBufferType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("vbo", vbo, VertexBufferType);
 
 	OpenGL::glDeleteBuffers(1, (OpenGL::GLuint *)&vbo->vbo);
 	Py_RETURN_NONE;
@@ -94,7 +94,7 @@ PyObject * DeleteIndexBuffer(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("ibo", ibo, IndexBufferType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("ibo", ibo, IndexBufferType);
 
 	OpenGL::glDeleteBuffers(1, (OpenGL::GLuint *)&ibo->ibo);
 	Py_RETURN_NONE;
@@ -107,7 +107,7 @@ PyObject * DeleteUniformBuffer(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("ubo", ubo, UniformBufferType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("ubo", ubo, UniformBufferType);
 
 	OpenGL::glDeleteBuffers(1, (OpenGL::GLuint *)&ubo->ubo);
 	Py_RETURN_NONE;
@@ -120,7 +120,7 @@ PyObject * DeleteStorageBuffer(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("sbo", sbo, StorageBufferType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("sbo", sbo, StorageBufferType);
 
 	OpenGL::glDeleteBuffers(1, (OpenGL::GLuint *)&sbo->sbo);
 	Py_RETURN_NONE;
@@ -138,7 +138,7 @@ PyObject * UpdateVertexBuffer(PyObject * self, PyObject * args, PyObject * kwarg
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("vbo", vbo, VertexBufferType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("vbo", vbo, VertexBufferType);
 
 	if (offset < 0 || offset + size > vbo->size) {
 		PyErr_SetString(PyExc_TypeError, "UpdateVertexBuffer() `offset` and `size` error");
@@ -162,7 +162,7 @@ PyObject * UpdateIndexBuffer(PyObject * self, PyObject * args, PyObject * kwargs
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("ibo", ibo, IndexBufferType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("ibo", ibo, IndexBufferType);
 
 	if (offset < 0 || offset + size > ibo->size) {
 		PyErr_SetString(PyExc_TypeError, "UpdateIndexBuffer() `offset` and `size` error");
@@ -186,7 +186,7 @@ PyObject * UpdateUniformBuffer(PyObject * self, PyObject * args, PyObject * kwar
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("ubo", ubo, UniformBufferType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("ubo", ubo, UniformBufferType);
 
 	if (offset < 0 || offset + size > ubo->size) {
 		PyErr_SetString(PyExc_TypeError, "UpdateUniformBuffer() `offset` and `size` error");
@@ -210,7 +210,7 @@ PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args, PyObject * kwar
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("sbo", sbo, StorageBufferType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("sbo", sbo, StorageBufferType);
 
 	if (offset < 0 || offset + size > sbo->size) {
 		PyErr_SetString(PyExc_TypeError, "UpdateStorageBuffer() `offset` and `size` error");
@@ -232,7 +232,7 @@ PyObject * UseStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("sbo", sbo, StorageBufferType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("sbo", sbo, StorageBufferType);
 
 	OpenGL::glBindBufferBase(OpenGL::GL_SHADER_STORAGE_BUFFER, binding, sbo->sbo);
 	Py_RETURN_NONE;
@@ -249,14 +249,14 @@ PyObject * ReadStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("sbo", sbo, StorageBufferType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("sbo", sbo, StorageBufferType);
 
 	if (size == 0) {
 		size = sbo->size - offset;
 	}
 
 	if (size < 0 || offset < 0 || offset + size > sbo->size) {
-		PyErr_SetString(ModuleError, "ReadStorageBuffer() offset` and `size` error");
+		PyErr_SetString(ModuleError, "ReadStorageBuffer() `offset` and `size` error");
 		return 0;
 	}
 

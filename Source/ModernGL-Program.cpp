@@ -17,7 +17,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("shaders", lst, PyList_Type);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("shaders", lst, PyList_Type);
 
 	int program = OpenGL::glCreateProgram();
 
@@ -26,11 +26,9 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	int count = (int)PyList_Size(lst);
 	for (int i = 0; i < count; ++i) {
 		Shader * shader = (Shader *)PyList_GetItem(lst, i);
-		if (!PyObject_TypeCheck((PyObject *)shader, &ShaderType)) {
-			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)shader))->tp_name;
-			PyErr_Format(PyExc_TypeError, "NewProgram() shaders[%d] must be Shader, not %s", i, got);
+		if (!CHECK_TYPE_ERROR(shader, ShaderType)) {
 			OpenGL::glDeleteProgram(program);
-			return 0;
+			REPORT_ELEMENT_TYPE_ERROR("shaders", shader, ShaderType, i);
 		}
 		OpenGL::glAttachShader(program, shader->shader);
 		++category[shader->category];
@@ -79,7 +77,7 @@ PyObject * DeleteProgram(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
 
 	int shaders[8] = {};
 	int numShaders = 0;
@@ -99,7 +97,7 @@ PyObject * UseProgram(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
 
 	OpenGL::glUseProgram(program->program);
 	activeProgram = program->program;
@@ -122,7 +120,7 @@ PyObject * GetAttributeLocation(PyObject * self, PyObject * args, PyObject * kwa
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
 
 	int location = OpenGL::glGetAttribLocation(program->program, name);
 	if (strict && location < 0) {
@@ -144,7 +142,7 @@ PyObject * GetUniformLocation(PyObject * self, PyObject * args, PyObject * kwarg
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
 
 	int location = OpenGL::glGetUniformLocation(program->program, name);
 	if (strict && location < 0) {
@@ -166,7 +164,7 @@ PyObject * GetUniformBufferLocation(PyObject * self, PyObject * args, PyObject *
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
 
 	int location = OpenGL::glGetUniformBlockIndex(program->program, name);
 	if (strict && location < 0) {
@@ -185,7 +183,7 @@ PyObject * Uniform1f(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
 
 	if (location->program != activeProgram) {
 		PyErr_SetString(ModuleError, "Uniform1f() the selected uniform does not belong to the active program");
@@ -205,7 +203,7 @@ PyObject * Uniform2f(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
 
 	if (location->program != activeProgram) {
 		PyErr_SetString(ModuleError, "Uniform2f() the selected uniform does not belong to the active program");
@@ -226,7 +224,7 @@ PyObject * Uniform3f(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
 
 	if (location->program != activeProgram) {
 		PyErr_SetString(ModuleError, "Uniform3f() the selected uniform does not belong to the active program");
@@ -248,7 +246,7 @@ PyObject * Uniform4f(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
 
 	if (location->program != activeProgram) {
 		PyErr_SetString(ModuleError, "Uniform4f() the selected uniform does not belong to the active program");
@@ -267,7 +265,7 @@ PyObject * Uniform1i(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
 
 	if (location->program != activeProgram) {
 		PyErr_SetString(ModuleError, "Uniform1i() the selected uniform does not belong to the active program");
@@ -287,7 +285,7 @@ PyObject * Uniform2i(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
 
 	if (location->program != activeProgram) {
 		PyErr_SetString(ModuleError, "Uniform2i() the selected uniform does not belong to the active program");
@@ -308,7 +306,7 @@ PyObject * Uniform3i(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
 
 	if (location->program != activeProgram) {
 		PyErr_SetString(ModuleError, "Uniform3i() the selected uniform does not belong to the active program");
@@ -330,7 +328,7 @@ PyObject * Uniform4i(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
 
 	if (location->program != activeProgram) {
 		PyErr_SetString(ModuleError, "Uniform4i() the selected uniform does not belong to the active program");
@@ -349,8 +347,8 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
-	REPORT_ARG_TYPE_ERROR("matrix", matrix, PyList_Type);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("matrix", matrix, PyList_Type);
 
 	if (location->program != activeProgram) {
 		PyErr_SetString(ModuleError, "UniformMatrix() the selected uniform does not belong to the active program");
@@ -368,13 +366,7 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 
 	for (int i = 0; i < count; ++i) {
 		PyObject * item = PyList_GET_ITEM(matrix, i);
-
-		if (!PyObject_TypeCheck((PyObject *)item, &PyFloat_Type)) {
-			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)item))->tp_name;
-			PyErr_Format(PyExc_TypeError, "UniformMatrix() matrix[%d] must be float, not %s", i, got);
-			return 0;
-		}
-
+		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("matrix", item, PyFloat_Type, i);
 		matrix_data[i] = (float)PyFloat_AsDouble(item);
 	}
 
@@ -390,8 +382,8 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
-	REPORT_ARG_TYPE_ERROR("matrix", matrix, PyList_Type);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("matrix", matrix, PyList_Type);
 
 	if (location->program != activeProgram) {
 		PyErr_SetString(ModuleError, "UniformTransposeMatrix() the selected uniform does not belong to the active program");
@@ -409,13 +401,7 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 
 	for (int i = 0; i < count; ++i) {
 		PyObject * item = PyList_GET_ITEM(matrix, i);
-
-		if (!PyObject_TypeCheck((PyObject *)item, &PyFloat_Type)) {
-			const char * got = ((PyTypeObject *)PyObject_Type((PyObject *)item))->tp_name;
-			PyErr_Format(PyExc_TypeError, "UniformTransposeMatrix() matrix[%d] must be float, not %s", i, got);
-			return 0;
-		}
-
+		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("matrix", item, PyFloat_Type, i);
 		matrix_data[i] = (float)PyFloat_AsDouble(item);
 	}
 
@@ -424,17 +410,17 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 }
 
 PyObject * UseUniformBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
-	UniformBufferLocation * location;
 	UniformBuffer * ubo;
+	UniformBufferLocation * location;
 
-	static const char * kwlist[] = {"location", "ubo", 0};
+	static const char * kwlist[] = {"ubo", "location", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:UseUniformBuffer", (char **)kwlist, &location, &ubo)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:UseUniformBuffer", (char **)kwlist, &ubo, &location)) {
 		return 0;
 	}
 
-	REPORT_ARG_TYPE_ERROR("location", location, UniformBufferLocationType);
-	REPORT_ARG_TYPE_ERROR("ubo", ubo, UniformBufferType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("ubo", ubo, UniformBufferType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformBufferLocationType);
 
 	OpenGL::glBindBufferBase(OpenGL::GL_UNIFORM_BUFFER, location->location, ubo->ubo);
 	Py_RETURN_NONE;
