@@ -111,7 +111,7 @@ PyObject * ReadPixels(PyObject * self, PyObject * args, PyObject * kwargs) {
 	}
 
 	if (components < 1 || components > 4) {
-		PyErr_SetString(ModuleError, "asdasd");
+		PyErr_Format(ModuleError, "ReadPixels() argument `components` must be in range 1 to 4, not %d", components);
 		return 0;
 	}
 
