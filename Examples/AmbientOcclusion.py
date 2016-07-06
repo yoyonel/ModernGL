@@ -161,17 +161,17 @@ vbo = GL.NewVertexBuffer(data)
 ibo = GL.NewIndexBuffer(idata)
 
 attribs = [
-	(vbo, GL.GetAttributeLocation(grass_prog, 'vert')),
-	(vbo, GL.GetAttributeLocation(grass_prog, 'direction')),
-	(vbo, GL.GetAttributeLocation(grass_prog, 'color')),
-	(vbo, GL.GetAttributeLocation(grass_prog, 'thickness')),
-	(vbo, GL.GetAttributeLocation(grass_prog, 'power')),
+	GL.GetAttributeLocation(grass_prog, 'vert'),
+	GL.GetAttributeLocation(grass_prog, 'direction'),
+	GL.GetAttributeLocation(grass_prog, 'color'),
+	GL.GetAttributeLocation(grass_prog, 'thickness'),
+	GL.GetAttributeLocation(grass_prog, 'power'),
 ]
 
-vao = GL.NewVertexArray('3f3f3f1f1f', attribs, ibo)
+vao = GL.NewVertexArray('3f3f3f1f1f', vbo, attribs, ibo)
 
 ssao_vbo = GL.NewVertexBuffer(struct.pack('8f', 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0))
-ssao_vao = GL.NewVertexArray('2f', [(ssao_vbo, GL.GetAttributeLocation(ssao_prog, 'vert'))])
+ssao_vao = GL.NewVertexArray('2f', ssao_vbo, [GL.GetAttributeLocation(ssao_prog, 'vert')])
 
 GL.UseProgram(grass_prog)
 GL.UniformMatrix(GL.GetUniformLocation(grass_prog, 'mat'), camera)

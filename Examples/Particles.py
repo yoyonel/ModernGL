@@ -66,7 +66,7 @@ prog = GL.NewProgram([vert, frag])
 GL.Uniform2f(GL.GetUniformLocation(prog, 'scale'), 1920, 1080)
 
 vbo = GL.NewVertexBuffer(struct.pack('6f', 0, 8, -6, -8, 6, -8))
-vao = GL.NewVertexArray('2f', [(vbo, GL.GetAttributeLocation(prog, 'vert'))])
+vao = GL.NewVertexArray('2f', vbo, [GL.GetAttributeLocation(prog, 'vert')])
 
 GL.UseStorageBuffer(sbo, 1)
 

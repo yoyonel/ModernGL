@@ -87,7 +87,7 @@ prog = GL.NewProgram([vert, frag])
 GL.Uniform1f(GL.GetUniformLocation(prog, 'ratio'), 16 / 9)
 
 vbo = GL.NewVertexBuffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
-vao = GL.NewVertexArray('2f', [(vbo, GL.GetAttributeLocation(prog, 'vert'))])
+vao = GL.NewVertexArray('2f', vbo, [GL.GetAttributeLocation(prog, 'vert')])
 
 ssbo = GL.NewStorageBuffer(open('Data/Raytrace-scene.dat', 'rb').read())
 GL.UseStorageBuffer(ssbo, 1)
