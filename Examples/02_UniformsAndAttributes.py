@@ -7,7 +7,7 @@ WND.BuildFullscreen()
 GL.InitializeModernGL()
 
 vert = GL.NewVertexShader('''
-	#version 400
+	#version 330
 
 	in vec2 vert;
 
@@ -25,7 +25,7 @@ vert = GL.NewVertexShader('''
 ''')
 
 frag = GL.NewFragmentShader('''
-	#version 400
+	#version 330
 	
 	in vec3 frag_color;
 	out vec4 color;

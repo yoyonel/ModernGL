@@ -10,7 +10,7 @@ WND.BuildFullscreen()
 GL.InitializeModernGL()
 
 vert = GL.NewVertexShader('''
-	#version 400
+	#version 330
 
 	in vec2 vert;
 	out vec2 tex_coord;
@@ -30,7 +30,7 @@ if not vert:
 	print(GL.CompilerLog())
 
 frag = GL.NewFragmentShader('''
-	#version 400
+	#version 330
 
 	uniform sampler2D texture;
 	

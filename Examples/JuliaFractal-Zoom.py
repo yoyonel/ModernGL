@@ -7,7 +7,7 @@ WND.BuildFullscreen()
 GL.InitializeModernGL()
 
 vert = GL.NewVertexShader('''
-	#version 400
+	#version 330
 
 	uniform vec2 pos;
 	uniform float zoom;
@@ -22,7 +22,7 @@ vert = GL.NewVertexShader('''
 ''')
 
 frag = GL.NewFragmentShader('''
-	#version 400
+	#version 330
 	
 	in vec2 textcoord;
 	out vec4 color;

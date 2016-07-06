@@ -1,6 +1,3 @@
-# python -m pip install ModernGL
-# python -m pip install GLWindow
-
 import ModernGL as GL
 import GLWindow as WND
 import struct
@@ -10,7 +7,7 @@ WND.BuildFullscreen()
 GL.InitializeModernGL()
 
 vert = GL.NewVertexShader('''
-	#version 400
+	#version 330
 
 	in vec2 vert;
 
@@ -33,7 +30,7 @@ if not vert:
 	print(GL.CompilerLog())
 
 frag = GL.NewFragmentShader('''
-	#version 400
+	#version 330
 	
 	in vec4 frag_color;
 	out vec4 color;
