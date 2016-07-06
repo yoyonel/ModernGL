@@ -41,6 +41,10 @@ PyObject * DummyExtension(PyObject * self, PyObject * args) {
 	return 0;
 }
 
+PyObject * Testing(PyObject * self, PyObject * args) {
+	Py_RETURN_NONE;
+}
+
 static PyMethodDef methods[] = {
 	{
 		"InitializeModernGL",
@@ -399,6 +403,21 @@ static PyMethodDef methods[] = {
 		"\n"
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+	},
+	{
+		"GetProgramInterface",
+		(PyCFunction)Dummy, // GetProgramInterface,
+		METH_VARARGS,
+		""
+
+		"\n"
+		"Parameters:\n"
+		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
+
+		"\n"
+		"Returns:\n"
+		"\tinterface (dict) dictionary containing attributes, uniforms and uniform buffers by name\n"
 		"\n"
 	},
 	{
@@ -1529,6 +1548,7 @@ static PyMethodDef methods[] = {
 		"\n"
 	},
 
+	{"Testing", (PyCFunction)Testing, METH_VARARGS, 0},
 	// Better than nothing font
 
 	// {"DebugFontColor", DebugFontColor, METH_VARARGS, 0},
@@ -1562,6 +1582,7 @@ void LoadImplementation() {
 		(PyCFunction)NewProgram,
 		(PyCFunction)DeleteProgram,
 		(PyCFunction)UseProgram,
+		(PyCFunction)GetProgramInterface,
 		(PyCFunction)GetAttributeLocation,
 		(PyCFunction)GetUniformLocation,
 		(PyCFunction)GetUniformBufferLocation,
@@ -1629,6 +1650,7 @@ void LoadImplementation() {
 		(PyCFunction)UseStorageBuffer,
 		(PyCFunction)UpdateStorageBuffer,
 		(PyCFunction)ReadStorageBuffer,
+		(PyCFunction)Testing,
 	};
 
 	bool extensionSupport = extensionActive;
@@ -1847,6 +1869,12 @@ const char * TestFunctions() {
 	}
 	if (!OpenGL::isglGetBufferParameteriv()) {
 		return "glGetBufferParameteriv not loaded.";
+	}
+	if (!OpenGL::isglGetActiveAttrib()) {
+		return "glGetActiveAttrib not loaded.";
+	}
+	if (!OpenGL::isglGetActiveUniform()) {
+		return "glGetActiveUniform not loaded.";
 	}
 
 	return 0;

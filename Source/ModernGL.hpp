@@ -243,6 +243,7 @@ PyObject * UpdateIndexBuffer(PyObject * self, PyObject * args, PyObject * kwargs
 PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
 
 PyObject * UseProgram(PyObject * self, PyObject * args);
+PyObject * GetProgramInterface(PyObject * self, PyObject * args);
 
 PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs);
 PyObject * DeleteFramebuffer(PyObject * self, PyObject * args);
