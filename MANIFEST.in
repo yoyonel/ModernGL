@@ -1,6 +1,4 @@
 include Source/WindowsGL.hpp
 include Source/OpenGL.hpp
 include Source/ModernGL.hpp
-include Source/Python-Types.hpp
-include Source/Python-ModernGL.hpp
 include Source/Global.hpp
