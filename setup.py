@@ -156,6 +156,7 @@ setup(
 	description = ShortDescription,
 	long_description = LongDescription,
 	url = 'https://github.com/cprogrammer1994/ModernGL',
+	download_url = 'https://github.com/cprogrammer1994/ModernGL/releases',
 	author = 'Szabolcs Dombi',
 	author_email = 'cprogrammer1994@gmail.com',
 	license = 'MIT',
