@@ -26,7 +26,7 @@ class GLWidget(QOpenGLWidget):
 		GL.InitializeModernGL()
 
 		vert = GL.NewVertexShader('''
-			#version 400
+			#version 330
 
 			in vec2 vert;
 
@@ -36,7 +36,7 @@ class GLWidget(QOpenGLWidget):
 		''')
 
 		frag = GL.NewFragmentShader('''
-			#version 400
+			#version 330
 			
 			out vec4 color;
 
@@ -46,9 +46,10 @@ class GLWidget(QOpenGLWidget):
 		''')
 
 		self.prog = GL.NewProgram([vert, frag])
+		self.interface = GL.GetProgramInterface(self.prog)
 
 		self.vbo = GL.NewVertexBuffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
-		self.vao = GL.NewVertexArray('2f', [(self.vbo, GL.GetAttributeLocation(self.prog, 'vert'))])
+		self.vao = GL.NewVertexArray('2f', self.vbo, [self.interface['vert']])
 		self.init = True
 
 	def paintGL(self):
