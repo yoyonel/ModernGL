@@ -148,9 +148,7 @@ PyObject * GetProgramInterface(PyObject * self, PyObject * args) {
 	OpenGL::glGetProgramiv(program->program, OpenGL::GL_ACTIVE_UNIFORM_BLOCKS, &uniformBlocks);
 	for (int i = 0; i < uniformBlocks; ++i) {
 		char name[64 + 1];
-		int size;
 		int length;
-		unsigned type;
 		int location = -1;
 		OpenGL::glGetActiveUniformBlockName(program->program, i, 64, &length, name);
 		OpenGL::glGetActiveUniformBlockiv(program->program, i, OpenGL::GL_UNIFORM_BLOCK_BINDING, &location);
