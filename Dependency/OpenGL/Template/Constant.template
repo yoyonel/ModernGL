@@ -1,0 +1,1 @@
+const %(type)s %(type_pad)s%(name)s%(name_pad)s = %(value)s;

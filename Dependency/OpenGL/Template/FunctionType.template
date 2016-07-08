@@ -1,0 +1,1 @@
+typedef %(type)s (GLAPI * PROC_%(name)s)(%(params)s);

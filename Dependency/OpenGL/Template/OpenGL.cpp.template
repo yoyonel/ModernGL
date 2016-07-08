@@ -1,0 +1,80 @@
+#include "OpenGL.hpp"
+#include "WindowsGL.hpp"
+
+namespace OpenGL {
+
+	bool LoadCoreOpenGLFunctions();
+
+	const void * GetOpenGLFunction(const char * name) {
+		const void * result = WindowsGL::GetWindowsFunctionFromOpenGL(name);
+		if (result) {
+			return result;
+		}
+
+		result = (const void *)WindowsGL::wglGetProcAddress(name);
+		if (result) {
+			return result;
+		}
+
+		int length = 0;
+		while (name[length]) {
+			++length;
+		}
+		
+		char * guess = (char *)malloc(length + 4);
+		memcpy(guess, name, length);
+
+		guess[length + 0] = 'A';
+		guess[length + 1] = 'R';
+		guess[length + 2] = 'B';
+		guess[length + 3] = 0;
+
+		result = (const void *)WindowsGL::wglGetProcAddress(guess);
+		if (result) {
+			free(guess);
+			return result;
+		}
+
+		guess[length + 0] = 'E';
+		guess[length + 1] = 'X';
+		guess[length + 2] = 'T';
+		guess[length + 3] = 0;
+
+		result = (const void *)WindowsGL::wglGetProcAddress(guess);
+		if (result) {
+			free(guess);
+			return result;
+		}
+
+		free(guess);
+		return 0;
+	}
+
+	bool __stdcall InitializeOpenGL() {
+		if (!WindowsGL::InitializeWindowsGLModule()) {
+			return false;
+		}
+
+		if (!WindowsGL::wglGetCurrentContext()) {
+			return false;
+		}
+
+		if (!LoadCoreOpenGLFunctions()) {
+			return false;
+		}
+
+		return true;
+	}
+
+	bool LoadCoreOpenGLFunctions() {
+
+%(function_load)s
+
+		return true;
+	}
+
+%(function_check)s
+
+%(function_declare)s
+
+}
