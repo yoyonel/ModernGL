@@ -3958,14 +3958,22 @@ namespace OpenGL {
 	bool InitializeOpenGL() {
 		opengl32 = LoadLibrary("opengl32.dll");
 
-		OpenGL::wglGetProcAddress = (PROC_wglGetProcAddress)GetProcAddress(opengl32, "wglGetProcAddress");
-		OpenGL::wglGetCurrentContext = (PROC_wglGetCurrentContext)GetProcAddress(opengl32, "wglGetCurrentContext");
-
 		if (!opengl32) {
 			return false;
 		}
 
-		if (!wglGetCurrentContext()) {
+		OpenGL::wglGetProcAddress = (PROC_wglGetProcAddress)GetProcAddress(opengl32, "wglGetProcAddress");
+		
+		if (!OpenGL::wglGetProcAddress) {
+			return false;
+		}
+		OpenGL::wglGetCurrentContext = (PROC_wglGetCurrentContext)GetProcAddress(opengl32, "wglGetCurrentContext");
+		
+		if (!OpenGL::wglGetCurrentContext) {
+			return false;
+		}
+
+		if (!OpenGL::wglGetCurrentContext()) {
 			return false;
 		}
 
@@ -3980,27 +3988,47 @@ namespace OpenGL {
 
 #else
 
+#include <dlfcn.h>
+
 namespace OpenGL {
-	void * opengl32;
+	void * libgl;
+
+	typedef const void * (__stdcall * PROC_glXGetProcAddress)(const char *);
+	typedef HGLRC (__stdcall * PROC_glXGetCurrentContext)();
+
+	PROC_glXGetProcAddress glXGetProcAddress;
+	PROC_glXGetCurrentContext glXGetCurrentContext;
 
 	const void * GetOpenGLFunction(const char * name) {
-		const void * result = 0; // GetProcAddress(opengl32, name);
+		const void * result = dlsym(libgl, name);
 		
 		if (!result) {
-			result = glXGetProcAddress(name);
+			result = OpenGL::glXGetProcAddress(name);
 		}
 
 		return result;
 	}
 
 	bool InitializeOpenGL() {
-		// opengl32 = LoadLibrary("opengl32.dll");
+		libgl = dlopen("libGL.so.1", RTLD_LAZY);
 
-		if (!opengl32) {
+		if (!libgl) {
 			return false;
 		}
 
-		if (!glXGetCurrentContext()) {
+		OpenGL::glXGetProcAddress = (PROC_glXGetProcAddress)dlsym(libgl, "glXGetProcAddress");
+
+		if (!OpenGL::glXGetProcAddress) {
+			return false;
+		}
+
+		OpenGL::glXGetCurrentContext = (PROC_glXGetCurrentContext)dlsym(libgl, "glXGetCurrentContext");
+
+		if (!OpenGL::glXGetCurrentContext) {
+			return false;
+		}
+
+		if (!OpenGL::glXGetCurrentContext()) {
 			return false;
 		}
 
