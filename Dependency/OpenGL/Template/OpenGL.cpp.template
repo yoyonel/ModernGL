@@ -25,13 +25,13 @@ namespace OpenGL {
 	HMODULE opengl32;
 
 	typedef const void * (__stdcall * PROC_wglGetProcAddress)(const char *);
-	typedef HGLRC (__stdcall * PROC_wglGetCurrentContext)();
+	typedef const void * (__stdcall * PROC_wglGetCurrentContext)();
 
 	PROC_wglGetProcAddress wglGetProcAddress;
 	PROC_wglGetCurrentContext wglGetCurrentContext;
 
 	const void * GetOpenGLFunction(const char * name) {
-		const void * result = GetProcAddress(opengl32, name);
+		const void * result = (const void *)GetProcAddress(opengl32, name);
 
 		if (!result) {
 			result = OpenGL::wglGetProcAddress(name);
