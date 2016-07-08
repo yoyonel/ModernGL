@@ -391,21 +391,6 @@ static PyMethodDef methods[] = {
 		"\n"
 	},
 	{
-		"UseProgram",
-		(PyCFunction)Dummy, // UseProgram,
-		METH_VARARGS,
-		""
-
-		"\n"
-		"Parameters:\n"
-		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
 		"GetProgramInterface",
 		(PyCFunction)Dummy, // GetProgramInterface,
 		METH_VARARGS,
@@ -1548,7 +1533,6 @@ void LoadImplementation() {
 		(PyCFunction)DeleteShader,
 		(PyCFunction)NewProgram,
 		(PyCFunction)DeleteProgram,
-		(PyCFunction)UseProgram,
 		(PyCFunction)GetProgramInterface,
 		(PyCFunction)GetAttributeLocation,
 		(PyCFunction)GetUniformLocation,
