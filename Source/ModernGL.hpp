@@ -175,10 +175,6 @@ PyObject * DisableCullFace(PyObject * self);
 PyObject * DisableDepthTest(PyObject * self);
 PyObject * DisableMultisample(PyObject * self);
 
-PyObject * GetAttributeLocation(PyObject * self, PyObject * args, PyObject * kwargs);
-PyObject * GetUniformBufferLocation(PyObject * self, PyObject * args, PyObject * kwargs);
-PyObject * GetUniformLocation(PyObject * self, PyObject * args, PyObject * kwargs);
-
 PyObject * NewComputeShader(PyObject * self, PyObject * args);
 PyObject * DeleteComputeShader(PyObject * self, PyObject * args);
 PyObject * RunComputeShader(PyObject * self, PyObject * args, PyObject * kwargs);

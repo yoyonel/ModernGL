@@ -421,54 +421,6 @@ static PyMethodDef methods[] = {
 		"\n"
 	},
 	{
-		"GetAttributeLocation",
-		(PyCFunction)Dummy, // GetAttributeLocation,
-		METH_VARARGS | METH_KEYWORDS,
-		""
-
-		"\n"
-		"Parameters:\n"
-		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
-		"\tname (str) Name of the attribute.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tlocation (int) The location of the attribute.\n"
-		"\n"
-	},
-	{
-		"GetUniformLocation",
-		(PyCFunction)Dummy, // GetUniformLocation,
-		METH_VARARGS | METH_KEYWORDS,
-		""
-
-		"\n"
-		"Parameters:\n"
-		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
-		"\tname (str) Name of the uniform.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tlocation (int) The location of the uniform.\n"
-		"\n"
-	},
-	{
-		"GetUniformBufferLocation",
-		(PyCFunction)Dummy, // GetUniformBufferLocation,
-		METH_VARARGS | METH_KEYWORDS,
-		""
-
-		"\n"
-		"Parameters:\n"
-		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
-		"\tname (str) Name of the uniform block.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tlocation (int) The location of the uniform block.\n"
-		"\n"
-	},
-	{
 		"Uniform1f",
 		(PyCFunction)Dummy, // Uniform1f,
 		METH_VARARGS,
