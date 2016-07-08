@@ -47,10 +47,11 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 
 	AttributeLocation * first_attribute = (AttributeLocation *)PyList_GET_ITEM(attributes, 0);
 	CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("attributes", first_attribute, AttributeLocationType, 0);
+	int program = first_attribute->program;
 	for (int i = 1; i < count; ++i) {
 		AttributeLocation * attribute = (AttributeLocation *)PyList_GET_ITEM(attributes, i);
 		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("attributes", attribute, AttributeLocationType, i);
-		if (first_attribute->program != attribute->program) {
+		if (program != attribute->program) {
 			PyErr_Format(PyExc_TypeError, "%s() attributes[%d] belongs to a different program", __FUNCTION__, i);
 			return 0;
 		}
@@ -92,7 +93,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	}
 
 	OpenGL::glBindVertexArray(defaultVertexArray);
-	return CreateVertexArrayType(vao, ibo != no_ibo);
+	return CreateVertexArrayType(vao, program, ibo != no_ibo);
 }
 
 PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {

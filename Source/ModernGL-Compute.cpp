@@ -93,6 +93,5 @@ PyObject * RunComputeShader(PyObject * self, PyObject * args, PyObject * kwargs)
 
 	OpenGL::glUseProgram(shader->program);
 	OpenGL::glDispatchCompute(x, y, z);
-	OpenGL::glUseProgram(activeProgram);
 	Py_RETURN_NONE;
 }
