@@ -59,3 +59,7 @@ Please follow the [Examples](https://github.com/cprogrammer1994/ModernGL/tree/ma
 ## 2.1.2 (has linux support)
 > tested on Ubuntu 16.04 without driver<br>
 > compiles, but sadly never tested the runtime<br>
+## DON'T FORGET
+```
+apt-get install libgl1-mesa-dev
+```
