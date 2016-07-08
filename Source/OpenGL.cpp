@@ -1,5 +1,4 @@
 #include "OpenGL.hpp"
-#include "WindowsGL.hpp"
 
 namespace OpenGL {
 

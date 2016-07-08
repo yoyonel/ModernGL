@@ -48,6 +48,7 @@ struct VertexArray {
 	PyObject_HEAD
 	int vao;
 	bool indexed;
+	int program; // TODO: use this fields
 };
 
 struct VertexBuffer {

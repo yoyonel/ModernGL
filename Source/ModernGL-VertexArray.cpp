@@ -39,18 +39,25 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("attributes", attributes, PyList_Type);
 
 	int count = (int)PyList_Size(attributes);
-	for (int i = 0; i < count; ++i) {
-		AttributeLocation * attribute = (AttributeLocation *)PyList_GET_ITEM(attributes, i);
-		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("attributes", attribute, AttributeLocationType, i);
-	}
-
-	if (ibo != no_ibo) {
-		CHECK_AND_REPORT_ARG_TYPE_ERROR("ibo", ibo, IndexBufferType);
-	}
 
 	if (length / 2 != count) {
 		PyErr_Format(ModuleError, "NewVertexArray() size of `format` is %d, length of `attributes` is %d", length / 2, count);
 		return 0;
+	}
+
+	AttributeLocation * first_attribute = (AttributeLocation *)PyList_GET_ITEM(attributes, 0);
+	CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("attributes", first_attribute, AttributeLocationType, 0);
+	for (int i = 1; i < count; ++i) {
+		AttributeLocation * attribute = (AttributeLocation *)PyList_GET_ITEM(attributes, i);
+		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("attributes", attribute, AttributeLocationType, i);
+		if (first_attribute->program != attribute->program) {
+			PyErr_Format(PyExc_TypeError, "%s() attributes[%d] belongs to a different program", __FUNCTION__, i);
+			return 0;
+		}
+	}
+
+	if (ibo != no_ibo) {
+		CHECK_AND_REPORT_ARG_TYPE_ERROR("ibo", ibo, IndexBufferType);
 	}
 
 	int vao = 0;
