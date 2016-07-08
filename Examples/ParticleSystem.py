@@ -118,8 +118,7 @@ physics = GL.NewComputeShader('''
 	}
 ''')
 
-circles_prog = GL.NewProgram([circles_vert, circles_frag])
-circles_iface = GL.GetProgramInterface(circles_prog)
+circles_prog, circles_iface = GL.NewProgram([circles_vert, circles_frag])
 
 GL.Uniform2f(circles_iface['scale'], 0.002 * height / width, 0.002)
 
@@ -137,8 +136,7 @@ circles = [
 circles_ubo = GL.NewUniformBuffer(struct.pack('i4x', len(circles)) + b''.join(struct.pack('2f1f4x', *c) for c in circles))
 GL.UseUniformBuffer(circles_ubo, circles_iface['Circles'])
 
-particles_prog = GL.NewProgram([particles_vert, particles_frag])
-particles_iface = GL.GetProgramInterface(particles_prog)
+particles_prog, particles_iface = GL.NewProgram([particles_vert, particles_frag])
 
 GL.Uniform2f(particles_iface['scale'], 0.002 * height / width, 0.002)
 
