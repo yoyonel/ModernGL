@@ -53,3 +53,9 @@ Please follow the [Documentation](https://pythonhosted.org/ModernGL/).
 # Examples
 
 Please follow the [Examples](https://github.com/cprogrammer1994/ModernGL/tree/master/Examples).
+
+# Linux Support
+
+## 2.1.2 (has linux support)
+> tested on Ubuntu 16.04 without driver<br>
+> compiles, but sadly never tested the runtime<br>
