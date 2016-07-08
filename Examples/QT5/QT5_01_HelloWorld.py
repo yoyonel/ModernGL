@@ -14,6 +14,7 @@ class Window(QWidget):
 		mainLayout = QHBoxLayout()
 		mainLayout.addWidget(self.glWidget)
 		self.setLayout(mainLayout)
+		self.init = False
 
 class GLWidget(QOpenGLWidget):
 	def __init__(self, parent = None):
@@ -45,17 +46,16 @@ class GLWidget(QOpenGLWidget):
 			}
 		''')
 
-		self.prog = GL.NewProgram([vert, frag])
-		self.interface = GL.GetProgramInterface(self.prog)
+		self.prog, self.iface = GL.NewProgram([vert, frag])
 
 		self.vbo = GL.NewVertexBuffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
-		self.vao = GL.NewVertexArray('2f', self.vbo, [self.interface['vert']])
+		self.vao = GL.NewVertexArray('2f', self.vbo, [self.iface['vert']])
 		self.init = True
 
 	def paintGL(self):
-		GL.Clear(240, 240, 240)
-		GL.UseProgram(self.prog)
-		GL.RenderTriangles(self.vao, 3)
+		if self.init:
+			GL.Clear(240, 240, 240)
+			GL.RenderTriangles(self.vao, 3)
 
 	def resizeGL(self, width, height):
 		GL.Viewport(0, 0, width, height)
