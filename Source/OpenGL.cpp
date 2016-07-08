@@ -3993,8 +3993,8 @@ namespace OpenGL {
 namespace OpenGL {
 	void * libgl;
 
-	typedef const void * (__stdcall * PROC_glXGetProcAddress)(const char *);
-	typedef HGLRC (__stdcall * PROC_glXGetCurrentContext)();
+	typedef const void * (* PROC_glXGetProcAddress)(const char *);
+	typedef HGLRC (* PROC_glXGetCurrentContext)();
 
 	PROC_glXGetProcAddress glXGetProcAddress;
 	PROC_glXGetCurrentContext glXGetCurrentContext;

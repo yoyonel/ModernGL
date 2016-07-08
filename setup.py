@@ -1,3 +1,5 @@
+import platform
+
 try:
 	import cccompiler
 except ImportError:
@@ -130,11 +132,14 @@ Keywords = [
 	'video',
 ]
 
-Libraries = ['user32', 'gdi32']
+Libraries = {
+	'windows' : ['user32', 'gdi32'],
+	'linux' : ['GL', 'dl'],
+}
 
 ModernGL = Extension(
 	'ModernGL.ModernGL',
-	libraries = Libraries,
+	libraries = Libraries[platform.system().lower()],
 	sources = [
 		'Source/OpenGL.cpp',
 		'Source/ModernGL.cpp',
