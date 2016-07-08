@@ -347,11 +347,6 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	UniformLocation * location;
 	PyObject * matrix;
-	
-	if (activeProgram != location->program) {
-		OpenGL::glUseProgram(location->program);
-		activeProgram = location->program;
-	}
 
 	if (!PyArg_ParseTuple(args, "OO:UniformTransposeMatrix", &location, &matrix)) {
 		return 0;
@@ -359,6 +354,11 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("matrix", matrix, PyList_Type);
+	
+	if (activeProgram != location->program) {
+		OpenGL::glUseProgram(location->program);
+		activeProgram = location->program;
+	}
 
 	float matrix_data[16];
 
