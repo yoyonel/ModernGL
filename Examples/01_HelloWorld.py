@@ -29,14 +29,11 @@ frag = GL.NewFragmentShader('''
 	}
 ''')
 
-prog = GL.NewProgram([vert, frag])
-interface = GL.GetProgramInterface(prog)
+prog, iface = GL.NewProgram([vert, frag])
 
 vbo = GL.NewVertexBuffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
-vao = GL.NewVertexArray('2f', vbo, [interface['vert']])
+vao = GL.NewVertexArray('2f', vbo, [iface['vert']])
 
 while WND.Update():
 	GL.Clear(240, 240, 240)
-
-	GL.UseProgram(prog)
 	GL.RenderTriangles(vao, 3)

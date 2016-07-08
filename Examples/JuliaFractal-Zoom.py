@@ -31,8 +31,6 @@ frag = GL.NewFragmentShader('''
 
 	void main() {
 		vec2 z = vec2(3.0 * (textcoord.x - 0.5), 2.0 * (textcoord.y - 0.5));
-//		vec2 c = vec2(0.397, 0.2);
-//		vec2 c = vec2(0.371, 0.16);
 		vec2 c = vec2(0.0, 1.0);
 
 		int i;
@@ -50,16 +48,12 @@ frag = GL.NewFragmentShader('''
 ''')
 
 prog = GL.NewProgram([vert, frag])
+iface = GL.GetProgramInterface(prog)
 
 vbo = GL.NewVertexBuffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
-vao = GL.NewVertexArray('2f', vbo, [GL.GetAttributeLocation(prog, 'vert')])
+vao = GL.NewVertexArray('2f', vbo, [iface['vert']])
 
-iterUni = GL.GetUniformLocation(prog, 'iter')
-zoomUni = GL.GetUniformLocation(prog, 'zoom')
-posUni = GL.GetUniformLocation(prog, 'pos')
-
-GL.UseProgram(prog)
-GL.Uniform1i(iterUni, 100)
+GL.Uniform1i(iface['iter'], 100)
 
 tx, ty = 0, 0
 nx, ny, mw = WND.GetMouse()
@@ -79,7 +73,6 @@ while WND.Update():
 	tx -= dx * z
 	ty += dy * z
 
-	GL.UseProgram(prog)
-	GL.Uniform2f(posUni, tx / z, ty / z)
-	GL.Uniform1f(zoomUni, z)
+	GL.Uniform2f(iface['pos'], tx / z, ty / z)
+	GL.Uniform1f(iface['zoom'], z)
 	GL.RenderTriangleStrip(vao, 4)

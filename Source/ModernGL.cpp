@@ -391,21 +391,6 @@ static PyMethodDef methods[] = {
 		"\n"
 	},
 	{
-		"GetProgramInterface",
-		(PyCFunction)Dummy, // GetProgramInterface,
-		METH_VARARGS,
-		""
-
-		"\n"
-		"Parameters:\n"
-		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tinterface (dict) dictionary containing attributes, uniforms and uniform buffers by name\n"
-		"\n"
-	},
-	{
 		"Uniform1f",
 		(PyCFunction)Dummy, // Uniform1f,
 		METH_VARARGS,
@@ -1533,7 +1518,6 @@ void LoadImplementation() {
 		(PyCFunction)DeleteShader,
 		(PyCFunction)NewProgram,
 		(PyCFunction)DeleteProgram,
-		(PyCFunction)GetProgramInterface,
 		(PyCFunction)Uniform1f,
 		(PyCFunction)Uniform2f,
 		(PyCFunction)Uniform3f,

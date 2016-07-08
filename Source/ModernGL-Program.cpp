@@ -63,8 +63,54 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		PyErr_SetString(ModuleError, compilerLog);
 		return 0;
 	}
-	
-	return CreateProgramType(program);
+
+	PyObject * dict = PyDict_New();
+
+	int attributes = 0;
+	OpenGL::glGetProgramiv(program, OpenGL::GL_ACTIVE_ATTRIBUTES, &attributes);
+	for (int i = 0; i < attributes; ++i) {
+		char name[64 + 1];
+		int size;
+		int length;
+		unsigned type;
+		OpenGL::glGetActiveAttrib(program, i, 64, &length, &size, &type, name);
+		int location = OpenGL::glGetAttribLocation(program, name);
+		name[length] = 0;
+		if (location >= 0) {
+			PyDict_SetItemString(dict, name, CreateAttributeLocationType(location, program));
+		}
+	}
+
+	int uniforms = 0;
+	OpenGL::glGetProgramiv(program, OpenGL::GL_ACTIVE_UNIFORMS, &uniforms);
+	for (int i = 0; i < uniforms; ++i) {
+		char name[64 + 1];
+		int size;
+		int length;
+		unsigned type;
+		OpenGL::glGetActiveUniform(program, i, 64, &length, &size, &type, name);
+		int location = OpenGL::glGetUniformLocation(program, name);
+		name[length] = 0;
+		if (location >= 0) {
+			PyDict_SetItemString(dict, name, CreateUniformLocationType(location, program));
+		}
+	}
+
+	int uniformBlocks = 0;
+	OpenGL::glGetProgramiv(program, OpenGL::GL_ACTIVE_UNIFORM_BLOCKS, &uniformBlocks);
+	for (int i = 0; i < uniformBlocks; ++i) {
+		char name[64 + 1];
+		int length;
+		int location = -1;
+		OpenGL::glGetActiveUniformBlockName(program, i, 64, &length, name);
+		OpenGL::glGetActiveUniformBlockiv(program, i, OpenGL::GL_UNIFORM_BLOCK_BINDING, &location);
+		name[length] = 0;
+		if (location >= 0) {
+			PyDict_SetItemString(dict, name, CreateUniformBufferLocationType(location, program));
+		}
+	}
+
+	return PyTuple_Pack(2, CreateProgramType(program), dict);
 }
 
 PyObject * DeleteProgram(PyObject * self, PyObject * args) {
@@ -85,64 +131,6 @@ PyObject * DeleteProgram(PyObject * self, PyObject * args) {
 	}
 	OpenGL::glDeleteProgram(program->program);
 	Py_RETURN_NONE;
-}
-
-PyObject * GetProgramInterface(PyObject * self, PyObject * args) {
-	Program * program;
-
-	if (!PyArg_ParseTuple(args, "O:GetProgramInterface", &program)) {
-		return 0;
-	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
-	
-	PyObject * dict = PyDict_New();
-
-	int attributes = 0;
-	OpenGL::glGetProgramiv(program->program, OpenGL::GL_ACTIVE_ATTRIBUTES, &attributes);
-	for (int i = 0; i < attributes; ++i) {
-		char name[64 + 1];
-		int size;
-		int length;
-		unsigned type;
-		OpenGL::glGetActiveAttrib(program->program, i, 64, &length, &size, &type, name);
-		int location = OpenGL::glGetAttribLocation(program->program, name);
-		name[length] = 0;
-		if (location >= 0) {
-			PyDict_SetItemString(dict, name, CreateAttributeLocationType(location, program->program));
-		}
-	}
-
-	int uniforms = 0;
-	OpenGL::glGetProgramiv(program->program, OpenGL::GL_ACTIVE_UNIFORMS, &uniforms);
-	for (int i = 0; i < uniforms; ++i) {
-		char name[64 + 1];
-		int size;
-		int length;
-		unsigned type;
-		OpenGL::glGetActiveUniform(program->program, i, 64, &length, &size, &type, name);
-		int location = OpenGL::glGetUniformLocation(program->program, name);
-		name[length] = 0;
-		if (location >= 0) {
-			PyDict_SetItemString(dict, name, CreateUniformLocationType(location, program->program));
-		}
-	}
-
-	int uniformBlocks = 0;
-	OpenGL::glGetProgramiv(program->program, OpenGL::GL_ACTIVE_UNIFORM_BLOCKS, &uniformBlocks);
-	for (int i = 0; i < uniformBlocks; ++i) {
-		char name[64 + 1];
-		int length;
-		int location = -1;
-		OpenGL::glGetActiveUniformBlockName(program->program, i, 64, &length, name);
-		OpenGL::glGetActiveUniformBlockiv(program->program, i, OpenGL::GL_UNIFORM_BLOCK_BINDING, &location);
-		name[length] = 0;
-		if (location >= 0) {
-			PyDict_SetItemString(dict, name, CreateUniformBufferLocationType(location, program->program));
-		}
-	}
-
-	return dict;
 }
 
 PyObject * Uniform1f(PyObject * self, PyObject * args) {

@@ -45,18 +45,14 @@ frag = GL.NewFragmentShader('''
 ''')
 
 prog = GL.NewProgram([vert, frag])
+iface = GL.GetProgramInterface(prog)
 
 vbo = GL.NewVertexBuffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
-vao = GL.NewVertexArray('2f', vbo, [GL.GetAttributeLocation(prog, 'vert')])
+vao = GL.NewVertexArray('2f', vbo, [iface['vert']])
 
-iterUni = GL.GetUniformLocation(prog, 'iter')
-scaleUni = GL.GetUniformLocation(prog, 'scale')
-centerUni = GL.GetUniformLocation(prog, 'center')
-
-GL.UseProgram(prog)
-GL.Uniform1i(iterUni, 100)
-GL.Uniform1f(scaleUni, 1.0)
-GL.Uniform2f(centerUni, 0.3, 0.2)
+GL.Uniform1i(iface['iter'], 100)
+GL.Uniform1f(iface['scale'], 1.0)
+GL.Uniform2f(iface['center'], 0.3, 0.2)
 
 while WND.Update():
 	GL.Clear(240, 240, 240)
@@ -65,7 +61,6 @@ while WND.Update():
 	mx = mx / 100
 	my = my / 100
 
-	GL.UseProgram(prog)
 	GL.Uniform2f(centerUni, mx, my)
 	GL.Uniform1f(scaleUni, scale)
 	GL.RenderTriangleStrip(vao, 4)

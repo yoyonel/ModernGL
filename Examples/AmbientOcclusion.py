@@ -61,7 +61,7 @@ grass_frag = GL.NewFragmentShader('''
 	}
 ''')
 
-grass_prog = GL.NewProgram([grass_vert, grass_frag])
+grass_prog, grass_iface = GL.NewProgram([grass_vert, grass_frag])
 
 ssao_vert = GL.NewVertexShader('''
 	#version 400
@@ -161,11 +161,11 @@ vbo = GL.NewVertexBuffer(data)
 ibo = GL.NewIndexBuffer(idata)
 
 attribs = [
-	GL.GetAttributeLocation(grass_prog, 'vert'),
-	GL.GetAttributeLocation(grass_prog, 'direction'),
-	GL.GetAttributeLocation(grass_prog, 'color'),
-	GL.GetAttributeLocation(grass_prog, 'thickness'),
-	GL.GetAttributeLocation(grass_prog, 'power'),
+	grass_iface['vert'],
+	grass_iface['direction'],
+	grass_iface['color'],
+	grass_iface['thickness'],
+	grass_iface['power'],
 ]
 
 vao = GL.NewVertexArray('3f3f3f1f1f', vbo, attribs, ibo)

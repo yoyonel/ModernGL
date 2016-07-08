@@ -37,21 +37,14 @@ frag = GL.NewFragmentShader('''
 
 width, height = WND.GetSize()
 
-prog = GL.NewProgram([vert, frag])
-
-vert_idx = GL.GetAttributeLocation(prog, 'vert')
-color_idx = GL.GetAttributeLocation(prog, 'vert_color')
-rotation = GL.GetUniformLocation(prog, 'rotation')
-scale = GL.GetUniformLocation(prog, 'scale')
+prog, iface = GL.NewProgram([vert, frag])
 
 vbo = GL.NewVertexBuffer(struct.pack('15f', 1.0, 0.0, 1.0, 0.0, 0.0, -0.5, 0.86, 0.0, 1.0, 0.0, -0.5, -0.86, 0.0, 0.0, 1.0))
-vao = GL.NewVertexArray('2f3f', vbo, [vert_idx, color_idx])
+vao = GL.NewVertexArray('2f3f', vbo, [iface['vert'], iface['vert_color']])
 
-GL.Uniform2f(scale, height / width * 0.75, 0.75)
+GL.Uniform2f(iface['scale'], height / width * 0.75, 0.75)
 
 while WND.Update():
 	GL.Clear(240, 240, 240)
-
-	GL.UseProgram(prog)
-	GL.Uniform1f(rotation, WND.GetTime())
+	GL.Uniform1f(iface['rotation'], WND.GetTime())
 	GL.RenderTriangles(vao, 3)

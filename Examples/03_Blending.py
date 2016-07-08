@@ -25,10 +25,6 @@ vert = GL.NewVertexShader('''
 	}
 ''')
 
-if not vert:
-	print('NewVertexShader failed')
-	print(GL.CompilerLog())
-
 frag = GL.NewFragmentShader('''
 	#version 330
 	
@@ -40,13 +36,9 @@ frag = GL.NewFragmentShader('''
 	}
 ''')
 
-if not frag:
-	print('NewFragmentShader failed')
-	print(GL.CompilerLog())
-
 width, height = WND.GetSize()
 
-prog = GL.NewProgram([vert, frag])
+prog, iface = GL.NewProgram([vert, frag])
 
 verts = [
 	1.0, 0.0,
@@ -62,21 +54,17 @@ verts = [
 vbo = GL.NewVertexBuffer(struct.pack('18f', *verts))
 
 attribs = [
-	GL.GetAttributeLocation(prog, 'vert'),
-	GL.GetAttributeLocation(prog, 'vert_color'),
+	iface['vert'],
+	iface['vert_color'],
 ]
 
 vao = GL.NewVertexArray('2f4f', vbo, attribs)
 
-rotation = GL.GetUniformLocation(prog, 'rotation')
-scale = GL.GetUniformLocation(prog, 'scale')
-
-GL.Uniform2f(scale, height / width * 0.75, 0.75)
+GL.Uniform2f(iface['scale'], height / width * 0.75, 0.75)
 
 while WND.Update():
 	GL.Clear(240, 240, 240)
 
-	GL.UseProgram(prog)
 	GL.EnableOnly(GL.ENABLE_BLEND + GL.ENABLE_MULTISAMPLE)
-	GL.Uniform1f(rotation, WND.GetTime())
+	GL.Uniform1f(iface['rotation'], WND.GetTime())
 	GL.RenderTriangles(vao, 3, instances = 10)
