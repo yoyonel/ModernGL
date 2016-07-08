@@ -951,6 +951,21 @@ static PyMethodDef methods[] = {
 		"\n"
 	},
 	{
+		"DeleteStorageBuffer",
+		(PyCFunction)Dummy, // DeleteStorageBuffer,
+		METH_VARARGS,
+		""
+
+		"\n"
+		"Parameters:\n"
+		"\tbuffer (int) The index of any buffer object except the framebuffer object.\n"
+
+		"\n"
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+	},
+	{
 		"UpdateVertexBuffer",
 		(PyCFunction)Dummy, // UpdateVertexBuffer,
 		METH_VARARGS | METH_KEYWORDS,
@@ -1569,6 +1584,7 @@ void LoadImplementation() {
 		(PyCFunction)DeleteVertexBuffer,
 		(PyCFunction)DeleteIndexBuffer,
 		(PyCFunction)DeleteUniformBuffer,
+		(PyCFunction)DeleteStorageBuffer,
 		(PyCFunction)UpdateVertexBuffer,
 		(PyCFunction)UpdateIndexBuffer,
 		(PyCFunction)UpdateUniformBuffer,
