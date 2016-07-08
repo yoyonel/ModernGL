@@ -57,8 +57,6 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		program = 0;
 	} else {
 		compilerLog[0] = 0;
-		OpenGL::glUseProgram(program);
-		activeProgram = program;
 	}
 
 	if (!program) {
@@ -86,20 +84,6 @@ PyObject * DeleteProgram(PyObject * self, PyObject * args) {
 		OpenGL::glDeleteShader(shaders[i]);
 	}
 	OpenGL::glDeleteProgram(program->program);
-	Py_RETURN_NONE;
-}
-
-PyObject * UseProgram(PyObject * self, PyObject * args) {
-	Program * program;
-
-	if (!PyArg_ParseTuple(args, "O:UseProgram", &program)) {
-		return 0;
-	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
-
-	OpenGL::glUseProgram(program->program);
-	activeProgram = program->program;
 	Py_RETURN_NONE;
 }
 
