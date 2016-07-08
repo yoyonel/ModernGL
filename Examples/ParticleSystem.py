@@ -155,8 +155,8 @@ while WND.Update():
 	GL.UpdateStorageBuffer(sbo, k * 24, b''.join(struct.pack('ffffff', -400, 200, -400 + uniform(3, 5), 200 + uniform(2, 5), 0, -0.1) for i in range(32)))
 	GL.Clear(240, 240, 240)
 	GL.RunComputeShader(physics, 20)
-	GL.UseProgram(circles_prog)
+	# GL.UseProgram(circles_prog)
 	GL.RenderTriangleFan(circle_vao, 128, instances = len(circles))
-	GL.UseProgram(particles_prog)
+	# GL.UseProgram(particles_prog)
 	GL.RenderTriangleFan(particle_vao, 16, instances = 10240)
 

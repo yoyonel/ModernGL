@@ -16,8 +16,9 @@ PyObject * RenderTriangles(PyObject * self, PyObject * args, PyObject * kwargs) 
 
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
-	if (vao->program != activeProgram) {
+	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
+		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -45,8 +46,9 @@ PyObject * RenderTriangleStrip(PyObject * self, PyObject * args, PyObject * kwar
 
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
-	if (vao->program != activeProgram) {
+	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
+		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -74,8 +76,9 @@ PyObject * RenderTriangleFan(PyObject * self, PyObject * args, PyObject * kwargs
 
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
-	if (vao->program != activeProgram) {
+	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
+		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -103,8 +106,9 @@ PyObject * RenderLines(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
-	if (vao->program != activeProgram) {
+	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
+		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -132,8 +136,9 @@ PyObject * RenderLineStrip(PyObject * self, PyObject * args, PyObject * kwargs) 
 
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
-	if (vao->program != activeProgram) {
+	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
+		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -161,8 +166,9 @@ PyObject * RenderLineLoop(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
-	if (vao->program != activeProgram) {
+	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
+		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -190,8 +196,9 @@ PyObject * RenderPoints(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
-	if (vao->program != activeProgram) {
+	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
+		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -219,8 +226,9 @@ PyObject * RenderLineStripAdjacency(PyObject * self, PyObject * args, PyObject *
 
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
-	if (vao->program != activeProgram) {
+	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
+		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -248,8 +256,9 @@ PyObject * RenderLinesAdjacency(PyObject * self, PyObject * args, PyObject * kwa
 
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
-	if (vao->program != activeProgram) {
+	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
+		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -277,8 +286,9 @@ PyObject * RenderTriangleStripAdjacency(PyObject * self, PyObject * args, PyObje
 
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
-	if (vao->program != activeProgram) {
+	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
+		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -306,8 +316,9 @@ PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args, PyObject *
 
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
-	if (vao->program != activeProgram) {
+	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
+		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
