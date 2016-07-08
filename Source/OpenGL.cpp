@@ -2,68 +2,7 @@
 
 namespace OpenGL {
 
-	bool LoadCoreOpenGLFunctions();
-
-	const void * GetOpenGLFunction(const char * name) {
-		const void * result = WindowsGL::GetWindowsFunctionFromOpenGL(name);
-		if (result) {
-			return result;
-		}
-
-		result = (const void *)WindowsGL::wglGetProcAddress(name);
-		if (result) {
-			return result;
-		}
-
-		int length = 0;
-		while (name[length]) {
-			++length;
-		}
-		
-		char * guess = (char *)malloc(length + 4);
-		memcpy(guess, name, length);
-
-		guess[length + 0] = 'A';
-		guess[length + 1] = 'R';
-		guess[length + 2] = 'B';
-		guess[length + 3] = 0;
-
-		result = (const void *)WindowsGL::wglGetProcAddress(guess);
-		if (result) {
-			free(guess);
-			return result;
-		}
-
-		guess[length + 0] = 'E';
-		guess[length + 1] = 'X';
-		guess[length + 2] = 'T';
-		guess[length + 3] = 0;
-
-		result = (const void *)WindowsGL::wglGetProcAddress(guess);
-		if (result) {
-			free(guess);
-			return result;
-		}
-
-		free(guess);
-		return 0;
-	}
-
-	bool __stdcall InitializeOpenGL() {
-		if (!WindowsGL::InitializeWindowsGLModule()) {
-			return false;
-		}
-
-		if (!WindowsGL::wglGetCurrentContext()) {
-			return false;
-		}
-
-		if (!LoadCoreOpenGLFunctions()) {
-			return false;
-		}
-
-		return true;
-	}
+	const void * GetOpenGLFunction(const char * name);
 
 	bool LoadCoreOpenGLFunctions() {
 
@@ -724,2615 +663,2615 @@ namespace OpenGL {
 		return true;
 	}
 
-	bool __stdcall isglCullFace() {
+	bool isglCullFace() {
 		return glCullFace != 0;
 	}
 
-	bool __stdcall isglFrontFace() {
+	bool isglFrontFace() {
 		return glFrontFace != 0;
 	}
 
-	bool __stdcall isglHint() {
+	bool isglHint() {
 		return glHint != 0;
 	}
 
-	bool __stdcall isglLineWidth() {
+	bool isglLineWidth() {
 		return glLineWidth != 0;
 	}
 
-	bool __stdcall isglPointSize() {
+	bool isglPointSize() {
 		return glPointSize != 0;
 	}
 
-	bool __stdcall isglPolygonMode() {
+	bool isglPolygonMode() {
 		return glPolygonMode != 0;
 	}
 
-	bool __stdcall isglScissor() {
+	bool isglScissor() {
 		return glScissor != 0;
 	}
 
-	bool __stdcall isglTexParameterf() {
+	bool isglTexParameterf() {
 		return glTexParameterf != 0;
 	}
 
-	bool __stdcall isglTexParameterfv() {
+	bool isglTexParameterfv() {
 		return glTexParameterfv != 0;
 	}
 
-	bool __stdcall isglTexParameteri() {
+	bool isglTexParameteri() {
 		return glTexParameteri != 0;
 	}
 
-	bool __stdcall isglTexParameteriv() {
+	bool isglTexParameteriv() {
 		return glTexParameteriv != 0;
 	}
 
-	bool __stdcall isglTexImage1D() {
+	bool isglTexImage1D() {
 		return glTexImage1D != 0;
 	}
 
-	bool __stdcall isglTexImage2D() {
+	bool isglTexImage2D() {
 		return glTexImage2D != 0;
 	}
 
-	bool __stdcall isglDrawBuffer() {
+	bool isglDrawBuffer() {
 		return glDrawBuffer != 0;
 	}
 
-	bool __stdcall isglClear() {
+	bool isglClear() {
 		return glClear != 0;
 	}
 
-	bool __stdcall isglClearColor() {
+	bool isglClearColor() {
 		return glClearColor != 0;
 	}
 
-	bool __stdcall isglClearStencil() {
+	bool isglClearStencil() {
 		return glClearStencil != 0;
 	}
 
-	bool __stdcall isglClearDepth() {
+	bool isglClearDepth() {
 		return glClearDepth != 0;
 	}
 
-	bool __stdcall isglStencilMask() {
+	bool isglStencilMask() {
 		return glStencilMask != 0;
 	}
 
-	bool __stdcall isglColorMask() {
+	bool isglColorMask() {
 		return glColorMask != 0;
 	}
 
-	bool __stdcall isglDepthMask() {
+	bool isglDepthMask() {
 		return glDepthMask != 0;
 	}
 
-	bool __stdcall isglDisable() {
+	bool isglDisable() {
 		return glDisable != 0;
 	}
 
-	bool __stdcall isglEnable() {
+	bool isglEnable() {
 		return glEnable != 0;
 	}
 
-	bool __stdcall isglFinish() {
+	bool isglFinish() {
 		return glFinish != 0;
 	}
 
-	bool __stdcall isglFlush() {
+	bool isglFlush() {
 		return glFlush != 0;
 	}
 
-	bool __stdcall isglBlendFunc() {
+	bool isglBlendFunc() {
 		return glBlendFunc != 0;
 	}
 
-	bool __stdcall isglLogicOp() {
+	bool isglLogicOp() {
 		return glLogicOp != 0;
 	}
 
-	bool __stdcall isglStencilFunc() {
+	bool isglStencilFunc() {
 		return glStencilFunc != 0;
 	}
 
-	bool __stdcall isglStencilOp() {
+	bool isglStencilOp() {
 		return glStencilOp != 0;
 	}
 
-	bool __stdcall isglDepthFunc() {
+	bool isglDepthFunc() {
 		return glDepthFunc != 0;
 	}
 
-	bool __stdcall isglPixelStoref() {
+	bool isglPixelStoref() {
 		return glPixelStoref != 0;
 	}
 
-	bool __stdcall isglPixelStorei() {
+	bool isglPixelStorei() {
 		return glPixelStorei != 0;
 	}
 
-	bool __stdcall isglReadBuffer() {
+	bool isglReadBuffer() {
 		return glReadBuffer != 0;
 	}
 
-	bool __stdcall isglReadPixels() {
+	bool isglReadPixels() {
 		return glReadPixels != 0;
 	}
 
-	bool __stdcall isglGetBooleanv() {
+	bool isglGetBooleanv() {
 		return glGetBooleanv != 0;
 	}
 
-	bool __stdcall isglGetDoublev() {
+	bool isglGetDoublev() {
 		return glGetDoublev != 0;
 	}
 
-	bool __stdcall isglGetError() {
+	bool isglGetError() {
 		return glGetError != 0;
 	}
 
-	bool __stdcall isglGetFloatv() {
+	bool isglGetFloatv() {
 		return glGetFloatv != 0;
 	}
 
-	bool __stdcall isglGetIntegerv() {
+	bool isglGetIntegerv() {
 		return glGetIntegerv != 0;
 	}
 
-	bool __stdcall isglGetString() {
+	bool isglGetString() {
 		return glGetString != 0;
 	}
 
-	bool __stdcall isglGetTexImage() {
+	bool isglGetTexImage() {
 		return glGetTexImage != 0;
 	}
 
-	bool __stdcall isglGetTexParameterfv() {
+	bool isglGetTexParameterfv() {
 		return glGetTexParameterfv != 0;
 	}
 
-	bool __stdcall isglGetTexParameteriv() {
+	bool isglGetTexParameteriv() {
 		return glGetTexParameteriv != 0;
 	}
 
-	bool __stdcall isglGetTexLevelParameterfv() {
+	bool isglGetTexLevelParameterfv() {
 		return glGetTexLevelParameterfv != 0;
 	}
 
-	bool __stdcall isglGetTexLevelParameteriv() {
+	bool isglGetTexLevelParameteriv() {
 		return glGetTexLevelParameteriv != 0;
 	}
 
-	bool __stdcall isglIsEnabled() {
+	bool isglIsEnabled() {
 		return glIsEnabled != 0;
 	}
 
-	bool __stdcall isglDepthRange() {
+	bool isglDepthRange() {
 		return glDepthRange != 0;
 	}
 
-	bool __stdcall isglViewport() {
+	bool isglViewport() {
 		return glViewport != 0;
 	}
 
-	bool __stdcall isglDrawArrays() {
+	bool isglDrawArrays() {
 		return glDrawArrays != 0;
 	}
 
-	bool __stdcall isglDrawElements() {
+	bool isglDrawElements() {
 		return glDrawElements != 0;
 	}
 
-	bool __stdcall isglGetPointerv() {
+	bool isglGetPointerv() {
 		return glGetPointerv != 0;
 	}
 
-	bool __stdcall isglPolygonOffset() {
+	bool isglPolygonOffset() {
 		return glPolygonOffset != 0;
 	}
 
-	bool __stdcall isglCopyTexImage1D() {
+	bool isglCopyTexImage1D() {
 		return glCopyTexImage1D != 0;
 	}
 
-	bool __stdcall isglCopyTexImage2D() {
+	bool isglCopyTexImage2D() {
 		return glCopyTexImage2D != 0;
 	}
 
-	bool __stdcall isglCopyTexSubImage1D() {
+	bool isglCopyTexSubImage1D() {
 		return glCopyTexSubImage1D != 0;
 	}
 
-	bool __stdcall isglCopyTexSubImage2D() {
+	bool isglCopyTexSubImage2D() {
 		return glCopyTexSubImage2D != 0;
 	}
 
-	bool __stdcall isglTexSubImage1D() {
+	bool isglTexSubImage1D() {
 		return glTexSubImage1D != 0;
 	}
 
-	bool __stdcall isglTexSubImage2D() {
+	bool isglTexSubImage2D() {
 		return glTexSubImage2D != 0;
 	}
 
-	bool __stdcall isglBindTexture() {
+	bool isglBindTexture() {
 		return glBindTexture != 0;
 	}
 
-	bool __stdcall isglDeleteTextures() {
+	bool isglDeleteTextures() {
 		return glDeleteTextures != 0;
 	}
 
-	bool __stdcall isglGenTextures() {
+	bool isglGenTextures() {
 		return glGenTextures != 0;
 	}
 
-	bool __stdcall isglIsTexture() {
+	bool isglIsTexture() {
 		return glIsTexture != 0;
 	}
 
-	bool __stdcall isglDrawRangeElements() {
+	bool isglDrawRangeElements() {
 		return glDrawRangeElements != 0;
 	}
 
-	bool __stdcall isglTexImage3D() {
+	bool isglTexImage3D() {
 		return glTexImage3D != 0;
 	}
 
-	bool __stdcall isglTexSubImage3D() {
+	bool isglTexSubImage3D() {
 		return glTexSubImage3D != 0;
 	}
 
-	bool __stdcall isglCopyTexSubImage3D() {
+	bool isglCopyTexSubImage3D() {
 		return glCopyTexSubImage3D != 0;
 	}
 
-	bool __stdcall isglActiveTexture() {
+	bool isglActiveTexture() {
 		return glActiveTexture != 0;
 	}
 
-	bool __stdcall isglSampleCoverage() {
+	bool isglSampleCoverage() {
 		return glSampleCoverage != 0;
 	}
 
-	bool __stdcall isglCompressedTexImage3D() {
+	bool isglCompressedTexImage3D() {
 		return glCompressedTexImage3D != 0;
 	}
 
-	bool __stdcall isglCompressedTexImage2D() {
+	bool isglCompressedTexImage2D() {
 		return glCompressedTexImage2D != 0;
 	}
 
-	bool __stdcall isglCompressedTexImage1D() {
+	bool isglCompressedTexImage1D() {
 		return glCompressedTexImage1D != 0;
 	}
 
-	bool __stdcall isglCompressedTexSubImage3D() {
+	bool isglCompressedTexSubImage3D() {
 		return glCompressedTexSubImage3D != 0;
 	}
 
-	bool __stdcall isglCompressedTexSubImage2D() {
+	bool isglCompressedTexSubImage2D() {
 		return glCompressedTexSubImage2D != 0;
 	}
 
-	bool __stdcall isglCompressedTexSubImage1D() {
+	bool isglCompressedTexSubImage1D() {
 		return glCompressedTexSubImage1D != 0;
 	}
 
-	bool __stdcall isglGetCompressedTexImage() {
+	bool isglGetCompressedTexImage() {
 		return glGetCompressedTexImage != 0;
 	}
 
-	bool __stdcall isglBlendFuncSeparate() {
+	bool isglBlendFuncSeparate() {
 		return glBlendFuncSeparate != 0;
 	}
 
-	bool __stdcall isglMultiDrawArrays() {
+	bool isglMultiDrawArrays() {
 		return glMultiDrawArrays != 0;
 	}
 
-	bool __stdcall isglMultiDrawElements() {
+	bool isglMultiDrawElements() {
 		return glMultiDrawElements != 0;
 	}
 
-	bool __stdcall isglPointParameterf() {
+	bool isglPointParameterf() {
 		return glPointParameterf != 0;
 	}
 
-	bool __stdcall isglPointParameterfv() {
+	bool isglPointParameterfv() {
 		return glPointParameterfv != 0;
 	}
 
-	bool __stdcall isglPointParameteri() {
+	bool isglPointParameteri() {
 		return glPointParameteri != 0;
 	}
 
-	bool __stdcall isglPointParameteriv() {
+	bool isglPointParameteriv() {
 		return glPointParameteriv != 0;
 	}
 
-	bool __stdcall isglBlendColor() {
+	bool isglBlendColor() {
 		return glBlendColor != 0;
 	}
 
-	bool __stdcall isglBlendEquation() {
+	bool isglBlendEquation() {
 		return glBlendEquation != 0;
 	}
 
-	bool __stdcall isglGenQueries() {
+	bool isglGenQueries() {
 		return glGenQueries != 0;
 	}
 
-	bool __stdcall isglDeleteQueries() {
+	bool isglDeleteQueries() {
 		return glDeleteQueries != 0;
 	}
 
-	bool __stdcall isglIsQuery() {
+	bool isglIsQuery() {
 		return glIsQuery != 0;
 	}
 
-	bool __stdcall isglBeginQuery() {
+	bool isglBeginQuery() {
 		return glBeginQuery != 0;
 	}
 
-	bool __stdcall isglEndQuery() {
+	bool isglEndQuery() {
 		return glEndQuery != 0;
 	}
 
-	bool __stdcall isglGetQueryiv() {
+	bool isglGetQueryiv() {
 		return glGetQueryiv != 0;
 	}
 
-	bool __stdcall isglGetQueryObjectiv() {
+	bool isglGetQueryObjectiv() {
 		return glGetQueryObjectiv != 0;
 	}
 
-	bool __stdcall isglGetQueryObjectuiv() {
+	bool isglGetQueryObjectuiv() {
 		return glGetQueryObjectuiv != 0;
 	}
 
-	bool __stdcall isglBindBuffer() {
+	bool isglBindBuffer() {
 		return glBindBuffer != 0;
 	}
 
-	bool __stdcall isglDeleteBuffers() {
+	bool isglDeleteBuffers() {
 		return glDeleteBuffers != 0;
 	}
 
-	bool __stdcall isglGenBuffers() {
+	bool isglGenBuffers() {
 		return glGenBuffers != 0;
 	}
 
-	bool __stdcall isglIsBuffer() {
+	bool isglIsBuffer() {
 		return glIsBuffer != 0;
 	}
 
-	bool __stdcall isglBufferData() {
+	bool isglBufferData() {
 		return glBufferData != 0;
 	}
 
-	bool __stdcall isglBufferSubData() {
+	bool isglBufferSubData() {
 		return glBufferSubData != 0;
 	}
 
-	bool __stdcall isglGetBufferSubData() {
+	bool isglGetBufferSubData() {
 		return glGetBufferSubData != 0;
 	}
 
-	bool __stdcall isglMapBuffer() {
+	bool isglMapBuffer() {
 		return glMapBuffer != 0;
 	}
 
-	bool __stdcall isglUnmapBuffer() {
+	bool isglUnmapBuffer() {
 		return glUnmapBuffer != 0;
 	}
 
-	bool __stdcall isglGetBufferParameteriv() {
+	bool isglGetBufferParameteriv() {
 		return glGetBufferParameteriv != 0;
 	}
 
-	bool __stdcall isglGetBufferPointerv() {
+	bool isglGetBufferPointerv() {
 		return glGetBufferPointerv != 0;
 	}
 
-	bool __stdcall isglBlendEquationSeparate() {
+	bool isglBlendEquationSeparate() {
 		return glBlendEquationSeparate != 0;
 	}
 
-	bool __stdcall isglDrawBuffers() {
+	bool isglDrawBuffers() {
 		return glDrawBuffers != 0;
 	}
 
-	bool __stdcall isglStencilOpSeparate() {
+	bool isglStencilOpSeparate() {
 		return glStencilOpSeparate != 0;
 	}
 
-	bool __stdcall isglStencilFuncSeparate() {
+	bool isglStencilFuncSeparate() {
 		return glStencilFuncSeparate != 0;
 	}
 
-	bool __stdcall isglStencilMaskSeparate() {
+	bool isglStencilMaskSeparate() {
 		return glStencilMaskSeparate != 0;
 	}
 
-	bool __stdcall isglAttachShader() {
+	bool isglAttachShader() {
 		return glAttachShader != 0;
 	}
 
-	bool __stdcall isglBindAttribLocation() {
+	bool isglBindAttribLocation() {
 		return glBindAttribLocation != 0;
 	}
 
-	bool __stdcall isglCompileShader() {
+	bool isglCompileShader() {
 		return glCompileShader != 0;
 	}
 
-	bool __stdcall isglCreateProgram() {
+	bool isglCreateProgram() {
 		return glCreateProgram != 0;
 	}
 
-	bool __stdcall isglCreateShader() {
+	bool isglCreateShader() {
 		return glCreateShader != 0;
 	}
 
-	bool __stdcall isglDeleteProgram() {
+	bool isglDeleteProgram() {
 		return glDeleteProgram != 0;
 	}
 
-	bool __stdcall isglDeleteShader() {
+	bool isglDeleteShader() {
 		return glDeleteShader != 0;
 	}
 
-	bool __stdcall isglDetachShader() {
+	bool isglDetachShader() {
 		return glDetachShader != 0;
 	}
 
-	bool __stdcall isglDisableVertexAttribArray() {
+	bool isglDisableVertexAttribArray() {
 		return glDisableVertexAttribArray != 0;
 	}
 
-	bool __stdcall isglEnableVertexAttribArray() {
+	bool isglEnableVertexAttribArray() {
 		return glEnableVertexAttribArray != 0;
 	}
 
-	bool __stdcall isglGetActiveAttrib() {
+	bool isglGetActiveAttrib() {
 		return glGetActiveAttrib != 0;
 	}
 
-	bool __stdcall isglGetActiveUniform() {
+	bool isglGetActiveUniform() {
 		return glGetActiveUniform != 0;
 	}
 
-	bool __stdcall isglGetAttachedShaders() {
+	bool isglGetAttachedShaders() {
 		return glGetAttachedShaders != 0;
 	}
 
-	bool __stdcall isglGetAttribLocation() {
+	bool isglGetAttribLocation() {
 		return glGetAttribLocation != 0;
 	}
 
-	bool __stdcall isglGetProgramiv() {
+	bool isglGetProgramiv() {
 		return glGetProgramiv != 0;
 	}
 
-	bool __stdcall isglGetProgramInfoLog() {
+	bool isglGetProgramInfoLog() {
 		return glGetProgramInfoLog != 0;
 	}
 
-	bool __stdcall isglGetShaderiv() {
+	bool isglGetShaderiv() {
 		return glGetShaderiv != 0;
 	}
 
-	bool __stdcall isglGetShaderInfoLog() {
+	bool isglGetShaderInfoLog() {
 		return glGetShaderInfoLog != 0;
 	}
 
-	bool __stdcall isglGetShaderSource() {
+	bool isglGetShaderSource() {
 		return glGetShaderSource != 0;
 	}
 
-	bool __stdcall isglGetUniformLocation() {
+	bool isglGetUniformLocation() {
 		return glGetUniformLocation != 0;
 	}
 
-	bool __stdcall isglGetUniformfv() {
+	bool isglGetUniformfv() {
 		return glGetUniformfv != 0;
 	}
 
-	bool __stdcall isglGetUniformiv() {
+	bool isglGetUniformiv() {
 		return glGetUniformiv != 0;
 	}
 
-	bool __stdcall isglGetVertexAttribdv() {
+	bool isglGetVertexAttribdv() {
 		return glGetVertexAttribdv != 0;
 	}
 
-	bool __stdcall isglGetVertexAttribfv() {
+	bool isglGetVertexAttribfv() {
 		return glGetVertexAttribfv != 0;
 	}
 
-	bool __stdcall isglGetVertexAttribiv() {
+	bool isglGetVertexAttribiv() {
 		return glGetVertexAttribiv != 0;
 	}
 
-	bool __stdcall isglGetVertexAttribPointerv() {
+	bool isglGetVertexAttribPointerv() {
 		return glGetVertexAttribPointerv != 0;
 	}
 
-	bool __stdcall isglIsProgram() {
+	bool isglIsProgram() {
 		return glIsProgram != 0;
 	}
 
-	bool __stdcall isglIsShader() {
+	bool isglIsShader() {
 		return glIsShader != 0;
 	}
 
-	bool __stdcall isglLinkProgram() {
+	bool isglLinkProgram() {
 		return glLinkProgram != 0;
 	}
 
-	bool __stdcall isglShaderSource() {
+	bool isglShaderSource() {
 		return glShaderSource != 0;
 	}
 
-	bool __stdcall isglUseProgram() {
+	bool isglUseProgram() {
 		return glUseProgram != 0;
 	}
 
-	bool __stdcall isglUniform1f() {
+	bool isglUniform1f() {
 		return glUniform1f != 0;
 	}
 
-	bool __stdcall isglUniform2f() {
+	bool isglUniform2f() {
 		return glUniform2f != 0;
 	}
 
-	bool __stdcall isglUniform3f() {
+	bool isglUniform3f() {
 		return glUniform3f != 0;
 	}
 
-	bool __stdcall isglUniform4f() {
+	bool isglUniform4f() {
 		return glUniform4f != 0;
 	}
 
-	bool __stdcall isglUniform1i() {
+	bool isglUniform1i() {
 		return glUniform1i != 0;
 	}
 
-	bool __stdcall isglUniform2i() {
+	bool isglUniform2i() {
 		return glUniform2i != 0;
 	}
 
-	bool __stdcall isglUniform3i() {
+	bool isglUniform3i() {
 		return glUniform3i != 0;
 	}
 
-	bool __stdcall isglUniform4i() {
+	bool isglUniform4i() {
 		return glUniform4i != 0;
 	}
 
-	bool __stdcall isglUniform1fv() {
+	bool isglUniform1fv() {
 		return glUniform1fv != 0;
 	}
 
-	bool __stdcall isglUniform2fv() {
+	bool isglUniform2fv() {
 		return glUniform2fv != 0;
 	}
 
-	bool __stdcall isglUniform3fv() {
+	bool isglUniform3fv() {
 		return glUniform3fv != 0;
 	}
 
-	bool __stdcall isglUniform4fv() {
+	bool isglUniform4fv() {
 		return glUniform4fv != 0;
 	}
 
-	bool __stdcall isglUniform1iv() {
+	bool isglUniform1iv() {
 		return glUniform1iv != 0;
 	}
 
-	bool __stdcall isglUniform2iv() {
+	bool isglUniform2iv() {
 		return glUniform2iv != 0;
 	}
 
-	bool __stdcall isglUniform3iv() {
+	bool isglUniform3iv() {
 		return glUniform3iv != 0;
 	}
 
-	bool __stdcall isglUniform4iv() {
+	bool isglUniform4iv() {
 		return glUniform4iv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix2fv() {
+	bool isglUniformMatrix2fv() {
 		return glUniformMatrix2fv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix3fv() {
+	bool isglUniformMatrix3fv() {
 		return glUniformMatrix3fv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix4fv() {
+	bool isglUniformMatrix4fv() {
 		return glUniformMatrix4fv != 0;
 	}
 
-	bool __stdcall isglValidateProgram() {
+	bool isglValidateProgram() {
 		return glValidateProgram != 0;
 	}
 
-	bool __stdcall isglVertexAttrib1d() {
+	bool isglVertexAttrib1d() {
 		return glVertexAttrib1d != 0;
 	}
 
-	bool __stdcall isglVertexAttrib1dv() {
+	bool isglVertexAttrib1dv() {
 		return glVertexAttrib1dv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib1f() {
+	bool isglVertexAttrib1f() {
 		return glVertexAttrib1f != 0;
 	}
 
-	bool __stdcall isglVertexAttrib1fv() {
+	bool isglVertexAttrib1fv() {
 		return glVertexAttrib1fv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib1s() {
+	bool isglVertexAttrib1s() {
 		return glVertexAttrib1s != 0;
 	}
 
-	bool __stdcall isglVertexAttrib1sv() {
+	bool isglVertexAttrib1sv() {
 		return glVertexAttrib1sv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib2d() {
+	bool isglVertexAttrib2d() {
 		return glVertexAttrib2d != 0;
 	}
 
-	bool __stdcall isglVertexAttrib2dv() {
+	bool isglVertexAttrib2dv() {
 		return glVertexAttrib2dv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib2f() {
+	bool isglVertexAttrib2f() {
 		return glVertexAttrib2f != 0;
 	}
 
-	bool __stdcall isglVertexAttrib2fv() {
+	bool isglVertexAttrib2fv() {
 		return glVertexAttrib2fv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib2s() {
+	bool isglVertexAttrib2s() {
 		return glVertexAttrib2s != 0;
 	}
 
-	bool __stdcall isglVertexAttrib2sv() {
+	bool isglVertexAttrib2sv() {
 		return glVertexAttrib2sv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib3d() {
+	bool isglVertexAttrib3d() {
 		return glVertexAttrib3d != 0;
 	}
 
-	bool __stdcall isglVertexAttrib3dv() {
+	bool isglVertexAttrib3dv() {
 		return glVertexAttrib3dv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib3f() {
+	bool isglVertexAttrib3f() {
 		return glVertexAttrib3f != 0;
 	}
 
-	bool __stdcall isglVertexAttrib3fv() {
+	bool isglVertexAttrib3fv() {
 		return glVertexAttrib3fv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib3s() {
+	bool isglVertexAttrib3s() {
 		return glVertexAttrib3s != 0;
 	}
 
-	bool __stdcall isglVertexAttrib3sv() {
+	bool isglVertexAttrib3sv() {
 		return glVertexAttrib3sv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4Nbv() {
+	bool isglVertexAttrib4Nbv() {
 		return glVertexAttrib4Nbv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4Niv() {
+	bool isglVertexAttrib4Niv() {
 		return glVertexAttrib4Niv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4Nsv() {
+	bool isglVertexAttrib4Nsv() {
 		return glVertexAttrib4Nsv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4Nub() {
+	bool isglVertexAttrib4Nub() {
 		return glVertexAttrib4Nub != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4Nubv() {
+	bool isglVertexAttrib4Nubv() {
 		return glVertexAttrib4Nubv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4Nuiv() {
+	bool isglVertexAttrib4Nuiv() {
 		return glVertexAttrib4Nuiv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4Nusv() {
+	bool isglVertexAttrib4Nusv() {
 		return glVertexAttrib4Nusv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4bv() {
+	bool isglVertexAttrib4bv() {
 		return glVertexAttrib4bv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4d() {
+	bool isglVertexAttrib4d() {
 		return glVertexAttrib4d != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4dv() {
+	bool isglVertexAttrib4dv() {
 		return glVertexAttrib4dv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4f() {
+	bool isglVertexAttrib4f() {
 		return glVertexAttrib4f != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4fv() {
+	bool isglVertexAttrib4fv() {
 		return glVertexAttrib4fv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4iv() {
+	bool isglVertexAttrib4iv() {
 		return glVertexAttrib4iv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4s() {
+	bool isglVertexAttrib4s() {
 		return glVertexAttrib4s != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4sv() {
+	bool isglVertexAttrib4sv() {
 		return glVertexAttrib4sv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4ubv() {
+	bool isglVertexAttrib4ubv() {
 		return glVertexAttrib4ubv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4uiv() {
+	bool isglVertexAttrib4uiv() {
 		return glVertexAttrib4uiv != 0;
 	}
 
-	bool __stdcall isglVertexAttrib4usv() {
+	bool isglVertexAttrib4usv() {
 		return glVertexAttrib4usv != 0;
 	}
 
-	bool __stdcall isglVertexAttribPointer() {
+	bool isglVertexAttribPointer() {
 		return glVertexAttribPointer != 0;
 	}
 
-	bool __stdcall isglUniformMatrix2x3fv() {
+	bool isglUniformMatrix2x3fv() {
 		return glUniformMatrix2x3fv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix3x2fv() {
+	bool isglUniformMatrix3x2fv() {
 		return glUniformMatrix3x2fv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix2x4fv() {
+	bool isglUniformMatrix2x4fv() {
 		return glUniformMatrix2x4fv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix4x2fv() {
+	bool isglUniformMatrix4x2fv() {
 		return glUniformMatrix4x2fv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix3x4fv() {
+	bool isglUniformMatrix3x4fv() {
 		return glUniformMatrix3x4fv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix4x3fv() {
+	bool isglUniformMatrix4x3fv() {
 		return glUniformMatrix4x3fv != 0;
 	}
 
-	bool __stdcall isglColorMaski() {
+	bool isglColorMaski() {
 		return glColorMaski != 0;
 	}
 
-	bool __stdcall isglGetBooleani_v() {
+	bool isglGetBooleani_v() {
 		return glGetBooleani_v != 0;
 	}
 
-	bool __stdcall isglGetIntegeri_v() {
+	bool isglGetIntegeri_v() {
 		return glGetIntegeri_v != 0;
 	}
 
-	bool __stdcall isglEnablei() {
+	bool isglEnablei() {
 		return glEnablei != 0;
 	}
 
-	bool __stdcall isglDisablei() {
+	bool isglDisablei() {
 		return glDisablei != 0;
 	}
 
-	bool __stdcall isglIsEnabledi() {
+	bool isglIsEnabledi() {
 		return glIsEnabledi != 0;
 	}
 
-	bool __stdcall isglBeginTransformFeedback() {
+	bool isglBeginTransformFeedback() {
 		return glBeginTransformFeedback != 0;
 	}
 
-	bool __stdcall isglEndTransformFeedback() {
+	bool isglEndTransformFeedback() {
 		return glEndTransformFeedback != 0;
 	}
 
-	bool __stdcall isglBindBufferRange() {
+	bool isglBindBufferRange() {
 		return glBindBufferRange != 0;
 	}
 
-	bool __stdcall isglBindBufferBase() {
+	bool isglBindBufferBase() {
 		return glBindBufferBase != 0;
 	}
 
-	bool __stdcall isglTransformFeedbackVaryings() {
+	bool isglTransformFeedbackVaryings() {
 		return glTransformFeedbackVaryings != 0;
 	}
 
-	bool __stdcall isglGetTransformFeedbackVarying() {
+	bool isglGetTransformFeedbackVarying() {
 		return glGetTransformFeedbackVarying != 0;
 	}
 
-	bool __stdcall isglClampColor() {
+	bool isglClampColor() {
 		return glClampColor != 0;
 	}
 
-	bool __stdcall isglBeginConditionalRender() {
+	bool isglBeginConditionalRender() {
 		return glBeginConditionalRender != 0;
 	}
 
-	bool __stdcall isglEndConditionalRender() {
+	bool isglEndConditionalRender() {
 		return glEndConditionalRender != 0;
 	}
 
-	bool __stdcall isglVertexAttribIPointer() {
+	bool isglVertexAttribIPointer() {
 		return glVertexAttribIPointer != 0;
 	}
 
-	bool __stdcall isglGetVertexAttribIiv() {
+	bool isglGetVertexAttribIiv() {
 		return glGetVertexAttribIiv != 0;
 	}
 
-	bool __stdcall isglGetVertexAttribIuiv() {
+	bool isglGetVertexAttribIuiv() {
 		return glGetVertexAttribIuiv != 0;
 	}
 
-	bool __stdcall isglVertexAttribI1i() {
+	bool isglVertexAttribI1i() {
 		return glVertexAttribI1i != 0;
 	}
 
-	bool __stdcall isglVertexAttribI2i() {
+	bool isglVertexAttribI2i() {
 		return glVertexAttribI2i != 0;
 	}
 
-	bool __stdcall isglVertexAttribI3i() {
+	bool isglVertexAttribI3i() {
 		return glVertexAttribI3i != 0;
 	}
 
-	bool __stdcall isglVertexAttribI4i() {
+	bool isglVertexAttribI4i() {
 		return glVertexAttribI4i != 0;
 	}
 
-	bool __stdcall isglVertexAttribI1ui() {
+	bool isglVertexAttribI1ui() {
 		return glVertexAttribI1ui != 0;
 	}
 
-	bool __stdcall isglVertexAttribI2ui() {
+	bool isglVertexAttribI2ui() {
 		return glVertexAttribI2ui != 0;
 	}
 
-	bool __stdcall isglVertexAttribI3ui() {
+	bool isglVertexAttribI3ui() {
 		return glVertexAttribI3ui != 0;
 	}
 
-	bool __stdcall isglVertexAttribI4ui() {
+	bool isglVertexAttribI4ui() {
 		return glVertexAttribI4ui != 0;
 	}
 
-	bool __stdcall isglVertexAttribI1iv() {
+	bool isglVertexAttribI1iv() {
 		return glVertexAttribI1iv != 0;
 	}
 
-	bool __stdcall isglVertexAttribI2iv() {
+	bool isglVertexAttribI2iv() {
 		return glVertexAttribI2iv != 0;
 	}
 
-	bool __stdcall isglVertexAttribI3iv() {
+	bool isglVertexAttribI3iv() {
 		return glVertexAttribI3iv != 0;
 	}
 
-	bool __stdcall isglVertexAttribI4iv() {
+	bool isglVertexAttribI4iv() {
 		return glVertexAttribI4iv != 0;
 	}
 
-	bool __stdcall isglVertexAttribI1uiv() {
+	bool isglVertexAttribI1uiv() {
 		return glVertexAttribI1uiv != 0;
 	}
 
-	bool __stdcall isglVertexAttribI2uiv() {
+	bool isglVertexAttribI2uiv() {
 		return glVertexAttribI2uiv != 0;
 	}
 
-	bool __stdcall isglVertexAttribI3uiv() {
+	bool isglVertexAttribI3uiv() {
 		return glVertexAttribI3uiv != 0;
 	}
 
-	bool __stdcall isglVertexAttribI4uiv() {
+	bool isglVertexAttribI4uiv() {
 		return glVertexAttribI4uiv != 0;
 	}
 
-	bool __stdcall isglVertexAttribI4bv() {
+	bool isglVertexAttribI4bv() {
 		return glVertexAttribI4bv != 0;
 	}
 
-	bool __stdcall isglVertexAttribI4sv() {
+	bool isglVertexAttribI4sv() {
 		return glVertexAttribI4sv != 0;
 	}
 
-	bool __stdcall isglVertexAttribI4ubv() {
+	bool isglVertexAttribI4ubv() {
 		return glVertexAttribI4ubv != 0;
 	}
 
-	bool __stdcall isglVertexAttribI4usv() {
+	bool isglVertexAttribI4usv() {
 		return glVertexAttribI4usv != 0;
 	}
 
-	bool __stdcall isglGetUniformuiv() {
+	bool isglGetUniformuiv() {
 		return glGetUniformuiv != 0;
 	}
 
-	bool __stdcall isglBindFragDataLocation() {
+	bool isglBindFragDataLocation() {
 		return glBindFragDataLocation != 0;
 	}
 
-	bool __stdcall isglGetFragDataLocation() {
+	bool isglGetFragDataLocation() {
 		return glGetFragDataLocation != 0;
 	}
 
-	bool __stdcall isglUniform1ui() {
+	bool isglUniform1ui() {
 		return glUniform1ui != 0;
 	}
 
-	bool __stdcall isglUniform2ui() {
+	bool isglUniform2ui() {
 		return glUniform2ui != 0;
 	}
 
-	bool __stdcall isglUniform3ui() {
+	bool isglUniform3ui() {
 		return glUniform3ui != 0;
 	}
 
-	bool __stdcall isglUniform4ui() {
+	bool isglUniform4ui() {
 		return glUniform4ui != 0;
 	}
 
-	bool __stdcall isglUniform1uiv() {
+	bool isglUniform1uiv() {
 		return glUniform1uiv != 0;
 	}
 
-	bool __stdcall isglUniform2uiv() {
+	bool isglUniform2uiv() {
 		return glUniform2uiv != 0;
 	}
 
-	bool __stdcall isglUniform3uiv() {
+	bool isglUniform3uiv() {
 		return glUniform3uiv != 0;
 	}
 
-	bool __stdcall isglUniform4uiv() {
+	bool isglUniform4uiv() {
 		return glUniform4uiv != 0;
 	}
 
-	bool __stdcall isglTexParameterIiv() {
+	bool isglTexParameterIiv() {
 		return glTexParameterIiv != 0;
 	}
 
-	bool __stdcall isglTexParameterIuiv() {
+	bool isglTexParameterIuiv() {
 		return glTexParameterIuiv != 0;
 	}
 
-	bool __stdcall isglGetTexParameterIiv() {
+	bool isglGetTexParameterIiv() {
 		return glGetTexParameterIiv != 0;
 	}
 
-	bool __stdcall isglGetTexParameterIuiv() {
+	bool isglGetTexParameterIuiv() {
 		return glGetTexParameterIuiv != 0;
 	}
 
-	bool __stdcall isglClearBufferiv() {
+	bool isglClearBufferiv() {
 		return glClearBufferiv != 0;
 	}
 
-	bool __stdcall isglClearBufferuiv() {
+	bool isglClearBufferuiv() {
 		return glClearBufferuiv != 0;
 	}
 
-	bool __stdcall isglClearBufferfv() {
+	bool isglClearBufferfv() {
 		return glClearBufferfv != 0;
 	}
 
-	bool __stdcall isglClearBufferfi() {
+	bool isglClearBufferfi() {
 		return glClearBufferfi != 0;
 	}
 
-	bool __stdcall isglGetStringi() {
+	bool isglGetStringi() {
 		return glGetStringi != 0;
 	}
 
-	bool __stdcall isglIsRenderbuffer() {
+	bool isglIsRenderbuffer() {
 		return glIsRenderbuffer != 0;
 	}
 
-	bool __stdcall isglBindRenderbuffer() {
+	bool isglBindRenderbuffer() {
 		return glBindRenderbuffer != 0;
 	}
 
-	bool __stdcall isglDeleteRenderbuffers() {
+	bool isglDeleteRenderbuffers() {
 		return glDeleteRenderbuffers != 0;
 	}
 
-	bool __stdcall isglGenRenderbuffers() {
+	bool isglGenRenderbuffers() {
 		return glGenRenderbuffers != 0;
 	}
 
-	bool __stdcall isglRenderbufferStorage() {
+	bool isglRenderbufferStorage() {
 		return glRenderbufferStorage != 0;
 	}
 
-	bool __stdcall isglGetRenderbufferParameteriv() {
+	bool isglGetRenderbufferParameteriv() {
 		return glGetRenderbufferParameteriv != 0;
 	}
 
-	bool __stdcall isglIsFramebuffer() {
+	bool isglIsFramebuffer() {
 		return glIsFramebuffer != 0;
 	}
 
-	bool __stdcall isglBindFramebuffer() {
+	bool isglBindFramebuffer() {
 		return glBindFramebuffer != 0;
 	}
 
-	bool __stdcall isglDeleteFramebuffers() {
+	bool isglDeleteFramebuffers() {
 		return glDeleteFramebuffers != 0;
 	}
 
-	bool __stdcall isglGenFramebuffers() {
+	bool isglGenFramebuffers() {
 		return glGenFramebuffers != 0;
 	}
 
-	bool __stdcall isglCheckFramebufferStatus() {
+	bool isglCheckFramebufferStatus() {
 		return glCheckFramebufferStatus != 0;
 	}
 
-	bool __stdcall isglFramebufferTexture1D() {
+	bool isglFramebufferTexture1D() {
 		return glFramebufferTexture1D != 0;
 	}
 
-	bool __stdcall isglFramebufferTexture2D() {
+	bool isglFramebufferTexture2D() {
 		return glFramebufferTexture2D != 0;
 	}
 
-	bool __stdcall isglFramebufferTexture3D() {
+	bool isglFramebufferTexture3D() {
 		return glFramebufferTexture3D != 0;
 	}
 
-	bool __stdcall isglFramebufferRenderbuffer() {
+	bool isglFramebufferRenderbuffer() {
 		return glFramebufferRenderbuffer != 0;
 	}
 
-	bool __stdcall isglGetFramebufferAttachmentParameteriv() {
+	bool isglGetFramebufferAttachmentParameteriv() {
 		return glGetFramebufferAttachmentParameteriv != 0;
 	}
 
-	bool __stdcall isglGenerateMipmap() {
+	bool isglGenerateMipmap() {
 		return glGenerateMipmap != 0;
 	}
 
-	bool __stdcall isglBlitFramebuffer() {
+	bool isglBlitFramebuffer() {
 		return glBlitFramebuffer != 0;
 	}
 
-	bool __stdcall isglRenderbufferStorageMultisample() {
+	bool isglRenderbufferStorageMultisample() {
 		return glRenderbufferStorageMultisample != 0;
 	}
 
-	bool __stdcall isglFramebufferTextureLayer() {
+	bool isglFramebufferTextureLayer() {
 		return glFramebufferTextureLayer != 0;
 	}
 
-	bool __stdcall isglMapBufferRange() {
+	bool isglMapBufferRange() {
 		return glMapBufferRange != 0;
 	}
 
-	bool __stdcall isglFlushMappedBufferRange() {
+	bool isglFlushMappedBufferRange() {
 		return glFlushMappedBufferRange != 0;
 	}
 
-	bool __stdcall isglBindVertexArray() {
+	bool isglBindVertexArray() {
 		return glBindVertexArray != 0;
 	}
 
-	bool __stdcall isglDeleteVertexArrays() {
+	bool isglDeleteVertexArrays() {
 		return glDeleteVertexArrays != 0;
 	}
 
-	bool __stdcall isglGenVertexArrays() {
+	bool isglGenVertexArrays() {
 		return glGenVertexArrays != 0;
 	}
 
-	bool __stdcall isglIsVertexArray() {
+	bool isglIsVertexArray() {
 		return glIsVertexArray != 0;
 	}
 
-	bool __stdcall isglDrawArraysInstanced() {
+	bool isglDrawArraysInstanced() {
 		return glDrawArraysInstanced != 0;
 	}
 
-	bool __stdcall isglDrawElementsInstanced() {
+	bool isglDrawElementsInstanced() {
 		return glDrawElementsInstanced != 0;
 	}
 
-	bool __stdcall isglTexBuffer() {
+	bool isglTexBuffer() {
 		return glTexBuffer != 0;
 	}
 
-	bool __stdcall isglPrimitiveRestartIndex() {
+	bool isglPrimitiveRestartIndex() {
 		return glPrimitiveRestartIndex != 0;
 	}
 
-	bool __stdcall isglCopyBufferSubData() {
+	bool isglCopyBufferSubData() {
 		return glCopyBufferSubData != 0;
 	}
 
-	bool __stdcall isglGetUniformIndices() {
+	bool isglGetUniformIndices() {
 		return glGetUniformIndices != 0;
 	}
 
-	bool __stdcall isglGetActiveUniformsiv() {
+	bool isglGetActiveUniformsiv() {
 		return glGetActiveUniformsiv != 0;
 	}
 
-	bool __stdcall isglGetActiveUniformName() {
+	bool isglGetActiveUniformName() {
 		return glGetActiveUniformName != 0;
 	}
 
-	bool __stdcall isglGetUniformBlockIndex() {
+	bool isglGetUniformBlockIndex() {
 		return glGetUniformBlockIndex != 0;
 	}
 
-	bool __stdcall isglGetActiveUniformBlockiv() {
+	bool isglGetActiveUniformBlockiv() {
 		return glGetActiveUniformBlockiv != 0;
 	}
 
-	bool __stdcall isglGetActiveUniformBlockName() {
+	bool isglGetActiveUniformBlockName() {
 		return glGetActiveUniformBlockName != 0;
 	}
 
-	bool __stdcall isglUniformBlockBinding() {
+	bool isglUniformBlockBinding() {
 		return glUniformBlockBinding != 0;
 	}
 
-	bool __stdcall isglDrawElementsBaseVertex() {
+	bool isglDrawElementsBaseVertex() {
 		return glDrawElementsBaseVertex != 0;
 	}
 
-	bool __stdcall isglDrawRangeElementsBaseVertex() {
+	bool isglDrawRangeElementsBaseVertex() {
 		return glDrawRangeElementsBaseVertex != 0;
 	}
 
-	bool __stdcall isglDrawElementsInstancedBaseVertex() {
+	bool isglDrawElementsInstancedBaseVertex() {
 		return glDrawElementsInstancedBaseVertex != 0;
 	}
 
-	bool __stdcall isglMultiDrawElementsBaseVertex() {
+	bool isglMultiDrawElementsBaseVertex() {
 		return glMultiDrawElementsBaseVertex != 0;
 	}
 
-	bool __stdcall isglProvokingVertex() {
+	bool isglProvokingVertex() {
 		return glProvokingVertex != 0;
 	}
 
-	bool __stdcall isglFenceSync() {
+	bool isglFenceSync() {
 		return glFenceSync != 0;
 	}
 
-	bool __stdcall isglIsSync() {
+	bool isglIsSync() {
 		return glIsSync != 0;
 	}
 
-	bool __stdcall isglDeleteSync() {
+	bool isglDeleteSync() {
 		return glDeleteSync != 0;
 	}
 
-	bool __stdcall isglClientWaitSync() {
+	bool isglClientWaitSync() {
 		return glClientWaitSync != 0;
 	}
 
-	bool __stdcall isglWaitSync() {
+	bool isglWaitSync() {
 		return glWaitSync != 0;
 	}
 
-	bool __stdcall isglGetInteger64v() {
+	bool isglGetInteger64v() {
 		return glGetInteger64v != 0;
 	}
 
-	bool __stdcall isglGetSynciv() {
+	bool isglGetSynciv() {
 		return glGetSynciv != 0;
 	}
 
-	bool __stdcall isglGetInteger64i_v() {
+	bool isglGetInteger64i_v() {
 		return glGetInteger64i_v != 0;
 	}
 
-	bool __stdcall isglGetBufferParameteri64v() {
+	bool isglGetBufferParameteri64v() {
 		return glGetBufferParameteri64v != 0;
 	}
 
-	bool __stdcall isglFramebufferTexture() {
+	bool isglFramebufferTexture() {
 		return glFramebufferTexture != 0;
 	}
 
-	bool __stdcall isglTexImage2DMultisample() {
+	bool isglTexImage2DMultisample() {
 		return glTexImage2DMultisample != 0;
 	}
 
-	bool __stdcall isglTexImage3DMultisample() {
+	bool isglTexImage3DMultisample() {
 		return glTexImage3DMultisample != 0;
 	}
 
-	bool __stdcall isglGetMultisamplefv() {
+	bool isglGetMultisamplefv() {
 		return glGetMultisamplefv != 0;
 	}
 
-	bool __stdcall isglSampleMaski() {
+	bool isglSampleMaski() {
 		return glSampleMaski != 0;
 	}
 
-	bool __stdcall isglBindFragDataLocationIndexed() {
+	bool isglBindFragDataLocationIndexed() {
 		return glBindFragDataLocationIndexed != 0;
 	}
 
-	bool __stdcall isglGetFragDataIndex() {
+	bool isglGetFragDataIndex() {
 		return glGetFragDataIndex != 0;
 	}
 
-	bool __stdcall isglGenSamplers() {
+	bool isglGenSamplers() {
 		return glGenSamplers != 0;
 	}
 
-	bool __stdcall isglDeleteSamplers() {
+	bool isglDeleteSamplers() {
 		return glDeleteSamplers != 0;
 	}
 
-	bool __stdcall isglIsSampler() {
+	bool isglIsSampler() {
 		return glIsSampler != 0;
 	}
 
-	bool __stdcall isglBindSampler() {
+	bool isglBindSampler() {
 		return glBindSampler != 0;
 	}
 
-	bool __stdcall isglSamplerParameteri() {
+	bool isglSamplerParameteri() {
 		return glSamplerParameteri != 0;
 	}
 
-	bool __stdcall isglSamplerParameteriv() {
+	bool isglSamplerParameteriv() {
 		return glSamplerParameteriv != 0;
 	}
 
-	bool __stdcall isglSamplerParameterf() {
+	bool isglSamplerParameterf() {
 		return glSamplerParameterf != 0;
 	}
 
-	bool __stdcall isglSamplerParameterfv() {
+	bool isglSamplerParameterfv() {
 		return glSamplerParameterfv != 0;
 	}
 
-	bool __stdcall isglSamplerParameterIiv() {
+	bool isglSamplerParameterIiv() {
 		return glSamplerParameterIiv != 0;
 	}
 
-	bool __stdcall isglSamplerParameterIuiv() {
+	bool isglSamplerParameterIuiv() {
 		return glSamplerParameterIuiv != 0;
 	}
 
-	bool __stdcall isglGetSamplerParameteriv() {
+	bool isglGetSamplerParameteriv() {
 		return glGetSamplerParameteriv != 0;
 	}
 
-	bool __stdcall isglGetSamplerParameterIiv() {
+	bool isglGetSamplerParameterIiv() {
 		return glGetSamplerParameterIiv != 0;
 	}
 
-	bool __stdcall isglGetSamplerParameterfv() {
+	bool isglGetSamplerParameterfv() {
 		return glGetSamplerParameterfv != 0;
 	}
 
-	bool __stdcall isglGetSamplerParameterIuiv() {
+	bool isglGetSamplerParameterIuiv() {
 		return glGetSamplerParameterIuiv != 0;
 	}
 
-	bool __stdcall isglQueryCounter() {
+	bool isglQueryCounter() {
 		return glQueryCounter != 0;
 	}
 
-	bool __stdcall isglGetQueryObjecti64v() {
+	bool isglGetQueryObjecti64v() {
 		return glGetQueryObjecti64v != 0;
 	}
 
-	bool __stdcall isglGetQueryObjectui64v() {
+	bool isglGetQueryObjectui64v() {
 		return glGetQueryObjectui64v != 0;
 	}
 
-	bool __stdcall isglVertexAttribDivisor() {
+	bool isglVertexAttribDivisor() {
 		return glVertexAttribDivisor != 0;
 	}
 
-	bool __stdcall isglVertexAttribP1ui() {
+	bool isglVertexAttribP1ui() {
 		return glVertexAttribP1ui != 0;
 	}
 
-	bool __stdcall isglVertexAttribP1uiv() {
+	bool isglVertexAttribP1uiv() {
 		return glVertexAttribP1uiv != 0;
 	}
 
-	bool __stdcall isglVertexAttribP2ui() {
+	bool isglVertexAttribP2ui() {
 		return glVertexAttribP2ui != 0;
 	}
 
-	bool __stdcall isglVertexAttribP2uiv() {
+	bool isglVertexAttribP2uiv() {
 		return glVertexAttribP2uiv != 0;
 	}
 
-	bool __stdcall isglVertexAttribP3ui() {
+	bool isglVertexAttribP3ui() {
 		return glVertexAttribP3ui != 0;
 	}
 
-	bool __stdcall isglVertexAttribP3uiv() {
+	bool isglVertexAttribP3uiv() {
 		return glVertexAttribP3uiv != 0;
 	}
 
-	bool __stdcall isglVertexAttribP4ui() {
+	bool isglVertexAttribP4ui() {
 		return glVertexAttribP4ui != 0;
 	}
 
-	bool __stdcall isglVertexAttribP4uiv() {
+	bool isglVertexAttribP4uiv() {
 		return glVertexAttribP4uiv != 0;
 	}
 
-	bool __stdcall isglMinSampleShading() {
+	bool isglMinSampleShading() {
 		return glMinSampleShading != 0;
 	}
 
-	bool __stdcall isglBlendEquationi() {
+	bool isglBlendEquationi() {
 		return glBlendEquationi != 0;
 	}
 
-	bool __stdcall isglBlendEquationSeparatei() {
+	bool isglBlendEquationSeparatei() {
 		return glBlendEquationSeparatei != 0;
 	}
 
-	bool __stdcall isglBlendFunci() {
+	bool isglBlendFunci() {
 		return glBlendFunci != 0;
 	}
 
-	bool __stdcall isglBlendFuncSeparatei() {
+	bool isglBlendFuncSeparatei() {
 		return glBlendFuncSeparatei != 0;
 	}
 
-	bool __stdcall isglDrawArraysIndirect() {
+	bool isglDrawArraysIndirect() {
 		return glDrawArraysIndirect != 0;
 	}
 
-	bool __stdcall isglDrawElementsIndirect() {
+	bool isglDrawElementsIndirect() {
 		return glDrawElementsIndirect != 0;
 	}
 
-	bool __stdcall isglUniform1d() {
+	bool isglUniform1d() {
 		return glUniform1d != 0;
 	}
 
-	bool __stdcall isglUniform2d() {
+	bool isglUniform2d() {
 		return glUniform2d != 0;
 	}
 
-	bool __stdcall isglUniform3d() {
+	bool isglUniform3d() {
 		return glUniform3d != 0;
 	}
 
-	bool __stdcall isglUniform4d() {
+	bool isglUniform4d() {
 		return glUniform4d != 0;
 	}
 
-	bool __stdcall isglUniform1dv() {
+	bool isglUniform1dv() {
 		return glUniform1dv != 0;
 	}
 
-	bool __stdcall isglUniform2dv() {
+	bool isglUniform2dv() {
 		return glUniform2dv != 0;
 	}
 
-	bool __stdcall isglUniform3dv() {
+	bool isglUniform3dv() {
 		return glUniform3dv != 0;
 	}
 
-	bool __stdcall isglUniform4dv() {
+	bool isglUniform4dv() {
 		return glUniform4dv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix2dv() {
+	bool isglUniformMatrix2dv() {
 		return glUniformMatrix2dv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix3dv() {
+	bool isglUniformMatrix3dv() {
 		return glUniformMatrix3dv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix4dv() {
+	bool isglUniformMatrix4dv() {
 		return glUniformMatrix4dv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix2x3dv() {
+	bool isglUniformMatrix2x3dv() {
 		return glUniformMatrix2x3dv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix2x4dv() {
+	bool isglUniformMatrix2x4dv() {
 		return glUniformMatrix2x4dv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix3x2dv() {
+	bool isglUniformMatrix3x2dv() {
 		return glUniformMatrix3x2dv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix3x4dv() {
+	bool isglUniformMatrix3x4dv() {
 		return glUniformMatrix3x4dv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix4x2dv() {
+	bool isglUniformMatrix4x2dv() {
 		return glUniformMatrix4x2dv != 0;
 	}
 
-	bool __stdcall isglUniformMatrix4x3dv() {
+	bool isglUniformMatrix4x3dv() {
 		return glUniformMatrix4x3dv != 0;
 	}
 
-	bool __stdcall isglGetUniformdv() {
+	bool isglGetUniformdv() {
 		return glGetUniformdv != 0;
 	}
 
-	bool __stdcall isglGetSubroutineUniformLocation() {
+	bool isglGetSubroutineUniformLocation() {
 		return glGetSubroutineUniformLocation != 0;
 	}
 
-	bool __stdcall isglGetSubroutineIndex() {
+	bool isglGetSubroutineIndex() {
 		return glGetSubroutineIndex != 0;
 	}
 
-	bool __stdcall isglGetActiveSubroutineUniformiv() {
+	bool isglGetActiveSubroutineUniformiv() {
 		return glGetActiveSubroutineUniformiv != 0;
 	}
 
-	bool __stdcall isglGetActiveSubroutineUniformName() {
+	bool isglGetActiveSubroutineUniformName() {
 		return glGetActiveSubroutineUniformName != 0;
 	}
 
-	bool __stdcall isglGetActiveSubroutineName() {
+	bool isglGetActiveSubroutineName() {
 		return glGetActiveSubroutineName != 0;
 	}
 
-	bool __stdcall isglUniformSubroutinesuiv() {
+	bool isglUniformSubroutinesuiv() {
 		return glUniformSubroutinesuiv != 0;
 	}
 
-	bool __stdcall isglGetUniformSubroutineuiv() {
+	bool isglGetUniformSubroutineuiv() {
 		return glGetUniformSubroutineuiv != 0;
 	}
 
-	bool __stdcall isglGetProgramStageiv() {
+	bool isglGetProgramStageiv() {
 		return glGetProgramStageiv != 0;
 	}
 
-	bool __stdcall isglPatchParameteri() {
+	bool isglPatchParameteri() {
 		return glPatchParameteri != 0;
 	}
 
-	bool __stdcall isglPatchParameterfv() {
+	bool isglPatchParameterfv() {
 		return glPatchParameterfv != 0;
 	}
 
-	bool __stdcall isglBindTransformFeedback() {
+	bool isglBindTransformFeedback() {
 		return glBindTransformFeedback != 0;
 	}
 
-	bool __stdcall isglDeleteTransformFeedbacks() {
+	bool isglDeleteTransformFeedbacks() {
 		return glDeleteTransformFeedbacks != 0;
 	}
 
-	bool __stdcall isglGenTransformFeedbacks() {
+	bool isglGenTransformFeedbacks() {
 		return glGenTransformFeedbacks != 0;
 	}
 
-	bool __stdcall isglIsTransformFeedback() {
+	bool isglIsTransformFeedback() {
 		return glIsTransformFeedback != 0;
 	}
 
-	bool __stdcall isglPauseTransformFeedback() {
+	bool isglPauseTransformFeedback() {
 		return glPauseTransformFeedback != 0;
 	}
 
-	bool __stdcall isglResumeTransformFeedback() {
+	bool isglResumeTransformFeedback() {
 		return glResumeTransformFeedback != 0;
 	}
 
-	bool __stdcall isglDrawTransformFeedback() {
+	bool isglDrawTransformFeedback() {
 		return glDrawTransformFeedback != 0;
 	}
 
-	bool __stdcall isglDrawTransformFeedbackStream() {
+	bool isglDrawTransformFeedbackStream() {
 		return glDrawTransformFeedbackStream != 0;
 	}
 
-	bool __stdcall isglBeginQueryIndexed() {
+	bool isglBeginQueryIndexed() {
 		return glBeginQueryIndexed != 0;
 	}
 
-	bool __stdcall isglEndQueryIndexed() {
+	bool isglEndQueryIndexed() {
 		return glEndQueryIndexed != 0;
 	}
 
-	bool __stdcall isglGetQueryIndexediv() {
+	bool isglGetQueryIndexediv() {
 		return glGetQueryIndexediv != 0;
 	}
 
-	bool __stdcall isglReleaseShaderCompiler() {
+	bool isglReleaseShaderCompiler() {
 		return glReleaseShaderCompiler != 0;
 	}
 
-	bool __stdcall isglShaderBinary() {
+	bool isglShaderBinary() {
 		return glShaderBinary != 0;
 	}
 
-	bool __stdcall isglGetShaderPrecisionFormat() {
+	bool isglGetShaderPrecisionFormat() {
 		return glGetShaderPrecisionFormat != 0;
 	}
 
-	bool __stdcall isglDepthRangef() {
+	bool isglDepthRangef() {
 		return glDepthRangef != 0;
 	}
 
-	bool __stdcall isglClearDepthf() {
+	bool isglClearDepthf() {
 		return glClearDepthf != 0;
 	}
 
-	bool __stdcall isglGetProgramBinary() {
+	bool isglGetProgramBinary() {
 		return glGetProgramBinary != 0;
 	}
 
-	bool __stdcall isglProgramBinary() {
+	bool isglProgramBinary() {
 		return glProgramBinary != 0;
 	}
 
-	bool __stdcall isglProgramParameteri() {
+	bool isglProgramParameteri() {
 		return glProgramParameteri != 0;
 	}
 
-	bool __stdcall isglUseProgramStages() {
+	bool isglUseProgramStages() {
 		return glUseProgramStages != 0;
 	}
 
-	bool __stdcall isglActiveShaderProgram() {
+	bool isglActiveShaderProgram() {
 		return glActiveShaderProgram != 0;
 	}
 
-	bool __stdcall isglCreateShaderProgramv() {
+	bool isglCreateShaderProgramv() {
 		return glCreateShaderProgramv != 0;
 	}
 
-	bool __stdcall isglBindProgramPipeline() {
+	bool isglBindProgramPipeline() {
 		return glBindProgramPipeline != 0;
 	}
 
-	bool __stdcall isglDeleteProgramPipelines() {
+	bool isglDeleteProgramPipelines() {
 		return glDeleteProgramPipelines != 0;
 	}
 
-	bool __stdcall isglGenProgramPipelines() {
+	bool isglGenProgramPipelines() {
 		return glGenProgramPipelines != 0;
 	}
 
-	bool __stdcall isglIsProgramPipeline() {
+	bool isglIsProgramPipeline() {
 		return glIsProgramPipeline != 0;
 	}
 
-	bool __stdcall isglGetProgramPipelineiv() {
+	bool isglGetProgramPipelineiv() {
 		return glGetProgramPipelineiv != 0;
 	}
 
-	bool __stdcall isglProgramUniform1i() {
+	bool isglProgramUniform1i() {
 		return glProgramUniform1i != 0;
 	}
 
-	bool __stdcall isglProgramUniform1iv() {
+	bool isglProgramUniform1iv() {
 		return glProgramUniform1iv != 0;
 	}
 
-	bool __stdcall isglProgramUniform1f() {
+	bool isglProgramUniform1f() {
 		return glProgramUniform1f != 0;
 	}
 
-	bool __stdcall isglProgramUniform1fv() {
+	bool isglProgramUniform1fv() {
 		return glProgramUniform1fv != 0;
 	}
 
-	bool __stdcall isglProgramUniform1d() {
+	bool isglProgramUniform1d() {
 		return glProgramUniform1d != 0;
 	}
 
-	bool __stdcall isglProgramUniform1dv() {
+	bool isglProgramUniform1dv() {
 		return glProgramUniform1dv != 0;
 	}
 
-	bool __stdcall isglProgramUniform1ui() {
+	bool isglProgramUniform1ui() {
 		return glProgramUniform1ui != 0;
 	}
 
-	bool __stdcall isglProgramUniform1uiv() {
+	bool isglProgramUniform1uiv() {
 		return glProgramUniform1uiv != 0;
 	}
 
-	bool __stdcall isglProgramUniform2i() {
+	bool isglProgramUniform2i() {
 		return glProgramUniform2i != 0;
 	}
 
-	bool __stdcall isglProgramUniform2iv() {
+	bool isglProgramUniform2iv() {
 		return glProgramUniform2iv != 0;
 	}
 
-	bool __stdcall isglProgramUniform2f() {
+	bool isglProgramUniform2f() {
 		return glProgramUniform2f != 0;
 	}
 
-	bool __stdcall isglProgramUniform2fv() {
+	bool isglProgramUniform2fv() {
 		return glProgramUniform2fv != 0;
 	}
 
-	bool __stdcall isglProgramUniform2d() {
+	bool isglProgramUniform2d() {
 		return glProgramUniform2d != 0;
 	}
 
-	bool __stdcall isglProgramUniform2dv() {
+	bool isglProgramUniform2dv() {
 		return glProgramUniform2dv != 0;
 	}
 
-	bool __stdcall isglProgramUniform2ui() {
+	bool isglProgramUniform2ui() {
 		return glProgramUniform2ui != 0;
 	}
 
-	bool __stdcall isglProgramUniform2uiv() {
+	bool isglProgramUniform2uiv() {
 		return glProgramUniform2uiv != 0;
 	}
 
-	bool __stdcall isglProgramUniform3i() {
+	bool isglProgramUniform3i() {
 		return glProgramUniform3i != 0;
 	}
 
-	bool __stdcall isglProgramUniform3iv() {
+	bool isglProgramUniform3iv() {
 		return glProgramUniform3iv != 0;
 	}
 
-	bool __stdcall isglProgramUniform3f() {
+	bool isglProgramUniform3f() {
 		return glProgramUniform3f != 0;
 	}
 
-	bool __stdcall isglProgramUniform3fv() {
+	bool isglProgramUniform3fv() {
 		return glProgramUniform3fv != 0;
 	}
 
-	bool __stdcall isglProgramUniform3d() {
+	bool isglProgramUniform3d() {
 		return glProgramUniform3d != 0;
 	}
 
-	bool __stdcall isglProgramUniform3dv() {
+	bool isglProgramUniform3dv() {
 		return glProgramUniform3dv != 0;
 	}
 
-	bool __stdcall isglProgramUniform3ui() {
+	bool isglProgramUniform3ui() {
 		return glProgramUniform3ui != 0;
 	}
 
-	bool __stdcall isglProgramUniform3uiv() {
+	bool isglProgramUniform3uiv() {
 		return glProgramUniform3uiv != 0;
 	}
 
-	bool __stdcall isglProgramUniform4i() {
+	bool isglProgramUniform4i() {
 		return glProgramUniform4i != 0;
 	}
 
-	bool __stdcall isglProgramUniform4iv() {
+	bool isglProgramUniform4iv() {
 		return glProgramUniform4iv != 0;
 	}
 
-	bool __stdcall isglProgramUniform4f() {
+	bool isglProgramUniform4f() {
 		return glProgramUniform4f != 0;
 	}
 
-	bool __stdcall isglProgramUniform4fv() {
+	bool isglProgramUniform4fv() {
 		return glProgramUniform4fv != 0;
 	}
 
-	bool __stdcall isglProgramUniform4d() {
+	bool isglProgramUniform4d() {
 		return glProgramUniform4d != 0;
 	}
 
-	bool __stdcall isglProgramUniform4dv() {
+	bool isglProgramUniform4dv() {
 		return glProgramUniform4dv != 0;
 	}
 
-	bool __stdcall isglProgramUniform4ui() {
+	bool isglProgramUniform4ui() {
 		return glProgramUniform4ui != 0;
 	}
 
-	bool __stdcall isglProgramUniform4uiv() {
+	bool isglProgramUniform4uiv() {
 		return glProgramUniform4uiv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix2fv() {
+	bool isglProgramUniformMatrix2fv() {
 		return glProgramUniformMatrix2fv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix3fv() {
+	bool isglProgramUniformMatrix3fv() {
 		return glProgramUniformMatrix3fv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix4fv() {
+	bool isglProgramUniformMatrix4fv() {
 		return glProgramUniformMatrix4fv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix2dv() {
+	bool isglProgramUniformMatrix2dv() {
 		return glProgramUniformMatrix2dv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix3dv() {
+	bool isglProgramUniformMatrix3dv() {
 		return glProgramUniformMatrix3dv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix4dv() {
+	bool isglProgramUniformMatrix4dv() {
 		return glProgramUniformMatrix4dv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix2x3fv() {
+	bool isglProgramUniformMatrix2x3fv() {
 		return glProgramUniformMatrix2x3fv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix3x2fv() {
+	bool isglProgramUniformMatrix3x2fv() {
 		return glProgramUniformMatrix3x2fv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix2x4fv() {
+	bool isglProgramUniformMatrix2x4fv() {
 		return glProgramUniformMatrix2x4fv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix4x2fv() {
+	bool isglProgramUniformMatrix4x2fv() {
 		return glProgramUniformMatrix4x2fv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix3x4fv() {
+	bool isglProgramUniformMatrix3x4fv() {
 		return glProgramUniformMatrix3x4fv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix4x3fv() {
+	bool isglProgramUniformMatrix4x3fv() {
 		return glProgramUniformMatrix4x3fv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix2x3dv() {
+	bool isglProgramUniformMatrix2x3dv() {
 		return glProgramUniformMatrix2x3dv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix3x2dv() {
+	bool isglProgramUniformMatrix3x2dv() {
 		return glProgramUniformMatrix3x2dv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix2x4dv() {
+	bool isglProgramUniformMatrix2x4dv() {
 		return glProgramUniformMatrix2x4dv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix4x2dv() {
+	bool isglProgramUniformMatrix4x2dv() {
 		return glProgramUniformMatrix4x2dv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix3x4dv() {
+	bool isglProgramUniformMatrix3x4dv() {
 		return glProgramUniformMatrix3x4dv != 0;
 	}
 
-	bool __stdcall isglProgramUniformMatrix4x3dv() {
+	bool isglProgramUniformMatrix4x3dv() {
 		return glProgramUniformMatrix4x3dv != 0;
 	}
 
-	bool __stdcall isglValidateProgramPipeline() {
+	bool isglValidateProgramPipeline() {
 		return glValidateProgramPipeline != 0;
 	}
 
-	bool __stdcall isglGetProgramPipelineInfoLog() {
+	bool isglGetProgramPipelineInfoLog() {
 		return glGetProgramPipelineInfoLog != 0;
 	}
 
-	bool __stdcall isglVertexAttribL1d() {
+	bool isglVertexAttribL1d() {
 		return glVertexAttribL1d != 0;
 	}
 
-	bool __stdcall isglVertexAttribL2d() {
+	bool isglVertexAttribL2d() {
 		return glVertexAttribL2d != 0;
 	}
 
-	bool __stdcall isglVertexAttribL3d() {
+	bool isglVertexAttribL3d() {
 		return glVertexAttribL3d != 0;
 	}
 
-	bool __stdcall isglVertexAttribL4d() {
+	bool isglVertexAttribL4d() {
 		return glVertexAttribL4d != 0;
 	}
 
-	bool __stdcall isglVertexAttribL1dv() {
+	bool isglVertexAttribL1dv() {
 		return glVertexAttribL1dv != 0;
 	}
 
-	bool __stdcall isglVertexAttribL2dv() {
+	bool isglVertexAttribL2dv() {
 		return glVertexAttribL2dv != 0;
 	}
 
-	bool __stdcall isglVertexAttribL3dv() {
+	bool isglVertexAttribL3dv() {
 		return glVertexAttribL3dv != 0;
 	}
 
-	bool __stdcall isglVertexAttribL4dv() {
+	bool isglVertexAttribL4dv() {
 		return glVertexAttribL4dv != 0;
 	}
 
-	bool __stdcall isglVertexAttribLPointer() {
+	bool isglVertexAttribLPointer() {
 		return glVertexAttribLPointer != 0;
 	}
 
-	bool __stdcall isglGetVertexAttribLdv() {
+	bool isglGetVertexAttribLdv() {
 		return glGetVertexAttribLdv != 0;
 	}
 
-	bool __stdcall isglViewportArrayv() {
+	bool isglViewportArrayv() {
 		return glViewportArrayv != 0;
 	}
 
-	bool __stdcall isglViewportIndexedf() {
+	bool isglViewportIndexedf() {
 		return glViewportIndexedf != 0;
 	}
 
-	bool __stdcall isglViewportIndexedfv() {
+	bool isglViewportIndexedfv() {
 		return glViewportIndexedfv != 0;
 	}
 
-	bool __stdcall isglScissorArrayv() {
+	bool isglScissorArrayv() {
 		return glScissorArrayv != 0;
 	}
 
-	bool __stdcall isglScissorIndexed() {
+	bool isglScissorIndexed() {
 		return glScissorIndexed != 0;
 	}
 
-	bool __stdcall isglScissorIndexedv() {
+	bool isglScissorIndexedv() {
 		return glScissorIndexedv != 0;
 	}
 
-	bool __stdcall isglDepthRangeArrayv() {
+	bool isglDepthRangeArrayv() {
 		return glDepthRangeArrayv != 0;
 	}
 
-	bool __stdcall isglDepthRangeIndexed() {
+	bool isglDepthRangeIndexed() {
 		return glDepthRangeIndexed != 0;
 	}
 
-	bool __stdcall isglGetFloati_v() {
+	bool isglGetFloati_v() {
 		return glGetFloati_v != 0;
 	}
 
-	bool __stdcall isglGetDoublei_v() {
+	bool isglGetDoublei_v() {
 		return glGetDoublei_v != 0;
 	}
 
-	bool __stdcall isglDrawArraysInstancedBaseInstance() {
+	bool isglDrawArraysInstancedBaseInstance() {
 		return glDrawArraysInstancedBaseInstance != 0;
 	}
 
-	bool __stdcall isglDrawElementsInstancedBaseInstance() {
+	bool isglDrawElementsInstancedBaseInstance() {
 		return glDrawElementsInstancedBaseInstance != 0;
 	}
 
-	bool __stdcall isglDrawElementsInstancedBaseVertexBaseInstance() {
+	bool isglDrawElementsInstancedBaseVertexBaseInstance() {
 		return glDrawElementsInstancedBaseVertexBaseInstance != 0;
 	}
 
-	bool __stdcall isglGetInternalformativ() {
+	bool isglGetInternalformativ() {
 		return glGetInternalformativ != 0;
 	}
 
-	bool __stdcall isglGetActiveAtomicCounterBufferiv() {
+	bool isglGetActiveAtomicCounterBufferiv() {
 		return glGetActiveAtomicCounterBufferiv != 0;
 	}
 
-	bool __stdcall isglBindImageTexture() {
+	bool isglBindImageTexture() {
 		return glBindImageTexture != 0;
 	}
 
-	bool __stdcall isglMemoryBarrier() {
+	bool isglMemoryBarrier() {
 		return glMemoryBarrier != 0;
 	}
 
-	bool __stdcall isglTexStorage1D() {
+	bool isglTexStorage1D() {
 		return glTexStorage1D != 0;
 	}
 
-	bool __stdcall isglTexStorage2D() {
+	bool isglTexStorage2D() {
 		return glTexStorage2D != 0;
 	}
 
-	bool __stdcall isglTexStorage3D() {
+	bool isglTexStorage3D() {
 		return glTexStorage3D != 0;
 	}
 
-	bool __stdcall isglDrawTransformFeedbackInstanced() {
+	bool isglDrawTransformFeedbackInstanced() {
 		return glDrawTransformFeedbackInstanced != 0;
 	}
 
-	bool __stdcall isglDrawTransformFeedbackStreamInstanced() {
+	bool isglDrawTransformFeedbackStreamInstanced() {
 		return glDrawTransformFeedbackStreamInstanced != 0;
 	}
 
-	bool __stdcall isglClearBufferData() {
+	bool isglClearBufferData() {
 		return glClearBufferData != 0;
 	}
 
-	bool __stdcall isglClearBufferSubData() {
+	bool isglClearBufferSubData() {
 		return glClearBufferSubData != 0;
 	}
 
-	bool __stdcall isglDispatchCompute() {
+	bool isglDispatchCompute() {
 		return glDispatchCompute != 0;
 	}
 
-	bool __stdcall isglDispatchComputeIndirect() {
+	bool isglDispatchComputeIndirect() {
 		return glDispatchComputeIndirect != 0;
 	}
 
-	bool __stdcall isglCopyImageSubData() {
+	bool isglCopyImageSubData() {
 		return glCopyImageSubData != 0;
 	}
 
-	bool __stdcall isglFramebufferParameteri() {
+	bool isglFramebufferParameteri() {
 		return glFramebufferParameteri != 0;
 	}
 
-	bool __stdcall isglGetFramebufferParameteriv() {
+	bool isglGetFramebufferParameteriv() {
 		return glGetFramebufferParameteriv != 0;
 	}
 
-	bool __stdcall isglGetInternalformati64v() {
+	bool isglGetInternalformati64v() {
 		return glGetInternalformati64v != 0;
 	}
 
-	bool __stdcall isglInvalidateTexSubImage() {
+	bool isglInvalidateTexSubImage() {
 		return glInvalidateTexSubImage != 0;
 	}
 
-	bool __stdcall isglInvalidateTexImage() {
+	bool isglInvalidateTexImage() {
 		return glInvalidateTexImage != 0;
 	}
 
-	bool __stdcall isglInvalidateBufferSubData() {
+	bool isglInvalidateBufferSubData() {
 		return glInvalidateBufferSubData != 0;
 	}
 
-	bool __stdcall isglInvalidateBufferData() {
+	bool isglInvalidateBufferData() {
 		return glInvalidateBufferData != 0;
 	}
 
-	bool __stdcall isglInvalidateFramebuffer() {
+	bool isglInvalidateFramebuffer() {
 		return glInvalidateFramebuffer != 0;
 	}
 
-	bool __stdcall isglInvalidateSubFramebuffer() {
+	bool isglInvalidateSubFramebuffer() {
 		return glInvalidateSubFramebuffer != 0;
 	}
 
-	bool __stdcall isglMultiDrawArraysIndirect() {
+	bool isglMultiDrawArraysIndirect() {
 		return glMultiDrawArraysIndirect != 0;
 	}
 
-	bool __stdcall isglMultiDrawElementsIndirect() {
+	bool isglMultiDrawElementsIndirect() {
 		return glMultiDrawElementsIndirect != 0;
 	}
 
-	bool __stdcall isglGetProgramInterfaceiv() {
+	bool isglGetProgramInterfaceiv() {
 		return glGetProgramInterfaceiv != 0;
 	}
 
-	bool __stdcall isglGetProgramResourceIndex() {
+	bool isglGetProgramResourceIndex() {
 		return glGetProgramResourceIndex != 0;
 	}
 
-	bool __stdcall isglGetProgramResourceName() {
+	bool isglGetProgramResourceName() {
 		return glGetProgramResourceName != 0;
 	}
 
-	bool __stdcall isglGetProgramResourceiv() {
+	bool isglGetProgramResourceiv() {
 		return glGetProgramResourceiv != 0;
 	}
 
-	bool __stdcall isglGetProgramResourceLocation() {
+	bool isglGetProgramResourceLocation() {
 		return glGetProgramResourceLocation != 0;
 	}
 
-	bool __stdcall isglGetProgramResourceLocationIndex() {
+	bool isglGetProgramResourceLocationIndex() {
 		return glGetProgramResourceLocationIndex != 0;
 	}
 
-	bool __stdcall isglShaderStorageBlockBinding() {
+	bool isglShaderStorageBlockBinding() {
 		return glShaderStorageBlockBinding != 0;
 	}
 
-	bool __stdcall isglTexBufferRange() {
+	bool isglTexBufferRange() {
 		return glTexBufferRange != 0;
 	}
 
-	bool __stdcall isglTexStorage2DMultisample() {
+	bool isglTexStorage2DMultisample() {
 		return glTexStorage2DMultisample != 0;
 	}
 
-	bool __stdcall isglTexStorage3DMultisample() {
+	bool isglTexStorage3DMultisample() {
 		return glTexStorage3DMultisample != 0;
 	}
 
-	bool __stdcall isglTextureView() {
+	bool isglTextureView() {
 		return glTextureView != 0;
 	}
 
-	bool __stdcall isglBindVertexBuffer() {
+	bool isglBindVertexBuffer() {
 		return glBindVertexBuffer != 0;
 	}
 
-	bool __stdcall isglVertexAttribFormat() {
+	bool isglVertexAttribFormat() {
 		return glVertexAttribFormat != 0;
 	}
 
-	bool __stdcall isglVertexAttribIFormat() {
+	bool isglVertexAttribIFormat() {
 		return glVertexAttribIFormat != 0;
 	}
 
-	bool __stdcall isglVertexAttribLFormat() {
+	bool isglVertexAttribLFormat() {
 		return glVertexAttribLFormat != 0;
 	}
 
-	bool __stdcall isglVertexAttribBinding() {
+	bool isglVertexAttribBinding() {
 		return glVertexAttribBinding != 0;
 	}
 
-	bool __stdcall isglVertexBindingDivisor() {
+	bool isglVertexBindingDivisor() {
 		return glVertexBindingDivisor != 0;
 	}
 
-	bool __stdcall isglDebugMessageControl() {
+	bool isglDebugMessageControl() {
 		return glDebugMessageControl != 0;
 	}
 
-	bool __stdcall isglDebugMessageInsert() {
+	bool isglDebugMessageInsert() {
 		return glDebugMessageInsert != 0;
 	}
 
-	bool __stdcall isglDebugMessageCallback() {
+	bool isglDebugMessageCallback() {
 		return glDebugMessageCallback != 0;
 	}
 
-	bool __stdcall isglGetDebugMessageLog() {
+	bool isglGetDebugMessageLog() {
 		return glGetDebugMessageLog != 0;
 	}
 
-	bool __stdcall isglPushDebugGroup() {
+	bool isglPushDebugGroup() {
 		return glPushDebugGroup != 0;
 	}
 
-	bool __stdcall isglPopDebugGroup() {
+	bool isglPopDebugGroup() {
 		return glPopDebugGroup != 0;
 	}
 
-	bool __stdcall isglObjectLabel() {
+	bool isglObjectLabel() {
 		return glObjectLabel != 0;
 	}
 
-	bool __stdcall isglGetObjectLabel() {
+	bool isglGetObjectLabel() {
 		return glGetObjectLabel != 0;
 	}
 
-	bool __stdcall isglObjectPtrLabel() {
+	bool isglObjectPtrLabel() {
 		return glObjectPtrLabel != 0;
 	}
 
-	bool __stdcall isglGetObjectPtrLabel() {
+	bool isglGetObjectPtrLabel() {
 		return glGetObjectPtrLabel != 0;
 	}
 
-	bool __stdcall isglBufferStorage() {
+	bool isglBufferStorage() {
 		return glBufferStorage != 0;
 	}
 
-	bool __stdcall isglClearTexImage() {
+	bool isglClearTexImage() {
 		return glClearTexImage != 0;
 	}
 
-	bool __stdcall isglClearTexSubImage() {
+	bool isglClearTexSubImage() {
 		return glClearTexSubImage != 0;
 	}
 
-	bool __stdcall isglBindBuffersBase() {
+	bool isglBindBuffersBase() {
 		return glBindBuffersBase != 0;
 	}
 
-	bool __stdcall isglBindBuffersRange() {
+	bool isglBindBuffersRange() {
 		return glBindBuffersRange != 0;
 	}
 
-	bool __stdcall isglBindTextures() {
+	bool isglBindTextures() {
 		return glBindTextures != 0;
 	}
 
-	bool __stdcall isglBindSamplers() {
+	bool isglBindSamplers() {
 		return glBindSamplers != 0;
 	}
 
-	bool __stdcall isglBindImageTextures() {
+	bool isglBindImageTextures() {
 		return glBindImageTextures != 0;
 	}
 
-	bool __stdcall isglBindVertexBuffers() {
+	bool isglBindVertexBuffers() {
 		return glBindVertexBuffers != 0;
 	}
 
-	bool __stdcall isglClipControl() {
+	bool isglClipControl() {
 		return glClipControl != 0;
 	}
 
-	bool __stdcall isglCreateTransformFeedbacks() {
+	bool isglCreateTransformFeedbacks() {
 		return glCreateTransformFeedbacks != 0;
 	}
 
-	bool __stdcall isglTransformFeedbackBufferBase() {
+	bool isglTransformFeedbackBufferBase() {
 		return glTransformFeedbackBufferBase != 0;
 	}
 
-	bool __stdcall isglTransformFeedbackBufferRange() {
+	bool isglTransformFeedbackBufferRange() {
 		return glTransformFeedbackBufferRange != 0;
 	}
 
-	bool __stdcall isglGetTransformFeedbackiv() {
+	bool isglGetTransformFeedbackiv() {
 		return glGetTransformFeedbackiv != 0;
 	}
 
-	bool __stdcall isglGetTransformFeedbacki_v() {
+	bool isglGetTransformFeedbacki_v() {
 		return glGetTransformFeedbacki_v != 0;
 	}
 
-	bool __stdcall isglGetTransformFeedbacki64_v() {
+	bool isglGetTransformFeedbacki64_v() {
 		return glGetTransformFeedbacki64_v != 0;
 	}
 
-	bool __stdcall isglCreateBuffers() {
+	bool isglCreateBuffers() {
 		return glCreateBuffers != 0;
 	}
 
-	bool __stdcall isglNamedBufferStorage() {
+	bool isglNamedBufferStorage() {
 		return glNamedBufferStorage != 0;
 	}
 
-	bool __stdcall isglNamedBufferData() {
+	bool isglNamedBufferData() {
 		return glNamedBufferData != 0;
 	}
 
-	bool __stdcall isglNamedBufferSubData() {
+	bool isglNamedBufferSubData() {
 		return glNamedBufferSubData != 0;
 	}
 
-	bool __stdcall isglCopyNamedBufferSubData() {
+	bool isglCopyNamedBufferSubData() {
 		return glCopyNamedBufferSubData != 0;
 	}
 
-	bool __stdcall isglClearNamedBufferData() {
+	bool isglClearNamedBufferData() {
 		return glClearNamedBufferData != 0;
 	}
 
-	bool __stdcall isglClearNamedBufferSubData() {
+	bool isglClearNamedBufferSubData() {
 		return glClearNamedBufferSubData != 0;
 	}
 
-	bool __stdcall isglMapNamedBuffer() {
+	bool isglMapNamedBuffer() {
 		return glMapNamedBuffer != 0;
 	}
 
-	bool __stdcall isglMapNamedBufferRange() {
+	bool isglMapNamedBufferRange() {
 		return glMapNamedBufferRange != 0;
 	}
 
-	bool __stdcall isglUnmapNamedBuffer() {
+	bool isglUnmapNamedBuffer() {
 		return glUnmapNamedBuffer != 0;
 	}
 
-	bool __stdcall isglFlushMappedNamedBufferRange() {
+	bool isglFlushMappedNamedBufferRange() {
 		return glFlushMappedNamedBufferRange != 0;
 	}
 
-	bool __stdcall isglGetNamedBufferParameteriv() {
+	bool isglGetNamedBufferParameteriv() {
 		return glGetNamedBufferParameteriv != 0;
 	}
 
-	bool __stdcall isglGetNamedBufferParameteri64v() {
+	bool isglGetNamedBufferParameteri64v() {
 		return glGetNamedBufferParameteri64v != 0;
 	}
 
-	bool __stdcall isglGetNamedBufferPointerv() {
+	bool isglGetNamedBufferPointerv() {
 		return glGetNamedBufferPointerv != 0;
 	}
 
-	bool __stdcall isglGetNamedBufferSubData() {
+	bool isglGetNamedBufferSubData() {
 		return glGetNamedBufferSubData != 0;
 	}
 
-	bool __stdcall isglCreateFramebuffers() {
+	bool isglCreateFramebuffers() {
 		return glCreateFramebuffers != 0;
 	}
 
-	bool __stdcall isglNamedFramebufferRenderbuffer() {
+	bool isglNamedFramebufferRenderbuffer() {
 		return glNamedFramebufferRenderbuffer != 0;
 	}
 
-	bool __stdcall isglNamedFramebufferParameteri() {
+	bool isglNamedFramebufferParameteri() {
 		return glNamedFramebufferParameteri != 0;
 	}
 
-	bool __stdcall isglNamedFramebufferTexture() {
+	bool isglNamedFramebufferTexture() {
 		return glNamedFramebufferTexture != 0;
 	}
 
-	bool __stdcall isglNamedFramebufferTextureLayer() {
+	bool isglNamedFramebufferTextureLayer() {
 		return glNamedFramebufferTextureLayer != 0;
 	}
 
-	bool __stdcall isglNamedFramebufferDrawBuffer() {
+	bool isglNamedFramebufferDrawBuffer() {
 		return glNamedFramebufferDrawBuffer != 0;
 	}
 
-	bool __stdcall isglNamedFramebufferDrawBuffers() {
+	bool isglNamedFramebufferDrawBuffers() {
 		return glNamedFramebufferDrawBuffers != 0;
 	}
 
-	bool __stdcall isglNamedFramebufferReadBuffer() {
+	bool isglNamedFramebufferReadBuffer() {
 		return glNamedFramebufferReadBuffer != 0;
 	}
 
-	bool __stdcall isglInvalidateNamedFramebufferData() {
+	bool isglInvalidateNamedFramebufferData() {
 		return glInvalidateNamedFramebufferData != 0;
 	}
 
-	bool __stdcall isglInvalidateNamedFramebufferSubData() {
+	bool isglInvalidateNamedFramebufferSubData() {
 		return glInvalidateNamedFramebufferSubData != 0;
 	}
 
-	bool __stdcall isglClearNamedFramebufferiv() {
+	bool isglClearNamedFramebufferiv() {
 		return glClearNamedFramebufferiv != 0;
 	}
 
-	bool __stdcall isglClearNamedFramebufferuiv() {
+	bool isglClearNamedFramebufferuiv() {
 		return glClearNamedFramebufferuiv != 0;
 	}
 
-	bool __stdcall isglClearNamedFramebufferfv() {
+	bool isglClearNamedFramebufferfv() {
 		return glClearNamedFramebufferfv != 0;
 	}
 
-	bool __stdcall isglClearNamedFramebufferfi() {
+	bool isglClearNamedFramebufferfi() {
 		return glClearNamedFramebufferfi != 0;
 	}
 
-	bool __stdcall isglBlitNamedFramebuffer() {
+	bool isglBlitNamedFramebuffer() {
 		return glBlitNamedFramebuffer != 0;
 	}
 
-	bool __stdcall isglCheckNamedFramebufferStatus() {
+	bool isglCheckNamedFramebufferStatus() {
 		return glCheckNamedFramebufferStatus != 0;
 	}
 
-	bool __stdcall isglGetNamedFramebufferParameteriv() {
+	bool isglGetNamedFramebufferParameteriv() {
 		return glGetNamedFramebufferParameteriv != 0;
 	}
 
-	bool __stdcall isglGetNamedFramebufferAttachmentParameteriv() {
+	bool isglGetNamedFramebufferAttachmentParameteriv() {
 		return glGetNamedFramebufferAttachmentParameteriv != 0;
 	}
 
-	bool __stdcall isglCreateRenderbuffers() {
+	bool isglCreateRenderbuffers() {
 		return glCreateRenderbuffers != 0;
 	}
 
-	bool __stdcall isglNamedRenderbufferStorage() {
+	bool isglNamedRenderbufferStorage() {
 		return glNamedRenderbufferStorage != 0;
 	}
 
-	bool __stdcall isglNamedRenderbufferStorageMultisample() {
+	bool isglNamedRenderbufferStorageMultisample() {
 		return glNamedRenderbufferStorageMultisample != 0;
 	}
 
-	bool __stdcall isglGetNamedRenderbufferParameteriv() {
+	bool isglGetNamedRenderbufferParameteriv() {
 		return glGetNamedRenderbufferParameteriv != 0;
 	}
 
-	bool __stdcall isglCreateTextures() {
+	bool isglCreateTextures() {
 		return glCreateTextures != 0;
 	}
 
-	bool __stdcall isglTextureBuffer() {
+	bool isglTextureBuffer() {
 		return glTextureBuffer != 0;
 	}
 
-	bool __stdcall isglTextureBufferRange() {
+	bool isglTextureBufferRange() {
 		return glTextureBufferRange != 0;
 	}
 
-	bool __stdcall isglTextureStorage1D() {
+	bool isglTextureStorage1D() {
 		return glTextureStorage1D != 0;
 	}
 
-	bool __stdcall isglTextureStorage2D() {
+	bool isglTextureStorage2D() {
 		return glTextureStorage2D != 0;
 	}
 
-	bool __stdcall isglTextureStorage3D() {
+	bool isglTextureStorage3D() {
 		return glTextureStorage3D != 0;
 	}
 
-	bool __stdcall isglTextureStorage2DMultisample() {
+	bool isglTextureStorage2DMultisample() {
 		return glTextureStorage2DMultisample != 0;
 	}
 
-	bool __stdcall isglTextureStorage3DMultisample() {
+	bool isglTextureStorage3DMultisample() {
 		return glTextureStorage3DMultisample != 0;
 	}
 
-	bool __stdcall isglTextureSubImage1D() {
+	bool isglTextureSubImage1D() {
 		return glTextureSubImage1D != 0;
 	}
 
-	bool __stdcall isglTextureSubImage2D() {
+	bool isglTextureSubImage2D() {
 		return glTextureSubImage2D != 0;
 	}
 
-	bool __stdcall isglTextureSubImage3D() {
+	bool isglTextureSubImage3D() {
 		return glTextureSubImage3D != 0;
 	}
 
-	bool __stdcall isglCompressedTextureSubImage1D() {
+	bool isglCompressedTextureSubImage1D() {
 		return glCompressedTextureSubImage1D != 0;
 	}
 
-	bool __stdcall isglCompressedTextureSubImage2D() {
+	bool isglCompressedTextureSubImage2D() {
 		return glCompressedTextureSubImage2D != 0;
 	}
 
-	bool __stdcall isglCompressedTextureSubImage3D() {
+	bool isglCompressedTextureSubImage3D() {
 		return glCompressedTextureSubImage3D != 0;
 	}
 
-	bool __stdcall isglCopyTextureSubImage1D() {
+	bool isglCopyTextureSubImage1D() {
 		return glCopyTextureSubImage1D != 0;
 	}
 
-	bool __stdcall isglCopyTextureSubImage2D() {
+	bool isglCopyTextureSubImage2D() {
 		return glCopyTextureSubImage2D != 0;
 	}
 
-	bool __stdcall isglCopyTextureSubImage3D() {
+	bool isglCopyTextureSubImage3D() {
 		return glCopyTextureSubImage3D != 0;
 	}
 
-	bool __stdcall isglTextureParameterf() {
+	bool isglTextureParameterf() {
 		return glTextureParameterf != 0;
 	}
 
-	bool __stdcall isglTextureParameterfv() {
+	bool isglTextureParameterfv() {
 		return glTextureParameterfv != 0;
 	}
 
-	bool __stdcall isglTextureParameteri() {
+	bool isglTextureParameteri() {
 		return glTextureParameteri != 0;
 	}
 
-	bool __stdcall isglTextureParameterIiv() {
+	bool isglTextureParameterIiv() {
 		return glTextureParameterIiv != 0;
 	}
 
-	bool __stdcall isglTextureParameterIuiv() {
+	bool isglTextureParameterIuiv() {
 		return glTextureParameterIuiv != 0;
 	}
 
-	bool __stdcall isglTextureParameteriv() {
+	bool isglTextureParameteriv() {
 		return glTextureParameteriv != 0;
 	}
 
-	bool __stdcall isglGenerateTextureMipmap() {
+	bool isglGenerateTextureMipmap() {
 		return glGenerateTextureMipmap != 0;
 	}
 
-	bool __stdcall isglBindTextureUnit() {
+	bool isglBindTextureUnit() {
 		return glBindTextureUnit != 0;
 	}
 
-	bool __stdcall isglGetTextureImage() {
+	bool isglGetTextureImage() {
 		return glGetTextureImage != 0;
 	}
 
-	bool __stdcall isglGetCompressedTextureImage() {
+	bool isglGetCompressedTextureImage() {
 		return glGetCompressedTextureImage != 0;
 	}
 
-	bool __stdcall isglGetTextureLevelParameterfv() {
+	bool isglGetTextureLevelParameterfv() {
 		return glGetTextureLevelParameterfv != 0;
 	}
 
-	bool __stdcall isglGetTextureLevelParameteriv() {
+	bool isglGetTextureLevelParameteriv() {
 		return glGetTextureLevelParameteriv != 0;
 	}
 
-	bool __stdcall isglGetTextureParameterfv() {
+	bool isglGetTextureParameterfv() {
 		return glGetTextureParameterfv != 0;
 	}
 
-	bool __stdcall isglGetTextureParameterIiv() {
+	bool isglGetTextureParameterIiv() {
 		return glGetTextureParameterIiv != 0;
 	}
 
-	bool __stdcall isglGetTextureParameterIuiv() {
+	bool isglGetTextureParameterIuiv() {
 		return glGetTextureParameterIuiv != 0;
 	}
 
-	bool __stdcall isglGetTextureParameteriv() {
+	bool isglGetTextureParameteriv() {
 		return glGetTextureParameteriv != 0;
 	}
 
-	bool __stdcall isglCreateVertexArrays() {
+	bool isglCreateVertexArrays() {
 		return glCreateVertexArrays != 0;
 	}
 
-	bool __stdcall isglDisableVertexArrayAttrib() {
+	bool isglDisableVertexArrayAttrib() {
 		return glDisableVertexArrayAttrib != 0;
 	}
 
-	bool __stdcall isglEnableVertexArrayAttrib() {
+	bool isglEnableVertexArrayAttrib() {
 		return glEnableVertexArrayAttrib != 0;
 	}
 
-	bool __stdcall isglVertexArrayElementBuffer() {
+	bool isglVertexArrayElementBuffer() {
 		return glVertexArrayElementBuffer != 0;
 	}
 
-	bool __stdcall isglVertexArrayVertexBuffer() {
+	bool isglVertexArrayVertexBuffer() {
 		return glVertexArrayVertexBuffer != 0;
 	}
 
-	bool __stdcall isglVertexArrayVertexBuffers() {
+	bool isglVertexArrayVertexBuffers() {
 		return glVertexArrayVertexBuffers != 0;
 	}
 
-	bool __stdcall isglVertexArrayAttribBinding() {
+	bool isglVertexArrayAttribBinding() {
 		return glVertexArrayAttribBinding != 0;
 	}
 
-	bool __stdcall isglVertexArrayAttribFormat() {
+	bool isglVertexArrayAttribFormat() {
 		return glVertexArrayAttribFormat != 0;
 	}
 
-	bool __stdcall isglVertexArrayAttribIFormat() {
+	bool isglVertexArrayAttribIFormat() {
 		return glVertexArrayAttribIFormat != 0;
 	}
 
-	bool __stdcall isglVertexArrayAttribLFormat() {
+	bool isglVertexArrayAttribLFormat() {
 		return glVertexArrayAttribLFormat != 0;
 	}
 
-	bool __stdcall isglVertexArrayBindingDivisor() {
+	bool isglVertexArrayBindingDivisor() {
 		return glVertexArrayBindingDivisor != 0;
 	}
 
-	bool __stdcall isglGetVertexArrayiv() {
+	bool isglGetVertexArrayiv() {
 		return glGetVertexArrayiv != 0;
 	}
 
-	bool __stdcall isglGetVertexArrayIndexediv() {
+	bool isglGetVertexArrayIndexediv() {
 		return glGetVertexArrayIndexediv != 0;
 	}
 
-	bool __stdcall isglGetVertexArrayIndexed64iv() {
+	bool isglGetVertexArrayIndexed64iv() {
 		return glGetVertexArrayIndexed64iv != 0;
 	}
 
-	bool __stdcall isglCreateSamplers() {
+	bool isglCreateSamplers() {
 		return glCreateSamplers != 0;
 	}
 
-	bool __stdcall isglCreateProgramPipelines() {
+	bool isglCreateProgramPipelines() {
 		return glCreateProgramPipelines != 0;
 	}
 
-	bool __stdcall isglCreateQueries() {
+	bool isglCreateQueries() {
 		return glCreateQueries != 0;
 	}
 
-	bool __stdcall isglGetQueryBufferObjecti64v() {
+	bool isglGetQueryBufferObjecti64v() {
 		return glGetQueryBufferObjecti64v != 0;
 	}
 
-	bool __stdcall isglGetQueryBufferObjectiv() {
+	bool isglGetQueryBufferObjectiv() {
 		return glGetQueryBufferObjectiv != 0;
 	}
 
-	bool __stdcall isglGetQueryBufferObjectui64v() {
+	bool isglGetQueryBufferObjectui64v() {
 		return glGetQueryBufferObjectui64v != 0;
 	}
 
-	bool __stdcall isglGetQueryBufferObjectuiv() {
+	bool isglGetQueryBufferObjectuiv() {
 		return glGetQueryBufferObjectuiv != 0;
 	}
 
-	bool __stdcall isglMemoryBarrierByRegion() {
+	bool isglMemoryBarrierByRegion() {
 		return glMemoryBarrierByRegion != 0;
 	}
 
-	bool __stdcall isglGetTextureSubImage() {
+	bool isglGetTextureSubImage() {
 		return glGetTextureSubImage != 0;
 	}
 
-	bool __stdcall isglGetCompressedTextureSubImage() {
+	bool isglGetCompressedTextureSubImage() {
 		return glGetCompressedTextureSubImage != 0;
 	}
 
-	bool __stdcall isglGetGraphicsResetStatus() {
+	bool isglGetGraphicsResetStatus() {
 		return glGetGraphicsResetStatus != 0;
 	}
 
-	bool __stdcall isglGetnCompressedTexImage() {
+	bool isglGetnCompressedTexImage() {
 		return glGetnCompressedTexImage != 0;
 	}
 
-	bool __stdcall isglGetnTexImage() {
+	bool isglGetnTexImage() {
 		return glGetnTexImage != 0;
 	}
 
-	bool __stdcall isglGetnUniformdv() {
+	bool isglGetnUniformdv() {
 		return glGetnUniformdv != 0;
 	}
 
-	bool __stdcall isglGetnUniformfv() {
+	bool isglGetnUniformfv() {
 		return glGetnUniformfv != 0;
 	}
 
-	bool __stdcall isglGetnUniformiv() {
+	bool isglGetnUniformiv() {
 		return glGetnUniformiv != 0;
 	}
 
-	bool __stdcall isglGetnUniformuiv() {
+	bool isglGetnUniformuiv() {
 		return glGetnUniformuiv != 0;
 	}
 
-	bool __stdcall isglReadnPixels() {
+	bool isglReadnPixels() {
 		return glReadnPixels != 0;
 	}
 
-	bool __stdcall isglTextureBarrier() {
+	bool isglTextureBarrier() {
 		return glTextureBarrier != 0;
 	}
 
@@ -3992,3 +3931,86 @@ namespace OpenGL {
 	PROC_glTextureBarrier glTextureBarrier;
 
 }
+
+#if defined(_WIN32) || defined(_WIN64)
+
+#include <Windows.h>
+
+namespace OpenGL {
+	HMODULE opengl32;
+
+	typedef const void * (__stdcall * PROC_wglGetProcAddress)(const char *);
+	typedef HGLRC (__stdcall * PROC_wglGetCurrentContext)();
+
+	PROC_wglGetProcAddress wglGetProcAddress;
+	PROC_wglGetCurrentContext wglGetCurrentContext;
+
+	const void * GetOpenGLFunction(const char * name) {
+		const void * result = GetProcAddress(opengl32, name);
+
+		if (!result) {
+			result = OpenGL::wglGetProcAddress(name);
+		}
+
+		return result;
+	}
+
+	bool InitializeOpenGL() {
+		opengl32 = LoadLibrary("opengl32.dll");
+
+		OpenGL::wglGetProcAddress = (PROC_wglGetProcAddress)GetProcAddress(opengl32, "wglGetProcAddress");
+		OpenGL::wglGetCurrentContext = (PROC_wglGetCurrentContext)GetProcAddress(opengl32, "wglGetCurrentContext");
+
+		if (!opengl32) {
+			return false;
+		}
+
+		if (!wglGetCurrentContext()) {
+			return false;
+		}
+
+		if (!LoadCoreOpenGLFunctions()) {
+			return false;
+		}
+
+		return true;
+	}
+
+}
+
+#else
+
+namespace OpenGL {
+	void * opengl32;
+
+	const void * GetOpenGLFunction(const char * name) {
+		const void * result = 0; // GetProcAddress(opengl32, name);
+		
+		if (!result) {
+			result = glXGetProcAddress(name);
+		}
+
+		return result;
+	}
+
+	bool InitializeOpenGL() {
+		// opengl32 = LoadLibrary("opengl32.dll");
+
+		if (!opengl32) {
+			return false;
+		}
+
+		if (!glXGetCurrentContext()) {
+			return false;
+		}
+
+		if (!LoadCoreOpenGLFunctions()) {
+			return false;
+		}
+
+		return true;
+	}
+}
+
+
+#endif

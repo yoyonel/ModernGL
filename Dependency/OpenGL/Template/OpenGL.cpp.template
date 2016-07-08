@@ -1,70 +1,8 @@
 #include "OpenGL.hpp"
-#include "WindowsGL.hpp"
 
 namespace OpenGL {
 
-	bool LoadCoreOpenGLFunctions();
-
-	const void * GetOpenGLFunction(const char * name) {
-		const void * result = WindowsGL::GetWindowsFunctionFromOpenGL(name);
-		if (result) {
-			return result;
-		}
-
-		result = (const void *)WindowsGL::wglGetProcAddress(name);
-		if (result) {
-			return result;
-		}
-
-		int length = 0;
-		while (name[length]) {
-			++length;
-		}
-		
-		char * guess = (char *)malloc(length + 4);
-		memcpy(guess, name, length);
-
-		guess[length + 0] = 'A';
-		guess[length + 1] = 'R';
-		guess[length + 2] = 'B';
-		guess[length + 3] = 0;
-
-		result = (const void *)WindowsGL::wglGetProcAddress(guess);
-		if (result) {
-			free(guess);
-			return result;
-		}
-
-		guess[length + 0] = 'E';
-		guess[length + 1] = 'X';
-		guess[length + 2] = 'T';
-		guess[length + 3] = 0;
-
-		result = (const void *)WindowsGL::wglGetProcAddress(guess);
-		if (result) {
-			free(guess);
-			return result;
-		}
-
-		free(guess);
-		return 0;
-	}
-
-	bool __stdcall InitializeOpenGL() {
-		if (!WindowsGL::InitializeWindowsGLModule()) {
-			return false;
-		}
-
-		if (!WindowsGL::wglGetCurrentContext()) {
-			return false;
-		}
-
-		if (!LoadCoreOpenGLFunctions()) {
-			return false;
-		}
-
-		return true;
-	}
+	const void * GetOpenGLFunction(const char * name);
 
 	bool LoadCoreOpenGLFunctions() {
 
@@ -78,3 +16,114 @@ namespace OpenGL {
 %(function_declare)s
 
 }
+
+#if defined(_WIN32) || defined(_WIN64)
+
+#include <Windows.h>
+
+namespace OpenGL {
+	HMODULE opengl32;
+
+	typedef const void * (__stdcall * PROC_wglGetProcAddress)(const char *);
+	typedef HGLRC (__stdcall * PROC_wglGetCurrentContext)();
+
+	PROC_wglGetProcAddress wglGetProcAddress;
+	PROC_wglGetCurrentContext wglGetCurrentContext;
+
+	const void * GetOpenGLFunction(const char * name) {
+		const void * result = GetProcAddress(opengl32, name);
+
+		if (!result) {
+			result = OpenGL::wglGetProcAddress(name);
+		}
+
+		return result;
+	}
+
+	bool InitializeOpenGL() {
+		opengl32 = LoadLibrary("opengl32.dll");
+
+		if (!opengl32) {
+			return false;
+		}
+
+		OpenGL::wglGetProcAddress = (PROC_wglGetProcAddress)GetProcAddress(opengl32, "wglGetProcAddress");
+		
+		if (!OpenGL::wglGetProcAddress) {
+			return false;
+		}
+		OpenGL::wglGetCurrentContext = (PROC_wglGetCurrentContext)GetProcAddress(opengl32, "wglGetCurrentContext");
+		
+		if (!OpenGL::wglGetCurrentContext) {
+			return false;
+		}
+
+		if (!OpenGL::wglGetCurrentContext()) {
+			return false;
+		}
+
+		if (!LoadCoreOpenGLFunctions()) {
+			return false;
+		}
+
+		return true;
+	}
+
+}
+
+#else
+
+#include <dlfcn.h>
+
+namespace OpenGL {
+	void * libgl;
+
+	typedef const void * (__stdcall * PROC_glXGetProcAddress)(const char *);
+	typedef HGLRC (__stdcall * PROC_glXGetCurrentContext)();
+
+	PROC_glXGetProcAddress glXGetProcAddress;
+	PROC_glXGetCurrentContext glXGetCurrentContext;
+
+	const void * GetOpenGLFunction(const char * name) {
+		const void * result = dlsym(libgl, name);
+		
+		if (!result) {
+			result = OpenGL::glXGetProcAddress(name);
+		}
+
+		return result;
+	}
+
+	bool InitializeOpenGL() {
+		libgl = dlopen("libGL.so.1", RTLD_LAZY);
+
+		if (!libgl) {
+			return false;
+		}
+
+		OpenGL::glXGetProcAddress = (PROC_glXGetProcAddress)dlsym(libgl, "glXGetProcAddress");
+
+		if (!OpenGL::glXGetProcAddress) {
+			return false;
+		}
+
+		OpenGL::glXGetCurrentContext = (PROC_glXGetCurrentContext)dlsym(libgl, "glXGetCurrentContext");
+
+		if (!OpenGL::glXGetCurrentContext) {
+			return false;
+		}
+
+		if (!OpenGL::glXGetCurrentContext()) {
+			return false;
+		}
+
+		if (!LoadCoreOpenGLFunctions()) {
+			return false;
+		}
+
+		return true;
+	}
+}
+
+
+#endif
