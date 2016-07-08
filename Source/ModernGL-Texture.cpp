@@ -79,7 +79,7 @@ PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 	CHECK_AND_REPORT_ARG_VALUE_ERROR(x < 1 || x > texture->width - 1, "x", x);
 	CHECK_AND_REPORT_ARG_VALUE_ERROR(y < 1 || y > texture->height - 1, "y", y);
 	CHECK_AND_REPORT_ARG_VALUE_ERROR(width < 1 || x + width > texture->width, "width", width);
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(height < 1 || y > height > texture->height, "height", height);
+	CHECK_AND_REPORT_ARG_VALUE_ERROR(height < 1 || y + height > texture->height, "height", height);
 
 	const int formats[] = {0, OpenGL::GL_RED, OpenGL::GL_RG, OpenGL::GL_RGB, OpenGL::GL_RGBA};
 	int format = formats[texture->components];
