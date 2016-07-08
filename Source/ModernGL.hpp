@@ -139,7 +139,7 @@ extern PyTypeObject ComputeShaderType;
 extern PyTypeObject EnableFlagType;
 
 PyObject * CreateFramebufferType(int fbo, int color, int depth);
-PyObject * CreateVertexArrayType(int vao, bool indexed);
+PyObject * CreateVertexArrayType(int vao, int program, bool indexed);
 PyObject * CreateVertexBufferType(int vbo, int size);
 PyObject * CreateIndexBufferType(int ibo, int size);
 PyObject * CreateUniformBufferType(int ubo, int size);

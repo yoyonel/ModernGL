@@ -860,11 +860,12 @@ PyObject * CreateFramebufferType(int fbo, int color, int depth) {
 	return (PyObject *)obj;
 }
 
-PyObject * CreateVertexArrayType(int vao, bool indexed) {
+PyObject * CreateVertexArrayType(int vao, int program, bool indexed) {
 	VertexArray * obj = (VertexArray *)VertexArrayType.tp_alloc(&VertexArrayType, 0);
 
 	if (obj != 0) {
 		obj->vao = vao;
+		obj->program = program;
 		obj->indexed = indexed;
 	}
 
