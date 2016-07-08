@@ -1,11 +1,11 @@
-import json
+import json, os, textwrap
 
-gl = json.loads(open('Data/OpenGL.json').read())
+gl = json.loads(open('OpenGL.json').read())
 
-if subset:
-	subset = set(open(subset).read().split())
-	gl['functions'] = list(filter(lambda x: x['name'] in subset, gl['functions']))
-	gl['constants'] = list(filter(lambda x: x['name'] in subset, gl['constants']))
+# if subset:
+# 	subset = set(open(subset).read().split())
+# 	gl['functions'] = list(filter(lambda x: x['name'] in subset, gl['functions']))
+# 	gl['constants'] = list(filter(lambda x: x['name'] in subset, gl['constants']))
 
 func_name_pad = max(len(func['name']) for func in gl['functions'])
 const_type_pad = max(len(const['type']) for const in gl['constants'])
@@ -19,7 +19,7 @@ for const in gl['constants']:
 	const['type_pad'] = ' ' * (const_type_pad - len(const['type']))
 	const['name_pad'] = ' ' * (const_name_pad - len(const['name']))
 
-template = dict((name, open('Data/Template/' + name).read()) for name in os.listdir('Data/Template/'))
+template = dict((name, open('Template/' + name).read()) for name in os.listdir('Template/'))
 
 def fill(foo, iterable, tabs = 0):
 	lines = '\n'.join(template[foo] % obj for obj in iterable)
@@ -37,6 +37,9 @@ core_context = {
 	'function_check' : fill('FunctionCheck.template', gl['functions'], 1),
 	'function_load' : fill('FunctionLoad.template', gl['functions'], 2),
 }
+
+if not os.path.isdir('Temp'):
+	os.mkdir('Temp')
 
 open('Temp/OpenGL.hpp', 'w').write(template['OpenGL.hpp.template'] % header_context)
 open('Temp/OpenGL.cpp', 'w').write(template['OpenGL.cpp.template'] % core_context)
