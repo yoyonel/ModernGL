@@ -2,9 +2,6 @@
 
 #include "Global.hpp"
 
-#include "Python.h"
-#include "structmember.h"
-
 const int ENABLE_NOTHING = 0x00;
 const int ENABLE_BLEND = 0x01;
 const int ENABLE_CULL_FACE = 0x02;

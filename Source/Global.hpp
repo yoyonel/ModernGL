@@ -4,6 +4,25 @@
 #endif
 #endif
 
+#include "Python.h"
+#include "structmember.h"
+
+#ifndef PyUnicode_New
+#define PyUnicode_New(size, num) PyUnicode_FromStringAndSize(0, size)
+#endif
+
+#ifndef PyUnicode_1BYTE_DATA
+#define PyUnicode_1BYTE_DATA PyUnicode_AS_DATA
+#endif
+
+#ifndef PyUnicode_AsUTF8
+#define PyUnicode_AsUTF8 PyUnicode_AS_DATA
+#endif
+
+#ifndef PyUnicode_READY
+#define PyUnicode_READY(obj) false
+#endif
+
 #define GET_OBJECT_TYPENAME(var) \
 ((PyTypeObject *)PyObject_Type((PyObject *)var))->tp_name
 
