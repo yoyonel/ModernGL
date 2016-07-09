@@ -2004,7 +2004,7 @@ PyObject * InitModule(PyObject * module) {
 	PyModule_AddObject(module, "ENABLE_MULTISAMPLE", CreateEnableFlagType(ENABLE_MULTISAMPLE));
 	PyModule_AddObject(module, "ENABLE_ALL", CreateEnableFlagType(ENABLE_ALL));
 
-	PyModule_AddStringConstant(module, "VERSION", "2.1.2");
+	PyModule_AddStringConstant(module, "VERSION", "2.2.0");
 	
 	PyModule_AddStringConstant(module, "__AUTHOR_NAME__", "Szabolcs Dombi");
 	PyModule_AddStringConstant(module, "__AUTHOR_EMAIL__", "cprogrammer1994@gmail.com");

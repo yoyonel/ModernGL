@@ -160,7 +160,7 @@ ModernGL = Extension(
 
 args = {
 	'name' : 'ModernGL',
-	'version' : '2.1.2',
+	'version' : '2.2.0',
 	'description' : ShortDescription,
 	'long_description' : LongDescription,
 	'url' : 'https://github.com/cprogrammer1994/ModernGL',
