@@ -8,7 +8,7 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"width", "height", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|ii:" __FUNCTION__, (char **)kwlist, &width, &height)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|ii:NewFramebuffer", (char **)kwlist, &width, &height)) {
 		return 0;
 	}
 
@@ -54,7 +54,7 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 PyObject * DeleteFramebuffer(PyObject * self, PyObject * args) {
 	Framebuffer * fbo;
 
-	if (!PyArg_ParseTuple(args, "O:" __FUNCTION__, &fbo)) {
+	if (!PyArg_ParseTuple(args, "O:DeleteFramebuffer", &fbo)) {
 		return 0;
 	}
 
@@ -69,7 +69,7 @@ PyObject * DeleteFramebuffer(PyObject * self, PyObject * args) {
 PyObject * UseFramebuffer(PyObject * self, PyObject * args) {
 	Framebuffer * fbo;
 
-	if (!PyArg_ParseTuple(args, "O:" __FUNCTION__, &fbo)) {
+	if (!PyArg_ParseTuple(args, "O:DeleteFramebuffer", &fbo)) {
 		return 0;
 	}
 
@@ -99,7 +99,7 @@ PyObject * ReadPixels(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"x", "y", "width", "height", "components", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii|i:" __FUNCTION__, (char **)kwlist, &x, &y, &width, &height, &components)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii|i:ReadPixels", (char **)kwlist, &x, &y, &width, &height, &components)) {
 		return 0;
 	}
 
@@ -129,7 +129,7 @@ PyObject * ReadDepthPixels(PyObject * self, PyObject * args, PyObject * kwargs) 
 
 	static const char * kwlist[] = {"x", "y", "width", "height", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii:" __FUNCTION__, (char **)kwlist, &x, &y, &width, &height)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii:ReadDepthPixels", (char **)kwlist, &x, &y, &width, &height)) {
 		return 0;
 	}
 
@@ -151,7 +151,7 @@ PyObject * ReadPixel(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"x", "y", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii:" __FUNCTION__, (char **)kwlist, &x, &y)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii:ReadPixel", (char **)kwlist, &x, &y)) {
 		return 0;
 	}
 
@@ -166,7 +166,7 @@ PyObject * ReadDepthPixel(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"x", "y", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii:" __FUNCTION__, (char **)kwlist, &x, &y)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii:ReadDepthPixel", (char **)kwlist, &x, &y)) {
 		return 0;
 	}
 

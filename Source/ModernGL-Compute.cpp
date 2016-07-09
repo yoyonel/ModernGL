@@ -5,7 +5,7 @@
 PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 	const char * source;
 
-	if (!PyArg_ParseTuple(args, "s:" __FUNCTION__, &source)) {
+	if (!PyArg_ParseTuple(args, "s:NewComputeShader", &source)) {
 		return 0;
 	}
 
@@ -16,7 +16,7 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 	int compiled = OpenGL::GL_FALSE;
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
-		static const char * logTitle = __FUNCTION__ "() compile failed\n";
+		static const char * logTitle = "NewComputeShader() compile failed\n";
 		static int logTitleLength = strlen(logTitle);
 		
 		int logLength = 0;
@@ -51,7 +51,7 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 	OpenGL::glGetProgramiv(program, OpenGL::GL_LINK_STATUS, &linked);
 
 	if (!linked) {
-		static const char * logTitle = __FUNCTION__ "() linking failed\n";
+		static const char * logTitle = "NewComputeShader() linking failed\n";
 		static int logTitleLength = strlen(logTitle);
 		
 		int logLength = 0;
@@ -85,7 +85,7 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 PyObject * DeleteComputeShader(PyObject * self, PyObject * args) {
 	ComputeShader * shader;
 
-	if (!PyArg_ParseTuple(args, "O:" __FUNCTION__, &shader)) {
+	if (!PyArg_ParseTuple(args, "O:DeleteComputeShader", &shader)) {
 		return 0;
 	}
 
@@ -104,7 +104,7 @@ PyObject * RunComputeShader(PyObject * self, PyObject * args, PyObject * kwargs)
 
 	static const char * kwlist[] = {"shader", "x", "y", "z", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|iii:" __FUNCTION__, (char **)kwlist, &shader, &x, &y, &z)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|iii:RunComputeShader", (char **)kwlist, &shader, &x, &y, &z)) {
 		return 0;
 	}
 

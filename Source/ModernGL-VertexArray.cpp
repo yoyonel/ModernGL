@@ -12,7 +12,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	IndexBuffer * ibo = no_ibo;
 	bool strict = false;
 
-	if (!PyArg_ParseTuple(args, "OOsO|Op:" __FUNCTION__, &program, &vbo, &format, &attributes, &ibo, &strict)) {
+	if (!PyArg_ParseTuple(args, "OOsO|Op:NewVertexArray", &program, &vbo, &format, &attributes, &ibo, &strict)) {
 		return 0;
 	}
 
@@ -24,12 +24,12 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	while (format[length]) {
 		if (length % 2 == 0) {
 			if (format[length] < '1' || format[length] > '4') {
-				PyErr_SetString(ModuleError, __FUNCTION__ "() argument `format` is invalid.");
+				PyErr_SetString(ModuleError, "NewVertexArray() argument `format` is invalid.");
 				return 0;
 			}
 		} else {
 			if (format[length] != 'i' && format[length] != 'f') {
-				PyErr_SetString(ModuleError, __FUNCTION__ "() argument `format` is invalid.");
+				PyErr_SetString(ModuleError, "NewVertexArray() argument `format` is invalid.");
 				return 0;
 			}
 		}
@@ -37,14 +37,14 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	}
 
 	if (!length || length % 2) {
-		PyErr_SetString(ModuleError, __FUNCTION__ "() argument `format` is empty or invalid.");
+		PyErr_SetString(ModuleError, "NewVertexArray() argument `format` is empty or invalid.");
 		return 0;
 	}
 
 	int count = (int)PyList_Size(attributes);
 
 	if (length / 2 != count) {
-		PyErr_Format(ModuleError, __FUNCTION__ "() size of `format` is %d, length of `attributes` is %d", length / 2, count);
+		PyErr_Format(ModuleError, "NewVertexArray() size of `format` is %d, length of `attributes` is %d", length / 2, count);
 		return 0;
 	}
 
@@ -52,7 +52,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 		const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i));
 		int location = OpenGL::glGetAttribLocation(program->program, name);
 		if (strict && location < 0) {
-			PyErr_Format(ModuleError, "ERR: 1");
+			PyErr_Format(ModuleError, "NewVertexArray() fail");
 			return 0;
 		}
 	}
@@ -106,7 +106,7 @@ PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args) {
 	IndexBuffer * ibo = no_ibo;
 	bool strict = false;
 
-	if (!PyArg_ParseTuple(args, "OO|Op:" __FUNCTION__, &program, &content, &ibo)) {
+	if (!PyArg_ParseTuple(args, "OO|Op:NewAdvancedVertexArray", &program, &content, &ibo)) {
 		return 0;
 	}
 
@@ -130,7 +130,7 @@ PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args) {
 		PyObject * tuple = PyList_GET_ITEM(content, k);
 		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("content", tuple, PyTuple_Type, k);
 		if (PyTuple_Size(tuple) != 3) {
-			PyErr_Format(ModuleError, "ERR: 5");
+			PyErr_Format(ModuleError, "NewAdvancedVertexArray() fail");
 			return 0;
 		}
 
@@ -139,12 +139,12 @@ PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args) {
 		PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
 
 		if (!CHECK_TYPE_ERROR(vbo, VertexBufferType)) {
-			PyErr_Format(ModuleError, "ERR: 5");
+			PyErr_Format(ModuleError, "NewAdvancedVertexArray() fail");
 			return 0;
 		}
 
 		if (!CHECK_TYPE_ERROR(attributes, PyList_Type)) {
-			PyErr_Format(ModuleError, "ERR: 5");
+			PyErr_Format(ModuleError, "NewAdvancedVertexArray() fail");
 			return 0;
 		}
 
@@ -152,12 +152,12 @@ PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args) {
 		while (format[length]) {
 			if (length % 2 == 0) {
 				if (format[length] < '1' || format[length] > '4') {
-					PyErr_SetString(ModuleError, __FUNCTION__ "() ERR 3");
+					PyErr_SetString(ModuleError, "NewAdvancedVertexArray() ERR 3");
 					return 0;
 				}
 			} else {
 				if (format[length] != 'i' && format[length] != 'f') {
-					PyErr_SetString(ModuleError, __FUNCTION__ "() ERR 3");
+					PyErr_SetString(ModuleError, "NewAdvancedVertexArray() ERR 3");
 					return 0;
 				}
 			}
@@ -165,7 +165,7 @@ PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args) {
 		}
 
 		if (!length || length % 2) {
-			PyErr_SetString(ModuleError, __FUNCTION__ "() ERR 3");
+			PyErr_SetString(ModuleError, "NewAdvancedVertexArray() ERR 3");
 			return 0;
 		}
 
@@ -176,7 +176,7 @@ PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args) {
 
 		int count = (int)PyList_Size(attributes);
 		if (length / 2 != count) {
-			PyErr_Format(ModuleError, "ERR 4.");
+			PyErr_Format(ModuleError, "NewAdvancedVertexArray() ERR 4.");
 			return 0;
 		}
 
@@ -206,7 +206,7 @@ PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args) {
 PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {
 	VertexArray * vao;
 
-	if (!PyArg_ParseTuple(args, "O:" __FUNCTION__, &vao)) {
+	if (!PyArg_ParseTuple(args, "O:DeleteVertexArray", &vao)) {
 		return 0;
 	}
 
@@ -223,7 +223,7 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 
 	static const char * kwlist[] = {"vao", "attributes", "strict", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|p:" __FUNCTION__, (char **)kwlist, &vao, &attributes, &strict)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|p:EnableAttributes", (char **)kwlist, &vao, &attributes, &strict)) {
 		return 0;
 	}
 
@@ -258,7 +258,7 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 
 	static const char * kwlist[] = {"vao", "attributes", "strict", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|p:" __FUNCTION__, (char **)kwlist, &vao, &attributes, &strict)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|p:DisableAttributes", (char **)kwlist, &vao, &attributes, &strict)) {
 		return 0;
 	}
 

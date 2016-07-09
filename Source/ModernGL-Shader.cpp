@@ -5,7 +5,7 @@
 PyObject * NewVertexShader(PyObject * self, PyObject * args) {
 	const char * source;
 
-	if (!PyArg_ParseTuple(args, "s:" __FUNCTION__, &source)) {
+	if (!PyArg_ParseTuple(args, "s:NewVertexShader", &source)) {
 		return 0;
 	}
 
@@ -16,7 +16,7 @@ PyObject * NewVertexShader(PyObject * self, PyObject * args) {
 	int compiled = OpenGL::GL_FALSE;
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
-		static const char * logTitle = __FUNCTION__ "() compile failed\n";
+		static const char * logTitle = "NewVertexShader() compile failed\n";
 		static int logTitleLength = strlen(logTitle);
 		
 		int logLength = 0;
@@ -48,7 +48,7 @@ PyObject * NewVertexShader(PyObject * self, PyObject * args) {
 PyObject * NewFragmentShader(PyObject * self, PyObject * args) {
 	const char * source;
 
-	if (!PyArg_ParseTuple(args, "s:" __FUNCTION__, &source)) {
+	if (!PyArg_ParseTuple(args, "s:NewFragmentShader", &source)) {
 		return 0;
 	}
 
@@ -59,7 +59,7 @@ PyObject * NewFragmentShader(PyObject * self, PyObject * args) {
 	int compiled = OpenGL::GL_FALSE;
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
-		static const char * logTitle = __FUNCTION__ "() compile failed\n";
+		static const char * logTitle = "NewFragmentShader() compile failed\n";
 		static int logTitleLength = strlen(logTitle);
 		
 		int logLength = 0;
@@ -91,7 +91,7 @@ PyObject * NewFragmentShader(PyObject * self, PyObject * args) {
 PyObject * NewGeometryShader(PyObject * self, PyObject * args) {
 	const char * source;
 
-	if (!PyArg_ParseTuple(args, "s:" __FUNCTION__, &source)) {
+	if (!PyArg_ParseTuple(args, "s:NewGeometryShader", &source)) {
 		return 0;
 	}
 
@@ -102,7 +102,7 @@ PyObject * NewGeometryShader(PyObject * self, PyObject * args) {
 	int compiled = OpenGL::GL_FALSE;
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
-		static const char * logTitle = __FUNCTION__ "() compile failed\n";
+		static const char * logTitle = "NewGeometryShader() compile failed\n";
 		static int logTitleLength = strlen(logTitle);
 		
 		int logLength = 0;
@@ -134,7 +134,7 @@ PyObject * NewGeometryShader(PyObject * self, PyObject * args) {
 PyObject * NewTessEvaluationShader(PyObject * self, PyObject * args) {
 	const char * source;
 
-	if (!PyArg_ParseTuple(args, "s:" __FUNCTION__, &source)) {
+	if (!PyArg_ParseTuple(args, "s:NewTessEvaluationShader", &source)) {
 		return 0;
 	}
 
@@ -145,7 +145,7 @@ PyObject * NewTessEvaluationShader(PyObject * self, PyObject * args) {
 	int compiled = OpenGL::GL_FALSE;
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
-		static const char * logTitle = __FUNCTION__ "() compile failed\n";
+		static const char * logTitle = "NewTessEvaluationShader() compile failed\n";
 		static int logTitleLength = strlen(logTitle);
 		
 		int logLength = 0;
@@ -177,7 +177,7 @@ PyObject * NewTessEvaluationShader(PyObject * self, PyObject * args) {
 PyObject * NewTessControlShader(PyObject * self, PyObject * args) {
 	const char * source;
 
-	if (!PyArg_ParseTuple(args, "s:" __FUNCTION__, &source)) {
+	if (!PyArg_ParseTuple(args, "s:NewTessControlShader", &source)) {
 		return 0;
 	}
 
@@ -188,7 +188,7 @@ PyObject * NewTessControlShader(PyObject * self, PyObject * args) {
 	int compiled = OpenGL::GL_FALSE;
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
-		static const char * logTitle = __FUNCTION__ "() compile failed\n";
+		static const char * logTitle = "NewTessControlShader() compile failed\n";
 		static int logTitleLength = strlen(logTitle);
 		
 		int logLength = 0;
@@ -220,7 +220,7 @@ PyObject * NewTessControlShader(PyObject * self, PyObject * args) {
 PyObject * DeleteShader(PyObject * self, PyObject * args) {
 	Shader * shader;
 
-	if (!PyArg_ParseTuple(args, "O:" __FUNCTION__, &shader)) {
+	if (!PyArg_ParseTuple(args, "O:DeleteShader", &shader)) {
 		return 0;
 	}
 

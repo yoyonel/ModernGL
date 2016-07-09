@@ -13,7 +13,7 @@ const char * categoryNames[] = {
 PyObject * NewProgram(PyObject * self, PyObject * args) {
 	PyObject * shaders;
 
-	if (!PyArg_ParseTuple(args, "O:" __FUNCTION__, &shaders)) {
+	if (!PyArg_ParseTuple(args, "O:NewProgram", &shaders)) {
 		return 0;
 	}
 
@@ -28,7 +28,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("shaders", shader, ShaderType, i);
 		
 		if (shader->attached) {
-			PyErr_Format(ModuleError, __FUNCTION__ "() shaders[%d] is already attached to another program", i);
+			PyErr_Format(ModuleError, "NewProgram() shaders[%d] is already attached to another program", i);
 			return 0;
 		}
 
@@ -37,7 +37,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 
 	for (int i = 0; i < NUM_SHADER_CATEGORIES; ++i) {
 		if (category[i] > 1) {
-			PyErr_Format(ModuleError, __FUNCTION__ "() duplicate %s in `shaders`", categoryNames[i]);
+			PyErr_Format(ModuleError, "NewProgram() duplicate %s in `shaders`", categoryNames[i]);
 			return 0;
 		}
 	}
@@ -54,7 +54,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	OpenGL::glGetProgramiv(program, OpenGL::GL_LINK_STATUS, &linked);
 
 	if (!linked) {
-		static const char * logTitle = __FUNCTION__ "() linking failed\n";
+		static const char * logTitle = "NewProgram() linking failed\n";
 		static int logTitleLength = strlen(logTitle);
 		
 		int logLength = 0;
@@ -121,7 +121,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 PyObject * DeleteProgram(PyObject * self, PyObject * args) {
 	Program * program;
 
-	if (!PyArg_ParseTuple(args, "O:" __FUNCTION__, &program)) {
+	if (!PyArg_ParseTuple(args, "O:DeleteProgram", &program)) {
 		return 0;
 	}
 
@@ -142,7 +142,7 @@ PyObject * Uniform1f(PyObject * self, PyObject * args) {
 	UniformLocation * location;
 	float v0;
 
-	if (!PyArg_ParseTuple(args, "Of:" __FUNCTION__, &location, &v0)) {
+	if (!PyArg_ParseTuple(args, "Of:Uniform1f", &location, &v0)) {
 		return 0;
 	}
 
@@ -162,7 +162,7 @@ PyObject * Uniform2f(PyObject * self, PyObject * args) {
 	float v0;
 	float v1;
 
-	if (!PyArg_ParseTuple(args, "Off:" __FUNCTION__, &location, &v0, &v1)) {
+	if (!PyArg_ParseTuple(args, "Off:Uniform2f", &location, &v0, &v1)) {
 		return 0;
 	}
 
@@ -183,7 +183,7 @@ PyObject * Uniform3f(PyObject * self, PyObject * args) {
 	float v1;
 	float v2;
 
-	if (!PyArg_ParseTuple(args, "Offf:" __FUNCTION__, &location, &v0, &v1, &v2)) {
+	if (!PyArg_ParseTuple(args, "Offf:Uniform3f", &location, &v0, &v1, &v2)) {
 		return 0;
 	}
 
@@ -205,7 +205,7 @@ PyObject * Uniform4f(PyObject * self, PyObject * args) {
 	float v2;
 	float v3;
 
-	if (!PyArg_ParseTuple(args, "Offff:" __FUNCTION__, &location, &v0, &v1, &v2, &v3)) {
+	if (!PyArg_ParseTuple(args, "Offff:Uniform4f", &location, &v0, &v1, &v2, &v3)) {
 		return 0;
 	}
 
@@ -224,7 +224,7 @@ PyObject * Uniform1i(PyObject * self, PyObject * args) {
 	UniformLocation * location;
 	int v0;
 
-	if (!PyArg_ParseTuple(args, "Oi:" __FUNCTION__, &location, &v0)) {
+	if (!PyArg_ParseTuple(args, "Oi:Uniform1i", &location, &v0)) {
 		return 0;
 	}
 
@@ -244,7 +244,7 @@ PyObject * Uniform2i(PyObject * self, PyObject * args) {
 	int v0;
 	int v1;
 
-	if (!PyArg_ParseTuple(args, "Oii:" __FUNCTION__, &location, &v0, &v1)) {
+	if (!PyArg_ParseTuple(args, "Oii:Uniform2i", &location, &v0, &v1)) {
 		return 0;
 	}
 
@@ -265,7 +265,7 @@ PyObject * Uniform3i(PyObject * self, PyObject * args) {
 	int v1;
 	int v2;
 
-	if (!PyArg_ParseTuple(args, "Oiii:" __FUNCTION__, &location, &v0, &v1, &v2)) {
+	if (!PyArg_ParseTuple(args, "Oiii:Uniform3i", &location, &v0, &v1, &v2)) {
 		return 0;
 	}
 
@@ -287,7 +287,7 @@ PyObject * Uniform4i(PyObject * self, PyObject * args) {
 	int v2;
 	int v3;
 
-	if (!PyArg_ParseTuple(args, "Oiiii:" __FUNCTION__, &location, &v0, &v1, &v2, &v3)) {
+	if (!PyArg_ParseTuple(args, "Oiiii:Uniform4i", &location, &v0, &v1, &v2, &v3)) {
 		return 0;
 	}
 
@@ -306,7 +306,7 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	UniformLocation * location;
 	PyObject * matrix;
 
-	if (!PyArg_ParseTuple(args, "OO:" __FUNCTION__, &location, &matrix)) {
+	if (!PyArg_ParseTuple(args, "OO:UniformMatrix", &location, &matrix)) {
 		return 0;
 	}
 
@@ -323,7 +323,7 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	int count = (int)PyList_Size(matrix);
 	
 	if (count != 16) {
-		PyErr_Format(ModuleError, __FUNCTION__ "() matrix length must be 16, not %d", count);
+		PyErr_Format(ModuleError, "UniformMatrix() matrix length must be 16, not %d", count);
 		return 0;
 	}
 
@@ -340,7 +340,7 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	UniformLocation * location;
 	PyObject * matrix;
 
-	if (!PyArg_ParseTuple(args, "OO:" __FUNCTION__, &location, &matrix)) {
+	if (!PyArg_ParseTuple(args, "OO:UniformTransposeMatrix", &location, &matrix)) {
 		return 0;
 	}
 
@@ -357,7 +357,7 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	int count = (int)PyList_Size(matrix);
 	
 	if (count != 16) {
-		PyErr_Format(ModuleError, __FUNCTION__ "() matrix length must be 16, not %d", count);
+		PyErr_Format(ModuleError, "UniformTransposeMatrix() matrix length must be 16, not %d", count);
 		return 0;
 	}
 

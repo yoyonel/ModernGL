@@ -132,6 +132,8 @@ Keywords = [
 	'video',
 ]
 
+target = platform.system().lower()
+
 Libraries = {
 	'windows' : ['user32', 'gdi32'],
 	'linux' : ['GL', 'dl'],
@@ -139,7 +141,7 @@ Libraries = {
 
 ModernGL = Extension(
 	'ModernGL.ModernGL',
-	libraries = Libraries[platform.system().lower()],
+	libraries = Libraries[target],
 	sources = [
 		'Source/OpenGL.cpp',
 		'Source/ModernGL.cpp',
@@ -156,20 +158,25 @@ ModernGL = Extension(
 	]
 )
 
-setup(
-	name = 'ModernGL',
-	version = '2.1.2',
-	description = ShortDescription,
-	long_description = LongDescription,
-	url = 'https://github.com/cprogrammer1994/ModernGL',
-	download_url = 'https://github.com/cprogrammer1994/ModernGL/releases',
-	author = 'Szabolcs Dombi',
-	author_email = 'cprogrammer1994@gmail.com',
-	license = 'MIT',
-	classifiers = Classifiers,
-	keywords = Keywords,
-	packages = ['ModernGL'],
-	ext_modules = [ModernGL],
-	platforms = ['win32', 'win64'],
-	zip_safe = True,
-)
+args = {
+	'name' : 'ModernGL',
+	'version' : '2.1.2',
+	'description' : ShortDescription,
+	'long_description' : LongDescription,
+	'url' : 'https://github.com/cprogrammer1994/ModernGL',
+	'download_url' : 'https://github.com/cprogrammer1994/ModernGL/releases',
+	'author' : 'Szabolcs Dombi',
+	'author_email' : 'cprogrammer1994@gmail.com',
+	'license' : 'MIT',
+	'classifiers' : Classifiers,
+	'keywords' : Keywords,
+	'packages' : ['ModernGL'],
+	'ext_modules' : [ModernGL],
+	'platforms' : ['win32', 'win64'],
+	'zip_safe' : True,
+}
+
+if target is 'windows':
+	args['zip_safe'] = True
+
+setup(**args)
