@@ -17,8 +17,6 @@ int activeProgram;
 int activeViewportWidth;
 int activeViewportHeight;
 
-char compilerLog[maxCompilerLog + 1];
-
 PyObject * ExtensionActive(PyObject * self) {
 	if (extensionActive) {
 		Py_RETURN_TRUE;
@@ -80,7 +78,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"GetInfo",
-		(PyCFunction)Dummy, // GetInfo,
+		(PyCFunction)Dummy,
 		METH_NOARGS,
 		"Get information about the OpenGL context.\n"
 
@@ -99,7 +97,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Viewport",
-		(PyCFunction)Dummy, // Viewport,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		"Set the viewport for rendering.\n"
 
@@ -117,7 +115,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Clear",
-		(PyCFunction)Dummy, // Clear,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		"Clear the viewport with the specified colors.\n"
 		"Also clears the depth attachments.\n"
@@ -136,7 +134,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"PointSize",
-		(PyCFunction)Dummy, // PointSize,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"Set the size of the point primitive.\n"
 
@@ -151,7 +149,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"LineSize",
-		(PyCFunction)Dummy, // LineSize,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"Set the with of the line primitive.\n"
 
@@ -166,7 +164,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"EnableOnly",
-		(PyCFunction)Dummy, // EnableOnly,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"Enables only the specified flags.\n"
 		"The enable flags are: ENABLE_NOTHING, ENABLE_BLEND, ENABLE_DEPTH_TEST, ENABLE_CULL_FACE and ENABLE_MULTISAMPLE.\n"
@@ -182,7 +180,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"EnableBlend",
-		(PyCFunction)Dummy, // EnableBlend,
+		(PyCFunction)Dummy,
 		METH_NOARGS,
 		"Enable blending.\n"
 
@@ -197,7 +195,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DisableBlend",
-		(PyCFunction)Dummy, // DisableBlend,
+		(PyCFunction)Dummy,
 		METH_NOARGS,
 		"Disable blending.\n"
 
@@ -212,7 +210,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"EnableCullFace",
-		(PyCFunction)Dummy, // EnableCullFace,
+		(PyCFunction)Dummy,
 		METH_NOARGS,
 		"Enable face culling.\n"
 
@@ -227,7 +225,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DisableCullFace",
-		(PyCFunction)Dummy, // DisableCullFace,
+		(PyCFunction)Dummy,
 		METH_NOARGS,
 		"Disable face culling.\n"
 
@@ -242,7 +240,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"EnableDepthTest",
-		(PyCFunction)Dummy, // EnableDepthTest,
+		(PyCFunction)Dummy,
 		METH_NOARGS,
 		"Enable depth testing.\n"
 
@@ -257,7 +255,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DisableDepthTest",
-		(PyCFunction)Dummy, // DisableDepthTest,
+		(PyCFunction)Dummy,
 		METH_NOARGS,
 		"Disable depth testing.\n"
 
@@ -272,7 +270,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"EnableMultisample",
-		(PyCFunction)Dummy, // EnableMultisample,
+		(PyCFunction)Dummy,
 		METH_NOARGS,
 		"Enable multisampling.\n"
 
@@ -287,7 +285,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DisableMultisample",
-		(PyCFunction)Dummy, // DisableMultisample,
+		(PyCFunction)Dummy,
 		METH_NOARGS,
 		"Disable multisampling.\n"
 
@@ -302,7 +300,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewVertexShader",
-		(PyCFunction)Dummy, // NewVertexShader,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		""
 
@@ -317,7 +315,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewFragmentShader",
-		(PyCFunction)Dummy, // NewFragmentShader,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		""
 
@@ -332,7 +330,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewGeometryShader",
-		(PyCFunction)Dummy, // NewGeometryShader,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		""
 
@@ -347,7 +345,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteShader",
-		(PyCFunction)Dummy, // DeleteShader,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"Delete shader object created by the NewFragmentShader, the NewGeometryShader, the NewTessControlShader, the NewTessEvaluationShader or the NewVertexShader.\n"
 
@@ -362,7 +360,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewProgram",
-		(PyCFunction)Dummy, // NewProgram,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		""
 
@@ -377,7 +375,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteProgram",
-		(PyCFunction)Dummy, // DeleteProgram,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		""
 
@@ -392,7 +390,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform1f",
-		(PyCFunction)Dummy, // Uniform1f,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `float` in the shader.\n"
@@ -411,7 +409,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform2f",
-		(PyCFunction)Dummy, // Uniform2f,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `vec2` in the shader.\n"
@@ -431,7 +429,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform3f",
-		(PyCFunction)Dummy, // Uniform3f,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `vec3` in the shader.\n"
@@ -452,7 +450,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform4f",
-		(PyCFunction)Dummy, // Uniform4f,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `vec4` in the shader.\n"
@@ -474,7 +472,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform1i",
-		(PyCFunction)Dummy, // Uniform1i,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `int` in the shader.\n"
@@ -494,7 +492,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform2i",
-		(PyCFunction)Dummy, // Uniform2i,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `ivec2` in the shader.\n"
@@ -514,7 +512,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform3i",
-		(PyCFunction)Dummy, // Uniform3i,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `ivec3` in the shader.\n"
@@ -535,7 +533,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"Uniform4i",
-		(PyCFunction)Dummy, // Uniform4i,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"Set the value of the uniform.\n"
 		"The value must have the type of `ivec4` in the shader.\n"
@@ -557,7 +555,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UniformMatrix",
-		(PyCFunction)Dummy, // UniformMatrix,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		""
 
@@ -573,7 +571,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UniformTransposeMatrix",
-		(PyCFunction)Dummy, // UniformTransposeMatrix,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		""
 
@@ -589,7 +587,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UseUniformBuffer",
-		(PyCFunction)Dummy, // UseUniformBuffer,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -605,7 +603,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewTexture",
-		(PyCFunction)Dummy, // NewTexture,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -623,7 +621,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteTexture",
-		(PyCFunction)Dummy, // DeleteTexture,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		""
 
@@ -638,7 +636,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UpdateTexture",
-		(PyCFunction)Dummy, // UpdateTexture,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -659,7 +657,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UseTexture",
-		(PyCFunction)Dummy, // UseTexture,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		""
 
@@ -675,7 +673,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"SetTexturePixelated",
-		(PyCFunction)Dummy, // SetTexturePixelated,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"Set texture filter to nearest.\n"
 
@@ -690,7 +688,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"SetTextureFiltered",
-		(PyCFunction)Dummy, // SetTextureFiltered,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"Set texture filter to linear.\n"
 
@@ -705,7 +703,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"SetTextureMipmapped",
-		(PyCFunction)Dummy, // SetTextureMipmapped,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"Set texture filter to mipmap linear.\n"
 
@@ -720,7 +718,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"BuildMipmap",
-		(PyCFunction)Dummy, // BuildMipmap,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		"Generate the mipmaps for the texture.\n"
 
@@ -737,7 +735,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewVertexArray",
-		(PyCFunction)Dummy, // NewVertexArray,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		"The foreach int or float attribute an index of a vertex buffer object and the location of a vertex attribute must be specified.\n"
 
@@ -754,7 +752,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteVertexArray",
-		(PyCFunction)Dummy, // DeleteVertexArray,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		""
 		"\n"
@@ -768,7 +766,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"EnableAttributes",
-		(PyCFunction)Dummy, // EnableAttributes,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		"Enable attributes in the vertex array object.\n"
 
@@ -784,7 +782,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DisableAttributes",
-		(PyCFunction)Dummy, // DisableAttributes,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		"Disable attributes in the vertex array object.\n"
 
@@ -800,7 +798,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewVertexBuffer",
-		(PyCFunction)Dummy, // NewVertexBuffer,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -815,7 +813,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewIndexBuffer",
-		(PyCFunction)Dummy, // NewIndexBuffer,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -830,7 +828,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewUniformBuffer",
-		(PyCFunction)Dummy, // NewUniformBuffer,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -845,7 +843,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteVertexBuffer",
-		(PyCFunction)Dummy, // DeleteVertexBuffer,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		""
 
@@ -860,7 +858,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteIndexBuffer",
-		(PyCFunction)Dummy, // DeleteIndexBuffer,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		""
 
@@ -875,7 +873,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteUniformBuffer",
-		(PyCFunction)Dummy, // DeleteUniformBuffer,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		""
 
@@ -890,7 +888,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteStorageBuffer",
-		(PyCFunction)Dummy, // DeleteStorageBuffer,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		""
 
@@ -905,7 +903,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UpdateVertexBuffer",
-		(PyCFunction)Dummy, // UpdateVertexBuffer,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -922,7 +920,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UpdateIndexBuffer",
-		(PyCFunction)Dummy, // UpdateIndexBuffer,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -939,7 +937,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UpdateUniformBuffer",
-		(PyCFunction)Dummy, // UpdateUniformBuffer,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -956,7 +954,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderTriangles",
-		(PyCFunction)Dummy, // RenderTriangles,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
@@ -973,7 +971,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderTriangleStrip",
-		(PyCFunction)Dummy, // RenderTriangleStrip,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
@@ -990,7 +988,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderTriangleFan",
-		(PyCFunction)Dummy, // RenderTriangleFan,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
@@ -1007,7 +1005,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderLines",
-		(PyCFunction)Dummy, // RenderLines,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
@@ -1024,7 +1022,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderLineStrip",
-		(PyCFunction)Dummy, // RenderLineStrip,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
@@ -1041,7 +1039,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderLineLoop",
-		(PyCFunction)Dummy, // RenderLineLoop,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
@@ -1058,7 +1056,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderPoints",
-		(PyCFunction)Dummy, // RenderPoints,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
@@ -1075,7 +1073,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderLineStripAdjacency",
-		(PyCFunction)Dummy, // RenderLineStripAdjacency,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
@@ -1092,7 +1090,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderLinesAdjacency",
-		(PyCFunction)Dummy, // RenderLinesAdjacency,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
@@ -1109,7 +1107,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderTriangleStripAdjacency",
-		(PyCFunction)Dummy, // RenderTriangleStripAdjacency,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
@@ -1126,7 +1124,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RenderTrianglesAdjacency",
-		(PyCFunction)Dummy, // RenderTrianglesAdjacency,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 
 		"\n"
@@ -1143,7 +1141,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewFramebuffer",
-		(PyCFunction)Dummy, // NewFramebuffer,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		"Creates a framebuffer with two texture attachments. (color and depth)\n"
 		"The color attachment have RGBA format, 8bit for each channel.\n"
@@ -1164,7 +1162,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteFramebuffer",
-		(PyCFunction)Dummy, // DeleteFramebuffer,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 
 		"\n"
@@ -1178,7 +1176,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UseFramebuffer",
-		(PyCFunction)Dummy, // UseFramebuffer,
+		(PyCFunction)Dummy,
 		METH_VARARGS,
 		""
 
@@ -1193,7 +1191,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"GetDefaultFramebuffer",
-		(PyCFunction)Dummy, // GetDefaultFramebuffer,
+		(PyCFunction)Dummy,
 		METH_NOARGS,
 		""
 
@@ -1208,7 +1206,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UseDefaultFramebuffer",
-		(PyCFunction)Dummy, // UseDefaultFramebuffer,
+		(PyCFunction)Dummy,
 		METH_NOARGS,
 		""
 
@@ -1224,7 +1222,7 @@ static PyMethodDef methods[] = {
 	
 	{
 		"ReadPixels",
-		(PyCFunction)Dummy, // ReadPixels,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -1243,7 +1241,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"ReadDepthPixels",
-		(PyCFunction)Dummy, // ReadDepthPixels,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -1261,7 +1259,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"ReadPixel",
-		(PyCFunction)Dummy, // ReadPixel,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -1277,7 +1275,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"ReadDepthPixel",
-		(PyCFunction)Dummy, // ReadDepthPixel,
+		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -1293,7 +1291,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UseTextureAsImage",
-		(PyCFunction)DummyExtension, // UseTextureAsImage,
+		(PyCFunction)DummyExtension,
 		METH_VARARGS | METH_KEYWORDS,
 		"To use image2D instead of sampler2D.\n"
 
@@ -1310,7 +1308,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewTessEvaluationShader",
-		(PyCFunction)DummyExtension, // NewTessEvaluationShader,
+		(PyCFunction)DummyExtension,
 		METH_VARARGS,
 		""
 
@@ -1325,7 +1323,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewTessControlShader",
-		(PyCFunction)DummyExtension, // NewTessControlShader,
+		(PyCFunction)DummyExtension,
 		METH_VARARGS,
 		""
 
@@ -1340,7 +1338,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewComputeShader",
-		(PyCFunction)DummyExtension, // NewComputeShader,
+		(PyCFunction)DummyExtension,
 		METH_VARARGS,
 		"Compiles and links a compute shader from source.\n"
 
@@ -1355,7 +1353,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"DeleteComputeShader",
-		(PyCFunction)DummyExtension, // DeleteComputeShader,
+		(PyCFunction)DummyExtension,
 		METH_VARARGS,
 		"Compute shader is a standalone shader program. NOT part of the rendering pipeline.\n"
 		"Equivalent to the DeleteProgram.\n"
@@ -1371,7 +1369,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"RunComputeShader",
-		(PyCFunction)DummyExtension, // RunComputeShader,
+		(PyCFunction)DummyExtension,
 		METH_VARARGS | METH_KEYWORDS,
 		"Run the compute shader.\n"
 
@@ -1389,7 +1387,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"NewStorageBuffer",
-		(PyCFunction)DummyExtension, // NewStorageBuffer,
+		(PyCFunction)DummyExtension,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -1404,7 +1402,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UseStorageBuffer",
-		(PyCFunction)DummyExtension, // UseStorageBuffer,
+		(PyCFunction)DummyExtension,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -1420,7 +1418,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"UpdateStorageBuffer",
-		(PyCFunction)DummyExtension, // UpdateStorageBuffer,
+		(PyCFunction)DummyExtension,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
@@ -1437,7 +1435,7 @@ static PyMethodDef methods[] = {
 	},
 	{
 		"ReadStorageBuffer",
-		(PyCFunction)DummyExtension, // ReadStorageBuffer,
+		(PyCFunction)DummyExtension,
 		METH_VARARGS | METH_KEYWORDS,
 		""
 
