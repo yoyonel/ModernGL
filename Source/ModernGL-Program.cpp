@@ -30,7 +30,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 
 	for (int i = 0; i < NUM_SHADER_CATEGORIES; ++i) {
 		if (category[i] > 1) {
-			PyErr_Format(ModuleError, "NewProgram() duplicate %s", categoryNames[i]);
+			PyErr_Format(ModuleError, __FUNCTION__ "() duplicate %s in `shaders`", categoryNames[i]);
 			return 0;
 		}
 	}
@@ -47,39 +47,32 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	OpenGL::glGetProgramiv(program, OpenGL::GL_LINK_STATUS, &linked);
 
 	if (!linked) {
-		int logSize = 0;
-		static const char * logTitle = "NewProgram() linking failed\n";
-		static int logTitleSize = strlen(logTitle);
-		memcpy(compilerLog, logTitle, logTitleSize);
-		OpenGL::glGetProgramInfoLog(program, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
-		compilerLog[logTitleSize + logSize] = 0;
-		OpenGL::glDeleteProgram(program);
-		program = 0;
-	} else {
-		compilerLog[0] = 0;
-	}
+		static const char * logTitle = __FUNCTION__ "() compile failed\n";
+		static int logTitleLength = strlen(logTitle);
+		
+		int logLength = 0;
+		OpenGL::glGetProgramiv(program, OpenGL::GL_INFO_LOG_LENGTH, &logLength);
+		int logTotalLength = logLength + logTitleLength;
 
-	if (!program) {
-		PyErr_SetString(ModuleError, compilerLog);
+		PyObject * content = PyUnicode_New(logTotalLength, 255);
+		if (PyUnicode_READY(content)) {
+			OpenGL::glDeleteProgram(program);
+			return 0;
+		}
+
+		char * data = (char *)PyUnicode_1BYTE_DATA(content);
+		memcpy(data, logTitle, logTitleLength);
+
+		int logSize = 0;
+		OpenGL::glGetProgramInfoLog(program, logLength, &logSize, data + logTitleLength);
+		data[logTitleLength] = 0;
+
+		OpenGL::glDeleteProgram(program);
+		PyErr_SetObject(ModuleError, content);
 		return 0;
 	}
 
 	PyObject * dict = PyDict_New();
-
-	int attributes = 0;
-	OpenGL::glGetProgramiv(program, OpenGL::GL_ACTIVE_ATTRIBUTES, &attributes);
-	for (int i = 0; i < attributes; ++i) {
-		char name[64 + 1];
-		int size;
-		int length;
-		unsigned type;
-		OpenGL::glGetActiveAttrib(program, i, 64, &length, &size, &type, name);
-		int location = OpenGL::glGetAttribLocation(program, name);
-		name[length] = 0;
-		if (location >= 0) {
-			PyDict_SetItemString(dict, name, CreateAttributeLocationType(location, program));
-		}
-	}
 
 	int uniforms = 0;
 	OpenGL::glGetProgramiv(program, OpenGL::GL_ACTIVE_UNIFORMS, &uniforms);
@@ -318,13 +311,12 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	int count = (int)PyList_Size(matrix);
 	
 	if (count != 16) {
-		PyErr_Format(ModuleError, "UniformMatrix() matrix length must be 16, not %d", count);
+		PyErr_Format(ModuleError, __FUNCTION__ "() matrix length must be 16, not %d", count);
 		return 0;
 	}
 
 	for (int i = 0; i < count; ++i) {
 		PyObject * item = PyList_GET_ITEM(matrix, i);
-		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("matrix", item, PyFloat_Type, i);
 		matrix_data[i] = (float)PyFloat_AsDouble(item);
 	}
 
@@ -353,13 +345,12 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	int count = (int)PyList_Size(matrix);
 	
 	if (count != 16) {
-		PyErr_Format(ModuleError, "UniformTransposeMatrix() matrix length must be 16, not %d", count);
+		PyErr_Format(ModuleError, __FUNCTION__ "() matrix length must be 16, not %d", count);
 		return 0;
 	}
 
 	for (int i = 0; i < count; ++i) {
 		PyObject * item = PyList_GET_ITEM(matrix, i);
-		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("matrix", item, PyFloat_Type, i);
 		matrix_data[i] = (float)PyFloat_AsDouble(item);
 	}
 

@@ -22,7 +22,7 @@ PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int expected_size = height * ((width * components + 3) & ~3);
 
 	if (size != expected_size) {
-		PyErr_Format(ModuleError, "NewTexture() expected size is %d, not %d", expected_size, size);
+		PyErr_Format(ModuleError, __FUNCTION__ "() expected size is %d, not %d", expected_size, size);
 		return 0;
 	}
 
