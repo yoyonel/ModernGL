@@ -46,7 +46,9 @@ quality, with less code written.
 
 Checkout the [OpenGL Registry](https://www.opengl.org/registry/) for core specifications.
 
-# Documentation
+# Patches are welcome
+
+# Documentation (deprecated until a stable release)
 
 Please follow the [Documentation](https://pythonhosted.org/ModernGL/).
 

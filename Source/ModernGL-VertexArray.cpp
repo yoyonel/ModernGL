@@ -12,7 +12,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	IndexBuffer * ibo = no_ibo;
 	bool strict = false;
 
-	if (!PyArg_ParseTuple(args, "OOsO|Op:NewVertexArray", &program, &vbo, &format, &attributes, &ibo, &strict)) {
+	if (!PyArg_ParseTuple(args, "OOsO|Op:" __FUNCTION__, &program, &vbo, &format, &attributes, &ibo, &strict)) {
 		return 0;
 	}
 
@@ -101,7 +101,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {
 	VertexArray * vao;
 
-	if (!PyArg_ParseTuple(args, "O:DeleteVertexArray", &vao)) {
+	if (!PyArg_ParseTuple(args, "O" __FUNCTION__, &vao)) {
 		return 0;
 	}
 
@@ -118,7 +118,7 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 
 	static const char * kwlist[] = {"vao", "attributes", "strict", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|p:EnableAttributes", (char **)kwlist, &vao, &attributes, &strict)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|p:" __FUNCTION__, (char **)kwlist, &vao, &attributes, &strict)) {
 		return 0;
 	}
 
@@ -153,7 +153,7 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 
 	static const char * kwlist[] = {"vao", "attributes", "strict", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|p:DisableAttributes", (char **)kwlist, &vao, &attributes, &strict)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|p:" __FUNCTION__, (char **)kwlist, &vao, &attributes, &strict)) {
 		return 0;
 	}
 

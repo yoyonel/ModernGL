@@ -5,7 +5,7 @@
 PyObject * NewVertexShader(PyObject * self, PyObject * args) {
 	const char * source;
 
-	if (!PyArg_ParseTuple(args, "s:NewVertexShader", &source)) {
+	if (!PyArg_ParseTuple(args, "s" __FUNCTION__, &source)) {
 		return 0;
 	}
 
@@ -39,7 +39,7 @@ PyObject * NewVertexShader(PyObject * self, PyObject * args) {
 PyObject * NewFragmentShader(PyObject * self, PyObject * args) {
 	const char * source;
 
-	if (!PyArg_ParseTuple(args, "s:NewFragmentShader", &source)) {
+	if (!PyArg_ParseTuple(args, "s" __FUNCTION__, &source)) {
 		return 0;
 	}
 
@@ -73,7 +73,7 @@ PyObject * NewFragmentShader(PyObject * self, PyObject * args) {
 PyObject * NewGeometryShader(PyObject * self, PyObject * args) {
 	const char * source;
 
-	if (!PyArg_ParseTuple(args, "s:NewGeometryShader", &source)) {
+	if (!PyArg_ParseTuple(args, "s" __FUNCTION__, &source)) {
 		return 0;
 	}
 
@@ -107,7 +107,7 @@ PyObject * NewGeometryShader(PyObject * self, PyObject * args) {
 PyObject * NewTessEvaluationShader(PyObject * self, PyObject * args) {
 	const char * source;
 
-	if (!PyArg_ParseTuple(args, "s:NewTessEvaluationShader", &source)) {
+	if (!PyArg_ParseTuple(args, "s" __FUNCTION__, &source)) {
 		return 0;
 	}
 
@@ -140,7 +140,7 @@ PyObject * NewTessEvaluationShader(PyObject * self, PyObject * args) {
 PyObject * NewTessControlShader(PyObject * self, PyObject * args) {
 	const char * source;
 
-	if (!PyArg_ParseTuple(args, "s:NewTessControlShader", &source)) {
+	if (!PyArg_ParseTuple(args, "s" __FUNCTION__, &source)) {
 		return 0;
 	}
 
@@ -173,7 +173,7 @@ PyObject * NewTessControlShader(PyObject * self, PyObject * args) {
 PyObject * DeleteShader(PyObject * self, PyObject * args) {
 	Shader * shader;
 
-	if (!PyArg_ParseTuple(args, "O:DeleteShader", &shader)) {
+	if (!PyArg_ParseTuple(args, "O" __FUNCTION__, &shader)) {
 		return 0;
 	}
 

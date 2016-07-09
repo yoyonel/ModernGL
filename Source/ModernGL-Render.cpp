@@ -10,7 +10,7 @@ PyObject * RenderTriangles(PyObject * self, PyObject * args, PyObject * kwargs) 
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderTriangles", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii" __FUNCTION__, (char **)kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -40,7 +40,7 @@ PyObject * RenderTriangleStrip(PyObject * self, PyObject * args, PyObject * kwar
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderTriangleStrip", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii" __FUNCTION__, (char **)kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -70,7 +70,7 @@ PyObject * RenderTriangleFan(PyObject * self, PyObject * args, PyObject * kwargs
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderTriangleFan", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii" __FUNCTION__, (char **)kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -100,7 +100,7 @@ PyObject * RenderLines(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderLines", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii" __FUNCTION__, (char **)kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -130,7 +130,7 @@ PyObject * RenderLineStrip(PyObject * self, PyObject * args, PyObject * kwargs) 
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderLineStrip", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii" __FUNCTION__, (char **)kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -160,7 +160,7 @@ PyObject * RenderLineLoop(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderLineLoop", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii" __FUNCTION__, (char **)kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -190,7 +190,7 @@ PyObject * RenderPoints(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderPoints", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii" __FUNCTION__, (char **)kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -220,7 +220,7 @@ PyObject * RenderLineStripAdjacency(PyObject * self, PyObject * args, PyObject *
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderLineStripAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii" __FUNCTION__, (char **)kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -250,7 +250,7 @@ PyObject * RenderLinesAdjacency(PyObject * self, PyObject * args, PyObject * kwa
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderLinesAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii" __FUNCTION__, (char **)kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -280,7 +280,7 @@ PyObject * RenderTriangleStripAdjacency(PyObject * self, PyObject * args, PyObje
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderTriangleStripAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii" __FUNCTION__, (char **)kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 
@@ -310,7 +310,7 @@ PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args, PyObject *
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderTrianglesAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii" __FUNCTION__, (char **)kwlist, &vao, &count, &first, &instances)) {
 		return 0;
 	}
 

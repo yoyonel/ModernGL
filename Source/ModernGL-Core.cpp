@@ -32,7 +32,7 @@ PyObject * Viewport(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"x", "y", "width", "height", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii:Viewport", (char **)kwlist, &x, &y, &width, &height)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii" __FUNCTION__, (char **)kwlist, &x, &y, &width, &height)) {
 		return 0;
 	}
 
@@ -50,7 +50,7 @@ PyObject * Clear(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"r", "g", "b", "a", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|bbbb:Clear", (char **)kwlist, &r, &g, &b, &a)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|bbbb" __FUNCTION__, (char **)kwlist, &r, &g, &b, &a)) {
 		return 0;
 	}
 
@@ -66,7 +66,7 @@ PyObject * Clear(PyObject * self, PyObject * args, PyObject * kwargs) {
 PyObject * PointSize(PyObject * self, PyObject * args) {
 	float size;
 
-	if (!PyArg_ParseTuple(args, "f:PointSize", &size)) {
+	if (!PyArg_ParseTuple(args, "f" __FUNCTION__, &size)) {
 		return 0;
 	}
 
@@ -77,7 +77,7 @@ PyObject * PointSize(PyObject * self, PyObject * args) {
 PyObject * LineSize(PyObject * self, PyObject * args) {
 	float size;
 
-	if (!PyArg_ParseTuple(args, "f:LineSize", &size)) {
+	if (!PyArg_ParseTuple(args, "f" __FUNCTION__, &size)) {
 		return 0;
 	}
 
@@ -88,7 +88,7 @@ PyObject * LineSize(PyObject * self, PyObject * args) {
 PyObject * EnableOnly(PyObject * self, PyObject * args) {
 	EnableFlag * flags;
 
-	if (!PyArg_ParseTuple(args, "O:EnableOnly", &flags)) {
+	if (!PyArg_ParseTuple(args, "O" __FUNCTION__, &flags)) {
 		return 0;
 	}
 
