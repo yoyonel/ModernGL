@@ -51,7 +51,7 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 	OpenGL::glGetProgramiv(program, OpenGL::GL_LINK_STATUS, &linked);
 
 	if (!linked) {
-		static const char * logTitle = __FUNCTION__ "() compile failed\n";
+		static const char * logTitle = __FUNCTION__ "() linking failed\n";
 		static int logTitleLength = strlen(logTitle);
 		
 		int logLength = 0;
