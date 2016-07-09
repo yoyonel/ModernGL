@@ -751,6 +751,23 @@ static PyMethodDef methods[] = {
 		"\n"
 	},
 	{
+		"NewAdvancedVertexArray",
+		(PyCFunction)Dummy,
+		METH_VARARGS,
+		"The foreach int or float attribute an index of a vertex buffer object and the location of a vertex attribute must be specified.\n"
+
+		"\n"
+		"Parameters:\n"
+		"\tformat (str) Format of the vertex array attrubites. ([1-4][if])+\n"
+		"\tattribs (list of int pairs) List of vertex buffer object and vertex location pairs.\n"
+		"\tibo (int) Index of an index buffer object. By default is 0\n"
+
+		"\n"
+		"Returns:\n"
+		"\tvao (int) The index of the new vertex array object.\n"
+		"\n"
+	},
+	{
 		"DeleteVertexArray",
 		(PyCFunction)Dummy,
 		METH_VARARGS,
@@ -1504,6 +1521,7 @@ void LoadImplementation() {
 		(PyCFunction)SetTextureMipmapped,
 		(PyCFunction)BuildMipmap,
 		(PyCFunction)NewVertexArray,
+		(PyCFunction)NewAdvancedVertexArray,
 		(PyCFunction)DeleteVertexArray,
 		(PyCFunction)EnableAttributes,
 		(PyCFunction)DisableAttributes,
