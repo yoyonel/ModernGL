@@ -21,7 +21,12 @@ PyObject * GetInfo(PyObject * self) {
 		renderer = "";
 	}
 
-	return Py_BuildValue("iiiss", major, minor, samples, vendor, renderer);
+	PyObject * dict = PyDict_New();
+	PyDict_SetItemString(dict, "version", PyTuple_Pack(2, PyLong_FromLong(major), PyLong_FromLong(minor)));
+	PyDict_SetItemString(dict, "samples", PyLong_FromLong(major));
+	PyDict_SetItemString(dict, "vendor", PyUnicode_FromString(vendor));
+	PyDict_SetItemString(dict, "renderer", PyUnicode_FromString(renderer));
+	return dict;
 }
 
 PyObject * Viewport(PyObject * self, PyObject * args, PyObject * kwargs) {
