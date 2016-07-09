@@ -767,38 +767,6 @@ static PyMethodDef methods[] = {
 		"\n"
 	},
 	{
-		"EnableAttribute",
-		(PyCFunction)Dummy, // EnableAttribute,
-		METH_VARARGS | METH_KEYWORDS,
-		"Enable an attribute in the vertex array object.\n"
-
-		"\n"
-		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object.\n"
-		"\tattrib (int) The location of the vertex attribute returned by the GetAttributeLocation function.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		"DisableAttribute",
-		(PyCFunction)Dummy, // DisableAttribute,
-		METH_VARARGS | METH_KEYWORDS,
-		"Disable an attribute in the vertex array object.\n"
-
-		"\n"
-		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object.\n"
-		"\tattrib (int) The location of the vertex attribute returned by the GetAttributeLocation function.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
 		"EnableAttributes",
 		(PyCFunction)Dummy, // EnableAttributes,
 		METH_VARARGS | METH_KEYWORDS,
@@ -1539,8 +1507,6 @@ void LoadImplementation() {
 		(PyCFunction)BuildMipmap,
 		(PyCFunction)NewVertexArray,
 		(PyCFunction)DeleteVertexArray,
-		(PyCFunction)EnableAttribute,
-		(PyCFunction)DisableAttribute,
 		(PyCFunction)EnableAttributes,
 		(PyCFunction)DisableAttributes,
 		(PyCFunction)NewVertexBuffer,

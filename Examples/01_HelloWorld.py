@@ -32,7 +32,7 @@ frag = GL.NewFragmentShader('''
 prog, iface = GL.NewProgram([vert, frag])
 
 vbo = GL.NewVertexBuffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
-vao = GL.NewVertexArray('2f', vbo, [iface['vert']])
+vao = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 
 while WND.Update():
 	GL.Clear(240, 240, 240)
