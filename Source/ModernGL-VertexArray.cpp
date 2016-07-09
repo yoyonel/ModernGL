@@ -101,7 +101,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {
 	VertexArray * vao;
 
-	if (!PyArg_ParseTuple(args, "O" __FUNCTION__, &vao)) {
+	if (!PyArg_ParseTuple(args, "O:" __FUNCTION__, &vao)) {
 		return 0;
 	}
 

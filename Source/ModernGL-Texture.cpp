@@ -11,7 +11,7 @@ PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"width", "height", "data", "components", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiy#|i" __FUNCTION__, (char **)kwlist, &width, &height, &data, &size, &components)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiy#|i:" __FUNCTION__, (char **)kwlist, &width, &height, &data, &size, &components)) {
 		return 0;
 	}
 
@@ -50,7 +50,7 @@ PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 PyObject * DeleteTexture(PyObject * self, PyObject * args) {
 	Texture * texture;
 
-	if (!PyArg_ParseTuple(args, "O" __FUNCTION__, &texture)) {
+	if (!PyArg_ParseTuple(args, "O:" __FUNCTION__, &texture)) {
 		return 0;
 	}
 
@@ -71,7 +71,7 @@ PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"texture", "x", "y", "width", "height", "data", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oiiiiy#|i" __FUNCTION__, (char **)kwlist, &texture, &x, &y, &width, &height, &data, &size)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oiiiiy#|i:" __FUNCTION__, (char **)kwlist, &texture, &x, &y, &width, &height, &data, &size)) {
 		return 0;
 	}
 
@@ -94,7 +94,7 @@ PyObject * UseTexture(PyObject * self, PyObject * args) {
 	Texture * texture;
 	int location = 0;
 
-	if (!PyArg_ParseTuple(args, "O|i" __FUNCTION__, &texture, &location)) {
+	if (!PyArg_ParseTuple(args, "O|i:" __FUNCTION__, &texture, &location)) {
 		return 0;
 	}
 
@@ -108,7 +108,7 @@ PyObject * UseTexture(PyObject * self, PyObject * args) {
 PyObject * SetTexturePixelated(PyObject * self, PyObject * args) {
 	Texture * texture;
 	
-	if (!PyArg_ParseTuple(args, "O" __FUNCTION__, &texture)) {
+	if (!PyArg_ParseTuple(args, "O:" __FUNCTION__, &texture)) {
 		return 0;
 	}
 
@@ -124,7 +124,7 @@ PyObject * SetTexturePixelated(PyObject * self, PyObject * args) {
 PyObject * SetTextureFiltered(PyObject * self, PyObject * args) {
 	Texture * texture;
 	
-	if (!PyArg_ParseTuple(args, "O" __FUNCTION__, &texture)) {
+	if (!PyArg_ParseTuple(args, "O:" __FUNCTION__, &texture)) {
 		return 0;
 	}
 
@@ -140,7 +140,7 @@ PyObject * SetTextureFiltered(PyObject * self, PyObject * args) {
 PyObject * SetTextureMipmapped(PyObject * self, PyObject * args) {
 	Texture * texture;
 	
-	if (!PyArg_ParseTuple(args, "O" __FUNCTION__, &texture)) {
+	if (!PyArg_ParseTuple(args, "O:" __FUNCTION__, &texture)) {
 		return 0;
 	}
 
@@ -160,7 +160,7 @@ PyObject * BuildMipmap(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"texture", "base", "max", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|ii" __FUNCTION__, (char **)kwlist, &texture, &base, &max)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|ii:" __FUNCTION__, (char **)kwlist, &texture, &base, &max)) {
 		return 0;
 	}
 
@@ -182,7 +182,7 @@ PyObject * UseTextureAsImage(PyObject * self, PyObject * args, PyObject * kwargs
 
 	static const char * kwlist[] = {"texture", "binding", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|ii" __FUNCTION__, (char **)kwlist, &texture, &binding)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|ii:" __FUNCTION__, (char **)kwlist, &texture, &binding)) {
 		return 0;
 	}
 

@@ -13,7 +13,7 @@ const char * categoryNames[] = {
 PyObject * NewProgram(PyObject * self, PyObject * args) {
 	PyObject * shaders;
 
-	if (!PyArg_ParseTuple(args, "O" __FUNCTION__, &shaders)) {
+	if (!PyArg_ParseTuple(args, "O:" __FUNCTION__, &shaders)) {
 		return 0;
 	}
 
@@ -116,7 +116,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 PyObject * DeleteProgram(PyObject * self, PyObject * args) {
 	Program * program;
 
-	if (!PyArg_ParseTuple(args, "O" __FUNCTION__, &program)) {
+	if (!PyArg_ParseTuple(args, "O:" __FUNCTION__, &program)) {
 		return 0;
 	}
 
@@ -137,7 +137,7 @@ PyObject * Uniform1f(PyObject * self, PyObject * args) {
 	UniformLocation * location;
 	float v0;
 
-	if (!PyArg_ParseTuple(args, "Of" __FUNCTION__, &location, &v0)) {
+	if (!PyArg_ParseTuple(args, "Of:" __FUNCTION__, &location, &v0)) {
 		return 0;
 	}
 
@@ -157,7 +157,7 @@ PyObject * Uniform2f(PyObject * self, PyObject * args) {
 	float v0;
 	float v1;
 
-	if (!PyArg_ParseTuple(args, "Off" __FUNCTION__, &location, &v0, &v1)) {
+	if (!PyArg_ParseTuple(args, "Off:" __FUNCTION__, &location, &v0, &v1)) {
 		return 0;
 	}
 
@@ -178,7 +178,7 @@ PyObject * Uniform3f(PyObject * self, PyObject * args) {
 	float v1;
 	float v2;
 
-	if (!PyArg_ParseTuple(args, "Offf" __FUNCTION__, &location, &v0, &v1, &v2)) {
+	if (!PyArg_ParseTuple(args, "Offf:" __FUNCTION__, &location, &v0, &v1, &v2)) {
 		return 0;
 	}
 
@@ -200,7 +200,7 @@ PyObject * Uniform4f(PyObject * self, PyObject * args) {
 	float v2;
 	float v3;
 
-	if (!PyArg_ParseTuple(args, "Offff" __FUNCTION__, &location, &v0, &v1, &v2, &v3)) {
+	if (!PyArg_ParseTuple(args, "Offff:" __FUNCTION__, &location, &v0, &v1, &v2, &v3)) {
 		return 0;
 	}
 
@@ -219,7 +219,7 @@ PyObject * Uniform1i(PyObject * self, PyObject * args) {
 	UniformLocation * location;
 	int v0;
 
-	if (!PyArg_ParseTuple(args, "Oi" __FUNCTION__, &location, &v0)) {
+	if (!PyArg_ParseTuple(args, "Oi:" __FUNCTION__, &location, &v0)) {
 		return 0;
 	}
 
@@ -239,7 +239,7 @@ PyObject * Uniform2i(PyObject * self, PyObject * args) {
 	int v0;
 	int v1;
 
-	if (!PyArg_ParseTuple(args, "Oii" __FUNCTION__, &location, &v0, &v1)) {
+	if (!PyArg_ParseTuple(args, "Oii:" __FUNCTION__, &location, &v0, &v1)) {
 		return 0;
 	}
 
@@ -260,7 +260,7 @@ PyObject * Uniform3i(PyObject * self, PyObject * args) {
 	int v1;
 	int v2;
 
-	if (!PyArg_ParseTuple(args, "Oiii" __FUNCTION__, &location, &v0, &v1, &v2)) {
+	if (!PyArg_ParseTuple(args, "Oiii:" __FUNCTION__, &location, &v0, &v1, &v2)) {
 		return 0;
 	}
 
@@ -282,7 +282,7 @@ PyObject * Uniform4i(PyObject * self, PyObject * args) {
 	int v2;
 	int v3;
 
-	if (!PyArg_ParseTuple(args, "Oiiii" __FUNCTION__, &location, &v0, &v1, &v2, &v3)) {
+	if (!PyArg_ParseTuple(args, "Oiiii:" __FUNCTION__, &location, &v0, &v1, &v2, &v3)) {
 		return 0;
 	}
 
@@ -301,7 +301,7 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	UniformLocation * location;
 	PyObject * matrix;
 
-	if (!PyArg_ParseTuple(args, "OO" __FUNCTION__, &location, &matrix)) {
+	if (!PyArg_ParseTuple(args, "OO:" __FUNCTION__, &location, &matrix)) {
 		return 0;
 	}
 
@@ -336,7 +336,7 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	UniformLocation * location;
 	PyObject * matrix;
 
-	if (!PyArg_ParseTuple(args, "OO" __FUNCTION__, &location, &matrix)) {
+	if (!PyArg_ParseTuple(args, "OO:" __FUNCTION__, &location, &matrix)) {
 		return 0;
 	}
 
