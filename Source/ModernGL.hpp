@@ -84,6 +84,7 @@ struct Shader {
 	PyObject_HEAD
 	int shader;
 	ShaderCategory category;
+	bool attached;
 };
 
 struct Program {

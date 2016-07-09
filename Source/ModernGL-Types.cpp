@@ -877,6 +877,7 @@ PyObject * CreateShaderType(int shader, ShaderCategory category) {
 	if (obj != 0) {
 		obj->shader = shader;
 		obj->category = category;
+		obj->attached = false;
 	}
 
 	return (PyObject *)obj;

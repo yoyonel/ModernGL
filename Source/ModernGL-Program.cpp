@@ -24,7 +24,14 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	int category[NUM_SHADER_CATEGORIES] = {};
 	for (int i = 0; i < count; ++i) {
 		Shader * shader = (Shader *)PyList_GetItem(shaders, i);
+		
 		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("shaders", shader, ShaderType, i);
+		
+		if (shader->attached) {
+			PyErr_Format(ModuleError, __FUNCTION__ "() shaders[%d] is already attached to another program", i);
+			return 0;
+		}
+
 		++category[shader->category];
 	}
 
@@ -70,6 +77,11 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		OpenGL::glDeleteProgram(program);
 		PyErr_SetObject(ModuleError, content);
 		return 0;
+	}
+
+	for (int i = 0; i < count; ++i) {
+		Shader * shader = (Shader *)PyList_GetItem(shaders, i);
+		shader->attached = true;
 	}
 
 	PyObject * dict = PyDict_New();

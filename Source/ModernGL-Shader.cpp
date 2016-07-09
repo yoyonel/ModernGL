@@ -224,6 +224,10 @@ PyObject * DeleteShader(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
+	if (shader->attached) {
+		Py_RETURN_NONE;
+	}
+
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("shader", shader, ShaderType);
 
 	OpenGL::glDeleteShader(shader->shader);
