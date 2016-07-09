@@ -38,7 +38,8 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 
 	def paintGL(self):
 		GL.Clear(240, 240, 240)
-		GL.RenderTriangles(context['vao'], 3)
+		if 'vao' in context:
+			GL.RenderTriangles(context['vao'], 3)
 
 class QTWithGLTest(QtWidgets.QMainWindow):
 	def __init__(self, parent = None):
