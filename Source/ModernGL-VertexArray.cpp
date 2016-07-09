@@ -114,10 +114,11 @@ PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {
 PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs) {
 	VertexArray * vao;
 	PyObject * attributes;
+	bool strict = false;
 
-	static const char * kwlist[] = {"vao", "attributes", 0};
+	static const char * kwlist[] = {"vao", "attributes", "strict", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:EnableAttributes", (char **)kwlist, &vao, &attributes)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|p:EnableAttributes", (char **)kwlist, &vao, &attributes, &strict)) {
 		return 0;
 	}
 
@@ -126,14 +127,19 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 
 	int count = (int)PyList_Size(attributes);
 	for (int i = 0; i < count; ++i) {
-		AttributeLocation * attribute = (AttributeLocation *)PyList_GET_ITEM(attributes, i);
-		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("attributes", attribute, AttributeLocationType, i);
+		const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i));
+		int location = OpenGL::glGetAttribLocation(vao->vao, name);
+		if (strict && location < 0) {
+			PyErr_Format(ModuleError, "ERR: 1");
+			return 0;
+		}
 	}
 	
 	OpenGL::glBindVertexArray(vao->vao);
 	for (int i = 0; i < count; ++i) {
-		AttributeLocation * attribute = (AttributeLocation *)PyList_GET_ITEM(attributes, i);
-		OpenGL::glEnableVertexAttribArray(attribute->location);
+		const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i));
+		int location = OpenGL::glGetAttribLocation(vao->program, name);
+		OpenGL::glEnableVertexAttribArray(location);
 	}
 
 	OpenGL::glBindVertexArray(defaultVertexArray);
@@ -143,10 +149,11 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs) {
 	VertexArray * vao;
 	PyObject * attributes;
+	bool strict = false;
 
-	static const char * kwlist[] = {"vao", "attributes", 0};
+	static const char * kwlist[] = {"vao", "attributes", "strict", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:DisableAttributes", (char **)kwlist, &vao, &attributes)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|p:DisableAttributes", (char **)kwlist, &vao, &attributes, &strict)) {
 		return 0;
 	}
 
@@ -155,14 +162,19 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 
 	int count = (int)PyList_Size(attributes);
 	for (int i = 0; i < count; ++i) {
-		AttributeLocation * attribute = (AttributeLocation *)PyList_GET_ITEM(attributes, i);
-		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("attributes", attribute, AttributeLocationType, i);
+		const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i));
+		int location = OpenGL::glGetAttribLocation(vao->program, name);
+		if (strict && location < 0) {
+			PyErr_Format(ModuleError, "ERR: 1");
+			return 0;
+		}
 	}
 	
 	OpenGL::glBindVertexArray(vao->vao);
 	for (int i = 0; i < count; ++i) {
-		AttributeLocation * attribute = (AttributeLocation *)PyList_GET_ITEM(attributes, i);
-		OpenGL::glDisableVertexAttribArray(attribute->location);
+		const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i));
+		int location = OpenGL::glGetAttribLocation(vao->program, name);
+		OpenGL::glDisableVertexAttribArray(location);
 	}
 
 	OpenGL::glBindVertexArray(defaultVertexArray);
