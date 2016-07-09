@@ -98,6 +98,97 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	return CreateVertexArrayType(vao, program->program, ibo != no_ibo);
 }
 
+PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args) {
+	Program * program;
+	PyObject * lst;
+
+	IndexBuffer * no_ibo = (IndexBuffer *)Py_None;
+	IndexBuffer * ibo = no_ibo;
+	bool strict = false;
+
+	if (!PyArg_ParseTuple(args, "OO|Op:" __FUNCTION__, &program, &lst, &ibo)) {
+		return 0;
+	}
+
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("lst", lst, PyList_Type);
+
+	if (ibo != no_ibo) {
+		CHECK_AND_REPORT_ARG_TYPE_ERROR("ibo", ibo, IndexBufferType);
+	}
+	
+	int vao = 0;
+	OpenGL::glGenVertexArrays(1, (OpenGL::GLuint *)&vao);
+	OpenGL::glBindVertexArray(vao);
+
+	if (ibo != no_ibo) {
+		OpenGL::glBindBuffer(OpenGL::GL_ELEMENT_ARRAY_BUFFER, ibo->ibo);
+	}
+
+	int size = PyList_Size(lst);
+	for (int i = 0; i < size; ++i) {
+		PyObject * tuple = PyList_GET_ITEM(lst, i);
+		// check tuple and size
+
+		VertexBuffer * vbo = (VertexBuffer *)PyTuple_GET_ITEM(tuple, 0);
+		const char * format = PyUnicode_AsUTF8(PyTuple_GET_ITEM(tuple, 1));
+		PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
+
+		int length = 0;
+		while (format[length]) {
+			if (length % 2 == 0) {
+				if (format[length] < '1' || format[length] > '4') {
+					PyErr_SetString(ModuleError, __FUNCTION__ "() ERR 3");
+					return 0;
+				}
+			} else {
+				if (format[length] != 'i' && format[length] != 'f') {
+					PyErr_SetString(ModuleError, __FUNCTION__ "() ERR 3");
+					return 0;
+				}
+			}
+			++length;
+		}
+
+		if (!length || length % 2) {
+			PyErr_SetString(ModuleError, __FUNCTION__ "() ERR 3");
+			return 0;
+		}
+
+		int stride = 0;
+		for (int i = 0; format[i]; i += 2) {
+			stride += (format[i] - '0') * 4;
+		}
+
+		int count = (int)PyList_Size(attributes);
+		if (length / 2 != count) {
+			PyErr_Format(ModuleError, "ERR 4.");
+			return 0;
+		}
+
+		char * ptr = 0;
+		for (int i = 0; i < count; ++i) {
+			const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i));
+			int location = OpenGL::glGetAttribLocation(program->program, name);
+
+			int dimension = format[i * 2] - '0';
+			switch (format[i * 2 + 1]) {
+				case 'f':
+					OpenGL::glVertexAttribPointer(location, dimension, OpenGL::GL_FLOAT, false, stride, ptr);
+					break;
+				case 'i':
+					OpenGL::glVertexAttribPointer(location, dimension, OpenGL::GL_INT, false, stride, ptr);
+					break;
+			}
+			OpenGL::glEnableVertexAttribArray(location);
+			ptr += dimension * 4;
+		}
+	}
+
+	OpenGL::glBindVertexArray(defaultVertexArray);
+	return CreateVertexArrayType(vao, program->program, ibo != no_ibo);
+}
+
 PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {
 	VertexArray * vao;
 

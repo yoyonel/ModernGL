@@ -193,6 +193,7 @@ PyObject * DeleteUniformBuffer(PyObject * self, PyObject * args);
 PyObject * DeleteStorageBuffer(PyObject * self, PyObject * args);
 
 PyObject * NewVertexArray(PyObject * self, PyObject * args);
+PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args);
 PyObject * DeleteVertexArray(PyObject * self, PyObject * args);
 
 PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs);
