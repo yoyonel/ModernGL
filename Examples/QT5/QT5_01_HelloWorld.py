@@ -1,30 +1,16 @@
-import sys, struct
-from PyQt5.QtCore import pyqtSignal, QPoint, QSize, Qt
-from PyQt5.QtWidgets import QApplication, QHBoxLayout, QOpenGLWidget, QSlider, QWidget
-
+from PyQt5 import QtOpenGL, QtWidgets
 import ModernGL as GL
+import struct
 
-class Window(QWidget):
-	def __init__(self):
-		super(Window, self).__init__()
+context = {}
 
-		self.setWindowTitle('QT5_01_HelloWorld')
-
-		self.glWidget = GLWidget()
-		mainLayout = QHBoxLayout()
-		mainLayout.addWidget(self.glWidget)
-		self.setLayout(mainLayout)
-		self.init = False
-
-class GLWidget(QOpenGLWidget):
-	def __init__(self, parent = None):
-		super(GLWidget, self).__init__(parent)
-
-	def sizeHint(self):
-		return QSize(800, 600)
+class QGLControllerWidget(QtOpenGL.QGLWidget):
+	def __init__(self, format = None):
+		super(QGLControllerWidget, self).__init__(format, None)
 
 	def initializeGL(self):
 		GL.InitializeModernGL()
+		GL.Viewport(0, 0, 800, 600)
 
 		vert = GL.NewVertexShader('''
 			#version 330
@@ -46,21 +32,29 @@ class GLWidget(QOpenGLWidget):
 			}
 		''')
 
-		self.prog, self.iface = GL.NewProgram([vert, frag])
-
-		self.vbo = GL.NewVertexBuffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
-		self.vao = GL.NewVertexArray('2f', self.vbo, [self.iface['vert']])
-		self.init = True
+		prog, iface = GL.NewProgram([vert, frag])
+		vbo = GL.NewVertexBuffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
+		context['vao'] = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 
 	def paintGL(self):
-		if self.init:
-			GL.Clear(240, 240, 240)
-			GL.RenderTriangles(self.vao, 3)
+		GL.Clear(240, 240, 240)
+		GL.RenderTriangles(context['vao'], 3)
 
-	def resizeGL(self, width, height):
-		GL.Viewport(0, 0, width, height)
+class QTWithGLTest(QtWidgets.QMainWindow):
+	def __init__(self, parent = None):
+		super(QTWithGLTest, self).__init__(parent)
 
-app = QApplication(sys.argv)
-window = Window()
+		fmt = QtOpenGL.QGLFormat()
+		fmt.setVersion(4, 1)
+		fmt.setProfile(QtOpenGL.QGLFormat.CoreProfile)
+		fmt.setSampleBuffers(True)
+
+		self.setFixedSize(800, 600)
+		self.widget = QGLControllerWidget(fmt)
+		self.setCentralWidget(self.widget)
+		self.show()
+
+app = QtWidgets.QApplication([])
+window = QTWithGLTest()
 window.show()
-sys.exit(app.exec_())
+app.exec_()
