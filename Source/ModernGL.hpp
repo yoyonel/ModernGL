@@ -25,9 +25,6 @@ extern int activeFramebuffer;
 extern int activeViewportWidth;
 extern int activeViewportHeight;
 
-const int maxCompilerLog = 16 * 1024;
-extern char compilerLog[maxCompilerLog + 1];
-
 enum ShaderCategory {
 	VERTEX_SHADER,
 	FRAGMENT_SHADER,
@@ -48,7 +45,7 @@ struct VertexArray {
 	PyObject_HEAD
 	int vao;
 	bool indexed;
-	int program; // TODO: use this fields
+	int program;
 };
 
 struct VertexBuffer {
@@ -94,12 +91,6 @@ struct Program {
 	int program;
 };
 
-struct AttributeLocation {
-	PyObject_HEAD
-	int location;
-	int program;
-};
-
 struct UniformLocation {
 	PyObject_HEAD
 	int location;
@@ -132,7 +123,6 @@ extern PyTypeObject StorageBufferType;
 extern PyTypeObject TextureType;
 extern PyTypeObject ShaderType;
 extern PyTypeObject ProgramType;
-extern PyTypeObject AttributeLocationType;
 extern PyTypeObject UniformLocationType;
 extern PyTypeObject UniformBufferLocationType;
 extern PyTypeObject ComputeShaderType;
@@ -147,7 +137,6 @@ PyObject * CreateStorageBufferType(int sbo, int size);
 PyObject * CreateTextureType(int texture, int width, int height, int components);
 PyObject * CreateShaderType(int shader, ShaderCategory category);
 PyObject * CreateProgramType(int program);
-PyObject * CreateAttributeLocationType(int location, int program);
 PyObject * CreateUniformLocationType(int location, int program);
 PyObject * CreateUniformBufferLocationType(int location, int program);
 PyObject * CreateComputeShaderType(int shader, int program);

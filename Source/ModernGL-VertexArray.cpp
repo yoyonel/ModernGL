@@ -24,12 +24,12 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	while (format[length]) {
 		if (length % 2 == 0) {
 			if (format[length] < '1' || format[length] > '4') {
-				PyErr_SetString(ModuleError, "NewVertexArray() argument `format` is invalid.");
+				PyErr_SetString(ModuleError, __FUNCTION__ "() argument `format` is invalid.");
 				return 0;
 			}
 		} else {
 			if (format[length] != 'i' && format[length] != 'f') {
-				PyErr_SetString(ModuleError, "NewVertexArray() argument `format` is invalid.");
+				PyErr_SetString(ModuleError, __FUNCTION__ "() argument `format` is invalid.");
 				return 0;
 			}
 		}
@@ -37,14 +37,14 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	}
 
 	if (!length || length % 2) {
-		PyErr_SetString(ModuleError, "NewVertexArray() argument `format` is empty or invalid.");
+		PyErr_SetString(ModuleError, __FUNCTION__ "() argument `format` is empty or invalid.");
 		return 0;
 	}
 
 	int count = (int)PyList_Size(attributes);
 
 	if (length / 2 != count) {
-		PyErr_Format(ModuleError, "NewVertexArray() size of `format` is %d, length of `attributes` is %d", length / 2, count);
+		PyErr_Format(ModuleError, __FUNCTION__ "() size of `format` is %d, length of `attributes` is %d", length / 2, count);
 		return 0;
 	}
 

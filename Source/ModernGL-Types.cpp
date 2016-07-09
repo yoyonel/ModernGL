@@ -55,10 +55,6 @@ PyObject * Program_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) 
 	return type->tp_alloc(type, 0);
 }
 
-PyObject * AttributeLocation_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
-	return type->tp_alloc(type, 0);
-}
-
 PyObject * UniformLocation_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
@@ -120,11 +116,6 @@ int Program_init(Program * self, PyObject * args, PyObject * kwargs) {
 	return -1;
 }
 
-int AttributeLocation_init(AttributeLocation * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "Cannot instantiate AttributeLocation.\nCall GetAttributeLocation(...) to get an AttributeLocation object.");
-	return -1;
-}
-
 int UniformLocation_init(UniformLocation * self, PyObject * args, PyObject * kwargs) {
 	PyErr_SetString(ModuleError, "Cannot instantiate UniformLocation.\nCall GetUniformLocation(...) to get a UniformLocation object.");
 	return -1;
@@ -181,10 +172,6 @@ void Program_dealloc(Program * self) {
 	Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
-void AttributeLocation_dealloc(AttributeLocation * self) {
-	Py_TYPE(self)->tp_free((PyObject*)self);
-}
-
 void UniformLocation_dealloc(UniformLocation * self) {
 	Py_TYPE(self)->tp_free((PyObject*)self);
 }
@@ -235,10 +222,6 @@ PyObject * Shader_str(Shader * self) {
 
 PyObject * Program_str(Program * self) {
 	return PyUnicode_FromFormat("<Program = %d>", self->program);
-}
-
-PyObject * AttributeLocation_str(AttributeLocation * self) {
-	return PyUnicode_FromFormat("<AttributeLocation = %d>", self->location);
 }
 
 PyObject * UniformLocation_str(UniformLocation * self) {
@@ -626,47 +609,6 @@ PyTypeObject ProgramType = {
 	Program_new,
 };
 
-PyTypeObject AttributeLocationType = {
-	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.AttributeLocation",
-	sizeof(AttributeLocation),
-	0,
-	(destructor)AttributeLocation_dealloc,
-	0,
-	0,
-	0,
-	0,
-	(reprfunc)AttributeLocation_str,
-	0,
-	0,
-	0,
-	0,
-	0,
-	(reprfunc)AttributeLocation_str,
-	0,
-	0,
-	0,
-	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
-	"AttributeLocation",
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	(initproc)AttributeLocation_init,
-	0,
-	AttributeLocation_new,
-};
-
 PyTypeObject UniformLocationType = {
 	PyVarObject_HEAD_INIT(0, 0)
 	"ModernGL.UniformLocation",
@@ -944,17 +886,6 @@ PyObject * CreateProgramType(int program) {
 	Program * obj = (Program *)ProgramType.tp_alloc(&ProgramType, 0);
 
 	if (obj != 0) {
-		obj->program = program;
-	}
-
-	return (PyObject *)obj;
-}
-
-PyObject * CreateAttributeLocationType(int location, int program) {
-	AttributeLocation * obj = (AttributeLocation *)AttributeLocationType.tp_alloc(&AttributeLocationType, 0);
-
-	if (obj != 0) {
-		obj->location = location;
 		obj->program = program;
 	}
 
