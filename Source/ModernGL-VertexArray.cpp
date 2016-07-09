@@ -100,23 +100,23 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 
 PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args) {
 	Program * program;
-	PyObject * lst;
+	PyObject * content;
 
 	IndexBuffer * no_ibo = (IndexBuffer *)Py_None;
 	IndexBuffer * ibo = no_ibo;
 	bool strict = false;
 
-	if (!PyArg_ParseTuple(args, "OO|Op:" __FUNCTION__, &program, &lst, &ibo)) {
+	if (!PyArg_ParseTuple(args, "OO|Op:" __FUNCTION__, &program, &content, &ibo)) {
 		return 0;
 	}
 
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("lst", lst, PyList_Type);
+	CHECK_AND_REPORT_ARG_TYPE_ERROR("content", content, PyList_Type);
 
 	if (ibo != no_ibo) {
 		CHECK_AND_REPORT_ARG_TYPE_ERROR("ibo", ibo, IndexBufferType);
 	}
-	
+
 	int vao = 0;
 	OpenGL::glGenVertexArrays(1, (OpenGL::GLuint *)&vao);
 	OpenGL::glBindVertexArray(vao);
@@ -125,14 +125,28 @@ PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args) {
 		OpenGL::glBindBuffer(OpenGL::GL_ELEMENT_ARRAY_BUFFER, ibo->ibo);
 	}
 
-	int size = PyList_Size(lst);
-	for (int i = 0; i < size; ++i) {
-		PyObject * tuple = PyList_GET_ITEM(lst, i);
-		// check tuple and size
+	int size = PyList_Size(content);
+	for (int k = 0; k < size; ++k) {
+		PyObject * tuple = PyList_GET_ITEM(content, k);
+		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("content", tuple, PyTuple_Type, k);
+		if (PyTuple_Size(tuple) != 3) {
+			PyErr_Format(ModuleError, "ERR: 5");
+			return 0;
+		}
 
 		VertexBuffer * vbo = (VertexBuffer *)PyTuple_GET_ITEM(tuple, 0);
 		const char * format = PyUnicode_AsUTF8(PyTuple_GET_ITEM(tuple, 1));
 		PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
+
+		if (!CHECK_TYPE_ERROR(vbo, VertexBufferType)) {
+			PyErr_Format(ModuleError, "ERR: 5");
+			return 0;
+		}
+
+		if (!CHECK_TYPE_ERROR(attributes, PyList_Type)) {
+			PyErr_Format(ModuleError, "ERR: 5");
+			return 0;
+		}
 
 		int length = 0;
 		while (format[length]) {
