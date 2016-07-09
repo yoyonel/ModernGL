@@ -30,7 +30,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 
 	for (int i = 0; i < NUM_SHADER_CATEGORIES; ++i) {
 		if (category[i] > 1) {
-			PyErr_Format(ModuleError, "NewProgram() duplicate %s", categoryNames[i]);
+			PyErr_Format(ModuleError, __FUNCTION__ "() duplicate %s", categoryNames[i]);
 			return 0;
 		}
 	}
@@ -48,7 +48,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 
 	if (!linked) {
 		int logSize = 0;
-		static const char * logTitle = "NewProgram() linking failed\n";
+		static const char * logTitle = __FUNCTION__ "() linking failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetProgramInfoLog(program, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
@@ -318,13 +318,12 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	int count = (int)PyList_Size(matrix);
 	
 	if (count != 16) {
-		PyErr_Format(ModuleError, "UniformMatrix() matrix length must be 16, not %d", count);
+		PyErr_Format(ModuleError, __FUNCTION__ "() matrix length must be 16, not %d", count);
 		return 0;
 	}
 
 	for (int i = 0; i < count; ++i) {
 		PyObject * item = PyList_GET_ITEM(matrix, i);
-		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("matrix", item, PyFloat_Type, i);
 		matrix_data[i] = (float)PyFloat_AsDouble(item);
 	}
 
@@ -353,13 +352,12 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 	int count = (int)PyList_Size(matrix);
 	
 	if (count != 16) {
-		PyErr_Format(ModuleError, "UniformTransposeMatrix() matrix length must be 16, not %d", count);
+		PyErr_Format(ModuleError, __FUNCTION__ "() matrix length must be 16, not %d", count);
 		return 0;
 	}
 
 	for (int i = 0; i < count; ++i) {
 		PyObject * item = PyList_GET_ITEM(matrix, i);
-		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("matrix", item, PyFloat_Type, i);
 		matrix_data[i] = (float)PyFloat_AsDouble(item);
 	}
 

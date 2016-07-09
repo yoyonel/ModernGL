@@ -17,7 +17,7 @@ PyObject * NewVertexShader(PyObject * self, PyObject * args) {
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		int logSize = 0;
-		static const char * logTitle = "NewVertexShader() compile failed\n";
+		static const char * logTitle = __FUNCTION__ "() compile failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
@@ -51,7 +51,7 @@ PyObject * NewFragmentShader(PyObject * self, PyObject * args) {
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		int logSize = 0;
-		static const char * logTitle = "NewFragmentShader() compile failed\n";
+		static const char * logTitle = __FUNCTION__ "() compile failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
@@ -85,7 +85,7 @@ PyObject * NewGeometryShader(PyObject * self, PyObject * args) {
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		int logSize = 0;
-		static const char * logTitle = "NewGeometryShader() compile failed\n";
+		static const char * logTitle = __FUNCTION__ "() compile failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
@@ -119,7 +119,7 @@ PyObject * NewTessEvaluationShader(PyObject * self, PyObject * args) {
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		int logSize = 0;
-		static const char * logTitle = "NewTessEvaluationShader() compile failed\n";
+		static const char * logTitle = __FUNCTION__ "() compile failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
@@ -152,7 +152,7 @@ PyObject * NewTessControlShader(PyObject * self, PyObject * args) {
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		int logSize = 0;
-		static const char * logTitle = "NewTessControlShader() compile failed\n";
+		static const char * logTitle = __FUNCTION__ "() compile failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);

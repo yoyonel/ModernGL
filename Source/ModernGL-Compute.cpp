@@ -17,7 +17,7 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		int logSize = 0;
-		static const char * logTitle = "NewComputeShader() compile failed\n";
+		static const char * logTitle = __FUNCTION__ "() compile failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
@@ -43,7 +43,7 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 
 	if (!linked) {
 		int logSize = 0;
-		static const char * logTitle = "NewComputeShader() linking failed\n";
+		static const char * logTitle = __FUNCTION__ "() linking failed\n";
 		static int logTitleSize = strlen(logTitle);
 		memcpy(compilerLog, logTitle, logTitleSize);
 		OpenGL::glGetProgramInfoLog(program, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
