@@ -30,7 +30,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 
 	for (int i = 0; i < NUM_SHADER_CATEGORIES; ++i) {
 		if (category[i] > 1) {
-			PyErr_Format(ModuleError, __FUNCTION__ "() duplicate %s", categoryNames[i]);
+			PyErr_Format(ModuleError, __FUNCTION__ "() duplicate %s in `shaders`", categoryNames[i]);
 			return 0;
 		}
 	}
