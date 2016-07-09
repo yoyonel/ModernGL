@@ -16,20 +16,29 @@ PyObject * NewVertexShader(PyObject * self, PyObject * args) {
 	int compiled = OpenGL::GL_FALSE;
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
-		int logSize = 0;
 		static const char * logTitle = __FUNCTION__ "() compile failed\n";
-		static int logTitleSize = strlen(logTitle);
-		memcpy(compilerLog, logTitle, logTitleSize);
-		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
-		compilerLog[logTitleSize + logSize] = 0;
-		OpenGL::glDeleteShader(shader);
-		shader = 0;
-	} else {
-		compilerLog[0] = 0;
-	}
+		static int logTitleLength = strlen(logTitle);
+		
+		int logLength = 0;
+		OpenGL::glGetShaderiv(shader, OpenGL::GL_INFO_LOG_LENGTH, &logLength);
+		int logTotalLength = logLength + logTitleLength;
 
-	if (!shader) {
-		PyErr_SetString(ModuleError, compilerLog);
+		PyObject * content = PyUnicode_New(logTotalLength, 255);
+		if (PyUnicode_READY(content)) {
+			OpenGL::glDeleteShader(shader);
+			return 0;
+		}
+
+		char * data = (char *)PyUnicode_1BYTE_DATA(content);
+		memcpy(data, logTitle, logTitleLength);
+
+		int logSize = 0;
+		OpenGL::glGetShaderInfoLog(shader, logLength, &logSize, data + logTitleLength);
+		data[logTitleLength] = 0;
+
+		OpenGL::glDeleteShader(shader);
+
+		PyErr_SetObject(ModuleError, content);
 		return 0;
 	}
 
@@ -50,20 +59,29 @@ PyObject * NewFragmentShader(PyObject * self, PyObject * args) {
 	int compiled = OpenGL::GL_FALSE;
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
-		int logSize = 0;
 		static const char * logTitle = __FUNCTION__ "() compile failed\n";
-		static int logTitleSize = strlen(logTitle);
-		memcpy(compilerLog, logTitle, logTitleSize);
-		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
-		compilerLog[logTitleSize + logSize] = 0;
-		OpenGL::glDeleteShader(shader);
-		shader = 0;
-	} else {
-		compilerLog[0] = 0;
-	}
+		static int logTitleLength = strlen(logTitle);
+		
+		int logLength = 0;
+		OpenGL::glGetShaderiv(shader, OpenGL::GL_INFO_LOG_LENGTH, &logLength);
+		int logTotalLength = logLength + logTitleLength;
 
-	if (!shader) {
-		PyErr_SetString(ModuleError, compilerLog);
+		PyObject * content = PyUnicode_New(logTotalLength, 255);
+		if (PyUnicode_READY(content)) {
+			OpenGL::glDeleteShader(shader);
+			return 0;
+		}
+
+		char * data = (char *)PyUnicode_1BYTE_DATA(content);
+		memcpy(data, logTitle, logTitleLength);
+
+		int logSize = 0;
+		OpenGL::glGetShaderInfoLog(shader, logLength, &logSize, data + logTitleLength);
+		data[logTitleLength] = 0;
+
+		OpenGL::glDeleteShader(shader);
+
+		PyErr_SetObject(ModuleError, content);
 		return 0;
 	}
 
@@ -84,20 +102,29 @@ PyObject * NewGeometryShader(PyObject * self, PyObject * args) {
 	int compiled = OpenGL::GL_FALSE;
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
-		int logSize = 0;
 		static const char * logTitle = __FUNCTION__ "() compile failed\n";
-		static int logTitleSize = strlen(logTitle);
-		memcpy(compilerLog, logTitle, logTitleSize);
-		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
-		compilerLog[logTitleSize + logSize] = 0;
-		OpenGL::glDeleteShader(shader);
-		shader = 0;
-	} else {
-		compilerLog[0] = 0;
-	}
+		static int logTitleLength = strlen(logTitle);
+		
+		int logLength = 0;
+		OpenGL::glGetShaderiv(shader, OpenGL::GL_INFO_LOG_LENGTH, &logLength);
+		int logTotalLength = logLength + logTitleLength;
 
-	if (!shader) {
-		PyErr_SetString(ModuleError, compilerLog);
+		PyObject * content = PyUnicode_New(logTotalLength, 255);
+		if (PyUnicode_READY(content)) {
+			OpenGL::glDeleteShader(shader);
+			return 0;
+		}
+
+		char * data = (char *)PyUnicode_1BYTE_DATA(content);
+		memcpy(data, logTitle, logTitleLength);
+
+		int logSize = 0;
+		OpenGL::glGetShaderInfoLog(shader, logLength, &logSize, data + logTitleLength);
+		data[logTitleLength] = 0;
+
+		OpenGL::glDeleteShader(shader);
+
+		PyErr_SetObject(ModuleError, content);
 		return 0;
 	}
 
@@ -118,20 +145,30 @@ PyObject * NewTessEvaluationShader(PyObject * self, PyObject * args) {
 	int compiled = OpenGL::GL_FALSE;
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
-		int logSize = 0;
 		static const char * logTitle = __FUNCTION__ "() compile failed\n";
-		static int logTitleSize = strlen(logTitle);
-		memcpy(compilerLog, logTitle, logTitleSize);
-		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
-		compilerLog[logTitleSize + logSize] = 0;
-		OpenGL::glDeleteShader(shader);
-		shader = 0;
-	} else {
-		compilerLog[0] = 0;
-	}
+		static int logTitleLength = strlen(logTitle);
+		
+		int logLength = 0;
+		OpenGL::glGetShaderiv(shader, OpenGL::GL_INFO_LOG_LENGTH, &logLength);
+		int logTotalLength = logLength + logTitleLength;
 
-	if (!shader) {
-		PyErr_SetString(ModuleError, compilerLog);
+		PyObject * content = PyUnicode_New(logTotalLength, 255);
+		if (PyUnicode_READY(content)) {
+			OpenGL::glDeleteShader(shader);
+			return 0;
+		}
+
+		char * data = (char *)PyUnicode_1BYTE_DATA(content);
+		memcpy(data, logTitle, logTitleLength);
+
+		int logSize = 0;
+		OpenGL::glGetShaderInfoLog(shader, logLength, &logSize, data + logTitleLength);
+		data[logTitleLength] = 0;
+
+		OpenGL::glDeleteShader(shader);
+
+		PyErr_SetObject(ModuleError, content);
+		return 0;
 	}
 
 	return CreateShaderType(shader, TESS_EVALUATION_SHADER);
@@ -151,20 +188,30 @@ PyObject * NewTessControlShader(PyObject * self, PyObject * args) {
 	int compiled = OpenGL::GL_FALSE;
 	OpenGL::glGetShaderiv(shader, OpenGL::GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
-		int logSize = 0;
 		static const char * logTitle = __FUNCTION__ "() compile failed\n";
-		static int logTitleSize = strlen(logTitle);
-		memcpy(compilerLog, logTitle, logTitleSize);
-		OpenGL::glGetShaderInfoLog(shader, maxCompilerLog - logTitleSize, &logSize, compilerLog + logTitleSize);
-		compilerLog[logTitleSize + logSize] = 0;
-		OpenGL::glDeleteShader(shader);
-		shader = 0;
-	} else {
-		compilerLog[0] = 0;
-	}
+		static int logTitleLength = strlen(logTitle);
+		
+		int logLength = 0;
+		OpenGL::glGetShaderiv(shader, OpenGL::GL_INFO_LOG_LENGTH, &logLength);
+		int logTotalLength = logLength + logTitleLength;
 
-	if (!shader) {
-		PyErr_SetString(ModuleError, compilerLog);
+		PyObject * content = PyUnicode_New(logTotalLength, 255);
+		if (PyUnicode_READY(content)) {
+			OpenGL::glDeleteShader(shader);
+			return 0;
+		}
+
+		char * data = (char *)PyUnicode_1BYTE_DATA(content);
+		memcpy(data, logTitle, logTitleLength);
+
+		int logSize = 0;
+		OpenGL::glGetShaderInfoLog(shader, logLength, &logSize, data + logTitleLength);
+		data[logTitleLength] = 0;
+
+		OpenGL::glDeleteShader(shader);
+
+		PyErr_SetObject(ModuleError, content);
+		return 0;
 	}
 
 	return CreateShaderType(shader, TESS_CONTROL_SHADER);

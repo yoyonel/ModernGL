@@ -25,9 +25,6 @@ extern int activeFramebuffer;
 extern int activeViewportWidth;
 extern int activeViewportHeight;
 
-const int maxCompilerLog = 16 * 1024;
-extern char compilerLog[maxCompilerLog + 1];
-
 enum ShaderCategory {
 	VERTEX_SHADER,
 	FRAGMENT_SHADER,
