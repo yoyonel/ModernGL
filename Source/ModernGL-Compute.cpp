@@ -5,7 +5,7 @@
 PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 	const char * source;
 
-	if (!PyArg_ParseTuple(args, "s:NewComputeShader", &source)) {
+	if (!PyArg_ParseTuple(args, "s" __FUNCTION__, &source)) {
 		return 0;
 	}
 
@@ -66,7 +66,7 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 PyObject * DeleteComputeShader(PyObject * self, PyObject * args) {
 	ComputeShader * shader;
 
-	if (!PyArg_ParseTuple(args, "O:DeleteComputeShader", &shader)) {
+	if (!PyArg_ParseTuple(args, "O" __FUNCTION__, &shader)) {
 		return 0;
 	}
 
@@ -85,7 +85,7 @@ PyObject * RunComputeShader(PyObject * self, PyObject * args, PyObject * kwargs)
 
 	static const char * kwlist[] = {"shader", "x", "y", "z", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|iii:RunComputeShader", (char **)kwlist, &shader, &x, &y, &z)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|iii" __FUNCTION__, (char **)kwlist, &shader, &x, &y, &z)) {
 		return 0;
 	}
 

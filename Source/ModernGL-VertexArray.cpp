@@ -10,7 +10,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	IndexBuffer * no_ibo = (IndexBuffer *)Py_None;
 	IndexBuffer * ibo = no_ibo;
 
-	if (!PyArg_ParseTuple(args, "sOO|O:NewVertexArray", &format, &vbo, &attributes, &ibo)) {
+	if (!PyArg_ParseTuple(args, "sOO|O" __FUNCTION__, &format, &vbo, &attributes, &ibo)) {
 		return 0;
 	}
 
@@ -99,7 +99,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {
 	VertexArray * vao;
 
-	if (!PyArg_ParseTuple(args, "O:DeleteVertexArray", &vao)) {
+	if (!PyArg_ParseTuple(args, "O" __FUNCTION__, &vao)) {
 		return 0;
 	}
 
@@ -115,7 +115,7 @@ PyObject * EnableAttribute(PyObject * self, PyObject * args, PyObject * kwargs) 
 
 	static const char * kwlist[] = {"vao", "attribute", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:EnableAttribute", (char **)kwlist, &vao, &attribute)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO" __FUNCTION__, (char **)kwlist, &vao, &attribute)) {
 		return 0;
 	}
 
@@ -134,7 +134,7 @@ PyObject * DisableAttribute(PyObject * self, PyObject * args, PyObject * kwargs)
 
 	static const char * kwlist[] = {"vao", "attribute", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:DisableAttribute", (char **)kwlist, &vao, &attribute)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO" __FUNCTION__, (char **)kwlist, &vao, &attribute)) {
 		return 0;
 	}
 
@@ -153,7 +153,7 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 
 	static const char * kwlist[] = {"vao", "attributes", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:EnableAttributes", (char **)kwlist, &vao, &attributes)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO" __FUNCTION__, (char **)kwlist, &vao, &attributes)) {
 		return 0;
 	}
 
@@ -182,7 +182,7 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 
 	static const char * kwlist[] = {"vao", "attributes", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO:DisableAttributes", (char **)kwlist, &vao, &attributes)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO" __FUNCTION__, (char **)kwlist, &vao, &attributes)) {
 		return 0;
 	}
 
