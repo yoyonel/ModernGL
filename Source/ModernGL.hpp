@@ -91,12 +91,6 @@ struct Program {
 	int program;
 };
 
-struct AttributeLocation {
-	PyObject_HEAD
-	int location;
-	int program;
-};
-
 struct UniformLocation {
 	PyObject_HEAD
 	int location;
@@ -129,7 +123,6 @@ extern PyTypeObject StorageBufferType;
 extern PyTypeObject TextureType;
 extern PyTypeObject ShaderType;
 extern PyTypeObject ProgramType;
-extern PyTypeObject AttributeLocationType;
 extern PyTypeObject UniformLocationType;
 extern PyTypeObject UniformBufferLocationType;
 extern PyTypeObject ComputeShaderType;
@@ -144,7 +137,6 @@ PyObject * CreateStorageBufferType(int sbo, int size);
 PyObject * CreateTextureType(int texture, int width, int height, int components);
 PyObject * CreateShaderType(int shader, ShaderCategory category);
 PyObject * CreateProgramType(int program);
-PyObject * CreateAttributeLocationType(int location, int program);
 PyObject * CreateUniformLocationType(int location, int program);
 PyObject * CreateUniformBufferLocationType(int location, int program);
 PyObject * CreateComputeShaderType(int shader, int program);

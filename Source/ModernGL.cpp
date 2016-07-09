@@ -1922,10 +1922,6 @@ bool ModuleReady() {
 		return false;
 	}
 
-	if (PyType_Ready(&AttributeLocationType) < 0) {
-		return false;
-	}
-
 	if (PyType_Ready(&UniformLocationType) < 0) {
 		return false;
 	}
@@ -1959,7 +1955,6 @@ PyObject * InitModule(PyObject * module) {
 	Py_INCREF(&TextureType);
 	Py_INCREF(&ShaderType);
 	Py_INCREF(&ProgramType);
-	Py_INCREF(&AttributeLocationType);
 	Py_INCREF(&UniformLocationType);
 	Py_INCREF(&UniformBufferLocationType);
 	Py_INCREF(&ComputeShaderType);
@@ -1974,7 +1969,6 @@ PyObject * InitModule(PyObject * module) {
 	PyModule_AddObject(module, "Texture", (PyObject *)&TextureType);
 	PyModule_AddObject(module, "Shader", (PyObject *)&ShaderType);
 	PyModule_AddObject(module, "Program", (PyObject *)&ProgramType);
-	PyModule_AddObject(module, "AttributeLocation", (PyObject *)&AttributeLocationType);
 	PyModule_AddObject(module, "UniformLocation", (PyObject *)&UniformLocationType);
 	PyModule_AddObject(module, "UniformBufferLocation", (PyObject *)&UniformBufferLocationType);
 	PyModule_AddObject(module, "ComputeShader", (PyObject *)&ComputeShaderType);

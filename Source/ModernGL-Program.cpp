@@ -74,21 +74,6 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 
 	PyObject * dict = PyDict_New();
 
-	int attributes = 0;
-	OpenGL::glGetProgramiv(program, OpenGL::GL_ACTIVE_ATTRIBUTES, &attributes);
-	for (int i = 0; i < attributes; ++i) {
-		char name[64 + 1];
-		int size;
-		int length;
-		unsigned type;
-		OpenGL::glGetActiveAttrib(program, i, 64, &length, &size, &type, name);
-		int location = OpenGL::glGetAttribLocation(program, name);
-		name[length] = 0;
-		if (location >= 0) {
-			PyDict_SetItemString(dict, name, CreateAttributeLocationType(location, program));
-		}
-	}
-
 	int uniforms = 0;
 	OpenGL::glGetProgramiv(program, OpenGL::GL_ACTIVE_UNIFORMS, &uniforms);
 	for (int i = 0; i < uniforms; ++i) {
