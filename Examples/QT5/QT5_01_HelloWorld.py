@@ -10,7 +10,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 
 	def initializeGL(self):
 		GL.InitializeModernGL()
-		GL.Viewport(0, 0, 800, 600)
+		GL.Viewport(0, 0, 320, 240)
 
 		vert = GL.NewVertexShader('''
 			#version 330
@@ -50,7 +50,7 @@ class QTWithGLTest(QtWidgets.QMainWindow):
 		fmt.setProfile(QtOpenGL.QGLFormat.CoreProfile)
 		fmt.setSampleBuffers(True)
 
-		self.setFixedSize(800, 600)
+		self.setFixedSize(320, 240)
 		self.widget = QGLControllerWidget(fmt)
 		self.setCentralWidget(self.widget)
 		self.show()
