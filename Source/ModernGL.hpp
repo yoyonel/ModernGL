@@ -195,8 +195,6 @@ PyObject * DeleteStorageBuffer(PyObject * self, PyObject * args);
 PyObject * NewVertexArray(PyObject * self, PyObject * args);
 PyObject * DeleteVertexArray(PyObject * self, PyObject * args);
 
-PyObject * EnableAttribute(PyObject * self, PyObject * args, PyObject * kwargs);
-PyObject * DisableAttribute(PyObject * self, PyObject * args, PyObject * kwargs);
 PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs);
 PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs);
 
