@@ -132,6 +132,8 @@ Keywords = [
 	'video',
 ]
 
+Version = '2.2.1'
+
 target = platform.system().lower()
 
 Libraries = {
@@ -142,6 +144,7 @@ Libraries = {
 ModernGL = Extension(
 	'ModernGL.ModernGL',
 	libraries = Libraries[target],
+	define_macros = [('MODERN_GL_VERSION', '\\"%s\\"' % Version)],
 	sources = [
 		'Source/OpenGL.cpp',
 		'Source/ModernGL.cpp',
@@ -160,7 +163,7 @@ ModernGL = Extension(
 
 args = {
 	'name' : 'ModernGL',
-	'version' : '2.2.0',
+	'version' : Version,
 	'description' : ShortDescription,
 	'long_description' : LongDescription,
 	'url' : 'https://github.com/cprogrammer1994/ModernGL',
@@ -172,8 +175,7 @@ args = {
 	'keywords' : Keywords,
 	'packages' : ['ModernGL'],
 	'ext_modules' : [ModernGL],
-	'platforms' : ['win32', 'win64'],
-	'zip_safe' : True,
+	'platforms' : ['any'],
 }
 
 if target is 'windows':
