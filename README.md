@@ -36,13 +36,13 @@ quality, with less code written.
 
 # Supported Versions
 
-![OpenGL-3.3](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Badges/OpenGL-33.png)
-![OpenGL-4.0](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Badges/OpenGL-40.png)
-![OpenGL-4.1](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Badges/OpenGL-41.png)
-![OpenGL-4.2](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Badges/OpenGL-42.png)
-![OpenGL-4.3](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Badges/OpenGL-43.png)
-![OpenGL-4.4](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Badges/OpenGL-44.png)
-![OpenGL-4.5](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Badges/OpenGL-45.png)
+![OpenGL-3.3](https://raw.githubusercontent.com/cprogrammer1994/libOpenGL.a/master/Badges/OpenGL-33.png)
+![OpenGL-4.0](https://raw.githubusercontent.com/cprogrammer1994/libOpenGL.a/master/Badges/OpenGL-40.png)
+![OpenGL-4.1](https://raw.githubusercontent.com/cprogrammer1994/libOpenGL.a/master/Badges/OpenGL-41.png)
+![OpenGL-4.2](https://raw.githubusercontent.com/cprogrammer1994/libOpenGL.a/master/Badges/OpenGL-42.png)
+![OpenGL-4.3](https://raw.githubusercontent.com/cprogrammer1994/libOpenGL.a/master/Badges/OpenGL-43.png)
+![OpenGL-4.4](https://raw.githubusercontent.com/cprogrammer1994/libOpenGL.a/master/Badges/OpenGL-44.png)
+![OpenGL-4.5](https://raw.githubusercontent.com/cprogrammer1994/libOpenGL.a/master/Badges/OpenGL-45.png)
 
 Checkout the [OpenGL Registry](https://www.opengl.org/registry/) for core specifications.
 
@@ -58,13 +58,11 @@ Please follow the [Examples](https://github.com/cprogrammer1994/ModernGL/tree/ma
 
 # Linux Support
 
-## since ModernGL 2.2.0
+## 2.1.2 (has linux support)
+> tested on Ubuntu 16.04 without driver<br>
+> compiles, but sadly never tested the runtime<br>
 
-tested on Ubuntu 16.04
-
-![Ubuntu](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Examples/Screenshots/Ubuntu.png)
-
+## DON'T FORGET
 ```
-apt-get install python3-dev
 apt-get install libgl1-mesa-dev
 ```
