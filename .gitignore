@@ -3,9 +3,6 @@ __pycache__
 *.pyc
 *.pyd
 
-Docs/ModernGL/*
-Docs/ModernGL-Docs.zip
-
 build
 dist
 

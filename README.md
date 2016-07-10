@@ -36,13 +36,13 @@ quality, with less code written.
 
 # Supported Versions
 
-![OpenGL-3.3](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Badges/OpenGL-33.png)
-![OpenGL-4.0](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Badges/OpenGL-40.png)
-![OpenGL-4.1](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Badges/OpenGL-41.png)
-![OpenGL-4.2](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Badges/OpenGL-42.png)
-![OpenGL-4.3](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Badges/OpenGL-43.png)
-![OpenGL-4.4](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Badges/OpenGL-44.png)
-![OpenGL-4.5](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Badges/OpenGL-45.png)
+![OpenGL-3.3](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/OpenGL-33.png)
+![OpenGL-4.0](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/OpenGL-40.png)
+![OpenGL-4.1](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/OpenGL-41.png)
+![OpenGL-4.2](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/OpenGL-42.png)
+![OpenGL-4.3](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/OpenGL-43.png)
+![OpenGL-4.4](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/OpenGL-44.png)
+![OpenGL-4.5](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/OpenGL-45.png)
 
 Checkout the [OpenGL Registry](https://www.opengl.org/registry/) for core specifications.
 
@@ -62,7 +62,7 @@ Please follow the [Examples](https://github.com/cprogrammer1994/ModernGL/tree/ma
 
 tested on Ubuntu 16.04
 
-![Ubuntu](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Examples/Screenshots/Ubuntu.png)
+![Ubuntu](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Images/Ubuntu.png)
 
 ```
 apt-get install python3-dev
