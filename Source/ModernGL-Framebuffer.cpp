@@ -54,7 +54,7 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 PyObject * DeleteFramebuffer(PyObject * self, PyObject * args) {
 	Framebuffer * fbo;
 
-	if (!PyArg_ParseTuple(args, "O:DeleteFramebuffer", &fbo)) {
+	if (!PyArg_ParseTuple(args, "O!:DeleteFramebuffer", &FramebufferType, &fbo)) {
 		return 0;
 	}
 
@@ -69,7 +69,7 @@ PyObject * DeleteFramebuffer(PyObject * self, PyObject * args) {
 PyObject * UseFramebuffer(PyObject * self, PyObject * args) {
 	Framebuffer * fbo;
 
-	if (!PyArg_ParseTuple(args, "O:DeleteFramebuffer", &fbo)) {
+	if (!PyArg_ParseTuple(args, "O!:DeleteFramebuffer", &FramebufferType, &fbo)) {
 		return 0;
 	}
 

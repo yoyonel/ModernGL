@@ -220,7 +220,7 @@ PyObject * NewTessControlShader(PyObject * self, PyObject * args) {
 PyObject * DeleteShader(PyObject * self, PyObject * args) {
 	Shader * shader;
 
-	if (!PyArg_ParseTuple(args, "O:DeleteShader", &shader)) {
+	if (!PyArg_ParseTuple(args, "O!:DeleteShader", &ShaderType, &shader)) {
 		return 0;
 	}
 

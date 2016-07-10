@@ -93,7 +93,7 @@ PyObject * LineSize(PyObject * self, PyObject * args) {
 PyObject * EnableOnly(PyObject * self, PyObject * args) {
 	EnableFlag * flags;
 
-	if (!PyArg_ParseTuple(args, "O:EnableOnly", &flags)) {
+	if (!PyArg_ParseTuple(args, "O!:EnableOnly", &EnableFlagType, &flags)) {
 		return 0;
 	}
 
