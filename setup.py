@@ -3,7 +3,7 @@ import platform
 target = platform.system().lower()
 
 try:
-	import cccompiler
+	from External import cccompiler
 except ImportError:
 	pass
 
