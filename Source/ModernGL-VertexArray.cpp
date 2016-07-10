@@ -12,13 +12,9 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	IndexBuffer * ibo = no_ibo;
 	bool strict = false;
 
-	if (!PyArg_ParseTuple(args, "OOsO|Op:NewVertexArray", &program, &vbo, &format, &attributes, &ibo, &strict)) {
+	if (!PyArg_ParseTuple(args, "O!O!sO!|O!p:NewVertexArray", &ProgramType, &program, &VertexBufferType, &vbo, &format, &PyList_Type, &attributes, &IndexBufferType, &ibo, &strict)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("vbo", vbo, VertexBufferType);
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("attributes", attributes, PyList_Type);
 
 	int length = 0;
 	while (format[length]) {
@@ -55,10 +51,6 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 			PyErr_Format(ModuleError, "NewVertexArray() fail");
 			return 0;
 		}
-	}
-
-	if (ibo != no_ibo) {
-		CHECK_AND_REPORT_ARG_TYPE_ERROR("ibo", ibo, IndexBufferType);
 	}
 
 	int vao = 0;
@@ -106,15 +98,8 @@ PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args) {
 	IndexBuffer * ibo = no_ibo;
 	bool strict = false;
 
-	if (!PyArg_ParseTuple(args, "OO|Op:NewAdvancedVertexArray", &program, &content, &ibo)) {
+	if (!PyArg_ParseTuple(args, "O!O!|O!p:NewAdvancedVertexArray", &ProgramType, &program, &PyList_Type, &content, &IndexBufferType, &ibo)) {
 		return 0;
-	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("content", content, PyList_Type);
-
-	if (ibo != no_ibo) {
-		CHECK_AND_REPORT_ARG_TYPE_ERROR("ibo", ibo, IndexBufferType);
 	}
 
 	int vao = 0;
@@ -206,11 +191,9 @@ PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args) {
 PyObject * DeleteVertexArray(PyObject * self, PyObject * args) {
 	VertexArray * vao;
 
-	if (!PyArg_ParseTuple(args, "O:DeleteVertexArray", &vao)) {
+	if (!PyArg_ParseTuple(args, "O!:DeleteVertexArray", &VertexArrayType, &vao)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	OpenGL::glDeleteVertexArrays(1, (OpenGL::GLuint *)&vao->vao);
 	Py_RETURN_NONE;
@@ -223,12 +206,9 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 
 	static const char * kwlist[] = {"vao", "attributes", "strict", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|p:EnableAttributes", (char **)kwlist, &vao, &attributes, &strict)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!O!|p:EnableAttributes", (char **)kwlist, &VertexArrayType, &vao, &PyList_Type, &attributes, &strict)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("attributes", attributes, PyList_Type);
 
 	int count = (int)PyList_Size(attributes);
 	for (int i = 0; i < count; ++i) {
@@ -258,12 +238,9 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 
 	static const char * kwlist[] = {"vao", "attributes", "strict", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|p:DisableAttributes", (char **)kwlist, &vao, &attributes, &strict)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!O!|p:DisableAttributes", (char **)kwlist, &VertexArrayType, &vao, &PyList_Type, &attributes, &strict)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("attributes", attributes, PyList_Type);
 
 	int count = (int)PyList_Size(attributes);
 	for (int i = 0; i < count; ++i) {

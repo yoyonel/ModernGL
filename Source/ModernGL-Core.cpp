@@ -93,11 +93,9 @@ PyObject * LineSize(PyObject * self, PyObject * args) {
 PyObject * EnableOnly(PyObject * self, PyObject * args) {
 	EnableFlag * flags;
 
-	if (!PyArg_ParseTuple(args, "O:EnableOnly", &flags)) {
+	if (!PyArg_ParseTuple(args, "O!:EnableOnly", &EnableFlagType, &flags)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("flags", flags, EnableFlagType);
 
 	(flags->value & ENABLE_BLEND ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_BLEND);
 	(flags->value & ENABLE_CULL_FACE ? OpenGL::glEnable : OpenGL::glDisable)(OpenGL::GL_CULL_FACE);

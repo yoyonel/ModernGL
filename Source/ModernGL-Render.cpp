@@ -10,11 +10,9 @@ PyObject * RenderTriangles(PyObject * self, PyObject * args, PyObject * kwargs) 
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderTriangles", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!i|ii:RenderTriangles", (char **)kwlist, &VertexArrayType, &vao, &count, &first, &instances)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
@@ -40,11 +38,9 @@ PyObject * RenderTriangleStrip(PyObject * self, PyObject * args, PyObject * kwar
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderTriangleStrip", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!i|ii:RenderTriangleStrip", (char **)kwlist, &VertexArrayType, &vao, &count, &first, &instances)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
@@ -70,11 +66,9 @@ PyObject * RenderTriangleFan(PyObject * self, PyObject * args, PyObject * kwargs
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderTriangleFan", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!i|ii:RenderTriangleFan", (char **)kwlist, &VertexArrayType, &vao, &count, &first, &instances)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
@@ -100,11 +94,9 @@ PyObject * RenderLines(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderLines", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!i|ii:RenderLines", (char **)kwlist, &VertexArrayType, &vao, &count, &first, &instances)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
@@ -130,11 +122,9 @@ PyObject * RenderLineStrip(PyObject * self, PyObject * args, PyObject * kwargs) 
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderLineStrip", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!i|ii:RenderLineStrip", (char **)kwlist, &VertexArrayType, &vao, &count, &first, &instances)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
@@ -160,11 +150,9 @@ PyObject * RenderLineLoop(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderLineLoop", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!i|ii:RenderLineLoop", (char **)kwlist, &VertexArrayType, &vao, &count, &first, &instances)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
@@ -190,11 +178,9 @@ PyObject * RenderPoints(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderPoints", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!i|ii:RenderPoints", (char **)kwlist, &VertexArrayType, &vao, &count, &first, &instances)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
@@ -220,11 +206,9 @@ PyObject * RenderLineStripAdjacency(PyObject * self, PyObject * args, PyObject *
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderLineStripAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!i|ii:RenderLineStripAdjacency", (char **)kwlist, &VertexArrayType, &vao, &count, &first, &instances)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
@@ -250,11 +234,9 @@ PyObject * RenderLinesAdjacency(PyObject * self, PyObject * args, PyObject * kwa
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderLinesAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!i|ii:RenderLinesAdjacency", (char **)kwlist, &VertexArrayType, &vao, &count, &first, &instances)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
@@ -280,11 +262,9 @@ PyObject * RenderTriangleStripAdjacency(PyObject * self, PyObject * args, PyObje
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderTriangleStripAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!i|ii:RenderTriangleStripAdjacency", (char **)kwlist, &VertexArrayType, &vao, &count, &first, &instances)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
@@ -310,11 +290,9 @@ PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args, PyObject *
 
 	static const char * kwlist[] = {"vao", "count", "first", "instances", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|ii:RenderTrianglesAdjacency", (char **)kwlist, &vao, &count, &first, &instances)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!i|ii:RenderTrianglesAdjacency", (char **)kwlist, &VertexArrayType, &vao, &count, &first, &instances)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("vao", vao, VertexArrayType);
 
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);

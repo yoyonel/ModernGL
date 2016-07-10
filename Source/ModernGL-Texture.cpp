@@ -50,11 +50,9 @@ PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 PyObject * DeleteTexture(PyObject * self, PyObject * args) {
 	Texture * texture;
 
-	if (!PyArg_ParseTuple(args, "O:DeleteTexture", &texture)) {
+	if (!PyArg_ParseTuple(args, "O!:DeleteTexture", &TextureType, &texture)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 
 	OpenGL::glDeleteTextures(1, (OpenGL::GLuint *)&texture->texture);
 	Py_RETURN_NONE;
@@ -71,11 +69,10 @@ PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"texture", "x", "y", "width", "height", "data", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oiiiiy#|i:UpdateTexture", (char **)kwlist, &texture, &x, &y, &width, &height, &data, &size)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!iiiiy#|i:UpdateTexture", (char **)kwlist, &TextureType, &texture, &x, &y, &width, &height, &data, &size)) {
 		return 0;
 	}
 
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 	CHECK_AND_REPORT_ARG_VALUE_ERROR(x < 1 || x > texture->width - 1, "x", x);
 	CHECK_AND_REPORT_ARG_VALUE_ERROR(y < 1 || y > texture->height - 1, "y", y);
 	CHECK_AND_REPORT_ARG_VALUE_ERROR(width < 1 || x + width > texture->width, "width", width);
@@ -94,11 +91,9 @@ PyObject * UseTexture(PyObject * self, PyObject * args) {
 	Texture * texture;
 	int location = 0;
 
-	if (!PyArg_ParseTuple(args, "O|i:UseTexture", &texture, &location)) {
+	if (!PyArg_ParseTuple(args, "O!|i:UseTexture", &TextureType, &texture, &location)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 
 	OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + location);
 	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture->texture);
@@ -108,11 +103,9 @@ PyObject * UseTexture(PyObject * self, PyObject * args) {
 PyObject * SetTexturePixelated(PyObject * self, PyObject * args) {
 	Texture * texture;
 	
-	if (!PyArg_ParseTuple(args, "O:SetTexturePixelated", &texture)) {
+	if (!PyArg_ParseTuple(args, "O!:SetTexturePixelated", &TextureType, &texture)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 
 	OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
 	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture->texture);
@@ -124,11 +117,9 @@ PyObject * SetTexturePixelated(PyObject * self, PyObject * args) {
 PyObject * SetTextureFiltered(PyObject * self, PyObject * args) {
 	Texture * texture;
 	
-	if (!PyArg_ParseTuple(args, "O:SetTextureFiltered", &texture)) {
+	if (!PyArg_ParseTuple(args, "O!:SetTextureFiltered", &TextureType, &texture)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 
 	OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
 	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture->texture);
@@ -140,11 +131,9 @@ PyObject * SetTextureFiltered(PyObject * self, PyObject * args) {
 PyObject * SetTextureMipmapped(PyObject * self, PyObject * args) {
 	Texture * texture;
 	
-	if (!PyArg_ParseTuple(args, "O:SetTextureMipmapped", &texture)) {
+	if (!PyArg_ParseTuple(args, "O!:SetTextureMipmapped", &TextureType, &texture)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 
 	OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
 	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture->texture);
@@ -160,11 +149,9 @@ PyObject * BuildMipmap(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"texture", "base", "max", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|ii:BuildMipmap", (char **)kwlist, &texture, &base, &max)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!|ii:BuildMipmap", (char **)kwlist, &TextureType, &texture, &base, &max)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 
 	OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
 	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture->texture);
@@ -182,11 +169,9 @@ PyObject * UseTextureAsImage(PyObject * self, PyObject * args, PyObject * kwargs
 
 	static const char * kwlist[] = {"texture", "binding", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|ii:UseTextureAsImage", (char **)kwlist, &texture, &binding)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!|ii:UseTextureAsImage", (char **)kwlist, &TextureType, &texture, &binding)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("texture", texture, TextureType);
 
 	const int formats[] = {0, OpenGL::GL_R8UI, OpenGL::GL_RG8UI, OpenGL::GL_RGB8UI, OpenGL::GL_RGBA8UI};
 	int format = formats[texture->components];
