@@ -17,8 +17,6 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("shaders", shaders, PyList_Type);
-
 	int count = (int)PyList_Size(shaders);
 
 	int category[NUM_SHADER_CATEGORIES] = {};
@@ -125,8 +123,6 @@ PyObject * DeleteProgram(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("program", program, ProgramType);
-
 	int shaders[8] = {};
 	int numShaders = 0;
 
@@ -146,8 +142,6 @@ PyObject * Uniform1f(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
-
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
 		activeProgram = location->program;
@@ -165,8 +159,6 @@ PyObject * Uniform2f(PyObject * self, PyObject * args) {
 	if (!PyArg_ParseTuple(args, "O!ff:Uniform2f", &UniformLocationType, &location, &v0, &v1)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
 
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
@@ -186,8 +178,6 @@ PyObject * Uniform3f(PyObject * self, PyObject * args) {
 	if (!PyArg_ParseTuple(args, "O!fff:Uniform3f", &UniformLocationType, &location, &v0, &v1, &v2)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
 
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
@@ -209,8 +199,6 @@ PyObject * Uniform4f(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
-
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
 		activeProgram = location->program;
@@ -227,8 +215,6 @@ PyObject * Uniform1i(PyObject * self, PyObject * args) {
 	if (!PyArg_ParseTuple(args, "O!i:Uniform1i", &UniformLocationType, &location, &v0)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
 
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
@@ -248,8 +234,6 @@ PyObject * Uniform2i(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
-
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
 		activeProgram = location->program;
@@ -268,8 +252,6 @@ PyObject * Uniform3i(PyObject * self, PyObject * args) {
 	if (!PyArg_ParseTuple(args, "O!iii:Uniform3i", &UniformLocationType, &location, &v0, &v1, &v2)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
 
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
@@ -291,8 +273,6 @@ PyObject * Uniform4i(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
-
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
 		activeProgram = location->program;
@@ -309,9 +289,6 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	if (!PyArg_ParseTuple(args, "O!O!:UniformMatrix", &UniformLocationType, &location, &PyList_Type, &matrix)) {
 		return 0;
 	}
-
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("matrix", matrix, PyList_Type);
 
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
@@ -344,9 +321,6 @@ PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("location", location, UniformLocationType);
-	CHECK_AND_REPORT_ARG_TYPE_ERROR("matrix", matrix, PyList_Type);
-	
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
 		activeProgram = location->program;
