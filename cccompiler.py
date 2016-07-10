@@ -23,15 +23,13 @@ class CustomCCompiler:
 		if not os.path.isdir(output_dir):
 			os.makedirs(output_dir)
 
-		macros = ' '.join('-D%s=%s' % (a, b) for a, b in kwargs['macros'])
-
 		objects = []
 		for source in sources:
 			output_base = os.path.basename(source)
 			output_name = os.path.splitext(output_base)[0]
 			output_filename = os.path.join(output_dir, output_name + '.o')
 			incs = ' '.join('-I "%s"' % inc for inc in self.inc_dirs)
-			todo = '%s %s -c %s %s -o "%s"' % (self.comp, macros, incs, source, output_filename)
+			todo = '%s -c %s %s -o "%s"' % (self.comp, incs, source, output_filename)
 			print(todo)
 			ret = os.system(todo)
 			objects.append(output_filename)
