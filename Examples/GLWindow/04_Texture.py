@@ -47,7 +47,7 @@ vao = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 
 GL.Uniform2f(iface['scale'], height / width * 0.75, 0.75)
 
-tex = GL.NewTexture(256, 256, Image.open('../Data/Noise.jpg').tobytes())
+tex = GL.NewTexture(256, 256, Image.open('../DataFiles/Noise.jpg').tobytes())
 GL.UseTexture(tex)
 
 while WND.Update():

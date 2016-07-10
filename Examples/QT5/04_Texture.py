@@ -56,7 +56,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 
 			GL.Uniform2f(iface['scale'], context['height'] / context['width'] * 0.75, 0.75)
 
-			tex = GL.NewTexture(256, 256, Image.open('../Data/Noise.jpg').tobytes())
+			tex = GL.NewTexture(256, 256, Image.open('../DataFiles/Noise.jpg').tobytes())
 			GL.UseTexture(tex)
 			
 		except GL.Error as error:

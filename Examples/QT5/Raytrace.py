@@ -101,7 +101,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 			vbo = GL.NewVertexBuffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
 			context['vao'] = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 
-			ssbo = GL.NewStorageBuffer(open('../Data/Raytrace-scene.dat', 'rb').read())
+			ssbo = GL.NewStorageBuffer(open('../DataFiles/Raytrace-scene.dat', 'rb').read())
 			GL.UseStorageBuffer(ssbo, 1)
 
 			GL.Uniform1f(iface['ratio'], context['width'] / context['height'])
