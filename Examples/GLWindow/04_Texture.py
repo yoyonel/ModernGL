@@ -43,7 +43,7 @@ width, height = WND.GetSize()
 prog, iface = GL.NewProgram([vert, frag])
 
 vbo = GL.NewVertexBuffer(struct.pack('6f', 1.0, 0.0, -0.5, 0.86, -0.5, -0.86))
-vao = GL.NewVertexArray('2f', vbo, [iface['vert']])
+vao = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 
 GL.Uniform2f(iface['scale'], height / width * 0.75, 0.75)
 

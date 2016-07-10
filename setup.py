@@ -1,5 +1,7 @@
 import platform
 
+target = platform.system().lower()
+
 try:
 	import cccompiler
 except ImportError:
@@ -11,6 +13,8 @@ try:
 except ImportError:
 	from distutils.core import setup
 	from distutils.extension import Extension
+
+Version = '2.2.0'
 
 ShortDescription = 'modern OpenGL binding for Python'
 
@@ -132,35 +136,36 @@ Keywords = [
 	'video',
 ]
 
-target = platform.system().lower()
-
 Libraries = {
 	'windows' : ['user32', 'gdi32'],
 	'linux' : ['GL', 'dl'],
 }
 
+Sources = [
+	'Source/OpenGL.cpp',
+	'Source/ModernGL.cpp',
+	'Source/ModernGL-Buffer.cpp',
+	'Source/ModernGL-Compute.cpp',
+	'Source/ModernGL-Core.cpp',
+	'Source/ModernGL-Framebuffer.cpp',
+	'Source/ModernGL-Program.cpp',
+	'Source/ModernGL-Render.cpp',
+	'Source/ModernGL-Shader.cpp',
+	'Source/ModernGL-Texture.cpp',
+	'Source/ModernGL-Types.cpp',
+	'Source/ModernGL-VertexArray.cpp',
+]
+
 ModernGL = Extension(
 	'ModernGL.ModernGL',
+	define_macros = [('MODERN_GL_VERSION', Version)],
 	libraries = Libraries[target],
-	sources = [
-		'Source/OpenGL.cpp',
-		'Source/ModernGL.cpp',
-		'Source/ModernGL-Buffer.cpp',
-		'Source/ModernGL-Compute.cpp',
-		'Source/ModernGL-Core.cpp',
-		'Source/ModernGL-Framebuffer.cpp',
-		'Source/ModernGL-Program.cpp',
-		'Source/ModernGL-Render.cpp',
-		'Source/ModernGL-Shader.cpp',
-		'Source/ModernGL-Texture.cpp',
-		'Source/ModernGL-Types.cpp',
-		'Source/ModernGL-VertexArray.cpp',
-	]
+	sources = Sources,
 )
 
 args = {
 	'name' : 'ModernGL',
-	'version' : '2.2.0',
+	'version' : Version,
 	'description' : ShortDescription,
 	'long_description' : LongDescription,
 	'url' : 'https://github.com/cprogrammer1994/ModernGL',
@@ -172,11 +177,10 @@ args = {
 	'keywords' : Keywords,
 	'packages' : ['ModernGL'],
 	'ext_modules' : [ModernGL],
-	'platforms' : ['win32', 'win64'],
-	'zip_safe' : True,
+	'platforms' : ['any'],
 }
 
-if target is 'windows':
+if target == 'windows':
 	args['zip_safe'] = True
 
 setup(**args)

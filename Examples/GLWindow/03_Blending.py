@@ -52,13 +52,7 @@ verts = [
 ]
 
 vbo = GL.NewVertexBuffer(struct.pack('18f', *verts))
-
-attribs = [
-	iface['vert'],
-	iface['vert_color'],
-]
-
-vao = GL.NewVertexArray('2f4f', vbo, attribs)
+vao = GL.NewVertexArray(prog, vbo, '2f4f', ['vert', 'vert_color'])
 
 GL.Uniform2f(iface['scale'], height / width * 0.75, 0.75)
 

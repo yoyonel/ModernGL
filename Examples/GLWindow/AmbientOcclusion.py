@@ -108,7 +108,7 @@ ssao_frag = GL.NewFragmentShader('''
 	}
 ''')
 
-ssao_prog = GL.NewProgram([ssao_vert, ssao_frag])
+ssao_prog, ssao_iface = GL.NewProgram([ssao_vert, ssao_frag])
 
 step = 7
 
@@ -160,41 +160,31 @@ for k in range(1000):
 vbo = GL.NewVertexBuffer(data)
 ibo = GL.NewIndexBuffer(idata)
 
-attribs = [
-	grass_iface['vert'],
-	grass_iface['direction'],
-	grass_iface['color'],
-	grass_iface['thickness'],
-	grass_iface['power'],
-]
-
-vao = GL.NewVertexArray('3f3f3f1f1f', vbo, attribs, ibo)
+vao = GL.NewVertexArray(grass_prog, vbo, '3f3f3f1f1f', ['vert', 'direction', 'color', 'thickness', 'power'], ibo)
 
 ssao_vbo = GL.NewVertexBuffer(struct.pack('8f', 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0))
-ssao_vao = GL.NewVertexArray('2f', ssao_vbo, [GL.GetAttributeLocation(ssao_prog, 'vert')])
+ssao_vao = GL.NewVertexArray(ssao_prog, ssao_vbo, '2f', ['vert'])
 
-GL.UseProgram(grass_prog)
-GL.UniformMatrix(GL.GetUniformLocation(grass_prog, 'mat'), camera)
 
 ubo = GL.NewUniformBuffer(b''.join(struct.pack('2f', x, y) for x, y in kernel))
 
 fbo, color, depth = GL.NewFramebuffer()
 
-GL.UseProgram(ssao_prog)
-GL.Uniform1i(GL.GetUniformLocation(ssao_prog, 'texture'), 0)
-GL.Uniform1i(GL.GetUniformLocation(ssao_prog, 'depth'), 1)
-GL.UseUniformBuffer(ubo, GL.GetUniformBufferLocation(ssao_prog, 'Kernel'))
+GL.UniformMatrix(grass_iface['mat'], camera)
+GL.Uniform1i(ssao_iface['texture'], 0)
+GL.Uniform1i(ssao_iface['depth'], 1)
+
+GL.UseUniformBuffer(ubo, ssao_iface['Kernel'])
 
 while WND.Update():
 	GL.UseFramebuffer(fbo)
 	GL.EnableDepthTest()
 	GL.Clear(0, 0, 0)
-	GL.UseProgram(grass_prog)
+
 	GL.RenderTriangleStrip(vao, 1000 * 8)
 
 	GL.UseDefaultFramebuffer()
 	GL.DisableDepthTest()
-	GL.UseProgram(ssao_prog)
 	GL.UseTexture(color, 0)
 	GL.UseTexture(depth, 1)
 	GL.RenderTriangleStrip(ssao_vao, 4)
