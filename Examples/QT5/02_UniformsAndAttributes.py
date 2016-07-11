@@ -5,6 +5,7 @@ import struct, time
 context = {
 	'width' : 800,
 	'height' : 600,
+	'start' : time.time(),
 }
 
 class QGLControllerWidget(QtOpenGL.QGLWidget):
@@ -59,12 +60,13 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 
 	def paintGL(self):
 		GL.Clear(240, 240, 240)
-		GL.Uniform1f(context['rotation'], time.time())
+		GL.Uniform1f(context['rotation'], time.time() - context['start'])
 		GL.RenderTriangles(context['vao'], 3)
+		self.update()
 
-class QTWithGLTest(QtWidgets.QMainWindow):
+class GLCanvas(QtWidgets.QMainWindow):
 	def __init__(self, parent = None):
-		super(QTWithGLTest, self).__init__(parent)
+		super(GLCanvas, self).__init__(parent)
 
 		fmt = QtOpenGL.QGLFormat()
 		fmt.setVersion(3, 3)
@@ -77,7 +79,7 @@ class QTWithGLTest(QtWidgets.QMainWindow):
 		self.show()
 
 app = QtWidgets.QApplication([])
-window = QTWithGLTest()
+window = GLCanvas()
 window.show()
 app.exec_()
 

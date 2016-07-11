@@ -5,6 +5,14 @@ import struct
 context = {
 	'width' : 800,
 	'height' : 600,
+
+	'dmx' : 0.0,
+	'dmy' : 0.0,
+	'ds' : 0.0,
+
+	'mx': 0.78,
+	'my' : -0.15,
+	's' : 1.84,
 }
 
 class QGLControllerWidget(QtOpenGL.QGLWidget):
@@ -64,24 +72,59 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 			GL.Uniform1i(iface['iter'], 100)
 			GL.Uniform1f(iface['scale'], 1.0)
 			GL.Uniform2f(iface['center'], 0.3, 0.2)
-
-			context['mx'] = 0
-			context['my'] = 0
-			context['s'] = 1
 			
 		except GL.Error as error:
 			print(error)
 			exit(1)
 
 	def paintGL(self):
+		context['mx'] += context['dmx']
+		context['my'] += context['dmy']
+		context['s'] += context['ds']
 		GL.Clear(240, 240, 240)
 		GL.Uniform2f(context['center'], context['mx'], context['my'])
-		GL.Uniform1f(context['scale'], context['s'])
+		GL.Uniform1f(context['scale'], 0.5 ** context['s'])
 		GL.RenderTriangleStrip(context['vao'], 4)
+		self.update()
 
-class QTWithGLTest(QtWidgets.QMainWindow):
+	def keyPressEvent(self, event):
+		if event.key() == ord('D'):
+			context['dmx'] += 0.01
+		if event.key() == ord('A'):
+			context['dmx'] -= 0.01
+		if event.key() == ord('W'):
+			context['dmy'] += 0.01
+		if event.key() == ord('S'):
+			context['dmy'] -= 0.01
+		if event.key() == ord('Q'):
+			context['ds'] += 0.01
+		if event.key() == ord('E'):
+			context['ds'] -= 0.01
+
+	def keyReleaseEvent(self, event):
+		if event.key() == ord('D'):
+			context['dmx'] -= 0.01
+		if event.key() == ord('A'):
+			context['dmx'] += 0.01
+		if event.key() == ord('W'):
+			context['dmy'] -= 0.01
+		if event.key() == ord('S'):
+			context['dmy'] += 0.01
+		if event.key() == ord('Q'):
+			context['ds'] -= 0.01
+		if event.key() == ord('E'):
+			context['ds'] += 0.01
+
+class GLCanvas(QtWidgets.QMainWindow):
+
+	def keyPressEvent(self, event):
+		self.widget.keyPressEvent(event)
+
+	def keyReleaseEvent(self, event):
+		self.widget.keyReleaseEvent(event)
+
 	def __init__(self, parent = None):
-		super(QTWithGLTest, self).__init__(parent)
+		super(GLCanvas, self).__init__(parent)
 
 		fmt = QtOpenGL.QGLFormat()
 		fmt.setVersion(3, 3)
@@ -94,6 +137,6 @@ class QTWithGLTest(QtWidgets.QMainWindow):
 		self.show()
 
 app = QtWidgets.QApplication([])
-window = QTWithGLTest()
+window = GLCanvas()
 window.show()
 app.exec_()
