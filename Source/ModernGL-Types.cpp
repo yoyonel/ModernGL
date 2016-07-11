@@ -905,13 +905,13 @@ PyObject * CreateUniformLocationType(int location, int program, int type) {
 	return (PyObject *)obj;
 }
 
-PyObject * CreateUniformBufferLocationType(int location, int program, int type) {
+PyObject * CreateUniformBufferLocationType(int location, int program, int size) {
 	UniformBufferLocation * obj = (UniformBufferLocation *)UniformBufferLocationType.tp_alloc(&UniformBufferLocationType, 0);
 
 	if (obj != 0) {
 		obj->location = location;
 		obj->program = program;
-		obj->type = type;
+		obj->size = size;
 	}
 
 	return (PyObject *)obj;

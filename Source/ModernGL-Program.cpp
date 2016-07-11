@@ -335,7 +335,7 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	PyObject * matrix;
 	bool transpose = false;
 
-	if (!PyArg_ParseTuple(args, "O!O!p:UniformMatrix", &UniformLocationType, &location, &PyList_Type, &matrix, &transpose)) {
+	if (!PyArg_ParseTuple(args, "O!O!|p:UniformMatrix", &UniformLocationType, &location, &PyList_Type, &matrix, &transpose)) {
 		return 0;
 	}
 
