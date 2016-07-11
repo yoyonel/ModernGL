@@ -8,10 +8,6 @@
 [![PyPI](https://img.shields.io/pypi/status/ModernGL.svg)](https://pypi.python.org/pypi/ModernGL)
 [![PyPI](https://img.shields.io/pypi/dm/ModernGL.svg)](https://pypi.python.org/pypi/ModernGL)
 
-```
-python -m pip install ModernGL
-```
-
 ## Description
 
 OpenGL is a great environment for developing portable, platform independent,
@@ -24,6 +20,38 @@ requires a steep learning curve. In contrast, ModernGL is easy to learn and
 use, moreover it is capable of rendering with the same performance and
 quality, with less code written.
 
+## How to install
+
+```
+pip install ModernGL
+```
+
+-----
+
+for **Ubuntu**:
+```
+apt-get install python3-dev
+apt-get install libgl1-mesa-dev
+pip3 install ModernGL
+```
+
+-----
+
+some examples depend on: **PyQt5** and **GLWindow**
+```
+pip3 install PyQt5
+pip install GLWindow
+```
+
+ PyQt5 is platform independent
+ GLWindow is windows only
+
+-----
+
+## How to use
+
+Please follow the [Examples](https://github.com/cprogrammer1994/ModernGL/tree/master/Examples).
+
 ## Links
 
 [Examples](https://github.com/cprogrammer1994/ModernGL/tree/master/Examples)<br>
@@ -34,7 +62,7 @@ quality, with less code written.
 [Github Page](http://cprogrammer1994.github.io/ModernGL/)<br>
 [Github Docs](https://github.com/cprogrammer1994/ModernGL/wiki)<br>
 
-# Patches are welcome
+# Pull requests are welcome!
 
 # Documentation (deprecated until a stable release)
 
@@ -43,19 +71,6 @@ Please follow the [Documentation](https://pythonhosted.org/ModernGL/).
 # Examples
 
 Please follow the [Examples](https://github.com/cprogrammer1994/ModernGL/tree/master/Examples).
-
-# Linux Support
-
-## since ModernGL 2.2.0
-
-tested on Ubuntu 16.04
-
-![Ubuntu](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Images/Ubuntu.png)
-
-```
-apt-get install python3-dev
-apt-get install libgl1-mesa-dev
-```
 
 # Supported Versions
 
@@ -168,3 +183,9 @@ UseTexture | ![OpenGL-3.1](https://raw.githubusercontent.com/cprogrammer1994/Mod
 UseTextureAsImage | ![OpenGL-4.2](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/OpenGL-42.png)
 UseUniformBuffer | ![OpenGL-3.1](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/OpenGL-31.png)
 Viewport | ![OpenGL-3.1](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/OpenGL-31.png)
+
+# Linux Support
+
+tested on Ubuntu 16.04
+
+![Ubuntu](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Images/Ubuntu.png)
