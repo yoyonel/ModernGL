@@ -43,7 +43,7 @@ pip3 install PyQt5
 pip install GLWindow
 ```
 
-**PyQt5** is platform independent. **GLWindow* is windows only.
+**PyQt5** is platform independent. **GLWindow** is windows only.
 
 ## How to use
 
