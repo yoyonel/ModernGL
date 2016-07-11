@@ -96,12 +96,14 @@ struct UniformLocation {
 	PyObject_HEAD
 	int location;
 	int program;
+	int type;
 };
 
 struct UniformBufferLocation {
 	PyObject_HEAD
 	int location;
 	int program;
+	int type;
 };
 
 struct ComputeShader {
@@ -138,8 +140,8 @@ PyObject * CreateStorageBufferType(int sbo, int size);
 PyObject * CreateTextureType(int texture, int width, int height, int components);
 PyObject * CreateShaderType(int shader, ShaderCategory category);
 PyObject * CreateProgramType(int program);
-PyObject * CreateUniformLocationType(int location, int program);
-PyObject * CreateUniformBufferLocationType(int location, int program);
+PyObject * CreateUniformLocationType(int location, int program, int type);
+PyObject * CreateUniformBufferLocationType(int location, int program, int type);
 PyObject * CreateComputeShaderType(int shader, int program);
 PyObject * CreateEnableFlagType(unsigned value);
 
