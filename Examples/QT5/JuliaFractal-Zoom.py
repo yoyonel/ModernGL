@@ -5,6 +5,14 @@ import struct, time
 context = {
 	'width' : 800,
 	'height' : 600,
+
+	'dmx' : 0.0,
+	'dmy' : 0.0,
+	'ds' : 0.0,
+
+	'mx': 0,
+	'my' : 0,
+	's' : -1,
 }
 
 class QGLControllerWidget(QtOpenGL.QGLWidget):
@@ -65,23 +73,59 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 			context['vao'] = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 
 			GL.Uniform1i(iface['iter'], 100)
-
-			context['tx'] = 0
-			context['ty'] = 0
-			context['z'] = 1
 			
 		except GL.Error as error:
 			print(error)
 			exit(1)
 
 	def paintGL(self):
+		z = 0.5 ** context['s']
+		context['mx'] += context['dmx'] * z
+		context['my'] += context['dmy'] * z
+		context['s'] += context['ds']
 		GL.Clear(240, 240, 240)
 
-		GL.Uniform2f(context['pos'], context['tx'] / context['z'], context['ty'] / context['z'])
-		GL.Uniform1f(context['zoom'], context['z'])
+		GL.Uniform2f(context['pos'], context['mx'] / z, context['my'] / z)
+		GL.Uniform1f(context['zoom'], z)
 		GL.RenderTriangleStrip(context['vao'], 4)
+		self.update()
+
+	def keyPressEvent(self, event):
+		if event.key() == ord('D'):
+			context['dmx'] += 0.01
+		if event.key() == ord('A'):
+			context['dmx'] -= 0.01
+		if event.key() == ord('W'):
+			context['dmy'] += 0.01
+		if event.key() == ord('S'):
+			context['dmy'] -= 0.01
+		if event.key() == ord('Q'):
+			context['ds'] += 0.01
+		if event.key() == ord('E'):
+			context['ds'] -= 0.01
+
+	def keyReleaseEvent(self, event):
+		if event.key() == ord('D'):
+			context['dmx'] -= 0.01
+		if event.key() == ord('A'):
+			context['dmx'] += 0.01
+		if event.key() == ord('W'):
+			context['dmy'] -= 0.01
+		if event.key() == ord('S'):
+			context['dmy'] += 0.01
+		if event.key() == ord('Q'):
+			context['ds'] -= 0.01
+		if event.key() == ord('E'):
+			context['ds'] += 0.01
 
 class QTWithGLTest(QtWidgets.QMainWindow):
+
+	def keyPressEvent(self, event):
+		self.widget.keyPressEvent(event)
+
+	def keyReleaseEvent(self, event):
+		self.widget.keyReleaseEvent(event)
+
 	def __init__(self, parent = None):
 		super(QTWithGLTest, self).__init__(parent)
 
