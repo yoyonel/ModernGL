@@ -88,14 +88,19 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	OpenGL::glGetProgramiv(program, OpenGL::GL_ACTIVE_UNIFORMS, &uniforms);
 	for (int i = 0; i < uniforms; ++i) {
 		char name[64 + 1];
-		int size;
-		int length;
-		unsigned type;
+		int size = 0;
+		int length = 0;
+		unsigned type = 0;
 		OpenGL::glGetActiveUniform(program, i, 64, &length, &size, &type, name);
 		int location = OpenGL::glGetUniformLocation(program, name);
 		name[length] = 0;
+
+		if (type == OpenGL::GL_SAMPLER_2D) {
+			type = OpenGL::GL_INT;
+		}
+
 		if (location >= 0) {
-			PyDict_SetItemString(dict, name, CreateUniformLocationType(location, program));
+			PyDict_SetItemString(dict, name, CreateUniformLocationType(location, program, type));
 		}
 	}
 
@@ -103,13 +108,16 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	OpenGL::glGetProgramiv(program, OpenGL::GL_ACTIVE_UNIFORM_BLOCKS, &uniformBlocks);
 	for (int i = 0; i < uniformBlocks; ++i) {
 		char name[64 + 1];
-		int length;
+		int size = 0;
+		int length = 0;
 		int location = -1;
 		OpenGL::glGetActiveUniformBlockName(program, i, 64, &length, name);
 		OpenGL::glGetActiveUniformBlockiv(program, i, OpenGL::GL_UNIFORM_BLOCK_BINDING, &location);
+		OpenGL::glGetActiveUniformBlockiv(program, i, OpenGL::GL_UNIFORM_BLOCK_DATA_SIZE, &size);
 		name[length] = 0;
+
 		if (location >= 0) {
-			PyDict_SetItemString(dict, name, CreateUniformBufferLocationType(location, program));
+			PyDict_SetItemString(dict, name, CreateUniformBufferLocationType(location, program, size));
 		}
 	}
 
@@ -142,6 +150,11 @@ PyObject * Uniform1f(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
+	if (location->type != OpenGL::GL_FLOAT) {
+		// TODO: SET ERROR
+		return 0;
+	}
+
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
 		activeProgram = location->program;
@@ -157,6 +170,11 @@ PyObject * Uniform2f(PyObject * self, PyObject * args) {
 	float v1;
 
 	if (!PyArg_ParseTuple(args, "O!ff:Uniform2f", &UniformLocationType, &location, &v0, &v1)) {
+		return 0;
+	}
+
+	if (location->type != OpenGL::GL_FLOAT_VEC2) {
+		// TODO: SET ERROR
 		return 0;
 	}
 
@@ -176,6 +194,11 @@ PyObject * Uniform3f(PyObject * self, PyObject * args) {
 	float v2;
 
 	if (!PyArg_ParseTuple(args, "O!fff:Uniform3f", &UniformLocationType, &location, &v0, &v1, &v2)) {
+		return 0;
+	}
+
+	if (location->type != OpenGL::GL_FLOAT_VEC3) {
+		// TODO: SET ERROR
 		return 0;
 	}
 
@@ -199,6 +222,11 @@ PyObject * Uniform4f(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
+	if (location->type != OpenGL::GL_FLOAT_VEC4) {
+		// TODO: SET ERROR
+		return 0;
+	}
+
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
 		activeProgram = location->program;
@@ -213,6 +241,11 @@ PyObject * Uniform1i(PyObject * self, PyObject * args) {
 	int v0;
 
 	if (!PyArg_ParseTuple(args, "O!i:Uniform1i", &UniformLocationType, &location, &v0)) {
+		return 0;
+	}
+
+	if (location->type != OpenGL::GL_INT) {
+		// TODO: SET ERROR
 		return 0;
 	}
 
@@ -234,6 +267,11 @@ PyObject * Uniform2i(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
+	if (location->type != OpenGL::GL_INT_VEC2) {
+		// TODO: SET ERROR
+		return 0;
+	}
+
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
 		activeProgram = location->program;
@@ -250,6 +288,11 @@ PyObject * Uniform3i(PyObject * self, PyObject * args) {
 	int v2;
 
 	if (!PyArg_ParseTuple(args, "O!iii:Uniform3i", &UniformLocationType, &location, &v0, &v1, &v2)) {
+		return 0;
+	}
+
+	if (location->type != OpenGL::GL_INT_VEC3) {
+		// TODO: SET ERROR
 		return 0;
 	}
 
@@ -273,6 +316,11 @@ PyObject * Uniform4i(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
+	if (location->type != OpenGL::GL_INT_VEC4) {
+		// TODO: SET ERROR
+		return 0;
+	}
+
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
 		activeProgram = location->program;
@@ -285,9 +333,44 @@ PyObject * Uniform4i(PyObject * self, PyObject * args) {
 PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	UniformLocation * location;
 	PyObject * matrix;
+	bool transpose = false;
 
-	if (!PyArg_ParseTuple(args, "O!O!:UniformMatrix", &UniformLocationType, &location, &PyList_Type, &matrix)) {
+	if (!PyArg_ParseTuple(args, "O!O!|p:UniformMatrix", &UniformLocationType, &location, &PyList_Type, &matrix, &transpose)) {
 		return 0;
+	}
+
+	int limit = 0;
+	switch (location->type) {
+		case OpenGL::GL_FLOAT_MAT2:
+			limit = 4;
+			break;
+
+		case OpenGL::GL_FLOAT_MAT3:
+			limit = 9;
+			break;
+
+		case OpenGL::GL_FLOAT_MAT4:
+			limit = 16;
+			break;
+
+		default:
+			// TODO: SET ERROR
+			return 0;
+			
+	}
+
+	int count = (int)PyList_Size(matrix);
+	
+	if (count != limit) {
+		// TODO: SET ERROR
+		return 0;
+	}
+
+	float matrix_data[16];
+
+	for (int i = 0; i < count; ++i) {
+		PyObject * item = PyList_GET_ITEM(matrix, i);
+		matrix_data[i] = (float)PyFloat_AsDouble(item);
 	}
 
 	if (activeProgram != location->program) {
@@ -295,51 +378,19 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 		activeProgram = location->program;
 	}
 
-	float matrix_data[16];
+	switch (location->type) {
+		case OpenGL::GL_FLOAT_MAT2:
+			OpenGL::glUniformMatrix2fv(location->location, 1, transpose, matrix_data);
+			break;
 
-	int count = (int)PyList_Size(matrix);
-	
-	if (count != 16) {
-		PyErr_Format(ModuleError, "UniformMatrix() matrix length must be 16, not %d", count);
-		return 0;
+		case OpenGL::GL_FLOAT_MAT3:
+			OpenGL::glUniformMatrix3fv(location->location, 1, transpose, matrix_data);
+			break;
+
+		case OpenGL::GL_FLOAT_MAT4:
+			OpenGL::glUniformMatrix4fv(location->location, 1, transpose, matrix_data);
+			break;
 	}
 
-	for (int i = 0; i < count; ++i) {
-		PyObject * item = PyList_GET_ITEM(matrix, i);
-		matrix_data[i] = (float)PyFloat_AsDouble(item);
-	}
-
-	OpenGL::glUniformMatrix4fv(location->location, 1, false, matrix_data);
-	Py_RETURN_NONE;
-}
-
-PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
-	UniformLocation * location;
-	PyObject * matrix;
-
-	if (!PyArg_ParseTuple(args, "O!O!:UniformTransposeMatrix", &UniformLocationType, &location, &PyList_Type, &matrix)) {
-		return 0;
-	}
-
-	if (activeProgram != location->program) {
-		OpenGL::glUseProgram(location->program);
-		activeProgram = location->program;
-	}
-
-	float matrix_data[16];
-
-	int count = (int)PyList_Size(matrix);
-	
-	if (count != 16) {
-		PyErr_Format(ModuleError, "UniformTransposeMatrix() matrix length must be 16, not %d", count);
-		return 0;
-	}
-
-	for (int i = 0; i < count; ++i) {
-		PyObject * item = PyList_GET_ITEM(matrix, i);
-		matrix_data[i] = (float)PyFloat_AsDouble(item);
-	}
-
-	OpenGL::glUniformMatrix4fv(location->location, 1, true, matrix_data);
 	Py_RETURN_NONE;
 }

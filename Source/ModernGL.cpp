@@ -570,22 +570,6 @@ static PyMethodDef methods[] = {
 		"\n"
 	},
 	{
-		"UniformTransposeMatrix",
-		(PyCFunction)Dummy,
-		METH_VARARGS,
-		""
-
-		"\n"
-		"Parameters:\n"
-		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
-		"\tmatrix (list of floats) List containing 4x4=16 float values.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
 		"UseUniformBuffer",
 		(PyCFunction)Dummy,
 		METH_VARARGS | METH_KEYWORDS,
@@ -1510,7 +1494,6 @@ void LoadImplementation() {
 		(PyCFunction)Uniform3i,
 		(PyCFunction)Uniform4i,
 		(PyCFunction)UniformMatrix,
-		(PyCFunction)UniformTransposeMatrix,
 		(PyCFunction)UseUniformBuffer,
 		(PyCFunction)NewTexture,
 		(PyCFunction)DeleteTexture,

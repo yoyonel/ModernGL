@@ -204,6 +204,11 @@ PyObject * UseUniformBuffer(PyObject * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
+	if (location->size != ubo->size) {
+		// TODO: SET ERROR
+		return 0;
+	}
+
 	OpenGL::glBindBufferBase(OpenGL::GL_UNIFORM_BUFFER, location->location, ubo->ubo);
 	Py_RETURN_NONE;
 }

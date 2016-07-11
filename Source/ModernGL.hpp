@@ -96,12 +96,14 @@ struct UniformLocation {
 	PyObject_HEAD
 	int location;
 	int program;
+	int type;
 };
 
 struct UniformBufferLocation {
 	PyObject_HEAD
 	int location;
 	int program;
+	int size;
 };
 
 struct ComputeShader {
@@ -138,8 +140,8 @@ PyObject * CreateStorageBufferType(int sbo, int size);
 PyObject * CreateTextureType(int texture, int width, int height, int components);
 PyObject * CreateShaderType(int shader, ShaderCategory category);
 PyObject * CreateProgramType(int program);
-PyObject * CreateUniformLocationType(int location, int program);
-PyObject * CreateUniformBufferLocationType(int location, int program);
+PyObject * CreateUniformLocationType(int location, int program, int type);
+PyObject * CreateUniformBufferLocationType(int location, int program, int size);
 PyObject * CreateComputeShaderType(int shader, int program);
 PyObject * CreateEnableFlagType(unsigned value);
 
@@ -220,7 +222,6 @@ PyObject * Uniform3i(PyObject * self, PyObject * args);
 PyObject * Uniform4f(PyObject * self, PyObject * args);
 PyObject * Uniform4i(PyObject * self, PyObject * args);
 PyObject * UniformMatrix(PyObject * self, PyObject * args);
-PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args);
 PyObject * UseUniformBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
 
 PyObject * UpdateVertexBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
