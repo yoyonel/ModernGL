@@ -1860,7 +1860,7 @@ PyObject * InitializeModernGL(PyObject * self, PyObject * args) {
 	OpenGL::glEnable(OpenGL::GL_PRIMITIVE_RESTART);
 	OpenGL::glPrimitiveRestartIndex(-1);
 
-	// Default VAO for GL_ELEMENT_ARRAY operations
+	// Default VAO for GL_ELEMENT_ARRAY_BUFFER operations
 	OpenGL::glGenVertexArrays(1, (OpenGL::GLuint *)&defaultVertexArray);
 	OpenGL::glBindVertexArray(defaultVertexArray);
 
