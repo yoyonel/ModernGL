@@ -94,6 +94,11 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		OpenGL::glGetActiveUniform(program, i, 64, &length, &size, &type, name);
 		int location = OpenGL::glGetUniformLocation(program, name);
 		name[length] = 0;
+
+		if (type == OpenGL::GL_SAMPLER_2D) {
+			type = OpenGL::GL_INT;
+		}
+
 		if (location >= 0) {
 			PyDict_SetItemString(dict, name, CreateUniformLocationType(location, program, type));
 		}
@@ -110,6 +115,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		OpenGL::glGetActiveUniformBlockiv(program, i, OpenGL::GL_UNIFORM_BLOCK_BINDING, &location);
 		OpenGL::glGetActiveUniformBlockiv(program, i, OpenGL::GL_UNIFORM_BLOCK_DATA_SIZE, &size);
 		name[length] = 0;
+
 		if (location >= 0) {
 			PyDict_SetItemString(dict, name, CreateUniformBufferLocationType(location, program, size));
 		}
@@ -144,6 +150,11 @@ PyObject * Uniform1f(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
+	if (location->type != OpenGL::GL_FLOAT) {
+		// TODO: SET ERROR
+		return 0;
+	}
+
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
 		activeProgram = location->program;
@@ -159,6 +170,11 @@ PyObject * Uniform2f(PyObject * self, PyObject * args) {
 	float v1;
 
 	if (!PyArg_ParseTuple(args, "O!ff:Uniform2f", &UniformLocationType, &location, &v0, &v1)) {
+		return 0;
+	}
+
+	if (location->type != OpenGL::GL_FLOAT_VEC2) {
+		// TODO: SET ERROR
 		return 0;
 	}
 
@@ -178,6 +194,11 @@ PyObject * Uniform3f(PyObject * self, PyObject * args) {
 	float v2;
 
 	if (!PyArg_ParseTuple(args, "O!fff:Uniform3f", &UniformLocationType, &location, &v0, &v1, &v2)) {
+		return 0;
+	}
+
+	if (location->type != OpenGL::GL_FLOAT_VEC3) {
+		// TODO: SET ERROR
 		return 0;
 	}
 
@@ -201,6 +222,11 @@ PyObject * Uniform4f(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
+	if (location->type != OpenGL::GL_FLOAT_VEC4) {
+		// TODO: SET ERROR
+		return 0;
+	}
+
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
 		activeProgram = location->program;
@@ -215,6 +241,11 @@ PyObject * Uniform1i(PyObject * self, PyObject * args) {
 	int v0;
 
 	if (!PyArg_ParseTuple(args, "O!i:Uniform1i", &UniformLocationType, &location, &v0)) {
+		return 0;
+	}
+
+	if (location->type != OpenGL::GL_INT) {
+		// TODO: SET ERROR
 		return 0;
 	}
 
@@ -233,6 +264,11 @@ PyObject * Uniform2i(PyObject * self, PyObject * args) {
 	int v1;
 
 	if (!PyArg_ParseTuple(args, "O!ii:Uniform2i", &UniformLocationType, &location, &v0, &v1)) {
+		return 0;
+	}
+
+	if (location->type != OpenGL::GL_INT_VEC2) {
+		// TODO: SET ERROR
 		return 0;
 	}
 
@@ -255,6 +291,11 @@ PyObject * Uniform3i(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
+	if (location->type != OpenGL::GL_INT_VEC3) {
+		// TODO: SET ERROR
+		return 0;
+	}
+
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
 		activeProgram = location->program;
@@ -272,6 +313,11 @@ PyObject * Uniform4i(PyObject * self, PyObject * args) {
 	int v3;
 
 	if (!PyArg_ParseTuple(args, "O!iiii:Uniform4i", &UniformLocationType, &location, &v0, &v1, &v2, &v3)) {
+		return 0;
+	}
+
+	if (location->type != OpenGL::GL_INT_VEC4) {
+		// TODO: SET ERROR
 		return 0;
 	}
 
