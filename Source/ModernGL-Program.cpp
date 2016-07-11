@@ -333,9 +333,44 @@ PyObject * Uniform4i(PyObject * self, PyObject * args) {
 PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	UniformLocation * location;
 	PyObject * matrix;
+	bool transpose = false;
 
-	if (!PyArg_ParseTuple(args, "O!O!:UniformMatrix", &UniformLocationType, &location, &PyList_Type, &matrix)) {
+	if (!PyArg_ParseTuple(args, "O!O!p:UniformMatrix", &UniformLocationType, &location, &PyList_Type, &matrix, &transpose)) {
 		return 0;
+	}
+
+	int limit = 0;
+	switch (location->type) {
+		case OpenGL::GL_FLOAT_MAT2:
+			limit = 4;
+			break;
+
+		case OpenGL::GL_FLOAT_MAT3:
+			limit = 9;
+			break;
+
+		case OpenGL::GL_FLOAT_MAT4:
+			limit = 16;
+			break;
+
+		default:
+			// TODO: SET ERROR
+			return 0;
+			
+	}
+
+	int count = (int)PyList_Size(matrix);
+	
+	if (count != limit) {
+		// TODO: SET ERROR
+		return 0;
+	}
+
+	float matrix_data[16];
+
+	for (int i = 0; i < count; ++i) {
+		PyObject * item = PyList_GET_ITEM(matrix, i);
+		matrix_data[i] = (float)PyFloat_AsDouble(item);
 	}
 
 	if (activeProgram != location->program) {
@@ -343,51 +378,19 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 		activeProgram = location->program;
 	}
 
-	float matrix_data[16];
+	switch (location->type) {
+		case OpenGL::GL_FLOAT_MAT2:
+			OpenGL::glUniformMatrix2fv(location->location, 1, transpose, matrix_data);
+			break;
 
-	int count = (int)PyList_Size(matrix);
-	
-	if (count != 16) {
-		PyErr_Format(ModuleError, "UniformMatrix() matrix length must be 16, not %d", count);
-		return 0;
+		case OpenGL::GL_FLOAT_MAT3:
+			OpenGL::glUniformMatrix3fv(location->location, 1, transpose, matrix_data);
+			break;
+
+		case OpenGL::GL_FLOAT_MAT4:
+			OpenGL::glUniformMatrix4fv(location->location, 1, transpose, matrix_data);
+			break;
 	}
 
-	for (int i = 0; i < count; ++i) {
-		PyObject * item = PyList_GET_ITEM(matrix, i);
-		matrix_data[i] = (float)PyFloat_AsDouble(item);
-	}
-
-	OpenGL::glUniformMatrix4fv(location->location, 1, false, matrix_data);
-	Py_RETURN_NONE;
-}
-
-PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args) {
-	UniformLocation * location;
-	PyObject * matrix;
-
-	if (!PyArg_ParseTuple(args, "O!O!:UniformTransposeMatrix", &UniformLocationType, &location, &PyList_Type, &matrix)) {
-		return 0;
-	}
-
-	if (activeProgram != location->program) {
-		OpenGL::glUseProgram(location->program);
-		activeProgram = location->program;
-	}
-
-	float matrix_data[16];
-
-	int count = (int)PyList_Size(matrix);
-	
-	if (count != 16) {
-		PyErr_Format(ModuleError, "UniformTransposeMatrix() matrix length must be 16, not %d", count);
-		return 0;
-	}
-
-	for (int i = 0; i < count; ++i) {
-		PyObject * item = PyList_GET_ITEM(matrix, i);
-		matrix_data[i] = (float)PyFloat_AsDouble(item);
-	}
-
-	OpenGL::glUniformMatrix4fv(location->location, 1, true, matrix_data);
 	Py_RETURN_NONE;
 }

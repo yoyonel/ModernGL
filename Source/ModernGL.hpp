@@ -222,7 +222,6 @@ PyObject * Uniform3i(PyObject * self, PyObject * args);
 PyObject * Uniform4f(PyObject * self, PyObject * args);
 PyObject * Uniform4i(PyObject * self, PyObject * args);
 PyObject * UniformMatrix(PyObject * self, PyObject * args);
-PyObject * UniformTransposeMatrix(PyObject * self, PyObject * args);
 PyObject * UseUniformBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
 
 PyObject * UpdateVertexBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
