@@ -59,6 +59,16 @@ apt-get install libgl1-mesa-dev
 
 # Supported Versions
 
+## Python
+
+![Python-2.7](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/Python-27.png)
+![Python-3.3](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/Python-33.png)
+![Python-3.4](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/Python-34.png)
+![Python-3.5](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/Python-35.png)
+![Python-3.6](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/Python-36.png)
+
+## OpenGL
+
 ![OpenGL-3.3](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/OpenGL-33.png)
 ![OpenGL-4.0](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/OpenGL-40.png)
 ![OpenGL-4.1](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Badges/OpenGL-41.png)
