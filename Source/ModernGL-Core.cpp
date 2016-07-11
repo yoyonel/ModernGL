@@ -61,10 +61,7 @@ PyObject * Clear(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	const float c = 1.0f / 255.0f;
 	OpenGL::glClearColor(r * c, g * c, b * c, a * c);
-	unsigned GL_ALL_BUFFER_BIT = 0;
-	GL_ALL_BUFFER_BIT |= OpenGL::GL_DEPTH_BUFFER_BIT;
-	GL_ALL_BUFFER_BIT |= OpenGL::GL_COLOR_BUFFER_BIT;
-	OpenGL::glClear(GL_ALL_BUFFER_BIT);
+	OpenGL::glClear(OpenGL::GL_DEPTH_BUFFER_BIT | OpenGL::GL_COLOR_BUFFER_BIT);
 	Py_RETURN_NONE;
 }
 
