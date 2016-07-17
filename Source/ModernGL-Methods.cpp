@@ -1119,10 +1119,10 @@ Implementation implementation[] = {
 	},
 	{
 		301,
-		(PyCFunction)GetDefaultFramebuffer,
-		(PyCFunction)Dummy_GetDefaultFramebuffer,
-		METH_NOARGS,
-		"GetDefaultFramebuffer",
+		(PyCFunction)SetDefaultFramebuffer,
+		(PyCFunction)Dummy_SetDefaultFramebuffer,
+		METH_VARARGS,
+		"SetDefaultFramebuffer",
 		""
 
 		"\n"
