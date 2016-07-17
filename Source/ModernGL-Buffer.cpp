@@ -237,12 +237,12 @@ PyObject * UseStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs)
 
 PyObject * ReadStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	StorageBuffer * sbo;
-	int offset;
-	int size;
+	int offset = 0;
+	int size = 0;
 
 	static const char * kwlist[] = {"sbo", "offset", "size", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!ii:ReadStorageBuffer", (char **)kwlist, &StorageBufferType, &sbo, &offset, &size)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!|ii:ReadStorageBuffer", (char **)kwlist, &StorageBufferType, &sbo, &offset, &size)) {
 		return 0;
 	}
 
