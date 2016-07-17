@@ -225,15 +225,8 @@ PyObject * RenderLineStripAdjacency(PyObject * self, PyObject * args, PyObject *
 PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
 PyObject * RenderTriangleStripAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
 
-PyObject * Uniform1f(PyObject * self, PyObject * args);
-PyObject * Uniform1i(PyObject * self, PyObject * args);
-PyObject * Uniform2f(PyObject * self, PyObject * args);
-PyObject * Uniform2i(PyObject * self, PyObject * args);
-PyObject * Uniform3f(PyObject * self, PyObject * args);
-PyObject * Uniform3i(PyObject * self, PyObject * args);
-PyObject * Uniform4f(PyObject * self, PyObject * args);
-PyObject * Uniform4i(PyObject * self, PyObject * args);
-PyObject * UniformMatrix(PyObject * self, PyObject * args);
+PyObject * SetUniform(PyObject * self, PyObject * args);
+PyObject * SetUniformMatrix(PyObject * self, PyObject * args);
 PyObject * UseUniformBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
 
 PyObject * UpdateVertexBuffer(PyObject * self, PyObject * args, PyObject * kwargs);
@@ -333,15 +326,8 @@ PyObject * Dummy_RenderLineStripAdjacency(PyObject * self);
 PyObject * Dummy_RenderTrianglesAdjacency(PyObject * self);
 PyObject * Dummy_RenderTriangleStripAdjacency(PyObject * self);
 
-PyObject * Dummy_Uniform1f(PyObject * self);
-PyObject * Dummy_Uniform1i(PyObject * self);
-PyObject * Dummy_Uniform2f(PyObject * self);
-PyObject * Dummy_Uniform2i(PyObject * self);
-PyObject * Dummy_Uniform3f(PyObject * self);
-PyObject * Dummy_Uniform3i(PyObject * self);
-PyObject * Dummy_Uniform4f(PyObject * self);
-PyObject * Dummy_Uniform4i(PyObject * self);
-PyObject * Dummy_UniformMatrix(PyObject * self);
+PyObject * Dummy_SetUniform(PyObject * self);
+PyObject * Dummy_SetUniformMatrix(PyObject * self);
 PyObject * Dummy_UseUniformBuffer(PyObject * self);
 
 PyObject * Dummy_UpdateVertexBuffer(PyObject * self);

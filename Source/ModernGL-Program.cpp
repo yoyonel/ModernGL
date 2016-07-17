@@ -142,39 +142,16 @@ PyObject * DeleteProgram(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * Uniform1f(PyObject * self, PyObject * args) {
-	UniformLocation * location;
-	float v0;
-
-	if (!PyArg_ParseTuple(args, "O!f:Uniform1f", &UniformLocationType, &location, &v0)) {
+PyObject * SetUniform(PyObject * self, PyObject * args) {
+	int size = PyTuple_GET_SIZE(args);
+	if (size < 1) {
 		return 0;
 	}
 
-	if (location->type != OpenGL::GL_FLOAT) {
-		// TODO: SET ERROR
-		return 0;
-	}
+	UniformLocation * location = (UniformLocation *)PyTuple_GET_ITEM(args, 0);
 
-	if (activeProgram != location->program) {
-		OpenGL::glUseProgram(location->program);
-		activeProgram = location->program;
-	}
-
-	OpenGL::glUniform1f(location->location, v0);
-	Py_RETURN_NONE;
-}
-
-PyObject * Uniform2f(PyObject * self, PyObject * args) {
-	UniformLocation * location;
-	float v0;
-	float v1;
-
-	if (!PyArg_ParseTuple(args, "O!ff:Uniform2f", &UniformLocationType, &location, &v0, &v1)) {
-		return 0;
-	}
-
-	if (location->type != OpenGL::GL_FLOAT_VEC2) {
-		// TODO: SET ERROR
+	if (!PyObject_TypeCheck((PyObject *)location, &UniformLocationType)) {
+		PyErr_Format(PyExc_TypeError, "SetUniform() argument `location` must be UniformLocationType, not %s", GET_OBJECT_TYPENAME(location));
 		return 0;
 	}
 
@@ -183,159 +160,145 @@ PyObject * Uniform2f(PyObject * self, PyObject * args) {
 		activeProgram = location->program;
 	}
 
-	OpenGL::glUniform2f(location->location, v0, v1);
+	switch (location->type) {
+		case OpenGL::GL_FLOAT: {
+			if (size != 2) {
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 1 additional float argument for uniform '%s'", size, "uniform name");
+			}
+			float v0 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 1));
+
+			if (PyErr_Occurred()) {
+				return 0;
+			}
+
+			OpenGL::glUniform1f(location->location, v0);
+			break;
+		}
+
+		case OpenGL::GL_FLOAT_VEC2: {
+			if (size != 3) {
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 2 additional float arguments for uniform '%s'", size, "uniform name");
+			}
+			float v0 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 1));
+			float v1 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 2));
+
+			if (PyErr_Occurred()) {
+				return 0;
+			}
+
+			OpenGL::glUniform2f(location->location, v0, v1);
+			break;
+		}
+
+		case OpenGL::GL_FLOAT_VEC3: {
+			if (size != 4) {
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 3 additional float arguments for uniform '%s'", size, "uniform name");
+			}
+			float v0 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 1));
+			float v1 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 2));
+			float v2 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 3));
+
+			if (PyErr_Occurred()) {
+				return 0;
+			}
+
+			OpenGL::glUniform3f(location->location, v0, v1, v2);
+			break;
+		}
+
+		case OpenGL::GL_FLOAT_VEC4: {
+			if (size != 5) {
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 3 additional float arguments for uniform '%s'", size, "uniform name");
+			}
+			float v0 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 1));
+			float v1 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 2));
+			float v2 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 3));
+			float v3 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 4));
+
+			if (PyErr_Occurred()) {
+				return 0;
+			}
+
+			OpenGL::glUniform4f(location->location, v0, v1, v2, v3);
+			break;
+		}
+
+		case OpenGL::GL_INT: {
+			if (size != 2) {
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 1 additional int argument for uniform '%s'", size, "uniform name");
+			}
+			int v0 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 1));
+
+			if (PyErr_Occurred()) {
+				return 0;
+			}
+
+			OpenGL::glUniform1i(location->location, v0);
+			break;
+		}
+
+		case OpenGL::GL_INT_VEC2: {
+			if (size != 3) {
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 2 additional int arguments for uniform '%s'", size, "uniform name");
+			}
+			int v0 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 1));
+			int v1 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 2));
+
+			if (PyErr_Occurred()) {
+				return 0;
+			}
+
+			OpenGL::glUniform2i(location->location, v0, v1);
+			break;
+		}
+
+		case OpenGL::GL_INT_VEC3: {
+			if (size != 4) {
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 3 additional int arguments for uniform '%s'", size, "uniform name");
+			}
+			int v0 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 1));
+			int v1 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 2));
+			int v2 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 3));
+
+			if (PyErr_Occurred()) {
+				return 0;
+			}
+
+			OpenGL::glUniform3i(location->location, v0, v1, v2);
+			break;
+		}
+
+		case OpenGL::GL_INT_VEC4: {
+			if (size != 5) {
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 3 additional int arguments for uniform '%s'", size, "uniform name");
+			}
+			int v0 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 1));
+			int v1 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 2));
+			int v2 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 3));
+			int v3 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 4));
+
+			if (PyErr_Occurred()) {
+				return 0;
+			}
+
+			OpenGL::glUniform4i(location->location, v0, v1, v2, v3);
+			break;
+		}
+
+		default:
+			PyErr_SetString(ModuleError, "SetUniform() failed");
+			return 0;
+	}
+
 	Py_RETURN_NONE;
 }
 
-PyObject * Uniform3f(PyObject * self, PyObject * args) {
-	UniformLocation * location;
-	float v0;
-	float v1;
-	float v2;
-
-	if (!PyArg_ParseTuple(args, "O!fff:Uniform3f", &UniformLocationType, &location, &v0, &v1, &v2)) {
-		return 0;
-	}
-
-	if (location->type != OpenGL::GL_FLOAT_VEC3) {
-		// TODO: SET ERROR
-		return 0;
-	}
-
-	if (activeProgram != location->program) {
-		OpenGL::glUseProgram(location->program);
-		activeProgram = location->program;
-	}
-
-	OpenGL::glUniform3f(location->location, v0, v1, v2);
-	Py_RETURN_NONE;
-}
-
-PyObject * Uniform4f(PyObject * self, PyObject * args) {
-	UniformLocation * location;
-	float v0;
-	float v1;
-	float v2;
-	float v3;
-
-	if (!PyArg_ParseTuple(args, "O!ffff:Uniform4f", &UniformLocationType, &location, &v0, &v1, &v2, &v3)) {
-		return 0;
-	}
-
-	if (location->type != OpenGL::GL_FLOAT_VEC4) {
-		// TODO: SET ERROR
-		return 0;
-	}
-
-	if (activeProgram != location->program) {
-		OpenGL::glUseProgram(location->program);
-		activeProgram = location->program;
-	}
-
-	OpenGL::glUniform4f(location->location, v0, v1, v2, v3);
-	Py_RETURN_NONE;
-}
-
-PyObject * Uniform1i(PyObject * self, PyObject * args) {
-	UniformLocation * location;
-	int v0;
-
-	if (!PyArg_ParseTuple(args, "O!i:Uniform1i", &UniformLocationType, &location, &v0)) {
-		return 0;
-	}
-
-	if (location->type != OpenGL::GL_INT) {
-		// TODO: SET ERROR
-		return 0;
-	}
-
-	if (activeProgram != location->program) {
-		OpenGL::glUseProgram(location->program);
-		activeProgram = location->program;
-	}
-
-	OpenGL::glUniform1i(location->location, v0);
-	Py_RETURN_NONE;
-}
-
-PyObject * Uniform2i(PyObject * self, PyObject * args) {
-	UniformLocation * location;
-	int v0;
-	int v1;
-
-	if (!PyArg_ParseTuple(args, "O!ii:Uniform2i", &UniformLocationType, &location, &v0, &v1)) {
-		return 0;
-	}
-
-	if (location->type != OpenGL::GL_INT_VEC2) {
-		// TODO: SET ERROR
-		return 0;
-	}
-
-	if (activeProgram != location->program) {
-		OpenGL::glUseProgram(location->program);
-		activeProgram = location->program;
-	}
-
-	OpenGL::glUniform2i(location->location, v0, v1);
-	Py_RETURN_NONE;
-}
-
-PyObject * Uniform3i(PyObject * self, PyObject * args) {
-	UniformLocation * location;
-	int v0;
-	int v1;
-	int v2;
-
-	if (!PyArg_ParseTuple(args, "O!iii:Uniform3i", &UniformLocationType, &location, &v0, &v1, &v2)) {
-		return 0;
-	}
-
-	if (location->type != OpenGL::GL_INT_VEC3) {
-		// TODO: SET ERROR
-		return 0;
-	}
-
-	if (activeProgram != location->program) {
-		OpenGL::glUseProgram(location->program);
-		activeProgram = location->program;
-	}
-
-	OpenGL::glUniform3i(location->location, v0, v1, v2);
-	Py_RETURN_NONE;
-}
-
-PyObject * Uniform4i(PyObject * self, PyObject * args) {
-	UniformLocation * location;
-	int v0;
-	int v1;
-	int v2;
-	int v3;
-
-	if (!PyArg_ParseTuple(args, "O!iiii:Uniform4i", &UniformLocationType, &location, &v0, &v1, &v2, &v3)) {
-		return 0;
-	}
-
-	if (location->type != OpenGL::GL_INT_VEC4) {
-		// TODO: SET ERROR
-		return 0;
-	}
-
-	if (activeProgram != location->program) {
-		OpenGL::glUseProgram(location->program);
-		activeProgram = location->program;
-	}
-
-	OpenGL::glUniform4i(location->location, v0, v1, v2, v3);
-	Py_RETURN_NONE;
-}
-
-PyObject * UniformMatrix(PyObject * self, PyObject * args) {
+PyObject * SetUniformMatrix(PyObject * self, PyObject * args) {
 	UniformLocation * location;
 	PyObject * matrix;
 	bool transpose = false;
 
-	if (!PyArg_ParseTuple(args, "O!O!|p:UniformMatrix", &UniformLocationType, &location, &PyList_Type, &matrix, &transpose)) {
+	if (!PyArg_ParseTuple(args, "O!O!|p:SetUniformMatrix", &UniformLocationType, &location, &PyList_Type, &matrix, &transpose)) {
 		return 0;
 	}
 
@@ -354,7 +317,7 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 			break;
 
 		default:
-			// TODO: SET ERROR
+			PyErr_SetString(ModuleError, "SetUniformMatrix() failed");
 			return 0;
 			
 	}
@@ -362,7 +325,7 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	int count = (int)PyList_Size(matrix);
 	
 	if (count != limit) {
-		// TODO: SET ERROR
+		PyErr_Format(ModuleError, "SetUniformMatrix() expected %d got %d", limit, count);
 		return 0;
 	}
 
@@ -371,6 +334,10 @@ PyObject * UniformMatrix(PyObject * self, PyObject * args) {
 	for (int i = 0; i < count; ++i) {
 		PyObject * item = PyList_GET_ITEM(matrix, i);
 		matrix_data[i] = (float)PyFloat_AsDouble(item);
+
+		if (PyErr_Occurred()) {
+			return 0;
+		}
 	}
 
 	if (activeProgram != location->program) {

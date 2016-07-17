@@ -170,9 +170,9 @@ ubo = GL.NewUniformBuffer(b''.join(struct.pack('2f', x, y) for x, y in kernel))
 
 fbo, color, depth = GL.NewFramebuffer()
 
-GL.UniformMatrix(grass_iface['mat'], camera)
-GL.Uniform1i(ssao_iface['texture'], 0)
-GL.Uniform1i(ssao_iface['depth'], 1)
+GL.SetUniformMatrix(grass_iface['mat'], camera)
+GL.SetUniform(ssao_iface['texture'], 0)
+GL.SetUniform(ssao_iface['depth'], 1)
 
 GL.UseUniformBuffer(ubo, ssao_iface['Kernel'])
 

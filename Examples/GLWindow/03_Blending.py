@@ -54,11 +54,11 @@ verts = [
 vbo = GL.NewVertexBuffer(struct.pack('18f', *verts))
 vao = GL.NewVertexArray(prog, vbo, '2f4f', ['vert', 'vert_color'])
 
-GL.Uniform2f(iface['scale'], height / width * 0.75, 0.75)
+GL.SetUniform(iface['scale'], height / width * 0.75, 0.75)
 
 while WND.Update():
 	GL.Clear(240, 240, 240)
 
 	GL.EnableOnly(GL.ENABLE_BLEND + GL.ENABLE_MULTISAMPLE)
-	GL.Uniform1f(iface['rotation'], WND.GetTime())
+	GL.SetUniform(iface['rotation'], WND.GetTime())
 	GL.RenderTriangles(vao, 3, instances = 10)

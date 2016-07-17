@@ -91,7 +91,7 @@ vao = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 ssbo = GL.NewStorageBuffer(open('../DataFiles/Raytrace-scene.dat', 'rb').read())
 GL.UseStorageBuffer(ssbo, 1)
 
-GL.Uniform1f(iface['ratio'], 16 / 9)
+GL.SetUniform(iface['ratio'], 16 / 9)
 
 x, y = 0.0, 0.0
 
@@ -107,6 +107,6 @@ while WND.Update():
 	if WND.GetKey(ord('S')) & 1:
 		y -= 0.04
 
-	GL.Uniform3f(iface['position'], math.cos(x) * math.cos(y), math.sin(x) * math.cos(y), math.sin(y))
-	GL.Uniform3f(iface['target'], 0, 0, 0)
+	GL.SetUniform(iface['position'], math.cos(x) * math.cos(y), math.sin(x) * math.cos(y), math.sin(y))
+	GL.SetUniform(iface['target'], 0, 0, 0)
 	GL.RenderTriangleStrip(vao, 4)

@@ -120,7 +120,7 @@ physics = GL.NewComputeShader('''
 
 circles_prog, circles_iface = GL.NewProgram([circles_vert, circles_frag])
 
-GL.Uniform2f(circles_iface['scale'], 0.002 * height / width, 0.002)
+GL.SetUniform(circles_iface['scale'], 0.002 * height / width, 0.002)
 
 circle_vbo = GL.NewVertexBuffer(b''.join(struct.pack('2f', cos(i * 2 * pi / 128), sin(i * 2 * pi / 128)) for i in range(128)))
 circle_vao = GL.NewVertexArray(circles_prog, circle_vbo, '2f', ['vert'])
@@ -138,7 +138,7 @@ GL.UseUniformBuffer(circles_ubo, circles_iface['Circles'])
 
 particles_prog, particles_iface = GL.NewProgram([particles_vert, particles_frag])
 
-GL.Uniform2f(particles_iface['scale'], 0.002 * height / width, 0.002)
+GL.SetUniform(particles_iface['scale'], 0.002 * height / width, 0.002)
 
 particle_vbo = GL.NewVertexBuffer(b''.join(struct.pack('2f', cos(i * 2 * pi / 16), sin(i * 2 * pi / 16)) for i in range(16)))
 particle_vao = GL.NewVertexArray(particles_prog, particle_vbo, '2f', ['vert'])

@@ -52,7 +52,7 @@ prog, iface = GL.NewProgram([vert, frag])
 vbo = GL.NewVertexBuffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
 vao = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 
-GL.Uniform1i(iface['iter'], 100)
+GL.SetUniform(iface['iter'], 100)
 
 tx, ty = 0, 0
 nx, ny, mw = WND.GetMouse()
@@ -72,6 +72,6 @@ while WND.Update():
 	tx -= dx * z
 	ty += dy * z
 
-	GL.Uniform2f(iface['pos'], tx / z, ty / z)
-	GL.Uniform1f(iface['zoom'], z)
+	GL.SetUniform(iface['pos'], tx / z, ty / z)
+	GL.SetUniform(iface['zoom'], z)
 	GL.RenderTriangleStrip(vao, 4)

@@ -459,83 +459,20 @@ PyObject * Dummy_RenderTriangleStripAdjacency(PyObject * self) {
 	return 0;
 }
 
-PyObject * Dummy_Uniform1f(PyObject * self) {
+PyObject * Dummy_SetUniform(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "Uniform1f() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "SetUniform() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
 	} else {
-		PyErr_SetString(ModuleNotSupported, "Uniform1f() function not initialized. OpenGL 3.1 is required.");
+		PyErr_SetString(ModuleNotSupported, "SetUniform() function not initialized. OpenGL 3.1 is required.");
 	}
 	return 0;
 }
 
-PyObject * Dummy_Uniform1i(PyObject * self) {
+PyObject * Dummy_SetUniformMatrix(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "Uniform1i() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "SetUniformMatrix() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
 	} else {
-		PyErr_SetString(ModuleNotSupported, "Uniform1i() function not initialized. OpenGL 3.1 is required.");
-	}
-	return 0;
-}
-
-PyObject * Dummy_Uniform2f(PyObject * self) {
-	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "Uniform2f() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
-	} else {
-		PyErr_SetString(ModuleNotSupported, "Uniform2f() function not initialized. OpenGL 3.1 is required.");
-	}
-	return 0;
-}
-
-PyObject * Dummy_Uniform2i(PyObject * self) {
-	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "Uniform2i() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
-	} else {
-		PyErr_SetString(ModuleNotSupported, "Uniform2i() function not initialized. OpenGL 3.1 is required.");
-	}
-	return 0;
-}
-
-PyObject * Dummy_Uniform3f(PyObject * self) {
-	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "Uniform3f() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
-	} else {
-		PyErr_SetString(ModuleNotSupported, "Uniform3f() function not initialized. OpenGL 3.1 is required.");
-	}
-	return 0;
-}
-
-PyObject * Dummy_Uniform3i(PyObject * self) {
-	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "Uniform3i() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
-	} else {
-		PyErr_SetString(ModuleNotSupported, "Uniform3i() function not initialized. OpenGL 3.1 is required.");
-	}
-	return 0;
-}
-
-PyObject * Dummy_Uniform4f(PyObject * self) {
-	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "Uniform4f() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
-	} else {
-		PyErr_SetString(ModuleNotSupported, "Uniform4f() function not initialized. OpenGL 3.1 is required.");
-	}
-	return 0;
-}
-
-PyObject * Dummy_Uniform4i(PyObject * self) {
-	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "Uniform4i() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
-	} else {
-		PyErr_SetString(ModuleNotSupported, "Uniform4i() function not initialized. OpenGL 3.1 is required.");
-	}
-	return 0;
-}
-
-PyObject * Dummy_UniformMatrix(PyObject * self) {
-	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "UniformMatrix() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
-	} else {
-		PyErr_SetString(ModuleNotSupported, "UniformMatrix() function not initialized. OpenGL 3.1 is required.");
+		PyErr_SetString(ModuleNotSupported, "SetUniformMatrix() function not initialized. OpenGL 3.1 is required.");
 	}
 	return 0;
 }
