@@ -69,9 +69,9 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 			vbo = GL.NewVertexBuffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
 			context['vao'] = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 
-			GL.Uniform1i(iface['iter'], 100)
-			GL.Uniform1f(iface['scale'], 1.0)
-			GL.Uniform2f(iface['center'], 0.3, 0.2)
+			GL.SetUniform(iface['iter'], 100)
+			GL.SetUniform(iface['scale'], 1.0)
+			GL.SetUniform(iface['center'], 0.3, 0.2)
 			
 		except GL.Error as error:
 			print(error)
@@ -82,8 +82,8 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 		context['my'] += context['dmy']
 		context['s'] += context['ds']
 		GL.Clear(240, 240, 240)
-		GL.Uniform2f(context['center'], context['mx'], context['my'])
-		GL.Uniform1f(context['scale'], 0.5 ** context['s'])
+		GL.SetUniform(context['center'], context['mx'], context['my'])
+		GL.SetUniform(context['scale'], 0.5 ** context['s'])
 		GL.RenderTriangleStrip(context['vao'], 4)
 		self.update()
 
