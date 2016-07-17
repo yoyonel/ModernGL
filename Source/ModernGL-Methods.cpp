@@ -383,10 +383,10 @@ Implementation implementation[] = {
 	},
 	{
 		301,
-		(PyCFunction)Uniform1f,
-		(PyCFunction)Dummy_Uniform1f,
+		(PyCFunction)SetUniform,
+		(PyCFunction)Dummy_SetUniform,
 		METH_VARARGS,
-		"Uniform1f",
+		"SetUniform",
 		"Set the value of the uniform.\n"
 		"The value must have the type of `float` in the shader.\n"
 		"The location of the uniform can be queried by the UniformLocation method.\n"
@@ -404,170 +404,10 @@ Implementation implementation[] = {
 	},
 	{
 		301,
-		(PyCFunction)Uniform2f,
-		(PyCFunction)Dummy_Uniform2f,
+		(PyCFunction)SetUniformMatrix,
+		(PyCFunction)Dummy_SetUniformMatrix,
 		METH_VARARGS,
-		"Uniform2f",
-		"Set the value of the uniform.\n"
-		"The value must have the type of `vec2` in the shader.\n"
-		"The location of the uniform can be queried by the UniformLocation method.\n"
-
-
-		"\n"
-		"Parameters:\n"
-		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
-		"\tv0 (float) Value to set.\n"
-		"\tv1 (float) Value to set.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		301,
-		(PyCFunction)Uniform3f,
-		(PyCFunction)Dummy_Uniform3f,
-		METH_VARARGS,
-		"Uniform3f",
-		"Set the value of the uniform.\n"
-		"The value must have the type of `vec3` in the shader.\n"
-		"The location of the uniform can be queried by the UniformLocation method.\n"
-
-
-		"\n"
-		"Parameters:\n"
-		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
-		"\tv0 (float) Value to set.\n"
-		"\tv1 (float) Value to set.\n"
-		"\tv2 (float) Value to set.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		301,
-		(PyCFunction)Uniform4f,
-		(PyCFunction)Dummy_Uniform4f,
-		METH_VARARGS,
-		"Uniform4f",
-		"Set the value of the uniform.\n"
-		"The value must have the type of `vec4` in the shader.\n"
-		"The location of the uniform can be queried by the UniformLocation method.\n"
-
-
-		"\n"
-		"Parameters:\n"
-		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
-		"\tv0 (float) Value to set.\n"
-		"\tv1 (float) Value to set.\n"
-		"\tv2 (float) Value to set.\n"
-		"\tv3 (float) Value to set.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		301,
-		(PyCFunction)Uniform1i,
-		(PyCFunction)Dummy_Uniform1i,
-		METH_VARARGS,
-		"Uniform1i",
-		"Set the value of the uniform.\n"
-		"The value must have the type of `int` in the shader.\n"
-		"The location of the uniform can be queried by the UniformLocation method.\n"
-
-
-		"\n"
-		"Parameters:\n"
-		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
-		"\tv0 (int) Value to set.\n"
-
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		301,
-		(PyCFunction)Uniform2i,
-		(PyCFunction)Dummy_Uniform2i,
-		METH_VARARGS,
-		"Uniform2i",
-		"Set the value of the uniform.\n"
-		"The value must have the type of `ivec2` in the shader.\n"
-		"The location of the uniform can be queried by the UniformLocation method.\n"
-
-
-		"\n"
-		"Parameters:\n"
-		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
-		"\tv0 (int) Value to set.\n"
-		"\tv1 (int) Value to set.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		301,
-		(PyCFunction)Uniform3i,
-		(PyCFunction)Dummy_Uniform3i,
-		METH_VARARGS,
-		"Uniform3i",
-		"Set the value of the uniform.\n"
-		"The value must have the type of `ivec3` in the shader.\n"
-		"The location of the uniform can be queried by the UniformLocation method.\n"
-
-
-		"\n"
-		"Parameters:\n"
-		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
-		"\tv0 (int) Value to set.\n"
-		"\tv1 (int) Value to set.\n"
-		"\tv2 (int) Value to set.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		301,
-		(PyCFunction)Uniform4i,
-		(PyCFunction)Dummy_Uniform4i,
-		METH_VARARGS,
-		"Uniform4i",
-		"Set the value of the uniform.\n"
-		"The value must have the type of `ivec4` in the shader.\n"
-		"The location of the uniform can be queried by the UniformLocation method.\n"
-
-
-		"\n"
-		"Parameters:\n"
-		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
-		"\tv0 (int) Value to set.\n"
-		"\tv1 (int) Value to set.\n"
-		"\tv2 (int) Value to set.\n"
-		"\tv3 (int) Value to set.\n"
-
-		"\n"
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-	},
-	{
-		301,
-		(PyCFunction)UniformMatrix,
-		(PyCFunction)Dummy_UniformMatrix,
-		METH_VARARGS,
-		"UniformMatrix",
+		"SetUniformMatrix",
 		""
 
 		"\n"
