@@ -130,7 +130,9 @@ PyObject * UpdateVertexBuffer(PyObject * self, PyObject * args, PyObject * kwarg
 		return 0;
 	}
 
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(offset < 0 || offset + size > vbo->size, "offset", offset)
+	if (offset < 0 || offset + size > vbo->size) {
+		PyErr_Format(ModuleRangeError, "UpdateVertexBuffer() data.offset = %d data.size = %d vbo.size = %d", offset, size, vbo->size);
+	}
 
 	OpenGL::glBindBuffer(OpenGL::GL_ARRAY_BUFFER, vbo->vbo);
 	OpenGL::glBufferSubData(OpenGL::GL_ARRAY_BUFFER, (OpenGL::GLintptr)offset, size, data);
@@ -149,7 +151,9 @@ PyObject * UpdateIndexBuffer(PyObject * self, PyObject * args, PyObject * kwargs
 		return 0;
 	}
 
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(offset < 0 || offset + size > ibo->size, "offset", offset)
+	if (offset < 0 || offset + size > ibo->size) {
+		PyErr_Format(ModuleRangeError, "UpdateIndexBuffer() data.offset = %d data.size = %d ibo.size = %d", offset, size, ibo->size);
+	}
 
 	OpenGL::glBindBuffer(OpenGL::GL_ELEMENT_ARRAY_BUFFER, ibo->ibo);
 	OpenGL::glBufferSubData(OpenGL::GL_ELEMENT_ARRAY_BUFFER, (OpenGL::GLintptr)offset, size, data);
@@ -168,7 +172,9 @@ PyObject * UpdateUniformBuffer(PyObject * self, PyObject * args, PyObject * kwar
 		return 0;
 	}
 
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(offset < 0 || offset + size > ubo->size, "offset", offset)
+	if (offset < 0 || offset + size > ubo->size) {
+		PyErr_Format(ModuleRangeError, "UpdateUniformBuffer() data.offset = %d data.size = %d ubo.size = %d", offset, size, ubo->size);
+	}
 
 	OpenGL::glBindBuffer(OpenGL::GL_UNIFORM_BUFFER, ubo->ubo);
 	OpenGL::glBufferSubData(OpenGL::GL_UNIFORM_BUFFER, (OpenGL::GLintptr)offset, size, data);
@@ -187,7 +193,9 @@ PyObject * UpdateStorageBuffer(PyObject * self, PyObject * args, PyObject * kwar
 		return 0;
 	}
 
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(offset < 0 || offset + size > sbo->size, "offset", offset)
+	if (offset < 0 || offset + size > sbo->size) {
+		PyErr_Format(ModuleRangeError, "UpdateStorageBuffer() data.offset = %d data.size = %d sbo.size = %d", offset, size, sbo->size);
+	}
 
 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, sbo->sbo);
 	OpenGL::glBufferSubData(OpenGL::GL_SHADER_STORAGE_BUFFER, (OpenGL::GLintptr)offset, size, data);
@@ -242,8 +250,9 @@ PyObject * ReadStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs
 		size = sbo->size - offset;
 	}
 
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(offset < 0 || offset > sbo->size - 1, "offset", offset)
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(size < 1 || offset + size > sbo->size, "size", size)
+	if (offset < 0 || offset + size > sbo->size) {
+		PyErr_Format(ModuleRangeError, "ReadStorageBuffer() data.offset = %d data.size = %d sbo.size = %d", offset, size, sbo->size);
+	}
 
 	OpenGL::glBindBuffer(OpenGL::GL_SHADER_STORAGE_BUFFER, sbo->sbo);
 	void * map = OpenGL::glMapBufferRange(OpenGL::GL_SHADER_STORAGE_BUFFER, offset, size, OpenGL::GL_MAP_READ_BIT);

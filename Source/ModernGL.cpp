@@ -3,6 +3,12 @@
 #include "OpenGL.hpp"
 
 PyObject * ModuleError;
+PyObject * ModuleRangeError;
+PyObject * ModuleCompileError;
+PyObject * ModuleInvalidFormat;
+PyObject * ModuleAttributeNotFound;
+PyObject * ModuleNotInitialized;
+PyObject * ModuleNotSupported;
 
 bool initialized;
 
@@ -29,7 +35,7 @@ PyObject * InitializeModernGL(PyObject * self, PyObject * args) {
 
 	// Initialize OpenGL
 	if (!OpenGL::InitializeOpenGL()) {
-		PyErr_SetString(ModuleError, "InitializeOpenGL failed.");
+		PyErr_SetString(ModuleNotInitialized, "InitializeOpenGL failed.");
 		return 0;
 	}
 
@@ -44,7 +50,7 @@ PyObject * InitializeModernGL(PyObject * self, PyObject * args) {
 	}
 
 	if (versionNumber < 301) {
-		PyErr_SetString(ModuleError, "Not enough OpenGL support.");
+		PyErr_SetString(ModuleNotInitialized, "Not enough OpenGL support.");
 		return 0;
 	}
 
@@ -176,7 +182,31 @@ PyObject * InitModule(PyObject * module) {
 	ModuleError = PyErr_NewException((char *)"ModernGL.Error", 0, 0);
 	Py_INCREF(ModuleError);
 
+	ModuleRangeError = PyErr_NewException((char *)"ModernGL.RangeError", ModuleError, 0);
+	Py_INCREF(ModuleRangeError);
+
+	ModuleCompileError = PyErr_NewException((char *)"ModernGL.CompileError", ModuleError, 0);
+	Py_INCREF(ModuleCompileError);
+
+	ModuleInvalidFormat = PyErr_NewException((char *)"ModernGL.InvalidFormat", ModuleError, 0);
+	Py_INCREF(ModuleInvalidFormat);
+
+	ModuleAttributeNotFound = PyErr_NewException((char *)"ModernGL.AttributeNotFound", ModuleError, 0);
+	Py_INCREF(ModuleAttributeNotFound);
+
+	ModuleNotInitialized = PyErr_NewException((char *)"ModernGL.NotInitialized", ModuleError, 0);
+	Py_INCREF(ModuleNotInitialized);
+
+	ModuleNotSupported = PyErr_NewException((char *)"ModernGL.NotSupported", ModuleError, 0);
+	Py_INCREF(ModuleNotSupported);
+
 	PyModule_AddObject(module, "Error", ModuleError);
+	PyModule_AddObject(module, "RangeError", ModuleRangeError);
+	PyModule_AddObject(module, "CompileError", ModuleCompileError);
+	PyModule_AddObject(module, "InvalidFormat", ModuleInvalidFormat);
+	PyModule_AddObject(module, "AttributeNotFound", ModuleAttributeNotFound);
+	PyModule_AddObject(module, "NotInitialized", ModuleNotInitialized);
+	PyModule_AddObject(module, "NotSupported", ModuleNotSupported);
 
 	PyModule_AddObject(module, "ENABLE_NOTHING", CreateEnableFlagType(ENABLE_NOTHING));
 	PyModule_AddObject(module, "ENABLE_BLEND", CreateEnableFlagType(ENABLE_BLEND));

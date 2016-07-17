@@ -26,7 +26,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("shaders", shader, ShaderType, i);
 		
 		if (shader->attached) {
-			PyErr_Format(ModuleError, "NewProgram() shaders[%d] is already attached to another program", i);
+			PyErr_Format(ModuleCompileError, "NewProgram() shaders[%d] is already attached to another program", i);
 			return 0;
 		}
 
@@ -35,7 +35,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 
 	for (int i = 0; i < NUM_SHADER_CATEGORIES; ++i) {
 		if (category[i] > 1) {
-			PyErr_Format(ModuleError, "NewProgram() duplicate %s in `shaders`", categoryNames[i]);
+			PyErr_Format(ModuleCompileError, "NewProgram() duplicate %s in `shaders`", categoryNames[i]);
 			return 0;
 		}
 	}
@@ -73,7 +73,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		data[logTitleLength] = 0;
 
 		OpenGL::glDeleteProgram(program);
-		PyErr_SetObject(ModuleError, content);
+		PyErr_SetObject(ModuleCompileError, content);
 		return 0;
 	}
 

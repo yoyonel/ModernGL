@@ -38,7 +38,7 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 
 		OpenGL::glDeleteShader(shader);
 
-		PyErr_SetObject(ModuleError, content);
+		PyErr_SetObject(ModuleCompileError, content);
 		return 0;
 	}
 
@@ -75,7 +75,7 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 		OpenGL::glDeleteProgram(program);
 		OpenGL::glDeleteShader(shader);
 
-		PyErr_SetObject(ModuleError, content);
+		PyErr_SetObject(ModuleCompileError, content);
 		return 0;
 	}
 
