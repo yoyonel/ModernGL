@@ -238,7 +238,7 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs);
 PyObject * DeleteFramebuffer(PyObject * self, PyObject * args);
 PyObject * UseFramebuffer(PyObject * self, PyObject * args);
 
-PyObject * GetDefaultFramebuffer(PyObject * self);
+PyObject * SetDefaultFramebuffer(PyObject * self, PyObject * args);
 PyObject * UseDefaultFramebuffer(PyObject * self);
 
 PyObject * ReadPixel(PyObject * self, PyObject * args, PyObject * kwargs);
@@ -339,7 +339,7 @@ PyObject * Dummy_NewFramebuffer(PyObject * self);
 PyObject * Dummy_DeleteFramebuffer(PyObject * self);
 PyObject * Dummy_UseFramebuffer(PyObject * self);
 
-PyObject * Dummy_GetDefaultFramebuffer(PyObject * self);
+PyObject * Dummy_SetDefaultFramebuffer(PyObject * self);
 PyObject * Dummy_UseDefaultFramebuffer(PyObject * self);
 
 PyObject * Dummy_ReadPixel(PyObject * self);

@@ -77,8 +77,14 @@ PyObject * UseFramebuffer(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * GetDefaultFramebuffer(PyObject * self) {
-	OpenGL::glGetIntegerv(OpenGL::GL_DRAW_FRAMEBUFFER_BINDING, (OpenGL::GLint *)&defaultFramebuffer);
+PyObject * SetDefaultFramebuffer(PyObject * self, PyObject * args) {
+	int fbo;
+
+	if (!PyArg_ParseTuple(args, "i:SetDefaultFramebuffer", &fbo)) {
+		return 0;
+	}
+
+	defaultFramebuffer = fbo;
 	Py_RETURN_NONE;
 }
 

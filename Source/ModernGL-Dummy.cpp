@@ -549,11 +549,11 @@ PyObject * Dummy_UseFramebuffer(PyObject * self) {
 	return 0;
 }
 
-PyObject * Dummy_GetDefaultFramebuffer(PyObject * self) {
+PyObject * Dummy_SetDefaultFramebuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "GetDefaultFramebuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "SetDefaultFramebuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
 	} else {
-		PyErr_SetString(ModuleNotSupported, "GetDefaultFramebuffer() function not initialized. OpenGL 3.1 is required.");
+		PyErr_SetString(ModuleNotSupported, "SetDefaultFramebuffer() function not initialized. OpenGL 3.1 is required.");
 	}
 	return 0;
 }
