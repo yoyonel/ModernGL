@@ -38,7 +38,7 @@ PyObject * NewVertexShader(PyObject * self, PyObject * args) {
 
 		OpenGL::glDeleteShader(shader);
 
-		PyErr_SetObject(ModuleError, content);
+		PyErr_SetObject(ModuleCompileError, content);
 		return 0;
 	}
 
@@ -81,7 +81,7 @@ PyObject * NewFragmentShader(PyObject * self, PyObject * args) {
 
 		OpenGL::glDeleteShader(shader);
 
-		PyErr_SetObject(ModuleError, content);
+		PyErr_SetObject(ModuleCompileError, content);
 		return 0;
 	}
 
@@ -124,7 +124,7 @@ PyObject * NewGeometryShader(PyObject * self, PyObject * args) {
 
 		OpenGL::glDeleteShader(shader);
 
-		PyErr_SetObject(ModuleError, content);
+		PyErr_SetObject(ModuleCompileError, content);
 		return 0;
 	}
 
@@ -167,7 +167,7 @@ PyObject * NewTessEvaluationShader(PyObject * self, PyObject * args) {
 
 		OpenGL::glDeleteShader(shader);
 
-		PyErr_SetObject(ModuleError, content);
+		PyErr_SetObject(ModuleCompileError, content);
 		return 0;
 	}
 
@@ -210,7 +210,7 @@ PyObject * NewTessControlShader(PyObject * self, PyObject * args) {
 
 		OpenGL::glDeleteShader(shader);
 
-		PyErr_SetObject(ModuleError, content);
+		PyErr_SetObject(ModuleCompileError, content);
 		return 0;
 	}
 

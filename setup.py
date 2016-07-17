@@ -14,7 +14,7 @@ except ImportError:
 	from distutils.core import setup
 	from distutils.extension import Extension
 
-Version = '2.2.0'
+Version = '2.2.1'
 
 ShortDescription = 'modern OpenGL binding for Python'
 
@@ -147,7 +147,9 @@ Sources = [
 	'Source/ModernGL-Buffer.cpp',
 	'Source/ModernGL-Compute.cpp',
 	'Source/ModernGL-Core.cpp',
+	'Source/ModernGL-Dummy.cpp',
 	'Source/ModernGL-Framebuffer.cpp',
+	'Source/ModernGL-Methods.cpp',
 	'Source/ModernGL-Program.cpp',
 	'Source/ModernGL-Render.cpp',
 	'Source/ModernGL-Shader.cpp',

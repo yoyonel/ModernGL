@@ -17,8 +17,9 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 		height = activeViewportHeight;
 	}
 
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(width < 1, "width", width);
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(height < 1, "height", height);
+	if (width < 0 || height < 0) {
+		PyErr_Format(ModuleRangeError, "NewFramebuffer() width = %d height = %d", width, height);
+	}
 
 	int framebuffer = 0;
 	int color = 0;
@@ -99,9 +100,9 @@ PyObject * ReadPixels(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(width < 1, "width", width);
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(height < 1, "height", height);
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(components < 1 || components > 4, "components", components);
+	if (width < 0 || height < 0 || components < 1 || components > 4) {
+		PyErr_Format(ModuleRangeError, "ReadPixels() width = %d height = %d components = %d", width, height, components);
+	}
 
 	int size = height * ((width * components + 3) & ~3);
 
@@ -129,8 +130,9 @@ PyObject * ReadDepthPixels(PyObject * self, PyObject * args, PyObject * kwargs) 
 		return 0;
 	}
 
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(width < 1, "width", width);
-	CHECK_AND_REPORT_ARG_VALUE_ERROR(height < 1, "height", height);
+	if (width < 0 || height < 0) {
+		PyErr_Format(ModuleRangeError, "ReadDepthPixels() width = %d height = %d", width, height);
+	}
 
 	int size = width * height * 4;
 	PyObject * bytes = PyBytes_FromStringAndSize(0, size);

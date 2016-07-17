@@ -12,7 +12,19 @@ const int ENABLE_DEPTH_TEST = 0x04;
 const int ENABLE_MULTISAMPLE = 0x08;
 const int ENABLE_ALL = 0x0F;
 
+void InitMethods();
+void LoadMethods();
+
+extern PyMethodDef methods[];
 extern PyObject * ModuleError;
+extern PyObject * ModuleRangeError;
+extern PyObject * ModuleCompileError;
+extern PyObject * ModuleInvalidFormat;
+extern PyObject * ModuleAttributeNotFound;
+extern PyObject * ModuleNotInitialized;
+extern PyObject * ModuleNotSupported;
+
+extern bool initialized;
 
 extern int defaultTextureUnit;
 extern int defaultVertexArray;
@@ -24,6 +36,7 @@ extern int activeFramebuffer;
 
 extern int activeViewportWidth;
 extern int activeViewportHeight;
+extern int versionNumber;
 
 enum ShaderCategory {
 	VERTEX_SHADER,
@@ -146,7 +159,6 @@ PyObject * CreateComputeShaderType(int shader, int program);
 PyObject * CreateEnableFlagType(unsigned value);
 
 PyObject * InitializeModernGL(PyObject * self, PyObject * args);
-PyObject * ExtensionActive(PyObject * self);
 
 PyObject * Viewport(PyObject * self, PyObject * args, PyObject * kwargs);
 PyObject * Clear(PyObject * self, PyObject * args, PyObject * kwargs);
@@ -253,3 +265,111 @@ PyObject * UseTextureAsImage(PyObject * self, PyObject * args, PyObject * kwargs
 PyObject * SetTextureFiltered(PyObject * self, PyObject * args);
 PyObject * SetTextureMipmapped(PyObject * self, PyObject * args);
 PyObject * SetTexturePixelated(PyObject * self, PyObject * args);
+
+// Dummy
+
+PyObject * Dummy_Viewport(PyObject * self);
+PyObject * Dummy_Clear(PyObject * self);
+PyObject * Dummy_GetInfo(PyObject * self);
+
+PyObject * Dummy_PointSize(PyObject * self);
+PyObject * Dummy_LineSize(PyObject * self);
+
+PyObject * Dummy_EnableOnly(PyObject * self);
+
+PyObject * Dummy_EnableBlend(PyObject * self);
+PyObject * Dummy_EnableCullFace(PyObject * self);
+PyObject * Dummy_EnableDepthTest(PyObject * self);
+PyObject * Dummy_EnableMultisample(PyObject * self);
+
+PyObject * Dummy_DisableBlend(PyObject * self);
+PyObject * Dummy_DisableCullFace(PyObject * self);
+PyObject * Dummy_DisableDepthTest(PyObject * self);
+PyObject * Dummy_DisableMultisample(PyObject * self);
+
+PyObject * Dummy_NewComputeShader(PyObject * self);
+PyObject * Dummy_DeleteComputeShader(PyObject * self);
+PyObject * Dummy_RunComputeShader(PyObject * self);
+
+PyObject * Dummy_NewVertexBuffer(PyObject * self);
+PyObject * Dummy_NewIndexBuffer(PyObject * self);
+PyObject * Dummy_NewUniformBuffer(PyObject * self);
+PyObject * Dummy_NewStorageBuffer(PyObject * self);
+
+PyObject * Dummy_UseStorageBuffer(PyObject * self);
+PyObject * Dummy_ReadStorageBuffer(PyObject * self);
+
+PyObject * Dummy_DeleteVertexBuffer(PyObject * self);
+PyObject * Dummy_DeleteIndexBuffer(PyObject * self);
+PyObject * Dummy_DeleteUniformBuffer(PyObject * self);
+PyObject * Dummy_DeleteStorageBuffer(PyObject * self);
+
+PyObject * Dummy_NewVertexArray(PyObject * self);
+PyObject * Dummy_NewAdvancedVertexArray(PyObject * self);
+PyObject * Dummy_DeleteVertexArray(PyObject * self);
+
+PyObject * Dummy_EnableAttributes(PyObject * self);
+PyObject * Dummy_DisableAttributes(PyObject * self);
+
+PyObject * Dummy_NewVertexShader(PyObject * self);
+PyObject * Dummy_NewFragmentShader(PyObject * self);
+PyObject * Dummy_NewGeometryShader(PyObject * self);
+PyObject * Dummy_NewTessControlShader(PyObject * self);
+PyObject * Dummy_NewTessEvaluationShader(PyObject * self);
+PyObject * Dummy_DeleteShader(PyObject * self);
+
+PyObject * Dummy_NewProgram(PyObject * self);
+PyObject * Dummy_DeleteProgram(PyObject * self);
+
+PyObject * Dummy_RenderPoints(PyObject * self);
+PyObject * Dummy_RenderLines(PyObject * self);
+PyObject * Dummy_RenderLineStrip(PyObject * self);
+PyObject * Dummy_RenderLineLoop(PyObject * self);
+PyObject * Dummy_RenderTriangles(PyObject * self);
+PyObject * Dummy_RenderTriangleStrip(PyObject * self);
+PyObject * Dummy_RenderTriangleFan(PyObject * self);
+PyObject * Dummy_RenderLinesAdjacency(PyObject * self);
+PyObject * Dummy_RenderLineStripAdjacency(PyObject * self);
+PyObject * Dummy_RenderTrianglesAdjacency(PyObject * self);
+PyObject * Dummy_RenderTriangleStripAdjacency(PyObject * self);
+
+PyObject * Dummy_Uniform1f(PyObject * self);
+PyObject * Dummy_Uniform1i(PyObject * self);
+PyObject * Dummy_Uniform2f(PyObject * self);
+PyObject * Dummy_Uniform2i(PyObject * self);
+PyObject * Dummy_Uniform3f(PyObject * self);
+PyObject * Dummy_Uniform3i(PyObject * self);
+PyObject * Dummy_Uniform4f(PyObject * self);
+PyObject * Dummy_Uniform4i(PyObject * self);
+PyObject * Dummy_UniformMatrix(PyObject * self);
+PyObject * Dummy_UseUniformBuffer(PyObject * self);
+
+PyObject * Dummy_UpdateVertexBuffer(PyObject * self);
+PyObject * Dummy_UpdateUniformBuffer(PyObject * self);
+PyObject * Dummy_UpdateIndexBuffer(PyObject * self);
+PyObject * Dummy_UpdateStorageBuffer(PyObject * self);
+
+PyObject * Dummy_NewFramebuffer(PyObject * self);
+PyObject * Dummy_DeleteFramebuffer(PyObject * self);
+PyObject * Dummy_UseFramebuffer(PyObject * self);
+
+PyObject * Dummy_GetDefaultFramebuffer(PyObject * self);
+PyObject * Dummy_UseDefaultFramebuffer(PyObject * self);
+
+PyObject * Dummy_ReadPixel(PyObject * self);
+PyObject * Dummy_ReadPixels(PyObject * self);
+PyObject * Dummy_ReadDepthPixel(PyObject * self);
+PyObject * Dummy_ReadDepthPixels(PyObject * self);
+
+PyObject * Dummy_NewTexture(PyObject * self);
+PyObject * Dummy_UpdateTexture(PyObject * self);
+PyObject * Dummy_DeleteTexture(PyObject * self);
+
+PyObject * Dummy_BuildMipmap(PyObject * self);
+
+PyObject * Dummy_UseTexture(PyObject * self);
+PyObject * Dummy_UseTextureAsImage(PyObject * self);
+
+PyObject * Dummy_SetTextureFiltered(PyObject * self);
+PyObject * Dummy_SetTextureMipmapped(PyObject * self);
+PyObject * Dummy_SetTexturePixelated(PyObject * self);
