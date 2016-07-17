@@ -33,10 +33,6 @@ for path, folders, files in os.walk('../Source'):
 				else:
 					content += line + '\n'
 
-del funcs['Dummy']
-del funcs['DummyExtension']
-del funcs['Testing']
-
 support = {}
 
 pattern = re.compile(r'\b(gl[A-Z][A-Za-z0-9_]+|GL_[A-Z0-9_]+)\b')
