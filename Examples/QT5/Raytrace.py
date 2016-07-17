@@ -104,9 +104,9 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 			ssbo = GL.NewStorageBuffer(open('../DataFiles/Raytrace-scene.dat', 'rb').read())
 			GL.UseStorageBuffer(ssbo, 1)
 
-			GL.Uniform1f(iface['ratio'], context['width'] / context['height'])
-			GL.Uniform3f(iface['position'], 0.7, 0.7, 0.0)
-			GL.Uniform3f(iface['target'], 0, 0, 0)
+			GL.SetUniform(iface['ratio'], context['width'] / context['height'])
+			GL.SetUniform(iface['position'], 0.7, 0.7, 0.0)
+			GL.SetUniform(iface['target'], 0, 0, 0)
 
 		except GL.Error as error:
 			print(error)

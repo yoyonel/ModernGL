@@ -64,7 +64,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 			vbo = GL.NewVertexBuffer(struct.pack('18f', *verts))
 			context['vao'] = GL.NewVertexArray(prog, vbo, '2f4f', ['vert', 'vert_color'])
 
-			GL.Uniform2f(iface['scale'], context['height'] / context['width'] * 0.75, 0.75)
+			GL.SetUniform(iface['scale'], context['height'] / context['width'] * 0.75, 0.75)
 
 		except GL.Error as error:
 			print(error)
@@ -73,7 +73,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 	def paintGL(self):
 		GL.Clear(240, 240, 240)
 		GL.EnableOnly(GL.ENABLE_BLEND + GL.ENABLE_MULTISAMPLE)
-		GL.Uniform1f(context['rotation'], time.time() - context['start'])
+		GL.SetUniform(context['rotation'], time.time() - context['start'])
 		GL.RenderTriangles(context['vao'], 3, instances = 10)
 		self.update()
 

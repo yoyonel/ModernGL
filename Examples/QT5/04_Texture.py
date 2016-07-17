@@ -55,7 +55,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 			vbo = GL.NewVertexBuffer(struct.pack('6f', 1.0, 0.0, -0.5, 0.86, -0.5, -0.86))
 			context['vao'] = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 
-			GL.Uniform2f(iface['scale'], context['height'] / context['width'] * 0.75, 0.75)
+			GL.SetUniform(iface['scale'], context['height'] / context['width'] * 0.75, 0.75)
 
 			tex = GL.NewTexture(256, 256, Image.open('../DataFiles/Noise.jpg').tobytes())
 			GL.UseTexture(tex)
@@ -66,7 +66,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 
 	def paintGL(self):
 		GL.Clear(240, 240, 240)
-		GL.Uniform1f(context['rotation'], time.time() - context['start'])
+		GL.SetUniform(context['rotation'], time.time() - context['start'])
 		GL.RenderTriangles(context['vao'], 3)
 		self.update()
 
