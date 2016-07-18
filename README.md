@@ -177,4 +177,4 @@ Viewport | ![OpenGL-3.1](https://raw.githubusercontent.com/cprogrammer1994/Moder
 
 tested on Ubuntu 16.04
 
-![Ubuntu](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/External/Images/Ubuntu.png)
+![Ubuntu](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Ubuntu.png)
