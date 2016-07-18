@@ -1,4 +1,4 @@
-open('Makefile', 'w').write('''
+open('../Makefile', 'w').write('''
 all: clean install
 
 clean:
@@ -8,18 +8,18 @@ install:
 	install.bat
 '''.strip())
 
-open('Source/Makefile', 'w').write('''
+open('../Source/Makefile', 'w').write('''
 all:
 	cd .. && make
 '''.strip())
 
-open('multi_install.bat', 'w').write('''
+open('../multi_install.bat', 'w').write('''
 call python Clean.py
 SET CUSTOM_GCC=YES
 call pythons.bat setup.py install
 '''.strip())
 
-open('multi_upload.bat', 'w').write('''
+open('../multi_upload.bat', 'w').write('''
 SET CUSTOM_GCC=YES
 call python setup.py sdist upload 
 call pythons setup.py bdist_wheel upload
@@ -27,9 +27,9 @@ call pythons setup.py bdist_egg upload
 call pythons setup.py bdist_wininst upload
 '''.strip())
 
-open('install.bat', 'w').write('call python setup.py install --record files.txt')
+open('../install.bat', 'w').write('call python setup.py install --record files.txt')
 
-open('Clean.py', 'w').write('''
+open('../Clean.py', 'w').write('''
 import shutil, os
 
 if os.path.isdir('build'):
@@ -59,3 +59,11 @@ if os.path.isfile('files.txt'):
 if os.path.isfile('log.txt'):
 	os.remove('log.txt')
 '''.strip())
+
+import subprocess, shutil, os
+
+glcontext = os.path.join(os.path.join(os.getcwd(), 'Dependency'), 'GLContext')
+proc = subprocess.Popen('make', cwd = glcontext)
+proc.wait()
+
+shutil.copyfile(os.path.join(glcontext, 'GLContext.pyd'), '../Tests/GLContext.pyd')

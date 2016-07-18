@@ -14,5 +14,6 @@ MANIFEST
 multi_upload.bat
 multi_install.bat
 install.bat
+Clean.py
 
 **/Makefile
