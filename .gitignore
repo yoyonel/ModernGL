@@ -1,12 +1,18 @@
 __pycache__
+build
+dist
+*.egg-info
+
 *.pyo
 *.pyc
 *.pyd
 
-build
-dist
-
 log.txt
 files.txt
-ModernGL.egg-info
 MANIFEST
+
+multi_upload.bat
+multi_install.bat
+install.bat
+
+**/Makefile
