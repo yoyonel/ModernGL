@@ -28,6 +28,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) There is no valid OpenGL context or OpenGL version is below 3.1\n"
+		"\n"
 	},
 	{
 		301,
@@ -36,18 +40,19 @@ Implementation implementation[] = {
 		METH_NOARGS,
 		"GetInfo",
 		"Get information about the OpenGL context.\n"
-
+		"The module must be initialized first.\n"
 		"\n"
+
 		"Parameters:\n"
 		"\tNone\n"
-
 		"\n"
+
 		"Returns:\n"
-		"\tmajor (int) The major OpenGL version.\n"
-		"\tminor (int) The minor OpenGL version.\n"
-		"\tsamples (int) The samples supported by the default framebuffer.\n"
-		"\tvendor (int) The vendor.\n"
-		"\trenderer (int) The renderer.\n"
+		"\tinfo (dict) Dictionary with the results of the most popular queries using glGet.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -57,17 +62,21 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"Viewport",
 		"Set the viewport for rendering.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tx (int) Position of the viewport.\n"
 		"\ty (int) Position of the viewport.\n"
 		"\twidth (int) Width of the viewport.\n"
 		"\theight (int) Height of the viewport.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -78,17 +87,21 @@ Implementation implementation[] = {
 		"Clear",
 		"Clear the viewport with the specified colors.\n"
 		"Also clears the depth attachments.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tr (int) Clear value for the red channel. By default is 0\n"
 		"\tg (int) Clear value for the green channel. By default is 0\n"
 		"\tb (int) Clear value for the blue channel. By default is 0\n"
 		"\ta (int) Clear value for the alpha channel. By default is 255\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -98,14 +111,18 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"PointSize",
 		"Set the size of the point primitive.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tsize (float) Size of the point.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -115,14 +132,18 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"LineSize",
 		"Set the with of the line primitive.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tsize (float) Width of the line.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -132,15 +153,25 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"EnableOnly",
 		"Enables only the specified flags.\n"
-		"The enable flags are: ENABLE_NOTHING, ENABLE_BLEND, ENABLE_DEPTH_TEST, ENABLE_CULL_FACE and ENABLE_MULTISAMPLE.\n"
-
+		"The enable flags are:\n"
+		"- ENABLE_NOTHING\n"
+		"- ENABLE_BLEND\n"
+		"- ENABLE_CULL_FACE\n"
+		"- ENABLE_DEPTH_TEST\n"
+		"- ENABLE_MULTISAMPLE\n"
+		"- ENABLE_ALL\n"
 		"\n"
+
 		"Parameters:\n"
-		"\tflags (int) A combination of the enable flags using bitwise OR operator.\n"
-
+		"\tflags (ModernGL.EnableFlag) A combination of the enable flags using + and - operators.\n"
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -150,14 +181,18 @@ Implementation implementation[] = {
 		METH_NOARGS,
 		"EnableBlend",
 		"Enable blending.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tNone\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -167,14 +202,18 @@ Implementation implementation[] = {
 		METH_NOARGS,
 		"DisableBlend",
 		"Disable blending.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tNone\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -184,14 +223,18 @@ Implementation implementation[] = {
 		METH_NOARGS,
 		"EnableCullFace",
 		"Enable face culling.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tNone\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -201,14 +244,18 @@ Implementation implementation[] = {
 		METH_NOARGS,
 		"DisableCullFace",
 		"Disable face culling.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tNone\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -218,14 +265,18 @@ Implementation implementation[] = {
 		METH_NOARGS,
 		"EnableDepthTest",
 		"Enable depth testing.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tNone\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -235,14 +286,18 @@ Implementation implementation[] = {
 		METH_NOARGS,
 		"DisableDepthTest",
 		"Disable depth testing.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tNone\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -252,14 +307,18 @@ Implementation implementation[] = {
 		METH_NOARGS,
 		"EnableMultisample",
 		"Enable multisampling.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tNone\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -269,14 +328,18 @@ Implementation implementation[] = {
 		METH_NOARGS,
 		"DisableMultisample",
 		"Disable multisampling.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tNone\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -285,15 +348,22 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_NewVertexShader,
 		METH_VARARGS,
 		"NewVertexShader",
-		""
-
+		"Create a VertexShader from GLSL source.\n"
+		"A Shader can be attached only once and will be deleted with the Program object.\n"
+		"If the Shader was not attached, it should be deleted using the DeleteShader method.\n"
 		"\n"
+
 		"Parameters:\n"
 		"\tsource (str) Source code in GLSL.\n"
-
 		"\n"
+
 		"Returns:\n"
-		"\tshader (int) The index of the new shader object.\n"
+		"\tshader (ModernGL.Shader) The shader object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.CompileError) The source cannot be compiled.\n"
 		"\n"
 	},
 	{
@@ -302,15 +372,22 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_NewFragmentShader,
 		METH_VARARGS,
 		"NewFragmentShader",
-		""
-
+		"Create a FragmentShader from GLSL source.\n"
+		"A Shader can be attached only once and will be deleted with the Program object.\n"
+		"If the Shader was not attached, it should be deleted using the DeleteShader method.\n"
 		"\n"
+
 		"Parameters:\n"
 		"\tsource (str) Source code in GLSL.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tshader (int) The index of the new shader object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.CompileError) The source cannot be compiled.\n"
 		"\n"
 	},
 	{
@@ -319,15 +396,22 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_NewGeometryShader,
 		METH_VARARGS,
 		"NewGeometryShader",
-		""
-
+		"Create a GeometryShader from GLSL source.\n"
+		"A Shader can be attached only once and will be deleted with the Program object.\n"
+		"If the Shader was not attached, it should be deleted using the DeleteShader method.\n"
 		"\n"
+
 		"Parameters:\n"
 		"\tsource (str) Source code in GLSL.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tshader (int) The index of the new shader object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.CompileError) The source cannot be compiled.\n"
 		"\n"
 	},
 	{
@@ -336,15 +420,25 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_DeleteShader,
 		METH_VARARGS,
 		"DeleteShader",
-		"Delete shader object created by the NewFragmentShader, the NewGeometryShader, the NewTessControlShader, the NewTessEvaluationShader or the NewVertexShader.\n"
-
+		"Delete shader object created by:\n"
+		"- NewVertexShader\n"
+		"- NewFragmentShader\n"
+		"- NewGeometryShader\n"
+		"- NewTessControlShader\n"
+		"- NewTessEvaluationShader\n"
+		"A Shader object should be deleted if it was not attached to any program objects.\n"
 		"\n"
+
 		"Parameters:\n"
-		"\tshader (int) Index of a shader object.\n"
-
+		"\tshader (ModernGL.Shader) Shader object that was not attached to a Program.\n"
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -353,15 +447,22 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_NewProgram,
 		METH_VARARGS,
 		"NewProgram",
-		""
-
+		"Create a Program object from a list of ModernGL.Shader objects.\n"
+		"There should be only one shader for each shader types.\n"
 		"\n"
+
 		"Parameters:\n"
-		"\tshaders (list of ints) List containing shader indices.\n"
-
+		"\tshaders (list of ModernGL.Shader) List containing shader objects.\n"
 		"\n"
+
 		"Returns:\n"
-		"\tprogram (int) The index of the new program object.\n"
+		"\tprogram (ModernGL.Program) The new program object.\n"
+		"\tinterface (dict) The active uniforms and uniform buffers.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.CompileError) Linking error or duplicate shaders of the same type.\n"
 		"\n"
 	},
 	{
@@ -370,15 +471,20 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_DeleteProgram,
 		METH_VARARGS,
 		"DeleteProgram",
-		""
-
+		"Delete a program objects and all the attached shaders.\n"
+		"A shader should be attached to a single program object.\n"
 		"\n"
+
 		"Parameters:\n"
-		"\tprogram (int) Index of a program object returned by the NewProgram function.\n"
-
+		"\tprogram (ModernGL.Program) A program object returned by the NewProgram function.\n"
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -387,19 +493,27 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_SetUniform,
 		METH_VARARGS,
 		"SetUniform",
-		"Set the value of the uniform.\n"
-		"The value must have the type of `float` in the shader.\n"
-		"The location of the uniform can be queried by the UniformLocation method.\n"
-
-
+		"Set the value of the uniform (except for matrices).\n"
+		"The number of parameters depends on the uniform type.\n"
+		"The location of active uniforms is always accessable from the program interface.\n"
+		"The program interface is the second value returned by the NewProgram.\n"
 		"\n"
+
 		"Parameters:\n"
-		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
-		"\tv0 (float) Value to set.\n"
-
+		"\tlocation (ModernGL.UniformLocation) Location of the uniform returned by the UniformLocation.\n"
+		"\tv0 (float or int) Value to set.\n"
+		"\tv1 (float or int) Value to set.\n"
+		"\tv2 (float or int) Value to set.\n"
+		"\tv3 (float or int) Value to set.\n"
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(TypeError) The dimension or the type of the uniform is different.\n"
 		"\n"
 	},
 	{
@@ -409,15 +523,20 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"SetUniformMatrix",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
 		"\tmatrix (list of floats) List containing 4x4=16 float values.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(TypeError) The dimension or the type of the matrix is different.\n"
 		"\n"
 	},
 	{
@@ -427,15 +546,19 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"UseUniformBuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
 		"\tubo (int) Index of a uniform buffer returned by a NewUniformBuffer.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -445,17 +568,22 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"NewTexture",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\twidth (int) Width of the texture.\n"
 		"\theight (int) Height of the texture.\n"
 		"\tpixels (bytes) Pixels stored in bytes.\n"
 		"\tcomponents (int) By default is 3\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\ttexture (int) The index of the new texture object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.RangeError) The size of pixels is different.\n"
 		"\n"
 	},
 	{
@@ -465,12 +593,12 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"DeleteTexture",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -482,8 +610,8 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"UpdateTexture",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
 		"\tx (int) Offset of the new texture part.\n"
@@ -492,10 +620,15 @@ Implementation implementation[] = {
 		"\theight (int) Height of the texture.\n"
 		"\tpixels (bytes) Pixels stored in bytes.\n"
 		"\tcomponents (int) By default is 3\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.RangeError) The size of pixels is different.\n"
 		"\n"
 	},
 	{
@@ -505,15 +638,19 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"UseTexture",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
 		"\tlocation (int) Location of the texture. By default is 0\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -523,14 +660,18 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"SetTexturePixelated",
 		"Set texture filter to nearest.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -540,14 +681,18 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"SetTextureFiltered",
 		"Set texture filter to linear.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -557,14 +702,18 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"SetTextureMipmapped",
 		"Set texture filter to mipmap linear.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -574,16 +723,20 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"BuildMipmap",
 		"Generate the mipmaps for the texture.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
 		"\tbase (int) Base mipmap level to build.\n"
 		"\tmax (int) Maximum mipmap level to build.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -593,16 +746,25 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"NewVertexArray",
 		"The foreach int or float attribute an index of a vertex buffer object and the location of a vertex attribute must be specified.\n"
-
 		"\n"
+
 		"Parameters:\n"
+		"\tprogram (ModernGL.Program) A program object that will be used for rendering.\n"
+		"\tvbo (ModernGL.VertexBuffer) A buffer containing data for the vertex attributes.\n"
 		"\tformat (str) Format of the vertex array attrubites. ([1-4][if])+\n"
-		"\tattribs (list of int pairs) List of vertex buffer object and vertex location pairs.\n"
-		"\tibo (int) Index of an index buffer object. By default is 0\n"
-
+		"\tattributes (list of str) List of vertex buffer object and vertex location pairs.\n"
+		"\tibo (int) Index of an index buffer object. By default is None\n"
+		"\tstrict (bool) Enable AttributeNotFound error. By default is True\n"
 		"\n"
+
 		"Returns:\n"
-		"\tvao (int) The index of the new vertex array object.\n"
+		"\tvao (ModernGL.VertexArray) The index of the new vertex array object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.InvalidFormat) The format is invalid or the size of attributes is different.\n"
+		"\t(ModernGL.AttributeNotFound) The attribute is missing (only strict enabled).\n"
 		"\n"
 	},
 	{
@@ -611,17 +773,15 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_NewAdvancedVertexArray,
 		METH_VARARGS,
 		"NewAdvancedVertexArray",
-		"The foreach int or float attribute an index of a vertex buffer object and the location of a vertex attribute must be specified.\n"
-
+		"Advanced version of NewVertexArray that can handle multiple VertexBuffer objects.\n"
 		"\n"
+
 		"Parameters:\n"
-		"\tformat (str) Format of the vertex array attrubites. ([1-4][if])+\n"
-		"\tattribs (list of int pairs) List of vertex buffer object and vertex location pairs.\n"
-		"\tibo (int) Index of an index buffer object. By default is 0\n"
-
+		"\tNone\n"
 		"\n"
+
 		"Returns:\n"
-		"\tvao (int) The index of the new vertex array object.\n"
+		"\tvao (ModernGL.VertexArray) The index of the new vertex array object.\n"
 		"\n"
 	},
 	{
@@ -630,12 +790,12 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_DeleteVertexArray,
 		METH_VARARGS,
 		"DeleteVertexArray",
-		""
 		"\n"
+		""
 		"Parameters:\n"
 		"\tNone\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -647,13 +807,13 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"EnableAttributes",
 		"Enable attributes in the vertex array object.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tvao (int) The index of a vertex array object.\n"
 		"\tattribs (list of ints) The locations of the vertex attributes returned by the GetAttributeLocation function.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -665,13 +825,13 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"DisableAttributes",
 		"Disable attributes in the vertex array object.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tvao (int) The index of a vertex array object.\n"
 		"\tattribs (list of ints) The locations of the vertex attributes returned by the GetAttributeLocation function.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -683,12 +843,12 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"NewVertexBuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tdata (bytes) The content of the buffer.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tvbo (int) The index of the new vertex buffer object.\n"
 		"\n"
@@ -700,12 +860,12 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"NewIndexBuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tdata (bytes) The content of the buffer.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tibo (int) The index of the new index buffer object.\n"
 		"\n"
@@ -717,12 +877,12 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"NewUniformBuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tdata (bytes) The content of the buffer.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tubo (int) The index of the new uniform buffer object.\n"
 		"\n"
@@ -734,12 +894,12 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"DeleteVertexBuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tbuffer (int) The index of any buffer object except the framebuffer object.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -751,12 +911,12 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"DeleteIndexBuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tbuffer (int) The index of any buffer object except the framebuffer object.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -768,12 +928,12 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"DeleteUniformBuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tbuffer (int) The index of any buffer object except the framebuffer object.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -785,12 +945,12 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"DeleteStorageBuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tbuffer (int) The index of any buffer object except the framebuffer object.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -802,14 +962,14 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"UpdateVertexBuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tbuffer (int) The index of a vertex buffer object except the framebuffer object.\n"
 		"\toffset (int) The offset of the data in the buffer to write.\n"
 		"\tdata (bytes) The content of the data to write to the buffer.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -821,14 +981,14 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"UpdateIndexBuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tbuffer (int) The index of an index buffer object except the framebuffer object.\n"
 		"\toffset (int) The offset of the data in the buffer to write.\n"
 		"\tdata (bytes) The content of the data to write to the buffer.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -840,14 +1000,14 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"UpdateUniformBuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tbuffer (int) The index of a uniform buffer object except the framebuffer object.\n"
 		"\toffset (int) The offset of the data in the buffer to write.\n"
 		"\tdata (bytes) The content of the data to write to the buffer.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -858,15 +1018,15 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_RenderTriangles,
 		METH_VARARGS | METH_KEYWORDS,
 		"RenderTriangles",
-
 		"\n"
+
 		"Parameters:\n"
 		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -877,15 +1037,15 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_RenderTriangleStrip,
 		METH_VARARGS | METH_KEYWORDS,
 		"RenderTriangleStrip",
-
 		"\n"
+
 		"Parameters:\n"
 		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -896,15 +1056,15 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_RenderTriangleFan,
 		METH_VARARGS | METH_KEYWORDS,
 		"RenderTriangleFan",
-
 		"\n"
+
 		"Parameters:\n"
 		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -915,15 +1075,15 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_RenderLines,
 		METH_VARARGS | METH_KEYWORDS,
 		"RenderLines",
-
 		"\n"
+
 		"Parameters:\n"
 		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -934,15 +1094,15 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_RenderLineStrip,
 		METH_VARARGS | METH_KEYWORDS,
 		"RenderLineStrip",
-
 		"\n"
+
 		"Parameters:\n"
 		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -953,15 +1113,15 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_RenderLineLoop,
 		METH_VARARGS | METH_KEYWORDS,
 		"RenderLineLoop",
-
 		"\n"
+
 		"Parameters:\n"
 		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -972,15 +1132,15 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_RenderPoints,
 		METH_VARARGS | METH_KEYWORDS,
 		"RenderPoints",
-
 		"\n"
+
 		"Parameters:\n"
 		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -991,15 +1151,15 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_RenderLineStripAdjacency,
 		METH_VARARGS | METH_KEYWORDS,
 		"RenderLineStripAdjacency",
-
 		"\n"
+
 		"Parameters:\n"
 		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -1010,15 +1170,15 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_RenderLinesAdjacency,
 		METH_VARARGS | METH_KEYWORDS,
 		"RenderLinesAdjacency",
-
 		"\n"
+
 		"Parameters:\n"
 		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -1029,15 +1189,15 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_RenderTriangleStripAdjacency,
 		METH_VARARGS | METH_KEYWORDS,
 		"RenderTriangleStripAdjacency",
-
 		"\n"
+
 		"Parameters:\n"
 		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -1048,15 +1208,15 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_RenderTrianglesAdjacency,
 		METH_VARARGS | METH_KEYWORDS,
 		"RenderTrianglesAdjacency",
-
 		"\n"
+
 		"Parameters:\n"
 		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -1071,13 +1231,13 @@ Implementation implementation[] = {
 		"The color attachment have RGBA format, 8bit for each channel.\n"
 		"The depth texture contains float values.\n"
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\twidth (int) Width of the framebuffer. By default is 0\n"
 		"\theight (int) Height of the framebuffer. By default is 0\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tfbo (int) The index of the new framebuffer object.\n"
 		"\tcolor (int) The index of the color attachment texture object.\n"
@@ -1090,12 +1250,12 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_DeleteFramebuffer,
 		METH_VARARGS,
 		"DeleteFramebuffer",
-
 		"\n"
+
 		"Parameters:\n"
 		"\tframebuffer (int) Index of the framebuffer returned by the NewFramebuffer.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -1107,12 +1267,12 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"UseFramebuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tframebuffer (int) Index of the framebuffer returned by the NewFramebuffer.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -1124,12 +1284,12 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"SetDefaultFramebuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tNone\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -1141,12 +1301,12 @@ Implementation implementation[] = {
 		METH_NOARGS,
 		"UseDefaultFramebuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tNone\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -1159,16 +1319,16 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"ReadPixels",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tx (int) Offset of the image to read.\n"
 		"\ty (int) Offset of the image to read.\n"
 		"\twidth (int) Width of the image to read.\n"
 		"\theight (int) Height of the image to read.\n"
 		"\tcomponents (int) By default is 3\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tpixels (bytes) The color channels selected by components from the active framebuffer.\n"
 		"\n"
@@ -1180,15 +1340,15 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"ReadDepthPixels",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tx (int) Offset of the image to read.\n"
 		"\ty (int) Offset of the image to read.\n"
 		"\twidth (int) Width of the image to read.\n"
 		"\theight (int) Height of the image to read.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tpixels (bytes) The depth channel from the active framebuffer.\n"
 		"\n"
@@ -1200,13 +1360,13 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"ReadPixel",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tx (int) Offset of the pixel to read.\n"
 		"\ty (int) Offset of the pixel to read.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tpixels (int) The rgba value at (x, y) from the active framebuffer.\n"
 		"\n"
@@ -1218,13 +1378,13 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"ReadDepthPixel",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tx (int) Offset of the pixel to read.\n"
 		"\ty (int) Offset of the pixel to read.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tpixels (float) The depth value at (x, y) from the active framebuffer.\n"
 		"\n"
@@ -1237,13 +1397,13 @@ Implementation implementation[] = {
 		"UseTextureAsImage",
 		"To use image2D instead of sampler2D.\n"
 
-
 		"\n"
+
 		"Parameters:\n"
 		"\ttexture (int) .\n"
 		"\tbinding (int) Image binding specified by the layout in GLSL. By default is 0\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -1255,12 +1415,12 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"NewTessEvaluationShader",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tsource (str) Source code in GLSL.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tshader (int) The index of the new shader object.\n"
 		"\n"
@@ -1272,12 +1432,12 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"NewTessControlShader",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tsource (str) Source code in GLSL.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tshader (int) The index of the new shader object.\n"
 		"\n"
@@ -1289,12 +1449,12 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"NewComputeShader",
 		"Compiles and links a compute shader from source.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tsource (str) Source code in GLSL.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tprogram (int) The index of the new program object.\n"
 		"\n"
@@ -1307,12 +1467,12 @@ Implementation implementation[] = {
 		"DeleteComputeShader",
 		"Compute shader is a standalone shader program. NOT part of the rendering pipeline.\n"
 		"Equivalent to the DeleteProgram.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tprogram (int) The index of a program object returned by the NewComputeShader function.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -1324,15 +1484,15 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"RunComputeShader",
 		"Run the compute shader.\n"
-
 		"\n"
+
 		"Parameters:\n"
 		"\tprogram (int) The index of a program object returned by the NewComputeShader function.\n"
 		"\tx (int) The x group size of the workers. By default is 1\n"
 		"\ty (int) The y group size of the workers. By default is 1\n"
 		"\tz (int) The z group size of the workers. By default is 1\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -1344,12 +1504,12 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"NewStorageBuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tdata (bytes) The content of the buffer.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tsbo (int) The index of the new shader storage buffer object.\n"
 		"\n"
@@ -1361,13 +1521,13 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"UseStorageBuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tsbo (int) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
 		"\tbinding (int) Buffer binding specified by the layout in GLSL. By default is 0\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -1379,14 +1539,14 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"UpdateStorageBuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tsbo (int) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
 		"\toffset (int) The offset of the data in the buffer to update.\n"
 		"\tdata (bytes) The content of the data to write to the buffer.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
@@ -1398,14 +1558,14 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"ReadStorageBuffer",
 		""
-
 		"\n"
+
 		"Parameters:\n"
 		"\tsbo (int) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
 		"\toffset (int) The offset of the data in the buffer to read.\n"
 		"\tsize (int) The size of the data to read from the buffer.\n"
-
 		"\n"
+
 		"Returns:\n"
 		"\tdata (bytes) The Content of the buffer.\n"
 		"\n"
