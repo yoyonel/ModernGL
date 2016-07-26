@@ -348,7 +348,7 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_NewVertexShader,
 		METH_VARARGS,
 		"NewVertexShader",
-		"Create a VertexShader from GLSL source.\n"
+		"Create a vertex shader from GLSL source.\n"
 		"A Shader can be attached only once and will be deleted with the Program object.\n"
 		"If the Shader was not attached, it should be deleted using the DeleteShader method.\n"
 		"\n"
@@ -372,7 +372,7 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_NewFragmentShader,
 		METH_VARARGS,
 		"NewFragmentShader",
-		"Create a FragmentShader from GLSL source.\n"
+		"Create a fragment shader from GLSL source.\n"
 		"A Shader can be attached only once and will be deleted with the Program object.\n"
 		"If the Shader was not attached, it should be deleted using the DeleteShader method.\n"
 		"\n"
@@ -396,7 +396,55 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_NewGeometryShader,
 		METH_VARARGS,
 		"NewGeometryShader",
-		"Create a GeometryShader from GLSL source.\n"
+		"Create a geometry shader from GLSL source.\n"
+		"A Shader can be attached only once and will be deleted with the Program object.\n"
+		"If the Shader was not attached, it should be deleted using the DeleteShader method.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tsource (str) Source code in GLSL.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tshader (int) The index of the new shader object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.CompileError) The source cannot be compiled.\n"
+		"\n"
+	},
+	{
+		400,
+		(PyCFunction)NewTessEvaluationShader,
+		(PyCFunction)Dummy_NewTessEvaluationShader,
+		METH_VARARGS,
+		"NewTessEvaluationShader",
+		"Create a tesselation evaluation shader from GLSL source.\n"
+		"A Shader can be attached only once and will be deleted with the Program object.\n"
+		"If the Shader was not attached, it should be deleted using the DeleteShader method.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tsource (str) Source code in GLSL.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tshader (int) The index of the new shader object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.CompileError) The source cannot be compiled.\n"
+		"\n"
+	},
+	{
+		400,
+		(PyCFunction)NewTessControlShader,
+		(PyCFunction)Dummy_NewTessControlShader,
+		METH_VARARGS,
+		"NewTessControlShader",
+		"Create a tesselation control shader from GLSL source.\n"
 		"A Shader can be attached only once and will be deleted with the Program object.\n"
 		"If the Shader was not attached, it should be deleted using the DeleteShader method.\n"
 		"\n"
@@ -526,7 +574,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
+		"\tlocation (ModernGL.UniformLocation) Location of the uniform returned by the UniformLocation.\n"
 		"\tmatrix (list of floats) List containing 4x4=16 float values.\n"
 		"\n"
 
@@ -549,8 +597,8 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tlocation (int) Location of the uniform returned by the UniformLocation.\n"
-		"\tubo (int) Index of a uniform buffer returned by a NewUniformBuffer.\n"
+		"\tubo (ModernGL.UniformBuffer) Index of a uniform buffer returned by a NewUniformBuffer.\n"
+		"\tlocation (ModernGL.UniformBufferLocation) Location of the uniform returned by the UniformLocation.\n"
 		"\n"
 
 		"Returns:\n"
@@ -578,7 +626,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Returns:\n"
-		"\ttexture (int) The index of the new texture object.\n"
+		"\ttexture (ModernGL.Texture) The index of the new texture object.\n"
 		"\n"
 
 		"Errors:\n"
@@ -596,7 +644,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the NewTexture function.\n"
 		"\n"
 
 		"Returns:\n"
@@ -613,7 +661,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the NewTexture function.\n"
 		"\tx (int) Offset of the new texture part.\n"
 		"\ty (int) Offset of the new texture part.\n"
 		"\twidth (int) Width of the texture.\n"
@@ -641,7 +689,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the NewTexture function.\n"
 		"\tlocation (int) Location of the texture. By default is 0\n"
 		"\n"
 
@@ -663,7 +711,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the NewTexture function.\n"
 		"\n"
 
 		"Returns:\n"
@@ -684,7 +732,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the NewTexture function.\n"
 		"\n"
 
 		"Returns:\n"
@@ -705,7 +753,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the NewTexture function.\n"
 		"\n"
 
 		"Returns:\n"
@@ -726,7 +774,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\ttexture (int) Index of a texture returned by the NewTexture function.\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the NewTexture function.\n"
 		"\tbase (int) Base mipmap level to build.\n"
 		"\tmax (int) Maximum mipmap level to build.\n"
 		"\n"
@@ -753,7 +801,7 @@ Implementation implementation[] = {
 		"\tvbo (ModernGL.VertexBuffer) A buffer containing data for the vertex attributes.\n"
 		"\tformat (str) Format of the vertex array attrubites. ([1-4][if])+\n"
 		"\tattributes (list of str) List of vertex buffer object and vertex location pairs.\n"
-		"\tibo (int) Index of an index buffer object. By default is None\n"
+		"\tibo (ModernGL.IndexBuffer) Index of an index buffer object. By default is None\n"
 		"\tstrict (bool) Enable AttributeNotFound error. By default is True\n"
 		"\n"
 
@@ -810,8 +858,8 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object.\n"
-		"\tattribs (list of ints) The locations of the vertex attributes returned by the GetAttributeLocation function.\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object.\n"
+		"\tattribs (list of str) The locations of the vertex attributes returned by the GetAttributeLocation function.\n"
 		"\n"
 
 		"Returns:\n"
@@ -828,8 +876,8 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object.\n"
-		"\tattribs (list of ints) The locations of the vertex attributes returned by the GetAttributeLocation function.\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object.\n"
+		"\tattribs (list of strs) The locations of the vertex attributes returned by the GetAttributeLocation function.\n"
 		"\n"
 
 		"Returns:\n"
@@ -850,7 +898,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Returns:\n"
-		"\tvbo (int) The index of the new vertex buffer object.\n"
+		"\tvbo (ModernGL.VertexBuffer) The index of the new vertex buffer object.\n"
 		"\n"
 	},
 	{
@@ -867,7 +915,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Returns:\n"
-		"\tibo (int) The index of the new index buffer object.\n"
+		"\tibo (ModernGL.IndexBuffer) The index of the new index buffer object.\n"
 		"\n"
 	},
 	{
@@ -984,7 +1032,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tbuffer (int) The index of an index buffer object except the framebuffer object.\n"
+		"\tibo (ModernGL.IndexBuffer) The index of an index buffer object except the framebuffer object.\n"
 		"\toffset (int) The offset of the data in the buffer to write.\n"
 		"\tdata (bytes) The content of the data to write to the buffer.\n"
 		"\n"
@@ -1003,7 +1051,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tbuffer (int) The index of a uniform buffer object except the framebuffer object.\n"
+		"\tubo (ModernGL.UniformBuffer) The index of a uniform buffer object except the framebuffer object.\n"
 		"\toffset (int) The offset of the data in the buffer to write.\n"
 		"\tdata (bytes) The content of the data to write to the buffer.\n"
 		"\n"
@@ -1021,7 +1069,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
@@ -1040,7 +1088,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
@@ -1059,7 +1107,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
@@ -1078,7 +1126,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
@@ -1097,7 +1145,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
@@ -1116,7 +1164,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
@@ -1135,7 +1183,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
@@ -1154,7 +1202,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
@@ -1173,7 +1221,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
@@ -1192,7 +1240,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
@@ -1211,7 +1259,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tvao (int) The index of a vertex array object that will be used during the rendering.\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
 		"\tcount (int) Number of vertices to render.\n"
 		"\tfirst (int) Index of the first vertex. By default is 0\n"
 		"\tinstances (int) Number of instances. By default is 1\n"
@@ -1400,46 +1448,12 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\ttexture (int) .\n"
+		"\ttexture (ModernGL.Texture) .\n"
 		"\tbinding (int) Image binding specified by the layout in GLSL. By default is 0\n"
 		"\n"
 
 		"Returns:\n"
 		"\tNone\n"
-		"\n"
-	},
-	{
-		400,
-		(PyCFunction)NewTessEvaluationShader,
-		(PyCFunction)Dummy_NewTessEvaluationShader,
-		METH_VARARGS,
-		"NewTessEvaluationShader",
-		""
-		"\n"
-
-		"Parameters:\n"
-		"\tsource (str) Source code in GLSL.\n"
-		"\n"
-
-		"Returns:\n"
-		"\tshader (int) The index of the new shader object.\n"
-		"\n"
-	},
-	{
-		400,
-		(PyCFunction)NewTessControlShader,
-		(PyCFunction)Dummy_NewTessControlShader,
-		METH_VARARGS,
-		"NewTessControlShader",
-		""
-		"\n"
-
-		"Parameters:\n"
-		"\tsource (str) Source code in GLSL.\n"
-		"\n"
-
-		"Returns:\n"
-		"\tshader (int) The index of the new shader object.\n"
 		"\n"
 	},
 	{
@@ -1456,7 +1470,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Returns:\n"
-		"\tprogram (int) The index of the new program object.\n"
+		"\tprogram (ModernGL.ComputeShader) The index of the new program object.\n"
 		"\n"
 	},
 	{
@@ -1465,12 +1479,11 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_DeleteComputeShader,
 		METH_VARARGS,
 		"DeleteComputeShader",
-		"Compute shader is a standalone shader program. NOT part of the rendering pipeline.\n"
-		"Equivalent to the DeleteProgram.\n"
+		"Compute shader is a standalone shader program.\n"
 		"\n"
 
 		"Parameters:\n"
-		"\tprogram (int) The index of a program object returned by the NewComputeShader function.\n"
+		"\tprogram (ModernGL.ComputeShader) The index of a program object returned by the NewComputeShader function.\n"
 		"\n"
 
 		"Returns:\n"
@@ -1487,7 +1500,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tprogram (int) The index of a program object returned by the NewComputeShader function.\n"
+		"\tprogram (ModernGL.ComputeShader) The index of a program object returned by the NewComputeShader function.\n"
 		"\tx (int) The x group size of the workers. By default is 1\n"
 		"\ty (int) The y group size of the workers. By default is 1\n"
 		"\tz (int) The z group size of the workers. By default is 1\n"
@@ -1511,7 +1524,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Returns:\n"
-		"\tsbo (int) The index of the new shader storage buffer object.\n"
+		"\tsbo (ModernGL.StorageBuffer) The index of the new shader storage buffer object.\n"
 		"\n"
 	},
 	{
@@ -1524,7 +1537,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tsbo (int) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
+		"\tsbo (ModernGL.StorageBuffer) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
 		"\tbinding (int) Buffer binding specified by the layout in GLSL. By default is 0\n"
 		"\n"
 
@@ -1542,7 +1555,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tsbo (int) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
+		"\tsbo (ModernGL.StorageBuffer) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
 		"\toffset (int) The offset of the data in the buffer to update.\n"
 		"\tdata (bytes) The content of the data to write to the buffer.\n"
 		"\n"
@@ -1561,7 +1574,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tsbo (int) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
+		"\tsbo (ModernGL.StorageBuffer) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
 		"\toffset (int) The offset of the data in the buffer to read.\n"
 		"\tsize (int) The size of the data to read from the buffer.\n"
 		"\n"
