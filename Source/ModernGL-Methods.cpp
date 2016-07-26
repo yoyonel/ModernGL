@@ -435,6 +435,7 @@ Implementation implementation[] = {
 
 		"Errors:\n"
 		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
 		"\t(ModernGL.CompileError) The source cannot be compiled.\n"
 		"\n"
 	},
@@ -459,6 +460,7 @@ Implementation implementation[] = {
 
 		"Errors:\n"
 		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
 		"\t(ModernGL.CompileError) The source cannot be compiled.\n"
 		"\n"
 	},
@@ -640,7 +642,7 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_DeleteTexture,
 		METH_VARARGS,
 		"DeleteTexture",
-		""
+		"Delete a texture created by the NewTexture method.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -649,6 +651,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -831,6 +837,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tvao (ModernGL.VertexArray) The index of the new vertex array object.\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -846,6 +856,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -865,6 +879,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -883,6 +901,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -899,6 +921,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tvbo (ModernGL.VertexBuffer) The index of the new vertex buffer object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -917,6 +943,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tibo (ModernGL.IndexBuffer) The index of the new index buffer object.\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -933,6 +963,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tubo (int) The index of the new uniform buffer object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -951,6 +985,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -967,6 +1005,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -985,6 +1027,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -1001,6 +1047,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -1021,6 +1071,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -1039,6 +1093,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -1059,6 +1117,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -1077,6 +1139,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -1097,6 +1163,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -1115,6 +1185,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -1135,6 +1209,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -1153,6 +1231,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -1173,6 +1255,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -1191,6 +1277,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -1211,6 +1301,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		302,
@@ -1229,6 +1323,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -1249,6 +1347,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		302,
@@ -1267,6 +1369,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -1291,6 +1397,10 @@ Implementation implementation[] = {
 		"\tcolor (int) The index of the color attachment texture object.\n"
 		"\tdepth (int) The index of the depth attachment texture object.\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -1306,6 +1416,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -1324,6 +1438,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -1341,6 +1459,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -1357,6 +1479,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	
@@ -1380,6 +1506,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tpixels (bytes) The color channels selected by components from the active framebuffer.\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -1400,6 +1530,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tpixels (bytes) The depth channel from the active framebuffer.\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -1417,6 +1551,10 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tpixels (int) The rgba value at (x, y) from the active framebuffer.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\n"
 	},
 	{
@@ -1436,6 +1574,10 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tpixels (float) The depth value at (x, y) from the active framebuffer.\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		402,
@@ -1444,7 +1586,6 @@ Implementation implementation[] = {
 		METH_VARARGS | METH_KEYWORDS,
 		"UseTextureAsImage",
 		"To use image2D instead of sampler2D.\n"
-
 		"\n"
 
 		"Parameters:\n"
@@ -1454,6 +1595,11 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
 		"\n"
 	},
 	{
@@ -1472,6 +1618,11 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tprogram (ModernGL.ComputeShader) The index of the new program object.\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
+		"\n"
 	},
 	{
 		301,
@@ -1488,6 +1639,11 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
 		"\n"
 	},
 	{
@@ -1509,6 +1665,11 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
+		"\n"
 	},
 	{
 		403,
@@ -1516,7 +1677,7 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_NewStorageBuffer,
 		METH_VARARGS | METH_KEYWORDS,
 		"NewStorageBuffer",
-		""
+		"Create a shader storage buffer.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -1526,6 +1687,11 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tsbo (ModernGL.StorageBuffer) The index of the new shader storage buffer object.\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
+		"\n"
 	},
 	{
 		403,
@@ -1533,7 +1699,7 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_UseStorageBuffer,
 		METH_VARARGS | METH_KEYWORDS,
 		"UseStorageBuffer",
-		""
+		"Bind a shader storage buffer to a location specified in the GLSL layout.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -1543,6 +1709,11 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
 		"\n"
 	},
 	{
@@ -1563,6 +1734,11 @@ Implementation implementation[] = {
 		"Returns:\n"
 		"\tNone\n"
 		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
+		"\n"
 	},
 	{
 		403,
@@ -1581,6 +1757,11 @@ Implementation implementation[] = {
 
 		"Returns:\n"
 		"\tdata (bytes) The Content of the buffer.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
 		"\n"
 	},
 };
