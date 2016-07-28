@@ -17,3 +17,4 @@ install.bat
 Clean.py
 
 **/Makefile
+!Development/**/Makefile
