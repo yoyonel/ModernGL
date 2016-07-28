@@ -502,7 +502,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tshaders (list of ModernGL.Shader) List containing shader objects.\n"
+		"\tshaders (list) List containing shader objects.\n"
 		"\n"
 
 		"Returns:\n"
@@ -578,7 +578,7 @@ Implementation implementation[] = {
 
 		"Parameters:\n"
 		"\tlocation (ModernGL.UniformLocation) Location of the uniform.\n"
-		"\tmatrix (list of floats) List containing 4x4=16 float values.\n"
+		"\tmatrix (list) List containing 4x4=16 float values.\n"
 		"\ttranspose (bool) Transpose matrix.\n"
 		"\n"
 
@@ -813,7 +813,7 @@ Implementation implementation[] = {
 		"\tprogram (ModernGL.Program) A program object that will be used for rendering.\n"
 		"\tvbo (ModernGL.VertexBuffer) A buffer containing data for the vertex attributes.\n"
 		"\tformat (str) Format of the vertex array attrubites. ([1-4][if])+\n"
-		"\tattributes (list of str) List of vertex attribute names.\n"
+		"\tattributes (list) List of vertex attribute names.\n"
 		"\tibo (ModernGL.IndexBuffer) Index of an index buffer object. By default is None\n"
 		"\tstrict (bool) Enable AttributeNotFound error. By default is True\n"
 		"\n"
@@ -883,7 +883,7 @@ Implementation implementation[] = {
 
 		"Parameters:\n"
 		"\tvao (ModernGL.VertexArray) The index of a vertex array object.\n"
-		"\tattribs (list of str) The names of the vertex attributes.\n"
+		"\tattribs (list) The names of the vertex attributes.\n"
 		"\n"
 
 		"Returns:\n"
@@ -905,7 +905,7 @@ Implementation implementation[] = {
 
 		"Parameters:\n"
 		"\tvao (ModernGL.VertexArray) The index of a vertex array object.\n"
-		"\tattribs (list of strs) The names of the vertex attributes.\n"
+		"\tattribs (list) The names of the vertex attributes.\n"
 		"\n"
 
 		"Returns:\n"
@@ -1599,7 +1599,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\ttexture (ModernGL.Texture) .\n"
+		"\ttexture (ModernGL.Texture) Texture.\n"
 		"\tbinding (int) Image binding specified by the layout in GLSL. By default is 0\n"
 		"\n"
 
