@@ -154,12 +154,12 @@ Implementation implementation[] = {
 		"EnableOnly",
 		"Enables only the specified flags.\n"
 		"The enable flags are:\n"
-		"- ENABLE_NOTHING\n"
-		"- ENABLE_BLEND\n"
-		"- ENABLE_CULL_FACE\n"
-		"- ENABLE_DEPTH_TEST\n"
-		"- ENABLE_MULTISAMPLE\n"
-		"- ENABLE_ALL\n"
+		"- ModernGL.ENABLE_NOTHING\n"
+		"- ModernGL.ENABLE_BLEND\n"
+		"- ModernGL.ENABLE_CULL_FACE\n"
+		"- ModernGL.ENABLE_DEPTH_TEST\n"
+		"- ModernGL.ENABLE_MULTISAMPLE\n"
+		"- ModernGL.ENABLE_ALL\n"
 		"\n"
 
 		"Parameters:\n"
@@ -349,8 +349,8 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"NewVertexShader",
 		"Create a vertex shader from GLSL source.\n"
-		"A Shader can be attached only once and will be deleted with the Program object.\n"
-		"If the Shader was not attached, it should be deleted using the DeleteShader method.\n"
+		"A shader can be attached only once and will be deleted with the program object.\n"
+		"If the shader was not attached, it must be deleted using the ModernGL.DeleteShader method.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -373,8 +373,8 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"NewFragmentShader",
 		"Create a fragment shader from GLSL source.\n"
-		"A Shader can be attached only once and will be deleted with the Program object.\n"
-		"If the Shader was not attached, it should be deleted using the DeleteShader method.\n"
+		"A shader can be attached only once and will be deleted with the program object.\n"
+		"If the shader was not attached, it must be deleted using the ModernGL.DeleteShader method.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -397,8 +397,8 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"NewGeometryShader",
 		"Create a geometry shader from GLSL source.\n"
-		"A Shader can be attached only once and will be deleted with the Program object.\n"
-		"If the Shader was not attached, it should be deleted using the DeleteShader method.\n"
+		"A shader can be attached only once and will be deleted with the program object.\n"
+		"If the shader was not attached, it must be deleted using the ModernGL.DeleteShader method.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -421,8 +421,8 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"NewTessEvaluationShader",
 		"Create a tesselation evaluation shader from GLSL source.\n"
-		"A Shader can be attached only once and will be deleted with the Program object.\n"
-		"If the Shader was not attached, it should be deleted using the DeleteShader method.\n"
+		"A shader can be attached only once and will be deleted with the program object.\n"
+		"If the shader was not attached, it must be deleted using the ModernGL.DeleteShader method.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -446,8 +446,8 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"NewTessControlShader",
 		"Create a tesselation control shader from GLSL source.\n"
-		"A Shader can be attached only once and will be deleted with the Program object.\n"
-		"If the Shader was not attached, it should be deleted using the DeleteShader method.\n"
+		"A shader can be attached only once and will be deleted with the program object.\n"
+		"If the shader was not attached, it must be deleted using the ModernGL.DeleteShader method.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -471,16 +471,16 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"DeleteShader",
 		"Delete shader object created by:\n"
-		"- NewVertexShader\n"
-		"- NewFragmentShader\n"
-		"- NewGeometryShader\n"
-		"- NewTessControlShader\n"
-		"- NewTessEvaluationShader\n"
-		"A Shader object should be deleted if it was not attached to any program objects.\n"
+		"- ModernGL.NewVertexShader\n"
+		"- ModernGL.NewFragmentShader\n"
+		"- ModernGL.NewGeometryShader\n"
+		"- ModernGL.NewTessControlShader\n"
+		"- ModernGL.NewTessEvaluationShader\n"
+		"A shader object must be deleted if it was not attached to any program objects.\n"
 		"\n"
 
 		"Parameters:\n"
-		"\tshader (ModernGL.Shader) Shader object that was not attached to a Program.\n"
+		"\tshader (ModernGL.Shader) Shader object that was not attached to any program object.\n"
 		"\n"
 
 		"Returns:\n"
@@ -497,8 +497,8 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_NewProgram,
 		METH_VARARGS,
 		"NewProgram",
-		"Create a Program object from a list of ModernGL.Shader objects.\n"
-		"There should be only one shader for each shader types.\n"
+		"Create a program object from a list of ModernGL.Shader objects.\n"
+		"There must be only one shader for each shader types.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -522,11 +522,11 @@ Implementation implementation[] = {
 		METH_VARARGS,
 		"DeleteProgram",
 		"Delete a program objects and all the attached shaders.\n"
-		"A shader should be attached to a single program object.\n"
+		"A shader must be attached only to a single program object.\n"
 		"\n"
 
 		"Parameters:\n"
-		"\tprogram (ModernGL.Program) A program object returned by the NewProgram function.\n"
+		"\tprogram (ModernGL.Program) A program object returned by the ModernGL.NewProgram function.\n"
 		"\n"
 
 		"Returns:\n"
@@ -546,11 +546,11 @@ Implementation implementation[] = {
 		"Set the value of the uniform (except for matrices).\n"
 		"The number of parameters depends on the uniform type.\n"
 		"The location of active uniforms is always accessable from the program interface.\n"
-		"The program interface is the second value returned by the NewProgram.\n"
+		"The program interface is the second value returned by the ModernGL.NewProgram.\n"
 		"\n"
 
 		"Parameters:\n"
-		"\tlocation (ModernGL.UniformLocation) Location of the uniform returned by the UniformLocation.\n"
+		"\tlocation (ModernGL.UniformLocation) Location of the uniform.\n"
 		"\tv0 (float or int) Value to set.\n"
 		"\tv1 (float or int) Value to set.\n"
 		"\tv2 (float or int) Value to set.\n"
@@ -576,7 +576,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tlocation (ModernGL.UniformLocation) Location of the uniform returned by the UniformLocation.\n"
+		"\tlocation (ModernGL.UniformLocation) Location of the uniform.\n"
 		"\tmatrix (list of floats) List containing 4x4=16 float values.\n"
 		"\n"
 
@@ -599,8 +599,8 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tubo (ModernGL.UniformBuffer) Index of a uniform buffer returned by a NewUniformBuffer.\n"
-		"\tlocation (ModernGL.UniformBufferLocation) Location of the uniform returned by the UniformLocation.\n"
+		"\tubo (ModernGL.UniformBuffer) Index of a uniform buffer.\n"
+		"\tlocation (ModernGL.UniformBufferLocation) Location of the uniform buffer.\n"
 		"\n"
 
 		"Returns:\n"
@@ -642,11 +642,11 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_DeleteTexture,
 		METH_VARARGS,
 		"DeleteTexture",
-		"Delete a texture created by the NewTexture method.\n"
+		"Delete a texture created by the ModernGL.NewTexture method.\n"
 		"\n"
 
 		"Parameters:\n"
-		"\ttexture (ModernGL.Texture) Index of a texture returned by the NewTexture function.\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the ModernGL.NewTexture.\n"
 		"\n"
 
 		"Returns:\n"
@@ -667,7 +667,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\ttexture (ModernGL.Texture) Index of a texture returned by the NewTexture function.\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the ModernGL.NewTexture.\n"
 		"\tx (int) Offset of the new texture part.\n"
 		"\ty (int) Offset of the new texture part.\n"
 		"\twidth (int) Width of the texture.\n"
@@ -695,7 +695,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\ttexture (ModernGL.Texture) Index of a texture returned by the NewTexture function.\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the ModernGL.NewTexture function.\n"
 		"\tlocation (int) Location of the texture. By default is 0\n"
 		"\n"
 
@@ -717,7 +717,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\ttexture (ModernGL.Texture) Index of a texture returned by the NewTexture function.\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the ModernGL.NewTexture function.\n"
 		"\n"
 
 		"Returns:\n"
@@ -738,7 +738,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\ttexture (ModernGL.Texture) Index of a texture returned by the NewTexture function.\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the ModernGL.NewTexture function.\n"
 		"\n"
 
 		"Returns:\n"
@@ -759,7 +759,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\ttexture (ModernGL.Texture) Index of a texture returned by the NewTexture function.\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the ModernGL.NewTexture function.\n"
 		"\n"
 
 		"Returns:\n"
@@ -851,7 +851,7 @@ Implementation implementation[] = {
 		"\n"
 		""
 		"Parameters:\n"
-		"\tNone\n"
+		"\tvao (ModernGL.VertexArray) The index of the new vertex array object.\n"
 		"\n"
 
 		"Returns:\n"
@@ -873,7 +873,7 @@ Implementation implementation[] = {
 
 		"Parameters:\n"
 		"\tvao (ModernGL.VertexArray) The index of a vertex array object.\n"
-		"\tattribs (list of str) The locations of the vertex attributes returned by the GetAttributeLocation function.\n"
+		"\tattribs (list of str) The names of the vertex attributes.\n"
 		"\n"
 
 		"Returns:\n"
@@ -895,7 +895,7 @@ Implementation implementation[] = {
 
 		"Parameters:\n"
 		"\tvao (ModernGL.VertexArray) The index of a vertex array object.\n"
-		"\tattribs (list of strs) The locations of the vertex attributes returned by the GetAttributeLocation function.\n"
+		"\tattribs (list of strs) The names of the vertex attributes.\n"
 		"\n"
 
 		"Returns:\n"
@@ -1608,7 +1608,7 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_NewComputeShader,
 		METH_VARARGS,
 		"NewComputeShader",
-		"Compiles and links a compute shader from source.\n"
+		"Compiles and links a compute shader from GLSL source.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -1634,7 +1634,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tprogram (ModernGL.ComputeShader) The index of a program object returned by the NewComputeShader function.\n"
+		"\tprogram (ModernGL.ComputeShader) The index of a program object returned by the ModernGL.NewComputeShader.\n"
 		"\n"
 
 		"Returns:\n"
@@ -1656,7 +1656,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tprogram (ModernGL.ComputeShader) The index of a program object returned by the NewComputeShader function.\n"
+		"\tprogram (ModernGL.ComputeShader) The index of a program object returned by the ModernGL.NewComputeShader.\n"
 		"\tx (int) The x group size of the workers. By default is 1\n"
 		"\ty (int) The y group size of the workers. By default is 1\n"
 		"\tz (int) The z group size of the workers. By default is 1\n"
@@ -1722,7 +1722,7 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_UpdateStorageBuffer,
 		METH_VARARGS | METH_KEYWORDS,
 		"UpdateStorageBuffer",
-		""
+		"Update the content of a shader storage buffer.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -1738,6 +1738,7 @@ Implementation implementation[] = {
 		"Errors:\n"
 		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
+		"\t(ModernGL.RangeError) The offset or size of data is out of the buffer bounds.\n"
 		"\n"
 	},
 	{
@@ -1746,22 +1747,24 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_ReadStorageBuffer,
 		METH_VARARGS | METH_KEYWORDS,
 		"ReadStorageBuffer",
-		""
+		"Read the content of a shader storage buffer.\n"
+		"If the size parameter is 0 the remaining size will be used.\n"
 		"\n"
 
 		"Parameters:\n"
-		"\tsbo (ModernGL.StorageBuffer) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
-		"\toffset (int) The offset of the data in the buffer to read.\n"
-		"\tsize (int) The size of the data to read from the buffer.\n"
+		"\tsbo (ModernGL.StorageBuffer) The index of a shader storage buffer object returned by the ModernGL.NewStorageBuffer.\n"
+		"\toffset (int) The offset of the data in the buffer to read. By default is 0\n"
+		"\tsize (int) The size of the data to read from the buffer. By default is 0\n"
 		"\n"
 
 		"Returns:\n"
-		"\tdata (bytes) The Content of the buffer.\n"
+		"\tdata (bytes) The content of the shader storage buffer.\n"
 		"\n"
 
 		"Errors:\n"
 		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
+		"\t(ModernGL.RangeError) The offset or size is out of the buffer bounds.\n"
 		"\n"
 	},
 };
