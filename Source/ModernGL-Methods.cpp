@@ -1444,7 +1444,6 @@ Implementation implementation[] = {
 		"Creates a framebuffer with two texture attachments. (color and depth)\n"
 		"The color attachment have RGBA format, 8bit for each channel.\n"
 		"The depth texture contains float values.\n"
-		""
 		"\n"
 
 		"Parameters:\n"
@@ -1488,7 +1487,7 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_UseFramebuffer,
 		METH_VARARGS,
 		"UseFramebuffer",
-		""
+		"Bind a framebuffer.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -1509,11 +1508,12 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_SetDefaultFramebuffer,
 		METH_VARARGS,
 		"SetDefaultFramebuffer",
-		""
+		"Some application provide a default framebuffer.\n"
+		"Otherwise the default framebuffer is 0.\n"
 		"\n"
 
 		"Parameters:\n"
-		"\tNone\n"
+		"\tfbo_index (int) The value provided by the application.\n"
 		"\n"
 
 		"Returns:\n"
@@ -1530,7 +1530,9 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_UseDefaultFramebuffer,
 		METH_NOARGS,
 		"UseDefaultFramebuffer",
-		""
+		"Use the default framebuffer.\n"
+		"The default framebuffer is 0.\n"
+		"It can be set with the ModernGL.SetDefaultFramebuffer method.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -1552,7 +1554,7 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_ReadPixels,
 		METH_VARARGS | METH_KEYWORDS,
 		"ReadPixels",
-		""
+		"Read the pixels from the active framebuffer.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -1577,7 +1579,7 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_ReadDepthPixels,
 		METH_VARARGS | METH_KEYWORDS,
 		"ReadDepthPixels",
-		""
+		"Read the depth pixels from the active framebuffer.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -1601,7 +1603,7 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_ReadPixel,
 		METH_VARARGS | METH_KEYWORDS,
 		"ReadPixel",
-		""
+		"Read a single pixel from the active framebuffer.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -1610,7 +1612,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Returns:\n"
-		"\tpixels (int) The rgba value at (x, y) from the active framebuffer.\n"
+		"\tpixel (int) The rgba value at (x, y) from the active framebuffer.\n"
 		"\n"
 
 		"Errors:\n"
@@ -1623,7 +1625,7 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_ReadDepthPixel,
 		METH_VARARGS | METH_KEYWORDS,
 		"ReadDepthPixel",
-		""
+		"Read a single depth value from the active framebuffer.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -1632,7 +1634,7 @@ Implementation implementation[] = {
 		"\n"
 
 		"Returns:\n"
-		"\tpixels (float) The depth value at (x, y) from the active framebuffer.\n"
+		"\tpixel (float) The depth value at (x, y) from the active framebuffer.\n"
 		"\n"
 
 		"Errors:\n"
