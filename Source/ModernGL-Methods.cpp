@@ -572,12 +572,14 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_SetUniformMatrix,
 		METH_VARARGS,
 		"SetUniformMatrix",
-		""
+		"Set the value of the uniform matrix.\n"
+		"The matrix type must be either mat2, mat3 or mat4.\n"
 		"\n"
 
 		"Parameters:\n"
 		"\tlocation (ModernGL.UniformLocation) Location of the uniform.\n"
 		"\tmatrix (list of floats) List containing 4x4=16 float values.\n"
+		"\ttranspose (bool) Transpose matrix.\n"
 		"\n"
 
 		"Returns:\n"
@@ -595,7 +597,7 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_UseUniformBuffer,
 		METH_VARARGS | METH_KEYWORDS,
 		"UseUniformBuffer",
-		""
+		"Bind a unirom buffer to a location in the program.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -617,7 +619,7 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_NewTexture,
 		METH_VARARGS | METH_KEYWORDS,
 		"NewTexture",
-		""
+		"Create a new texture.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -663,7 +665,7 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_UpdateTexture,
 		METH_VARARGS | METH_KEYWORDS,
 		"UpdateTexture",
-		""
+		"Update the content of a texture.\n"
 		"\n"
 
 		"Parameters:\n"
@@ -691,7 +693,9 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_UseTexture,
 		METH_VARARGS,
 		"UseTexture",
-		""
+		"Bind a texture to a location.\n"
+		"The default location is 0.\n"
+		"Initialize sampler2D uniforms with ModernGL.SetUniform\n"
 		"\n"
 
 		"Parameters:\n"
@@ -799,14 +803,17 @@ Implementation implementation[] = {
 		(PyCFunction)Dummy_NewVertexArray,
 		METH_VARARGS,
 		"NewVertexArray",
-		"The foreach int or float attribute an index of a vertex buffer object and the location of a vertex attribute must be specified.\n"
+		"Create a vertex array object.\n"
+		"Prepare vertex and index buffers for rendering. enable or disable attributes.\n"
+		"To use more than one vertex buffer call the ModernGL.NewAdvancedVertexArray method.\n"
+		"The format regex is: ([1-4][if])+\n"
 		"\n"
 
 		"Parameters:\n"
 		"\tprogram (ModernGL.Program) A program object that will be used for rendering.\n"
 		"\tvbo (ModernGL.VertexBuffer) A buffer containing data for the vertex attributes.\n"
 		"\tformat (str) Format of the vertex array attrubites. ([1-4][if])+\n"
-		"\tattributes (list of str) List of vertex buffer object and vertex location pairs.\n"
+		"\tattributes (list of str) List of vertex attribute names.\n"
 		"\tibo (ModernGL.IndexBuffer) Index of an index buffer object. By default is None\n"
 		"\tstrict (bool) Enable AttributeNotFound error. By default is True\n"
 		"\n"
@@ -831,7 +838,10 @@ Implementation implementation[] = {
 		"\n"
 
 		"Parameters:\n"
-		"\tNone\n"
+		"\tprogram (ModernGL.Program) A program object that will be used for rendering.\n"
+		"\tcontent (list) List of tuples similar to the ModernGL.NewVertexArray parameters.\n"
+		"\tibo (ModernGL.IndexBuffer) Index of an index buffer object. By default is None\n"
+		"\tstrict (bool) Enable AttributeNotFound error. By default is True\n"
 		"\n"
 
 		"Returns:\n"
