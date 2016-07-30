@@ -73,15 +73,16 @@ Please follow the [Examples](https://github.com/cprogrammer1994/ModernGL/tree/ma
 
 ## Python
 
-![Python-2.7](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/Python-27.png)
-![Python-3.3](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/Python-33.png)
 ![Python-3.4](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/Python-34.png)
 ![Python-3.5](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/Python-35.png)
 ![Python-3.6](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/Python-36.png)
 
 ## OpenGL
 
-![OpenGL-3.3](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/OpenGL-33.png)
+![OpenGL-3.0](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/OpenGL-30.png)
+![OpenGL-3.1](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/OpenGL-31.png)
+![OpenGL-3.2](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/OpenGL-32.png)
+![OpenGL-3.3](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/OpenGL-33.png)<br>
 ![OpenGL-4.0](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/OpenGL-40.png)
 ![OpenGL-4.1](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/OpenGL-41.png)
 ![OpenGL-4.2](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/OpenGL-42.png)

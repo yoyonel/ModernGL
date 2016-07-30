@@ -14,7 +14,7 @@ except ImportError:
 	from distutils.core import setup
 	from distutils.extension import Extension
 
-Version = '2.2.1'
+Version = '2.3.0'
 
 ShortDescription = 'modern OpenGL binding for Python'
 
@@ -81,11 +81,11 @@ Classifiers = [
 	'Programming Language :: C++',
 	'Programming Language :: Cython',
 	'Programming Language :: Python',
-	'Programming Language :: Python :: 2.7',
-	'Programming Language :: Python :: 3.3',
+	'Programming Language :: Python :: 3',
 	'Programming Language :: Python :: 3.4',
 	'Programming Language :: Python :: 3.5',
 	'Programming Language :: Python :: 3.6',
+	'Programming Language :: Python :: 3 :: Only',
 	'Topic :: Documentation',
 	'Topic :: Desktop Environment',
 	'Topic :: Education',
