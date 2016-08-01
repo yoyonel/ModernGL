@@ -6,4 +6,5 @@
 - [ ] Export docs to html
 - [ ] Export tutorials to html
 - [ ] Support GL2PS
-- [ ] Add wheels
+
+and more...
