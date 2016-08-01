@@ -1,0 +1,11 @@
+# Tutorials
+
+The tutorials will cover basic and advanced rendering using ModernGL
+
+Numbered examples will be explained step by step. ModernGL is not about Window
+creation, the **GLWindow** will be used most of the time, since requires less
+then 10 lines of code to create and update a window. PyQt5 is an alternative
+and all the examples and maybe the tutorials as well will be ported to **PyQt5**.
+
+ModernGL can be used for windowless rendering as well. **GL2PS** will be
+supported soon.
