@@ -24,7 +24,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 				return 0;
 			}
 		} else {
-			if (format[length] != 'i' && format[length] != 'f') {
+			if (format[length] != 'i' && format[length] != 'f' && format[length] != 'd') {
 				PyErr_SetString(ModuleInvalidFormat, "NewVertexArray() argument `format` is invalid.");
 				return 0;
 			}
@@ -63,7 +63,19 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 
 	int stride = 0;
 	for (int i = 0; format[i]; i += 2) {
-		stride += (format[i] - '0') * 4;
+		int size = 0;
+		switch (format[i + 1]) {
+			case 'f':
+				size = 4;
+				break;
+			case 'd':
+				size = 8;
+				break;
+			case 'i':
+				size = 4;
+				break;
+		}
+		stride += (format[i] - '0') * size;
 	}
 
 	OpenGL::glBindBuffer(OpenGL::GL_ARRAY_BUFFER, vbo->vbo);
@@ -77,6 +89,9 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 		switch (format[i * 2 + 1]) {
 			case 'f':
 				OpenGL::glVertexAttribPointer(location, dimension, OpenGL::GL_FLOAT, false, stride, ptr);
+				break;
+			case 'd':
+				OpenGL::glVertexAttribPointer(location, dimension, OpenGL::GL_DOUBLE, false, stride, ptr);
 				break;
 			case 'i':
 				OpenGL::glVertexAttribPointer(location, dimension, OpenGL::GL_INT, false, stride, ptr);
