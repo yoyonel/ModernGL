@@ -15,7 +15,6 @@ bool initialized;
 int defaultTextureUnit;
 int defaultVertexArray;
 int defaultFramebuffer;
-int defaultProgram;
 
 int activeFramebuffer;
 int activeProgram;
@@ -23,6 +22,8 @@ int activeProgram;
 int activeViewportWidth;
 int activeViewportHeight;
 int versionNumber;
+
+int maxTextureUnits;
 
 PyObject * InitializeModernGL(PyObject * self, PyObject * args) {
 	if (initialized) {
@@ -69,15 +70,13 @@ PyObject * InitializeModernGL(PyObject * self, PyObject * args) {
 
 	// Default FBO and program
 	OpenGL::glGetIntegerv(OpenGL::GL_DRAW_FRAMEBUFFER_BINDING, (OpenGL::GLint *)&defaultFramebuffer);
-	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&defaultProgram);
+	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
 
 	// Default texture unit for texture operations
-	int maxTextureUnits = 1;
 	OpenGL::glGetIntegerv(OpenGL::GL_MAX_TEXTURE_IMAGE_UNITS, (OpenGL::GLint *)&maxTextureUnits);
 	defaultTextureUnit = maxTextureUnits - 1;
 
 	activeFramebuffer = defaultFramebuffer;
-	activeProgram = defaultProgram;
 
 	int viewport[4] = {};
 	OpenGL::glGetIntegerv(OpenGL::GL_VIEWPORT, viewport);

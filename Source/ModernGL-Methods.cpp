@@ -1782,6 +1782,22 @@ Implementation implementation[] = {
 		"\t(ModernGL.RangeError) The offset or size is out of the buffer bounds.\n"
 		"\n"
 	},
+	{
+		301,
+		(PyCFunction)DebugInfo,
+		(PyCFunction)Dummy_DebugInfo,
+		METH_NOARGS,
+		"DebugInfo",
+		""
+	},
+	{
+		301,
+		(PyCFunction)DebugVar,
+		(PyCFunction)Dummy_DebugVar,
+		METH_VARARGS,
+		"DebugVar",
+		""
+	},
 };
 
 const int implementations = sizeof(implementation) / sizeof(Implementation);
