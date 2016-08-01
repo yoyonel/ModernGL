@@ -29,7 +29,6 @@ extern bool initialized;
 extern int defaultTextureUnit;
 extern int defaultVertexArray;
 extern int defaultFramebuffer;
-extern int defaultProgram;
 
 extern int activeProgram;
 extern int activeFramebuffer;
@@ -37,6 +36,8 @@ extern int activeFramebuffer;
 extern int activeViewportWidth;
 extern int activeViewportHeight;
 extern int versionNumber;
+
+extern int maxTextureUnits;
 
 enum ShaderCategory {
 	VERTEX_SHADER,
@@ -259,6 +260,9 @@ PyObject * SetTextureFiltered(PyObject * self, PyObject * args);
 PyObject * SetTextureMipmapped(PyObject * self, PyObject * args);
 PyObject * SetTexturePixelated(PyObject * self, PyObject * args);
 
+PyObject * DebugInfo(PyObject * self);
+PyObject * DebugVar(PyObject * self, PyObject * args);
+
 // Dummy
 
 PyObject * Dummy_Viewport(PyObject * self);
@@ -359,3 +363,6 @@ PyObject * Dummy_UseTextureAsImage(PyObject * self);
 PyObject * Dummy_SetTextureFiltered(PyObject * self);
 PyObject * Dummy_SetTextureMipmapped(PyObject * self);
 PyObject * Dummy_SetTexturePixelated(PyObject * self);
+
+PyObject * Dummy_DebugInfo(PyObject * self);
+PyObject * Dummy_DebugVar(PyObject * self);
