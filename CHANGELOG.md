@@ -4,6 +4,8 @@
 
 - Added padding and double format to VertexArray
 - Added Transform feedback methods
+- Removed strict parameter from NewVertexArray
+- NewVertexArray supports keyword arguments
 
 # 2.3.0
 
