@@ -4,14 +4,14 @@
 #include "BufferFormat.hpp"
 
 PyObject * NewTransformArray(PyObject * self, PyObject * args, PyObject * kwargs) {
-	Program * program;
-	VertexBuffer * src;
+	TransformShader * shader;
+	VertexBuffer * vbo;
 	VertexBuffer * dst;
 
 	const char * format;
 	PyObject * attributes;
 
-	if (!PyArg_ParseTuple(args, "O!O!sO!:NewTransformArray", &ProgramType, &program, &VertexBufferType, &src, &VertexBufferType, &dst, &format, &PyList_Type, &attributes)) {
+	if (!PyArg_ParseTuple(args, "O!O!O!sO!:NewTransformArray", &TransformShaderType, &shader, &VertexBufferType, &vbo, &VertexBufferType, &dst, &format, &PyList_Type, &attributes)) {
 		return 0;
 	}
 
@@ -32,7 +32,7 @@ PyObject * NewTransformArray(PyObject * self, PyObject * args, PyObject * kwargs
 
 	for (int i = 0; i < count; ++i) {
 		const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i));
-		int location = OpenGL::glGetAttribLocation(program->program, name);
+		int location = OpenGL::glGetAttribLocation(shader->program, name);
 		if (location < 0) {
 			PyErr_Format(ModuleAttributeNotFound, "NewTransformArray() attribute `%s` not found", name);
 			return 0;
@@ -43,20 +43,20 @@ PyObject * NewTransformArray(PyObject * self, PyObject * args, PyObject * kwargs
 	OpenGL::glGenVertexArrays(1, (OpenGL::GLuint *)&tao);
 	OpenGL::glBindVertexArray(tao);
 
-	OpenGL::glBindBuffer(OpenGL::GL_ARRAY_BUFFER, src->vbo);
+	OpenGL::glBindBuffer(OpenGL::GL_ARRAY_BUFFER, vbo->vbo);
 
 	int i = 0;
 	char * ptr = 0;
 	while (FormatNode * node = it.next()) {
 		const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i++));
-		int location = OpenGL::glGetAttribLocation(program->program, name);
+		int location = OpenGL::glGetAttribLocation(shader->program, name);
 		OpenGL::glVertexAttribPointer(location, node->count, node->type, false, info.size, ptr);
 		OpenGL::glEnableVertexAttribArray(location);
 		ptr += node->count * node->size;
 	}
 
 	OpenGL::glBindVertexArray(defaultVertexArray);
-	return CreateTransformArrayType(program->program, tao, src->vbo, dst->vbo);
+	return CreateTransformArrayType(shader->program, tao, src->vbo, dst->vbo);
 }
 
 PyObject * DeleteTransformArray(PyObject * self, PyObject * args) {
@@ -72,8 +72,9 @@ PyObject * DeleteTransformArray(PyObject * self, PyObject * args) {
 
 PyObject * NewTransformShader(PyObject * self, PyObject * args) {
 	const char * source;
+	PyObject * outputs;
 
-	if (!PyArg_ParseTuple(args, "s:NewTransformShader", &source)) {
+	if (!PyArg_ParseTuple(args, "sO!:NewTransformShader", &source, &PyList_Type, &outputs)) {
 		return 0;
 	}
 
@@ -113,6 +114,15 @@ PyObject * NewTransformShader(PyObject * self, PyObject * args) {
 	int program = OpenGL::glCreateProgram();
 
 	OpenGL::glAttachShader(program, shader);
+
+	int count = PyList_Size(outputs);
+	const char * feedbackVaryings[1024];
+
+	for (int i = 0; i < count; ++i) {
+		feedbackVaryings[i] = PyUnicode_AsUTF8(PyList_GET_ITEM(outputs, i));
+	}
+
+	OpenGL::glTransformFeedbackVaryings(program, count, feedbackVaryings, OpenGL::GL_INTERLEAVED_ATTRIBS);
 
 	int linked = OpenGL::GL_FALSE;
 	OpenGL::glLinkProgram(program);
@@ -181,6 +191,9 @@ PyObject * RunTransformShader(PyObject * self, PyObject * args, PyObject * kwarg
 
 	OpenGL::glBindVertexArray(tao->tao);
 	OpenGL::glBindBufferBase(OpenGL::GL_TRANSFORM_FEEDBACK_BUFFER, 0, tao->dst);
+	printf("tao = %d\n", tao->tao);
+	printf("dst = %d\n", tao->dst);
+	printf("%d %d\n", first, vertices);
 
 	OpenGL::glEnable(OpenGL::GL_RASTERIZER_DISCARD);
 	OpenGL::glBeginTransformFeedback(OpenGL::GL_POINTS);
