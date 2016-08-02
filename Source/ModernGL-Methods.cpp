@@ -1783,6 +1783,46 @@ Implementation implementation[] = {
 		"\n"
 	},
 	{
+		0,
+		(PyCFunction)NewTransformArray,
+		(PyCFunction)Dummy_NewTransformArray,
+		METH_VARARGS | METH_KEYWORDS,
+		"NewTransformArray",
+		""
+	},
+	{
+		0,
+		(PyCFunction)DeleteTransformArray,
+		(PyCFunction)Dummy_DeleteTransformArray,
+		METH_VARARGS,
+		"DeleteTransformArray",
+		""
+	},
+	{
+		0,
+		(PyCFunction)NewTransformShader,
+		(PyCFunction)Dummy_NewTransformShader,
+		METH_VARARGS,
+		"NewTransformShader",
+		""
+	},
+	{
+		0,
+		(PyCFunction)DeleteTransformShader,
+		(PyCFunction)Dummy_DeleteTransformShader,
+		METH_VARARGS,
+		"DeleteTransformShader",
+		""
+	},
+	{
+		0,
+		(PyCFunction)RunTransformShader,
+		(PyCFunction)Dummy_RunTransformShader,
+		METH_VARARGS | METH_KEYWORDS,
+		"RunTransformShader",
+		""
+	},
+	{
 		301,
 		(PyCFunction)DebugInfo,
 		(PyCFunction)Dummy_DebugInfo,
