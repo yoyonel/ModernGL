@@ -144,6 +144,7 @@ Libraries = {
 Sources = [
 	'Source/OpenGL.cpp',
 	'Source/ModernGL.cpp',
+	'Source/BufferFormat.cpp',
 	'Source/ModernGL-Buffer.cpp',
 	'Source/ModernGL-Compute.cpp',
 	'Source/ModernGL-Core.cpp',

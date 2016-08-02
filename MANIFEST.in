@@ -1,3 +1,4 @@
 include Source/OpenGL.hpp
 include Source/ModernGL.hpp
 include Source/Global.hpp
+include Source/BufferFormat.hpp

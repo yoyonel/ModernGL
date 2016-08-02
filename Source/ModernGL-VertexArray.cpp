@@ -1,6 +1,7 @@
 #include "ModernGL.hpp"
 
 #include "OpenGL.hpp"
+#include "BufferFormat.hpp"
 
 PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	Program * program;
@@ -12,35 +13,29 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	IndexBuffer * ibo = no_ibo;
 	bool strict = false;
 
-	if (!PyArg_ParseTuple(args, "O!O!sO!|O!p:NewVertexArray", &ProgramType, &program, &VertexBufferType, &vbo, &format, &PyList_Type, &attributes, &IndexBufferType, &ibo, &strict)) {
+	if (!PyArg_ParseTuple(args, "O!O!sO!|Op:NewVertexArray", &ProgramType, &program, &VertexBufferType, &vbo, &format, &PyList_Type, &attributes, &ibo, &strict)) {
 		return 0;
 	}
 
-	int length = 0;
-	while (format[length]) {
-		if (length % 2 == 0) {
-			if (format[length] < '1' || format[length] > '4') {
-				PyErr_SetString(ModuleInvalidFormat, "NewVertexArray() argument `format` is invalid.");
-				return 0;
-			}
-		} else {
-			if (format[length] != 'i' && format[length] != 'f' && format[length] != 'd') {
-				PyErr_SetString(ModuleInvalidFormat, "NewVertexArray() argument `format` is invalid.");
-				return 0;
-			}
+	if (ibo != no_ibo) {
+		if (!PyObject_TypeCheck((PyObject *)ibo, &IndexBufferType)) {
+			PyErr_Format(PyExc_TypeError, "NewVertexArray() ibo must be IndexBufferType not %s", GET_OBJECT_TYPENAME(ibo));
+			return 0;
 		}
-		++length;
-	}
-
-	if (!length || length % 2) {
-		PyErr_SetString(ModuleInvalidFormat, "NewVertexArray() argument `format` is empty or invalid.");
-		return 0;
 	}
 
 	int count = (int)PyList_Size(attributes);
 
-	if (length / 2 != count) {
-		PyErr_Format(ModuleInvalidFormat, "NewVertexArray() size of `format` is %d, length of `attributes` is %d", length / 2, count);
+	FormatIterator it = FormatIterator(format);
+	FormatInfo info = it.info();
+
+	if (!info.valid) {
+		PyErr_Format(ModuleInvalidFormat, "NewVertexArray() format is invalid");
+		return 0;
+	}
+
+	if (info.nodes != count) {
+		PyErr_Format(ModuleInvalidFormat, "NewVertexArray() format has %d nodes but there are %d attributes", info.nodes, count);
 		return 0;
 	}
 
@@ -61,44 +56,16 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 		OpenGL::glBindBuffer(OpenGL::GL_ELEMENT_ARRAY_BUFFER, ibo->ibo);
 	}
 
-	int stride = 0;
-	for (int i = 0; format[i]; i += 2) {
-		int size = 0;
-		switch (format[i + 1]) {
-			case 'f':
-				size = 4;
-				break;
-			case 'd':
-				size = 8;
-				break;
-			case 'i':
-				size = 4;
-				break;
-		}
-		stride += (format[i] - '0') * size;
-	}
-
 	OpenGL::glBindBuffer(OpenGL::GL_ARRAY_BUFFER, vbo->vbo);
 
+	int i = 0;
 	char * ptr = 0;
-	for (int i = 0; i < count; ++i) {
-		const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i));
+	while (FormatNode * node = it.next()) {
+		const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i++));
 		int location = OpenGL::glGetAttribLocation(program->program, name);
-
-		int dimension = format[i * 2] - '0';
-		switch (format[i * 2 + 1]) {
-			case 'f':
-				OpenGL::glVertexAttribPointer(location, dimension, OpenGL::GL_FLOAT, false, stride, ptr);
-				break;
-			case 'd':
-				OpenGL::glVertexAttribPointer(location, dimension, OpenGL::GL_DOUBLE, false, stride, ptr);
-				break;
-			case 'i':
-				OpenGL::glVertexAttribPointer(location, dimension, OpenGL::GL_INT, false, stride, ptr);
-				break;
-		}
+		OpenGL::glVertexAttribPointer(location, node->count, node->type, false, info.size, ptr);
 		OpenGL::glEnableVertexAttribArray(location);
-		ptr += dimension * 4;
+		ptr += node->count * node->size;
 	}
 
 	OpenGL::glBindVertexArray(defaultVertexArray);
