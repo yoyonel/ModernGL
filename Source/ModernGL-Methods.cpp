@@ -1792,10 +1792,90 @@ Implementation implementation[] = {
 	},
 	{
 		0,
+		(PyCFunction)TransformTriangles,
+		(PyCFunction)Dummy_TransformTriangles,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformTriangles",
+		""
+	},
+	{
+		0,
+		(PyCFunction)TransformTriangleStrip,
+		(PyCFunction)Dummy_TransformTriangleStrip,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformTriangleStrip",
+		""
+	},
+	{
+		0,
+		(PyCFunction)TransformTriangleFan,
+		(PyCFunction)Dummy_TransformTriangleFan,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformTriangleFan",
+		""
+	},
+	{
+		0,
+		(PyCFunction)TransformLines,
+		(PyCFunction)Dummy_TransformLines,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformLines",
+		""
+	},
+	{
+		0,
+		(PyCFunction)TransformLineStrip,
+		(PyCFunction)Dummy_TransformLineStrip,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformLineStrip",
+		""
+	},
+	{
+		0,
+		(PyCFunction)TransformLineLoop,
+		(PyCFunction)Dummy_TransformLineLoop,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformLineLoop",
+		""
+	},
+	{
+		0,
 		(PyCFunction)TransformPoints,
 		(PyCFunction)Dummy_TransformPoints,
 		METH_VARARGS | METH_KEYWORDS,
 		"TransformPoints",
+		""
+	},
+	{
+		0,
+		(PyCFunction)TransformLineStripAdjacency,
+		(PyCFunction)Dummy_TransformLineStripAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformLineStripAdjacency",
+		""
+	},
+	{
+		0,
+		(PyCFunction)TransformLinesAdjacency,
+		(PyCFunction)Dummy_TransformLinesAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformLinesAdjacency",
+		""
+	},
+	{
+		0,
+		(PyCFunction)TransformTriangleStripAdjacency,
+		(PyCFunction)Dummy_TransformTriangleStripAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformTriangleStripAdjacency",
+		""
+	},
+	{
+		0,
+		(PyCFunction)TransformTrianglesAdjacency,
+		(PyCFunction)Dummy_TransformTrianglesAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformTrianglesAdjacency",
 		""
 	},
 	{
