@@ -131,6 +131,17 @@ struct EnableFlag {
 	unsigned value;
 };
 
+struct TransformShader {
+	PyObject_HEAD
+	int shader;
+	int program;
+};
+
+struct TransformArray {
+	PyObject_HEAD
+	int tao;
+};
+
 extern PyTypeObject FramebufferType;
 extern PyTypeObject VertexArrayType;
 extern PyTypeObject VertexBufferType;

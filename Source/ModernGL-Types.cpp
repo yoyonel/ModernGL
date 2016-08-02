@@ -71,6 +71,14 @@ PyObject * EnableFlag_new(PyTypeObject * type, PyObject * args, PyObject * kwarg
 	return type->tp_alloc(type, 0);
 }
 
+PyObject * TransformShader_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+	return type->tp_alloc(type, 0);
+}
+
+PyObject * TransformArray_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+	return type->tp_alloc(type, 0);
+}
+
 int Framebuffer_init(Framebuffer * self, PyObject * args, PyObject * kwargs) {
 	PyErr_SetString(ModuleError, "Cannot instantiate Framebuffer.\nCall NewFramebuffer(...) to get a Framebuffer object.");
 	return -1;
@@ -136,6 +144,16 @@ int EnableFlag_init(EnableFlag * self, PyObject * args, PyObject * kwargs) {
 	return -1;
 }
 
+int TransformShader_init(ComputeShader * self, PyObject * args, PyObject * kwargs) {
+	PyErr_SetString(ModuleError, "Cannot instantiate TransformShader.\nCall NewTransformShader(...) to get a TransformShader object.");
+	return -1;
+}
+
+int TransformArray_init(EnableFlag * self, PyObject * args, PyObject * kwargs) {
+	PyErr_SetString(ModuleError, "Cannot instantiate TransformArray.\nCall NewTransformArray(...) to get a TransformArray object.");
+	return -1;
+}
+
 void Framebuffer_dealloc(Framebuffer * self) {
 	Py_TYPE(self)->tp_free((PyObject*)self);
 }
@@ -185,6 +203,14 @@ void ComputeShader_dealloc(ComputeShader * self) {
 }
 
 void EnableFlag_dealloc(EnableFlag * self) {
+	Py_TYPE(self)->tp_free((PyObject*)self);
+}
+
+void TransformShader_dealloc(ComputeShader * self) {
+	Py_TYPE(self)->tp_free((PyObject*)self);
+}
+
+void TransformArray_dealloc(EnableFlag * self) {
 	Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
@@ -238,6 +264,14 @@ PyObject * ComputeShader_str(ComputeShader * self) {
 
 PyObject * EnableFlag_str(EnableFlag * self) {
 	return PyUnicode_FromFormat("<EnableFlag = %s>", enableTable[self->value]);
+}
+
+PyObject * TransformShader_str(TransformShader * self) {
+	return PyUnicode_FromFormat("<TransformShader = %d>", self->program);
+}
+
+PyObject * TransformArray_str(TransformArray * self) {
+	return PyUnicode_FromFormat("<TransformArray = %d>", self->tao);
 }
 
 PyTypeObject FramebufferType = {
@@ -790,6 +824,88 @@ PyTypeObject EnableFlagType = {
 	EnableFlag_new,
 };
 
+PyTypeObject TransformShaderType = {
+	PyVarObject_HEAD_INIT(0, 0)
+	"ModernGL.TransformShader",
+	sizeof(TransformShader),
+	0,
+	(destructor)TransformShader_dealloc,
+	0,
+	0,
+	0,
+	0,
+	(reprfunc)TransformShader_str,
+	0,
+	0,
+	0,
+	0,
+	0,
+	(reprfunc)TransformShader_str,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+	"TransformShader",
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	(initproc)TransformShader_init,
+	0,
+	TransformShader_new,
+};
+
+PyTypeObject TransformArrayType = {
+	PyVarObject_HEAD_INIT(0, 0)
+	"ModernGL.TransformArray",
+	sizeof(TransformArray),
+	0,
+	(destructor)TransformArray_dealloc,
+	0,
+	0,
+	0,
+	0,
+	(reprfunc)TransformArray_str,
+	0,
+	0,
+	0,
+	0,
+	0,
+	(reprfunc)TransformArray_str,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+	"TransformArray",
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	(initproc)TransformArray_init,
+	0,
+	TransformArray_new,
+};
+
 PyObject * CreateFramebufferType(int fbo, int color, int depth) {
 	Framebuffer * obj = (Framebuffer *)FramebufferType.tp_alloc(&FramebufferType, 0);
 
@@ -933,6 +1049,24 @@ PyObject * CreateEnableFlagType(unsigned value) {
 
 	if (obj != 0) {
 		obj->value = value;
+	}
+
+	return (PyObject *)obj;
+}
+
+PyObject * CreateTransformShaderType() {
+	TransformShader * obj = (TransformShader *)TransformShaderType.tp_alloc(&TransformShaderType, 0);
+
+	if (obj != 0) {
+	}
+
+	return (PyObject *)obj;
+}
+
+PyObject * CreateTransformArrayType() {
+	TransformArray * obj = (TransformArray *)TransformArrayType.tp_alloc(&TransformArrayType, 0);
+
+	if (obj != 0) {
 	}
 
 	return (PyObject *)obj;
