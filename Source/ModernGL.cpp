@@ -136,6 +136,14 @@ bool ModuleReady() {
 		return false;
 	}
 
+	if (PyType_Ready(&TransformShaderType) < 0) {
+		return false;
+	}
+
+	if (PyType_Ready(&TransformArrayType) < 0) {
+		return false;
+	}
+
 	if (PyType_Ready(&EnableFlagType) < 0) {
 		return false;
 	}
@@ -162,6 +170,8 @@ PyObject * InitModule(PyObject * module) {
 	Py_INCREF(&UniformLocationType);
 	Py_INCREF(&UniformBufferLocationType);
 	Py_INCREF(&ComputeShaderType);
+	Py_INCREF(&TransformShaderType);
+	Py_INCREF(&TransformArrayType);
 	Py_INCREF(&EnableFlagType);
 
 	PyModule_AddObject(module, "Framebuffer", (PyObject *)&FramebufferType);
@@ -176,6 +186,8 @@ PyObject * InitModule(PyObject * module) {
 	PyModule_AddObject(module, "UniformLocation", (PyObject *)&UniformLocationType);
 	PyModule_AddObject(module, "UniformBufferLocation", (PyObject *)&UniformBufferLocationType);
 	PyModule_AddObject(module, "ComputeShader", (PyObject *)&ComputeShaderType);
+	PyModule_AddObject(module, "TransformShader", (PyObject *)&TransformShaderType);
+	PyModule_AddObject(module, "TransformArray", (PyObject *)&TransformArrayType);
 	PyModule_AddObject(module, "EnableFlag", (PyObject *)&EnableFlagType);
 
 	ModuleError = PyErr_NewException((char *)"ModernGL.Error", 0, 0);
