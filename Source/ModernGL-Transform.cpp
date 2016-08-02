@@ -94,17 +94,6 @@ PyObject * DeleteTransformShader(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * RunTransformShader(PyObject * self, PyObject * args, PyObject * kwargs) {
-	TransformShader * shader;
-	int x = 1;
-
-	static const char * kwlist[] = {"shader", "x", 0};
-
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!|iii:RunTransformShader", (char **)kwlist, &TransformShaderType, &shader, &x, &y, &z)) {
-		return 0;
-	}
-
-	OpenGL::glUseProgram(shader->program);
-	OpenGL::glDispatchTransform(x, y, z);
+PyObject * NewTransformArray(PyObject * self, PyObject * args, PyObject * kwargs) {
 	Py_RETURN_NONE;
 }

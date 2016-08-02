@@ -155,6 +155,7 @@ Sources = [
 	'Source/ModernGL-Render.cpp',
 	'Source/ModernGL-Shader.cpp',
 	'Source/ModernGL-Texture.cpp',
+	'Source/ModernGL-Transform.cpp',
 	'Source/ModernGL-Types.cpp',
 	'Source/ModernGL-VertexArray.cpp',
 ]

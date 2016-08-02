@@ -155,6 +155,8 @@ extern PyTypeObject UniformLocationType;
 extern PyTypeObject UniformBufferLocationType;
 extern PyTypeObject ComputeShaderType;
 extern PyTypeObject EnableFlagType;
+extern PyTypeObject TransformShaderType;
+extern PyTypeObject TransformArrayType;
 
 PyObject * CreateFramebufferType(int fbo, int color, int depth);
 PyObject * CreateVertexArrayType(int vao, int program, bool indexed);
@@ -169,6 +171,8 @@ PyObject * CreateUniformLocationType(int location, int program, int type);
 PyObject * CreateUniformBufferLocationType(int location, int program, int size);
 PyObject * CreateComputeShaderType(int shader, int program);
 PyObject * CreateEnableFlagType(unsigned value);
+PyObject * CreateTransformShaderType(int shader, int program);
+PyObject * CreateTransformArrayType();
 
 PyObject * InitializeModernGL(PyObject * self, PyObject * args);
 

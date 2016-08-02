@@ -1054,10 +1054,12 @@ PyObject * CreateEnableFlagType(unsigned value) {
 	return (PyObject *)obj;
 }
 
-PyObject * CreateTransformShaderType() {
+PyObject * CreateTransformShaderType(int shader, int program) {
 	TransformShader * obj = (TransformShader *)TransformShaderType.tp_alloc(&TransformShaderType, 0);
 
 	if (obj != 0) {
+		obj->shader = shader;
+		obj->program = program;
 	}
 
 	return (PyObject *)obj;
