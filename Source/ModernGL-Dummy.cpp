@@ -684,47 +684,110 @@ PyObject * Dummy_SetTexturePixelated(PyObject * self) {
 	return 0;
 }
 
-PyObject * Dummy_NewTransformArray(PyObject * self) {
+PyObject * Dummy_NewTransformProgram(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "NewTransformArray() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "NewTransformProgram() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
 	} else {
-		PyErr_SetString(ModuleNotSupported, "NewTransformArray() function not initialized. OpenGL 3.1 is required.");
+		PyErr_SetString(ModuleNotSupported, "NewTransformProgram() function not initialized. OpenGL 3.1 is required.");
 	}
 	return 0;
 }
 
-PyObject * Dummy_DeleteTransformArray(PyObject * self) {
+PyObject * Dummy_TransformTriangles(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "DeleteTransformArray() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "TransformTriangles() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
 	} else {
-		PyErr_SetString(ModuleNotSupported, "DeleteTransformArray() function not initialized. OpenGL 3.1 is required.");
+		PyErr_SetString(ModuleNotSupported, "TransformTriangles() function not initialized. OpenGL 3.1 is required.");
 	}
 	return 0;
 }
 
-PyObject * Dummy_NewTransformShader(PyObject * self) {
+PyObject * Dummy_TransformTriangleStrip(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "NewTransformShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "TransformTriangleStrip() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
 	} else {
-		PyErr_SetString(ModuleNotSupported, "NewTransformShader() function not initialized. OpenGL 3.1 is required.");
+		PyErr_SetString(ModuleNotSupported, "TransformTriangleStrip() function not initialized. OpenGL 3.1 is required.");
 	}
 	return 0;
 }
 
-PyObject * Dummy_DeleteTransformShader(PyObject * self) {
+PyObject * Dummy_TransformTriangleFan(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "DeleteTransformShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "TransformTriangleFan() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
 	} else {
-		PyErr_SetString(ModuleNotSupported, "DeleteTransformShader() function not initialized. OpenGL 3.1 is required.");
+		PyErr_SetString(ModuleNotSupported, "TransformTriangleFan() function not initialized. OpenGL 3.1 is required.");
 	}
 	return 0;
 }
 
-PyObject * Dummy_RunTransformShader(PyObject * self) {
+PyObject * Dummy_TransformLines(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "RunTransformShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "TransformLines() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
 	} else {
-		PyErr_SetString(ModuleNotSupported, "RunTransformShader() function not initialized. OpenGL 3.1 is required.");
+		PyErr_SetString(ModuleNotSupported, "TransformLines() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_TransformLineStrip(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "TransformLineStrip() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "TransformLineStrip() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_TransformLineLoop(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "TransformLineLoop() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "TransformLineLoop() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_TransformPoints(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "TransformPoints() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "TransformPoints() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_TransformLineStripAdjacency(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "TransformLineStripAdjacency() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "TransformLineStripAdjacency() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_TransformLinesAdjacency(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "TransformLinesAdjacency() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "TransformLinesAdjacency() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_TransformTriangleStripAdjacency(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "TransformTriangleStripAdjacency() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "TransformTriangleStripAdjacency() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_TransformTrianglesAdjacency(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "TransformTrianglesAdjacency() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "TransformTrianglesAdjacency() function not initialized. OpenGL 3.1 is required.");
 	}
 	return 0;
 }

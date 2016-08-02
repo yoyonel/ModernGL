@@ -126,20 +126,6 @@ struct ComputeShader {
 	int program;
 };
 
-struct TransformShader {
-	PyObject_HEAD
-	int shader;
-	int program;
-};
-
-struct TransformArray {
-	PyObject_HEAD
-	int program;
-	int tao;
-	int src;
-	int dst;
-};
-
 struct EnableFlag {
 	PyObject_HEAD
 	unsigned value;
@@ -157,8 +143,6 @@ extern PyTypeObject ProgramType;
 extern PyTypeObject UniformLocationType;
 extern PyTypeObject UniformBufferLocationType;
 extern PyTypeObject ComputeShaderType;
-extern PyTypeObject TransformShaderType;
-extern PyTypeObject TransformArrayType;
 extern PyTypeObject EnableFlagType;
 
 PyObject * CreateFramebufferType(int fbo, int color, int depth);
@@ -173,8 +157,6 @@ PyObject * CreateProgramType(int program);
 PyObject * CreateUniformLocationType(int location, int program, int type);
 PyObject * CreateUniformBufferLocationType(int location, int program, int size);
 PyObject * CreateComputeShaderType(int shader, int program);
-PyObject * CreateTransformShaderType(int shader, int program);
-PyObject * CreateTransformArrayType(int program, int tao, int src, int dst);
 PyObject * CreateEnableFlagType(unsigned value);
 
 PyObject * InitializeModernGL(PyObject * self, PyObject * args);
@@ -278,12 +260,19 @@ PyObject * SetTextureFiltered(PyObject * self, PyObject * args);
 PyObject * SetTextureMipmapped(PyObject * self, PyObject * args);
 PyObject * SetTexturePixelated(PyObject * self, PyObject * args);
 
-PyObject * NewTransformArray(PyObject * self, PyObject * args, PyObject * kwargs);
-PyObject * DeleteTransformArray(PyObject * self, PyObject * args);
+PyObject * NewTransformProgram(PyObject * self, PyObject * args);
 
-PyObject * NewTransformShader(PyObject * self, PyObject * args);
-PyObject * DeleteTransformShader(PyObject * self, PyObject * args);
-PyObject * RunTransformShader(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformPoints(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformTriangles(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformTriangleStrip(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformTriangleFan(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformLines(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformLineStrip(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformLineLoop(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformLineStripAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformLinesAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformTriangleStripAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformTrianglesAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
 
 PyObject * DebugInfo(PyObject * self);
 PyObject * DebugVar(PyObject * self, PyObject * args);
@@ -389,12 +378,19 @@ PyObject * Dummy_SetTextureFiltered(PyObject * self);
 PyObject * Dummy_SetTextureMipmapped(PyObject * self);
 PyObject * Dummy_SetTexturePixelated(PyObject * self);
 
-PyObject * Dummy_NewTransformArray(PyObject * self);
-PyObject * Dummy_DeleteTransformArray(PyObject * self);
+PyObject * Dummy_NewTransformProgram(PyObject * self);
 
-PyObject * Dummy_NewTransformShader(PyObject * self);
-PyObject * Dummy_DeleteTransformShader(PyObject * self);
-PyObject * Dummy_RunTransformShader(PyObject * self);
+PyObject * Dummy_TransformPoints(PyObject * self);
+PyObject * Dummy_TransformTriangles(PyObject * self);
+PyObject * Dummy_TransformTriangleStrip(PyObject * self);
+PyObject * Dummy_TransformTriangleFan(PyObject * self);
+PyObject * Dummy_TransformLines(PyObject * self);
+PyObject * Dummy_TransformLineStrip(PyObject * self);
+PyObject * Dummy_TransformLineLoop(PyObject * self);
+PyObject * Dummy_TransformLineStripAdjacency(PyObject * self);
+PyObject * Dummy_TransformLinesAdjacency(PyObject * self);
+PyObject * Dummy_TransformTriangleStripAdjacency(PyObject * self);
+PyObject * Dummy_TransformTrianglesAdjacency(PyObject * self);
 
 PyObject * Dummy_DebugInfo(PyObject * self);
 PyObject * Dummy_DebugVar(PyObject * self);

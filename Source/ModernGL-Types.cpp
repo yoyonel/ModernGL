@@ -67,14 +67,6 @@ PyObject * ComputeShader_new(PyTypeObject * type, PyObject * args, PyObject * kw
 	return type->tp_alloc(type, 0);
 }
 
-PyObject * TransformShader_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
-	return type->tp_alloc(type, 0);
-}
-
-PyObject * TransformArray_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
-	return type->tp_alloc(type, 0);
-}
-
 PyObject * EnableFlag_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	return type->tp_alloc(type, 0);
 }
@@ -139,16 +131,6 @@ int ComputeShader_init(ComputeShader * self, PyObject * args, PyObject * kwargs)
 	return -1;
 }
 
-int TransformShader_init(ComputeShader * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "Cannot instantiate TransformShader.\nCall NewTransformShader(...) to get a TransformShader object.");
-	return -1;
-}
-
-int TransformArray_init(EnableFlag * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "Cannot instantiate TransformArray.\nCall NewTransformArray(...) to get a TransformArray object.");
-	return -1;
-}
-
 int EnableFlag_init(EnableFlag * self, PyObject * args, PyObject * kwargs) {
 	PyErr_SetString(ModuleError, "Cannot instantiate EnableFlag.");
 	return -1;
@@ -202,14 +184,6 @@ void ComputeShader_dealloc(ComputeShader * self) {
 	Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
-void TransformShader_dealloc(ComputeShader * self) {
-	Py_TYPE(self)->tp_free((PyObject*)self);
-}
-
-void TransformArray_dealloc(EnableFlag * self) {
-	Py_TYPE(self)->tp_free((PyObject*)self);
-}
-
 void EnableFlag_dealloc(EnableFlag * self) {
 	Py_TYPE(self)->tp_free((PyObject*)self);
 }
@@ -260,14 +234,6 @@ PyObject * UniformBufferLocation_str(UniformBufferLocation * self) {
 
 PyObject * ComputeShader_str(ComputeShader * self) {
 	return PyUnicode_FromFormat("<ComputeShader = %d>", self->program);
-}
-
-PyObject * TransformShader_str(TransformShader * self) {
-	return PyUnicode_FromFormat("<TransformShader = %d>", self->program);
-}
-
-PyObject * TransformArray_str(TransformArray * self) {
-	return PyUnicode_FromFormat("<TransformArray = %d>", self->tao);
 }
 
 PyObject * EnableFlag_str(EnableFlag * self) {
@@ -766,88 +732,6 @@ PyTypeObject ComputeShaderType = {
 	ComputeShader_new,
 };
 
-PyTypeObject TransformShaderType = {
-	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.TransformShader",
-	sizeof(TransformShader),
-	0,
-	(destructor)TransformShader_dealloc,
-	0,
-	0,
-	0,
-	0,
-	(reprfunc)TransformShader_str,
-	0,
-	0,
-	0,
-	0,
-	0,
-	(reprfunc)TransformShader_str,
-	0,
-	0,
-	0,
-	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
-	"TransformShader",
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	(initproc)TransformShader_init,
-	0,
-	TransformShader_new,
-};
-
-PyTypeObject TransformArrayType = {
-	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.TransformArray",
-	sizeof(TransformArray),
-	0,
-	(destructor)TransformArray_dealloc,
-	0,
-	0,
-	0,
-	0,
-	(reprfunc)TransformArray_str,
-	0,
-	0,
-	0,
-	0,
-	0,
-	(reprfunc)TransformArray_str,
-	0,
-	0,
-	0,
-	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
-	"TransformArray",
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	(initproc)TransformArray_init,
-	0,
-	TransformArray_new,
-};
-
 PyObject * EnableFlag_add(EnableFlag * a, EnableFlag * b) {
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("a", a, EnableFlagType);
 	CHECK_AND_REPORT_ARG_TYPE_ERROR("b", b, EnableFlagType);
@@ -1039,31 +923,6 @@ PyObject * CreateComputeShaderType(int shader, int program) {
 	if (obj != 0) {
 		obj->shader = shader;
 		obj->program = program;
-	}
-
-	return (PyObject *)obj;
-}
-
-PyObject * CreateTransformShaderType(int shader, int program) {
-	TransformShader * obj = (TransformShader *)TransformShaderType.tp_alloc(&TransformShaderType, 0);
-
-	if (obj != 0) {
-		obj->shader = shader;
-		obj->program = program;
-	}
-
-	return (PyObject *)obj;
-}
-
-PyObject * CreateTransformArrayType(int program, int tao, int src, int dst) {
-	TransformArray * obj = (TransformArray *)TransformArrayType.tp_alloc(&TransformArrayType, 0);
-
-	if (obj != 0) {
-		obj->program = program;
-		obj->tao = tao;
-		obj->src = src;
-		obj->dst = dst;
-		
 	}
 
 	return (PyObject *)obj;
