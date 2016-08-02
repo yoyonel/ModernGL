@@ -24,7 +24,14 @@ PyObject * TransformPoints(PyObject * self, PyObject * args, PyObject * kwargs) 
 
 	OpenGL::glEnable(OpenGL::GL_RASTERIZER_DISCARD);
 	OpenGL::glBeginTransformFeedback(OpenGL::GL_POINTS);
-	OpenGL::glDrawArrays(OpenGL::GL_POINTS, first, count);
+
+	if (vao->indexed) {
+		OpenGL::glDrawArrays(OpenGL::GL_POINTS, first, count);
+	} else {
+		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
+		OpenGL::glDrawElements(OpenGL::GL_POINTS, count, OpenGL::GL_UNSIGNED_INT, ptr);
+	}
+
 	OpenGL::glEndTransformFeedback();
 	OpenGL::glDisable(OpenGL::GL_RASTERIZER_DISCARD);
 	OpenGL::glFlush();
