@@ -1055,10 +1055,15 @@ PyObject * CreateTransformShaderType(int shader, int program) {
 	return (PyObject *)obj;
 }
 
-PyObject * CreateTransformArrayType() {
+PyObject * CreateTransformArrayType(int program, int tao, int src, int dst) {
 	TransformArray * obj = (TransformArray *)TransformArrayType.tp_alloc(&TransformArrayType, 0);
 
 	if (obj != 0) {
+		obj->program = program;
+		obj->tao = tao;
+		obj->src = src;
+		obj->dst = dst;
+		
 	}
 
 	return (PyObject *)obj;

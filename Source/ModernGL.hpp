@@ -134,7 +134,10 @@ struct TransformShader {
 
 struct TransformArray {
 	PyObject_HEAD
+	int program;
 	int tao;
+	int src;
+	int dst;
 };
 
 struct EnableFlag {
@@ -171,7 +174,7 @@ PyObject * CreateUniformLocationType(int location, int program, int type);
 PyObject * CreateUniformBufferLocationType(int location, int program, int size);
 PyObject * CreateComputeShaderType(int shader, int program);
 PyObject * CreateTransformShaderType(int shader, int program);
-PyObject * CreateTransformArrayType();
+PyObject * CreateTransformArrayType(int program, int tao, int src, int dst);
 PyObject * CreateEnableFlagType(unsigned value);
 
 PyObject * InitializeModernGL(PyObject * self, PyObject * args);
