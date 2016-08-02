@@ -42,7 +42,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	for (int i = 0; i < count; ++i) {
 		const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i));
 		int location = OpenGL::glGetAttribLocation(program->program, name);
-		if (strict && location < 0) {
+		if (!strict && location < 0) {
 			PyErr_Format(ModuleAttributeNotFound, "NewVertexArray() attribute `%s` not found", name);
 			return 0;
 		}
@@ -61,10 +61,13 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	int i = 0;
 	char * ptr = 0;
 	while (FormatNode * node = it.next()) {
-		const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i++));
-		int location = OpenGL::glGetAttribLocation(program->program, name);
-		OpenGL::glVertexAttribPointer(location, node->count, node->type, false, info.size, ptr);
-		OpenGL::glEnableVertexAttribArray(location);
+		if (node->type) {
+			const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i));
+			int location = OpenGL::glGetAttribLocation(program->program, name);
+			OpenGL::glVertexAttribPointer(location, node->count, node->type, false, info.size, ptr);
+			OpenGL::glEnableVertexAttribArray(location);
+			++i;
+		}
 		ptr += node->count * node->size;
 	}
 

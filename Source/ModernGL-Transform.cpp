@@ -26,10 +26,10 @@ PyObject * TransformTriangles(PyObject * self, PyObject * args, PyObject * kwarg
 	OpenGL::glBeginTransformFeedback(OpenGL::GL_TRIANGLES);
 
 	if (vao->indexed) {
-		OpenGL::glDrawArrays(OpenGL::GL_TRIANGLES, first, count);
-	} else {
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElements(OpenGL::GL_TRIANGLES, count, OpenGL::GL_UNSIGNED_INT, ptr);
+	} else {
+		OpenGL::glDrawArrays(OpenGL::GL_TRIANGLES, first, count);
 	}
 
 	OpenGL::glEndTransformFeedback();
@@ -64,10 +64,10 @@ PyObject * TransformTriangleStrip(PyObject * self, PyObject * args, PyObject * k
 	OpenGL::glBeginTransformFeedback(OpenGL::GL_TRIANGLES);
 
 	if (vao->indexed) {
-		OpenGL::glDrawArrays(OpenGL::GL_TRIANGLE_STRIP, first, count);
-	} else {
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElements(OpenGL::GL_TRIANGLE_STRIP, count, OpenGL::GL_UNSIGNED_INT, ptr);
+	} else {
+		OpenGL::glDrawArrays(OpenGL::GL_TRIANGLE_STRIP, first, count);
 	}
 
 	OpenGL::glEndTransformFeedback();
@@ -102,10 +102,10 @@ PyObject * TransformTriangleFan(PyObject * self, PyObject * args, PyObject * kwa
 	OpenGL::glBeginTransformFeedback(OpenGL::GL_TRIANGLES);
 
 	if (vao->indexed) {
-		OpenGL::glDrawArrays(OpenGL::GL_TRIANGLE_FAN, first, count);
-	} else {
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElements(OpenGL::GL_TRIANGLE_FAN, count, OpenGL::GL_UNSIGNED_INT, ptr);
+	} else {
+		OpenGL::glDrawArrays(OpenGL::GL_TRIANGLE_FAN, first, count);
 	}
 
 	OpenGL::glEndTransformFeedback();
@@ -140,10 +140,10 @@ PyObject * TransformLines(PyObject * self, PyObject * args, PyObject * kwargs) {
 	OpenGL::glBeginTransformFeedback(OpenGL::GL_LINES);
 
 	if (vao->indexed) {
-		OpenGL::glDrawArrays(OpenGL::GL_LINES, first, count);
-	} else {
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElements(OpenGL::GL_LINES, count, OpenGL::GL_UNSIGNED_INT, ptr);
+	} else {
+		OpenGL::glDrawArrays(OpenGL::GL_LINES, first, count);
 	}
 
 	OpenGL::glEndTransformFeedback();
@@ -178,10 +178,10 @@ PyObject * TransformLineStrip(PyObject * self, PyObject * args, PyObject * kwarg
 	OpenGL::glBeginTransformFeedback(OpenGL::GL_LINES);
 
 	if (vao->indexed) {
-		OpenGL::glDrawArrays(OpenGL::GL_LINE_STRIP, first, count);
-	} else {
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElements(OpenGL::GL_LINE_STRIP, count, OpenGL::GL_UNSIGNED_INT, ptr);
+	} else {
+		OpenGL::glDrawArrays(OpenGL::GL_LINE_STRIP, first, count);
 	}
 
 	OpenGL::glEndTransformFeedback();
@@ -216,10 +216,10 @@ PyObject * TransformLineLoop(PyObject * self, PyObject * args, PyObject * kwargs
 	OpenGL::glBeginTransformFeedback(OpenGL::GL_LINES);
 
 	if (vao->indexed) {
-		OpenGL::glDrawArrays(OpenGL::GL_LINE_LOOP, first, count);
-	} else {
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElements(OpenGL::GL_LINE_LOOP, count, OpenGL::GL_UNSIGNED_INT, ptr);
+	} else {
+		OpenGL::glDrawArrays(OpenGL::GL_LINE_LOOP, first, count);
 	}
 
 	OpenGL::glEndTransformFeedback();
@@ -254,10 +254,10 @@ PyObject * TransformPoints(PyObject * self, PyObject * args, PyObject * kwargs) 
 	OpenGL::glBeginTransformFeedback(OpenGL::GL_POINTS);
 
 	if (vao->indexed) {
-		OpenGL::glDrawArrays(OpenGL::GL_POINTS, first, count);
-	} else {
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElements(OpenGL::GL_POINTS, count, OpenGL::GL_UNSIGNED_INT, ptr);
+	} else {
+		OpenGL::glDrawArrays(OpenGL::GL_POINTS, first, count);
 	}
 
 	OpenGL::glEndTransformFeedback();
@@ -292,10 +292,10 @@ PyObject * TransformLineStripAdjacency(PyObject * self, PyObject * args, PyObjec
 	OpenGL::glBeginTransformFeedback(OpenGL::GL_LINES);
 
 	if (vao->indexed) {
-		OpenGL::glDrawArrays(OpenGL::GL_LINE_STRIP_ADJACENCY, first, count);
-	} else {
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElements(OpenGL::GL_LINE_STRIP_ADJACENCY, count, OpenGL::GL_UNSIGNED_INT, ptr);
+	} else {
+		OpenGL::glDrawArrays(OpenGL::GL_LINE_STRIP_ADJACENCY, first, count);
 	}
 
 	OpenGL::glEndTransformFeedback();
@@ -330,10 +330,10 @@ PyObject * TransformLinesAdjacency(PyObject * self, PyObject * args, PyObject * 
 	OpenGL::glBeginTransformFeedback(OpenGL::GL_LINES);
 
 	if (vao->indexed) {
-		OpenGL::glDrawArrays(OpenGL::GL_LINES_ADJACENCY, first, count);
-	} else {
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElements(OpenGL::GL_LINES_ADJACENCY, count, OpenGL::GL_UNSIGNED_INT, ptr);
+	} else {
+		OpenGL::glDrawArrays(OpenGL::GL_LINES_ADJACENCY, first, count);
 	}
 
 	OpenGL::glEndTransformFeedback();
@@ -368,10 +368,10 @@ PyObject * TransformTriangleStripAdjacency(PyObject * self, PyObject * args, PyO
 	OpenGL::glBeginTransformFeedback(OpenGL::GL_TRIANGLES);
 
 	if (vao->indexed) {
-		OpenGL::glDrawArrays(OpenGL::GL_TRIANGLE_STRIP_ADJACENCY, first, count);
-	} else {
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElements(OpenGL::GL_TRIANGLE_STRIP_ADJACENCY, count, OpenGL::GL_UNSIGNED_INT, ptr);
+	} else {
+		OpenGL::glDrawArrays(OpenGL::GL_TRIANGLE_STRIP_ADJACENCY, first, count);
 	}
 
 	OpenGL::glEndTransformFeedback();
@@ -406,10 +406,10 @@ PyObject * TransformTrianglesAdjacency(PyObject * self, PyObject * args, PyObjec
 	OpenGL::glBeginTransformFeedback(OpenGL::GL_TRIANGLES);
 
 	if (vao->indexed) {
-		OpenGL::glDrawArrays(OpenGL::GL_TRIANGLES_ADJACENCY, first, count);
-	} else {
 		const void * ptr = (const void *)((OpenGL::GLintptr)first * 4);
 		OpenGL::glDrawElements(OpenGL::GL_TRIANGLES_ADJACENCY, count, OpenGL::GL_UNSIGNED_INT, ptr);
+	} else {
+		OpenGL::glDrawArrays(OpenGL::GL_TRIANGLES_ADJACENCY, first, count);
 	}
 
 	OpenGL::glEndTransformFeedback();

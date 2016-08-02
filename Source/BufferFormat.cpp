@@ -20,7 +20,9 @@ FormatInfo FormatIterator::info() {
 			break;
 		}
 		info.size += node->count * node->size;
-		++info.nodes;
+		if (node->type) {
+			++info.nodes;
+		}
 	}
 
 	return info;

@@ -16,6 +16,28 @@ PyObject * DebugInfo(PyObject * self) {
 	PyDict_SetItemString(dict, "activeProgram", PyLong_FromLong(activeProgram));
 	PyDict_SetItemString(dict, "activeViewport", viewport);
 
+	switch (OpenGL::glGetError()) {
+		case OpenGL::GL_NO_ERROR:
+			PyDict_SetItemString(dict, "error", PyUnicode_FromString("GL_NO_ERROR"));
+			break;
+
+		case OpenGL::GL_INVALID_ENUM:
+			PyDict_SetItemString(dict, "error", PyUnicode_FromString("GL_INVALID_ENUM"));
+			break;
+
+		case OpenGL::GL_INVALID_VALUE:
+			PyDict_SetItemString(dict, "error", PyUnicode_FromString("GL_INVALID_VALUE"));
+			break;
+
+		case OpenGL::GL_INVALID_OPERATION:
+			PyDict_SetItemString(dict, "error", PyUnicode_FromString("GL_INVALID_OPERATION"));
+			break;
+
+		case OpenGL::GL_OUT_OF_MEMORY:
+			PyDict_SetItemString(dict, "error", PyUnicode_FromString("GL_OUT_OF_MEMORY"));
+			break;
+	}
+
 	PyObject * textures = PyList_New(maxTextureUnits);
 
 	for (int i = 0; i < maxTextureUnits; ++i) {

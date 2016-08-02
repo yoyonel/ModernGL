@@ -206,7 +206,46 @@ PyObject * NewTransformProgram(PyObject * self, PyObject * args) {
 		shader->attached = true;
 	}
 
-	return CreateProgramType(program);
+	PyObject * dict = PyDict_New();
+
+	int uniforms = 0;
+	OpenGL::glGetProgramiv(program, OpenGL::GL_ACTIVE_UNIFORMS, &uniforms);
+	for (int i = 0; i < uniforms; ++i) {
+		char name[64 + 1];
+		int size = 0;
+		int length = 0;
+		unsigned type = 0;
+		OpenGL::glGetActiveUniform(program, i, 64, &length, &size, &type, name);
+		int location = OpenGL::glGetUniformLocation(program, name);
+		name[length] = 0;
+
+		if (type == OpenGL::GL_SAMPLER_2D) {
+			type = OpenGL::GL_INT;
+		}
+
+		if (location >= 0) {
+			PyDict_SetItemString(dict, name, CreateUniformLocationType(location, program, type));
+		}
+	}
+
+	int uniformBlocks = 0;
+	OpenGL::glGetProgramiv(program, OpenGL::GL_ACTIVE_UNIFORM_BLOCKS, &uniformBlocks);
+	for (int i = 0; i < uniformBlocks; ++i) {
+		char name[64 + 1];
+		int size = 0;
+		int length = 0;
+		int location = -1;
+		OpenGL::glGetActiveUniformBlockName(program, i, 64, &length, name);
+		OpenGL::glGetActiveUniformBlockiv(program, i, OpenGL::GL_UNIFORM_BLOCK_BINDING, &location);
+		OpenGL::glGetActiveUniformBlockiv(program, i, OpenGL::GL_UNIFORM_BLOCK_DATA_SIZE, &size);
+		name[length] = 0;
+
+		if (location >= 0) {
+			PyDict_SetItemString(dict, name, CreateUniformBufferLocationType(location, program, size));
+		}
+	}
+
+	return PyTuple_Pack(2, CreateProgramType(program), dict);
 }
 
 PyObject * DeleteProgram(PyObject * self, PyObject * args) {
