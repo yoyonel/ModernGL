@@ -233,7 +233,7 @@ PyObject * UniformBufferLocation_str(UniformBufferLocation * self) {
 }
 
 PyObject * ComputeShader_str(ComputeShader * self) {
-	return PyUnicode_FromFormat("<ComputeShader = %d>", self->shader);
+	return PyUnicode_FromFormat("<ComputeShader = %d>", self->program);
 }
 
 PyObject * EnableFlag_str(EnableFlag * self) {
