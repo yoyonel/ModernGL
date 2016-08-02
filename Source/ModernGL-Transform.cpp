@@ -33,8 +33,8 @@ PyObject * NewTransformArray(PyObject * self, PyObject * args, PyObject * kwargs
 	for (int i = 0; i < count; ++i) {
 		const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i));
 		int location = OpenGL::glGetAttribLocation(program->program, name);
-		if (strict && location < 0) {
-			PyErr_Format(ModuleAttributeNotFound, "NewVertexArray() attribute `%s` not found", name);
+		if (location < 0) {
+			PyErr_Format(ModuleAttributeNotFound, "NewTransformArray() attribute `%s` not found", name);
 			return 0;
 		}
 	}
@@ -60,7 +60,7 @@ PyObject * NewTransformArray(PyObject * self, PyObject * args, PyObject * kwargs
 }
 
 PyObject * DeleteTransformArray(PyObject * self, PyObject * args) {
-	VertexArray * tao;
+	TransformArray * tao;
 
 	if (!PyArg_ParseTuple(args, "O!:DeleteTransformArray", &TransformArrayType, &tao)) {
 		return 0;
@@ -180,14 +180,14 @@ PyObject * RunTransformShader(PyObject * self, PyObject * args, PyObject * kwarg
 	}
 
 	OpenGL::glBindVertexArray(tao->tao);
-	glBindBufferBase(OpenGL::GL_TRANSFORM_FEEDBACK_BUFFER, 0, tao->dst);
+	OpenGL::glBindBufferBase(OpenGL::GL_TRANSFORM_FEEDBACK_BUFFER, 0, tao->dst);
 
-	glEnable(GL_RASTERIZER_DISCARD);
-	glBeginTransformFeedback(GL_POINTS);
+	OpenGL::glEnable(OpenGL::GL_RASTERIZER_DISCARD);
+	OpenGL::glBeginTransformFeedback(OpenGL::GL_POINTS);
 	OpenGL::glDrawArrays(OpenGL::GL_POINTS, first, vertices);
-	glEndTransformFeedback();
-	glDisable(GL_RASTERIZER_DISCARD);
-	glFlush();
+	OpenGL::glEndTransformFeedback();
+	OpenGL::glDisable(OpenGL::GL_RASTERIZER_DISCARD);
+	OpenGL::glFlush();
 
 	OpenGL::glBindVertexArray(defaultVertexArray);
 	Py_RETURN_NONE;
