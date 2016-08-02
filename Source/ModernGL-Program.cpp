@@ -124,6 +124,91 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	return PyTuple_Pack(2, CreateProgramType(program), dict);
 }
 
+PyObject * NewTransformProgram(PyObject * self, PyObject * args) {
+	PyObject * shaders;
+	PyObject * outputs;
+
+	if (!PyArg_ParseTuple(args, "O!O!:NewTransformProgram", &PyList_Type, &shaders, &PyList_Type, &outputs)) {
+		return 0;
+	}
+
+	int count = (int)PyList_Size(shaders);
+
+	int category[NUM_SHADER_CATEGORIES] = {};
+	for (int i = 0; i < count; ++i) {
+		Shader * shader = (Shader *)PyList_GetItem(shaders, i);
+		
+		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("shaders", shader, ShaderType, i);
+		
+		if (shader->attached) {
+			PyErr_Format(ModuleCompileError, "NewTransformProgram() shaders[%d] is already attached to another program", i);
+			return 0;
+		}
+
+		++category[shader->category];
+	}
+
+	for (int i = 0; i < NUM_SHADER_CATEGORIES; ++i) {
+		if (category[i] > 1) {
+			PyErr_Format(ModuleCompileError, "NewTransformProgram() duplicate %s in `shaders`", categoryNames[i]);
+			return 0;
+		}
+	}
+	
+	int program = OpenGL::glCreateProgram();
+
+	for (int i = 0; i < count; ++i) {
+		Shader * shader = (Shader *)PyList_GetItem(shaders, i);
+		OpenGL::glAttachShader(program, shader->shader);
+	}
+
+	int size = PyList_Size(outputs);
+	const char * feedbackVaryings[1024];
+
+	for (int i = 0; i < size; ++i) {
+		feedbackVaryings[i] = PyUnicode_AsUTF8(PyList_GET_ITEM(outputs, i));
+	}
+
+	OpenGL::glTransformFeedbackVaryings(program, size, feedbackVaryings, OpenGL::GL_INTERLEAVED_ATTRIBS);
+
+	int linked = OpenGL::GL_FALSE;
+	OpenGL::glLinkProgram(program);
+	OpenGL::glGetProgramiv(program, OpenGL::GL_LINK_STATUS, &linked);
+
+	if (!linked) {
+		static const char * logTitle = "NewProgram() linking failed\n";
+		static int logTitleLength = strlen(logTitle);
+		
+		int logLength = 0;
+		OpenGL::glGetProgramiv(program, OpenGL::GL_INFO_LOG_LENGTH, &logLength);
+		int logTotalLength = logLength + logTitleLength;
+
+		PyObject * content = PyUnicode_New(logTotalLength, 255);
+		if (PyUnicode_READY(content)) {
+			OpenGL::glDeleteProgram(program);
+			return 0;
+		}
+
+		char * data = (char *)PyUnicode_1BYTE_DATA(content);
+		memcpy(data, logTitle, logTitleLength);
+
+		int logSize = 0;
+		OpenGL::glGetProgramInfoLog(program, logLength, &logSize, data + logTitleLength);
+		data[logTitleLength] = 0;
+
+		OpenGL::glDeleteProgram(program);
+		PyErr_SetObject(ModuleCompileError, content);
+		return 0;
+	}
+
+	for (int i = 0; i < count; ++i) {
+		Shader * shader = (Shader *)PyList_GET_ITEM(shaders, i);
+		shader->attached = true;
+	}
+
+	return CreateProgramType(program);
+}
+
 PyObject * DeleteProgram(PyObject * self, PyObject * args) {
 	Program * program;
 

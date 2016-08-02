@@ -260,6 +260,20 @@ PyObject * SetTextureFiltered(PyObject * self, PyObject * args);
 PyObject * SetTextureMipmapped(PyObject * self, PyObject * args);
 PyObject * SetTexturePixelated(PyObject * self, PyObject * args);
 
+PyObject * NewTransformProgram(PyObject * self, PyObject * args);
+
+PyObject * TransformPoints(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformTriangles(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformTriangleStrip(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformTriangleFan(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformLines(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformLineStrip(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformLineLoop(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformLineStripAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformLinesAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformTriangleStripAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * TransformTrianglesAdjacency(PyObject * self, PyObject * args, PyObject * kwargs);
+
 PyObject * DebugInfo(PyObject * self);
 PyObject * DebugVar(PyObject * self, PyObject * args);
 
@@ -363,6 +377,20 @@ PyObject * Dummy_UseTextureAsImage(PyObject * self);
 PyObject * Dummy_SetTextureFiltered(PyObject * self);
 PyObject * Dummy_SetTextureMipmapped(PyObject * self);
 PyObject * Dummy_SetTexturePixelated(PyObject * self);
+
+PyObject * Dummy_NewTransformProgram(PyObject * self);
+
+PyObject * Dummy_TransformPoints(PyObject * self);
+PyObject * Dummy_TransformTriangles(PyObject * self);
+PyObject * Dummy_TransformTriangleStrip(PyObject * self);
+PyObject * Dummy_TransformTriangleFan(PyObject * self);
+PyObject * Dummy_TransformLines(PyObject * self);
+PyObject * Dummy_TransformLineStrip(PyObject * self);
+PyObject * Dummy_TransformLineLoop(PyObject * self);
+PyObject * Dummy_TransformLineStripAdjacency(PyObject * self);
+PyObject * Dummy_TransformLinesAdjacency(PyObject * self);
+PyObject * Dummy_TransformTriangleStripAdjacency(PyObject * self);
+PyObject * Dummy_TransformTrianglesAdjacency(PyObject * self);
 
 PyObject * Dummy_DebugInfo(PyObject * self);
 PyObject * Dummy_DebugVar(PyObject * self);
