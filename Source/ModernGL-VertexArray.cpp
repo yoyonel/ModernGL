@@ -3,7 +3,7 @@
 #include "OpenGL.hpp"
 #include "BufferFormat.hpp"
 
-PyObject * NewVertexArray(PyObject * self, PyObject * args) {
+PyObject * NewVertexArray(PyObject * self, PyObject * args, PyObject * kwargs) {
 	Program * program;
 	VertexBuffer * vbo;
 	const char * format;
@@ -11,9 +11,10 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 
 	IndexBuffer * no_ibo = (IndexBuffer *)Py_None;
 	IndexBuffer * ibo = no_ibo;
-	bool strict = false;
 
-	if (!PyArg_ParseTuple(args, "O!O!sO!|Op:NewVertexArray", &ProgramType, &program, &VertexBufferType, &vbo, &format, &PyList_Type, &attributes, &ibo, &strict)) {
+	static const char * kwlist[] = {"program", "vbo", "format", "attributes", "ibo", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!O!sO!|O:NewVertexArray", (char **)kwlist, &ProgramType, &program, &VertexBufferType, &vbo, &format, &PyList_Type, &attributes, &ibo)) {
 		return 0;
 	}
 
@@ -42,7 +43,7 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	for (int i = 0; i < count; ++i) {
 		const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i));
 		int location = OpenGL::glGetAttribLocation(program->program, name);
-		if (!strict && location < 0) {
+		if (location < 0) {
 			PyErr_Format(ModuleAttributeNotFound, "NewVertexArray() attribute `%s` not found", name);
 			return 0;
 		}
@@ -75,17 +76,20 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args) {
 	return CreateVertexArrayType(vao, program->program, ibo != no_ibo);
 }
 
-PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args) {
+PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args, PyObject * kwargs) {
 	Program * program;
 	PyObject * content;
 
 	IndexBuffer * no_ibo = (IndexBuffer *)Py_None;
 	IndexBuffer * ibo = no_ibo;
-	bool strict = false;
 
-	if (!PyArg_ParseTuple(args, "O!O!|O!p:NewAdvancedVertexArray", &ProgramType, &program, &PyList_Type, &content, &IndexBufferType, &ibo)) {
+	static const char * kwlist[] = {"program", "content", "ibo", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!O!|O!:NewAdvancedVertexArray", (char **)kwargs, &ProgramType, &program, &PyList_Type, &content, &IndexBufferType, &ibo)) {
 		return 0;
 	}
+
+	// TODO: upgrade
 
 	int vao = 0;
 	OpenGL::glGenVertexArrays(1, (OpenGL::GLuint *)&vao);
