@@ -126,11 +126,6 @@ struct ComputeShader {
 	int program;
 };
 
-struct EnableFlag {
-	PyObject_HEAD
-	unsigned value;
-};
-
 struct TransformShader {
 	PyObject_HEAD
 	int shader;
@@ -140,6 +135,11 @@ struct TransformShader {
 struct TransformArray {
 	PyObject_HEAD
 	int tao;
+};
+
+struct EnableFlag {
+	PyObject_HEAD
+	unsigned value;
 };
 
 extern PyTypeObject FramebufferType;
@@ -154,9 +154,9 @@ extern PyTypeObject ProgramType;
 extern PyTypeObject UniformLocationType;
 extern PyTypeObject UniformBufferLocationType;
 extern PyTypeObject ComputeShaderType;
-extern PyTypeObject EnableFlagType;
 extern PyTypeObject TransformShaderType;
 extern PyTypeObject TransformArrayType;
+extern PyTypeObject EnableFlagType;
 
 PyObject * CreateFramebufferType(int fbo, int color, int depth);
 PyObject * CreateVertexArrayType(int vao, int program, bool indexed);
@@ -170,9 +170,9 @@ PyObject * CreateProgramType(int program);
 PyObject * CreateUniformLocationType(int location, int program, int type);
 PyObject * CreateUniformBufferLocationType(int location, int program, int size);
 PyObject * CreateComputeShaderType(int shader, int program);
-PyObject * CreateEnableFlagType(unsigned value);
 PyObject * CreateTransformShaderType(int shader, int program);
 PyObject * CreateTransformArrayType();
+PyObject * CreateEnableFlagType(unsigned value);
 
 PyObject * InitializeModernGL(PyObject * self, PyObject * args);
 
