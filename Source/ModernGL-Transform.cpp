@@ -2,6 +2,14 @@
 
 #include "OpenGL.hpp"
 
+PyObject * NewTransformArray(PyObject * self, PyObject * args, PyObject * kwargs) {
+	return CreateTransformArrayType();
+}
+
+PyObject * DeleteTransformArray(PyObject * self, PyObject * args) {
+	Py_RETURN_NONE;
+}
+
 PyObject * NewTransformShader(PyObject * self, PyObject * args) {
 	const char * source;
 
@@ -94,6 +102,6 @@ PyObject * DeleteTransformShader(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * NewTransformArray(PyObject * self, PyObject * args, PyObject * kwargs) {
+PyObject * RunTransformShader(PyObject * self, PyObject * args, PyObject * kwargs) {
 	Py_RETURN_NONE;
 }

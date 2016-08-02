@@ -275,6 +275,13 @@ PyObject * SetTextureFiltered(PyObject * self, PyObject * args);
 PyObject * SetTextureMipmapped(PyObject * self, PyObject * args);
 PyObject * SetTexturePixelated(PyObject * self, PyObject * args);
 
+PyObject * NewTransformArray(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * DeleteTransformArray(PyObject * self, PyObject * args);
+
+PyObject * NewTransformShader(PyObject * self, PyObject * args);
+PyObject * DeleteTransformShader(PyObject * self, PyObject * args);
+PyObject * RunTransformShader(PyObject * self, PyObject * args, PyObject * kwargs);
+
 PyObject * DebugInfo(PyObject * self);
 PyObject * DebugVar(PyObject * self, PyObject * args);
 
@@ -378,6 +385,13 @@ PyObject * Dummy_UseTextureAsImage(PyObject * self);
 PyObject * Dummy_SetTextureFiltered(PyObject * self);
 PyObject * Dummy_SetTextureMipmapped(PyObject * self);
 PyObject * Dummy_SetTexturePixelated(PyObject * self);
+
+PyObject * Dummy_NewTransformArray(PyObject * self);
+PyObject * Dummy_DeleteTransformArray(PyObject * self);
+
+PyObject * Dummy_NewTransformShader(PyObject * self);
+PyObject * Dummy_DeleteTransformShader(PyObject * self);
+PyObject * Dummy_RunTransformShader(PyObject * self);
 
 PyObject * Dummy_DebugInfo(PyObject * self);
 PyObject * Dummy_DebugVar(PyObject * self);

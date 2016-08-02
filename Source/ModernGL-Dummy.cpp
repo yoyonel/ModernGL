@@ -684,6 +684,51 @@ PyObject * Dummy_SetTexturePixelated(PyObject * self) {
 	return 0;
 }
 
+PyObject * Dummy_NewTransformArray(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "NewTransformArray() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "NewTransformArray() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_DeleteTransformArray(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "DeleteTransformArray() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "DeleteTransformArray() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_NewTransformShader(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "NewTransformShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "NewTransformShader() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_DeleteTransformShader(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "DeleteTransformShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "DeleteTransformShader() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_RunTransformShader(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "RunTransformShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "RunTransformShader() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
 PyObject * Dummy_DebugInfo(PyObject * self) {
 	if (!initialized) {
 		PyErr_SetString(ModuleNotInitialized, "DebugInfo() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
