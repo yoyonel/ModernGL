@@ -14,7 +14,7 @@ except ImportError:
 	from distutils.core import setup
 	from distutils.extension import Extension
 
-Version = '2.3.0'
+Version = '2.3.1'
 
 ShortDescription = 'modern OpenGL binding for Python'
 
