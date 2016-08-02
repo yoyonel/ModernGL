@@ -3,6 +3,7 @@
 # 2.3.1
 
 - Added padding and double format to VertexArray
+- Added Transform feedback methods
 
 # 2.3.0
 
