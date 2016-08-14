@@ -630,11 +630,11 @@ PyObject * Dummy_DeleteTexture(PyObject * self) {
 	return 0;
 }
 
-PyObject * Dummy_BuildMipmap(PyObject * self) {
+PyObject * Dummy_BuildMipmaps(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "BuildMipmap() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "BuildMipmaps() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
 	} else {
-		PyErr_SetString(ModuleNotSupported, "BuildMipmap() function not initialized. OpenGL 3.1 is required.");
+		PyErr_SetString(ModuleNotSupported, "BuildMipmaps() function not initialized. OpenGL 3.1 is required.");
 	}
 	return 0;
 }

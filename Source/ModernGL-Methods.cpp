@@ -776,10 +776,10 @@ Implementation implementation[] = {
 	},
 	{
 		301,
-		(PyCFunction)BuildMipmap,
-		(PyCFunction)Dummy_BuildMipmap,
+		(PyCFunction)BuildMipmaps,
+		(PyCFunction)Dummy_BuildMipmaps,
 		METH_VARARGS | METH_KEYWORDS,
-		"BuildMipmap",
+		"BuildMipmaps",
 		"Generate the mipmaps for the texture.\n"
 		"\n"
 

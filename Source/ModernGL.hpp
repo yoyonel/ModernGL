@@ -92,6 +92,7 @@ struct Texture {
 	int width;
 	int height;
 	int components;
+	bool floats;
 };
 
 struct Shader {
@@ -151,7 +152,7 @@ PyObject * CreateVertexBufferType(int vbo, int size);
 PyObject * CreateIndexBufferType(int ibo, int size);
 PyObject * CreateUniformBufferType(int ubo, int size);
 PyObject * CreateStorageBufferType(int sbo, int size);
-PyObject * CreateTextureType(int texture, int width, int height, int components);
+PyObject * CreateTextureType(int texture, int width, int height, int components, bool floats);
 PyObject * CreateShaderType(int shader, ShaderCategory category);
 PyObject * CreateProgramType(int program);
 PyObject * CreateUniformLocationType(int location, int program, int type);
@@ -251,7 +252,7 @@ PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs);
 PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs);
 PyObject * DeleteTexture(PyObject * self, PyObject * args);
 
-PyObject * BuildMipmap(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * BuildMipmaps(PyObject * self, PyObject * args, PyObject * kwargs);
 
 PyObject * UseTexture(PyObject * self, PyObject * args);
 PyObject * UseTextureAsImage(PyObject * self, PyObject * args, PyObject * kwargs);
@@ -369,7 +370,7 @@ PyObject * Dummy_NewTexture(PyObject * self);
 PyObject * Dummy_UpdateTexture(PyObject * self);
 PyObject * Dummy_DeleteTexture(PyObject * self);
 
-PyObject * Dummy_BuildMipmap(PyObject * self);
+PyObject * Dummy_BuildMipmaps(PyObject * self);
 
 PyObject * Dummy_UseTexture(PyObject * self);
 PyObject * Dummy_UseTextureAsImage(PyObject * self);
