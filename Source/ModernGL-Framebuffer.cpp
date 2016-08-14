@@ -149,7 +149,8 @@ PyObject * ReadDepthPixels(PyObject * self, PyObject * args, PyObject * kwargs) 
 		PyErr_Format(ModuleRangeError, "ReadDepthPixels() width = %d height = %d", width, height);
 	}
 
-	int size = width * height * 4;
+	int size = floats ? (width * height * 4) : (height * ((width + 3) & ~3));
+
 	PyObject * bytes = PyBytes_FromStringAndSize(0, size);
 	char * data = PyBytes_AS_STRING(bytes);
 	OpenGL::glReadPixels(x, y, width, height, OpenGL::GL_DEPTH_COMPONENT, floats ? OpenGL::GL_FLOAT : OpenGL::GL_UNSIGNED_BYTE, data);
