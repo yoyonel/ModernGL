@@ -8,10 +8,11 @@ PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 	const void * data;
 	int components = 3;
 	int size;
+	bool floats = false;
 
-	static const char * kwlist[] = {"width", "height", "data", "components", 0};
+	static const char * kwlist[] = {"width", "height", "data", "components", "floats", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiy#|i:NewTexture", (char **)kwlist, &width, &height, &data, &size, &components)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiy#|ip:NewTexture", (char **)kwlist, &width, &height, &data, &size, &components, &floats)) {
 		return 0;
 	}
 
@@ -27,6 +28,8 @@ PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 	}
 
 	const int formats[] = {0, OpenGL::GL_RED, OpenGL::GL_RG, OpenGL::GL_RGB, OpenGL::GL_RGBA};
+
+	int pixel_type = floats ? OpenGL::GL_FLOAT : OpenGL::GL_UNSIGNED_BYTE;
 	int format = formats[components];
 
 	OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
@@ -36,8 +39,8 @@ PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture);
 	OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
 	OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
-	OpenGL::glTexImage2D(OpenGL::GL_TEXTURE_2D, 0, format, width, height, 0, format, OpenGL::GL_UNSIGNED_BYTE, data);
-	return CreateTextureType(texture, width, height, components);
+	OpenGL::glTexImage2D(OpenGL::GL_TEXTURE_2D, 0, format, width, height, 0, format, pixel_type, data);
+	return CreateTextureType(texture, width, height, components, floats);
 }
 
 PyObject * DeleteTexture(PyObject * self, PyObject * args) {
@@ -79,11 +82,13 @@ PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 	}
 	
 	const int formats[] = {0, OpenGL::GL_RED, OpenGL::GL_RG, OpenGL::GL_RGB, OpenGL::GL_RGBA};
+
+	int pixel_type = texture->floats ? OpenGL::GL_FLOAT : OpenGL::GL_UNSIGNED_BYTE;
 	int format = formats[texture->components];
 	
 	OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
 	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture->texture);
-	OpenGL::glTexSubImage2D(OpenGL::GL_TEXTURE_2D, 0, x, y, width, height, format, OpenGL::GL_UNSIGNED_BYTE, data);
+	OpenGL::glTexSubImage2D(OpenGL::GL_TEXTURE_2D, 0, x, y, width, height, format, pixel_type, data);
 	Py_RETURN_NONE;
 }
 
@@ -173,9 +178,17 @@ PyObject * UseTextureAsImage(PyObject * self, PyObject * args, PyObject * kwargs
 		return 0;
 	}
 
-	const int formats[] = {0, OpenGL::GL_R8UI, OpenGL::GL_RG8UI, OpenGL::GL_RGB8UI, OpenGL::GL_RGBA8UI};
-	int format = formats[texture->components];
+	if (texture->floats) {
+		const int formats[] = {0, OpenGL::GL_R8UI, OpenGL::GL_RG8UI, OpenGL::GL_RGB8UI, OpenGL::GL_RGBA8UI};
+		int format = formats[texture->components];
+		
+		OpenGL::glBindImageTexture(binding, texture->texture, 0, false, 0, OpenGL::GL_READ_WRITE, format);
+	} else {
+		const int formats[] = {0, OpenGL::GL_R32F, OpenGL::GL_RG32F, OpenGL::GL_RGB32F, OpenGL::GL_RGBA32F};
+		int format = formats[texture->components];
+		
+		OpenGL::glBindImageTexture(binding, texture->texture, 0, false, 0, OpenGL::GL_READ_WRITE, format);
+	}
 	
-	OpenGL::glBindImageTexture(binding, texture->texture, 0, false, 0, OpenGL::GL_READ_WRITE, format);
 	Py_RETURN_NONE;
 }

@@ -92,6 +92,7 @@ struct Texture {
 	int width;
 	int height;
 	int components;
+	bool floats;
 };
 
 struct Shader {
@@ -151,7 +152,7 @@ PyObject * CreateVertexBufferType(int vbo, int size);
 PyObject * CreateIndexBufferType(int ibo, int size);
 PyObject * CreateUniformBufferType(int ubo, int size);
 PyObject * CreateStorageBufferType(int sbo, int size);
-PyObject * CreateTextureType(int texture, int width, int height, int components);
+PyObject * CreateTextureType(int texture, int width, int height, int components, bool floats);
 PyObject * CreateShaderType(int shader, ShaderCategory category);
 PyObject * CreateProgramType(int program);
 PyObject * CreateUniformLocationType(int location, int program, int type);
