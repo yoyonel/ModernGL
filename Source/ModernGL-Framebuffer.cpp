@@ -6,14 +6,19 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int width = 0;
 	int height = 0;
 
-	static const char * kwlist[] = {"width", "height", 0};
+	int components = 4;
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|ii:NewFramebuffer", (char **)kwlist, &width, &height)) {
+	bool floats = false;
+	bool depth = true;
+
+	static const char * kwlist[] = {"width", "height", "components", "floats", "depth", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|iiip:NewFramebuffer", (char **)kwlist, &width, &height, &components, &floats, &depth)) {
 		return 0;
 	}
 
 	if (!width && !height) {
-		width = activeViewportWidth;
+		width = activeViewportWidth; // todo query with glGet (slower but ok)
 		height = activeViewportHeight;
 	}
 
@@ -21,35 +26,49 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 		PyErr_Format(ModuleRangeError, "NewFramebuffer() width = %d height = %d", width, height);
 	}
 
+	const int formats[] = {0, OpenGL::GL_RED, OpenGL::GL_RG, OpenGL::GL_RGB, OpenGL::GL_RGBA};
+
+	int pixel_type = floats ? OpenGL::GL_FLOAT : OpenGL::GL_UNSIGNED_BYTE;
+	int format = formats[components];
+
 	int framebuffer = 0;
-	int color = 0;
-	int depth = 0;
+	int colorTexture = 0;
+	int depthTexture = 0;
 
 	OpenGL::glGenFramebuffers(1, (OpenGL::GLuint *)&framebuffer);
 	OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, framebuffer);
 
-	OpenGL::glGenTextures(1, (OpenGL::GLuint *)&color);
-	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, color);
+	OpenGL::glGenTextures(1, (OpenGL::GLuint *)&colorTexture);
+	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, colorTexture);
 
 	OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
 	OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
-	OpenGL::glTexImage2D(OpenGL::GL_TEXTURE_2D, 0, OpenGL::GL_RGBA, width, height, 0, OpenGL::GL_RGBA, OpenGL::GL_FLOAT, 0);
-	OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_COLOR_ATTACHMENT0, OpenGL::GL_TEXTURE_2D, color, 0);
+	OpenGL::glTexImage2D(OpenGL::GL_TEXTURE_2D, 0, format, width, height, 0, format, pixel_type, 0);
+	OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_COLOR_ATTACHMENT0, OpenGL::GL_TEXTURE_2D, colorTexture, 0);
 
-	OpenGL::glGenTextures(1, (OpenGL::GLuint *)&depth);
-	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, depth);
-	OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
-	OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
-	OpenGL::glTexImage2D(OpenGL::GL_TEXTURE_2D, 0, OpenGL::GL_DEPTH_COMPONENT, width, height, 0, OpenGL::GL_DEPTH_COMPONENT, OpenGL::GL_FLOAT, 0);
-	OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_DEPTH_ATTACHMENT, OpenGL::GL_TEXTURE_2D, depth, 0);
+	if (depth) {
+		OpenGL::glGenTextures(1, (OpenGL::GLuint *)&depthTexture);
+		OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, depthTexture);
+		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MIN_FILTER, OpenGL::GL_LINEAR);
+		OpenGL::glTexParameteri(OpenGL::GL_TEXTURE_2D, OpenGL::GL_TEXTURE_MAG_FILTER, OpenGL::GL_LINEAR);
+		OpenGL::glTexImage2D(OpenGL::GL_TEXTURE_2D, 0, OpenGL::GL_DEPTH_COMPONENT, width, height, 0, OpenGL::GL_DEPTH_COMPONENT, OpenGL::GL_FLOAT, 0);
+		OpenGL::glFramebufferTexture2D(OpenGL::GL_FRAMEBUFFER, OpenGL::GL_DEPTH_ATTACHMENT, OpenGL::GL_TEXTURE_2D, depthTexture, 0);
+	}
 
 	OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, defaultFramebuffer);
 
-	PyObject * fbo = CreateFramebufferType(framebuffer, color, depth);
-	PyObject * colorTexture = CreateTextureType(color, width, height, 4);
-	PyObject * depthTexture = CreateTextureType(depth, width, height, 1);
+	PyObject * tuple = PyTuple_New(floats ? 3 : 2);
 
-	return Py_BuildValue("OOO", fbo, colorTexture, depthTexture);
+	PyTuple_SET_ITEM(tuple, 0, CreateFramebufferType(framebuffer, colorTexture, depthTexture));
+	PyTuple_SET_ITEM(tuple, 1, CreateTextureType(colorTexture, width, height, 4));
+
+	if (depth) {
+		PyTuple_SET_ITEM(tuple, 2, CreateTextureType(depthTexture, width, height, 1));
+	}
+
+	// validate fbo (https://www.opengl.org/wiki/Framebuffer_Object) (Framebuffer Completeness)
+
+	return tuple;
 }
 
 PyObject * DeleteFramebuffer(PyObject * self, PyObject * args) {
@@ -84,7 +103,7 @@ PyObject * UseFramebuffer(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * SetDefaultFramebuffer(PyObject * self, PyObject * args) {
+PyObject * SetDefaultFramebuffer(PyObject * self, PyObject * args) { // TODO: mark as deprecated allow: def_fbo = Framebuffer(2) # QT
 	int fbo;
 
 	if (!PyArg_ParseTuple(args, "i:SetDefaultFramebuffer", &fbo)) {
@@ -95,7 +114,7 @@ PyObject * SetDefaultFramebuffer(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * UseDefaultFramebuffer(PyObject * self) {
+PyObject * UseDefaultFramebuffer(PyObject * self) { // TODO: mark as deprecated
 	OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, defaultFramebuffer);
 	Py_RETURN_NONE;
 }
@@ -119,6 +138,7 @@ PyObject * ReadPixels(PyObject * self, PyObject * args, PyObject * kwargs) {
 	}
 
 	int size = floats ? (width * height * 4) : (height * ((width * components + 3) & ~3));
+	int pixel_type = floats ? OpenGL::GL_FLOAT : OpenGL::GL_UNSIGNED_BYTE;
 
 	const int formats[] = {0, OpenGL::GL_RED, OpenGL::GL_RG, OpenGL::GL_RGB, OpenGL::GL_RGBA};
 	int format = formats[components];
@@ -126,7 +146,7 @@ PyObject * ReadPixels(PyObject * self, PyObject * args, PyObject * kwargs) {
 	PyObject * bytes = PyBytes_FromStringAndSize(0, size);
 	char * data = PyBytes_AS_STRING(bytes);
 
-	OpenGL::glReadPixels(x, y, width, height, format, floats ? OpenGL::GL_FLOAT : OpenGL::GL_UNSIGNED_BYTE, data);
+	OpenGL::glReadPixels(x, y, width, height, format, pixel_type, data);
 	data[size] = 0;
 	
 	return bytes;
@@ -150,10 +170,11 @@ PyObject * ReadDepthPixels(PyObject * self, PyObject * args, PyObject * kwargs) 
 	}
 
 	int size = floats ? (width * height * 4) : (height * ((width + 3) & ~3));
+	int pixel_type = floats ? OpenGL::GL_FLOAT : OpenGL::GL_UNSIGNED_BYTE;
 
 	PyObject * bytes = PyBytes_FromStringAndSize(0, size);
 	char * data = PyBytes_AS_STRING(bytes);
-	OpenGL::glReadPixels(x, y, width, height, OpenGL::GL_DEPTH_COMPONENT, floats ? OpenGL::GL_FLOAT : OpenGL::GL_UNSIGNED_BYTE, data);
+	OpenGL::glReadPixels(x, y, width, height, OpenGL::GL_DEPTH_COMPONENT, pixel_type, data);
 	data[size] = 0;
 
 	return bytes;
@@ -174,6 +195,7 @@ PyObject * ReadPixel(PyObject * self, PyObject * args, PyObject * kwargs) {
 	if (components < 1 || components > 4) {
 		// TODO:
 	}
+	
 	PyObject * tuple = PyTuple_New(components);
 
 	if (floats) {
