@@ -60,8 +60,15 @@ PyObject * DeleteFramebuffer(PyObject * self, PyObject * args) {
 	}
 
 	OpenGL::glDeleteFramebuffers(1, (OpenGL::GLuint *)&fbo->fbo);
-	OpenGL::glDeleteTextures(1, (OpenGL::GLuint *)&fbo->color);
-	OpenGL::glDeleteTextures(1, (OpenGL::GLuint *)&fbo->depth);
+
+	if (fbo->color) {
+		OpenGL::glDeleteTextures(1, (OpenGL::GLuint *)&fbo->color);
+	}
+
+	if (fbo->depth) {
+		OpenGL::glDeleteTextures(1, (OpenGL::GLuint *)&fbo->depth);
+	}
+	
 	Py_RETURN_NONE;
 }
 
