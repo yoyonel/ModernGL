@@ -110,7 +110,7 @@ PyObject * ReadPixels(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"x", "y", "width", "height", "components", "floats", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii|ip:ReadPixels", (char **)kwlist, &x, &y, &width, &height, &components)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii|ip:ReadPixels", (char **)kwlist, &x, &y, &width, &height, &components, &floats)) {
 		return 0;
 	}
 
@@ -141,7 +141,7 @@ PyObject * ReadDepthPixels(PyObject * self, PyObject * args, PyObject * kwargs) 
 
 	static const char * kwlist[] = {"x", "y", "width", "height", "floats", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii:ReadDepthPixels", (char **)kwlist, &x, &y, &width, &height)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii|p:ReadDepthPixels", (char **)kwlist, &x, &y, &width, &height, &floats)) {
 		return 0;
 	}
 
@@ -162,29 +162,55 @@ PyObject * ReadDepthPixels(PyObject * self, PyObject * args, PyObject * kwargs) 
 PyObject * ReadPixel(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int x;
 	int y;
+	int components = 3;
+	bool floats = false;
 
-	static const char * kwlist[] = {"x", "y", 0};
+	static const char * kwlist[] = {"x", "y", "components", "floats", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii:ReadPixel", (char **)kwlist, &x, &y)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|ip:ReadPixel", (char **)kwlist, &x, &y, &components, &floats)) {
 		return 0;
 	}
 
-	unsigned rgba = 0;
-	OpenGL::glReadPixels(x, y, 1, 1, OpenGL::GL_RGBA, OpenGL::GL_UNSIGNED_BYTE, &rgba);
-	return PyLong_FromUnsignedLong(rgba);
+	if (components < 1 || components > 4) {
+		// TODO:
+	}
+	PyObject * tuple = PyTuple_New(components);
+
+	if (floats) {
+		float rgba[4];
+		OpenGL::glReadPixels(x, y, 1, 1, OpenGL::GL_RGBA, OpenGL::GL_FLOAT, &rgba);
+		for (int i = 0; i < components; ++i) {
+			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(rgba[i]));
+		}
+	} else {
+		unsigned char rgba[4];
+		OpenGL::glReadPixels(x, y, 1, 1, OpenGL::GL_RGBA, OpenGL::GL_UNSIGNED_BYTE, &rgba);
+		for (int i = 0; i < components; ++i) {
+			PyTuple_SET_ITEM(tuple, i, PyLong_FromUnsignedLong(rgba[i]));
+		}
+	}
+
+	return tuple;
 }
 
 PyObject * ReadDepthPixel(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int x;
 	int y;
+	bool floats = true;
 
-	static const char * kwlist[] = {"x", "y", 0};
+	static const char * kwlist[] = {"x", "y", "floats", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii:ReadDepthPixel", (char **)kwlist, &x, &y)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "ii|p:ReadDepthPixel", (char **)kwlist, &x, &y, &floats)) {
 		return 0;
 	}
 
-	float depth = 0.0;
-	OpenGL::glReadPixels(x, y, 1, 1, OpenGL::GL_DEPTH_COMPONENT, OpenGL::GL_FLOAT, &depth);
-	return PyFloat_FromDouble(depth);
+	if (floats) {
+		float depth = 0.0;
+		OpenGL::glReadPixels(x, y, 1, 1, OpenGL::GL_DEPTH_COMPONENT, OpenGL::GL_FLOAT, &depth);
+		return PyFloat_FromDouble(depth);
+	} else {
+		unsigned depth = 0;
+		OpenGL::glReadPixels(x, y, 1, 1, OpenGL::GL_DEPTH_COMPONENT, OpenGL::GL_UNSIGNED_BYTE, &depth);
+		return PyLong_FromUnsignedLong(depth);
+	}
 }
