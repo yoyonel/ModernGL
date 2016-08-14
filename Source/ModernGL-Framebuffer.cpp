@@ -68,7 +68,7 @@ PyObject * DeleteFramebuffer(PyObject * self, PyObject * args) {
 	if (fbo->depth) {
 		OpenGL::glDeleteTextures(1, (OpenGL::GLuint *)&fbo->depth);
 	}
-	
+
 	Py_RETURN_NONE;
 }
 
@@ -80,7 +80,7 @@ PyObject * UseFramebuffer(PyObject * self, PyObject * args) {
 	}
 
 	OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, fbo->fbo);
-	activeProgram = fbo->fbo;
+
 	Py_RETURN_NONE;
 }
 
