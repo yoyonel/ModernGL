@@ -2,6 +2,7 @@
 
 # 2.3.1
 
+- Framebuffer and Texture improvments
 - Added padding and double format to VertexArray
 - Added Transform feedback methods
 - Removed strict parameter from NewVertexArray
