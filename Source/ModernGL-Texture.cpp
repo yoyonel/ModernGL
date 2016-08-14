@@ -15,7 +15,7 @@ PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
-	if (width < 0 || height < 0 || components < 1 || components > 4) {
+	if (width <= 0 || height <= 0 || components < 1 || components > 4) {
 		PyErr_Format(ModuleRangeError, "NewTexture() width = %d height = %d components = %d", width, height, components);
 	}
 
@@ -28,13 +28,6 @@ PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	const int formats[] = {0, OpenGL::GL_RED, OpenGL::GL_RG, OpenGL::GL_RGB, OpenGL::GL_RGBA};
 	int format = formats[components];
-
-	if (!width && !height) {
-		int viewportValue[4];
-		OpenGL::glGetIntegerv(OpenGL::GL_VIEWPORT, viewportValue);
-		width = viewportValue[2];
-		height = viewportValue[3];
-	}
 
 	OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
 
@@ -60,17 +53,25 @@ PyObject * DeleteTexture(PyObject * self, PyObject * args) {
 
 PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 	Texture * texture;
-	int x;
-	int y;
-	int width;
-	int height;
+	int x = 0;
+	int y = 0;
+	int width = 0;
+	int height = 0;
 	const void * data;
 	int size;
 
-	static const char * kwlist[] = {"texture", "x", "y", "width", "height", "data", 0};
+	static const char * kwlist[] = {"texture", "data", "x", "y", "width", "height", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!iiiiy#|i:UpdateTexture", (char **)kwlist, &TextureType, &texture, &x, &y, &width, &height, &data, &size)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!y#|iiii:UpdateTexture", (char **)kwlist, &TextureType, &texture, &data, &size, &x, &y, &width, &height)) {
 		return 0;
+	}
+
+	if (width == 0) {
+		width = texture->width;
+	}
+
+	if (height == 0) {
+		height = texture->height;
 	}
 
 	if (x < 0 || y < 0 || width < 0 || height < 0 || x + width > texture->width || y + height > texture->height) {
@@ -141,14 +142,14 @@ PyObject * SetTextureMipmapped(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * BuildMipmap(PyObject * self, PyObject * args, PyObject * kwargs) {
+PyObject * BuildMipmaps(PyObject * self, PyObject * args, PyObject * kwargs) {
 	Texture * texture;
 	int base = 0;
 	int max = 1000;
 
 	static const char * kwlist[] = {"texture", "base", "max", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!|ii:BuildMipmap", (char **)kwlist, &TextureType, &texture, &base, &max)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!|ii:BuildMipmaps", (char **)kwlist, &TextureType, &texture, &base, &max)) {
 		return 0;
 	}
 
@@ -168,7 +169,7 @@ PyObject * UseTextureAsImage(PyObject * self, PyObject * args, PyObject * kwargs
 
 	static const char * kwlist[] = {"texture", "binding", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!|ii:UseTextureAsImage", (char **)kwlist, &TextureType, &texture, &binding)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O!|i:UseTextureAsImage", (char **)kwlist, &TextureType, &texture, &binding)) {
 		return 0;
 	}
 

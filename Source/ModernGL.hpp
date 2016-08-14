@@ -251,7 +251,7 @@ PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs);
 PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs);
 PyObject * DeleteTexture(PyObject * self, PyObject * args);
 
-PyObject * BuildMipmap(PyObject * self, PyObject * args, PyObject * kwargs);
+PyObject * BuildMipmaps(PyObject * self, PyObject * args, PyObject * kwargs);
 
 PyObject * UseTexture(PyObject * self, PyObject * args);
 PyObject * UseTextureAsImage(PyObject * self, PyObject * args, PyObject * kwargs);
@@ -369,7 +369,7 @@ PyObject * Dummy_NewTexture(PyObject * self);
 PyObject * Dummy_UpdateTexture(PyObject * self);
 PyObject * Dummy_DeleteTexture(PyObject * self);
 
-PyObject * Dummy_BuildMipmap(PyObject * self);
+PyObject * Dummy_BuildMipmaps(PyObject * self);
 
 PyObject * Dummy_UseTexture(PyObject * self);
 PyObject * Dummy_UseTextureAsImage(PyObject * self);
