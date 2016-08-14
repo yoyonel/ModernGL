@@ -106,18 +106,19 @@ PyObject * ReadPixels(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int width;
 	int height;
 	int components = 3;
+	bool floats = false;
 
-	static const char * kwlist[] = {"x", "y", "width", "height", "components", 0};
+	static const char * kwlist[] = {"x", "y", "width", "height", "components", "floats", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii|i:ReadPixels", (char **)kwlist, &x, &y, &width, &height, &components)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii|ip:ReadPixels", (char **)kwlist, &x, &y, &width, &height, &components)) {
 		return 0;
 	}
 
-	if (width < 0 || height < 0 || components < 1 || components > 4) {
+	if (width <= 0 || height <= 0 || components < 1 || components > 4) {
 		PyErr_Format(ModuleRangeError, "ReadPixels() width = %d height = %d components = %d", width, height, components);
 	}
 
-	int size = height * ((width * components + 3) & ~3);
+	int size = floats ? (width * height * 4) : (height * ((width * components + 3) & ~3));
 
 	const int formats[] = {0, OpenGL::GL_RED, OpenGL::GL_RG, OpenGL::GL_RGB, OpenGL::GL_RGBA};
 	int format = formats[components];
@@ -125,7 +126,7 @@ PyObject * ReadPixels(PyObject * self, PyObject * args, PyObject * kwargs) {
 	PyObject * bytes = PyBytes_FromStringAndSize(0, size);
 	char * data = PyBytes_AS_STRING(bytes);
 
-	OpenGL::glReadPixels(x, y, width, height, format, OpenGL::GL_UNSIGNED_BYTE, data);
+	OpenGL::glReadPixels(x, y, width, height, format, floats ? OpenGL::GL_FLOAT : OpenGL::GL_UNSIGNED_BYTE, data);
 	data[size] = 0;
 	
 	return bytes;
@@ -136,8 +137,9 @@ PyObject * ReadDepthPixels(PyObject * self, PyObject * args, PyObject * kwargs) 
 	int y;
 	int width;
 	int height;
+	bool floats = true;
 
-	static const char * kwlist[] = {"x", "y", "width", "height", 0};
+	static const char * kwlist[] = {"x", "y", "width", "height", "floats", 0};
 
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "iiii:ReadDepthPixels", (char **)kwlist, &x, &y, &width, &height)) {
 		return 0;
@@ -150,7 +152,7 @@ PyObject * ReadDepthPixels(PyObject * self, PyObject * args, PyObject * kwargs) 
 	int size = width * height * 4;
 	PyObject * bytes = PyBytes_FromStringAndSize(0, size);
 	char * data = PyBytes_AS_STRING(bytes);
-	OpenGL::glReadPixels(x, y, width, height, OpenGL::GL_DEPTH_COMPONENT, OpenGL::GL_FLOAT, data);
+	OpenGL::glReadPixels(x, y, width, height, OpenGL::GL_DEPTH_COMPONENT, floats ? OpenGL::GL_FLOAT : OpenGL::GL_UNSIGNED_BYTE, data);
 	data[size] = 0;
 
 	return bytes;
