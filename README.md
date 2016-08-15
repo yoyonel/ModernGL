@@ -62,9 +62,11 @@ Please follow the [Examples](https://github.com/cprogrammer1994/ModernGL/tree/ma
 
 # Pull requests are welcome!
 
-# Documentation (deprecated until a stable release)
+# Documentation
 
-Please follow the [Documentation](https://pythonhosted.org/ModernGL/).
+Use the builtin `help()` for the latest docs.
+
+The [Documentation](https://pythonhosted.org/ModernGL/) will be updated soon.
 
 # Examples
 
