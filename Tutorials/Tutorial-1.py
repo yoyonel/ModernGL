@@ -6,11 +6,11 @@ import ModernGL as GL
 # GLWindow will create a window with a valid OpenGL context
 import GLWindow as WND
 
-# We will ned the struct module to create data for buffers
+# We will need the struct module to create data for buffers
 import struct
 
 # InitializeWindow() will only initialize the GLWindow module
-# The InitializeWindow() does not create a window or any OpenGL contextes
+# The InitializeWindow() does not create a window or any OpenGL contexts
 WND.InitializeWindow()
 
 # We will need a window
