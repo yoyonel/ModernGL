@@ -236,3 +236,87 @@ PyObject * ReadDepthPixel(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return PyLong_FromUnsignedLong(depth);
 	}
 }
+
+//
+
+
+PyObject * Dummy_NewFramebuffer(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "NewFramebuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "NewFramebuffer() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_DeleteFramebuffer(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "DeleteFramebuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "DeleteFramebuffer() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_UseFramebuffer(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "UseFramebuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "UseFramebuffer() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_SetDefaultFramebuffer(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "SetDefaultFramebuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "SetDefaultFramebuffer() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_UseDefaultFramebuffer(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "UseDefaultFramebuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "UseDefaultFramebuffer() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_ReadPixel(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "ReadPixel() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "ReadPixel() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_ReadPixels(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "ReadPixels() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "ReadPixels() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_ReadDepthPixel(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "ReadDepthPixel() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "ReadDepthPixel() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_ReadDepthPixels(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "ReadDepthPixels() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "ReadDepthPixels() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}

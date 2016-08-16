@@ -113,3 +113,23 @@ PyObject * DebugVar(PyObject * self, PyObject * args) {
 	PyErr_Format(ModuleError, "Type %s is not part of ModernGL", GET_OBJECT_TYPENAME(obj));
 	return 0;
 }
+
+// Dummy
+
+PyObject * Dummy_DebugInfo(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "DebugInfo() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "DebugInfo() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_DebugVar(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "DebugVar() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "DebugVar() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}

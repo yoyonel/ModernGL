@@ -192,3 +192,96 @@ PyObject * UseTextureAsImage(PyObject * self, PyObject * args, PyObject * kwargs
 	
 	Py_RETURN_NONE;
 }
+
+//
+
+
+PyObject * Dummy_NewTexture(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "NewTexture() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "NewTexture() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_UpdateTexture(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "UpdateTexture() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "UpdateTexture() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_DeleteTexture(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "DeleteTexture() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "DeleteTexture() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_BuildMipmaps(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "BuildMipmaps() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "BuildMipmaps() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_UseTexture(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "UseTexture() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "UseTexture() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_UseTextureAsImage(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "UseTextureAsImage() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "UseTextureAsImage() function not initialized. OpenGL 4.2 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_SetTextureFiltered(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "SetTextureFiltered() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "SetTextureFiltered() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_SetTextureMipmapped(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "SetTextureMipmapped() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "SetTextureMipmapped() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_SetTexturePixelated(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "SetTexturePixelated() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "SetTexturePixelated() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_NewTransformProgram(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "NewTransformProgram() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "NewTransformProgram() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}

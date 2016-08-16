@@ -251,3 +251,50 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 	OpenGL::glBindVertexArray(defaultVertexArray);
 	Py_RETURN_NONE;
 }
+
+//
+
+PyObject * Dummy_NewVertexArray(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "NewVertexArray() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "NewVertexArray() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_NewAdvancedVertexArray(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "NewAdvancedVertexArray() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "NewAdvancedVertexArray() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_DeleteVertexArray(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "DeleteVertexArray() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "DeleteVertexArray() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_EnableAttributes(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "EnableAttributes() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "EnableAttributes() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_DisableAttributes(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "DisableAttributes() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "DisableAttributes() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}

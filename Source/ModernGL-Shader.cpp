@@ -231,3 +231,60 @@ PyObject * DeleteShader(PyObject * self, PyObject * args) {
 	OpenGL::glDeleteShader(shader->shader);
 	Py_RETURN_NONE;
 }
+
+//
+
+
+PyObject * Dummy_NewVertexShader(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "NewVertexShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "NewVertexShader() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_NewFragmentShader(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "NewFragmentShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "NewFragmentShader() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_NewGeometryShader(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "NewGeometryShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "NewGeometryShader() function not initialized. OpenGL 3.2 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_NewTessControlShader(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "NewTessControlShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "NewTessControlShader() function not initialized. OpenGL 4.0 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_NewTessEvaluationShader(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "NewTessEvaluationShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "NewTessEvaluationShader() function not initialized. OpenGL 4.0 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_DeleteShader(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "DeleteShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "DeleteShader() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}

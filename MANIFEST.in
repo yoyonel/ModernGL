@@ -2,3 +2,16 @@ include Source/OpenGL.hpp
 include Source/ModernGL.hpp
 include Source/Global.hpp
 include Source/BufferFormat.hpp
+include Source/ModernGL-Buffer.cpp
+include Source/ModernGL-Compute.cpp
+include Source/ModernGL-Core.cpp
+include Source/ModernGL-Debug.cpp
+include Source/ModernGL-Framebuffer.cpp
+include Source/ModernGL-Methods.cpp
+include Source/ModernGL-Program.cpp
+include Source/ModernGL-Render.cpp
+include Source/ModernGL-Shader.cpp
+include Source/ModernGL-Texture.cpp
+include Source/ModernGL-Transform.cpp
+include Source/ModernGL-Types.cpp
+include Source/ModernGL-VertexArray.cpp

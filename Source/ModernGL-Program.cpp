@@ -485,3 +485,42 @@ PyObject * SetUniformMatrix(PyObject * self, PyObject * args) {
 
 	Py_RETURN_NONE;
 }
+
+//
+
+
+PyObject * Dummy_NewProgram(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "NewProgram() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "NewProgram() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_DeleteProgram(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "DeleteProgram() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "DeleteProgram() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_SetUniform(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "SetUniform() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "SetUniform() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_SetUniformMatrix(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "SetUniformMatrix() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "SetUniformMatrix() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
