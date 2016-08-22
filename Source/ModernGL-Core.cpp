@@ -1,5 +1,6 @@
-#include "ModernGL.hpp"
+#include "ModernGL-Core.hpp"
 
+#include "ModernGL-Types.hpp"
 #include "OpenGL.hpp"
 
 PyObject * GetInfo(PyObject * self) {
@@ -271,28 +272,6 @@ PyObject * Dummy_DisableMultisample(PyObject * self) {
 
 
 PythonMethod CoreMethods[] = {
-	{
-		0,
-		(PyCFunction)InitializeModernGL,
-		(PyCFunction)InitializeModernGL,
-		METH_VARARGS,
-		"InitializeModernGL",
-		"Initialize the ModernGL module inside a valid OpenGL context.\n"
-		"A valid OpenGL context must exists before the function call.\n"
-		"\n"
-
-		"Parameters:\n"
-		"\tNone\n"
-		"\n"
-
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-
-		"Errors:\n"
-		"\t(ModernGL.NotInitialized) There is no valid OpenGL context or OpenGL version is below 3.1\n"
-		"\n"
-	},
 	{
 		301,
 		(PyCFunction)GetInfo,

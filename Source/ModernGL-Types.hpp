@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common.hpp"
+
 enum ShaderCategory {
 	VERTEX_SHADER,
 	FRAGMENT_SHADER,

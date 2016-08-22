@@ -1,5 +1,6 @@
-#include "ModernGL.hpp"
+#include "ModernGL-Buffer.hpp"
 
+#include "ModernGL-Types.hpp"
 #include "OpenGL.hpp"
 
 PyObject * NewVertexBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {

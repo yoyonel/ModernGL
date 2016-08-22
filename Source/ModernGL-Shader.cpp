@@ -1,5 +1,6 @@
-#include "ModernGL.hpp"
+#include "ModernGL-Shader.hpp"
 
+#include "ModernGL-Types.hpp"
 #include "OpenGL.hpp"
 
 PyObject * NewVertexShader(PyObject * self, PyObject * args) {

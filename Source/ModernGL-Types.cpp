@@ -1,4 +1,4 @@
-#include "ModernGL.hpp"
+#include "ModernGL-Types.hpp"
 
 const char * enableTable[] = {
 	"Nothing",

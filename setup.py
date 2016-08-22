@@ -45,8 +45,7 @@ quality, with less code written.
 '''
 
 Classifiers = [
-	'Development Status :: 4 - Beta',
-#	'Development Status :: 5 - Production/Stable',
+	'Development Status :: 5 - Production/Stable',
 #	'Development Status :: 6 - Mature',
 	'Environment :: Win32 (MS Windows)',
 	'Environment :: X11 Applications',
@@ -142,14 +141,18 @@ Libraries = {
 }
 
 Sources = [
-	'Source/OpenGL.cpp',
-	'Source/ModernGL.cpp',
 	'Source/BufferFormat.cpp',
+	'Source/PythonMethod.cpp',
+	'Source/OpenGL.cpp',
+	
 	'Source/ModernGL-Buffer.cpp',
 	'Source/ModernGL-Compute.cpp',
 	'Source/ModernGL-Core.cpp',
 	'Source/ModernGL-Debug.cpp',
+	'Source/ModernGL-Errors.cpp',
+	'Source/ModernGL-Experimental.cpp',
 	'Source/ModernGL-Framebuffer.cpp',
+	'Source/ModernGL-Methods.cpp',
 	'Source/ModernGL-Program.cpp',
 	'Source/ModernGL-Render.cpp',
 	'Source/ModernGL-Shader.cpp',
@@ -157,6 +160,7 @@ Sources = [
 	'Source/ModernGL-Transform.cpp',
 	'Source/ModernGL-Types.cpp',
 	'Source/ModernGL-VertexArray.cpp',
+	'Source/ModernGL.cpp',
 ]
 
 ModernGL = Extension(

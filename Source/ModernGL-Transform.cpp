@@ -1,5 +1,6 @@
-#include "ModernGL.hpp"
+#include "ModernGL-Transform.hpp"
 
+#include "ModernGL-Types.hpp"
 #include "OpenGL.hpp"
 
 PyObject * TransformTriangles(PyObject * self, PyObject * args, PyObject * kwargs) {

@@ -1,4 +1,4 @@
-#include "ModernGL.hpp"
+#include "ModernGL-Methods.hpp"
 
 #include "ModernGL-Buffer.hpp"
 #include "ModernGL-Compute.hpp"

@@ -1,5 +1,6 @@
-#include "ModernGL.hpp"
+#include "ModernGL-Render.hpp"
 
+#include "ModernGL-Types.hpp"
 #include "OpenGL.hpp"
 
 PyObject * RenderTriangles(PyObject * self, PyObject * args, PyObject * kwargs) {

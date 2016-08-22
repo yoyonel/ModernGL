@@ -1,5 +1,6 @@
-#include "ModernGL.hpp"
+#include "ModernGL-Compute.hpp"
 
+#include "ModernGL-Types.hpp"
 #include "OpenGL.hpp"
 
 PyObject * NewComputeShader(PyObject * self, PyObject * args) {

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common.hpp"
+
 struct PythonMethod {
 	int version;
 	PyCFunction method;

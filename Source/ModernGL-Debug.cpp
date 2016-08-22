@@ -1,5 +1,6 @@
-#include "ModernGL.hpp"
+#include "ModernGL-Debug.hpp"
 
+#include "ModernGL-Types.hpp"
 #include "OpenGL.hpp"
 
 PyObject * DebugInfo(PyObject * self) {

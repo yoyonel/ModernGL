@@ -1,5 +1,6 @@
-#include "ModernGL.hpp"
+#include "ModernGL-Program.hpp"
 
+#include "ModernGL-Types.hpp"
 #include "OpenGL.hpp"
 
 const char * categoryNames[] = {

@@ -1,5 +1,6 @@
-#include "ModernGL.hpp"
+#include "ModernGL-Texture.hpp"
 
+#include "ModernGL-Types.hpp"
 #include "OpenGL.hpp"
 
 PyObject * NewTexture(PyObject * self, PyObject * args, PyObject * kwargs) {

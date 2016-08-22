@@ -1,5 +1,6 @@
-#include "ModernGL.hpp"
+#include "ModernGL-Framebuffer.hpp"
 
+#include "ModernGL-Types.hpp"
 #include "OpenGL.hpp"
 
 PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {

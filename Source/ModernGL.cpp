@@ -25,6 +25,29 @@ int versionNumber;
 
 int maxTextureUnits;
 
+// {
+// 	0,
+// 	(PyCFunction)InitializeModernGL,
+// 	(PyCFunction)InitializeModernGL,
+// 	METH_VARARGS,
+// 	"InitializeModernGL",
+// 	"Initialize the ModernGL module inside a valid OpenGL context.\n"
+// 	"A valid OpenGL context must exists before the function call.\n"
+// 	"\n"
+
+// 	"Parameters:\n"
+// 	"\tNone\n"
+// 	"\n"
+
+// 	"Returns:\n"
+// 	"\tNone\n"
+// 	"\n"
+
+// 	"Errors:\n"
+// 	"\t(ModernGL.NotInitialized) There is no valid OpenGL context or OpenGL version is below 3.1\n"
+// 	"\n"
+// },
+
 PyObject * InitializeModernGL(PyObject * self, PyObject * args) {
 	if (initialized) {
 		Py_RETURN_NONE;
