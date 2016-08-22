@@ -3963,12 +3963,12 @@ namespace OpenGL {
 		}
 
 		OpenGL::wglGetProcAddress = (PROC_wglGetProcAddress)GetProcAddress(opengl32, "wglGetProcAddress");
-		
+
 		if (!OpenGL::wglGetProcAddress) {
 			return false;
 		}
 		OpenGL::wglGetCurrentContext = (PROC_wglGetCurrentContext)GetProcAddress(opengl32, "wglGetCurrentContext");
-		
+
 		if (!OpenGL::wglGetCurrentContext) {
 			return false;
 		}
@@ -4001,7 +4001,7 @@ namespace OpenGL {
 
 	const void * GetOpenGLFunction(const char * name) {
 		const void * result = dlsym(libgl, name);
-		
+
 		if (!result) {
 			result = OpenGL::glXGetProcAddress(name);
 		}

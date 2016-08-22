@@ -14,7 +14,7 @@ namespace OpenGL {
 	#else
 		typedef int GLsizeiptr;
 		typedef int GLintptr;
-	#endif 
+	#endif
 
 	typedef char GLbyte;
 	typedef char GLchar;
@@ -2038,7 +2038,7 @@ namespace OpenGL {
 	typedef GLvoid (GLAPI * PROC_glGetnUniformuiv)(GLuint program, GLint location, GLsizei bufSize, GLuint * params);
 	typedef GLvoid (GLAPI * PROC_glReadnPixels)(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei bufSize, GLvoid * data);
 	typedef GLvoid (GLAPI * PROC_glTextureBarrier)();
-	
+
 	extern PROC_glCullFace glCullFace;
 	extern PROC_glFrontFace glFrontFace;
 	extern PROC_glHint glHint;

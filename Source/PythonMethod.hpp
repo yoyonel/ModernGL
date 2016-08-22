@@ -9,8 +9,3 @@ struct PythonMethod {
 	const char * name;
 	const char * doc;
 };
-
-extern int pythonMethods;
-extern PythonMethod pythonMethod[];
-
-void RegisterMethod(const PythonMethod & method);

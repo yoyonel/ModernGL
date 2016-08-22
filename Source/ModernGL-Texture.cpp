@@ -80,12 +80,12 @@ PyObject * UpdateTexture(PyObject * self, PyObject * args, PyObject * kwargs) {
 	if (x < 0 || y < 0 || width < 0 || height < 0 || x + width > texture->width || y + height > texture->height) {
 		PyErr_Format(ModuleRangeError, "UpdateTexture() x = %d y = %d width = %d height = %d", x, y, width, height);
 	}
-	
+
 	const int formats[] = {0, OpenGL::GL_RED, OpenGL::GL_RG, OpenGL::GL_RGB, OpenGL::GL_RGBA};
 
 	int pixel_type = texture->floats ? OpenGL::GL_FLOAT : OpenGL::GL_UNSIGNED_BYTE;
 	int format = formats[texture->components];
-	
+
 	OpenGL::glActiveTexture(OpenGL::GL_TEXTURE0 + defaultTextureUnit);
 	OpenGL::glBindTexture(OpenGL::GL_TEXTURE_2D, texture->texture);
 	OpenGL::glTexSubImage2D(OpenGL::GL_TEXTURE_2D, 0, x, y, width, height, format, pixel_type, data);
@@ -107,7 +107,7 @@ PyObject * UseTexture(PyObject * self, PyObject * args) {
 
 PyObject * SetTexturePixelated(PyObject * self, PyObject * args) {
 	Texture * texture;
-	
+
 	if (!PyArg_ParseTuple(args, "O!:SetTexturePixelated", &TextureType, &texture)) {
 		return 0;
 	}
@@ -121,7 +121,7 @@ PyObject * SetTexturePixelated(PyObject * self, PyObject * args) {
 
 PyObject * SetTextureFiltered(PyObject * self, PyObject * args) {
 	Texture * texture;
-	
+
 	if (!PyArg_ParseTuple(args, "O!:SetTextureFiltered", &TextureType, &texture)) {
 		return 0;
 	}
@@ -135,7 +135,7 @@ PyObject * SetTextureFiltered(PyObject * self, PyObject * args) {
 
 PyObject * SetTextureMipmapped(PyObject * self, PyObject * args) {
 	Texture * texture;
-	
+
 	if (!PyArg_ParseTuple(args, "O!:SetTextureMipmapped", &TextureType, &texture)) {
 		return 0;
 	}
@@ -181,19 +181,17 @@ PyObject * UseTextureAsImage(PyObject * self, PyObject * args, PyObject * kwargs
 	if (texture->floats) {
 		const int formats[] = {0, OpenGL::GL_R8UI, OpenGL::GL_RG8UI, OpenGL::GL_RGB8UI, OpenGL::GL_RGBA8UI};
 		int format = formats[texture->components];
-		
+
 		OpenGL::glBindImageTexture(binding, texture->texture, 0, false, 0, OpenGL::GL_READ_WRITE, format);
 	} else {
 		const int formats[] = {0, OpenGL::GL_R32F, OpenGL::GL_RG32F, OpenGL::GL_RGB32F, OpenGL::GL_RGBA32F};
 		int format = formats[texture->components];
-		
+
 		OpenGL::glBindImageTexture(binding, texture->texture, 0, false, 0, OpenGL::GL_READ_WRITE, format);
 	}
-	
+
 	Py_RETURN_NONE;
 }
-
-//
 
 
 PyObject * Dummy_NewTexture(PyObject * self) {
@@ -277,11 +275,213 @@ PyObject * Dummy_SetTexturePixelated(PyObject * self) {
 	return 0;
 }
 
-PyObject * Dummy_NewTransformProgram(PyObject * self) {
-	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "NewTransformProgram() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
-	} else {
-		PyErr_SetString(ModuleNotSupported, "NewTransformProgram() function not initialized. OpenGL 3.1 is required.");
-	}
-	return 0;
-}
+
+PythonMethod TextureMethods[] = {
+	{
+		301,
+		(PyCFunction)NewTexture,
+		(PyCFunction)Dummy_NewTexture,
+		METH_VARARGS | METH_KEYWORDS,
+		"NewTexture",
+		"Create a new texture.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\twidth (int) Width of the texture.\n"
+		"\theight (int) Height of the texture.\n"
+		"\tpixels (bytes) Pixels stored in bytes.\n"
+		"\tcomponents (int) By default is 3\n"
+		"\n"
+
+		"Returns:\n"
+		"\ttexture (ModernGL.Texture) The index of the new texture object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.RangeError) The size of pixels is different.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)DeleteTexture,
+		(PyCFunction)Dummy_DeleteTexture,
+		METH_VARARGS,
+		"DeleteTexture",
+		"Delete a texture created by the ModernGL.NewTexture method.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the ModernGL.NewTexture.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)UpdateTexture,
+		(PyCFunction)Dummy_UpdateTexture,
+		METH_VARARGS | METH_KEYWORDS,
+		"UpdateTexture",
+		"Update the content of a texture.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the ModernGL.NewTexture.\n"
+		"\tx (int) Offset of the new texture part.\n"
+		"\ty (int) Offset of the new texture part.\n"
+		"\twidth (int) Width of the texture.\n"
+		"\theight (int) Height of the texture.\n"
+		"\tpixels (bytes) Pixels stored in bytes.\n"
+		"\tcomponents (int) By default is 3\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.RangeError) The size of pixels is different.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)UseTexture,
+		(PyCFunction)Dummy_UseTexture,
+		METH_VARARGS,
+		"UseTexture",
+		"Bind a texture to a location.\n"
+		"The default location is 0.\n"
+		"Initialize sampler2D uniforms with ModernGL.SetUniform\n"
+		"\n"
+
+		"Parameters:\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the ModernGL.NewTexture function.\n"
+		"\tlocation (int) Location of the texture. By default is 0\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)SetTexturePixelated,
+		(PyCFunction)Dummy_SetTexturePixelated,
+		METH_VARARGS,
+		"SetTexturePixelated",
+		"Set texture filter to nearest.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the ModernGL.NewTexture function.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)SetTextureFiltered,
+		(PyCFunction)Dummy_SetTextureFiltered,
+		METH_VARARGS,
+		"SetTextureFiltered",
+		"Set texture filter to linear.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the ModernGL.NewTexture function.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)SetTextureMipmapped,
+		(PyCFunction)Dummy_SetTextureMipmapped,
+		METH_VARARGS,
+		"SetTextureMipmapped",
+		"Set texture filter to mipmap linear.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the ModernGL.NewTexture function.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)BuildMipmaps,
+		(PyCFunction)Dummy_BuildMipmaps,
+		METH_VARARGS | METH_KEYWORDS,
+		"BuildMipmaps",
+		"Generate the mipmaps for the texture.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\ttexture (ModernGL.Texture) Index of a texture returned by the NewTexture function.\n"
+		"\tbase (int) Base mipmap level to build.\n"
+		"\tmax (int) Maximum mipmap level to build.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		402,
+		(PyCFunction)UseTextureAsImage,
+		(PyCFunction)Dummy_UseTextureAsImage,
+		METH_VARARGS | METH_KEYWORDS,
+		"UseTextureAsImage",
+		"To use image2D instead of sampler2D.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\ttexture (ModernGL.Texture) Texture.\n"
+		"\tbinding (int) Image binding specified by the layout in GLSL. By default is 0\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
+		"\n"
+	},
+};

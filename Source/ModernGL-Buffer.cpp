@@ -1,6 +1,4 @@
-
-
-// Dummy#include "ModernGL.hpp"
+#include "ModernGL.hpp"
 
 #include "OpenGL.hpp"
 
@@ -214,11 +212,6 @@ PyObject * UseUniformBuffer(PyObject * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
-	// if (location->size != ubo->size) {
-	// 	// TODO: SET ERROR
-	// 	return 0;
-	// }
-
 	OpenGL::glBindBufferBase(OpenGL::GL_UNIFORM_BUFFER, location->location, ubo->ubo);
 	Py_RETURN_NONE;
 }
@@ -269,7 +262,6 @@ PyObject * ReadStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs
 	return data;
 }
 
-// Dummy
 
 PyObject * Dummy_NewVertexBuffer(PyObject * self) {
 	if (!initialized) {
@@ -303,24 +295,6 @@ PyObject * Dummy_NewStorageBuffer(PyObject * self) {
 		PyErr_SetString(ModuleNotInitialized, "NewStorageBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "NewStorageBuffer() function not initialized. OpenGL 4.3 is required.");
-	}
-	return 0;
-}
-
-PyObject * Dummy_UseStorageBuffer(PyObject * self) {
-	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "UseStorageBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
-	} else {
-		PyErr_SetString(ModuleNotSupported, "UseStorageBuffer() function not initialized. OpenGL 4.3 is required.");
-	}
-	return 0;
-}
-
-PyObject * Dummy_ReadStorageBuffer(PyObject * self) {
-	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "ReadStorageBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
-	} else {
-		PyErr_SetString(ModuleNotSupported, "ReadStorageBuffer() function not initialized. OpenGL 4.3 is required.");
 	}
 	return 0;
 }
@@ -361,15 +335,6 @@ PyObject * Dummy_DeleteStorageBuffer(PyObject * self) {
 	return 0;
 }
 
-PyObject * Dummy_UseUniformBuffer(PyObject * self) {
-	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "UseUniformBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
-	} else {
-		PyErr_SetString(ModuleNotSupported, "UseUniformBuffer() function not initialized. OpenGL 3.1 is required.");
-	}
-	return 0;
-}
-
 PyObject * Dummy_UpdateVertexBuffer(PyObject * self) {
 	if (!initialized) {
 		PyErr_SetString(ModuleNotInitialized, "UpdateVertexBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
@@ -405,3 +370,371 @@ PyObject * Dummy_UpdateStorageBuffer(PyObject * self) {
 	}
 	return 0;
 }
+
+PyObject * Dummy_UseUniformBuffer(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "UseUniformBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "UseUniformBuffer() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_UseStorageBuffer(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "UseStorageBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "UseStorageBuffer() function not initialized. OpenGL 4.3 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_ReadStorageBuffer(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "ReadStorageBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "ReadStorageBuffer() function not initialized. OpenGL 4.3 is required.");
+	}
+	return 0;
+}
+
+
+PythonMethod BufferMethods[] = {
+	{
+		301,
+		(PyCFunction)NewVertexBuffer,
+		(PyCFunction)Dummy_NewVertexBuffer,
+		METH_VARARGS | METH_KEYWORDS,
+		"NewVertexBuffer",
+		"Create a vertex buffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tdata (bytes) The content of the buffer.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tvbo (ModernGL.VertexBuffer) The index of the new vertex buffer object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)NewIndexBuffer,
+		(PyCFunction)Dummy_NewIndexBuffer,
+		METH_VARARGS | METH_KEYWORDS,
+		"NewIndexBuffer",
+		"Create an index buffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tdata (bytes) The content of the buffer.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tibo (ModernGL.IndexBuffer) The index of the new index buffer object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)NewUniformBuffer,
+		(PyCFunction)Dummy_NewUniformBuffer,
+		METH_VARARGS | METH_KEYWORDS,
+		"NewUniformBuffer",
+		"Create a uniform buffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tdata (bytes) The content of the buffer.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tubo (int) The index of the new uniform buffer object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		403,
+		(PyCFunction)NewStorageBuffer,
+		(PyCFunction)Dummy_NewStorageBuffer,
+		METH_VARARGS | METH_KEYWORDS,
+		"NewStorageBuffer",
+		"Create a shader storage buffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tdata (bytes) The content of the buffer.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tsbo (ModernGL.StorageBuffer) The index of the new shader storage buffer object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)DeleteVertexBuffer,
+		(PyCFunction)Dummy_DeleteVertexBuffer,
+		METH_VARARGS,
+		"DeleteVertexBuffer",
+		"Delete a vertex buffer created by the ModernGL.NewVertexBuffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tbuffer (int) The index of any buffer object except the framebuffer object.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)DeleteIndexBuffer,
+		(PyCFunction)Dummy_DeleteIndexBuffer,
+		METH_VARARGS,
+		"DeleteIndexBuffer",
+		"Delete an index buffer created by the ModernGL.NewIndexBuffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tbuffer (int) The index of any buffer object except the framebuffer object.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)DeleteUniformBuffer,
+		(PyCFunction)Dummy_DeleteUniformBuffer,
+		METH_VARARGS,
+		"DeleteUniformBuffer",
+		"Delete a uniform buffer created by the ModernGL.NewUniformBuffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tbuffer (int) The index of any buffer object except the framebuffer object.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)DeleteStorageBuffer,
+		(PyCFunction)Dummy_DeleteStorageBuffer,
+		METH_VARARGS,
+		"DeleteStorageBuffer",
+		"Delete a shader storage buffer created by the ModernGL.NewStorageBuffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tbuffer (int) The index of any buffer object except the framebuffer object.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)UpdateVertexBuffer,
+		(PyCFunction)Dummy_UpdateVertexBuffer,
+		METH_VARARGS | METH_KEYWORDS,
+		"UpdateVertexBuffer",
+		"Update the content of the buffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tbuffer (int) The index of a vertex buffer object except the framebuffer object.\n"
+		"\toffset (int) The offset of the data in the buffer to write.\n"
+		"\tdata (bytes) The content of the data to write to the buffer.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.RangeError) The offset or size of data is out of the buffer bounds.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)UpdateIndexBuffer,
+		(PyCFunction)Dummy_UpdateIndexBuffer,
+		METH_VARARGS | METH_KEYWORDS,
+		"UpdateIndexBuffer",
+		"Update the content of the buffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tibo (ModernGL.IndexBuffer) The index of an index buffer object except the framebuffer object.\n"
+		"\toffset (int) The offset of the data in the buffer to write.\n"
+		"\tdata (bytes) The content of the data to write to the buffer.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.RangeError) The offset or size of data is out of the buffer bounds.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)UpdateUniformBuffer,
+		(PyCFunction)Dummy_UpdateUniformBuffer,
+		METH_VARARGS | METH_KEYWORDS,
+		"UpdateUniformBuffer",
+		"Update the content of the buffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tubo (ModernGL.UniformBuffer) The index of a uniform buffer object except the framebuffer object.\n"
+		"\toffset (int) The offset of the data in the buffer to write.\n"
+		"\tdata (bytes) The content of the data to write to the buffer.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.RangeError) The offset or size of data is out of the buffer bounds.\n"
+		"\n"
+	},
+	{
+		403,
+		(PyCFunction)UpdateStorageBuffer,
+		(PyCFunction)Dummy_UpdateStorageBuffer,
+		METH_VARARGS | METH_KEYWORDS,
+		"UpdateStorageBuffer",
+		"Update the content of a shader storage buffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tsbo (ModernGL.StorageBuffer) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
+		"\toffset (int) The offset of the data in the buffer to update.\n"
+		"\tdata (bytes) The content of the data to write to the buffer.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
+		"\t(ModernGL.RangeError) The offset or size of data is out of the buffer bounds.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)UseUniformBuffer,
+		(PyCFunction)Dummy_UseUniformBuffer,
+		METH_VARARGS | METH_KEYWORDS,
+		"UseUniformBuffer",
+		"Bind a unirom buffer to a location in the program.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tubo (ModernGL.UniformBuffer) Index of a uniform buffer.\n"
+		"\tlocation (ModernGL.UniformBufferLocation) Location of the uniform buffer.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		403,
+		(PyCFunction)UseStorageBuffer,
+		(PyCFunction)Dummy_UseStorageBuffer,
+		METH_VARARGS | METH_KEYWORDS,
+		"UseStorageBuffer",
+		"Bind a shader storage buffer to a location specified in the GLSL layout.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tsbo (ModernGL.StorageBuffer) The index of a shader storage buffer object returned by the NewStorageBuffer.\n"
+		"\tbinding (int) Buffer binding specified by the layout in GLSL. By default is 0\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
+		"\n"
+	},
+	{
+		403,
+		(PyCFunction)ReadStorageBuffer,
+		(PyCFunction)Dummy_ReadStorageBuffer,
+		METH_VARARGS | METH_KEYWORDS,
+		"ReadStorageBuffer",
+		"Read the content of a shader storage buffer.\n"
+		"If the size parameter is 0 the remaining size will be used.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tsbo (ModernGL.StorageBuffer) The index of a shader storage buffer object returned by the ModernGL.NewStorageBuffer.\n"
+		"\toffset (int) The offset of the data in the buffer to read. By default is 0\n"
+		"\tsize (int) The size of the data to read from the buffer. By default is 0\n"
+		"\n"
+
+		"Returns:\n"
+		"\tdata (bytes) The content of the shader storage buffer.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
+		"\t(ModernGL.RangeError) The offset or size is out of the buffer bounds.\n"
+		"\n"
+	},
+};

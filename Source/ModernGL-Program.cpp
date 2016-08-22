@@ -22,9 +22,9 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	int category[NUM_SHADER_CATEGORIES] = {};
 	for (int i = 0; i < count; ++i) {
 		Shader * shader = (Shader *)PyList_GetItem(shaders, i);
-		
+
 		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("shaders", shader, ShaderType, i);
-		
+
 		if (shader->attached) {
 			PyErr_Format(ModuleCompileError, "NewProgram() shaders[%d] is already attached to another program", i);
 			return 0;
@@ -39,7 +39,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 			return 0;
 		}
 	}
-	
+
 	int program = OpenGL::glCreateProgram();
 
 	for (int i = 0; i < count; ++i) {
@@ -54,7 +54,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 	if (!linked) {
 		static const char * logTitle = "NewProgram() linking failed\n";
 		static int logTitleLength = strlen(logTitle);
-		
+
 		int logLength = 0;
 		OpenGL::glGetProgramiv(program, OpenGL::GL_INFO_LOG_LENGTH, &logLength);
 		int logTotalLength = logLength + logTitleLength;
@@ -137,9 +137,9 @@ PyObject * NewTransformProgram(PyObject * self, PyObject * args) {
 	int category[NUM_SHADER_CATEGORIES] = {};
 	for (int i = 0; i < count; ++i) {
 		Shader * shader = (Shader *)PyList_GetItem(shaders, i);
-		
+
 		CHECK_AND_REPORT_ELEMENT_TYPE_ERROR("shaders", shader, ShaderType, i);
-		
+
 		if (shader->attached) {
 			PyErr_Format(ModuleCompileError, "NewTransformProgram() shaders[%d] is already attached to another program", i);
 			return 0;
@@ -154,7 +154,7 @@ PyObject * NewTransformProgram(PyObject * self, PyObject * args) {
 			return 0;
 		}
 	}
-	
+
 	int program = OpenGL::glCreateProgram();
 
 	for (int i = 0; i < count; ++i) {
@@ -178,7 +178,7 @@ PyObject * NewTransformProgram(PyObject * self, PyObject * args) {
 	if (!linked) {
 		static const char * logTitle = "NewProgram() linking failed\n";
 		static int logTitleLength = strlen(logTitle);
-		
+
 		int logLength = 0;
 		OpenGL::glGetProgramiv(program, OpenGL::GL_INFO_LOG_LENGTH, &logLength);
 		int logTotalLength = logLength + logTitleLength;
@@ -443,11 +443,11 @@ PyObject * SetUniformMatrix(PyObject * self, PyObject * args) {
 		default:
 			PyErr_SetString(ModuleError, "SetUniformMatrix() failed");
 			return 0;
-			
+
 	}
 
 	int count = (int)PyList_Size(matrix);
-	
+
 	if (count != limit) {
 		PyErr_Format(ModuleError, "SetUniformMatrix() expected %d got %d", limit, count);
 		return 0;
@@ -486,14 +486,21 @@ PyObject * SetUniformMatrix(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-//
-
 
 PyObject * Dummy_NewProgram(PyObject * self) {
 	if (!initialized) {
 		PyErr_SetString(ModuleNotInitialized, "NewProgram() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "NewProgram() function not initialized. OpenGL 3.1 is required.");
+	}
+	return 0;
+}
+
+PyObject * Dummy_NewTransformProgram(PyObject * self) {
+	if (!initialized) {
+		PyErr_SetString(ModuleNotInitialized, "NewTransformProgram() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+	} else {
+		PyErr_SetString(ModuleNotSupported, "NewTransformProgram() function not initialized. OpenGL 3.1 is required.");
 	}
 	return 0;
 }
@@ -524,3 +531,115 @@ PyObject * Dummy_SetUniformMatrix(PyObject * self) {
 	}
 	return 0;
 }
+
+
+PythonMethod ProgramMethods[] = {
+	{
+		301,
+		(PyCFunction)NewProgram,
+		(PyCFunction)Dummy_NewProgram,
+		METH_VARARGS,
+		"NewProgram",
+		"Create a program object from a list of ModernGL.Shader objects.\n"
+		"There must be only one shader for each shader types.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tshaders (list) List containing shader objects.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tprogram (ModernGL.Program) The new program object.\n"
+		"\tinterface (dict) The active uniforms and uniform buffers.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.CompileError) Linking error or duplicate shaders of the same type.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)DeleteProgram,
+		(PyCFunction)Dummy_DeleteProgram,
+		METH_VARARGS,
+		"DeleteProgram",
+		"Delete a program objects and all the attached shaders.\n"
+		"A shader must be attached only to a single program object.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tprogram (ModernGL.Program) A program object returned by the ModernGL.NewProgram function.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)SetUniform,
+		(PyCFunction)Dummy_SetUniform,
+		METH_VARARGS,
+		"SetUniform",
+		"Set the value of the uniform (except for matrices).\n"
+		"The number of parameters depends on the uniform type.\n"
+		"The location of active uniforms is always accessable from the program interface.\n"
+		"The program interface is the second value returned by the ModernGL.NewProgram.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tlocation (ModernGL.UniformLocation) Location of the uniform.\n"
+		"\tv0 (float or int) Value to set.\n"
+		"\tv1 (float or int) Value to set.\n"
+		"\tv2 (float or int) Value to set.\n"
+		"\tv3 (float or int) Value to set.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(TypeError) The dimension or the type of the uniform is different.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)SetUniformMatrix,
+		(PyCFunction)Dummy_SetUniformMatrix,
+		METH_VARARGS,
+		"SetUniformMatrix",
+		"Set the value of the uniform matrix.\n"
+		"The matrix type must be either mat2, mat3 or mat4.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tlocation (ModernGL.UniformLocation) Location of the uniform.\n"
+		"\tmatrix (list) List containing 4x4=16 float values.\n"
+		"\ttranspose (bool) Transpose matrix.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(TypeError) The dimension or the type of the matrix is different.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)NewTransformProgram,
+		(PyCFunction)Dummy_NewTransformProgram,
+		METH_VARARGS | METH_KEYWORDS,
+		"NewTransformProgram",
+		""
+	},
+};

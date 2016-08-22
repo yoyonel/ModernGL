@@ -420,8 +420,6 @@ PyObject * TransformTrianglesAdjacency(PyObject * self, PyObject * args, PyObjec
 	Py_RETURN_NONE;
 }
 
-//
-
 
 PyObject * Dummy_TransformTriangles(PyObject * self) {
 	if (!initialized) {
@@ -522,3 +520,94 @@ PyObject * Dummy_TransformTrianglesAdjacency(PyObject * self) {
 	return 0;
 }
 
+
+PythonMethod TransformMethods[] = {
+	{
+		301,
+		(PyCFunction)TransformTriangles,
+		(PyCFunction)Dummy_TransformTriangles,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformTriangles",
+		""
+	},
+	{
+		301,
+		(PyCFunction)TransformTriangleStrip,
+		(PyCFunction)Dummy_TransformTriangleStrip,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformTriangleStrip",
+		""
+	},
+	{
+		301,
+		(PyCFunction)TransformTriangleFan,
+		(PyCFunction)Dummy_TransformTriangleFan,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformTriangleFan",
+		""
+	},
+	{
+		301,
+		(PyCFunction)TransformLines,
+		(PyCFunction)Dummy_TransformLines,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformLines",
+		""
+	},
+	{
+		301,
+		(PyCFunction)TransformLineStrip,
+		(PyCFunction)Dummy_TransformLineStrip,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformLineStrip",
+		""
+	},
+	{
+		301,
+		(PyCFunction)TransformLineLoop,
+		(PyCFunction)Dummy_TransformLineLoop,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformLineLoop",
+		""
+	},
+	{
+		301,
+		(PyCFunction)TransformPoints,
+		(PyCFunction)Dummy_TransformPoints,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformPoints",
+		""
+	},
+	{
+		302,
+		(PyCFunction)TransformLineStripAdjacency,
+		(PyCFunction)Dummy_TransformLineStripAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformLineStripAdjacency",
+		""
+	},
+	{
+		302,
+		(PyCFunction)TransformLinesAdjacency,
+		(PyCFunction)Dummy_TransformLinesAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformLinesAdjacency",
+		""
+	},
+	{
+		302,
+		(PyCFunction)TransformTriangleStripAdjacency,
+		(PyCFunction)Dummy_TransformTriangleStripAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformTriangleStripAdjacency",
+		""
+	},
+	{
+		302,
+		(PyCFunction)TransformTrianglesAdjacency,
+		(PyCFunction)Dummy_TransformTrianglesAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
+		"TransformTrianglesAdjacency",
+		""
+	},
+};

@@ -208,7 +208,7 @@ PyObject * EnableAttributes(PyObject * self, PyObject * args, PyObject * kwargs)
 			return 0;
 		}
 	}
-	
+
 	OpenGL::glBindVertexArray(vao->vao);
 	for (int i = 0; i < count; ++i) {
 		const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i));
@@ -240,7 +240,7 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 			return 0;
 		}
 	}
-	
+
 	OpenGL::glBindVertexArray(vao->vao);
 	for (int i = 0; i < count; ++i) {
 		const char * name = PyUnicode_AsUTF8(PyList_GET_ITEM(attributes, i));
@@ -252,7 +252,6 @@ PyObject * DisableAttributes(PyObject * self, PyObject * args, PyObject * kwargs
 	Py_RETURN_NONE;
 }
 
-//
 
 PyObject * Dummy_NewVertexArray(PyObject * self) {
 	if (!initialized) {
@@ -298,3 +297,126 @@ PyObject * Dummy_DisableAttributes(PyObject * self) {
 	}
 	return 0;
 }
+
+
+PythonMethod VertexArrayMethods[] = {
+	{
+		301,
+		(PyCFunction)NewVertexArray,
+		(PyCFunction)Dummy_NewVertexArray,
+		METH_VARARGS | METH_KEYWORDS,
+		"NewVertexArray",
+		"Create a vertex array object.\n"
+		"Prepare vertex and index buffers for rendering. enable or disable attributes.\n"
+		"To use more than one vertex buffer call the ModernGL.NewAdvancedVertexArray method.\n"
+		"The format regex is: ([1-4][if])+\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tprogram (ModernGL.Program) A program object that will be used for rendering.\n"
+		"\tvbo (ModernGL.VertexBuffer) A buffer containing data for the vertex attributes.\n"
+		"\tformat (str) Format of the vertex array attrubites. ([1-4][if])+\n"
+		"\tattributes (list) List of vertex attribute names.\n"
+		"\tibo (ModernGL.IndexBuffer) Index of an index buffer object. By default is None\n"
+		"\tstrict (bool) Enable AttributeNotFound error. By default is True\n"
+		"\n"
+
+		"Returns:\n"
+		"\tvao (ModernGL.VertexArray) The index of the new vertex array object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.InvalidFormat) The format is invalid or the size of attributes is different.\n"
+		"\t(ModernGL.AttributeNotFound) The attribute is missing (only strict enabled).\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)NewAdvancedVertexArray,
+		(PyCFunction)Dummy_NewAdvancedVertexArray,
+		METH_VARARGS,
+		"NewAdvancedVertexArray",
+		"Advanced version of NewVertexArray that can handle multiple VertexBuffer objects.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tprogram (ModernGL.Program) A program object that will be used for rendering.\n"
+		"\tcontent (list) List of tuples similar to the ModernGL.NewVertexArray parameters.\n"
+		"\tibo (ModernGL.IndexBuffer) Index of an index buffer object. By default is None\n"
+		"\tstrict (bool) Enable AttributeNotFound error. By default is True\n"
+		"\n"
+
+		"Returns:\n"
+		"\tvao (ModernGL.VertexArray) The index of the new vertex array object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)DeleteVertexArray,
+		(PyCFunction)Dummy_DeleteVertexArray,
+		METH_VARARGS,
+		"DeleteVertexArray",
+		"\n"
+		""
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of the new vertex array object.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)EnableAttributes,
+		(PyCFunction)Dummy_EnableAttributes,
+		METH_VARARGS | METH_KEYWORDS,
+		"EnableAttributes",
+		"Enable attributes in the vertex array object.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object.\n"
+		"\tattribs (list) The names of the vertex attributes.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)DisableAttributes,
+		(PyCFunction)Dummy_DisableAttributes,
+		METH_VARARGS | METH_KEYWORDS,
+		"DisableAttributes",
+		"Disable attributes in the vertex array object.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object.\n"
+		"\tattribs (list) The names of the vertex attributes.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+};

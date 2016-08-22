@@ -114,7 +114,6 @@ PyObject * DebugVar(PyObject * self, PyObject * args) {
 	return 0;
 }
 
-// Dummy
 
 PyObject * Dummy_DebugInfo(PyObject * self) {
 	if (!initialized) {
@@ -133,3 +132,23 @@ PyObject * Dummy_DebugVar(PyObject * self) {
 	}
 	return 0;
 }
+
+
+PythonMethod DebugMethods[] = {
+	{
+		301,
+		(PyCFunction)DebugInfo,
+		(PyCFunction)Dummy_DebugInfo,
+		METH_NOARGS,
+		"DebugInfo",
+		""
+	},
+	{
+		301,
+		(PyCFunction)DebugVar,
+		(PyCFunction)Dummy_DebugVar,
+		METH_VARARGS,
+		"DebugVar",
+		""
+	},
+};

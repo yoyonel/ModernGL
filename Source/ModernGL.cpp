@@ -55,8 +55,8 @@ PyObject * InitializeModernGL(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
-	LoadMethods();
-	
+	// LoadMethods();
+
 	// Default blending
 	OpenGL::glBlendFunc(OpenGL::GL_SRC_ALPHA, OpenGL::GL_ONE_MINUS_SRC_ALPHA);
 
@@ -149,7 +149,7 @@ PyObject * InitModule(PyObject * module) {
 	if (!module) {
 		return module;
 	}
-	
+
 	Py_INCREF(&FramebufferType);
 	Py_INCREF(&VertexArrayType);
 	Py_INCREF(&VertexBufferType);
@@ -215,7 +215,7 @@ PyObject * InitModule(PyObject * module) {
 	PyModule_AddObject(module, "ENABLE_ALL", CreateEnableFlagType(ENABLE_ALL));
 
 	PyModule_AddStringConstant(module, "VERSION", STR_VERSION(MODERN_GL_VERSION));
-	
+
 	PyModule_AddStringConstant(module, "__AUTHOR_NAME__", "Szabolcs Dombi");
 	PyModule_AddStringConstant(module, "__AUTHOR_EMAIL__", "cprogrammer1994@gmail.com");
 
@@ -238,7 +238,7 @@ PyObject * PyInit_ModernGL() {
 		return 0;
 	}
 
-	InitMethods();
+	// InitMethods();
 
 	return InitModule(PyModule_Create(&moduledef));
 }
@@ -255,7 +255,7 @@ PyObject * initModernGL() {
 		return 0;
 	}
 
-	InitMethods();
+	// InitMethods();
 
 	return InitModule(Py_InitModule("ModernGL", methods));
 }

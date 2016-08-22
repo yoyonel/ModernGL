@@ -310,8 +310,6 @@ PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args, PyObject *
 	Py_RETURN_NONE;
 }
 
-//
-
 
 PyObject * Dummy_RenderPoints(PyObject * self) {
 	if (!initialized) {
@@ -411,3 +409,260 @@ PyObject * Dummy_RenderTriangleStripAdjacency(PyObject * self) {
 	}
 	return 0;
 }
+
+
+PythonMethod RenderMethods[] = {
+	{
+		301,
+		(PyCFunction)RenderTriangles,
+		(PyCFunction)Dummy_RenderTriangles,
+		METH_VARARGS | METH_KEYWORDS,
+		"RenderTriangles",
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)RenderTriangleStrip,
+		(PyCFunction)Dummy_RenderTriangleStrip,
+		METH_VARARGS | METH_KEYWORDS,
+		"RenderTriangleStrip",
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)RenderTriangleFan,
+		(PyCFunction)Dummy_RenderTriangleFan,
+		METH_VARARGS | METH_KEYWORDS,
+		"RenderTriangleFan",
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)RenderLines,
+		(PyCFunction)Dummy_RenderLines,
+		METH_VARARGS | METH_KEYWORDS,
+		"RenderLines",
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)RenderLineStrip,
+		(PyCFunction)Dummy_RenderLineStrip,
+		METH_VARARGS | METH_KEYWORDS,
+		"RenderLineStrip",
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)RenderLineLoop,
+		(PyCFunction)Dummy_RenderLineLoop,
+		METH_VARARGS | METH_KEYWORDS,
+		"RenderLineLoop",
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)RenderPoints,
+		(PyCFunction)Dummy_RenderPoints,
+		METH_VARARGS | METH_KEYWORDS,
+		"RenderPoints",
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		302,
+		(PyCFunction)RenderLineStripAdjacency,
+		(PyCFunction)Dummy_RenderLineStripAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
+		"RenderLineStripAdjacency",
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		302,
+		(PyCFunction)RenderLinesAdjacency,
+		(PyCFunction)Dummy_RenderLinesAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
+		"RenderLinesAdjacency",
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		302,
+		(PyCFunction)RenderTriangleStripAdjacency,
+		(PyCFunction)Dummy_RenderTriangleStripAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
+		"RenderTriangleStripAdjacency",
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		302,
+		(PyCFunction)RenderTrianglesAdjacency,
+		(PyCFunction)Dummy_RenderTrianglesAdjacency,
+		METH_VARARGS | METH_KEYWORDS,
+		"RenderTrianglesAdjacency",
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+};

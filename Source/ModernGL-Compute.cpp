@@ -18,7 +18,7 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 	if (!compiled) {
 		static const char * logTitle = "NewComputeShader() compile failed\n";
 		static int logTitleLength = strlen(logTitle);
-		
+
 		int logLength = 0;
 		OpenGL::glGetShaderiv(shader, OpenGL::GL_INFO_LOG_LENGTH, &logLength);
 		int logTotalLength = logLength + logTitleLength;
@@ -53,7 +53,7 @@ PyObject * NewComputeShader(PyObject * self, PyObject * args) {
 	if (!linked) {
 		static const char * logTitle = "NewComputeShader() linking failed\n";
 		static int logTitleLength = strlen(logTitle);
-		
+
 		int logLength = 0;
 		OpenGL::glGetProgramiv(program, OpenGL::GL_INFO_LOG_LENGTH, &logLength);
 		int logTotalLength = logLength + logTitleLength;
@@ -111,7 +111,6 @@ PyObject * RunComputeShader(PyObject * self, PyObject * args, PyObject * kwargs)
 	Py_RETURN_NONE;
 }
 
-// Dummy
 
 PyObject * Dummy_NewComputeShader(PyObject * self) {
 	if (!initialized) {
@@ -139,3 +138,76 @@ PyObject * Dummy_RunComputeShader(PyObject * self) {
 	}
 	return 0;
 }
+
+
+PythonMethod ComputeMethods[] = {
+	{
+		403,
+		(PyCFunction)NewComputeShader,
+		(PyCFunction)Dummy_NewComputeShader,
+		METH_VARARGS,
+		"NewComputeShader",
+		"Compiles and links a compute shader from GLSL source.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tsource (str) Source code in GLSL.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tprogram (ModernGL.ComputeShader) The index of the new program object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)DeleteComputeShader,
+		(PyCFunction)Dummy_DeleteComputeShader,
+		METH_VARARGS,
+		"DeleteComputeShader",
+		"Compute shader is a standalone shader program.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tprogram (ModernGL.ComputeShader) The index of a program object returned by the ModernGL.NewComputeShader.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
+		"\n"
+	},
+	{
+		403,
+		(PyCFunction)RunComputeShader,
+		(PyCFunction)Dummy_RunComputeShader,
+		METH_VARARGS | METH_KEYWORDS,
+		"RunComputeShader",
+		"Run the compute shader.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tprogram (ModernGL.ComputeShader) The index of a program object returned by the ModernGL.NewComputeShader.\n"
+		"\tx (int) The x group size of the workers. By default is 1\n"
+		"\ty (int) The y group size of the workers. By default is 1\n"
+		"\tz (int) The z group size of the workers. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\t(ModernGL.NotSupported) The OpenGL version is below the required.\n"
+		"\n"
+	},
+};

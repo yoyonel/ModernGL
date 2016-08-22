@@ -16,7 +16,7 @@ PyObject * GetInfo(PyObject * self) {
 	if (!vendor) {
 		vendor = "";
 	}
-	
+
 	if (!renderer) {
 		renderer = "";
 	}
@@ -142,7 +142,6 @@ PyObject * DisableMultisample(PyObject * self) {
 	Py_RETURN_NONE;
 }
 
-// Dummy
 
 PyObject * Dummy_Viewport(PyObject * self) {
 	if (!initialized) {
@@ -269,3 +268,338 @@ PyObject * Dummy_DisableMultisample(PyObject * self) {
 	}
 	return 0;
 }
+
+
+PythonMethod CoreMethods[] = {
+	{
+		0,
+		(PyCFunction)InitializeModernGL,
+		(PyCFunction)InitializeModernGL,
+		METH_VARARGS,
+		"InitializeModernGL",
+		"Initialize the ModernGL module inside a valid OpenGL context.\n"
+		"A valid OpenGL context must exists before the function call.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tNone\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) There is no valid OpenGL context or OpenGL version is below 3.1\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)GetInfo,
+		(PyCFunction)Dummy_GetInfo,
+		METH_NOARGS,
+		"GetInfo",
+		"Get information about the OpenGL context.\n"
+		"The module must be initialized first.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tNone\n"
+		"\n"
+
+		"Returns:\n"
+		"\tinfo (dict) Dictionary with the results of the most popular queries using glGet.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)Viewport,
+		(PyCFunction)Dummy_Viewport,
+		METH_VARARGS | METH_KEYWORDS,
+		"Viewport",
+		"Set the viewport for rendering.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tx (int) Position of the viewport.\n"
+		"\ty (int) Position of the viewport.\n"
+		"\twidth (int) Width of the viewport.\n"
+		"\theight (int) Height of the viewport.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)Clear,
+		(PyCFunction)Dummy_Clear,
+		METH_VARARGS | METH_KEYWORDS,
+		"Clear",
+		"Clear the viewport with the specified colors.\n"
+		"Also clears the depth attachments.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tr (int) Clear value for the red channel. By default is 0\n"
+		"\tg (int) Clear value for the green channel. By default is 0\n"
+		"\tb (int) Clear value for the blue channel. By default is 0\n"
+		"\ta (int) Clear value for the alpha channel. By default is 255\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)PointSize,
+		(PyCFunction)Dummy_PointSize,
+		METH_VARARGS,
+		"PointSize",
+		"Set the size of the point primitive.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tsize (float) Size of the point.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)LineSize,
+		(PyCFunction)Dummy_LineSize,
+		METH_VARARGS,
+		"LineSize",
+		"Set the with of the line primitive.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tsize (float) Width of the line.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)EnableOnly,
+		(PyCFunction)Dummy_EnableOnly,
+		METH_VARARGS,
+		"EnableOnly",
+		"Enables only the specified flags.\n"
+		"The enable flags are:\n"
+		"- ModernGL.ENABLE_NOTHING\n"
+		"- ModernGL.ENABLE_BLEND\n"
+		"- ModernGL.ENABLE_CULL_FACE\n"
+		"- ModernGL.ENABLE_DEPTH_TEST\n"
+		"- ModernGL.ENABLE_MULTISAMPLE\n"
+		"- ModernGL.ENABLE_ALL\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tflags (ModernGL.EnableFlag) A combination of the enable flags using + and - operators.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)EnableBlend,
+		(PyCFunction)Dummy_EnableBlend,
+		METH_NOARGS,
+		"EnableBlend",
+		"Enable blending.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tNone\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)DisableBlend,
+		(PyCFunction)Dummy_DisableBlend,
+		METH_NOARGS,
+		"DisableBlend",
+		"Disable blending.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tNone\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)EnableCullFace,
+		(PyCFunction)Dummy_EnableCullFace,
+		METH_NOARGS,
+		"EnableCullFace",
+		"Enable face culling.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tNone\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)DisableCullFace,
+		(PyCFunction)Dummy_DisableCullFace,
+		METH_NOARGS,
+		"DisableCullFace",
+		"Disable face culling.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tNone\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)EnableDepthTest,
+		(PyCFunction)Dummy_EnableDepthTest,
+		METH_NOARGS,
+		"EnableDepthTest",
+		"Enable depth testing.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tNone\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)DisableDepthTest,
+		(PyCFunction)Dummy_DisableDepthTest,
+		METH_NOARGS,
+		"DisableDepthTest",
+		"Disable depth testing.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tNone\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)EnableMultisample,
+		(PyCFunction)Dummy_EnableMultisample,
+		METH_NOARGS,
+		"EnableMultisample",
+		"Enable multisampling.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tNone\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)DisableMultisample,
+		(PyCFunction)Dummy_DisableMultisample,
+		METH_NOARGS,
+		"DisableMultisample",
+		"Disable multisampling.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tNone\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+};

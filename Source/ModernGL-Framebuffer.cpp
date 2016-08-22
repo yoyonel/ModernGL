@@ -148,7 +148,7 @@ PyObject * ReadPixels(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	OpenGL::glReadPixels(x, y, width, height, format, pixel_type, data);
 	data[size] = 0;
-	
+
 	return bytes;
 }
 
@@ -195,7 +195,7 @@ PyObject * ReadPixel(PyObject * self, PyObject * args, PyObject * kwargs) {
 	if (components < 1 || components > 4) {
 		// TODO:
 	}
-	
+
 	PyObject * tuple = PyTuple_New(components);
 
 	if (floats) {
@@ -236,8 +236,6 @@ PyObject * ReadDepthPixel(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return PyLong_FromUnsignedLong(depth);
 	}
 }
-
-//
 
 
 PyObject * Dummy_NewFramebuffer(PyObject * self) {
@@ -320,3 +318,212 @@ PyObject * Dummy_ReadDepthPixels(PyObject * self) {
 	}
 	return 0;
 }
+
+
+PythonMethod FramebufferMethods[] = {
+	{
+		301,
+		(PyCFunction)NewFramebuffer,
+		(PyCFunction)Dummy_NewFramebuffer,
+		METH_VARARGS | METH_KEYWORDS,
+		"NewFramebuffer",
+		"Creates a framebuffer with two texture attachments. (color and depth)\n"
+		"The color attachment have RGBA format, 8bit for each channel.\n"
+		"The depth texture contains float values.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\twidth (int) Width of the framebuffer. By default is 0\n"
+		"\theight (int) Height of the framebuffer. By default is 0\n"
+		"\n"
+
+		"Returns:\n"
+		"\tfbo (int) The index of the new framebuffer object.\n"
+		"\tcolor (int) The index of the color attachment texture object.\n"
+		"\tdepth (int) The index of the depth attachment texture object.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)DeleteFramebuffer,
+		(PyCFunction)Dummy_DeleteFramebuffer,
+		METH_VARARGS,
+		"DeleteFramebuffer",
+		"\n"
+
+		"Parameters:\n"
+		"\tframebuffer (int) Index of the framebuffer returned by the NewFramebuffer.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)UseFramebuffer,
+		(PyCFunction)Dummy_UseFramebuffer,
+		METH_VARARGS,
+		"UseFramebuffer",
+		"Bind a framebuffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tframebuffer (int) Index of the framebuffer returned by the NewFramebuffer.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)SetDefaultFramebuffer,
+		(PyCFunction)Dummy_SetDefaultFramebuffer,
+		METH_VARARGS,
+		"SetDefaultFramebuffer",
+		"Some application provide a default framebuffer.\n"
+		"Otherwise the default framebuffer is 0.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tfbo_index (int) The value provided by the application.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)UseDefaultFramebuffer,
+		(PyCFunction)Dummy_UseDefaultFramebuffer,
+		METH_NOARGS,
+		"UseDefaultFramebuffer",
+		"Use the default framebuffer.\n"
+		"The default framebuffer is 0.\n"
+		"It can be set with the ModernGL.SetDefaultFramebuffer method.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tNone\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)ReadPixels,
+		(PyCFunction)Dummy_ReadPixels,
+		METH_VARARGS | METH_KEYWORDS,
+		"ReadPixels",
+		"Read the pixels from the active framebuffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tx (int) Offset of the image to read.\n"
+		"\ty (int) Offset of the image to read.\n"
+		"\twidth (int) Width of the image to read.\n"
+		"\theight (int) Height of the image to read.\n"
+		"\tcomponents (int) By default is 3\n"
+		"\n"
+
+		"Returns:\n"
+		"\tpixels (bytes) The color channels selected by components from the active framebuffer.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)ReadDepthPixels,
+		(PyCFunction)Dummy_ReadDepthPixels,
+		METH_VARARGS | METH_KEYWORDS,
+		"ReadDepthPixels",
+		"Read the depth pixels from the active framebuffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tx (int) Offset of the image to read.\n"
+		"\ty (int) Offset of the image to read.\n"
+		"\twidth (int) Width of the image to read.\n"
+		"\theight (int) Height of the image to read.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tpixels (bytes) The depth channel from the active framebuffer.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)ReadPixel,
+		(PyCFunction)Dummy_ReadPixel,
+		METH_VARARGS | METH_KEYWORDS,
+		"ReadPixel",
+		"Read a single pixel from the active framebuffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tx (int) Offset of the pixel to read.\n"
+		"\ty (int) Offset of the pixel to read.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tpixel (int) The rgba value at (x, y) from the active framebuffer.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+	{
+		301,
+		(PyCFunction)ReadDepthPixel,
+		(PyCFunction)Dummy_ReadDepthPixel,
+		METH_VARARGS | METH_KEYWORDS,
+		"ReadDepthPixel",
+		"Read a single depth value from the active framebuffer.\n"
+		"\n"
+
+		"Parameters:\n"
+		"\tx (int) Offset of the pixel to read.\n"
+		"\ty (int) Offset of the pixel to read.\n"
+		"\n"
+
+		"Returns:\n"
+		"\tpixel (float) The depth value at (x, y) from the active framebuffer.\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
+	},
+};

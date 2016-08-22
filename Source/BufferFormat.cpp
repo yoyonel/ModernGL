@@ -67,7 +67,7 @@ FormatNode * FormatIterator::next() {
 				node.type = OpenGL::GL_DOUBLE;
 				node.size = 8;
 				return &node;
-				
+
 			case 'i':
 				if (node.count == 0) {
 					node.count = 1;
@@ -93,6 +93,5 @@ FormatNode * FormatIterator::next() {
 			default:
 				return InvalidFormat;
 		}
-
 	}
 }

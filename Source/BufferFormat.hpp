@@ -16,7 +16,7 @@ struct FormatIterator {
 	const char * ptr;
 	FormatNode node;
 
-	FormatIterator(const char * str) ;
+	FormatIterator(const char * str);
 
 	FormatInfo info();
 	FormatNode * next();

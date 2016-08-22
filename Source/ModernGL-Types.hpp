@@ -1,5 +1,14 @@
 #pragma once
 
+enum ShaderCategory {
+	VERTEX_SHADER,
+	FRAGMENT_SHADER,
+	GEOMETRY_SHADER,
+	TESS_EVALUATION_SHADER,
+	TESS_CONTROL_SHADER,
+	NUM_SHADER_CATEGORIES,
+};
+
 struct Framebuffer {
 	PyObject_HEAD
 	int fbo;

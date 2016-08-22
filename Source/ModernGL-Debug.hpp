@@ -1,9 +1,5 @@
 #pragma once
 
-PyObject * DebugInfo(PyObject * self);
-PyObject * DebugVar(PyObject * self, PyObject * args);
+#include "PythonMethod.hpp"
 
-// Dummy
-
-PyObject * Dummy_DebugInfo(PyObject * self);
-PyObject * Dummy_DebugVar(PyObject * self);
+extern PythonMethod DebugMethods[];
