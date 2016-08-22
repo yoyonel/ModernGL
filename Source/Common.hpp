@@ -4,6 +4,9 @@
 #endif
 #endif
 
+#include "Python.h"
+#include "structmember.h"
+
 #define GET_OBJECT_TYPENAME(var) \
 ((PyTypeObject *)PyObject_Type((PyObject *)var))->tp_name
 

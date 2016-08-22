@@ -1,8 +1,19 @@
 #include "ModernGL.hpp"
 
-const int implementations = sizeof(implementation) / sizeof(Implementation);
+#include "ModernGL-Buffer.hpp"
+#include "ModernGL-Compute.hpp"
+#include "ModernGL-Core.hpp"
+#include "ModernGL-Debug.hpp"
+#include "ModernGL-Framebuffer.hpp"
+#include "ModernGL-Program.hpp"
+#include "ModernGL-Render.hpp"
+#include "ModernGL-Shader.hpp"
+#include "ModernGL-Texture.hpp"
+#include "ModernGL-Transform.hpp"
+#include "ModernGL-Types.hpp"
+#include "ModernGL-VertexArray.hpp"
 
-PyMethodDef methods[implementations + 1];
+PyMethodDef methods[1024];
 
 void InitMethods() {
 	for (int i = 0; i < implementations; ++i) {
