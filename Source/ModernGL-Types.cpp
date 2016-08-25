@@ -74,8 +74,19 @@ PyObject * EnableFlag_new(PyTypeObject * type, PyObject * args, PyObject * kwarg
 }
 
 int Framebuffer_init(Framebuffer * self, PyObject * args, PyObject * kwargs) {
-	PyErr_SetString(ModuleError, "Cannot instantiate Framebuffer.\nCall NewFramebuffer(...) to get a Framebuffer object.");
-	return -1;
+	int fbo;
+
+	static const char * kwlist[] = {"fbo", 0};
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "I|:NewFramebuffer", (char **)kwlist, &fbo)) {
+		return -1;
+	}
+
+	self->fbo = fbo;
+	self->color = 0;
+	self->depth = 0;
+
+	return 0;
 }
 
 int VertexArray_init(VertexArray * self, PyObject * args, PyObject * kwargs) {
