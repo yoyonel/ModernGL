@@ -5,7 +5,7 @@
 #include "ModernGL-Constants.hpp"
 #include "ModernGL-Methods.hpp"
 
-#include "OpenGL.hpp"
+#include "Utils/OpenGL.hpp"
 
 bool initialized;
 

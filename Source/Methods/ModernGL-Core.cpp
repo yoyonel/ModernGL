@@ -4,7 +4,7 @@
 #include "ModernGL-Constants.hpp"
 #include "ModernGL-Errors.hpp"
 #include "ModernGL.hpp"
-#include "OpenGL.hpp"
+#include "Utils/OpenGL.hpp"
 
 PyObject * GetInfo(PyObject * self) {
 	int major = 0;

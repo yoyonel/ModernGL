@@ -3,7 +3,7 @@
 #include "ModernGL-Types.hpp"
 #include "ModernGL-Errors.hpp"
 #include "ModernGL.hpp"
-#include "OpenGL.hpp"
+#include "Utils/OpenGL.hpp"
 
 const char * categoryNames[] = {
 	"VertexShader",

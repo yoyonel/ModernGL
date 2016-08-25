@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common.hpp"
-#include "PythonMethod.hpp"
+#include "Utils/PythonMethod.hpp"
 
 extern int NumBufferMethods;
 extern PythonMethod BufferMethods[];

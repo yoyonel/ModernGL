@@ -1,6 +1,6 @@
 #include "BufferFormat.hpp"
 
-#include "OpenGL.hpp"
+#include "Utils/OpenGL.hpp"
 
 FormatNode * InvalidFormat = (FormatNode *)(-1);
 

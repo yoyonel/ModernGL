@@ -4,7 +4,7 @@
 #include "ModernGL-Errors.hpp"
 #include "ModernGL-Methods.hpp"
 #include "ModernGL.hpp"
-#include "OpenGL.hpp"
+#include "Utils/OpenGL.hpp"
 
 PyObject * InitializeModernGL(PyObject * self, PyObject * args, PyObject * kwargs) {
 	if (initialized) {

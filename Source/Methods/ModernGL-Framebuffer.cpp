@@ -3,7 +3,7 @@
 #include "ModernGL-Types.hpp"
 #include "ModernGL-Errors.hpp"
 #include "ModernGL.hpp"
-#include "OpenGL.hpp"
+#include "Utils/OpenGL.hpp"
 
 PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int width = 0;

@@ -2,9 +2,10 @@
 
 #include "ModernGL-Types.hpp"
 #include "ModernGL-Errors.hpp"
-#include "BufferFormat.hpp"
 #include "ModernGL.hpp"
-#include "OpenGL.hpp"
+
+#include "Utils/BufferFormat.hpp"
+#include "Utils/OpenGL.hpp"
 
 PyObject * NewVertexArray(PyObject * self, PyObject * args, PyObject * kwargs) {
 	Program * program;
