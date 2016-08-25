@@ -1,6 +1,8 @@
 #include "ModernGL-Buffer.hpp"
 
 #include "ModernGL-Types.hpp"
+#include "ModernGL-Errors.hpp"
+#include "ModernGL.hpp"
 #include "OpenGL.hpp"
 
 PyObject * NewVertexBuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
@@ -266,7 +268,7 @@ PyObject * ReadStorageBuffer(PyObject * self, PyObject * args, PyObject * kwargs
 
 PyObject * Dummy_NewVertexBuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "NewVertexBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "NewVertexBuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "NewVertexBuffer() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -275,7 +277,7 @@ PyObject * Dummy_NewVertexBuffer(PyObject * self) {
 
 PyObject * Dummy_NewIndexBuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "NewIndexBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "NewIndexBuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "NewIndexBuffer() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -284,7 +286,7 @@ PyObject * Dummy_NewIndexBuffer(PyObject * self) {
 
 PyObject * Dummy_NewUniformBuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "NewUniformBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "NewUniformBuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "NewUniformBuffer() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -293,7 +295,7 @@ PyObject * Dummy_NewUniformBuffer(PyObject * self) {
 
 PyObject * Dummy_NewStorageBuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "NewStorageBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "NewStorageBuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "NewStorageBuffer() function not initialized. OpenGL 4.3 is required.");
 	}
@@ -302,7 +304,7 @@ PyObject * Dummy_NewStorageBuffer(PyObject * self) {
 
 PyObject * Dummy_DeleteVertexBuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "DeleteVertexBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "DeleteVertexBuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "DeleteVertexBuffer() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -311,7 +313,7 @@ PyObject * Dummy_DeleteVertexBuffer(PyObject * self) {
 
 PyObject * Dummy_DeleteIndexBuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "DeleteIndexBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "DeleteIndexBuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "DeleteIndexBuffer() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -320,7 +322,7 @@ PyObject * Dummy_DeleteIndexBuffer(PyObject * self) {
 
 PyObject * Dummy_DeleteUniformBuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "DeleteUniformBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "DeleteUniformBuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "DeleteUniformBuffer() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -329,7 +331,7 @@ PyObject * Dummy_DeleteUniformBuffer(PyObject * self) {
 
 PyObject * Dummy_DeleteStorageBuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "DeleteStorageBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "DeleteStorageBuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "DeleteStorageBuffer() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -338,7 +340,7 @@ PyObject * Dummy_DeleteStorageBuffer(PyObject * self) {
 
 PyObject * Dummy_UpdateVertexBuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "UpdateVertexBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "UpdateVertexBuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "UpdateVertexBuffer() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -347,7 +349,7 @@ PyObject * Dummy_UpdateVertexBuffer(PyObject * self) {
 
 PyObject * Dummy_UpdateUniformBuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "UpdateUniformBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "UpdateUniformBuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "UpdateUniformBuffer() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -356,7 +358,7 @@ PyObject * Dummy_UpdateUniformBuffer(PyObject * self) {
 
 PyObject * Dummy_UpdateIndexBuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "UpdateIndexBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "UpdateIndexBuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "UpdateIndexBuffer() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -365,7 +367,7 @@ PyObject * Dummy_UpdateIndexBuffer(PyObject * self) {
 
 PyObject * Dummy_UpdateStorageBuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "UpdateStorageBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "UpdateStorageBuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "UpdateStorageBuffer() function not initialized. OpenGL 4.3 is required.");
 	}
@@ -374,7 +376,7 @@ PyObject * Dummy_UpdateStorageBuffer(PyObject * self) {
 
 PyObject * Dummy_UseUniformBuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "UseUniformBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "UseUniformBuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "UseUniformBuffer() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -383,7 +385,7 @@ PyObject * Dummy_UseUniformBuffer(PyObject * self) {
 
 PyObject * Dummy_UseStorageBuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "UseStorageBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "UseStorageBuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "UseStorageBuffer() function not initialized. OpenGL 4.3 is required.");
 	}
@@ -392,7 +394,7 @@ PyObject * Dummy_UseStorageBuffer(PyObject * self) {
 
 PyObject * Dummy_ReadStorageBuffer(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "ReadStorageBuffer() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "ReadStorageBuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "ReadStorageBuffer() function not initialized. OpenGL 4.3 is required.");
 	}
@@ -739,3 +741,5 @@ PythonMethod BufferMethods[] = {
 		"\n"
 	},
 };
+
+int NumBufferMethods = sizeof(BufferMethods) / sizeof(BufferMethods[0]);

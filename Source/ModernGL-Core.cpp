@@ -1,6 +1,9 @@
 #include "ModernGL-Core.hpp"
 
 #include "ModernGL-Types.hpp"
+#include "ModernGL-Constants.hpp"
+#include "ModernGL-Errors.hpp"
+#include "ModernGL.hpp"
 #include "OpenGL.hpp"
 
 PyObject * GetInfo(PyObject * self) {
@@ -146,7 +149,7 @@ PyObject * DisableMultisample(PyObject * self) {
 
 PyObject * Dummy_Viewport(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "Viewport() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "Viewport() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "Viewport() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -155,7 +158,7 @@ PyObject * Dummy_Viewport(PyObject * self) {
 
 PyObject * Dummy_Clear(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "Clear() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "Clear() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "Clear() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -164,7 +167,7 @@ PyObject * Dummy_Clear(PyObject * self) {
 
 PyObject * Dummy_GetInfo(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "GetInfo() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "GetInfo() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "GetInfo() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -173,7 +176,7 @@ PyObject * Dummy_GetInfo(PyObject * self) {
 
 PyObject * Dummy_PointSize(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "PointSize() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "PointSize() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "PointSize() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -182,7 +185,7 @@ PyObject * Dummy_PointSize(PyObject * self) {
 
 PyObject * Dummy_LineSize(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "LineSize() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "LineSize() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "LineSize() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -191,7 +194,7 @@ PyObject * Dummy_LineSize(PyObject * self) {
 
 PyObject * Dummy_EnableOnly(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "EnableOnly() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "EnableOnly() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "EnableOnly() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -200,7 +203,7 @@ PyObject * Dummy_EnableOnly(PyObject * self) {
 
 PyObject * Dummy_EnableBlend(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "EnableBlend() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "EnableBlend() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "EnableBlend() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -209,7 +212,7 @@ PyObject * Dummy_EnableBlend(PyObject * self) {
 
 PyObject * Dummy_EnableCullFace(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "EnableCullFace() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "EnableCullFace() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "EnableCullFace() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -218,7 +221,7 @@ PyObject * Dummy_EnableCullFace(PyObject * self) {
 
 PyObject * Dummy_EnableDepthTest(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "EnableDepthTest() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "EnableDepthTest() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "EnableDepthTest() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -227,7 +230,7 @@ PyObject * Dummy_EnableDepthTest(PyObject * self) {
 
 PyObject * Dummy_EnableMultisample(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "EnableMultisample() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "EnableMultisample() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "EnableMultisample() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -236,7 +239,7 @@ PyObject * Dummy_EnableMultisample(PyObject * self) {
 
 PyObject * Dummy_DisableBlend(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "DisableBlend() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "DisableBlend() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "DisableBlend() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -245,7 +248,7 @@ PyObject * Dummy_DisableBlend(PyObject * self) {
 
 PyObject * Dummy_DisableCullFace(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "DisableCullFace() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "DisableCullFace() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "DisableCullFace() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -254,7 +257,7 @@ PyObject * Dummy_DisableCullFace(PyObject * self) {
 
 PyObject * Dummy_DisableDepthTest(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "DisableDepthTest() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "DisableDepthTest() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "DisableDepthTest() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -263,7 +266,7 @@ PyObject * Dummy_DisableDepthTest(PyObject * self) {
 
 PyObject * Dummy_DisableMultisample(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "DisableMultisample() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "DisableMultisample() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "DisableMultisample() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -582,3 +585,5 @@ PythonMethod CoreMethods[] = {
 		"\n"
 	},
 };
+
+int NumCoreMethods = sizeof(CoreMethods) / sizeof(CoreMethods[0]);

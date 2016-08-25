@@ -1,6 +1,8 @@
 #include "ModernGL-Compute.hpp"
 
 #include "ModernGL-Types.hpp"
+#include "ModernGL-Errors.hpp"
+#include "ModernGL.hpp"
 #include "OpenGL.hpp"
 
 PyObject * NewComputeShader(PyObject * self, PyObject * args) {
@@ -115,7 +117,7 @@ PyObject * RunComputeShader(PyObject * self, PyObject * args, PyObject * kwargs)
 
 PyObject * Dummy_NewComputeShader(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "NewComputeShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "NewComputeShader() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "NewComputeShader() function not initialized. OpenGL 4.3 is required.");
 	}
@@ -124,7 +126,7 @@ PyObject * Dummy_NewComputeShader(PyObject * self) {
 
 PyObject * Dummy_DeleteComputeShader(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "DeleteComputeShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "DeleteComputeShader() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "DeleteComputeShader() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -133,7 +135,7 @@ PyObject * Dummy_DeleteComputeShader(PyObject * self) {
 
 PyObject * Dummy_RunComputeShader(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "RunComputeShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "RunComputeShader() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "RunComputeShader() function not initialized. OpenGL 4.3 is required.");
 	}
@@ -212,3 +214,5 @@ PythonMethod ComputeMethods[] = {
 		"\n"
 	},
 };
+
+int NumComputeMethods = sizeof(ComputeMethods) / sizeof(ComputeMethods[0]);

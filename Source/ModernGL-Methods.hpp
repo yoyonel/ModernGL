@@ -2,4 +2,7 @@
 
 #include "Common.hpp"
 
-extern PyMethodDef methods[];
+extern PyMethodDef moduleMethod[];
+
+extern void InitMethods();
+extern void LoadMethods();

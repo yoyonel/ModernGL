@@ -1,6 +1,8 @@
 #include "ModernGL-Shader.hpp"
 
 #include "ModernGL-Types.hpp"
+#include "ModernGL-Errors.hpp"
+#include "ModernGL.hpp"
 #include "OpenGL.hpp"
 
 PyObject * NewVertexShader(PyObject * self, PyObject * args) {
@@ -236,7 +238,7 @@ PyObject * DeleteShader(PyObject * self, PyObject * args) {
 
 PyObject * Dummy_NewVertexShader(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "NewVertexShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "NewVertexShader() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "NewVertexShader() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -245,7 +247,7 @@ PyObject * Dummy_NewVertexShader(PyObject * self) {
 
 PyObject * Dummy_NewFragmentShader(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "NewFragmentShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "NewFragmentShader() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "NewFragmentShader() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -254,7 +256,7 @@ PyObject * Dummy_NewFragmentShader(PyObject * self) {
 
 PyObject * Dummy_NewGeometryShader(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "NewGeometryShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "NewGeometryShader() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "NewGeometryShader() function not initialized. OpenGL 3.2 is required.");
 	}
@@ -263,7 +265,7 @@ PyObject * Dummy_NewGeometryShader(PyObject * self) {
 
 PyObject * Dummy_NewTessControlShader(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "NewTessControlShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "NewTessControlShader() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "NewTessControlShader() function not initialized. OpenGL 4.0 is required.");
 	}
@@ -272,7 +274,7 @@ PyObject * Dummy_NewTessControlShader(PyObject * self) {
 
 PyObject * Dummy_NewTessEvaluationShader(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "NewTessEvaluationShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "NewTessEvaluationShader() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "NewTessEvaluationShader() function not initialized. OpenGL 4.0 is required.");
 	}
@@ -281,7 +283,7 @@ PyObject * Dummy_NewTessEvaluationShader(PyObject * self) {
 
 PyObject * Dummy_DeleteShader(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "DeleteShader() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "DeleteShader() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "DeleteShader() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -440,3 +442,5 @@ PythonMethod ShaderMethods[] = {
 		"\n"
 	},
 };
+
+int NumShaderMethods = sizeof(ShaderMethods) / sizeof(ShaderMethods[0]);

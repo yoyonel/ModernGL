@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.hpp"
+#include "PythonMethod.hpp"
 
 extern bool initialized;
 
@@ -16,3 +17,6 @@ extern int activeViewportHeight;
 extern int versionNumber;
 
 extern int maxTextureUnits;
+
+extern int NumModuleMethods;
+extern PythonMethod ModuleMethods[];

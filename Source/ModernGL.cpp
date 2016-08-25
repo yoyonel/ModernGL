@@ -1,14 +1,11 @@
 #include "ModernGL.hpp"
 
-#include "OpenGL.hpp"
+#include "ModernGL-Types.hpp"
+#include "ModernGL-Errors.hpp"
+#include "ModernGL-Constants.hpp"
+#include "ModernGL-Methods.hpp"
 
-PyObject * ModuleError;
-PyObject * ModuleRangeError;
-PyObject * ModuleCompileError;
-PyObject * ModuleInvalidFormat;
-PyObject * ModuleAttributeNotFound;
-PyObject * ModuleNotInitialized;
-PyObject * ModuleNotSupported;
+#include "OpenGL.hpp"
 
 bool initialized;
 
@@ -24,91 +21,6 @@ int activeViewportHeight;
 int versionNumber;
 
 int maxTextureUnits;
-
-// {
-// 	0,
-// 	(PyCFunction)InitializeModernGL,
-// 	(PyCFunction)InitializeModernGL,
-// 	METH_VARARGS,
-// 	"InitializeModernGL",
-// 	"Initialize the ModernGL module inside a valid OpenGL context.\n"
-// 	"A valid OpenGL context must exists before the function call.\n"
-// 	"\n"
-
-// 	"Parameters:\n"
-// 	"\tNone\n"
-// 	"\n"
-
-// 	"Returns:\n"
-// 	"\tNone\n"
-// 	"\n"
-
-// 	"Errors:\n"
-// 	"\t(ModernGL.NotInitialized) There is no valid OpenGL context or OpenGL version is below 3.1\n"
-// 	"\n"
-// },
-
-PyObject * InitializeModernGL(PyObject * self, PyObject * args) {
-	if (initialized) {
-		Py_RETURN_NONE;
-	}
-
-	if (!PyArg_ParseTuple(args, ":InitializeModernGL")) {
-		return 0;
-	}
-
-	// Initialize OpenGL
-	if (!OpenGL::InitializeOpenGL()) {
-		PyErr_SetString(ModuleNotInitialized, "InitializeOpenGL failed.");
-		return 0;
-	}
-
-	if (OpenGL::isglGetIntegerv()) {
-		int major = 0;
-		int minor = 0;
-
-		OpenGL::glGetIntegerv(OpenGL::GL_MAJOR_VERSION, &major);
-		OpenGL::glGetIntegerv(OpenGL::GL_MINOR_VERSION, &minor);
-
-		versionNumber = major * 100 + minor;
-	}
-
-	if (versionNumber < 301) {
-		PyErr_SetString(ModuleNotInitialized, "Not enough OpenGL support.");
-		return 0;
-	}
-
-	// LoadMethods();
-
-	// Default blending
-	OpenGL::glBlendFunc(OpenGL::GL_SRC_ALPHA, OpenGL::GL_ONE_MINUS_SRC_ALPHA);
-
-	// Default primitive restart index
-	OpenGL::glEnable(OpenGL::GL_PRIMITIVE_RESTART);
-	OpenGL::glPrimitiveRestartIndex(-1);
-
-	// Default VAO for GL_ELEMENT_ARRAY_BUFFER operations
-	OpenGL::glGenVertexArrays(1, (OpenGL::GLuint *)&defaultVertexArray);
-	OpenGL::glBindVertexArray(defaultVertexArray);
-
-	// Default FBO and program
-	OpenGL::glGetIntegerv(OpenGL::GL_DRAW_FRAMEBUFFER_BINDING, (OpenGL::GLint *)&defaultFramebuffer);
-	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
-
-	// Default texture unit for texture operations
-	OpenGL::glGetIntegerv(OpenGL::GL_MAX_TEXTURE_IMAGE_UNITS, (OpenGL::GLint *)&maxTextureUnits);
-	defaultTextureUnit = maxTextureUnits - 1;
-
-	activeFramebuffer = defaultFramebuffer;
-
-	int viewport[4] = {};
-	OpenGL::glGetIntegerv(OpenGL::GL_VIEWPORT, viewport);
-	activeViewportWidth = viewport[2];
-	activeViewportHeight = viewport[3];
-
-	initialized = true;
-	Py_RETURN_NONE;
-}
 
 bool ModuleReady() {
 	if (PyType_Ready(&FramebufferType) < 0) {
@@ -201,35 +113,6 @@ PyObject * InitModule(PyObject * module) {
 	PyModule_AddObject(module, "ComputeShader", (PyObject *)&ComputeShaderType);
 	PyModule_AddObject(module, "EnableFlag", (PyObject *)&EnableFlagType);
 
-	ModuleError = PyErr_NewException((char *)"ModernGL.Error", 0, 0);
-	Py_INCREF(ModuleError);
-
-	ModuleRangeError = PyErr_NewException((char *)"ModernGL.RangeError", ModuleError, 0);
-	Py_INCREF(ModuleRangeError);
-
-	ModuleCompileError = PyErr_NewException((char *)"ModernGL.CompileError", ModuleError, 0);
-	Py_INCREF(ModuleCompileError);
-
-	ModuleInvalidFormat = PyErr_NewException((char *)"ModernGL.InvalidFormat", ModuleError, 0);
-	Py_INCREF(ModuleInvalidFormat);
-
-	ModuleAttributeNotFound = PyErr_NewException((char *)"ModernGL.AttributeNotFound", ModuleError, 0);
-	Py_INCREF(ModuleAttributeNotFound);
-
-	ModuleNotInitialized = PyErr_NewException((char *)"ModernGL.NotInitialized", ModuleError, 0);
-	Py_INCREF(ModuleNotInitialized);
-
-	ModuleNotSupported = PyErr_NewException((char *)"ModernGL.NotSupported", ModuleError, 0);
-	Py_INCREF(ModuleNotSupported);
-
-	PyModule_AddObject(module, "Error", ModuleError);
-	PyModule_AddObject(module, "RangeError", ModuleRangeError);
-	PyModule_AddObject(module, "CompileError", ModuleCompileError);
-	PyModule_AddObject(module, "InvalidFormat", ModuleInvalidFormat);
-	PyModule_AddObject(module, "AttributeNotFound", ModuleAttributeNotFound);
-	PyModule_AddObject(module, "NotInitialized", ModuleNotInitialized);
-	PyModule_AddObject(module, "NotSupported", ModuleNotSupported);
-
 	PyModule_AddObject(module, "ENABLE_NOTHING", CreateEnableFlagType(ENABLE_NOTHING));
 	PyModule_AddObject(module, "ENABLE_BLEND", CreateEnableFlagType(ENABLE_BLEND));
 	PyModule_AddObject(module, "ENABLE_CULL_FACE", CreateEnableFlagType(ENABLE_CULL_FACE));
@@ -249,7 +132,7 @@ PyObject * InitModule(PyObject * module) {
 
 #if PY_MAJOR_VERSION >= 3
 
-static struct PyModuleDef moduledef = {PyModuleDef_HEAD_INIT, "ModernGL", 0, -1, methods, 0, 0, 0, 0};
+static struct PyModuleDef moduledef = {PyModuleDef_HEAD_INIT, "ModernGL", 0, -1, moduleMethod, 0, 0, 0, 0};
 
 extern "C" {
 	PyObject * PyInit_ModernGL();
@@ -261,7 +144,7 @@ PyObject * PyInit_ModernGL() {
 		return 0;
 	}
 
-	// InitMethods();
+	InitMethods();
 
 	return InitModule(PyModule_Create(&moduledef));
 }
@@ -278,7 +161,7 @@ PyObject * initModernGL() {
 		return 0;
 	}
 
-	// InitMethods();
+	InitMethods();
 
 	return InitModule(Py_InitModule("ModernGL", methods));
 }

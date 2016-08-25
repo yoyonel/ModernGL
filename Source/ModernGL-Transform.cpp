@@ -1,6 +1,8 @@
 #include "ModernGL-Transform.hpp"
 
 #include "ModernGL-Types.hpp"
+#include "ModernGL-Errors.hpp"
+#include "ModernGL.hpp"
 #include "OpenGL.hpp"
 
 PyObject * TransformTriangles(PyObject * self, PyObject * args, PyObject * kwargs) {
@@ -424,7 +426,7 @@ PyObject * TransformTrianglesAdjacency(PyObject * self, PyObject * args, PyObjec
 
 PyObject * Dummy_TransformTriangles(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "TransformTriangles() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "TransformTriangles() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "TransformTriangles() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -433,7 +435,7 @@ PyObject * Dummy_TransformTriangles(PyObject * self) {
 
 PyObject * Dummy_TransformTriangleStrip(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "TransformTriangleStrip() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "TransformTriangleStrip() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "TransformTriangleStrip() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -442,7 +444,7 @@ PyObject * Dummy_TransformTriangleStrip(PyObject * self) {
 
 PyObject * Dummy_TransformTriangleFan(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "TransformTriangleFan() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "TransformTriangleFan() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "TransformTriangleFan() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -451,7 +453,7 @@ PyObject * Dummy_TransformTriangleFan(PyObject * self) {
 
 PyObject * Dummy_TransformLines(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "TransformLines() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "TransformLines() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "TransformLines() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -460,7 +462,7 @@ PyObject * Dummy_TransformLines(PyObject * self) {
 
 PyObject * Dummy_TransformLineStrip(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "TransformLineStrip() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "TransformLineStrip() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "TransformLineStrip() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -469,7 +471,7 @@ PyObject * Dummy_TransformLineStrip(PyObject * self) {
 
 PyObject * Dummy_TransformLineLoop(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "TransformLineLoop() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "TransformLineLoop() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "TransformLineLoop() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -478,7 +480,7 @@ PyObject * Dummy_TransformLineLoop(PyObject * self) {
 
 PyObject * Dummy_TransformPoints(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "TransformPoints() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "TransformPoints() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "TransformPoints() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -487,7 +489,7 @@ PyObject * Dummy_TransformPoints(PyObject * self) {
 
 PyObject * Dummy_TransformLineStripAdjacency(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "TransformLineStripAdjacency() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "TransformLineStripAdjacency() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "TransformLineStripAdjacency() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -496,7 +498,7 @@ PyObject * Dummy_TransformLineStripAdjacency(PyObject * self) {
 
 PyObject * Dummy_TransformLinesAdjacency(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "TransformLinesAdjacency() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "TransformLinesAdjacency() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "TransformLinesAdjacency() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -505,7 +507,7 @@ PyObject * Dummy_TransformLinesAdjacency(PyObject * self) {
 
 PyObject * Dummy_TransformTriangleStripAdjacency(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "TransformTriangleStripAdjacency() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "TransformTriangleStripAdjacency() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "TransformTriangleStripAdjacency() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -514,7 +516,7 @@ PyObject * Dummy_TransformTriangleStripAdjacency(PyObject * self) {
 
 PyObject * Dummy_TransformTrianglesAdjacency(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "TransformTrianglesAdjacency() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "TransformTrianglesAdjacency() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "TransformTrianglesAdjacency() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -612,3 +614,5 @@ PythonMethod TransformMethods[] = {
 		""
 	},
 };
+
+int NumTransformMethods = sizeof(TransformMethods) / sizeof(TransformMethods[0]);

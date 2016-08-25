@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common.hpp"
+
 extern PyObject * ModuleError;
 extern PyObject * ModuleRangeError;
 extern PyObject * ModuleCompileError;

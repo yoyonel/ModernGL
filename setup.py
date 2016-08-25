@@ -152,6 +152,7 @@ Sources = [
 	'Source/ModernGL-Errors.cpp',
 	'Source/ModernGL-Experimental.cpp',
 	'Source/ModernGL-Framebuffer.cpp',
+	'Source/ModernGL-Initialize.cpp',
 	'Source/ModernGL-Methods.cpp',
 	'Source/ModernGL-Program.cpp',
 	'Source/ModernGL-Render.cpp',

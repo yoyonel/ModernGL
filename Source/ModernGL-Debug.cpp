@@ -1,6 +1,8 @@
 #include "ModernGL-Debug.hpp"
 
 #include "ModernGL-Types.hpp"
+#include "ModernGL-Errors.hpp"
+#include "ModernGL.hpp"
 #include "OpenGL.hpp"
 
 PyObject * DebugInfo(PyObject * self) {
@@ -118,7 +120,7 @@ PyObject * DebugVar(PyObject * self, PyObject * args) {
 
 PyObject * Dummy_DebugInfo(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "DebugInfo() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "DebugInfo() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "DebugInfo() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -127,7 +129,7 @@ PyObject * Dummy_DebugInfo(PyObject * self) {
 
 PyObject * Dummy_DebugVar(PyObject * self) {
 	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "DebugVar() function not initialized.\n\nCall ModernGL.InitializeModernGL() first.\n\n");
+		PyErr_SetString(ModuleNotInitialized, "DebugVar() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "DebugVar() function not initialized. OpenGL 3.1 is required.");
 	}
@@ -153,3 +155,5 @@ PythonMethod DebugMethods[] = {
 		""
 	},
 };
+
+int NumDebugMethods = sizeof(DebugMethods) / sizeof(DebugMethods[0]);
