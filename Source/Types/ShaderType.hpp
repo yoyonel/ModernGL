@@ -18,4 +18,6 @@ struct Shader {
 	bool attached;
 };
 
+extern PyTypeObject ShaderType;
+
 PyObject * CreateShaderType(int shader, ShaderCategory category);
