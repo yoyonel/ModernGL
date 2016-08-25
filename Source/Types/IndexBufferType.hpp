@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common.h"
+#include "Common.hpp"
 
 struct IndexBuffer {
 	PyObject_HEAD
