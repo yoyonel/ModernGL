@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common.h"
+
 struct UniformBuffer {
 	PyObject_HEAD
 	int ubo;

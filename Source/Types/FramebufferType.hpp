@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common.h"
+
 struct Framebuffer {
 	PyObject_HEAD
 	int fbo;

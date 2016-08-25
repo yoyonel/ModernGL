@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common.h"
+
 struct Program {
 	PyObject_HEAD
 	int program;

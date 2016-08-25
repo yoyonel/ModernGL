@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common.h"
+
 struct VertexBuffer {
 	PyObject_HEAD
 	int vbo;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common.h"
+
 struct EnableFlag {
 	PyObject_HEAD
 	unsigned value;

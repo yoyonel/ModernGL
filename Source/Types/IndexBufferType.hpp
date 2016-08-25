@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common.h"
+
 struct IndexBuffer {
 	PyObject_HEAD
 	int ibo;

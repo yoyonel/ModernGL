@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common.h"
+
 struct VertexArray {
 	PyObject_HEAD
 	int vao;

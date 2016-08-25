@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common.h"
+
 struct UniformLocation {
 	PyObject_HEAD
 	int location;

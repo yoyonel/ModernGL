@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common.h"
+
 struct Texture {
 	PyObject_HEAD
 	int texture;

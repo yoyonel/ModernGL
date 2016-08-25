@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common.h"
+
 struct StorageBuffer {
 	PyObject_HEAD
 	int sbo;

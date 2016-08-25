@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common.h"
+
 struct ComputeShader {
 	PyObject_HEAD
 	int shader;
