@@ -73,7 +73,7 @@ PythonMethod InitializeMethods[] = {
 		0,
 		(PyCFunction)InitializeModernGL,
 		(PyCFunction)InitializeModernGL,
-		METH_VARARGS | METH_KWARGS,
+		METH_VARARGS | METH_KEYWORDS,
 		"Init",
 		"Initialize the ModernGL module inside a valid OpenGL context.\n"
 		"A valid OpenGL context must exists before the function call.\n"
@@ -95,7 +95,7 @@ PythonMethod InitializeMethods[] = {
 		0,
 		(PyCFunction)InitializeModernGL,
 		(PyCFunction)InitializeModernGL,
-		METH_VARARGS | METH_KWARGS,
+		METH_VARARGS | METH_KEYWORDS,
 		"InitializeModernGL",
 		"Initialize the ModernGL module inside a valid OpenGL context.\n"
 		"A valid OpenGL context must exists before the function call.\n"
