@@ -1,4 +1,4 @@
-#include "ModernGL-Errors.hpp"
+#include "Errors.hpp"
 
 PyObject * ModuleError;
 PyObject * ModuleRangeError;

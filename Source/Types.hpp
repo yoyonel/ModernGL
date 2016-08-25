@@ -116,7 +116,6 @@ PyObject * CreateIndexBufferType(int ibo, int size);
 PyObject * CreateUniformBufferType(int ubo, int size);
 PyObject * CreateStorageBufferType(int sbo, int size);
 PyObject * CreateTextureType(int texture, int width, int height, int components, bool floats);
-PyObject * CreateShaderType(int shader, ShaderCategory category);
 PyObject * CreateProgramType(int program);
 PyObject * CreateUniformLocationType(int location, int program, int type);
 PyObject * CreateUniformBufferLocationType(int location, int program, int size);

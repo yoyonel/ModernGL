@@ -1,6 +1,6 @@
-#include "ModernGL-Types.hpp"
+#include "Types.hpp"
 
-#include "ModernGL-Errors.hpp"
+#include "Errors.hpp"
 
 const char * enableTable[] = {
 	"Nothing",

@@ -1,8 +1,8 @@
-#include "ModernGL-Core.hpp"
+#include "Core.hpp"
 
-#include "ModernGL-Types.hpp"
-#include "ModernGL-Constants.hpp"
-#include "ModernGL-Errors.hpp"
+#include "Types.hpp"
+#include "Constants.hpp"
+#include "Errors.hpp"
 #include "ModernGL.hpp"
 #include "Utils/OpenGL.hpp"
 

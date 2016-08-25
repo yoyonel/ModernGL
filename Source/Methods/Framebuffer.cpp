@@ -1,7 +1,7 @@
-#include "ModernGL-Framebuffer.hpp"
+#include "Framebuffer.hpp"
 
-#include "ModernGL-Types.hpp"
-#include "ModernGL-Errors.hpp"
+#include "Types.hpp"
+#include "Errors.hpp"
 #include "ModernGL.hpp"
 #include "Utils/OpenGL.hpp"
 

@@ -1,6 +1,6 @@
-#include "ModernGL-Constants.hpp"
+#include "Constants.hpp"
 
-#include "ModernGL-Types.hpp"
+#include "Types.hpp"
 
 #define STR_VERSION(ver) # ver
 
