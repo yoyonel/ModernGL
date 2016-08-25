@@ -8,3 +8,5 @@ const int ENABLE_CULL_FACE = 0x02;
 const int ENABLE_DEPTH_TEST = 0x04;
 const int ENABLE_MULTISAMPLE = 0x08;
 const int ENABLE_ALL = 0x0F;
+
+void RegisterConstants(PyObject * module);

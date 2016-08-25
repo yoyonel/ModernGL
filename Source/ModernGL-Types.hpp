@@ -122,3 +122,6 @@ PyObject * CreateUniformLocationType(int location, int program, int type);
 PyObject * CreateUniformBufferLocationType(int location, int program, int size);
 PyObject * CreateComputeShaderType(int shader, int program);
 PyObject * CreateEnableFlagType(unsigned value);
+
+bool TypeReadyCheck();
+void RegisterTypes(PyObject * module);
