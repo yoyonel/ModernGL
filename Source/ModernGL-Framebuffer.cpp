@@ -106,22 +106,6 @@ PyObject * UseFramebuffer(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * SetDefaultFramebuffer(PyObject * self, PyObject * args) { // TODO: mark as deprecated allow: def_fbo = Framebuffer(2) # QT
-	int fbo;
-
-	if (!PyArg_ParseTuple(args, "i:SetDefaultFramebuffer", &fbo)) {
-		return 0;
-	}
-
-	defaultFramebuffer = fbo;
-	Py_RETURN_NONE;
-}
-
-PyObject * UseDefaultFramebuffer(PyObject * self) { // TODO: mark as deprecated
-	OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, defaultFramebuffer);
-	Py_RETURN_NONE;
-}
-
 PyObject * ReadPixels(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int x;
 	int y;
@@ -268,24 +252,6 @@ PyObject * Dummy_UseFramebuffer(PyObject * self) {
 	return 0;
 }
 
-PyObject * Dummy_SetDefaultFramebuffer(PyObject * self) {
-	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "SetDefaultFramebuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
-	} else {
-		PyErr_SetString(ModuleNotSupported, "SetDefaultFramebuffer() function not initialized. OpenGL 3.1 is required.");
-	}
-	return 0;
-}
-
-PyObject * Dummy_UseDefaultFramebuffer(PyObject * self) {
-	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "UseDefaultFramebuffer() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
-	} else {
-		PyErr_SetString(ModuleNotSupported, "UseDefaultFramebuffer() function not initialized. OpenGL 3.1 is required.");
-	}
-	return 0;
-}
-
 PyObject * Dummy_ReadPixel(PyObject * self) {
 	if (!initialized) {
 		PyErr_SetString(ModuleNotInitialized, "ReadPixel() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
@@ -381,51 +347,6 @@ PythonMethod FramebufferMethods[] = {
 
 		"Parameters:\n"
 		"\tframebuffer (int) Index of the framebuffer returned by the NewFramebuffer.\n"
-		"\n"
-
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-
-		"Errors:\n"
-		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
-		"\n"
-	},
-	{
-		301,
-		(PyCFunction)SetDefaultFramebuffer,
-		(PyCFunction)Dummy_SetDefaultFramebuffer,
-		METH_VARARGS,
-		"SetDefaultFramebuffer",
-		"Some application provide a default framebuffer.\n"
-		"Otherwise the default framebuffer is 0.\n"
-		"\n"
-
-		"Parameters:\n"
-		"\tfbo_index (int) The value provided by the application.\n"
-		"\n"
-
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-
-		"Errors:\n"
-		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
-		"\n"
-	},
-	{
-		301,
-		(PyCFunction)UseDefaultFramebuffer,
-		(PyCFunction)Dummy_UseDefaultFramebuffer,
-		METH_NOARGS,
-		"UseDefaultFramebuffer",
-		"Use the default framebuffer.\n"
-		"The default framebuffer is 0.\n"
-		"It can be set with the ModernGL.SetDefaultFramebuffer method.\n"
-		"\n"
-
-		"Parameters:\n"
-		"\tNone\n"
 		"\n"
 
 		"Returns:\n"

@@ -16,6 +16,8 @@ void RegisterConstants(PyObject * module) {
 
 	PyModule_AddStringConstant(module, "__AUTHOR_NAME__", "Szabolcs Dombi");
 	PyModule_AddStringConstant(module, "__AUTHOR_EMAIL__", "cprogrammer1994@gmail.com");
+
+	PyModule_AddObject(module, "screen", CreateFramebufferType(0, 0, 0));
 }
 
 #undef STR_VERSION
