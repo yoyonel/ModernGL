@@ -11,13 +11,14 @@ void RegisterConstants(PyObject * module) {
 	PyModule_AddObject(module, "ENABLE_DEPTH_TEST", CreateEnableFlagType(ENABLE_DEPTH_TEST));
 	PyModule_AddObject(module, "ENABLE_MULTISAMPLE", CreateEnableFlagType(ENABLE_MULTISAMPLE));
 	PyModule_AddObject(module, "ENABLE_ALL", CreateEnableFlagType(ENABLE_ALL));
+	
+	PyModule_AddObject(module, "SCREEN", CreateFramebufferType(0, 0, 0));
 
 	PyModule_AddStringConstant(module, "VERSION", STR_VERSION(MODERN_GL_VERSION));
 
 	PyModule_AddStringConstant(module, "__AUTHOR_NAME__", "Szabolcs Dombi");
 	PyModule_AddStringConstant(module, "__AUTHOR_EMAIL__", "cprogrammer1994@gmail.com");
 
-	PyModule_AddObject(module, "screen", CreateFramebufferType(0, 0, 0));
 }
 
 #undef STR_VERSION
