@@ -45,8 +45,7 @@ quality, with less code written.
 '''
 
 Classifiers = [
-	'Development Status :: 4 - Beta',
-#	'Development Status :: 5 - Production/Stable',
+	'Development Status :: 5 - Production/Stable',
 #	'Development Status :: 6 - Mature',
 	'Environment :: Win32 (MS Windows)',
 	'Environment :: X11 Applications',
@@ -142,27 +141,49 @@ Libraries = {
 }
 
 Sources = [
-	'Source/OpenGL.cpp',
+	'Source/Methods.cpp',
+	'Source/Methods/Buffer.cpp',
+	'Source/Methods/Compute.cpp',
+	'Source/Methods/Core.cpp',
+	'Source/Methods/Debug.cpp',
+	'Source/Methods/Experimental.cpp',
+	'Source/Methods/Framebuffer.cpp',
+	'Source/Methods/Initialize.cpp',
+	'Source/Methods/Program.cpp',
+	'Source/Methods/Render.cpp',
+	'Source/Methods/Shader.cpp',
+	'Source/Methods/Texture.cpp',
+	'Source/Methods/Transform.cpp',
+	'Source/Methods/VertexArray.cpp',
+
+	'Source/Types/ComputeShaderType.cpp',
+	'Source/Types/EnableFlagType.cpp',
+	'Source/Types/FramebufferType.cpp',
+	'Source/Types/IndexBufferType.cpp',
+	'Source/Types/ProgramType.cpp',
+	'Source/Types/ShaderType.cpp',
+	'Source/Types/StorageBufferType.cpp',
+	'Source/Types/TextureType.cpp',
+	'Source/Types/UniformBufferLocationType.cpp',
+	'Source/Types/UniformBufferType.cpp',
+	'Source/Types/UniformLocationType.cpp',
+	'Source/Types/VertexArrayType.cpp',
+	'Source/Types/VertexBufferType.cpp',
+
+	'Source/Utils/BufferFormat.cpp',
+	'Source/Utils/OpenGL.cpp',
+	'Source/Utils/PythonMethod.cpp',
+
+	'Source/Constants.cpp',
+	'Source/Errors.cpp',
+	'Source/Types.cpp',
+
 	'Source/ModernGL.cpp',
-	'Source/BufferFormat.cpp',
-	'Source/ModernGL-Buffer.cpp',
-	'Source/ModernGL-Compute.cpp',
-	'Source/ModernGL-Core.cpp',
-	'Source/ModernGL-Debug.cpp',
-	'Source/ModernGL-Dummy.cpp',
-	'Source/ModernGL-Framebuffer.cpp',
-	'Source/ModernGL-Methods.cpp',
-	'Source/ModernGL-Program.cpp',
-	'Source/ModernGL-Render.cpp',
-	'Source/ModernGL-Shader.cpp',
-	'Source/ModernGL-Texture.cpp',
-	'Source/ModernGL-Transform.cpp',
-	'Source/ModernGL-Types.cpp',
-	'Source/ModernGL-VertexArray.cpp',
 ]
 
 ModernGL = Extension(
 	'ModernGL.ModernGL',
+	include_dirs = ['Source'],
 	define_macros = [('MODERN_GL_VERSION', Version)],
 	libraries = Libraries[target],
 	sources = Sources,

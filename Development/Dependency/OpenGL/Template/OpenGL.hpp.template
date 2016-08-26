@@ -14,7 +14,7 @@ namespace OpenGL {
 	#else
 		typedef int GLsizeiptr;
 		typedef int GLintptr;
-	#endif 
+	#endif
 
 	typedef char GLbyte;
 	typedef char GLchar;
@@ -44,7 +44,7 @@ namespace OpenGL {
 %(constants)s
 
 %(function_types)s
-	
+
 %(function_exports)s
 
 %(function_export_checks)s
