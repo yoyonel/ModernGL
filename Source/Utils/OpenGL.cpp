@@ -4040,5 +4040,4 @@ namespace OpenGL {
 	}
 }
 
-
 #endif
