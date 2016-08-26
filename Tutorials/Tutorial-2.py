@@ -10,4 +10,4 @@ WND.BuildFullscreen()
 # InitializeModernGL() cannot precede the context creation
 
 GL.InitializeModernGL()
-print('ModernGL Initialized successfuly!')
+print('ModernGL Initialized successfully!')
