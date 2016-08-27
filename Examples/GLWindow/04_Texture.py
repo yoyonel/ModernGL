@@ -5,7 +5,7 @@ import struct
 
 WND.InitializeWindow()
 WND.BuildFullscreen()
-GL.InitializeModernGL()
+GL.Init()
 
 vert = GL.NewVertexShader('''
 	#version 330

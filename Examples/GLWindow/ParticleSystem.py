@@ -6,7 +6,7 @@ import struct
 
 WND.InitializeWindow()
 WND.BuildFullscreen()
-GL.InitializeModernGL()
+GL.Init()
 
 width, height = WND.GetSize()
 

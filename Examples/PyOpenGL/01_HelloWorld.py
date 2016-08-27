@@ -16,7 +16,7 @@ glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
 glutInitWindowSize(800, 600)
 glutCreateWindow('')
 
-GL.InitializeModernGL()
+GL.Init()
 
 vert = GL.NewVertexShader('''
 	#version 330

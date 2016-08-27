@@ -5,7 +5,7 @@ import pygame, struct
 pygame.init()
 pygame.display.set_mode((800, 600), DOUBLEBUF | OPENGL)
 
-GL.InitializeModernGL()
+GL.Init()
 
 vert = GL.NewVertexShader('''
 	#version 330

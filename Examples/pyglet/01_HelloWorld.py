@@ -3,7 +3,7 @@ import ModernGL as GL
 
 window = pyglet.window.Window()
 
-GL.InitializeModernGL()
+GL.Init()
 
 vert = GL.NewVertexShader('''
 	#version 330
