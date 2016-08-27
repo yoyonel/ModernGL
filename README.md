@@ -190,8 +190,12 @@ UseTextureAsImage | ![OpenGL-4.2](https://raw.githubusercontent.com/cprogrammer1
 UseUniformBuffer | ![OpenGL-3.1](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/OpenGL-31.png)
 Viewport | ![OpenGL-3.1](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/OpenGL-31.png)
 
-# Linux Support
+# Cross-platform
 
-tested on Ubuntu 16.04
+- tested on Ubuntu 16.04
+- tested on Windows 7
+- tested on Windows 10
 
 ![Ubuntu](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Ubuntu.png)
+![Win7](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Win7.png)
+![Win10](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Win10.png)
