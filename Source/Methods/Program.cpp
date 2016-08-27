@@ -124,7 +124,7 @@ PyObject * NewProgram(PyObject * self, PyObject * args) {
 		}
 	}
 
-	return PyTuple_Pack(2, CreateProgramType(program), dict);
+	return CreateProgramType(program, dict);
 }
 
 PyObject * NewTransformProgram(PyObject * self, PyObject * args) {
@@ -248,7 +248,7 @@ PyObject * NewTransformProgram(PyObject * self, PyObject * args) {
 		}
 	}
 
-	return PyTuple_Pack(2, CreateProgramType(program), dict);
+	return CreateProgramType(program, dict);
 }
 
 PyObject * DeleteProgram(PyObject * self, PyObject * args) {
