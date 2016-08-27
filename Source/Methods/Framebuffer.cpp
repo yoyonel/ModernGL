@@ -16,7 +16,7 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	static const char * kwlist[] = {"width", "height", "components", "floats", "depth", 0};
 
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|iiip:NewFramebuffer", (char **)kwlist, &width, &height, &components, &floats, &depth)) {
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|iiipp:NewFramebuffer", (char **)kwlist, &width, &height, &components, &floats, &depth)) {
 		return 0;
 	}
 
@@ -65,7 +65,7 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 	OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, defaultFramebuffer);
 
-	PyObject * tuple = PyTuple_New(floats ? 3 : 2);
+	PyObject * tuple = PyTuple_New(depth ? 3 : 2);
 
 	PyTuple_SET_ITEM(tuple, 0, CreateFramebufferType(framebuffer, colorTexture, depthTexture));
 	PyTuple_SET_ITEM(tuple, 1, CreateTextureType(colorTexture, width, height, 4, floats));
