@@ -1,5 +1,3 @@
-# python -m pip install Pillow
-
 from PIL import Image
 import ModernGL as GL
 import GLWindow as WND
@@ -7,7 +5,7 @@ import struct
 
 WND.InitializeWindow()
 WND.BuildFullscreen()
-GL.InitializeModernGL()
+GL.Init()
 
 vert = GL.NewVertexShader('''
 	#version 330

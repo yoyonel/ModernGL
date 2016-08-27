@@ -1,9 +1,20 @@
-from pygame.locals import *
+from OpenGL.error import NullFunctionError
+from OpenGL.GLUT import *
 import ModernGL as GL
-import pygame, struct
+import struct
 
-pygame.init()
-pygame.display.set_mode((800, 600), DOUBLEBUF | OPENGL)
+try:
+	glutInit(sys.argv)
+
+except NullFunctionError as ex:
+	print('(Windows) Maybe missing glut32.dll.')
+	print('(Linux) Maybe apt-get install python-opengl will help.')
+	print(ex)
+	exit()
+
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
+glutInitWindowSize(800, 600)
+glutCreateWindow('')
 
 GL.Init()
 
@@ -28,14 +39,10 @@ prog, iface = GL.NewProgram([vert, frag])
 vbo = GL.NewVertexBuffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
 vao = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 
-running = True
-while running:
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			running = False
-
+def display():
 	GL.Clear(240, 240, 240)
 	GL.RenderTriangles(vao, 3)
+	glutSwapBuffers()
 
-	pygame.display.flip()
-	pygame.time.wait(10)
+glutDisplayFunc(display)
+glutMainLoop()

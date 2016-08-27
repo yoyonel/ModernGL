@@ -21,7 +21,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 
 	def initializeGL(self):
 		try:
-			GL.InitializeModernGL()
+			GL.Init()
 			GL.Viewport(0, 0, context['width'], context['height'])
 
 			vert = GL.NewVertexShader('''

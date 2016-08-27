@@ -1,13 +1,12 @@
 # ModernGL
 
-[![Chat](https://badges.gitter.im/cprogrammer1994/ModernGL.svg)](https://gitter.im/cprogrammer1994/ModernGL?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)<br>
 [![PyPI](https://img.shields.io/pypi/l/ModernGL.svg)](https://pypi.python.org/pypi/ModernGL)
 [![PyPI](https://img.shields.io/pypi/pyversions/ModernGL.svg)](https://pypi.python.org/pypi/ModernGL)
 [![PyPI](https://img.shields.io/pypi/v/ModernGL.svg)](https://pypi.python.org/pypi/ModernGL)
 [![github](https://img.shields.io/github/tag/cprogrammer1994/ModernGL.svg)](https://github.com/cprogrammer1994/ModernGL)<br>
-[![PyPI](https://img.shields.io/pypi/status/ModernGL.svg)](https://pypi.python.org/pypi/ModernGL)
-[![PyPI](https://img.shields.io/pypi/dm/ModernGL.svg)](https://pypi.python.org/pypi/ModernGL)<br>
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.me/ModernGL)
+[![Chat](https://badges.gitter.im/cprogrammer1994/ModernGL.svg)](https://gitter.im/cprogrammer1994/ModernGL?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![PyPI](https://img.shields.io/pypi/status/ModernGL.svg)](https://pypi.python.org/pypi/ModernGL)
 
 ## Description
 
@@ -191,8 +190,12 @@ UseTextureAsImage | ![OpenGL-4.2](https://raw.githubusercontent.com/cprogrammer1
 UseUniformBuffer | ![OpenGL-3.1](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/OpenGL-31.png)
 Viewport | ![OpenGL-3.1](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Badges/OpenGL-31.png)
 
-# Linux Support
+# Cross-platform
 
-tested on Ubuntu 16.04
+- tested on Ubuntu 16.04
+- tested on Windows 7
+- tested on Windows 10
 
 ![Ubuntu](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Ubuntu.png)
+![Win7](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Win7.png)
+![Win10](https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/Development/Images/Win10.png)

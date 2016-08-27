@@ -1,5 +1,3 @@
-# python -m pip install ModernGL
-
 from PyQt5 import QtOpenGL, QtWidgets
 import ModernGL as GL
 import struct
@@ -15,7 +13,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 
 	def initializeGL(self):
 		try:
-			GL.InitializeModernGL()
+			GL.Init()
 			GL.Viewport(0, 0, context['width'], context['height'])
 
 			vert = GL.NewVertexShader('''

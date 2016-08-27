@@ -4,7 +4,7 @@ import struct, random
 
 WND.InitializeWindow()
 WND.BuildFullscreen()
-GL.InitializeModernGL()
+GL.Init()
 
 tvert = GL.NewVertexShader('''
 	#version 330

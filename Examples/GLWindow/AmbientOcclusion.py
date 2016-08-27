@@ -26,7 +26,7 @@ camera = [
 
 WND.InitializeWindow()
 WND.BuildFullscreen()
-GL.InitializeModernGL()
+GL.Init()
 
 grass_vert = GL.NewVertexShader('''
 	#version 400
