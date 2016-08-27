@@ -43,9 +43,9 @@ frag = GL.NewFragmentShader('''
 	}
 ''')
 
-prog, iface = GL.NewProgram([vert, frag])
+prog = GL.NewProgram([vert, frag])
 
-transform, tiface = GL.NewTransformProgram([tvert], ['out_pos', 'out_prev'])
+transform = GL.NewTransformProgram([tvert], ['out_pos', 'out_prev'])
 
 vbo1 = GL.NewVertexBuffer(b''.join(struct.pack('2f2f', 0.0, 0.0, random.uniform(-0.001, 0.001), random.uniform(-0.001, 0.0)) for i in range(1024)))
 vbo2 = GL.NewVertexBuffer(b''.join(struct.pack('2f2f', 0.0, 0.0, random.uniform(-0.001, 0.001), random.uniform(-0.001, 0.0)) for i in range(1024)))
@@ -55,7 +55,7 @@ vao2 = GL.NewVertexArray(transform, vbo2, '2f2f', ['in_pos', 'in_prev'])
 
 render_vao = GL.NewVertexArray(prog, vbo1, '2f8x', ['vert'])
 
-GL.SetUniform(tiface['acc'], 0, -0.00001)
+GL.SetUniform(transform['acc'], 0, -0.00001)
 
 while WND.Update():
 	GL.Clear(240, 240, 240)

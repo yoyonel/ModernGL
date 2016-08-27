@@ -118,9 +118,9 @@ physics = GL.NewComputeShader('''
 	}
 ''')
 
-circles_prog, circles_iface = GL.NewProgram([circles_vert, circles_frag])
+circles_prog = GL.NewProgram([circles_vert, circles_frag])
 
-GL.SetUniform(circles_iface['scale'], 0.002 * height / width, 0.002)
+GL.SetUniform(circles_prog['scale'], 0.002 * height / width, 0.002)
 
 circle_vbo = GL.NewVertexBuffer(b''.join(struct.pack('2f', cos(i * 2 * pi / 128), sin(i * 2 * pi / 128)) for i in range(128)))
 circle_vao = GL.NewVertexArray(circles_prog, circle_vbo, '2f', ['vert'])
@@ -134,17 +134,17 @@ circles = [
 ]
 
 circles_ubo = GL.NewUniformBuffer(struct.pack('i4x', len(circles)) + b''.join(struct.pack('2f1f4x', *c) for c in circles))
-GL.UseUniformBuffer(circles_ubo, circles_iface['Circles'])
+GL.UseUniformBuffer(circles_ubo, circles_prog['Circles'])
 
-particles_prog, particles_iface = GL.NewProgram([particles_vert, particles_frag])
+particles_prog = GL.NewProgram([particles_vert, particles_frag])
 
-GL.SetUniform(particles_iface['scale'], 0.002 * height / width, 0.002)
+GL.SetUniform(particles_prog['scale'], 0.002 * height / width, 0.002)
 
 particle_vbo = GL.NewVertexBuffer(b''.join(struct.pack('2f', cos(i * 2 * pi / 16), sin(i * 2 * pi / 16)) for i in range(16)))
 particle_vao = GL.NewVertexArray(particles_prog, particle_vbo, '2f', ['vert'])
 
 sbo = GL.NewStorageBuffer(b''.join(struct.pack('ffffff', -10000, 0, -10000, 0, 0, 0) for i in range(10240)))
-GL.UseUniformBuffer(circles_ubo, circles_iface['Circles'])
+GL.UseUniformBuffer(circles_ubo, circles_prog['Circles'])
 GL.UseStorageBuffer(sbo)
 
 k = 0
