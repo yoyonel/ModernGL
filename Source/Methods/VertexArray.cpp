@@ -134,6 +134,9 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args, PyObject * kwargs) {
 }
 
 PyObject * NewAdvancedVertexArray(PyObject * self, PyObject * args, PyObject * kwargs) {
+	PyErr_SetString(ModuleError, "Not implemented");
+	return 0;
+
 	Program * program;
 	PyObject * content;
 
