@@ -36,7 +36,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 				}
 			''')
 
-			prog, iface = GL.NewProgram([vert, frag])
+			prog = GL.NewProgram([vert, frag])
 			vbo = GL.NewVertexBuffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
 			context['vao'] = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 

@@ -65,14 +65,14 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 				}
 			''')
 
-			prog, iface = GL.NewProgram([vert, frag])
-			context['pos'] = iface['pos']
-			context['zoom'] = iface['zoom']
+			prog = GL.NewProgram([vert, frag])
+			context['pos'] = prog['pos']
+			context['zoom'] = prog['zoom']
 
 			vbo = GL.NewVertexBuffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
 			context['vao'] = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 
-			GL.SetUniform(iface['iter'], 100)
+			GL.SetUniform(prog['iter'], 100)
 			
 		except GL.Error as error:
 			print(error)

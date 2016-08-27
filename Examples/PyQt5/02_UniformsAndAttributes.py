@@ -46,13 +46,13 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 				}
 			''')
 
-			prog, iface = GL.NewProgram([vert, frag])
-			context['rotation'] = iface['rotation']
+			prog = GL.NewProgram([vert, frag])
+			context['rotation'] = prog['rotation']
 
 			vbo = GL.NewVertexBuffer(struct.pack('15f', 1.0, 0.0, 1.0, 0.0, 0.0, -0.5, 0.86, 0.0, 1.0, 0.0, -0.5, -0.86, 0.0, 0.0, 1.0))
 			context['vao'] = GL.NewVertexArray(prog, vbo, '2f3f', ['vert', 'vert_color'])
 
-			GL.SetUniform(iface['scale'], context['height'] / context['width'] * 0.75, 0.75)
+			GL.SetUniform(prog['scale'], context['height'] / context['width'] * 0.75, 0.75)
 
 		except GL.Error as error:
 			print(error)

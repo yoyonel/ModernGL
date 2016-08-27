@@ -62,16 +62,16 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 				}
 			''')
 
-			prog, iface = GL.NewProgram([vert, frag])
-			context['center'] = iface['center']
-			context['scale'] = iface['scale']
+			prog = GL.NewProgram([vert, frag])
+			context['center'] = prog['center']
+			context['scale'] = prog['scale']
 
 			vbo = GL.NewVertexBuffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
 			context['vao'] = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 
-			GL.SetUniform(iface['iter'], 100)
-			GL.SetUniform(iface['scale'], 1.0)
-			GL.SetUniform(iface['center'], 0.3, 0.2)
+			GL.SetUniform(prog['iter'], 100)
+			GL.SetUniform(prog['scale'], 1.0)
+			GL.SetUniform(prog['center'], 0.3, 0.2)
 			
 		except GL.Error as error:
 			print(error)

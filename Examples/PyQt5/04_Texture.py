@@ -49,13 +49,13 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 				}
 			''')
 
-			prog, iface = GL.NewProgram([vert, frag])
-			context['rotation'] = iface['rotation']
+			prog = GL.NewProgram([vert, frag])
+			context['rotation'] = prog['rotation']
 
 			vbo = GL.NewVertexBuffer(struct.pack('6f', 1.0, 0.0, -0.5, 0.86, -0.5, -0.86))
 			context['vao'] = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 
-			GL.SetUniform(iface['scale'], context['height'] / context['width'] * 0.75, 0.75)
+			GL.SetUniform(prog['scale'], context['height'] / context['width'] * 0.75, 0.75)
 
 			tex = GL.NewTexture(256, 256, Image.open('../DataFiles/Noise.jpg').tobytes())
 			GL.UseTexture(tex)
