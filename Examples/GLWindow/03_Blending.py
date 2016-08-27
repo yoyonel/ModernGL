@@ -58,7 +58,6 @@ GL.SetUniform(prog['scale'], height / width * 0.75, 0.75)
 
 while WND.Update():
 	GL.Clear(240, 240, 240)
-
 	GL.EnableOnly(GL.ENABLE_BLEND + GL.ENABLE_MULTISAMPLE)
 	GL.SetUniform(prog['rotation'], WND.GetTime())
 	GL.RenderTriangles(vao, 3, instances = 10)
