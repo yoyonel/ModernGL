@@ -1,6 +1,3 @@
-# python -m pip install ModernGL
-# python -m pip install GLWindow
-
 import ModernGL as GL
 import GLWindow as WND
 import struct

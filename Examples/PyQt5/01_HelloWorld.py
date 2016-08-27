@@ -1,5 +1,3 @@
-# python -m pip install ModernGL
-
 from PyQt5 import QtOpenGL, QtWidgets
 import ModernGL as GL
 import struct

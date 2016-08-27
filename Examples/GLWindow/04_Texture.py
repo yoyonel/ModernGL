@@ -1,5 +1,3 @@
-# python -m pip install Pillow
-
 from PIL import Image
 import ModernGL as GL
 import GLWindow as WND

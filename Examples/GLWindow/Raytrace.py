@@ -1,4 +1,6 @@
-import ModernGL as GL, GLWindow as WND, struct, math
+import ModernGL as GL
+import GLWindow as WND
+import struct, math
 
 WND.InitializeWindow()
 WND.BuildFullscreen()
