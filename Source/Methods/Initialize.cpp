@@ -4,6 +4,7 @@
 #include "Errors.hpp"
 #include "Methods.hpp"
 #include "ModernGL.hpp"
+#include "Constants.hpp"
 #include "Utils/OpenGL.hpp"
 
 PyObject * InitializeModernGL(PyObject * self, PyObject * args, PyObject * kwargs) {
@@ -49,20 +50,14 @@ PyObject * InitializeModernGL(PyObject * self, PyObject * args, PyObject * kwarg
 	OpenGL::glGenVertexArrays(1, (OpenGL::GLuint *)&defaultVertexArray);
 	OpenGL::glBindVertexArray(defaultVertexArray);
 
-	// Default FBO and program
+	// Default FBO
+	int defaultFramebuffer = 0;
 	OpenGL::glGetIntegerv(OpenGL::GL_DRAW_FRAMEBUFFER_BINDING, (OpenGL::GLint *)&defaultFramebuffer);
-	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
+	((Framebuffer *)SCREEN)->fbo = defaultFramebuffer;
 
 	// Default texture unit for texture operations
 	OpenGL::glGetIntegerv(OpenGL::GL_MAX_TEXTURE_IMAGE_UNITS, (OpenGL::GLint *)&maxTextureUnits);
 	defaultTextureUnit = maxTextureUnits - 1;
-
-	activeFramebuffer = defaultFramebuffer;
-
-	int viewport[4] = {};
-	OpenGL::glGetIntegerv(OpenGL::GL_VIEWPORT, viewport);
-	activeViewportWidth = viewport[2];
-	activeViewportHeight = viewport[3];
 
 	initialized = true;
 	Py_RETURN_NONE;

@@ -21,8 +21,10 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	}
 
 	if (!width && !height) {
-		width = activeViewportWidth; // todo query with glGet (slower but ok)
-		height = activeViewportHeight;
+		int viewport[4] = {};
+		OpenGL::glGetIntegerv(OpenGL::GL_VIEWPORT, viewport);
+		width = viewport[2];
+		height = viewport[3];
 	}
 
 	if (width < 0 || height < 0) {
@@ -37,6 +39,9 @@ PyObject * NewFramebuffer(PyObject * self, PyObject * args, PyObject * kwargs) {
 	int framebuffer = 0;
 	int colorTexture = 0;
 	int depthTexture = 0;
+
+	int defaultFramebuffer = 0;
+	OpenGL::glGetIntegerv(OpenGL::GL_DRAW_FRAMEBUFFER_BINDING, (OpenGL::GLint *)&defaultFramebuffer);
 
 	OpenGL::glGenFramebuffers(1, (OpenGL::GLuint *)&framebuffer);
 	OpenGL::glBindFramebuffer(OpenGL::GL_FRAMEBUFFER, framebuffer);
@@ -304,12 +309,14 @@ PythonMethod FramebufferMethods[] = {
 		"Parameters:\n"
 		"\twidth (int) Width of the framebuffer. By default is 0\n"
 		"\theight (int) Height of the framebuffer. By default is 0\n"
+		"\tfloats (bool) Single-precision floating-point format. By default is False\n"
+		"\tdepth (bool) Depth attachment. By default is True\n"
 		"\n"
 
 		"Returns:\n"
 		"\tfbo (int) The index of the new framebuffer object.\n"
 		"\tcolor (int) The index of the color attachment texture object.\n"
-		"\tdepth (int) The index of the depth attachment texture object.\n"
+		"\tdepth (int) The index of the depth attachment texture object if depth parameter is True.\n"
 		"\n"
 
 		"Errors:\n"
@@ -372,6 +379,7 @@ PythonMethod FramebufferMethods[] = {
 		"\twidth (int) Width of the image to read.\n"
 		"\theight (int) Height of the image to read.\n"
 		"\tcomponents (int) By default is 3\n"
+		"\tfloats (bool) Single-precision floating-point format. By default is False\n"
 		"\n"
 
 		"Returns:\n"
@@ -396,6 +404,7 @@ PythonMethod FramebufferMethods[] = {
 		"\ty (int) Offset of the image to read.\n"
 		"\twidth (int) Width of the image to read.\n"
 		"\theight (int) Height of the image to read.\n"
+		"\tfloats (bool) Single-precision floating-point format. By default is True\n"
 		"\n"
 
 		"Returns:\n"
@@ -418,10 +427,11 @@ PythonMethod FramebufferMethods[] = {
 		"Parameters:\n"
 		"\tx (int) Offset of the pixel to read.\n"
 		"\ty (int) Offset of the pixel to read.\n"
+		"\tfloats (bool) Single-precision floating-point format. By default is False\n"
 		"\n"
 
 		"Returns:\n"
-		"\tpixel (int) The rgba value at (x, y) from the active framebuffer.\n"
+		"\trgba (tuple) The rgba value at (x, y) from the active framebuffer.\n"
 		"\n"
 
 		"Errors:\n"
@@ -440,10 +450,11 @@ PythonMethod FramebufferMethods[] = {
 		"Parameters:\n"
 		"\tx (int) Offset of the pixel to read.\n"
 		"\ty (int) Offset of the pixel to read.\n"
+		"\tfloats (bool) Single-precision floating-point format. By default is True\n"
 		"\n"
 
 		"Returns:\n"
-		"\tpixel (float) The depth value at (x, y) from the active framebuffer.\n"
+		"\tdepth (float) The depth value at (x, y) from the active framebuffer.\n"
 		"\n"
 
 		"Errors:\n"

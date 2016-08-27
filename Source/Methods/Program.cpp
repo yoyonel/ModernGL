@@ -282,9 +282,10 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 		return 0;
 	}
 
+	int activeProgram = 0;
+	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
-		activeProgram = location->program;
 	}
 
 	switch (location->type) {
@@ -467,9 +468,10 @@ PyObject * SetUniformMatrix(PyObject * self, PyObject * args) {
 		}
 	}
 
+	int activeProgram = 0;
+	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
 	if (activeProgram != location->program) {
 		OpenGL::glUseProgram(location->program);
-		activeProgram = location->program;
 	}
 
 	switch (location->type) {

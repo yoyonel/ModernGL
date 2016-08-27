@@ -17,9 +17,10 @@ PyObject * RenderTriangles(PyObject * self, PyObject * args, PyObject * kwargs) 
 		return 0;
 	}
 
+	int activeProgram = 0;
+	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
-		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -45,9 +46,10 @@ PyObject * RenderTriangleStrip(PyObject * self, PyObject * args, PyObject * kwar
 		return 0;
 	}
 
+	int activeProgram = 0;
+	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
-		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -73,9 +75,10 @@ PyObject * RenderTriangleFan(PyObject * self, PyObject * args, PyObject * kwargs
 		return 0;
 	}
 
+	int activeProgram = 0;
+	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
-		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -101,9 +104,10 @@ PyObject * RenderLines(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
+	int activeProgram = 0;
+	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
-		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -129,9 +133,10 @@ PyObject * RenderLineStrip(PyObject * self, PyObject * args, PyObject * kwargs) 
 		return 0;
 	}
 
+	int activeProgram = 0;
+	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
-		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -157,9 +162,10 @@ PyObject * RenderLineLoop(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
+	int activeProgram = 0;
+	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
-		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -185,9 +191,10 @@ PyObject * RenderPoints(PyObject * self, PyObject * args, PyObject * kwargs) {
 		return 0;
 	}
 
+	int activeProgram = 0;
+	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
-		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -213,9 +220,10 @@ PyObject * RenderLineStripAdjacency(PyObject * self, PyObject * args, PyObject *
 		return 0;
 	}
 
+	int activeProgram = 0;
+	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
-		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -241,9 +249,10 @@ PyObject * RenderLinesAdjacency(PyObject * self, PyObject * args, PyObject * kwa
 		return 0;
 	}
 
+	int activeProgram = 0;
+	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
-		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -269,9 +278,10 @@ PyObject * RenderTriangleStripAdjacency(PyObject * self, PyObject * args, PyObje
 		return 0;
 	}
 
+	int activeProgram = 0;
+	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
-		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);
@@ -297,9 +307,10 @@ PyObject * RenderTrianglesAdjacency(PyObject * self, PyObject * args, PyObject *
 		return 0;
 	}
 
+	int activeProgram = 0;
+	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
 	if (activeProgram != vao->program) {
 		OpenGL::glUseProgram(vao->program);
-		activeProgram = vao->program;
 	}
 
 	OpenGL::glBindVertexArray(vao->vao);

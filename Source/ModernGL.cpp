@@ -11,13 +11,7 @@ bool initialized;
 
 int defaultTextureUnit;
 int defaultVertexArray;
-int defaultFramebuffer;
 
-int activeFramebuffer;
-int activeProgram;
-
-int activeViewportWidth;
-int activeViewportHeight;
 int versionNumber;
 
 int maxTextureUnits;
