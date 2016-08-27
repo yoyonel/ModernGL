@@ -9,4 +9,6 @@ const int ENABLE_DEPTH_TEST = 0x04;
 const int ENABLE_MULTISAMPLE = 0x08;
 const int ENABLE_ALL = 0x0F;
 
+extern PyObject * SCREEN;
+
 void RegisterConstants(PyObject * module);
