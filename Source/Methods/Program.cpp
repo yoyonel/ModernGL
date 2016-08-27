@@ -289,9 +289,58 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 	}
 
 	switch (location->type) {
+		case OpenGL::GL_FLOAT_MAT2: {
+			if (size != 2) {
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 1 additional bytes argument for uniform '%s'", "uniform name"); // TODO: fixname
+				return 0;
+			}
+
+			Py_buffer view = {};
+			PyObject * buffer = PyTuple_GET_ITEM(args, 1);
+			if (PyObject_GetBuffer(buffer, &view, PyBUF_SIMPLE)) {
+				return 0;
+			}
+
+			OpenGL::glUniformMatrix2fv(location->location, 1, false, (const float *)view.buf);
+			break;
+		}
+
+		case OpenGL::GL_FLOAT_MAT3: {
+			if (size != 2) {
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 1 additional bytes argument for uniform '%s'", "uniform name");
+				return 0;
+			}
+
+			Py_buffer view = {};
+			PyObject * buffer = PyTuple_GET_ITEM(args, 1);
+			if (PyObject_GetBuffer(buffer, &view, PyBUF_SIMPLE)) {
+				return 0;
+			}
+
+			OpenGL::glUniformMatrix3fv(location->location, 1, false, (const float *)view.buf);
+			break;
+		}
+
+		case OpenGL::GL_FLOAT_MAT4: {
+			if (size != 2) {
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 1 additional bytes argument for uniform '%s'", "uniform name");
+				return 0;
+			}
+
+			Py_buffer view = {};
+			PyObject * buffer = PyTuple_GET_ITEM(args, 1);
+			if (PyObject_GetBuffer(buffer, &view, PyBUF_SIMPLE)) {
+				return 0;
+			}
+
+			OpenGL::glUniformMatrix4fv(location->location, 1, false, (const float *)view.buf);
+			break;
+		}
+
 		case OpenGL::GL_FLOAT: {
 			if (size != 2) {
-				PyErr_Format(PyExc_TypeError, "SetUniform() takes 1 additional float argument for uniform '%s'", size, "uniform name");
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 1 additional float argument for uniform '%s'", "uniform name");
+				return 0;
 			}
 			float v0 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 1));
 
@@ -305,7 +354,8 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 
 		case OpenGL::GL_FLOAT_VEC2: {
 			if (size != 3) {
-				PyErr_Format(PyExc_TypeError, "SetUniform() takes 2 additional float arguments for uniform '%s'", size, "uniform name");
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 2 additional float arguments for uniform '%s'", "uniform name");
+				return 0;
 			}
 			float v0 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 1));
 			float v1 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 2));
@@ -320,7 +370,8 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 
 		case OpenGL::GL_FLOAT_VEC3: {
 			if (size != 4) {
-				PyErr_Format(PyExc_TypeError, "SetUniform() takes 3 additional float arguments for uniform '%s'", size, "uniform name");
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 3 additional float arguments for uniform '%s'", "uniform name");
+				return 0;
 			}
 			float v0 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 1));
 			float v1 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 2));
@@ -336,7 +387,8 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 
 		case OpenGL::GL_FLOAT_VEC4: {
 			if (size != 5) {
-				PyErr_Format(PyExc_TypeError, "SetUniform() takes 3 additional float arguments for uniform '%s'", size, "uniform name");
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 4 additional float arguments for uniform '%s'", "uniform name");
+				return 0;
 			}
 			float v0 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 1));
 			float v1 = (float)PyFloat_AsDouble(PyTuple_GET_ITEM(args, 2));
@@ -353,7 +405,8 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 
 		case OpenGL::GL_INT: {
 			if (size != 2) {
-				PyErr_Format(PyExc_TypeError, "SetUniform() takes 1 additional int argument for uniform '%s'", size, "uniform name");
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 1 additional int argument for uniform '%s'", "uniform name");
+				return 0;
 			}
 			int v0 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 1));
 
@@ -367,7 +420,8 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 
 		case OpenGL::GL_INT_VEC2: {
 			if (size != 3) {
-				PyErr_Format(PyExc_TypeError, "SetUniform() takes 2 additional int arguments for uniform '%s'", size, "uniform name");
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 2 additional int arguments for uniform '%s'", "uniform name");
+				return 0;
 			}
 			int v0 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 1));
 			int v1 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 2));
@@ -382,7 +436,8 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 
 		case OpenGL::GL_INT_VEC3: {
 			if (size != 4) {
-				PyErr_Format(PyExc_TypeError, "SetUniform() takes 3 additional int arguments for uniform '%s'", size, "uniform name");
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 3 additional int arguments for uniform '%s'", "uniform name");
+				return 0;
 			}
 			int v0 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 1));
 			int v1 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 2));
@@ -398,7 +453,8 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 
 		case OpenGL::GL_INT_VEC4: {
 			if (size != 5) {
-				PyErr_Format(PyExc_TypeError, "SetUniform() takes 3 additional int arguments for uniform '%s'", size, "uniform name");
+				PyErr_Format(PyExc_TypeError, "SetUniform() takes 4 additional int arguments for uniform '%s'", "uniform name");
+				return 0;
 			}
 			int v0 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 1));
 			int v1 = (int)PyLong_AsLong(PyTuple_GET_ITEM(args, 2));
@@ -416,76 +472,6 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 		default:
 			PyErr_SetString(ModuleError, "SetUniform() failed");
 			return 0;
-	}
-
-	Py_RETURN_NONE;
-}
-
-PyObject * SetUniformMatrix(PyObject * self, PyObject * args) {
-	UniformLocation * location;
-	PyObject * matrix;
-	bool transpose = false;
-
-	if (!PyArg_ParseTuple(args, "O!O!|p:SetUniformMatrix", &UniformLocationType, &location, &PyList_Type, &matrix, &transpose)) {
-		return 0;
-	}
-
-	int limit = 0;
-	switch (location->type) {
-		case OpenGL::GL_FLOAT_MAT2:
-			limit = 4;
-			break;
-
-		case OpenGL::GL_FLOAT_MAT3:
-			limit = 9;
-			break;
-
-		case OpenGL::GL_FLOAT_MAT4:
-			limit = 16;
-			break;
-
-		default:
-			PyErr_SetString(ModuleError, "SetUniformMatrix() failed");
-			return 0;
-
-	}
-
-	int count = (int)PyList_Size(matrix);
-
-	if (count != limit) {
-		PyErr_Format(ModuleError, "SetUniformMatrix() expected %d got %d", limit, count);
-		return 0;
-	}
-
-	float matrix_data[16];
-
-	for (int i = 0; i < count; ++i) {
-		PyObject * item = PyList_GET_ITEM(matrix, i);
-		matrix_data[i] = (float)PyFloat_AsDouble(item);
-
-		if (PyErr_Occurred()) {
-			return 0;
-		}
-	}
-
-	int activeProgram = 0;
-	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
-	if (activeProgram != location->program) {
-		OpenGL::glUseProgram(location->program);
-	}
-
-	switch (location->type) {
-		case OpenGL::GL_FLOAT_MAT2:
-			OpenGL::glUniformMatrix2fv(location->location, 1, transpose, matrix_data);
-			break;
-
-		case OpenGL::GL_FLOAT_MAT3:
-			OpenGL::glUniformMatrix3fv(location->location, 1, transpose, matrix_data);
-			break;
-
-		case OpenGL::GL_FLOAT_MAT4:
-			OpenGL::glUniformMatrix4fv(location->location, 1, transpose, matrix_data);
-			break;
 	}
 
 	Py_RETURN_NONE;
@@ -524,15 +510,6 @@ PyObject * Dummy_SetUniform(PyObject * self) {
 		PyErr_SetString(ModuleNotInitialized, "SetUniform() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
 	} else {
 		PyErr_SetString(ModuleNotSupported, "SetUniform() function not initialized. OpenGL 3.1 is required.");
-	}
-	return 0;
-}
-
-PyObject * Dummy_SetUniformMatrix(PyObject * self) {
-	if (!initialized) {
-		PyErr_SetString(ModuleNotInitialized, "SetUniformMatrix() function not initialized.\n\nCall ModernGL.Init() first.\n\n");
-	} else {
-		PyErr_SetString(ModuleNotSupported, "SetUniformMatrix() function not initialized. OpenGL 3.1 is required.");
 	}
 	return 0;
 }
@@ -591,7 +568,7 @@ PythonMethod ProgramMethods[] = {
 		(PyCFunction)Dummy_SetUniform,
 		METH_VARARGS,
 		"SetUniform",
-		"Set the value of the uniform (except for matrices).\n"
+		"Set the value of the uniform.\n"
 		"The number of parameters depends on the uniform type.\n"
 		"The location of active uniforms is always accessable from the program interface.\n"
 		"The program interface is the second value returned by the ModernGL.NewProgram.\n"
@@ -612,31 +589,6 @@ PythonMethod ProgramMethods[] = {
 		"Errors:\n"
 		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
 		"\t(TypeError) The dimension or the type of the uniform is different.\n"
-		"\n"
-	},
-	{
-		301,
-		(PyCFunction)SetUniformMatrix,
-		(PyCFunction)Dummy_SetUniformMatrix,
-		METH_VARARGS,
-		"SetUniformMatrix",
-		"Set the value of the uniform matrix.\n"
-		"The matrix type must be either mat2, mat3 or mat4.\n"
-		"\n"
-
-		"Parameters:\n"
-		"\tlocation (ModernGL.UniformLocation) Location of the uniform.\n"
-		"\tmatrix (list) List containing 4x4=16 float values.\n"
-		"\ttranspose (bool) Transpose matrix.\n"
-		"\n"
-
-		"Returns:\n"
-		"\tNone\n"
-		"\n"
-
-		"Errors:\n"
-		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
-		"\t(TypeError) The dimension or the type of the matrix is different.\n"
 		"\n"
 	},
 	{
