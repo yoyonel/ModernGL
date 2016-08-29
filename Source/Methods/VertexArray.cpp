@@ -59,51 +59,53 @@ PyObject * NewVertexArray(PyObject * self, PyObject * args, PyObject * kwargs) {
 			return 0;
 		}
 
-		int size = 0;
-		unsigned type = 0;
-		OpenGL::glGetActiveAttrib(program->program, location, 0, 0, &size, &type, 0);
+		// int size = 0;
+		// unsigned type = 0;
+		// char tname[20];
+		// OpenGL::glGetActiveAttrib(program->program, location, 20, 0, &size, &type, tname);
+		// printf("%s\n", tname); // index != location
 
-		switch (type) {
-			case OpenGL::GL_INT:
-			case OpenGL::GL_FLOAT:
-			case OpenGL::GL_DOUBLE:
-				if (node->count != 1) {
-					PyErr_Format(ModuleAttributeNotFound, "NewVertexArray() attribute `%s` dimension mismatch %d != 1", name, node->count);
-					return 0;
-				}
-				break;
+		// switch (type) {
+		// 	case OpenGL::GL_INT:
+		// 	case OpenGL::GL_FLOAT:
+		// 	case OpenGL::GL_DOUBLE:
+		// 		if (node->count != 1) {
+		// 			PyErr_Format(ModuleAttributeNotFound, "NewVertexArray() attribute `%s` dimension mismatch %d != 1", name, node->count);
+		// 			return 0;
+		// 		}
+		// 		break;
 
-			case OpenGL::GL_INT_VEC2:
-			case OpenGL::GL_FLOAT_VEC2:
-			case OpenGL::GL_DOUBLE_VEC2:
-				if (node->count != 2) {
-					PyErr_Format(ModuleAttributeNotFound, "NewVertexArray() attribute `%s` dimension mismatch %d != 2", name, node->count);
-					return 0;
-				}
-				break;
+		// 	case OpenGL::GL_INT_VEC2:
+		// 	case OpenGL::GL_FLOAT_VEC2:
+		// 	case OpenGL::GL_DOUBLE_VEC2:
+		// 		if (node->count != 2) {
+		// 			PyErr_Format(ModuleAttributeNotFound, "NewVertexArray() attribute `%s` dimension mismatch %d != 2", name, node->count);
+		// 			return 0;
+		// 		}
+		// 		break;
 
-			case OpenGL::GL_INT_VEC3:
-			case OpenGL::GL_FLOAT_VEC3:
-			case OpenGL::GL_DOUBLE_VEC3:
-				if (node->count != 3) {
-					PyErr_Format(ModuleAttributeNotFound, "NewVertexArray() attribute `%s` dimension mismatch %d != 3", name, node->count);
-					return 0;
-				}
-				break;
+		// 	case OpenGL::GL_INT_VEC3:
+		// 	case OpenGL::GL_FLOAT_VEC3:
+		// 	case OpenGL::GL_DOUBLE_VEC3:
+		// 		if (node->count != 3) {
+		// 			PyErr_Format(ModuleAttributeNotFound, "NewVertexArray() attribute `%s` dimension mismatch %d != 3", name, node->count);
+		// 			return 0;
+		// 		}
+		// 		break;
 
-			case OpenGL::GL_INT_VEC4:
-			case OpenGL::GL_FLOAT_VEC4:
-			case OpenGL::GL_DOUBLE_VEC4:
-				if (node->count != 4) {
-					PyErr_Format(ModuleAttributeNotFound, "NewVertexArray() attribute `%s` dimension mismatch %d != 4", name, node->count);
-					return 0;
-				}
-				break;
+		// 	case OpenGL::GL_INT_VEC4:
+		// 	case OpenGL::GL_FLOAT_VEC4:
+		// 	case OpenGL::GL_DOUBLE_VEC4:
+		// 		if (node->count != 4) {
+		// 			PyErr_Format(ModuleAttributeNotFound, "NewVertexArray() attribute `%s` dimension mismatch %d != 4", name, node->count);
+		// 			return 0;
+		// 		}
+		// 		break;
 
-			default:
-				PyErr_Format(ModuleAttributeNotFound, "NewVertexArray() attribute `%s` unsupported type", name);
-				return 0;
-		}
+		// 	default:
+		// 		PyErr_Format(ModuleAttributeNotFound, "NewVertexArray() attribute `%s` unsupported type", name);
+		// 		return 0;
+		// }
 	}
 
 	int vao = 0;
