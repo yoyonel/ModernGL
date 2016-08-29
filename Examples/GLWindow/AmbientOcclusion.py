@@ -24,8 +24,7 @@ camera = [
 	0.0000, -12.3948, 74.9584, 75.1584,
 ]
 
-WND.InitializeWindow()
-WND.BuildFullscreen()
+WND.Init()
 GL.Init()
 
 grass_vert = GL.NewVertexShader('''

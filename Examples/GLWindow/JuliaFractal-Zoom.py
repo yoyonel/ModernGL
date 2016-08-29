@@ -2,8 +2,7 @@ import ModernGL as GL
 import GLWindow as WND
 import struct, time
 
-WND.InitializeWindow()
-WND.BuildFullscreen()
+WND.Init()
 GL.Init()
 
 vert = GL.NewVertexShader('''
@@ -55,22 +54,15 @@ vao = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 GL.SetUniform(prog['iter'], 100)
 
 tx, ty = 0, 0
-nx, ny, mw = WND.GetMouse()
+z = 1
 
 while WND.Update():
 	GL.Clear(240, 240, 240)
-	mx, my, mw = WND.GetMouse()
-	dx = nx - mx
-	dy = ny - my
-	nx = mx
-	ny = my
+	dx, dy, mw = WND.GetMouse()
 
-	dx = dx / 100
-	dy = dy / 100
-
-	z = 0.995 ** (mw / 150 - 100)
-	tx -= dx * z
-	ty += dy * z
+	z *= 1.1 ** (mw / 150)
+	tx -= dx / 100 * z
+	ty += dy / 100 * z
 
 	GL.SetUniform(prog['pos'], tx / z, ty / z)
 	GL.SetUniform(prog['zoom'], z)

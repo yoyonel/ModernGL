@@ -59,11 +59,3 @@ if os.path.isfile('files.txt'):
 if os.path.isfile('log.txt'):
 	os.remove('log.txt')
 '''.strip())
-
-import subprocess, shutil, os
-
-glcontext = os.path.join(os.path.join(os.getcwd(), 'Dependency'), 'GLContext')
-proc = subprocess.Popen('make', cwd = glcontext)
-proc.wait()
-
-shutil.copyfile(os.path.join(glcontext, 'GLContext.pyd'), '../Tests/GLContext.pyd')

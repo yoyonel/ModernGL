@@ -4,8 +4,7 @@ from random import *
 from math import *
 import struct
 
-WND.InitializeWindow()
-WND.BuildFullscreen()
+WND.Init()
 GL.Init()
 
 width, height = WND.GetSize()
@@ -95,7 +94,7 @@ physics = GL.NewComputeShader('''
 		Particle particle[];
 	};
 
-	layout (local_size_x = 512, local_size_y = 1, local_size_z = 1) in;
+	layout (local_size_x = 256, local_size_y = 1, local_size_z = 1) in;
 
 	void update(inout Particle p) {
 		vec2 pos = p.pos * 2 - p.prev + p.acc;
@@ -152,7 +151,7 @@ while WND.Update():
 	k = (k + 32) % 10240
 	GL.UpdateStorageBuffer(sbo, k * 24, b''.join(struct.pack('ffffff', -400, 200, -400 + uniform(3, 5), 200 + uniform(2, 5), 0, -0.1) for i in range(32)))
 	GL.Clear(240, 240, 240)
-	GL.RunComputeShader(physics, 20)
+	GL.RunComputeShader(physics, 40)
 	GL.RenderTriangleFan(circle_vao, 128, instances = len(circles))
 	GL.RenderTriangleFan(particle_vao, 16, instances = 10240)
 

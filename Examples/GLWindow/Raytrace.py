@@ -2,8 +2,7 @@ import ModernGL as GL
 import GLWindow as WND
 import struct, math
 
-WND.InitializeWindow()
-WND.BuildFullscreen()
+WND.Init()
 GL.Init()
 
 vert = GL.NewVertexShader('''
@@ -100,13 +99,13 @@ x, y = 0.0, 0.0
 while WND.Update():
 	GL.Clear(240, 240, 240)
 
-	if WND.GetKey(ord('A')) & 1:
+	if WND.KeyDown('A'):
 		x -= 0.04
-	if WND.GetKey(ord('D')) & 1:
+	if WND.KeyDown('D'):
 		x += 0.04
-	if WND.GetKey(ord('W')) & 1:
+	if WND.KeyDown('W'):
 		y += 0.04
-	if WND.GetKey(ord('S')) & 1:
+	if WND.KeyDown('S'):
 		y -= 0.04
 
 	GL.SetUniform(prog['position'], math.cos(x) * math.cos(y), math.sin(x) * math.cos(y), math.sin(y))

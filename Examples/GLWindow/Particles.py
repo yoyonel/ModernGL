@@ -2,8 +2,7 @@ import ModernGL as GL
 import GLWindow as WND
 import struct, random
 
-WND.InitializeWindow()
-WND.BuildFullscreen()
+WND.Init()
 GL.Init()
 
 tvert = GL.NewVertexShader('''

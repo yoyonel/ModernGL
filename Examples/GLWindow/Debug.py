@@ -2,8 +2,7 @@ import ModernGL as GL
 import GLWindow as WND
 import struct, json
 
-WND.InitializeWindow()
-WND.BuildFullscreen()
+WND.Init()
 GL.Init()
 
 vert = GL.NewVertexShader('''
