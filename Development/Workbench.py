@@ -44,11 +44,11 @@ if os.path.isdir('__pycache__'):
 if os.path.isdir('ModernGL/__pycache__'):
 	shutil.rmtree('ModernGL/__pycache__')
 
-if os.path.isdir('External/__pycache__'):
-	shutil.rmtree('External/__pycache__')
+if os.path.isdir('Development/__pycache__'):
+	shutil.rmtree('Development/__pycache__')
 
-if os.path.isfile('External/cccompiler.pyc'):
-	os.remove('External/cccompiler.pyc')
+if os.path.isfile('Development/cccompiler.pyc'):
+	os.remove('Development/cccompiler.pyc')
 
 if os.path.isdir('ModernGL.egg-info'):
 	shutil.rmtree('ModernGL.egg-info')
