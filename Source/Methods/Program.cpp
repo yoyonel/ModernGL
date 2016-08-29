@@ -289,7 +289,7 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 	}
 
 	switch (location->type) {
-		case OpenGL::GL_FLOAT_MAT2: {
+		case OpenGL::GL_FLOAT_MAT2: {			
 			if (size != 2) {
 				PyErr_Format(PyExc_TypeError, "SetUniform() takes 1 additional bytes argument for uniform '%s'", "uniform name"); // TODO: fixname
 				return 0;
@@ -302,17 +302,25 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 			}
 
 			switch (view.len) {
-				case 16:
+				case 16: {
 					OpenGL::glUniformMatrix2fv(location->location, 1, false, (const float *)view.buf);
 					break;
+				}
 
-				case 32:
-					OpenGL::glUniformMatrix2dv(location->location, 1, false, (const double *)view.buf);
+				case 32: {
+					float temp[4];
+					const double * ptr = (const double *)view.buf;
+					for (int i = 0; i < 4; ++i) {
+						temp[i] = (float)ptr[i];
+					}
+					OpenGL::glUniformMatrix2fv(location->location, 1, false, temp);
 					break;
+				}
 
-				default:
+				default: {
 					PyErr_Format(PyExc_TypeError, "SetUniform() 2x2 uniform matrix '%s' can be 16 or 32 bytes not %d", "uniform name", view.len);
 					return 0;
+				}
 			}
 			break;
 		}
@@ -330,17 +338,25 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 			}
 
 			switch (view.len) {
-				case 36:
+				case 36: {
 					OpenGL::glUniformMatrix3fv(location->location, 1, false, (const float *)view.buf);
 					break;
+				}
 
-				case 72:
-					OpenGL::glUniformMatrix3dv(location->location, 1, false, (const double *)view.buf);
+				case 72: {
+					float temp[9];
+					const double * ptr = (const double *)view.buf;
+					for (int i = 0; i < 9; ++i) {
+						temp[i] = (float)ptr[i];
+					}
+					OpenGL::glUniformMatrix3fv(location->location, 1, false, temp);
 					break;
+				}
 
-				default:
+				default: {
 					PyErr_Format(PyExc_TypeError, "SetUniform() 2x2 uniform matrix '%s' can be 36 or 72 bytes not %d", "uniform name", view.len);
 					return 0;
+				}
 			}
 			break;
 		}
@@ -358,17 +374,25 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 			}
 
 			switch (view.len) {
-				case 64:
+				case 64: {
 					OpenGL::glUniformMatrix4fv(location->location, 1, false, (const float *)view.buf);
 					break;
+				}
 
-				case 128:
-					OpenGL::glUniformMatrix4dv(location->location, 1, false, (const double *)view.buf);
+				case 128: {
+					float temp[16];
+					const double * ptr = (const double *)view.buf;
+					for (int i = 0; i < 16; ++i) {
+						temp[i] = (float)ptr[i];
+					}
+					OpenGL::glUniformMatrix4fv(location->location, 1, false, temp);
 					break;
+				}
 
-				default:
+				default: {
 					PyErr_Format(PyExc_TypeError, "SetUniform() 2x2 uniform matrix '%s' can be 64 or 128 bytes not %d", "uniform name", view.len);
 					return 0;
+				}
 			}
 			break;
 		}
