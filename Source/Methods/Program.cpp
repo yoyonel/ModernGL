@@ -307,7 +307,7 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 					break;
 
 				case 32:
-					OpenGL::glUniformMatrix2dv(location->location, 1, false, (const float *)view.buf);
+					OpenGL::glUniformMatrix2dv(location->location, 1, false, (const double *)view.buf);
 					break;
 
 				default:
@@ -335,7 +335,7 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 					break;
 
 				case 72:
-					OpenGL::glUniformMatrix3dv(location->location, 1, false, (const float *)view.buf);
+					OpenGL::glUniformMatrix3dv(location->location, 1, false, (const double *)view.buf);
 					break;
 
 				default:
@@ -363,7 +363,7 @@ PyObject * SetUniform(PyObject * self, PyObject * args) {
 					break;
 
 				case 128:
-					OpenGL::glUniformMatrix4dv(location->location, 1, false, (const float *)view.buf);
+					OpenGL::glUniformMatrix4dv(location->location, 1, false, (const double *)view.buf);
 					break;
 
 				default:
