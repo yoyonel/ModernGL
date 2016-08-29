@@ -542,7 +542,22 @@ PythonMethod TransformMethods[] = {
 		(PyCFunction)Dummy_TransformTriangles,
 		METH_VARARGS | METH_KEYWORDS,
 		"TransformTriangles",
-		""
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -550,7 +565,22 @@ PythonMethod TransformMethods[] = {
 		(PyCFunction)Dummy_TransformTriangleStrip,
 		METH_VARARGS | METH_KEYWORDS,
 		"TransformTriangleStrip",
-		""
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -558,7 +588,22 @@ PythonMethod TransformMethods[] = {
 		(PyCFunction)Dummy_TransformTriangleFan,
 		METH_VARARGS | METH_KEYWORDS,
 		"TransformTriangleFan",
-		""
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -566,7 +611,22 @@ PythonMethod TransformMethods[] = {
 		(PyCFunction)Dummy_TransformLines,
 		METH_VARARGS | METH_KEYWORDS,
 		"TransformLines",
-		""
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -574,7 +634,22 @@ PythonMethod TransformMethods[] = {
 		(PyCFunction)Dummy_TransformLineStrip,
 		METH_VARARGS | METH_KEYWORDS,
 		"TransformLineStrip",
-		""
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -582,7 +657,22 @@ PythonMethod TransformMethods[] = {
 		(PyCFunction)Dummy_TransformLineLoop,
 		METH_VARARGS | METH_KEYWORDS,
 		"TransformLineLoop",
-		""
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		301,
@@ -590,7 +680,22 @@ PythonMethod TransformMethods[] = {
 		(PyCFunction)Dummy_TransformPoints,
 		METH_VARARGS | METH_KEYWORDS,
 		"TransformPoints",
-		""
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		302,
@@ -598,7 +703,22 @@ PythonMethod TransformMethods[] = {
 		(PyCFunction)Dummy_TransformLineStripAdjacency,
 		METH_VARARGS | METH_KEYWORDS,
 		"TransformLineStripAdjacency",
-		""
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		302,
@@ -606,7 +726,22 @@ PythonMethod TransformMethods[] = {
 		(PyCFunction)Dummy_TransformLinesAdjacency,
 		METH_VARARGS | METH_KEYWORDS,
 		"TransformLinesAdjacency",
-		""
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		302,
@@ -614,7 +749,22 @@ PythonMethod TransformMethods[] = {
 		(PyCFunction)Dummy_TransformTriangleStripAdjacency,
 		METH_VARARGS | METH_KEYWORDS,
 		"TransformTriangleStripAdjacency",
-		""
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 	{
 		302,
@@ -622,7 +772,22 @@ PythonMethod TransformMethods[] = {
 		(PyCFunction)Dummy_TransformTrianglesAdjacency,
 		METH_VARARGS | METH_KEYWORDS,
 		"TransformTrianglesAdjacency",
-		""
+		"\n"
+
+		"Parameters:\n"
+		"\tvao (ModernGL.VertexArray) The index of a vertex array object that will be used during the rendering.\n"
+		"\tcount (int) Number of vertices to render.\n"
+		"\tfirst (int) Index of the first vertex. By default is 0\n"
+		"\tinstances (int) Number of instances. By default is 1\n"
+		"\n"
+
+		"Returns:\n"
+		"\tNone\n"
+		"\n"
+
+		"Errors:\n"
+		"\t(ModernGL.NotInitialized) The module must be initialized first.\n"
+		"\n"
 	},
 };
 
