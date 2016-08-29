@@ -20,7 +20,9 @@ PyObject * Program_str(Program * self) {
 }
 
 PyObject * Program_get_item(Program * self, PyObject * key) {
-	return PyDict_GetItem(self->iface, key);
+	PyObject * value = PyDict_GetItem(self->iface, key);
+	Py_INCREF(value);
+	return value;
 }
 
 PyMemberDef Program_members[] = {
