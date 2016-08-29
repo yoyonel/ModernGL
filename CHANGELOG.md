@@ -1,5 +1,18 @@
 # ChangeLog
 
+# 2.4.1
+
+- Program object's `[]` operator "missing INCREF" bugfix.
+- Removed SetUniformMatrix.
+- SetUniform can take matrices.
+- NewVertexArray does not check for dimension mismatch.
+- Added some lines to transform method docs.
+- NewProgram returns a single program object.
+
+## Other
+
+- GLWindow examples were ported to GLWindow 1.0.0
+
 # 2.4.0
 
 - Removed UseDefaultFramebuffer method.
