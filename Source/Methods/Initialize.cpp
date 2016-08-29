@@ -7,12 +7,12 @@
 #include "Constants.hpp"
 #include "Utils/OpenGL.hpp"
 
-PyObject * InitializeModernGL(PyObject * self, PyObject * args, PyObject * kwargs) {
+PyObject * Init(PyObject * self, PyObject * args, PyObject * kwargs) {
 	if (initialized) {
 		Py_RETURN_NONE;
 	}
 
-	if (!PyArg_ParseTuple(args, ":InitializeModernGL")) {
+	if (!PyArg_ParseTuple(args, ":Init")) {
 		return 0;
 	}
 
@@ -66,8 +66,8 @@ PyObject * InitializeModernGL(PyObject * self, PyObject * args, PyObject * kwarg
 PythonMethod InitializeMethods[] = {
 	{
 		0,
-		(PyCFunction)InitializeModernGL,
-		(PyCFunction)InitializeModernGL,
+		(PyCFunction)Init,
+		(PyCFunction)Init,
 		METH_VARARGS | METH_KEYWORDS,
 		"Init",
 		"Initialize the ModernGL module inside a valid OpenGL context.\n"
@@ -88,8 +88,8 @@ PythonMethod InitializeMethods[] = {
 	},
 	{
 		0,
-		(PyCFunction)InitializeModernGL,
-		(PyCFunction)InitializeModernGL,
+		(PyCFunction)Init,
+		(PyCFunction)Init,
 		METH_VARARGS | METH_KEYWORDS,
 		"InitializeModernGL",
 		"Initialize the ModernGL module inside a valid OpenGL context.\n"
