@@ -6,18 +6,24 @@
 #include "Utils/OpenGL.hpp"
 
 PyObject * DebugInfo(PyObject * self) {
-	PyObject * viewport = PyDict_New();
-	PyDict_SetItemString(viewport, "width", PyLong_FromLong(activeViewportWidth));
-	PyDict_SetItemString(viewport, "height", PyLong_FromLong(activeViewportHeight));
+	int viewport[4] = {};
+	OpenGL::glGetIntegerv(OpenGL::GL_VIEWPORT, viewport);
+	int activeViewportWidth = viewport[2];
+	int activeViewportHeight = viewport[3];
+
+	int activeProgram = 0;
+	OpenGL::glGetIntegerv(OpenGL::GL_CURRENT_PROGRAM, (OpenGL::GLint *)&activeProgram);
+
+	PyObject * activeViewport = PyDict_New();
+	PyDict_SetItemString(activeViewport, "width", PyLong_FromLong(activeViewportWidth));
+	PyDict_SetItemString(activeViewport, "height", PyLong_FromLong(activeViewportHeight));
 
 	PyObject * dict = PyDict_New();
 	PyDict_SetItemString(dict, "versionNumber", PyLong_FromLong(versionNumber));
 	PyDict_SetItemString(dict, "maxTextureUnits", PyLong_FromLong(maxTextureUnits));
-	PyDict_SetItemString(dict, "defaultFramebuffer", PyLong_FromLong(defaultFramebuffer));
 	PyDict_SetItemString(dict, "defaultVertexArray", PyLong_FromLong(defaultVertexArray));
-	PyDict_SetItemString(dict, "activeFramebuffer", PyLong_FromLong(activeFramebuffer));
 	PyDict_SetItemString(dict, "activeProgram", PyLong_FromLong(activeProgram));
-	PyDict_SetItemString(dict, "activeViewport", viewport);
+	PyDict_SetItemString(dict, "activeViewport", activeViewport);
 
 	switch (OpenGL::glGetError()) {
 		case OpenGL::GL_NO_ERROR:

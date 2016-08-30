@@ -28,7 +28,7 @@ class CustomCCompiler:
 			output_base = os.path.basename(source)
 			output_name = os.path.splitext(output_base)[0]
 			output_filename = os.path.join(output_dir, output_name + '.o')
-			incs = ' '.join('-I "%s"' % inc for inc in self.inc_dirs)
+			incs = ' '.join('-I "%s"' % inc for inc in self.inc_dirs + kwargs['include_dirs'])
 			macros = ' '.join('-D%s=%s' % (a, b) for a, b in kwargs['macros'])
 			todo = '%s %s -c %s %s -o "%s"' % (self.comp, macros, incs, source, output_filename)
 			print(todo)

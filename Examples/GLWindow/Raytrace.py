@@ -2,8 +2,7 @@ import ModernGL as GL
 import GLWindow as WND
 import struct, math
 
-WND.InitializeWindow()
-WND.BuildFullscreen()
+WND.Init()
 GL.Init()
 
 vert = GL.NewVertexShader('''
@@ -85,7 +84,7 @@ frag = GL.NewFragmentShader('''
 	}
 ''')
 
-prog, iface = GL.NewProgram([vert, frag])
+prog = GL.NewProgram([vert, frag])
 
 vbo = GL.NewVertexBuffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
 vao = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
@@ -93,22 +92,22 @@ vao = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 ssbo = GL.NewStorageBuffer(open('../DataFiles/Raytrace-scene.dat', 'rb').read())
 GL.UseStorageBuffer(ssbo, 1)
 
-GL.SetUniform(iface['ratio'], 16 / 9)
+GL.SetUniform(prog['ratio'], 16 / 9)
 
 x, y = 0.0, 0.0
 
 while WND.Update():
 	GL.Clear(240, 240, 240)
 
-	if WND.GetKey(ord('A')) & 1:
+	if WND.KeyDown('A'):
 		x -= 0.04
-	if WND.GetKey(ord('D')) & 1:
+	if WND.KeyDown('D'):
 		x += 0.04
-	if WND.GetKey(ord('W')) & 1:
+	if WND.KeyDown('W'):
 		y += 0.04
-	if WND.GetKey(ord('S')) & 1:
+	if WND.KeyDown('S'):
 		y -= 0.04
 
-	GL.SetUniform(iface['position'], math.cos(x) * math.cos(y), math.sin(x) * math.cos(y), math.sin(y))
-	GL.SetUniform(iface['target'], 0, 0, 0)
+	GL.SetUniform(prog['position'], math.cos(x) * math.cos(y), math.sin(x) * math.cos(y), math.sin(y))
+	GL.SetUniform(prog['target'], 0, 0, 0)
 	GL.RenderTriangleStrip(vao, 4)

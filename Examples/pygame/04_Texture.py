@@ -1,9 +1,14 @@
-from PIL import Image
+from pygame.locals import *
 import ModernGL as GL
-import GLWindow as WND
-import struct
+import pygame, struct, time
+from PIL import Image
 
-WND.Init()
+width, height = 800, 600
+start = time.time()
+
+pygame.init()
+pygame.display.set_mode((width, height), DOUBLEBUF | OPENGL)
+
 GL.Init()
 
 vert = GL.NewVertexShader('''
@@ -35,8 +40,6 @@ frag = GL.NewFragmentShader('''
 	}
 ''')
 
-width, height = WND.GetSize()
-
 prog = GL.NewProgram([vert, frag])
 
 vbo = GL.NewVertexBuffer(struct.pack('6f', 1.0, 0.0, -0.5, 0.86, -0.5, -0.86))
@@ -47,7 +50,15 @@ GL.SetUniform(prog['scale'], height / width * 0.75, 0.75)
 tex = GL.NewTexture(256, 256, Image.open('../DataFiles/Noise.jpg').tobytes())
 GL.UseTexture(tex)
 
-while WND.Update():
+running = True
+while running:
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+			running = False
+
 	GL.Clear(240, 240, 240)
-	GL.SetUniform(prog['rotation'], WND.GetTime())
+	GL.SetUniform(prog['rotation'], time.time() - start)
 	GL.RenderTriangles(vao, 3)
+
+	pygame.display.flip()
+	pygame.time.wait(10)

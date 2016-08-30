@@ -44,11 +44,11 @@ if os.path.isdir('__pycache__'):
 if os.path.isdir('ModernGL/__pycache__'):
 	shutil.rmtree('ModernGL/__pycache__')
 
-if os.path.isdir('External/__pycache__'):
-	shutil.rmtree('External/__pycache__')
+if os.path.isdir('Development/__pycache__'):
+	shutil.rmtree('Development/__pycache__')
 
-if os.path.isfile('External/cccompiler.pyc'):
-	os.remove('External/cccompiler.pyc')
+if os.path.isfile('Development/cccompiler.pyc'):
+	os.remove('Development/cccompiler.pyc')
 
 if os.path.isdir('ModernGL.egg-info'):
 	shutil.rmtree('ModernGL.egg-info')
@@ -59,11 +59,3 @@ if os.path.isfile('files.txt'):
 if os.path.isfile('log.txt'):
 	os.remove('log.txt')
 '''.strip())
-
-import subprocess, shutil, os
-
-glcontext = os.path.join(os.path.join(os.getcwd(), 'Dependency'), 'GLContext')
-proc = subprocess.Popen('make', cwd = glcontext)
-proc.wait()
-
-shutil.copyfile(os.path.join(glcontext, 'GLContext.pyd'), '../Tests/GLContext.pyd')

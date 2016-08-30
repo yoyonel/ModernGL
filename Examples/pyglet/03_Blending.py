@@ -1,8 +1,9 @@
+import pyglet, struct, time
 import ModernGL as GL
-import GLWindow as WND
-import struct
 
-WND.Init()
+window = pyglet.window.Window()
+start = time.time()
+
 GL.Init()
 
 vert = GL.NewVertexShader('''
@@ -35,8 +36,6 @@ frag = GL.NewFragmentShader('''
 	}
 ''')
 
-width, height = WND.GetSize()
-
 prog = GL.NewProgram([vert, frag])
 
 verts = [
@@ -53,10 +52,18 @@ verts = [
 vbo = GL.NewVertexBuffer(struct.pack('18f', *verts))
 vao = GL.NewVertexArray(prog, vbo, '2f4f', ['vert', 'vert_color'])
 
-GL.SetUniform(prog['scale'], height / width * 0.75, 0.75)
+GL.SetUniform(prog['scale'], window.height / window.width * 0.75, 0.75)
 
-while WND.Update():
+def update(dt):
+	global elapsed
+	elapsed = time.time() - start
+
+@window.event
+def on_draw():
 	GL.Clear(240, 240, 240)
 	GL.EnableOnly(GL.ENABLE_BLEND + GL.ENABLE_MULTISAMPLE)
-	GL.SetUniform(prog['rotation'], WND.GetTime())
+	GL.SetUniform(prog['rotation'], elapsed)
 	GL.RenderTriangles(vao, 3, instances = 10)
+
+pyglet.clock.schedule_interval(update, 1 / 60)
+pyglet.app.run()

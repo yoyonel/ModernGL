@@ -1,9 +1,10 @@
 from PIL import Image
+import pyglet, struct, time
 import ModernGL as GL
-import GLWindow as WND
-import struct
 
-WND.Init()
+window = pyglet.window.Window()
+start = time.time()
+
 GL.Init()
 
 vert = GL.NewVertexShader('''
@@ -35,19 +36,25 @@ frag = GL.NewFragmentShader('''
 	}
 ''')
 
-width, height = WND.GetSize()
-
 prog = GL.NewProgram([vert, frag])
 
 vbo = GL.NewVertexBuffer(struct.pack('6f', 1.0, 0.0, -0.5, 0.86, -0.5, -0.86))
 vao = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 
-GL.SetUniform(prog['scale'], height / width * 0.75, 0.75)
+GL.SetUniform(prog['scale'], window.height / window.width * 0.75, 0.75)
 
 tex = GL.NewTexture(256, 256, Image.open('../DataFiles/Noise.jpg').tobytes())
 GL.UseTexture(tex)
 
-while WND.Update():
+def update(dt):
+	global elapsed
+	elapsed = time.time() - start
+
+@window.event
+def on_draw():
 	GL.Clear(240, 240, 240)
-	GL.SetUniform(prog['rotation'], WND.GetTime())
+	GL.SetUniform(prog['rotation'], time.time() - start)
 	GL.RenderTriangles(vao, 3)
+
+pyglet.clock.schedule_interval(update, 1 / 60)
+pyglet.app.run()

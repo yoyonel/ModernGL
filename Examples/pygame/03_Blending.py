@@ -1,8 +1,13 @@
+from pygame.locals import *
 import ModernGL as GL
-import GLWindow as WND
-import struct
+import pygame, struct, time
 
-WND.Init()
+width, height = 800, 600
+start = time.time()
+
+pygame.init()
+pygame.display.set_mode((width, height), DOUBLEBUF | OPENGL)
+
 GL.Init()
 
 vert = GL.NewVertexShader('''
@@ -35,8 +40,6 @@ frag = GL.NewFragmentShader('''
 	}
 ''')
 
-width, height = WND.GetSize()
-
 prog = GL.NewProgram([vert, frag])
 
 verts = [
@@ -55,8 +58,16 @@ vao = GL.NewVertexArray(prog, vbo, '2f4f', ['vert', 'vert_color'])
 
 GL.SetUniform(prog['scale'], height / width * 0.75, 0.75)
 
-while WND.Update():
+running = True
+while running:
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+			running = False
+
 	GL.Clear(240, 240, 240)
 	GL.EnableOnly(GL.ENABLE_BLEND + GL.ENABLE_MULTISAMPLE)
-	GL.SetUniform(prog['rotation'], WND.GetTime())
+	GL.SetUniform(prog['rotation'], time.time() - start)
 	GL.RenderTriangles(vao, 3, instances = 10)
+
+	pygame.display.flip()
+	pygame.time.wait(10)

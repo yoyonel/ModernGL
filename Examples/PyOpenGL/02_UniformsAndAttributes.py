@@ -1,8 +1,16 @@
+from PIL import Image
+from OpenGL.GLUT import *
 import ModernGL as GL
-import GLWindow as WND
-import struct
+import struct, time
 
-WND.Init()
+width, height = 800, 600
+start = time.time()
+
+glutInit(sys.argv)
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
+glutInitWindowSize(width, height)
+glutCreateWindow('')
+
 GL.Init()
 
 vert = GL.NewVertexShader('''
@@ -34,8 +42,6 @@ frag = GL.NewFragmentShader('''
 	}
 ''')
 
-width, height = WND.GetSize()
-
 prog = GL.NewProgram([vert, frag])
 
 vbo = GL.NewVertexBuffer(struct.pack('15f', 1.0, 0.0, 1.0, 0.0, 0.0, -0.5, 0.86, 0.0, 1.0, 0.0, -0.5, -0.86, 0.0, 0.0, 1.0))
@@ -43,7 +49,12 @@ vao = GL.NewVertexArray(prog, vbo, '2f3f', ['vert', 'vert_color'])
 
 GL.SetUniform(prog['scale'], height / width * 0.75, 0.75)
 
-while WND.Update():
+def display():
 	GL.Clear(240, 240, 240)
-	GL.SetUniform(prog['rotation'], WND.GetTime())
+	GL.SetUniform(prog['rotation'], time.time() - start)
 	GL.RenderTriangles(vao, 3)
+	glutSwapBuffers()
+
+glutDisplayFunc(display)
+glutIdleFunc(display)
+glutMainLoop()

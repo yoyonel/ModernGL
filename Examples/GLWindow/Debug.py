@@ -2,8 +2,7 @@ import ModernGL as GL
 import GLWindow as WND
 import struct, json
 
-WND.InitializeWindow()
-WND.BuildFullscreen()
+WND.Init()
 GL.Init()
 
 vert = GL.NewVertexShader('''
@@ -26,7 +25,7 @@ frag = GL.NewFragmentShader('''
 	}
 ''')
 
-prog, iface = GL.NewProgram([vert, frag])
+prog = GL.NewProgram([vert, frag])
 
 vbo = GL.NewVertexBuffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
 vao = GL.NewVertexArray(prog, vbo, '2f', ['vert'])

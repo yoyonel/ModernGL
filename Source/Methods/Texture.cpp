@@ -292,8 +292,9 @@ PythonMethod TextureMethods[] = {
 		"Parameters:\n"
 		"\twidth (int) Width of the texture.\n"
 		"\theight (int) Height of the texture.\n"
-		"\tpixels (bytes) Pixels stored in bytes.\n"
-		"\tcomponents (int) By default is 3\n"
+		"\tdata (bytes) Pixels stored in bytes.\n"
+		"\tcomponents (int) Number of color channels. By default is 3\n"
+		"\tfloats (bool) Single-precision floating-point format. By default is False\n"
 		"\n"
 
 		"Returns:\n"
@@ -337,11 +338,11 @@ PythonMethod TextureMethods[] = {
 
 		"Parameters:\n"
 		"\ttexture (ModernGL.Texture) Index of a texture returned by the ModernGL.NewTexture.\n"
-		"\tx (int) Offset of the new texture part.\n"
-		"\ty (int) Offset of the new texture part.\n"
-		"\twidth (int) Width of the texture.\n"
-		"\theight (int) Height of the texture.\n"
-		"\tpixels (bytes) Pixels stored in bytes.\n"
+		"\tdata (bytes) Pixels stored in bytes.\n"
+		"\tx (int) Offset of the new texture part. By default is 0\n"
+		"\ty (int) Offset of the new texture part. By default is 0\n"
+		"\twidth (int) Width of the texture. By default is 0\n"
+		"\theight (int) Height of the texture. By default is 0\n"
 		"\tcomponents (int) By default is 3\n"
 		"\n"
 

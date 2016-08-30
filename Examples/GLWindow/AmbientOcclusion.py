@@ -24,8 +24,7 @@ camera = [
 	0.0000, -12.3948, 74.9584, 75.1584,
 ]
 
-WND.InitializeWindow()
-WND.BuildFullscreen()
+WND.Init()
 GL.Init()
 
 grass_vert = GL.NewVertexShader('''
@@ -61,7 +60,7 @@ grass_frag = GL.NewFragmentShader('''
 	}
 ''')
 
-grass_prog, grass_iface = GL.NewProgram([grass_vert, grass_frag])
+grass_prog = GL.NewProgram([grass_vert, grass_frag])
 
 ssao_vert = GL.NewVertexShader('''
 	#version 400
@@ -108,7 +107,7 @@ ssao_frag = GL.NewFragmentShader('''
 	}
 ''')
 
-ssao_prog, ssao_iface = GL.NewProgram([ssao_vert, ssao_frag])
+ssao_prog = GL.NewProgram([ssao_vert, ssao_frag])
 
 step = 7
 
@@ -170,11 +169,11 @@ ubo = GL.NewUniformBuffer(b''.join(struct.pack('2f', x, y) for x, y in kernel))
 
 fbo, color, depth = GL.NewFramebuffer()
 
-GL.SetUniformMatrix(grass_iface['mat'], camera)
-GL.SetUniform(ssao_iface['texture'], 0)
-GL.SetUniform(ssao_iface['depth'], 1)
+GL.SetUniform(grass_prog['mat'], struct.pack('16f', *camera))
+GL.SetUniform(ssao_prog['texture'], 0)
+GL.SetUniform(ssao_prog['depth'], 1)
 
-GL.UseUniformBuffer(ubo, ssao_iface['Kernel'])
+GL.UseUniformBuffer(ubo, ssao_prog['Kernel'])
 
 while WND.Update():
 	GL.UseFramebuffer(fbo)
@@ -183,7 +182,7 @@ while WND.Update():
 
 	GL.RenderTriangleStrip(vao, 1000 * 8)
 
-	GL.UseDefaultFramebuffer()
+	GL.UseFramebuffer(GL.SCREEN)
 	GL.DisableDepthTest()
 	GL.UseTexture(color, 0)
 	GL.UseTexture(depth, 1)

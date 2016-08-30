@@ -41,11 +41,14 @@ for func, content in funcs.items():
 	support[func] = max(versions) if versions else '0.0'
 
 for func in support:
-	support[func] = max(support[func], support['InitializeModernGL'])
+	support[func] = max(support[func], support['Init'])
 
 lst = sorted([(func, support[func]) for func in support])
+
+def img(version):
+	return 'https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Images/Badges/OpenGL-%s%s.png' % (version[0], version[2])
 
 print('%s | %s' % ('Method', 'Version', ))
 print('--- | ---')
 for func, version in lst:
-	print('%s | %s' % (func, version))
+	print('%s | ![OpenGL-%s](%s)' % (func, version, img(version)))

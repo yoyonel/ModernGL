@@ -46,8 +46,6 @@ PyObject * Viewport(PyObject * self, PyObject * args, PyObject * kwargs) {
 	}
 
 	OpenGL::glViewport(x, y, width, height);
-	activeViewportWidth = width;
-	activeViewportHeight = height;
 	Py_RETURN_NONE;
 }
 

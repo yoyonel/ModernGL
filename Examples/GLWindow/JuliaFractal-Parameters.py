@@ -2,8 +2,7 @@ import ModernGL as GL
 import GLWindow as WND
 import struct
 
-WND.InitializeWindow()
-WND.BuildFullscreen()
+WND.Init()
 GL.Init()
 
 vert = GL.NewVertexShader('''
@@ -44,23 +43,25 @@ frag = GL.NewFragmentShader('''
 	}
 ''')
 
-prog, iface = GL.NewProgram([vert, frag])
+prog = GL.NewProgram([vert, frag])
 
 vbo = GL.NewVertexBuffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
 vao = GL.NewVertexArray(prog, vbo, '2f', ['vert'])
 
-GL.SetUniform(iface['iter'], 100)
-GL.SetUniform(iface['scale'], 1.0)
-GL.SetUniform(iface['center'], 0.3, 0.2)
+GL.SetUniform(prog['iter'], 100)
+GL.SetUniform(prog['scale'], 1.0)
+GL.SetUniform(prog['center'], 0.3, 0.2)
+
+x, y, scale = 0, 0, 1
 
 while WND.Update():
 	GL.Clear(240, 240, 240)
 	mx, my, mw = WND.GetMouse()
-	scale = 1.1 ** (mw / 150)
-	mx = mx / 100
-	my = my / 100
+	scale *= 1.1 ** (mw / 150)
+	x += mx / 100
+	y += my / 100
 
-	GL.SetUniform(iface['center'], mx, my)
-	GL.SetUniform(iface['scale'], scale)
+	GL.SetUniform(prog['center'], x, y)
+	GL.SetUniform(prog['scale'], scale)
 	GL.RenderTriangleStrip(vao, 4)
 
