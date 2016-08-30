@@ -20,6 +20,34 @@ requires a steep learning curve. In contrast, ModernGL is easy to learn and
 use, moreover it is capable of rendering with the same performance and
 quality, with less code written.
 
+```py
+
+ModernGL.Init()
+
+prog = ModernGL.NewProgram([
+	ModernGL.NewVertexShader('''
+		#version 330 core
+		in vec2 vert;
+		void main() {
+			gl_Position = vec4(vert, 0.0, 1.0);
+		}
+	'''),
+	ModernGL.NewFragmentShader('''
+		#version 330 core
+		out vec4 color;
+		void main() {
+			color = vec4(0.2, 0.6, 0.9, 1.0);
+		}
+	'''),
+])
+
+vbo = ModernGL.NewVertexBuffer(struct.pack('6f', 0, 0, 1, 0, 0, 1))
+vao = ModernGL.NewVertexArray(prog, vbo, '2f', ['vert'])
+
+ModernGL.RenderTriangles(vao, 3)
+
+```
+
 ## How to install
 
 ```
