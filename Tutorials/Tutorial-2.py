@@ -2,12 +2,10 @@ import ModernGL as GL
 import GLWindow as WND
 import struct
 
-WND.InitializeWindow()
-WND.BuildFullscreen()
+WND.Init()
 
-# Initialize ModernGL after creating an OpenGL context
-# Remember: BuildFullscreen() will create a window and an OpenGL context
-# InitializeModernGL() cannot precede the context creation
+# Initialize ModernGL after creating an OpenGL context is created
+# ModernGL.Init() cannot precede the context creation
 
-GL.InitializeModernGL()
+GL.Init()
 print('ModernGL Initialized successfully!')

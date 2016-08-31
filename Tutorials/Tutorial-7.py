@@ -2,10 +2,8 @@ import ModernGL as GL
 import GLWindow as WND
 import struct
 
-WND.InitializeWindow()
-WND.BuildFullscreen()
-
-GL.InitializeModernGL()
+WND.Init()
+GL.Init()
 
 # gl_InstanceID is added to the rotation.
 # Now different instances won't overlap all the time.
@@ -40,7 +38,7 @@ frag = GL.NewFragmentShader('''
 	}
 ''')
 
-prog, iface = GL.NewProgram([vert, frag])
+prog = GL.NewProgram([vert, frag])
 
 triangle = [
 # A
@@ -64,7 +62,7 @@ width, height = WND.GetSize()
 while WND.Update():
 	GL.Clear(240, 240, 240)
 
-	GL.SetUniform(iface['rotate'], WND.GetTime())
-	GL.SetUniform(iface['scale'], height / width * 0.75, 0.75)
+	GL.SetUniform(prog['rotate'], WND.GetTime())
+	GL.SetUniform(prog['scale'], height / width * 0.75, 0.75)
 
 	GL.RenderTriangles(vao, 3, instances = 10)

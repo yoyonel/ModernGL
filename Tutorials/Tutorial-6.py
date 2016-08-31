@@ -2,10 +2,8 @@ import ModernGL as GL
 import GLWindow as WND
 import struct
 
-WND.InitializeWindow()
-WND.BuildFullscreen()
-
-GL.InitializeModernGL()
+WND.Init()
+GL.Init()
 
 # VertexShader:
 
@@ -42,7 +40,7 @@ frag = GL.NewFragmentShader('''
 	}
 ''')
 
-prog, iface = GL.NewProgram([vert, frag])
+prog = GL.NewProgram([vert, frag])
 
 # Coordinates are changed
 
@@ -73,10 +71,10 @@ while WND.Update():
 	# Set the value for the rotate and scale uniforms
 	# The program interface contains the address of the rotate uniform
 
-	GL.SetUniform(iface['rotate'], WND.GetTime())
+	GL.SetUniform(prog['rotate'], WND.GetTime())
 
 	# We will scale the triangle using the dimension of the window
 
-	GL.SetUniform(iface['scale'], height / width * 0.75, 0.75)
+	GL.SetUniform(prog['scale'], height / width * 0.75, 0.75)
 
 	GL.RenderTriangles(vao, 3)

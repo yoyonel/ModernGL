@@ -2,10 +2,8 @@ import ModernGL as GL
 import GLWindow as WND
 import struct
 
-WND.InitializeWindow()
-WND.BuildFullscreen()
-
-GL.InitializeModernGL()
+WND.Init()
+GL.Init()
 
 # Rendering with modern OpenGL:
 
@@ -37,10 +35,10 @@ frag = GL.NewFragmentShader('''
 ''')
 
 # We will need a program object that will contain our shaders attached and linked together.
-# The NewProgram() function also returns the program interface
+# The program object also contains the program interface
 # The program interface will be discussed later
 
-prog, iface = GL.NewProgram([vert, frag])
+prog = GL.NewProgram([vert, frag])
 
 # Now we want a triangle
 # The screen coordinates are in the range of [-1, 1] and [-1, 1] for x and y respectively.

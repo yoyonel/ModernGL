@@ -9,10 +9,7 @@ import GLWindow as WND
 # We will need the struct module to create data for buffers
 import struct
 
-# InitializeWindow() will only initialize the GLWindow module
-# The InitializeWindow() does not create a window or any OpenGL contexts
-WND.InitializeWindow()
+# GLWindow.Init() will initialize the GLWindow module and create
+# a hidden window with a valid OpenGL context
 
-# We will need a window
-# The window will have an OpenGL context
-WND.BuildFullscreen()
+WND.Init()

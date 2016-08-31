@@ -2,10 +2,8 @@ import ModernGL as GL
 import GLWindow as WND
 import struct
 
-WND.InitializeWindow()
-WND.BuildFullscreen()
-
-GL.InitializeModernGL()
+WND.Init()
+GL.Init()
 
 # Lets add a color attribute per vertex
 # We need the color in the fragment shader but we can specify attributes
@@ -46,7 +44,7 @@ frag = GL.NewFragmentShader('''
 	}
 ''')
 
-prog, iface = GL.NewProgram([vert, frag])
+prog = GL.NewProgram([vert, frag])
 
 # Last time we had x, y for each vertex
 # Now we have x, y, r, g, b (5 floats) per vertex
