@@ -20,6 +20,8 @@ requires a steep learning curve. In contrast, ModernGL is easy to learn and
 use, moreover it is capable of rendering with the same performance and
 quality, with less code written.
 
+## Sample
+
 ```py
 
 ModernGL.Init()
