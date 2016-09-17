@@ -1,4 +1,9 @@
-open('../Makefile', 'w').write('''
+import os
+
+project = os.path.dirname(os.path.abspath(__file__))
+project = os.path.normpath(os.path.join(project, '..'))
+
+open(os.path.join(project, 'Makefile'), 'w').write('''
 all: clean install
 
 clean:
@@ -8,18 +13,18 @@ install:
 	install.bat
 '''.strip())
 
-open('../Source/Makefile', 'w').write('''
+open(os.path.join(project, 'Source/Makefile'), 'w').write('''
 all:
 	cd .. && make
 '''.strip())
 
-open('../multi_install.bat', 'w').write('''
+open(os.path.join(project, 'multi_install.bat'), 'w').write('''
 call python Clean.py
 SET CUSTOM_GCC=YES
 call pythons.bat setup.py install
 '''.strip())
 
-open('../multi_upload.bat', 'w').write('''
+open(os.path.join(project, 'multi_upload.bat'), 'w').write('''
 SET CUSTOM_GCC=YES
 call python setup.py sdist upload 
 call pythons setup.py bdist_wheel upload
@@ -27,9 +32,10 @@ call pythons setup.py bdist_egg upload
 call pythons setup.py bdist_wininst upload
 '''.strip())
 
-open('../install.bat', 'w').write('call python setup.py install --record files.txt')
+open(os.path.join(project, 'install.bat'), 'w').write('call python setup.py install --record files.txt')
+open(os.path.join(project, 'cmd.bat'), 'w').write('cmd.exe')
 
-open('../Clean.py', 'w').write('''
+open(os.path.join(project, 'Clean.py'), 'w').write('''
 import shutil, os
 
 if os.path.isdir('build'):
