@@ -9,7 +9,7 @@ start = time.time()
 glutInit(sys.argv)
 glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
 glutInitWindowSize(width, height)
-glutCreateWindow('')
+glutCreateWindow(b'04 Texture')
 
 GL.Init()
 
