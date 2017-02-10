@@ -14,7 +14,7 @@ except NullFunctionError as ex:
 
 glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
 glutInitWindowSize(800, 600)
-glutCreateWindow('')
+glutCreateWindow(b'01 HelloWorld')
 
 GL.Init()
 
