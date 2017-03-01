@@ -7,12 +7,12 @@
 struct MGLBufferAccess : public MGLObject {
 	MGLBuffer * buffer;
 
+	void * ptr;
+
 	int obj;
 	int offset;
 	int size;
 	int access;
-
-	void * ptr;
 };
 
 extern PyTypeObject MGLBufferAccess_Type;

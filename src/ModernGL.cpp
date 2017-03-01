@@ -9,8 +9,12 @@
 #include "InvalidObject.hpp"
 #include "Primitive.hpp"
 #include "Uniform.hpp"
+#include "Attribute.hpp"
+#include "Varying.hpp"
+#include "Subroutine.hpp"
 #include "BufferAccess.hpp"
 #include "EnableFlag.hpp"
+#include "Version.hpp"
 
 #include <Python.h>
 #include <Windows.h>
@@ -47,7 +51,7 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 		return 0;
 	}
 
-	unsigned char pixel_bits = 24; // TODO: alpha not rendered (remains 0x00)
+	unsigned char pixel_bits = 24; // alpha not rendered (remains 0x00)
 
 	BITMAPINFO info = {
 		{
@@ -220,8 +224,6 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 
 	MGLContext * ctx = MGLContext_New();
 
-	// TODO: fill data
-
 	MGLContext_Initialize(ctx);
 
 	if (PyErr_Occurred()) {
@@ -233,13 +235,40 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 }
 
 const char * create_standalone_context_doc = R"(
+	create_standalone_context(size)
+
+	Extended description of function.
+
+	Keyword Arguments:
+		require (version): OpenGL version
+
+	Returns:
+		~ModernGL.Context: ....
 )";
 
-MGLContext * create_context(PyObject * self) {
+MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs) {
+	static const char * kwlist[] = {"require", 0};
+
+	MGLVersion * require = (MGLVersion *)Py_None;
+
+	int args_ok = PyArg_ParseTupleAndKeywords(
+		args,
+		kwargs,
+		"|$O!",
+		(char **)kwlist,
+		&MGLVersion_Type,
+		&require
+	);
+
+	if (!args_ok) {
+		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		return 0;
+	}
+
 	MGLContext * ctx = MGLContext_New();
 
-	ctx->rc_handle = oglGetCurrentContext();
-	ctx->dc_handle = oglGetCurrentDC();
+	ctx->rc_handle = wglGetCurrentContext();
+	ctx->dc_handle = wglGetCurrentDC();
 
 	MGLContext_Initialize(ctx);
 
@@ -252,6 +281,15 @@ MGLContext * create_context(PyObject * self) {
 }
 
 const char * create_context_doc = R"(
+	create_context(size)
+
+	Extended description of function.
+
+	Keyword Arguments:
+		require (version): OpenGL version
+
+	Returns:
+		~ModernGL.Context: ....
 )";
 
 PyMethodDef MGL_module_methods[] = {
@@ -261,6 +299,7 @@ PyMethodDef MGL_module_methods[] = {
 };
 
 const char * MGL_module_doc = R"(
+	ModernGL
 )";
 
 PyModuleDef MGL_moduledef = {
@@ -433,78 +472,185 @@ extern "C" PyObject * PyInit_ModernGL() {
 	}
 
 	{
-		MGLPrimitive * TRIANGLES = MGLPrimitive_New();
-		TRIANGLES->name = "TRIANGLES";
-		TRIANGLES->primitive = GL_TRIANGLES;
-		TRIANGLES->transform_primitive = GL_TRIANGLES;
-		PyModule_AddObject(module, "TRIANGLES", (PyObject *)TRIANGLES);
+		if (PyType_Ready(&MGLProgramMember_Type) < 0) {
+			PyErr_Format(PyExc_Exception, "Cannot register ProgramMember in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
 
-		MGLPrimitive * TRIANGLE_STRIP = MGLPrimitive_New();
-		TRIANGLE_STRIP->name = "TRIANGLE_STRIP";
-		TRIANGLE_STRIP->primitive = GL_TRIANGLE_STRIP;
-		TRIANGLE_STRIP->transform_primitive = GL_TRIANGLES;
-		PyModule_AddObject(module, "TRIANGLE_STRIP", (PyObject *)TRIANGLE_STRIP);
+		Py_INCREF(&MGLProgramMember_Type);
 
-		MGLPrimitive * TRIANGLE_FAN = MGLPrimitive_New();
-		TRIANGLE_FAN->name = "TRIANGLE_FAN";
-		TRIANGLE_FAN->primitive = GL_TRIANGLE_FAN;
-		TRIANGLE_FAN->transform_primitive = GL_TRIANGLES;
-		PyModule_AddObject(module, "TRIANGLE_FAN", (PyObject *)TRIANGLE_FAN);
-
-		MGLPrimitive * LINES = MGLPrimitive_New();
-		LINES->name = "LINES";
-		LINES->primitive = GL_LINES;
-		LINES->transform_primitive = GL_LINES;
-		PyModule_AddObject(module, "LINES", (PyObject *)LINES);
-
-		MGLPrimitive * LINE_STRIP = MGLPrimitive_New();
-		LINE_STRIP->name = "LINE_STRIP";
-		LINE_STRIP->primitive = GL_LINE_STRIP;
-		LINE_STRIP->transform_primitive = GL_LINES;
-		PyModule_AddObject(module, "LINE_STRIP", (PyObject *)LINE_STRIP);
-
-		MGLPrimitive * LINE_LOOP = MGLPrimitive_New();
-		LINE_LOOP->name = "LINE_LOOP";
-		LINE_LOOP->primitive = GL_LINE_LOOP;
-		LINE_LOOP->transform_primitive = GL_LINES;
-		PyModule_AddObject(module, "LINE_LOOP", (PyObject *)LINE_LOOP);
-
-		MGLPrimitive * POINTS = MGLPrimitive_New();
-		POINTS->name = "POINTS";
-		POINTS->primitive = GL_POINTS;
-		POINTS->transform_primitive = GL_POINTS;
-		PyModule_AddObject(module, "POINTS", (PyObject *)POINTS);
-
-		MGLPrimitive * LINE_STRIP_ADJACENCY = MGLPrimitive_New();
-		LINE_STRIP_ADJACENCY->name = "LINE_STRIP_ADJACENCY";
-		LINE_STRIP_ADJACENCY->primitive = GL_LINE_STRIP_ADJACENCY;
-		LINE_STRIP_ADJACENCY->transform_primitive = GL_LINES;
-		PyModule_AddObject(module, "LINE_STRIP_ADJACENCY", (PyObject *)LINE_STRIP_ADJACENCY);
-
-		MGLPrimitive * LINES_ADJACENCY = MGLPrimitive_New();
-		LINES_ADJACENCY->name = "LINES_ADJACENCY";
-		LINES_ADJACENCY->primitive = GL_LINES_ADJACENCY;
-		LINES_ADJACENCY->transform_primitive = GL_LINES;
-		PyModule_AddObject(module, "LINES_ADJACENCY", (PyObject *)LINES_ADJACENCY);
-
-		MGLPrimitive * TRIANGLE_STRIP_ADJACENCY = MGLPrimitive_New();
-		TRIANGLE_STRIP_ADJACENCY->name = "TRIANGLE_STRIP_ADJACENCY";
-		TRIANGLE_STRIP_ADJACENCY->primitive = GL_TRIANGLE_STRIP_ADJACENCY;
-		TRIANGLE_STRIP_ADJACENCY->transform_primitive = GL_TRIANGLES;
-		PyModule_AddObject(module, "TRIANGLE_STRIP_ADJACENCY", (PyObject *)TRIANGLE_STRIP_ADJACENCY);
-
-		MGLPrimitive * TRIANGLES_ADJACENCY = MGLPrimitive_New();
-		TRIANGLES_ADJACENCY->name = "TRIANGLES_ADJACENCY";
-		TRIANGLES_ADJACENCY->primitive = GL_TRIANGLES_ADJACENCY;
-		TRIANGLES_ADJACENCY->transform_primitive = GL_TRIANGLES;
-		PyModule_AddObject(module, "TRIANGLES_ADJACENCY", (PyObject *)TRIANGLES_ADJACENCY);
+		PyModule_AddObject(module, "ProgramMember", (PyObject *)&MGLProgramMember_Type);
 	}
 
 	{
-		MGLEnableFlag * BLEND = MGLEnableFlag_New();
-		BLEND->name = "BLEND";
-		BLEND->flag = GL_BLEND;
-		PyModule_AddObject(module, "BLEND", (PyObject *)BLEND);
+		if (PyType_Ready(&MGLVersion_Type) < 0) {
+			PyErr_Format(PyExc_Exception, "Cannot register Version in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+
+		Py_INCREF(&MGLVersion_Type);
+
+		PyModule_AddObject(module, "Version", (PyObject *)&MGLVersion_Type);
+	}
+
+	{
+		if (PyType_Ready(&MGLAttribute_Type) < 0) {
+			PyErr_Format(PyExc_Exception, "Cannot register Attribute in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+
+		Py_INCREF(&MGLAttribute_Type);
+
+		PyModule_AddObject(module, "Attribute", (PyObject *)&MGLAttribute_Type);
+	}
+
+	{
+		if (PyType_Ready(&MGLSubroutine_Type) < 0) {
+			PyErr_Format(PyExc_Exception, "Cannot register Subroutine in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+
+		Py_INCREF(&MGLSubroutine_Type);
+
+		PyModule_AddObject(module, "Subroutine", (PyObject *)&MGLSubroutine_Type);
+	}
+
+	{
+		if (PyType_Ready(&MGLVarying_Type) < 0) {
+			PyErr_Format(PyExc_Exception, "Cannot register Varying in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+
+		Py_INCREF(&MGLVarying_Type);
+
+		PyModule_AddObject(module, "Varying", (PyObject *)&MGLVarying_Type);
+	}
+
+	{
+		MGL_TRIANGLES = MGLPrimitive_New();
+		MGL_TRIANGLES->name = "TRIANGLES";
+		MGL_TRIANGLES->primitive = GL_TRIANGLES;
+		MGL_TRIANGLES->transform_primitive = GL_TRIANGLES;
+		PyModule_AddObject(module, "TRIANGLES", (PyObject *)MGL_TRIANGLES);
+
+		MGL_TRIANGLE_STRIP = MGLPrimitive_New();
+		MGL_TRIANGLE_STRIP->name = "TRIANGLE_STRIP";
+		MGL_TRIANGLE_STRIP->primitive = GL_TRIANGLE_STRIP;
+		MGL_TRIANGLE_STRIP->transform_primitive = GL_TRIANGLES;
+		PyModule_AddObject(module, "TRIANGLE_STRIP", (PyObject *)MGL_TRIANGLE_STRIP);
+
+		MGL_TRIANGLE_FAN = MGLPrimitive_New();
+		MGL_TRIANGLE_FAN->name = "TRIANGLE_FAN";
+		MGL_TRIANGLE_FAN->primitive = GL_TRIANGLE_FAN;
+		MGL_TRIANGLE_FAN->transform_primitive = GL_TRIANGLES;
+		PyModule_AddObject(module, "TRIANGLE_FAN", (PyObject *)MGL_TRIANGLE_FAN);
+
+		MGL_LINES = MGLPrimitive_New();
+		MGL_LINES->name = "LINES";
+		MGL_LINES->primitive = GL_LINES;
+		MGL_LINES->transform_primitive = GL_LINES;
+		PyModule_AddObject(module, "LINES", (PyObject *)MGL_LINES);
+
+		MGL_LINE_STRIP = MGLPrimitive_New();
+		MGL_LINE_STRIP->name = "LINE_STRIP";
+		MGL_LINE_STRIP->primitive = GL_LINE_STRIP;
+		MGL_LINE_STRIP->transform_primitive = GL_LINES;
+		PyModule_AddObject(module, "LINE_STRIP", (PyObject *)MGL_LINE_STRIP);
+
+		MGL_LINE_LOOP = MGLPrimitive_New();
+		MGL_LINE_LOOP->name = "LINE_LOOP";
+		MGL_LINE_LOOP->primitive = GL_LINE_LOOP;
+		MGL_LINE_LOOP->transform_primitive = GL_LINES;
+		PyModule_AddObject(module, "LINE_LOOP", (PyObject *)MGL_LINE_LOOP);
+
+		MGL_POINTS = MGLPrimitive_New();
+		MGL_POINTS->name = "POINTS";
+		MGL_POINTS->primitive = GL_POINTS;
+		MGL_POINTS->transform_primitive = GL_POINTS;
+		PyModule_AddObject(module, "POINTS", (PyObject *)MGL_POINTS);
+
+		MGL_LINE_STRIP_ADJACENCY = MGLPrimitive_New();
+		MGL_LINE_STRIP_ADJACENCY->name = "LINE_STRIP_ADJACENCY";
+		MGL_LINE_STRIP_ADJACENCY->primitive = GL_LINE_STRIP_ADJACENCY;
+		MGL_LINE_STRIP_ADJACENCY->transform_primitive = GL_LINES;
+		PyModule_AddObject(module, "LINE_STRIP_ADJACENCY", (PyObject *)MGL_LINE_STRIP_ADJACENCY);
+
+		MGL_LINES_ADJACENCY = MGLPrimitive_New();
+		MGL_LINES_ADJACENCY->name = "LINES_ADJACENCY";
+		MGL_LINES_ADJACENCY->primitive = GL_LINES_ADJACENCY;
+		MGL_LINES_ADJACENCY->transform_primitive = GL_LINES;
+		PyModule_AddObject(module, "LINES_ADJACENCY", (PyObject *)MGL_LINES_ADJACENCY);
+
+		MGL_TRIANGLE_STRIP_ADJACENCY = MGLPrimitive_New();
+		MGL_TRIANGLE_STRIP_ADJACENCY->name = "TRIANGLE_STRIP_ADJACENCY";
+		MGL_TRIANGLE_STRIP_ADJACENCY->primitive = GL_TRIANGLE_STRIP_ADJACENCY;
+		MGL_TRIANGLE_STRIP_ADJACENCY->transform_primitive = GL_TRIANGLES;
+		PyModule_AddObject(module, "TRIANGLE_STRIP_ADJACENCY", (PyObject *)MGL_TRIANGLE_STRIP_ADJACENCY);
+
+		MGL_TRIANGLES_ADJACENCY = MGLPrimitive_New();
+		MGL_TRIANGLES_ADJACENCY->name = "TRIANGLES_ADJACENCY";
+		MGL_TRIANGLES_ADJACENCY->primitive = GL_TRIANGLES_ADJACENCY;
+		MGL_TRIANGLES_ADJACENCY->transform_primitive = GL_TRIANGLES;
+		PyModule_AddObject(module, "TRIANGLES_ADJACENCY", (PyObject *)MGL_TRIANGLES_ADJACENCY);
+	}
+
+	{
+		MGL_BLEND = MGLEnableFlag_New();
+		MGL_BLEND->name = "BLEND";
+		MGL_BLEND->flag = GL_BLEND;
+		PyModule_AddObject(module, "BLEND", (PyObject *)MGL_BLEND);
+
+		MGL_DEPTH_TEST = MGLEnableFlag_New();
+		MGL_DEPTH_TEST->name = "DEPTH_TEST";
+		MGL_DEPTH_TEST->flag = GL_DEPTH_TEST;
+		PyModule_AddObject(module, "DEPTH_TEST", (PyObject *)MGL_DEPTH_TEST);
+
+		MGL_CULL_FACE = MGLEnableFlag_New();
+		MGL_CULL_FACE->name = "CULL_FACE";
+		MGL_CULL_FACE->flag = GL_CULL_FACE;
+		PyModule_AddObject(module, "CULL_FACE", (PyObject *)MGL_CULL_FACE);
+
+		MGL_MULTISAMPLE = MGLEnableFlag_New();
+		MGL_MULTISAMPLE->name = "MULTISAMPLE";
+		MGL_MULTISAMPLE->flag = GL_MULTISAMPLE;
+		PyModule_AddObject(module, "MULTISAMPLE", (PyObject *)MGL_MULTISAMPLE);
+	}
+
+	{
+		MGLVersion * CORE_330 = MGLVersion_New();
+		CORE_330->major = 3;
+		CORE_330->minor = 3;
+		PyModule_AddObject(module, "CORE_330", (PyObject *)CORE_330);
+
+		MGLVersion * CORE_400 = MGLVersion_New();
+		CORE_400->major = 4;
+		CORE_400->minor = 0;
+		PyModule_AddObject(module, "CORE_400", (PyObject *)CORE_400);
+
+		MGLVersion * CORE_410 = MGLVersion_New();
+		CORE_410->major = 4;
+		CORE_410->minor = 1;
+		PyModule_AddObject(module, "CORE_410", (PyObject *)CORE_410);
+
+		MGLVersion * CORE_420 = MGLVersion_New();
+		CORE_420->major = 4;
+		CORE_420->minor = 2;
+		PyModule_AddObject(module, "CORE_420", (PyObject *)CORE_420);
+
+		MGLVersion * CORE_430 = MGLVersion_New();
+		CORE_430->major = 4;
+		CORE_430->minor = 3;
+		PyModule_AddObject(module, "CORE_430", (PyObject *)CORE_430);
+
+		MGLVersion * CORE_440 = MGLVersion_New();
+		CORE_440->major = 4;
+		CORE_440->minor = 4;
+		PyModule_AddObject(module, "CORE_440", (PyObject *)CORE_440);
+
+		MGLVersion * CORE_450 = MGLVersion_New();
+		CORE_450->major = 4;
+		CORE_450->minor = 5;
+		PyModule_AddObject(module, "CORE_450", (PyObject *)CORE_450);
 	}
 
 	return module;

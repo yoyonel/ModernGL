@@ -1,775 +1,47 @@
 #include "Program.hpp"
 
 #include "Shader.hpp"
+
 #include "Uniform.hpp"
-
-MGLProgram * MGLProgram_New() {
-	MGLProgram * self = (MGLProgram *)MGLProgram_Type.tp_alloc(&MGLProgram_Type, 0);
-	return self;
-}
-
-void MGLProgram_Compile(MGLProgram * program) {
-	GLMethods & gl = program->ctx->gl;
-
-	int obj = gl.CreateProgram();
-
-	int num_shaders = PyList_GET_SIZE(program->shaders);
-	for (int i = 0; i < num_shaders; ++i) {
-		MGLShader * shader = (MGLShader *)PyList_GET_ITEM(program->shaders, i);
-		gl.AttachShader(obj, shader->obj);
-	}
-
-	// int num_varyings = PyList_GET_SIZE(program->varyings);
-	// if (varyings_len) {
-	// 	gl.TransformFeedbackVaryings(obj, varyings_len, varyings, GL_INTERLEAVED_ATTRIBS);
-	// }
-
-	int linked = GL_FALSE;
-	gl.LinkProgram(obj);
-	gl.GetProgramiv(obj, GL_LINK_STATUS, &linked);
-
-	if (!linked) {
-		static const char * logTitle = "GLSL Linker failed\n";
-		static int logTitleLength = strlen(logTitle);
-
-		int logLength = 0;
-		gl.GetProgramiv(obj, GL_INFO_LOG_LENGTH, &logLength);
-		int logTotalLength = logLength + logTitleLength;
-
-		PyObject * content = PyUnicode_New(logTotalLength, 255);
-		if (PyUnicode_READY(content)) {
-			gl.DeleteProgram(obj);
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return;
-		}
-
-		char * data = (char *)PyUnicode_1BYTE_DATA(content);
-		memcpy(data, logTitle, logTitleLength);
-
-		int logSize = 0;
-		gl.GetProgramInfoLog(obj, logLength, &logSize, data + logTitleLength);
-		data[logTitleLength] = 0;
-
-		gl.DeleteProgram(obj);
-		PyErr_SetObject(PyExc_RuntimeError, content);
-		return;
-	}
-
-	PyObject * uniforms = PyDict_New();
-
-	int num_uniforms = 0;
-	gl.GetProgramiv(obj, GL_ACTIVE_UNIFORMS, &num_uniforms);
-
-	// printf("num_uniforms: %d\n", num_uniforms);
-
-	for (int i = 0; i < num_uniforms; ++i) {
-		MGLUniform * uniform = MGLUniform_New();
-
-		int name_len = 0;
-		char name[256];
-
-		gl.GetActiveUniform(obj, i, 256, &name_len, &uniform->array_len, (GLenum *)&uniform->type, name);
-		name[name_len] = 0;
-
-		// printf("name: %s\n", name);
-
-		// TODO:
-
-		// if (info.name[info.name_len - 1] == ']') {
-		// 	while (info.name_len && info.name[info.name_len] != '[') {
-		// 		--info.name_len;
-		// 	}
-		// }
-
-		// info.name[info.name_len] = 0;
-
-		switch (uniform->type) {
-			case GL_BOOL:
-				uniform->matrix = false;
-				uniform->dimension = 1;
-				uniform->element_size = 4;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform1iv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_bool_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_bool_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_bool_value_getter;
-					uniform->value_setter = (void *)MGLUniform_bool_value_setter;
-				}
-				break;
-
-			case GL_BOOL_VEC2:
-				uniform->matrix = false;
-				uniform->dimension = 2;
-				uniform->element_size = 8;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform2iv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_bvec2_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_bvec2_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_bvec2_value_getter;
-					uniform->value_setter = (void *)MGLUniform_bvec2_value_setter;
-				}
-				break;
-
-			case GL_BOOL_VEC3:
-				uniform->matrix = false;
-				uniform->dimension = 3;
-				uniform->element_size = 12;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform3iv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_bvec3_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_bvec3_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_bvec3_value_getter;
-					uniform->value_setter = (void *)MGLUniform_bvec3_value_setter;
-				}
-				break;
-
-			case GL_BOOL_VEC4:
-				uniform->matrix = false;
-				uniform->dimension = 4;
-				uniform->element_size = 16;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform4iv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_bvec4_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_bvec4_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_bvec4_value_getter;
-					uniform->value_setter = (void *)MGLUniform_bvec4_value_setter;
-				}
-				break;
-
-			case GL_INT:
-				uniform->matrix = false;
-				uniform->dimension = 1;
-				uniform->element_size = 4;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform1iv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_int_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_int_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_int_value_getter;
-					uniform->value_setter = (void *)MGLUniform_int_value_setter;
-				}
-				break;
-
-			case GL_INT_VEC2:
-				uniform->matrix = false;
-				uniform->dimension = 2;
-				uniform->element_size = 8;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform2iv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_ivec2_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_ivec2_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_ivec2_value_getter;
-					uniform->value_setter = (void *)MGLUniform_ivec2_value_setter;
-				}
-				break;
-
-			case GL_INT_VEC3:
-				uniform->matrix = false;
-				uniform->dimension = 3;
-				uniform->element_size = 12;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform3iv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_ivec3_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_ivec3_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_ivec3_value_getter;
-					uniform->value_setter = (void *)MGLUniform_ivec3_value_setter;
-				}
-				break;
-
-			case GL_INT_VEC4:
-				uniform->matrix = false;
-				uniform->dimension = 4;
-				uniform->element_size = 16;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform4iv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_ivec4_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_ivec4_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_ivec4_value_getter;
-					uniform->value_setter = (void *)MGLUniform_ivec4_value_setter;
-				}
-				break;
-
-			case GL_UNSIGNED_INT:
-				uniform->matrix = false;
-				uniform->dimension = 1;
-				uniform->element_size = 4;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformuiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform1uiv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_uint_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_uint_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_uint_value_getter;
-					uniform->value_setter = (void *)MGLUniform_uint_value_setter;
-				}
-				break;
-
-			case GL_UNSIGNED_INT_VEC2:
-				uniform->matrix = false;
-				uniform->dimension = 2;
-				uniform->element_size = 8;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformuiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform2uiv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_uvec2_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_uvec2_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_uvec2_value_getter;
-					uniform->value_setter = (void *)MGLUniform_uvec2_value_setter;
-				}
-				break;
-
-			case GL_UNSIGNED_INT_VEC3:
-				uniform->matrix = false;
-				uniform->dimension = 3;
-				uniform->element_size = 12;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformuiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform3uiv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_uvec3_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_uvec3_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_uvec3_value_getter;
-					uniform->value_setter = (void *)MGLUniform_uvec3_value_setter;
-				}
-				break;
-
-			case GL_UNSIGNED_INT_VEC4:
-				uniform->matrix = false;
-				uniform->dimension = 4;
-				uniform->element_size = 16;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformuiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform4uiv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_uvec4_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_uvec4_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_uvec4_value_getter;
-					uniform->value_setter = (void *)MGLUniform_uvec4_value_setter;
-				}
-				break;
-
-			case GL_FLOAT:
-				uniform->matrix = false;
-				uniform->dimension = 1;
-				uniform->element_size = 4;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformfv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform1fv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_float_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_float_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_value_setter;
-				}
-				break;
-
-			case GL_FLOAT_VEC2:
-				uniform->matrix = false;
-				uniform->dimension = 2;
-				uniform->element_size = 8;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformfv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform2fv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_vec2_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_vec2_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_vec2_value_getter;
-					uniform->value_setter = (void *)MGLUniform_vec2_value_setter;
-				}
-				break;
-
-			case GL_FLOAT_VEC3:
-				uniform->matrix = false;
-				uniform->dimension = 3;
-				uniform->element_size = 12;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformfv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform3fv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_vec3_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_vec3_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_vec3_value_getter;
-					uniform->value_setter = (void *)MGLUniform_vec3_value_setter;
-				}
-				break;
-
-			case GL_FLOAT_VEC4:
-				uniform->matrix = false;
-				uniform->dimension = 4;
-				uniform->element_size = 16;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformfv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform4fv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_vec4_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_vec4_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_vec4_value_getter;
-					uniform->value_setter = (void *)MGLUniform_vec4_value_setter;
-				}
-				break;
-
-			case GL_DOUBLE:
-				uniform->matrix = false;
-				uniform->dimension = 1;
-				uniform->element_size = 8;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformdv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform1dv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_double_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_double_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_value_setter;
-				}
-				// TODO: continue here
-				break;
-
-			case GL_DOUBLE_VEC2:
-				uniform->matrix = false;
-				uniform->dimension = 2;
-				uniform->element_size = 16;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformdv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform2dv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_dvec2_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_dvec2_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_dvec2_value_getter;
-					uniform->value_setter = (void *)MGLUniform_dvec2_value_setter;
-				}
-				break;
-
-			case GL_DOUBLE_VEC3:
-				uniform->matrix = false;
-				uniform->dimension = 3;
-				uniform->element_size = 24;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformdv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform3dv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_dvec3_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_dvec3_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_dvec3_value_getter;
-					uniform->value_setter = (void *)MGLUniform_dvec3_value_setter;
-				}
-				break;
-
-			case GL_DOUBLE_VEC4:
-				uniform->matrix = false;
-				uniform->dimension = 4;
-				uniform->element_size = 32;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformdv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform4dv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_dvec4_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_dvec4_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_dvec4_value_getter;
-					uniform->value_setter = (void *)MGLUniform_dvec4_value_setter;
-				}
-				break;
-
-			case GL_SAMPLER_2D:
-				uniform->matrix = false;
-				uniform->dimension = 1;
-				uniform->element_size = 4;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform1iv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_sampler_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_sampler_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_sampler_value_getter;
-					uniform->value_setter = (void *)MGLUniform_sampler_value_setter;
-				}
-				break;
-
-			case GL_SAMPLER_2D_SHADOW:
-				uniform->matrix = false;
-				uniform->dimension = 1;
-				uniform->element_size = 4;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform1iv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_sampler_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_sampler_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_sampler_value_getter;
-					uniform->value_setter = (void *)MGLUniform_sampler_value_setter;
-				}
-				break;
-
-			case GL_SAMPLER_2D_MULTISAMPLE:
-				uniform->matrix = false;
-				uniform->dimension = 1;
-				uniform->element_size = 4;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform1iv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_sampler_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_sampler_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_sampler_value_getter;
-					uniform->value_setter = (void *)MGLUniform_sampler_value_setter;
-				}
-				break;
-
-			case GL_SAMPLER_CUBE:
-				uniform->matrix = false;
-				uniform->dimension = 1;
-				uniform->element_size = 4;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformiv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniform1iv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_sampler_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_sampler_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_sampler_value_getter;
-					uniform->value_setter = (void *)MGLUniform_sampler_value_setter;
-				}
-				break;
-
-			case GL_FLOAT_MAT2:
-				uniform->matrix = true;
-				uniform->dimension = 4;
-				uniform->element_size = 16;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformfv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix2fv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_2x2_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_2x2_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_2x2_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_2x2_value_setter;
-				}
-				break;
-
-			case GL_FLOAT_MAT2x3:
-				uniform->matrix = true;
-				uniform->dimension = 6;
-				uniform->element_size = 24;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformfv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix2x3fv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_2x3_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_2x3_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_2x3_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_2x3_value_setter;
-				}
-				break;
-
-			case GL_FLOAT_MAT2x4:
-				uniform->matrix = true;
-				uniform->dimension = 8;
-				uniform->element_size = 32;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformfv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix2x4fv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_2x4_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_2x4_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_2x4_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_2x4_value_setter;
-				}
-				break;
-
-			case GL_FLOAT_MAT3x2:
-				uniform->matrix = true;
-				uniform->dimension = 6;
-				uniform->element_size = 24;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformfv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix3x2fv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_3x2_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_3x2_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_3x2_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_3x2_value_setter;
-				}
-				break;
-
-			case GL_FLOAT_MAT3:
-				uniform->matrix = true;
-				uniform->dimension = 9;
-				uniform->element_size = 36;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformfv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix3fv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_3x3_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_3x3_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_3x3_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_3x3_value_setter;
-				}
-				break;
-
-			case GL_FLOAT_MAT3x4:
-				uniform->matrix = true;
-				uniform->dimension = 12;
-				uniform->element_size = 48;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformfv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix3x4fv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_3x4_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_3x4_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_3x4_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_3x4_value_setter;
-				}
-				break;
-
-			case GL_FLOAT_MAT4x2:
-				uniform->matrix = true;
-				uniform->dimension = 8;
-				uniform->element_size = 32;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformfv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix4x2fv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_4x2_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_4x2_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_4x2_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_4x2_value_setter;
-				}
-				break;
-
-			case GL_FLOAT_MAT4x3:
-				uniform->matrix = true;
-				uniform->dimension = 12;
-				uniform->element_size = 48;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformfv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix4x3fv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_4x3_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_4x3_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_4x3_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_4x3_value_setter;
-				}
-				break;
-
-			case GL_FLOAT_MAT4:
-				uniform->matrix = true;
-				uniform->dimension = 16;
-				uniform->element_size = 64;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformfv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix4fv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_4x4_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_4x4_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_float_matrix_4x4_value_getter;
-					uniform->value_setter = (void *)MGLUniform_float_matrix_4x4_value_setter;
-				}
-				break;
-
-			case GL_DOUBLE_MAT2:
-				uniform->matrix = true;
-				uniform->dimension = 4;
-				uniform->element_size = 32;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformdv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix2dv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_2x2_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_2x2_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_2x2_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_2x2_value_setter;
-				}
-				break;
-
-			case GL_DOUBLE_MAT2x3:
-				uniform->matrix = true;
-				uniform->dimension = 6;
-				uniform->element_size = 48;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformdv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix2x3dv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_2x3_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_2x3_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_2x3_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_2x3_value_setter;
-				}
-				break;
-
-			case GL_DOUBLE_MAT2x4:
-				uniform->matrix = true;
-				uniform->dimension = 8;
-				uniform->element_size = 64;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformdv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix2x4dv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_2x4_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_2x4_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_2x4_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_2x4_value_setter;
-				}
-				break;
-
-			case GL_DOUBLE_MAT3x2:
-				uniform->matrix = true;
-				uniform->dimension = 6;
-				uniform->element_size = 48;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformdv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix3x2dv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_3x2_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_3x2_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_3x2_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_3x2_value_setter;
-				}
-				break;
-
-			case GL_DOUBLE_MAT3:
-				uniform->matrix = true;
-				uniform->dimension = 9;
-				uniform->element_size = 72;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformdv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix3dv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_3x3_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_3x3_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_3x3_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_3x3_value_setter;
-				}
-				break;
-
-			case GL_DOUBLE_MAT3x4:
-				uniform->matrix = true;
-				uniform->dimension = 12;
-				uniform->element_size = 96;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformdv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix3x4dv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_3x4_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_3x4_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_3x4_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_3x4_value_setter;
-				}
-				break;
-
-			case GL_DOUBLE_MAT4x2:
-				uniform->matrix = true;
-				uniform->dimension = 8;
-				uniform->element_size = 64;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformdv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix4x2dv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_4x2_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_4x2_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_4x2_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_4x2_value_setter;
-				}
-				break;
-
-			case GL_DOUBLE_MAT4x3:
-				uniform->matrix = true;
-				uniform->dimension = 12;
-				uniform->element_size = 96;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformdv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix4x3dv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_4x3_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_4x3_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_4x3_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_4x3_value_setter;
-				}
-				break;
-
-			case GL_DOUBLE_MAT4:
-				uniform->matrix = true;
-				uniform->dimension = 16;
-				uniform->element_size = 128;
-				uniform->gl_value_reader_proc = (void *)program->ctx->gl.GetUniformdv;
-				uniform->gl_value_writer_proc = (void *)program->ctx->gl.ProgramUniformMatrix4dv;
-				if (uniform->array_len > 1) {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_4x4_array_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_4x4_array_value_setter;
-				} else {
-					uniform->value_getter = (void *)MGLUniform_double_matrix_4x4_value_getter;
-					uniform->value_setter = (void *)MGLUniform_double_matrix_4x4_value_setter;
-				}
-				break;
-
-			default:
-				uniform->value_getter = (void *)MGLUniform_invalid_getter;
-				uniform->value_setter = (void *)MGLUniform_invalid_setter;
-				break;
-		}
-
-		// TODO: check shadow and sampler cube
-
-		uniform->location = gl.GetUniformLocation(obj, name);
-		uniform->name = PyUnicode_FromStringAndSize(name, name_len);
-
-		Py_INCREF((PyObject *)uniform->name);
-		Py_INCREF((PyObject *)uniform);
-
-		PyDict_SetItem(uniforms, uniform->name, (PyObject *)uniform);
-
-		if (uniform->location < 0) {
-			Py_DECREF((PyObject *)uniform);
-			continue;
-		}
-
-		Py_INCREF((PyObject *)program);
-		uniform->program = program;
-	}
-
-	// TODO:
-	// int num_attributes = 0;
-	// gl.GetProgramiv(obj, GL_ACTIVE_ATTRIBUTES, &num_attributes);
-
-	// TODO:
-	// int num_uniform_blocks = 0;
-	// gl.GetProgramiv(obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
-
-	// TODO:
-	// int num_uniform_blocks = 0;
-	// gl.GetProgramiv(obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
-
-	// TODO:
-	// glGetProgramStageiv
-	// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glGetProgramStage.xhtml
-
-	program->uniforms = uniforms;
-	program->obj = obj;
-}
+#include "Attribute.hpp"
+#include "Subroutine.hpp"
+#include "Varying.hpp"
+
+#include "InvalidObject.hpp"
 
 PyObject * MGLProgram_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLProgram * self = (MGLProgram *)type->tp_alloc(type, 0);
 
+	#ifdef MGL_VERBOSE
+	printf("MGLProgram_tp_new %p\n", self);
+	#endif
+
 	if (self) {
+		self->shaders = 0;
+
+		self->uniforms = 0;
+		self->attributes = 0;
+		self->subroutines = 0;
+		self->varyings = 0;
+
+		self->uniforms_proxy = 0;
+		self->attributes_proxy = 0;
+		self->subroutines_proxy = 0;
+		self->varyings_proxy = 0;
+
+		self->geometry_input = 0;
+		self->geometry_output = 0;
 	}
 
 	return (PyObject *)self;
 }
 
 void MGLProgram_tp_dealloc(MGLProgram * self) {
+
+	#ifdef MGL_VERBOSE
+	printf("MGLProgram_tp_dealloc %p\n", self);
+	#endif
+
 	Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
@@ -782,15 +54,7 @@ PyObject * MGLProgram_tp_str(MGLProgram * self) {
 }
 
 PyObject * MGLProgram_release(MGLProgram * self) {
-	if (self->ob_base.ob_refcnt != 2) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-		return 0;
-	}
-
-	// TODO: release
-
-	// Py_DECREF((PyObject *)self);
-
+	MGLProgram_Invalidate(self);
 	Py_RETURN_NONE;
 }
 
@@ -804,20 +68,64 @@ PyObject * MGLProgram_get_shaders(MGLProgram * self, void * closure) {
 	return self->shaders;
 }
 
+char MGLProgram_shaders_doc[] = R"(
+	shaders
+
+	The shaders.
+)";
+
 PyObject * MGLProgram_get_varyings(MGLProgram * self, void * closure) {
-	Py_INCREF(self->varyings);
-	return self->varyings;
+	Py_INCREF(self->varyings_proxy);
+	return self->varyings_proxy;
 }
+
+char MGLProgram_varyings_doc[] = R"(
+	varyings
+
+	The varyings.
+)";
 
 PyObject * MGLProgram_get_uniforms(MGLProgram * self, void * closure) {
-	Py_INCREF(self->uniforms);
-	return self->uniforms;
+	Py_INCREF(self->uniforms_proxy);
+	return self->uniforms_proxy;
 }
 
+char MGLProgram_uniforms_doc[] = R"(
+	uniforms
+
+	The uniforms.
+)";
+
+PyObject * MGLProgram_get_attributes(MGLProgram * self, void * closure) {
+	Py_INCREF(self->attributes_proxy);
+	return self->attributes_proxy;
+}
+
+char MGLProgram_attributes_doc[] = R"(
+	attributes
+
+	The attributes.
+)";
+
+PyObject * MGLProgram_get_subroutines(MGLProgram * self, void * closure) {
+	// Py_INCREF(self->subroutines_proxy);
+	// return self->subroutines_proxy;
+	// TODO:
+	return 0;
+}
+
+char MGLProgram_subroutines_doc[] = R"(
+	subroutines
+
+	The subroutines.
+)";
+
 PyGetSetDef MGLProgram_tp_getseters[] = {
-	{(char *)"shaders", (getter)MGLProgram_get_shaders, 0, 0, 0},
-	{(char *)"varyings", (getter)MGLProgram_get_varyings, 0, 0, 0},
-	{(char *)"uniforms", (getter)MGLProgram_get_uniforms, 0, 0, 0},
+	{(char *)"shaders", (getter)MGLProgram_get_shaders, 0, MGLProgram_shaders_doc, 0},
+	{(char *)"varyings", (getter)MGLProgram_get_varyings, 0, MGLProgram_varyings_doc, 0},
+	{(char *)"uniforms", (getter)MGLProgram_get_uniforms, 0, MGLProgram_uniforms_doc, 0},
+	{(char *)"attributes", (getter)MGLProgram_get_attributes, 0, MGLProgram_attributes_doc, 0},
+	{(char *)"subroutines", (getter)MGLProgram_get_subroutines, 0, MGLProgram_subroutines_doc, 0},
 	{0},
 };
 
@@ -906,3 +214,431 @@ PyTypeObject MGLProgram_Type = {
 	0,                                                      // tp_alloc
 	MGLProgram_tp_new,                                      // tp_new
 };
+
+MGLProgram * MGLProgram_New() {
+	MGLProgram * self = (MGLProgram *)MGLProgram_tp_new(&MGLProgram_Type, 0, 0); // TODO: all
+	return self;
+}
+
+void MGLProgram_Invalidate(MGLProgram * program) {
+	if (Py_TYPE(program) == &MGLInvalidObject_Type) {
+
+		#ifdef MGL_VERBOSE
+		printf("MGLProgram_Invalidate %p already released\n", program);
+		#endif
+
+		return;
+	}
+
+	// TODO: finish
+
+	#ifdef MGL_VERBOSE
+	printf("MGLProgram_Invalidate %p\n", program);
+	#endif
+
+	Py_DECREF(program->uniforms_proxy);
+	Py_DECREF(program->attributes_proxy);
+	Py_DECREF(program->subroutines_proxy);
+	Py_DECREF(program->varyings_proxy);
+
+	Py_XDECREF(program->geometry_input);
+	Py_XDECREF(program->geometry_output);
+
+	{
+		MGLUniform * uniform = 0;
+		Py_ssize_t pos = 0;
+
+		while (PyDict_Next(program->uniforms, &pos, 0, (PyObject **)&uniform)) {
+			MGLUniform_Invalidate(uniform);
+		}
+
+		Py_DECREF(program->uniforms);
+	}
+
+	{
+		MGLAttribute * attribute = 0;
+		Py_ssize_t pos = 0;
+
+		while (PyDict_Next(program->attributes, &pos, 0, (PyObject **)&attribute)) {
+			MGLAttribute_Invalidate(attribute);
+		}
+
+		Py_DECREF(program->attributes);
+	}
+
+	{
+		MGLSubroutine * subroutine = 0;
+		Py_ssize_t pos = 0;
+
+		while (PyDict_Next(program->subroutines, &pos, 0, (PyObject **)&subroutine)) {
+			MGLSubroutine_Invalidate(subroutine);
+		}
+
+		Py_DECREF(program->subroutines);
+	}
+
+	{
+		MGLVarying * varying = 0;
+		Py_ssize_t pos = 0;
+
+		while (PyDict_Next(program->varyings, &pos, 0, (PyObject **)&varying)) {
+			MGLVarying_Invalidate(varying);
+		}
+
+		Py_DECREF(program->varyings);
+	}
+
+	int shaders_len = PyTuple_GET_SIZE(program->shaders);
+
+	for (int i = 0; i < shaders_len; ++i) {
+		MGLShader * shader = (MGLShader *)PyTuple_GET_ITEM(program->shaders, i);
+		if (Py_REFCNT(shader) == 2) {
+			MGLShader_Invalidate(shader);
+		}
+	}
+
+	Py_DECREF(program->shaders);
+
+	Py_DECREF(program->context);
+
+	program->ob_base.ob_type = &MGLInvalidObject_Type;
+	program->initial_type = &MGLProgram_Type;
+
+	Py_DECREF(program);
+}
+
+void MGLProgram_Compile(MGLProgram * program, PyObject * varyings) {
+	GLMethods & gl = program->context->gl;
+
+	int obj = gl.CreateProgram();
+
+	int num_shaders = PyTuple_GET_SIZE(program->shaders);
+
+	for (int i = 0; i < num_shaders; ++i) {
+		MGLShader * shader = (MGLShader *)PyTuple_GET_ITEM(program->shaders, i);
+		gl.AttachShader(obj, shader->obj);
+	}
+
+	if (varyings != Py_None) {
+		int varyings_len = PyList_GET_SIZE(varyings);
+
+		// printf("varyings_len %d\n", varyings_len);
+
+		if (varyings_len) {
+			char ** varyings_array = new char * [varyings_len];
+
+			for (int i = 0; i < varyings_len; ++i) {
+				varyings_array[i] = PyUnicode_AsUTF8(PyList_GET_ITEM(varyings, i));
+			}
+
+			gl.TransformFeedbackVaryings(obj, varyings_len, varyings_array, GL_INTERLEAVED_ATTRIBS);
+
+			delete[] varyings_array;
+		}
+	}
+
+	int linked = GL_FALSE;
+	gl.LinkProgram(obj);
+	gl.GetProgramiv(obj, GL_LINK_STATUS, &linked);
+
+	if (!linked) {
+		static const char * logTitle = "GLSL Linker failed\n";
+		static int logTitleLength = strlen(logTitle);
+
+		int logLength = 0;
+		gl.GetProgramiv(obj, GL_INFO_LOG_LENGTH, &logLength);
+		int logTotalLength = logLength + logTitleLength;
+
+		PyObject * content = PyUnicode_New(logTotalLength, 255);
+		if (PyUnicode_READY(content)) {
+			gl.DeleteProgram(obj);
+			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return;
+		}
+
+		char * data = (char *)PyUnicode_1BYTE_DATA(content);
+		memcpy(data, logTitle, logTitleLength);
+
+		int logSize = 0;
+		gl.GetProgramInfoLog(obj, logLength, &logSize, data + logTitleLength);
+		data[logTitleLength] = 0;
+
+		gl.DeleteProgram(obj);
+		PyErr_SetObject(PyExc_RuntimeError, content);
+		return;
+	}
+
+	program->obj = obj;
+
+	MGLProgram_LoadUniforms(program);
+	MGLProgram_LoadAttributes(program);
+	MGLProgram_LoadVaryings(program);
+	MGLProgram_LoadSubroutines(program);
+
+	// TODO:
+	// int num_varyings = 0;
+	// gl.GetProgramiv(obj, GL_TRANSFORM_FEEDBACK_VARYINGS, &num_varyings);
+
+	// TODO:
+	// int num_uniform_blocks = 0;
+	// gl.GetProgramiv(obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
+
+	// TODO:
+	// int num_uniform_blocks = 0;
+	// gl.GetProgramiv(obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
+
+	// TODO:
+	// glGetProgramStageiv
+	// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glGetProgramStage.xhtml
+
+	// Py_INCREF(...);
+
+	int geometry_in = 0;
+	int geometry_out = 0;
+
+	gl.GetProgramiv(obj, GL_GEOMETRY_INPUT_TYPE, &geometry_in);
+	gl.GetProgramiv(obj, GL_GEOMETRY_OUTPUT_TYPE, &geometry_out);
+
+	switch (geometry_in) {
+		case GL_TRIANGLES:
+			program->geometry_input = MGL_TRIANGLES;
+			break;
+
+		case GL_TRIANGLE_STRIP:
+			program->geometry_input = MGL_TRIANGLE_STRIP;
+			break;
+
+		case GL_TRIANGLE_FAN:
+			program->geometry_input = MGL_TRIANGLE_FAN;
+			break;
+
+		case GL_LINES:
+			program->geometry_input = MGL_LINES;
+			break;
+
+		case GL_LINE_STRIP:
+			program->geometry_input = MGL_LINE_STRIP;
+			break;
+
+		case GL_LINE_LOOP:
+			program->geometry_input = MGL_LINE_LOOP;
+			break;
+
+		case GL_POINTS:
+			program->geometry_input = MGL_POINTS;
+			break;
+
+		case GL_LINE_STRIP_ADJACENCY:
+			program->geometry_input = MGL_LINE_STRIP_ADJACENCY;
+			break;
+
+		case GL_LINES_ADJACENCY:
+			program->geometry_input = MGL_LINES_ADJACENCY;
+			break;
+
+		case GL_TRIANGLE_STRIP_ADJACENCY:
+			program->geometry_input = MGL_TRIANGLE_STRIP_ADJACENCY;
+			break;
+
+		case GL_TRIANGLES_ADJACENCY:
+			program->geometry_input = MGL_TRIANGLES_ADJACENCY;
+			break;
+
+		default:
+			program->geometry_input = 0;
+			break;
+	}
+
+	switch (geometry_out) {
+		case GL_TRIANGLES:
+			program->geometry_output = MGL_TRIANGLES;
+			break;
+
+		case GL_TRIANGLE_STRIP:
+			program->geometry_output = MGL_TRIANGLE_STRIP;
+			break;
+
+		case GL_TRIANGLE_FAN:
+			program->geometry_output = MGL_TRIANGLE_FAN;
+			break;
+
+		case GL_LINES:
+			program->geometry_output = MGL_LINES;
+			break;
+
+		case GL_LINE_STRIP:
+			program->geometry_output = MGL_LINE_STRIP;
+			break;
+
+		case GL_LINE_LOOP:
+			program->geometry_output = MGL_LINE_LOOP;
+			break;
+
+		case GL_POINTS:
+			program->geometry_output = MGL_POINTS;
+			break;
+
+		case GL_LINE_STRIP_ADJACENCY:
+			program->geometry_output = MGL_LINE_STRIP_ADJACENCY;
+			break;
+
+		case GL_LINES_ADJACENCY:
+			program->geometry_output = MGL_LINES_ADJACENCY;
+			break;
+
+		case GL_TRIANGLE_STRIP_ADJACENCY:
+			program->geometry_output = MGL_TRIANGLE_STRIP_ADJACENCY;
+			break;
+
+		case GL_TRIANGLES_ADJACENCY:
+			program->geometry_output = MGL_TRIANGLES_ADJACENCY;
+			break;
+
+		default:
+			program->geometry_output = 0;
+			break;
+	}
+
+	if (program->geometry_input) {
+		Py_INCREF(program->geometry_input);
+	}
+
+	if (program->geometry_output) {
+		Py_INCREF(program->geometry_output);
+	}
+}
+
+void MGLProgram_LoadUniforms(MGLProgram * program) {
+	GLMethods & gl = program->context->gl; // TODO: const
+
+	PyObject * uniforms = PyDict_New();
+
+	int num_uniforms = 0;
+	gl.GetProgramiv(program->obj, GL_ACTIVE_UNIFORMS, &num_uniforms);
+
+	// printf("num_uniforms: %d\n", num_uniforms);
+
+	for (int i = 0; i < num_uniforms; ++i) {
+		MGLUniform * uniform = MGLUniform_New();
+
+		int name_len = 0;
+		char name[256];
+
+		gl.GetActiveUniform(program->obj, i, 256, &name_len, &uniform->array_len, (GLenum *)&uniform->type, name);
+
+		uniform->location = gl.GetUniformLocation(program->obj, name);
+
+		if (uniform->location < 0) {
+			Py_DECREF((PyObject *)uniform);
+			continue;
+		}
+
+		uniform->index = i;
+		uniform->program = program;
+		uniform->name = PyUnicode_FromStringAndSize(name, name_len);
+
+		MGLUniform_Complete(uniform);
+
+		// printf("name: %s\n", name);
+
+		// TODO:
+
+		// if (info.name[info.name_len - 1] == ']') {
+		// 	while (info.name_len && info.name[info.name_len] != '[') {
+		// 		--info.name_len;
+		// 	}
+		// }
+
+		// info.name[info.name_len] = 0;
+
+		// TODO: check shadow and sampler cube
+
+		PyDict_SetItem(uniforms, uniform->name, (PyObject *)uniform);
+		Py_DECREF(uniform); // TODO: do similar things
+	}
+
+	program->uniforms = uniforms;
+
+	Py_INCREF(uniforms); // TODO: ?
+	program->uniforms_proxy = PyDictProxy_New(uniforms);
+}
+
+void MGLProgram_LoadAttributes(MGLProgram * program) {
+	GLMethods & gl = program->context->gl;
+
+	PyObject * attributes = PyDict_New();
+
+	int num_attributes = 0;
+	gl.GetProgramiv(program->obj, GL_ACTIVE_ATTRIBUTES, &num_attributes);
+
+	for (int i = 0; i < num_attributes; ++i) {
+		MGLAttribute * attribute = MGLAttribute_New();
+
+		int name_len = 0;
+		char name[256];
+
+		gl.GetActiveAttrib(program->obj, i, 256, &name_len, &attribute->array_len, (GLenum *)&attribute->type, name);
+
+		attribute->location = gl.GetAttribLocation(program->obj, name);
+
+		if (attribute->location < 0) {
+			Py_DECREF(attribute);
+			continue;
+		}
+
+		attribute->index = i;
+		attribute->program = program;
+		attribute->name = PyUnicode_FromStringAndSize(name, name_len);
+
+		PyDict_SetItem(attributes, attribute->name, (PyObject *)attribute);
+		Py_DECREF(attribute);
+	}
+
+	program->attributes = attributes;
+
+	Py_INCREF(attributes); // TODO: ?
+	program->attributes_proxy = PyDictProxy_New(attributes);
+}
+
+void MGLProgram_LoadVaryings(MGLProgram * program) {
+	GLMethods & gl = program->context->gl;
+
+	PyObject * varyings = PyDict_New();
+
+	int num_varyings = 0;
+	gl.GetProgramiv(program->obj, GL_TRANSFORM_FEEDBACK_VARYINGS, &num_varyings);
+
+	// printf("num_varyings %d\n", num_varyings);
+
+	for (int i = 0; i < num_varyings; ++i) {
+		MGLVarying * varrying = MGLVarying_New();
+
+		int name_len = 0;
+		char name[256];
+
+		gl.GetTransformFeedbackVarying(program->obj, i, 256, &name_len, &varrying->array_len, (GLenum *)&varrying->type, name);
+
+		varrying->index = i;
+		varrying->program = program;
+		varrying->name = PyUnicode_FromStringAndSize(name, name_len);
+
+		PyDict_SetItem(varyings, varrying->name, (PyObject *)varrying);
+		Py_DECREF(varrying);
+	}
+
+	program->varyings = varyings;
+
+	Py_INCREF(varyings); // TODO: ?
+	program->varyings_proxy = PyDictProxy_New(varyings);
+}
+
+void MGLProgram_LoadSubroutines(MGLProgram * program) {
+	GLMethods & gl = program->context->gl;
+
+	PyObject * subroutines = PyDict_New();
+
+	program->subroutines = subroutines;
+
+	Py_INCREF(subroutines); // TODO: ?
+	program->subroutines_proxy = PyDictProxy_New(subroutines);
+}

@@ -1,20 +1,31 @@
 #include "Framebuffer.hpp"
 
-MGLFramebuffer * MGLFramebuffer_New() {
-	MGLFramebuffer * self = (MGLFramebuffer *)MGLFramebuffer_Type.tp_alloc(&MGLFramebuffer_Type, 0);
-	return self;
-}
+#include "InvalidObject.hpp"
+
+#include "Texture.hpp"
+#include "Renderbuffer.hpp"
 
 PyObject * MGLFramebuffer_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLFramebuffer * self = (MGLFramebuffer *)type->tp_alloc(type, 0);
 
+	#ifdef MGL_VERBOSE
+	printf("MGLFramebuffer_tp_new %p\n", self);
+	#endif
+
 	if (self) {
+		self->color_attachments = 0;
+		self->depth_attachment = 0;
 	}
 
 	return (PyObject *)self;
 }
 
 void MGLFramebuffer_tp_dealloc(MGLFramebuffer * self) {
+
+	#ifdef MGL_VERBOSE
+	printf("MGLFramebuffer_tp_dealloc %p\n", self);
+	#endif
+
 	Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
@@ -27,20 +38,22 @@ PyObject * MGLFramebuffer_tp_str(MGLFramebuffer * self) {
 }
 
 PyObject * MGLFramebuffer_release(MGLFramebuffer * self) {
-	if (self->ob_base.ob_refcnt != 2) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-		return 0;
-	}
-
-	// TODO: release
-
-	// Py_DECREF((PyObject *)self);
-
+	MGLFramebuffer_Invalidate(self);
 	Py_RETURN_NONE;
 }
 
+PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
+	self->context->gl.BindFramebuffer(GL_FRAMEBUFFER, self->obj);
+	Py_RETURN_NONE;
+}
+
+const char * MGLFramebuffer_use_doc = R"(
+	use()
+)";
+
 PyMethodDef MGLFramebuffer_tp_methods[] = {
 	{"release", (PyCFunction)MGLFramebuffer_release, METH_NOARGS, 0},
+	{"use", (PyCFunction)MGLFramebuffer_use, METH_NOARGS, 0},
 	{0},
 };
 
@@ -49,6 +62,7 @@ PyGetSetDef MGLFramebuffer_tp_getseters[] = {
 };
 
 const char * MGLFramebuffer_tp_doc = R"(
+	Framebuffer
 )";
 
 PyTypeObject MGLFramebuffer_Type = {
@@ -91,3 +105,62 @@ PyTypeObject MGLFramebuffer_Type = {
 	0,                                                      // tp_alloc
 	MGLFramebuffer_tp_new,                                  // tp_new
 };
+
+MGLFramebuffer * MGLFramebuffer_New() {
+	MGLFramebuffer * self = (MGLFramebuffer *)MGLFramebuffer_tp_new(&MGLFramebuffer_Type, 0, 0);
+	return self;
+}
+
+void MGLFramebuffer_Invalidate(MGLFramebuffer * framebuffer) {
+	if (Py_TYPE(framebuffer) == &MGLInvalidObject_Type) {
+
+		#ifdef MGL_VERBOSE
+		printf("MGLFramebuffer_Invalidate %p already released\n", framebuffer);
+		#endif
+
+		return;
+	}
+
+	#ifdef MGL_VERBOSE
+	printf("MGLFramebuffer_Invalidate %p\n", framebuffer);
+	#endif
+
+	framebuffer->context->gl.DeleteFramebuffers(1, (GLuint *)&framebuffer->obj);
+
+	int color_attachments_len = PyList_GET_SIZE(framebuffer->color_attachments);
+
+	for (int i = 0; i < color_attachments_len; ++i) {
+		PyObject * attachment = PyList_GET_ITEM(framebuffer->color_attachments, i);
+
+		if (Py_TYPE(attachment) == &MGLTexture_Type) {
+			MGLTexture * texture = (MGLTexture *)attachment;
+			if (Py_REFCNT(texture) == 2) {
+				MGLTexture_Invalidate(texture);
+			}
+		} else {
+			// TODO:
+			printf("Unknown trace in %s (%s:%d)\n", __FUNCTION__, __FILE__, __LINE__);
+		}
+	}
+
+	Py_DECREF(framebuffer->color_attachments);
+
+	if (Py_TYPE(framebuffer->depth_attachment) == &MGLTexture_Type) {
+		MGLTexture * texture = (MGLTexture *)framebuffer->depth_attachment;
+		if (Py_REFCNT(texture) == 2) {
+			MGLTexture_Invalidate(texture);
+		}
+	} else {
+		// TODO:
+		printf("Unknown trace in %s (%s:%d)\n", __FUNCTION__, __FILE__, __LINE__);
+	}
+
+	Py_DECREF(framebuffer->depth_attachment);
+
+	Py_DECREF(framebuffer->context);
+
+	framebuffer->ob_base.ob_type = &MGLInvalidObject_Type;
+	framebuffer->initial_type = &MGLFramebuffer_Type;
+
+	Py_DECREF(framebuffer);
+}

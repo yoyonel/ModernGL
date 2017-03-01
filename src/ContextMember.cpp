@@ -1,10 +1,5 @@
 #include "ContextMember.hpp"
 
-MGLContextMember * MGLContextMember_New() {
-	MGLContextMember * self = (MGLContextMember *)MGLContextMember_Type.tp_alloc(&MGLContextMember_Type, 0);
-	return self;
-}
-
 PyObject * MGLContextMember_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLContextMember * self = (MGLContextMember *)type->tp_alloc(type, 0);
 
@@ -30,11 +25,22 @@ PyMethodDef MGLContextMember_tp_methods[] = {
 	{0},
 };
 
+MGLContext * MGLContextMember_get_context(MGLContextMember * self, void * closure) {
+	Py_INCREF(self->context);
+	return self->context;
+}
+
+char MGLContextMember_context_doc[] = R"(
+	context
+)";
+
 PyGetSetDef MGLContextMember_tp_getseters[] = {
+	{(char *)"context", (getter)MGLContextMember_get_context, 0, MGLContextMember_context_doc, 0},
 	{0},
 };
 
 const char * MGLContextMember_tp_doc = R"(
+	ContextMember
 )";
 
 PyTypeObject MGLContextMember_Type = {

@@ -4,17 +4,18 @@
 
 #include "ContextMember.hpp"
 #include "Program.hpp"
+#include "Buffer.hpp"
 
 struct MGLVertexArray : public MGLContextMember {
-	int obj;
-
 	MGLProgram * program;
 	PyObject * content;
+	MGLBuffer * index_buffer;
 
+	int obj;
 	int num_vertices;
-	bool indexed;
 };
 
 extern PyTypeObject MGLVertexArray_Type;
 
 MGLVertexArray * MGLVertexArray_New();
+void MGLVertexArray_Invalidate(MGLVertexArray * array);

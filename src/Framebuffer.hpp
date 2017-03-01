@@ -5,12 +5,13 @@
 #include "ContextMember.hpp"
 
 struct MGLFramebuffer : public MGLContextMember {
-	int obj;
-
 	PyObject * color_attachments;
 	PyObject * depth_attachment;
+
+	int obj;
 };
 
 extern PyTypeObject MGLFramebuffer_Type;
 
 MGLFramebuffer * MGLFramebuffer_New();
+void MGLFramebuffer_Invalidate(MGLFramebuffer * framebuffer);
