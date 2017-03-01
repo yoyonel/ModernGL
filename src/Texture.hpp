@@ -10,6 +10,7 @@ struct MGLTexture : public MGLContextMember {
 	int width;
 	int height;
 	int components;
+
 	bool floats;
 	bool depth;
 };
@@ -17,3 +18,4 @@ struct MGLTexture : public MGLContextMember {
 extern PyTypeObject MGLTexture_Type;
 
 MGLTexture * MGLTexture_New();
+void MGLTexture_Invalidate(MGLTexture * texture);

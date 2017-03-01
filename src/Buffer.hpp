@@ -14,3 +14,4 @@ struct MGLBuffer : public MGLContextMember {
 extern PyTypeObject MGLBuffer_Type;
 
 MGLBuffer * MGLBuffer_New();
+void MGLBuffer_Invalidate(MGLBuffer * buffer);

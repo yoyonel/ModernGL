@@ -1,10 +1,5 @@
 #include "InvalidObject.hpp"
 
-MGLInvalidObject * MGLInvalidObject_New() {
-	MGLInvalidObject * self = (MGLInvalidObject *)MGLInvalidObject_Type.tp_alloc(&MGLInvalidObject_Type, 0);
-	return self;
-}
-
 PyObject * MGLInvalidObject_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLInvalidObject * self = (MGLInvalidObject *)type->tp_alloc(type, 0);
 
@@ -15,7 +10,12 @@ PyObject * MGLInvalidObject_tp_new(PyTypeObject * type, PyObject * args, PyObjec
 }
 
 void MGLInvalidObject_tp_dealloc(MGLInvalidObject * self) {
-	Py_TYPE(self)->tp_free((PyObject*)self);
+
+	#ifdef MGL_VERBOSE
+	printf("MGLInvalidObject_tp_dealloc %p\n", self);
+	#endif
+
+	self->initial_type->tp_dealloc((PyObject*)self);
 }
 
 int MGLInvalidObject_tp_init(MGLInvalidObject * self, PyObject * args, PyObject * kwargs) {
@@ -35,6 +35,9 @@ PyGetSetDef MGLInvalidObject_tp_getseters[] = {
 };
 
 const char * MGLInvalidObject_tp_doc = R"(
+	InvalidObject
+
+	A ModernGL object turns into an InvalidObject once the release method is successfully called.
 )";
 
 PyTypeObject MGLInvalidObject_Type = {

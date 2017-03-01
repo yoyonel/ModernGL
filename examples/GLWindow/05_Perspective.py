@@ -3,9 +3,9 @@ import struct
 
 GLWindow.Init()
 
-GL = ModernGL.create_context()
+ctx = ModernGL.create_context()
 
-vert = GL.VertexShader('''
+vert = ctx.VertexShader('''
 	#version 330
 
 	in vec3 vert;
@@ -49,7 +49,7 @@ vert = GL.VertexShader('''
 	}
 ''')
 
-frag = GL.FragmentShader('''
+frag = ctx.FragmentShader('''
 	#version 330
 
 	out vec4 color;
@@ -61,7 +61,7 @@ frag = GL.FragmentShader('''
 
 width, height = GLWindow.GetSize()
 
-prog = GL.Program([vert, frag])
+prog = ctx.Program([vert, frag])
 
 prog.uniforms['znear'].value = 0.1
 prog.uniforms['zfar'].value = 1000.0
@@ -78,9 +78,9 @@ for i in range(0, 65):
 	grid += struct.pack('6f', i - 32, -32.0, 0.0, i - 32, 32.0, 0.0)
 	grid += struct.pack('6f', -32.0, i - 32, 0.0, 32.0, i - 32, 0.0)
 
-vbo = GL.Buffer(grid)
-vao = GL.VertexArray(prog, [(vbo, '3f', ['vert'])])
+vbo = ctx.Buffer(grid)
+vao = ctx.SimpleVertexArray(prog, vbo, '3f', ['vert'])
 
 while GLWindow.Update():
-	GL.clear(240, 240, 240)
+	ctx.clear(240, 240, 240)
 	vao.render(ModernGL.LINES, 65 * 4)

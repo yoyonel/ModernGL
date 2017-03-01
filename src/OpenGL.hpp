@@ -1,9 +1,5 @@
 #pragma once
 
-// TODO:
-inline int oglMakeCurrent(void *, void *) {return 0;}
-inline void * oglGetCurrentContext() {return 0;}
-inline void * oglGetCurrentDC() {return 0;}
 // inline void * GLAPI oglGetProcAddress(const char * name); {return 0;}
 #define oglGetProcAddress wglGetProcAddress
 

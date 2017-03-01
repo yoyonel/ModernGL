@@ -2,18 +2,37 @@
 
 #include <Python.h>
 
-#include "Object.hpp"
+#include "ProgramMember.hpp"
 #include "Program.hpp"
 
-#include "OpenGL.hpp"
+struct MGLUniform : public MGLProgramMember {
+	PyObject * name;
+
+	void * value_getter;
+	void * value_setter;
+	void * gl_value_reader_proc;
+	void * gl_value_writer_proc;
+
+	int index;
+	int location;
+	int type;
+
+	int dimension;
+	int element_size; // TODO:
+	int array_len;
+
+	bool matrix;
+};
+
+extern PyTypeObject MGLUniform_Type;
+
+MGLUniform * MGLUniform_New();
+void MGLUniform_Invalidate(MGLUniform * uniform);
+void MGLUniform_Complete(MGLUniform * self);
 
 typedef void (GLAPI * gl_uniform_reader_proc)(GLuint program, GLint location, void * value);
 typedef void (GLAPI * gl_uniform_vector_writer_proc)(GLuint program, GLint location, GLsizei count, const void * value);
 typedef void (GLAPI * gl_uniform_matrix_writer_proc)(GLuint program, GLint location, GLsizei count, GLboolean transpose, const void * value);
-
-// TODO:
-
-struct MGLUniform;
 
 typedef PyObject * (* MGLUniform_Getter)(MGLUniform * self);
 typedef int (* MGLUniform_Setter)(MGLUniform * self, PyObject * value);
@@ -177,27 +196,3 @@ int MGLUniform_double_matrix_3x4_array_value_setter(MGLUniform * self, PyObject 
 int MGLUniform_double_matrix_4x2_array_value_setter(MGLUniform * self, PyObject * value);
 int MGLUniform_double_matrix_4x3_array_value_setter(MGLUniform * self, PyObject * value);
 int MGLUniform_double_matrix_4x4_array_value_setter(MGLUniform * self, PyObject * value);
-
-struct MGLUniform : public MGLObject {
-	MGLProgram * program;
-	PyObject * name;
-
-	int location;
-	int type;
-
-	int dimension;
-	int element_size; // TODO:
-	int array_len;
-
-	bool matrix;
-
-	void * value_getter;
-	void * value_setter;
-	void * gl_value_reader_proc;
-	void * gl_value_writer_proc;
-};
-
-extern PyTypeObject MGLUniform_Type;
-
-MGLUniform * MGLUniform_New();
-void MGLUniform_Complete(MGLUniform * self);

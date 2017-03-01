@@ -10,6 +10,7 @@ def sources():
 ModernGL = Extension(
 	name = 'ModernGL.ModernGL',
 	include_dirs = ['src'],
+	define_macros = [('MGL_VERBOSE', '1')],
 	libraries = ['gdi32', 'opengl32', 'user32'],
 	sources = list(sources()),
 )

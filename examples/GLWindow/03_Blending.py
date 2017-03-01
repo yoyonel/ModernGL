@@ -3,9 +3,9 @@ import struct
 
 GLWindow.Init()
 
-GL = ModernGL.create_context()
+ctx = ModernGL.create_context()
 
-vert = GL.VertexShader('''
+vert = ctx.VertexShader('''
 	#version 330
 
 	in vec2 vert;
@@ -24,7 +24,7 @@ vert = GL.VertexShader('''
 	}
 ''')
 
-frag = GL.FragmentShader('''
+frag = ctx.FragmentShader('''
 	#version 330
 
 	in vec4 frag_color;
@@ -37,7 +37,7 @@ frag = GL.FragmentShader('''
 
 width, height = GLWindow.GetSize()
 
-prog = GL.Program([vert, frag])
+prog = ctx.Program([vert, frag])
 
 verts = [
 	1.0, 0.0,
@@ -50,8 +50,8 @@ verts = [
 	0.0, 0.0, 1.0, 0.5,
 ]
 
-vbo = GL.Buffer(struct.pack('18f', *verts))
-vao = GL.VertexArray(prog, [
+vbo = ctx.Buffer(struct.pack('18f', *verts))
+vao = ctx.VertexArray(prog, [
 	(vbo, '2f4f', ['vert', 'vert_color']),
 ])
 
@@ -61,7 +61,7 @@ rotation = prog.uniforms['rotation']
 scale.value = (height / width * 0.75, 0.75)
 
 while GLWindow.Update():
-	GL.clear(240, 240, 240)
-	GL.enable(ModernGL.BLEND)
+	ctx.clear(240, 240, 240)
+	ctx.enable(ModernGL.BLEND)
 	rotation.value = GLWindow.GetTime()
 	vao.render(ModernGL.TRIANGLES, instances = 10)

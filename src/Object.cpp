@@ -1,10 +1,5 @@
 #include "Object.hpp"
 
-MGLObject * MGLObject_New() {
-	MGLObject * self = (MGLObject *)MGLObject_Type.tp_alloc(&MGLObject_Type, 0);
-	return self;
-}
-
 PyObject * MGLObject_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLObject * self = (MGLObject *)type->tp_alloc(type, 0);
 
@@ -35,6 +30,9 @@ PyGetSetDef MGLObject_tp_getseters[] = {
 };
 
 const char * MGLObject_tp_doc = R"(
+	Object
+
+	ModernGL objects.
 )";
 
 PyTypeObject MGLObject_Type = {

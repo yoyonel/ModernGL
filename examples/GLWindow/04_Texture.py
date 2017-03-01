@@ -4,9 +4,11 @@ import struct
 
 GLWindow.Init()
 
-GL = ModernGL.create_context()
+ctx = ModernGL.create_context()
 
-vert = GL.VertexShader('''
+print(ctx.max_texture_units)
+
+vert = ctx.VertexShader('''
 	#version 330
 
 	in vec2 vert;
@@ -22,7 +24,7 @@ vert = GL.VertexShader('''
 	}
 ''')
 
-frag = GL.FragmentShader('''
+frag = ctx.FragmentShader('''
 	#version 330
 
 	uniform sampler2D texture;
@@ -37,10 +39,10 @@ frag = GL.FragmentShader('''
 
 width, height = GLWindow.GetSize()
 
-prog = GL.Program([vert, frag])
+prog = ctx.Program([vert, frag])
 
-vbo = GL.Buffer(struct.pack('6f', 1.0, 0.0, -0.5, 0.86, -0.5, -0.86))
-vao = GL.VertexArray(prog, [(vbo, '2f', ['vert'])])
+vbo = ctx.Buffer(struct.pack('6f', 1.0, 0.0, -0.5, 0.86, -0.5, -0.86))
+vao = ctx.VertexArray(prog, [(vbo, '2f', ['vert'])])
 
 scale = prog.uniforms['scale']
 rotation = prog.uniforms['rotation']
@@ -48,10 +50,10 @@ rotation = prog.uniforms['rotation']
 scale.value = (height / width * 0.75, 0.75)
 
 img = Image.open('../DataFiles/Noise.jpg')
-texture = GL.Texture(img.size, 3, img.tobytes())
+texture = ctx.Texture(img.size, 3, img.tobytes())
 texture.use()
 
 while GLWindow.Update():
-	GL.clear(240, 240, 240)
+	ctx.clear(240, 240, 240)
 	rotation.value = GLWindow.GetTime()
 	vao.render(ModernGL.TRIANGLES)

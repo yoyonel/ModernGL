@@ -12,3 +12,8 @@ struct MGLEnableFlag : public MGLObject {
 extern PyTypeObject MGLEnableFlag_Type;
 
 MGLEnableFlag * MGLEnableFlag_New();
+
+extern MGLEnableFlag * MGL_BLEND;
+extern MGLEnableFlag * MGL_DEPTH_TEST;
+extern MGLEnableFlag * MGL_CULL_FACE;
+extern MGLEnableFlag * MGL_MULTISAMPLE;
