@@ -8,20 +8,23 @@
 struct MGLAttribute : public MGLProgramMember {
 	PyObject * name;
 
-	void * value_getter;
-	void * value_setter;
-	void * gl_value_reader_proc;
-	void * gl_value_writer_proc;
+	void * gl_attrib_ptr_proc;
 
-	int index;
+	int number;
 	int location;
 	int type;
 
-	int dimension;
-	int element_size;
-	int array_len;
+	int scalar_type;
 
-	bool matrix;
+	int dimension;
+	int array_length;
+
+	int rows_length;
+	int row_length;
+	int row_size;
+
+	char shape;
+	bool normalizable;
 };
 
 extern PyTypeObject MGLAttribute_Type;

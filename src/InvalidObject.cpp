@@ -15,7 +15,7 @@ void MGLInvalidObject_tp_dealloc(MGLInvalidObject * self) {
 	printf("MGLInvalidObject_tp_dealloc %p\n", self);
 	#endif
 
-	self->initial_type->tp_dealloc((PyObject*)self);
+	self->initial_type->tp_dealloc((PyObject *)self);
 }
 
 int MGLInvalidObject_tp_init(MGLInvalidObject * self, PyObject * args, PyObject * kwargs) {

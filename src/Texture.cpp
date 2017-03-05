@@ -1,5 +1,6 @@
 #include "Texture.hpp"
 
+#include "Error.hpp"
 #include "InvalidObject.hpp"
 
 PyObject * MGLTexture_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
@@ -21,7 +22,7 @@ void MGLTexture_tp_dealloc(MGLTexture * self) {
 	printf("MGLTexture_tp_dealloc %p\n", self);
 	#endif
 
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	MGLTexture_Type.tp_free((PyObject *)self);
 }
 
 int MGLTexture_tp_init(MGLTexture * self, PyObject * args, PyObject * kwargs) {
@@ -46,7 +47,6 @@ PyObject * MGLTexture_use(MGLTexture * self, PyObject * args, PyObject * kwargs)
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
@@ -75,7 +75,6 @@ PyObject * MGLTexture_read(PyObject * self, PyObject * args, PyObject * kwargs) 
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
@@ -100,7 +99,6 @@ PyObject * MGLTexture_write(PyObject * self, PyObject * args, PyObject * kwargs)
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 

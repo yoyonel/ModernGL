@@ -10,7 +10,7 @@ PyObject * MGLProgramMember_tp_new(PyTypeObject * type, PyObject * args, PyObjec
 }
 
 void MGLProgramMember_tp_dealloc(MGLProgramMember * self) {
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 int MGLProgramMember_tp_init(MGLProgramMember * self, PyObject * args, PyObject * kwargs) {

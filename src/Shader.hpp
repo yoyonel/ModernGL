@@ -13,11 +13,15 @@ enum SHADER_SLOT_ENUM {
 	NUM_SHADER_SLOTS,
 };
 
+extern const int SHADER_TYPE[];
+extern const char * SHADER_NAME[];
+
 struct MGLShader : public MGLContextMember {
 	PyObject * source;
 
 	int obj;
 	int shader_type;
+	int shader_slot;
 };
 
 extern PyTypeObject MGLShader_Type;

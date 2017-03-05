@@ -19,7 +19,7 @@ void MGLEnableFlag_tp_dealloc(MGLEnableFlag * self) {
 	printf("MGLEnableFlag_tp_dealloc %p\n", self);
 	#endif
 
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 int MGLEnableFlag_tp_init(MGLEnableFlag * self, PyObject * args, PyObject * kwargs) {

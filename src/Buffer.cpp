@@ -1,5 +1,6 @@
 #include "Buffer.hpp"
 
+#include "Error.hpp"
 #include "InvalidObject.hpp"
 #include "BufferAccess.hpp"
 
@@ -23,7 +24,7 @@ void MGLBuffer_tp_dealloc(MGLBuffer * self) {
 	printf("MGLBuffer_tp_dealloc %p\n", self);
 	#endif
 
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	MGLBuffer_Type.tp_free((PyObject *)self);
 }
 
 int MGLBuffer_tp_init(MGLBuffer * self, PyObject * args, PyObject * kwargs) {
@@ -52,7 +53,6 @@ MGLBufferAccess * MGLBuffer_access(MGLBuffer * self, PyObject * args, PyObject *
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
@@ -61,7 +61,8 @@ MGLBufferAccess * MGLBuffer_access(MGLBuffer * self, PyObject * args, PyObject *
 	}
 
 	if (offset < 0 || size > self->size - offset) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "offset = %d or size = %d out of range", offset, size);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
@@ -102,7 +103,6 @@ PyObject * MGLBuffer_read(MGLBuffer * self, PyObject * args, PyObject * kwargs) 
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
@@ -111,11 +111,10 @@ PyObject * MGLBuffer_read(MGLBuffer * self, PyObject * args, PyObject * kwargs) 
 	}
 
 	if (offset < 0 || size < 0 || size + offset > self->size) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "offset = %d or size = %d out of range", offset, size);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
-
-	// printf("%d %d %d\n", self->obj, offset, size);
 
 	GLMethods & gl = self->context->gl;
 
@@ -123,7 +122,8 @@ PyObject * MGLBuffer_read(MGLBuffer * self, PyObject * args, PyObject * kwargs) 
 	void * map = gl.MapBufferRange(GL_ARRAY_BUFFER, offset, size, GL_MAP_READ_BIT);
 
 	if (!map) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "Cannot map buffer");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
@@ -165,12 +165,12 @@ PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args, PyObject * kwargs)
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
 	if (offset < 0 || size + offset > self->size) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "offset = %d or size = %d out of range", offset, size);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
@@ -252,7 +252,7 @@ int MGLBuffer_tp_as_buffer_get_vew(MGLBuffer * self, Py_buffer * view, int flags
 	void * map = gl.MapBufferRange(GL_ARRAY_BUFFER, 0, self->size, access);
 
 	if (!map) {
-		PyErr_Format(PyExc_BufferError, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		PyErr_Format(PyExc_BufferError, "Cannot map buffer");
 		view->obj = 0;
 		return -1;
 	}
@@ -266,9 +266,6 @@ int MGLBuffer_tp_as_buffer_get_vew(MGLBuffer * self, Py_buffer * view, int flags
 	view->shape = 0;
 	view->strides = 0;
 	view->suboffsets = 0;
-
-	// view->readonly = <auto>;
-	// view->internal = <auto>;
 
 	Py_INCREF(self);
 	view->obj = (PyObject *)self;

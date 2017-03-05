@@ -1,5 +1,6 @@
 #include "Varying.hpp"
 
+#include "Error.hpp"
 #include "InvalidObject.hpp"
 
 PyObject * MGLVarying_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
@@ -22,7 +23,7 @@ void MGLVarying_tp_dealloc(MGLVarying * self) {
 	printf("MGLVarying_tp_dealloc %p\n", self);
 	#endif
 
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	MGLVarying_Type.tp_free((PyObject *)self);
 }
 
 int MGLVarying_tp_init(MGLVarying * self, PyObject * args, PyObject * kwargs) {

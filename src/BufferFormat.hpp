@@ -1,9 +1,9 @@
 #pragma once
 
 struct FormatNode {
-	unsigned type;
 	int count;
 	int size;
+	char shape;
 };
 
 struct FormatInfo {

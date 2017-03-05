@@ -6,7 +6,7 @@
 #include "Primitive.hpp"
 
 struct MGLProgram : public MGLContextMember {
-	PyObject * shaders; // TODO: tuple
+	PyObject * shaders;
 
 	PyObject * uniforms;
 	PyObject * attributes;

@@ -1,13 +1,12 @@
 #include "Program.hpp"
 
+#include "Error.hpp"
+#include "InvalidObject.hpp"
 #include "Shader.hpp"
-
 #include "Uniform.hpp"
 #include "Attribute.hpp"
 #include "Subroutine.hpp"
 #include "Varying.hpp"
-
-#include "InvalidObject.hpp"
 
 PyObject * MGLProgram_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLProgram * self = (MGLProgram *)type->tp_alloc(type, 0);
@@ -42,7 +41,7 @@ void MGLProgram_tp_dealloc(MGLProgram * self) {
 	printf("MGLProgram_tp_dealloc %p\n", self);
 	#endif
 
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	MGLProgram_Type.tp_free((PyObject *)self);
 }
 
 int MGLProgram_tp_init(MGLProgram * self, PyObject * args, PyObject * kwargs) {
@@ -108,10 +107,8 @@ char MGLProgram_attributes_doc[] = R"(
 )";
 
 PyObject * MGLProgram_get_subroutines(MGLProgram * self, void * closure) {
-	// Py_INCREF(self->subroutines_proxy);
-	// return self->subroutines_proxy;
-	// TODO:
-	return 0;
+	Py_INCREF(self->subroutines_proxy);
+	return self->subroutines_proxy;
 }
 
 char MGLProgram_subroutines_doc[] = R"(
@@ -120,53 +117,55 @@ char MGLProgram_subroutines_doc[] = R"(
 	The subroutines.
 )";
 
+PyObject * MGLProgram_get_geometry_input(MGLProgram * self, void * closure) {
+	if (self->geometry_input) {
+		Py_INCREF(self->geometry_input);
+		return (PyObject *)self->geometry_input;
+	} else {
+		Py_RETURN_NONE;
+	}
+}
+
+char MGLProgram_geometry_input_doc[] = R"(
+	geometry_input
+
+	The geometry input.
+)";
+
+PyObject * MGLProgram_get_geometry_output(MGLProgram * self, void * closure) {
+	if (self->geometry_output) {
+		Py_INCREF(self->geometry_output);
+		return (PyObject *)self->geometry_output;
+	} else {
+		Py_RETURN_NONE;
+	}
+}
+
+char MGLProgram_geometry_output_doc[] = R"(
+	geometry_output
+
+	The geometry output.
+)";
+
 PyGetSetDef MGLProgram_tp_getseters[] = {
 	{(char *)"shaders", (getter)MGLProgram_get_shaders, 0, MGLProgram_shaders_doc, 0},
 	{(char *)"varyings", (getter)MGLProgram_get_varyings, 0, MGLProgram_varyings_doc, 0},
 	{(char *)"uniforms", (getter)MGLProgram_get_uniforms, 0, MGLProgram_uniforms_doc, 0},
 	{(char *)"attributes", (getter)MGLProgram_get_attributes, 0, MGLProgram_attributes_doc, 0},
 	{(char *)"subroutines", (getter)MGLProgram_get_subroutines, 0, MGLProgram_subroutines_doc, 0},
+	{(char *)"geometry_input", (getter)MGLProgram_get_geometry_input, 0, MGLProgram_geometry_input_doc, 0},
+	{(char *)"geometry_output", (getter)MGLProgram_get_geometry_output, 0, MGLProgram_geometry_output_doc, 0},
 	{0},
 };
 
 // PyObject * Program_get_item(Program * self, PyObject * key) {
-// 	char * name = PyUnicode_AsUTF8(key);
-
-// 	if (!name) {
-// 		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-// 		return 0;
-// 	}
-
-// 	UniformMapIterator it = self->uniforms->find(name);
-// 	if (it == self->uniforms->end()) {
-// 		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-// 		return 0;
-// 	}
-
-// 	PyObject * uniform = (PyObject *)it->second;
-// 	Py_INCREF(uniform);
-// 	return uniform;
 // }
 
 // int Program_set_item(Program * self, PyObject * key, PyObject * value) {
-// 	char * name = PyUnicode_AsUTF8(key);
-
-// 	if (!name) {
-// 		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-// 		return -1;
-// 	}
-
-// 	UniformMapIterator it = self->uniforms->find(name);
-// 	if (it == self->uniforms->end()) {
-// 		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-// 		return -1;
-// 	}
-
-// 	return it->second->setter(it->second, value);
 // }
 
 PyMappingMethods Program_map = {
-	0, // TODO:
+	0,
 	// (binaryfunc)Program_get_item,
 	// (objobjargproc)Program_set_item,
 };
@@ -230,19 +229,12 @@ void MGLProgram_Invalidate(MGLProgram * program) {
 		return;
 	}
 
-	// TODO: finish
-
 	#ifdef MGL_VERBOSE
 	printf("MGLProgram_Invalidate %p\n", program);
 	#endif
 
-	Py_DECREF(program->uniforms_proxy);
-	Py_DECREF(program->attributes_proxy);
-	Py_DECREF(program->subroutines_proxy);
-	Py_DECREF(program->varyings_proxy);
-
-	Py_XDECREF(program->geometry_input);
-	Py_XDECREF(program->geometry_output);
+	GLMethods & gl = program->context->gl;
+	gl.DeleteProgram(program->obj);
 
 	{
 		MGLUniform * uniform = 0;
@@ -297,6 +289,14 @@ void MGLProgram_Invalidate(MGLProgram * program) {
 		}
 	}
 
+	Py_DECREF(program->uniforms_proxy);
+	Py_DECREF(program->attributes_proxy);
+	Py_DECREF(program->subroutines_proxy);
+	Py_DECREF(program->varyings_proxy);
+
+	Py_XDECREF(program->geometry_input);
+	Py_XDECREF(program->geometry_output);
+
 	Py_DECREF(program->shaders);
 
 	Py_DECREF(program->context);
@@ -312,17 +312,20 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * varyings) {
 
 	int obj = gl.CreateProgram();
 
+	bool has_geometry_shader = false;
+
 	int num_shaders = PyTuple_GET_SIZE(program->shaders);
 
 	for (int i = 0; i < num_shaders; ++i) {
 		MGLShader * shader = (MGLShader *)PyTuple_GET_ITEM(program->shaders, i);
+		if (shader->shader_slot == GEOMETRY_SHADER_SLOT) {
+			has_geometry_shader = true;
+		}
 		gl.AttachShader(obj, shader->obj);
 	}
 
 	if (varyings != Py_None) {
 		int varyings_len = PyList_GET_SIZE(varyings);
-
-		// printf("varyings_len %d\n", varyings_len);
 
 		if (varyings_len) {
 			char ** varyings_array = new char * [varyings_len];
@@ -337,34 +340,28 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * varyings) {
 		}
 	}
 
-	int linked = GL_FALSE;
 	gl.LinkProgram(obj);
+
+	int linked = GL_FALSE;
 	gl.GetProgramiv(obj, GL_LINK_STATUS, &linked);
 
 	if (!linked) {
-		static const char * logTitle = "GLSL Linker failed\n";
-		static int logTitleLength = strlen(logTitle);
+		const char * message = "GLSL Compiler failed";
+		const char * title = "Program";
+		const char * underline = "=======";
 
-		int logLength = 0;
-		gl.GetProgramiv(obj, GL_INFO_LOG_LENGTH, &logLength);
-		int logTotalLength = logLength + logTitleLength;
+		int log_len = 0;
+		gl.GetProgramiv(obj, GL_INFO_LOG_LENGTH, &log_len);
 
-		PyObject * content = PyUnicode_New(logTotalLength, 255);
-		if (PyUnicode_READY(content)) {
-			gl.DeleteProgram(obj);
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return;
-		}
-
-		char * data = (char *)PyUnicode_1BYTE_DATA(content);
-		memcpy(data, logTitle, logTitleLength);
-
-		int logSize = 0;
-		gl.GetProgramInfoLog(obj, logLength, &logSize, data + logTitleLength);
-		data[logTitleLength] = 0;
+		char * log = new char[log_len];
+		gl.GetProgramInfoLog(obj, log_len, &log_len, log);
 
 		gl.DeleteProgram(obj);
-		PyErr_SetObject(PyExc_RuntimeError, content);
+
+		MGLError * error = MGLError_New(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+
+		delete[] log;
 		return;
 	}
 
@@ -396,107 +393,109 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * varyings) {
 	int geometry_in = 0;
 	int geometry_out = 0;
 
-	gl.GetProgramiv(obj, GL_GEOMETRY_INPUT_TYPE, &geometry_in);
-	gl.GetProgramiv(obj, GL_GEOMETRY_OUTPUT_TYPE, &geometry_out);
+	if (has_geometry_shader) {
+		gl.GetProgramiv(obj, GL_GEOMETRY_INPUT_TYPE, &geometry_in);
+		gl.GetProgramiv(obj, GL_GEOMETRY_OUTPUT_TYPE, &geometry_out);
 
-	switch (geometry_in) {
-		case GL_TRIANGLES:
-			program->geometry_input = MGL_TRIANGLES;
-			break;
+		switch (geometry_in) {
+			case GL_TRIANGLES:
+				program->geometry_input = MGL_TRIANGLES;
+				break;
 
-		case GL_TRIANGLE_STRIP:
-			program->geometry_input = MGL_TRIANGLE_STRIP;
-			break;
+			case GL_TRIANGLE_STRIP:
+				program->geometry_input = MGL_TRIANGLE_STRIP;
+				break;
 
-		case GL_TRIANGLE_FAN:
-			program->geometry_input = MGL_TRIANGLE_FAN;
-			break;
+			case GL_TRIANGLE_FAN:
+				program->geometry_input = MGL_TRIANGLE_FAN;
+				break;
 
-		case GL_LINES:
-			program->geometry_input = MGL_LINES;
-			break;
+			case GL_LINES:
+				program->geometry_input = MGL_LINES;
+				break;
 
-		case GL_LINE_STRIP:
-			program->geometry_input = MGL_LINE_STRIP;
-			break;
+			case GL_LINE_STRIP:
+				program->geometry_input = MGL_LINE_STRIP;
+				break;
 
-		case GL_LINE_LOOP:
-			program->geometry_input = MGL_LINE_LOOP;
-			break;
+			case GL_LINE_LOOP:
+				program->geometry_input = MGL_LINE_LOOP;
+				break;
 
-		case GL_POINTS:
-			program->geometry_input = MGL_POINTS;
-			break;
+			case GL_POINTS:
+				program->geometry_input = MGL_POINTS;
+				break;
 
-		case GL_LINE_STRIP_ADJACENCY:
-			program->geometry_input = MGL_LINE_STRIP_ADJACENCY;
-			break;
+			case GL_LINE_STRIP_ADJACENCY:
+				program->geometry_input = MGL_LINE_STRIP_ADJACENCY;
+				break;
 
-		case GL_LINES_ADJACENCY:
-			program->geometry_input = MGL_LINES_ADJACENCY;
-			break;
+			case GL_LINES_ADJACENCY:
+				program->geometry_input = MGL_LINES_ADJACENCY;
+				break;
 
-		case GL_TRIANGLE_STRIP_ADJACENCY:
-			program->geometry_input = MGL_TRIANGLE_STRIP_ADJACENCY;
-			break;
+			case GL_TRIANGLE_STRIP_ADJACENCY:
+				program->geometry_input = MGL_TRIANGLE_STRIP_ADJACENCY;
+				break;
 
-		case GL_TRIANGLES_ADJACENCY:
-			program->geometry_input = MGL_TRIANGLES_ADJACENCY;
-			break;
+			case GL_TRIANGLES_ADJACENCY:
+				program->geometry_input = MGL_TRIANGLES_ADJACENCY;
+				break;
 
-		default:
-			program->geometry_input = 0;
-			break;
-	}
+			default:
+				program->geometry_input = 0;
+				break;
+		}
 
-	switch (geometry_out) {
-		case GL_TRIANGLES:
-			program->geometry_output = MGL_TRIANGLES;
-			break;
+		switch (geometry_out) {
+			case GL_TRIANGLES:
+				program->geometry_output = MGL_TRIANGLES;
+				break;
 
-		case GL_TRIANGLE_STRIP:
-			program->geometry_output = MGL_TRIANGLE_STRIP;
-			break;
+			case GL_TRIANGLE_STRIP:
+				program->geometry_output = MGL_TRIANGLE_STRIP;
+				break;
 
-		case GL_TRIANGLE_FAN:
-			program->geometry_output = MGL_TRIANGLE_FAN;
-			break;
+			case GL_TRIANGLE_FAN:
+				program->geometry_output = MGL_TRIANGLE_FAN;
+				break;
 
-		case GL_LINES:
-			program->geometry_output = MGL_LINES;
-			break;
+			case GL_LINES:
+				program->geometry_output = MGL_LINES;
+				break;
 
-		case GL_LINE_STRIP:
-			program->geometry_output = MGL_LINE_STRIP;
-			break;
+			case GL_LINE_STRIP:
+				program->geometry_output = MGL_LINE_STRIP;
+				break;
 
-		case GL_LINE_LOOP:
-			program->geometry_output = MGL_LINE_LOOP;
-			break;
+			case GL_LINE_LOOP:
+				program->geometry_output = MGL_LINE_LOOP;
+				break;
 
-		case GL_POINTS:
-			program->geometry_output = MGL_POINTS;
-			break;
+			case GL_POINTS:
+				program->geometry_output = MGL_POINTS;
+				break;
 
-		case GL_LINE_STRIP_ADJACENCY:
-			program->geometry_output = MGL_LINE_STRIP_ADJACENCY;
-			break;
+			case GL_LINE_STRIP_ADJACENCY:
+				program->geometry_output = MGL_LINE_STRIP_ADJACENCY;
+				break;
 
-		case GL_LINES_ADJACENCY:
-			program->geometry_output = MGL_LINES_ADJACENCY;
-			break;
+			case GL_LINES_ADJACENCY:
+				program->geometry_output = MGL_LINES_ADJACENCY;
+				break;
 
-		case GL_TRIANGLE_STRIP_ADJACENCY:
-			program->geometry_output = MGL_TRIANGLE_STRIP_ADJACENCY;
-			break;
+			case GL_TRIANGLE_STRIP_ADJACENCY:
+				program->geometry_output = MGL_TRIANGLE_STRIP_ADJACENCY;
+				break;
 
-		case GL_TRIANGLES_ADJACENCY:
-			program->geometry_output = MGL_TRIANGLES_ADJACENCY;
-			break;
+			case GL_TRIANGLES_ADJACENCY:
+				program->geometry_output = MGL_TRIANGLES_ADJACENCY;
+				break;
 
-		default:
-			program->geometry_output = 0;
-			break;
+			default:
+				program->geometry_output = 0;
+				break;
+		}
 	}
 
 	if (program->geometry_input) {
@@ -508,6 +507,16 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * varyings) {
 	}
 }
 
+void clean_program_member_name(char * name, int & name_len) {
+	if (name_len && name[name_len - 1] == ']') {
+		name_len -= 1;
+		while (name_len && name[name_len] != '[') {
+			name_len -= 1;
+		}
+	}
+	name[name_len] = 0;
+}
+
 void MGLProgram_LoadUniforms(MGLProgram * program) {
 	GLMethods & gl = program->context->gl; // TODO: const
 
@@ -515,8 +524,6 @@ void MGLProgram_LoadUniforms(MGLProgram * program) {
 
 	int num_uniforms = 0;
 	gl.GetProgramiv(program->obj, GL_ACTIVE_UNIFORMS, &num_uniforms);
-
-	// printf("num_uniforms: %d\n", num_uniforms);
 
 	for (int i = 0; i < num_uniforms; ++i) {
 		MGLUniform * uniform = MGLUniform_New();
@@ -577,7 +584,7 @@ void MGLProgram_LoadAttributes(MGLProgram * program) {
 		int name_len = 0;
 		char name[256];
 
-		gl.GetActiveAttrib(program->obj, i, 256, &name_len, &attribute->array_len, (GLenum *)&attribute->type, name);
+		gl.GetActiveAttrib(program->obj, i, 256, &name_len, &attribute->array_length, (GLenum *)&attribute->type, name);
 
 		attribute->location = gl.GetAttribLocation(program->obj, name);
 
@@ -586,9 +593,24 @@ void MGLProgram_LoadAttributes(MGLProgram * program) {
 			continue;
 		}
 
-		attribute->index = i;
+		clean_program_member_name(name, name_len);
+
+		// rstrip [...]
+		/* example for uniforms and attributes:
+
+		A[0].B[0]       <->    A[0].B
+		A[1].B[0]       <->    A[1].B
+		A[0].C          <->    A[0].C
+		D[0]            <->    D
+		E               <->    E
+
+		*/
+
+		attribute->number = i;
 		attribute->program = program;
 		attribute->name = PyUnicode_FromStringAndSize(name, name_len);
+
+		MGLAttribute_Complete(attribute);
 
 		PyDict_SetItem(attributes, attribute->name, (PyObject *)attribute);
 		Py_DECREF(attribute);
@@ -608,22 +630,20 @@ void MGLProgram_LoadVaryings(MGLProgram * program) {
 	int num_varyings = 0;
 	gl.GetProgramiv(program->obj, GL_TRANSFORM_FEEDBACK_VARYINGS, &num_varyings);
 
-	// printf("num_varyings %d\n", num_varyings);
-
 	for (int i = 0; i < num_varyings; ++i) {
-		MGLVarying * varrying = MGLVarying_New();
+		MGLVarying * varying = MGLVarying_New();
 
 		int name_len = 0;
 		char name[256];
 
-		gl.GetTransformFeedbackVarying(program->obj, i, 256, &name_len, &varrying->array_len, (GLenum *)&varrying->type, name);
+		gl.GetTransformFeedbackVarying(program->obj, i, 256, &name_len, &varying->array_len, (GLenum *)&varying->type, name);
 
-		varrying->index = i;
-		varrying->program = program;
-		varrying->name = PyUnicode_FromStringAndSize(name, name_len);
+		varying->index = i;
+		varying->program = program;
+		varying->name = PyUnicode_FromStringAndSize(name, name_len);
 
-		PyDict_SetItem(varyings, varrying->name, (PyObject *)varrying);
-		Py_DECREF(varrying);
+		PyDict_SetItem(varyings, varying->name, (PyObject *)varying);
+		Py_DECREF(varying);
 	}
 
 	program->varyings = varyings;

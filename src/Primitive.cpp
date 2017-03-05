@@ -19,7 +19,7 @@ void MGLPrimitive_tp_dealloc(MGLPrimitive * self) {
 	printf("MGLPrimitive_tp_dealloc %p\n", self);
 	#endif
 
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 int MGLPrimitive_tp_init(MGLPrimitive * self, PyObject * args, PyObject * kwargs) {

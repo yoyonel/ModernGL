@@ -1,6 +1,31 @@
 #include "Shader.hpp"
 
+#include "Error.hpp"
 #include "InvalidObject.hpp"
+
+const int SHADER_TYPE[] = {
+	GL_VERTEX_SHADER,
+	GL_FRAGMENT_SHADER,
+	GL_GEOMETRY_SHADER,
+	GL_TESS_EVALUATION_SHADER,
+	GL_TESS_CONTROL_SHADER,
+};
+
+const char * SHADER_NAME[] = {
+	"VertexShader",
+	"FragmentShader",
+	"GeometryShader",
+	"TessEvaluationShader",
+	"TessControlShader",
+};
+
+const char * SHADER_NAME_UNDERLINE[] = {
+	"============",
+	"==============",
+	"==============",
+	"====================",
+	"=================",
+};
 
 PyObject * MGLShader_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLShader * self = (MGLShader *)type->tp_alloc(type, 0);
@@ -22,7 +47,7 @@ void MGLShader_tp_dealloc(MGLShader * self) {
 	printf("MGLShader_tp_dealloc %p\n", self);
 	#endif
 
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	MGLShader_Type.tp_free((PyObject *)self);
 }
 
 int MGLShader_tp_init(MGLShader * self, PyObject * args, PyObject * kwargs) {
@@ -102,51 +127,6 @@ MGLShader * MGLShader_New() {
 	return self;
 }
 
-void MGLShader_Compile(MGLShader * shader) {
-	GLMethods & gl = shader->context->gl;
-
-	char * source = PyUnicode_AsUTF8(shader->source);
-
-	int obj = gl.CreateShader(shader->shader_type);
-
-	gl.ShaderSource(obj, 1, &source, 0);
-	gl.CompileShader(obj);
-
-	int compiled = GL_FALSE;
-	gl.GetShaderiv(obj, GL_COMPILE_STATUS, &compiled);
-
-	if (!compiled) {
-		static const char * logTitle = "GLSL Compiler failed\n";
-		static int logTitleLength = strlen(logTitle);
-
-		int logLength = 0;
-		gl.GetShaderiv(obj, GL_INFO_LOG_LENGTH, &logLength);
-		int logTotalLength = logLength + logTitleLength;
-
-		PyObject * content = PyUnicode_New(logTotalLength, 255);
-
-		if (PyUnicode_READY(content)) {
-			gl.DeleteShader(obj);
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return;
-		}
-
-		char * data = (char *)PyUnicode_1BYTE_DATA(content);
-		memcpy(data, logTitle, logTitleLength);
-
-		int logSize = 0;
-		gl.GetShaderInfoLog(obj, logLength, &logSize, data + logTitleLength);
-		data[logTitleLength] = 0;
-
-		gl.DeleteShader(obj);
-
-		PyErr_SetObject(PyExc_Exception, content);
-		return;
-	}
-
-	shader->obj = obj;
-}
-
 void MGLShader_Invalidate(MGLShader * shader) {
 	if (Py_TYPE(shader) == &MGLInvalidObject_Type) {
 
@@ -161,13 +141,50 @@ void MGLShader_Invalidate(MGLShader * shader) {
 	printf("MGLShader_Invalidate %p\n", shader);
 	#endif
 
-	// TODO: release
+	GLMethods & gl = shader->context->gl;
+	gl.DeleteShader(shader->obj);
 
-	Py_DECREF(shader->context);
 	Py_DECREF(shader->source);
+	Py_DECREF(shader->context);
 
 	shader->ob_base.ob_type = &MGLInvalidObject_Type;
 	shader->initial_type = &MGLShader_Type;
 
 	Py_DECREF(shader);
+}
+
+void MGLShader_Compile(MGLShader * shader) {
+	GLMethods & gl = shader->context->gl;
+
+	char * source = PyUnicode_AsUTF8(shader->source);
+
+	int obj = gl.CreateShader(shader->shader_type);
+
+	gl.ShaderSource(obj, 1, &source, 0);
+	gl.CompileShader(obj);
+
+	int compiled = GL_FALSE;
+	gl.GetShaderiv(obj, GL_COMPILE_STATUS, &compiled);
+
+	if (!compiled) {
+		const char * message = "GLSL Compiler failed";
+		const char * title = SHADER_NAME[shader->shader_slot];
+		const char * underline = SHADER_NAME_UNDERLINE[shader->shader_slot];
+
+		int log_len = 0;
+		gl.GetShaderiv(obj, GL_INFO_LOG_LENGTH, &log_len);
+
+		char * log = new char[log_len];
+		gl.GetShaderInfoLog(obj, log_len, &log_len, log);
+
+		gl.DeleteShader(obj);
+
+		MGLError * error = MGLError_New(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+
+		delete[] log;
+		return;
+	}
+
+	shader->obj = obj;
 }

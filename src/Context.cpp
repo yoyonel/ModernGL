@@ -1,5 +1,6 @@
 #include "Context.hpp"
 
+#include "Error.hpp"
 #include "Buffer.hpp"
 #include "Texture.hpp"
 #include "VertexArray.hpp"
@@ -8,8 +9,12 @@
 #include "Framebuffer.hpp"
 #include "EnableFlag.hpp"
 #include "InvalidObject.hpp"
+#include "Attribute.hpp"
+#include "Uniform.hpp"
 
 #include "BufferFormat.hpp"
+
+// TODO: validate same context
 
 PyObject * MGLContext_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLContext * self = (MGLContext *)type->tp_alloc(type, 0);
@@ -32,7 +37,7 @@ void MGLContext_tp_dealloc(MGLContext * self) {
 	printf("MGLContext_tp_dealloc %p\n", self);
 	#endif
 
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	MGLContext_Type.tp_free((PyObject *)self);
 }
 
 int MGLContext_tp_init(MGLContext * self, PyObject * args, PyObject * kwargs) {
@@ -75,7 +80,6 @@ PyObject * MGLContext_clear(MGLContext * self, PyObject * args, PyObject * kwarg
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
@@ -116,7 +120,6 @@ PyObject * MGLContext_enable(MGLContext * self, PyObject * args, PyObject * kwar
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
@@ -152,7 +155,6 @@ PyObject * MGLContext_disable(MGLContext * self, PyObject * args, PyObject * kwa
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
@@ -222,7 +224,6 @@ PyObject * MGLContext_copy_buffer(MGLContext * self, PyObject * args, PyObject *
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
@@ -265,12 +266,12 @@ MGLBuffer * MGLContext_Buffer(MGLContext * self, PyObject * args, PyObject * kwa
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
 	if ((data != Py_None && reserve) || (data == Py_None && !reserve)) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "data and reserve are mutually exclusive");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
@@ -279,7 +280,8 @@ MGLBuffer * MGLContext_Buffer(MGLContext * self, PyObject * args, PyObject * kwa
 	if (data != Py_None) {
 		int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
 		if (get_buffer < 0) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			MGLError * error = MGLError_New(TRACE, "data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 	} else {
@@ -288,7 +290,11 @@ MGLBuffer * MGLContext_Buffer(MGLContext * self, PyObject * args, PyObject * kwa
 	}
 
 	if (!buffer_view.len) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "buffer cannot be empty");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		if (data != Py_None) {
+			PyBuffer_Release(&buffer_view);
+		}
 		return 0;
 	}
 
@@ -348,12 +354,12 @@ MGLTexture * MGLContext_Texture(MGLContext * self, PyObject * args, PyObject * k
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
 	if (components < 1 || components > 4) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "components must be 1, 2, 3 or 4");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
@@ -369,7 +375,8 @@ MGLTexture * MGLContext_Texture(MGLContext * self, PyObject * args, PyObject * k
 	}
 
 	if (buffer_view.len != expected_size) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "data size mismatch %d != %d", buffer_view.len, expected_size);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		if (data != Py_None) {
 			PyBuffer_Release(&buffer_view);
 		}
@@ -436,7 +443,6 @@ MGLTexture * MGLContext_DepthTexture(MGLContext * self, PyObject * args, PyObjec
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
@@ -452,7 +458,8 @@ MGLTexture * MGLContext_DepthTexture(MGLContext * self, PyObject * args, PyObjec
 	}
 
 	if (buffer_view.len != expected_size) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "data size mismatch %d != %d", buffer_view.len, expected_size);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		if (data != Py_None) {
 			PyBuffer_Release(&buffer_view);
 		}
@@ -498,6 +505,12 @@ const char * MGLContext_DepthTexture_doc = R"(
 	Create a DepthTexture.
 )";
 
+
+//TODO:
+
+typedef GLvoid (GLAPI * ASD1)(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer);
+typedef GLvoid (GLAPI * ASD2)(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid * pointer);
+
 MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"program", "content", "index_buffer", "skip_errors", 0};
 
@@ -520,7 +533,6 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
@@ -532,14 +544,16 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 		PyObject * tuple = PyList_GET_ITEM(content, i);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			MGLError * error = MGLError_New(TRACE, "content[%d] must be a tuple not %s", i, Py_TYPE(tuple)->tp_name);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
 		int size = PyTuple_GET_SIZE(tuple);
 
 		if (size != 3) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			MGLError * error = MGLError_New(TRACE, "content[%d] must be a tuple of size 3 not %d", i, size);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
@@ -548,17 +562,20 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 		PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
 
 		if (Py_TYPE(buffer) != &MGLBuffer_Type) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			MGLError * error = MGLError_New(TRACE, "content[%d][0] must be a ModernGL.Buffer not %s", i, Py_TYPE(buffer)->tp_name);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
 		if (Py_TYPE(format) != &PyUnicode_Type) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			MGLError * error = MGLError_New(TRACE, "content[%d][1] must be a str not %s", i, Py_TYPE(format)->tp_name);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
 		if (Py_TYPE(attributes) != &PyList_Type) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			MGLError * error = MGLError_New(TRACE, "content[%d][2] must be a list not %s", i, Py_TYPE(attributes)->tp_name);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
@@ -566,25 +583,53 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 		FormatInfo format_info = it.info();
 
 		if (!format_info.valid) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			MGLError * error = MGLError_New(TRACE, "content[%d][1] is an invalid format", i, Py_TYPE(attributes)->tp_name);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
+		// TODO: has at least 1 non /i format
+
 		int attributes_len = PyList_GET_SIZE(attributes);
+
+		if (!attributes_len) {
+			MGLError * error = MGLError_New(TRACE, "content[%d][2] must not be empty", i);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return 0;
+		}
 
 		for (int j = 0; j < attributes_len; ++j) {
 			PyObject * attribute = PyList_GET_ITEM(attributes, j);
 
 			if (Py_TYPE(attribute) != &PyUnicode_Type) {
-				PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+				MGLError * error = MGLError_New(TRACE, "content[%d][2][%d] must be a str not %s", i, j, Py_TYPE(attribute)->tp_name);
+				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 				return 0;
 			}
 
 			if (!skip_errors) {
-				int location = gl.GetAttribLocation(program->obj, PyUnicode_AsUTF8(attribute));
+				const char * name = PyUnicode_AsUTF8(attribute);
 
-				if (location < 0) {
-					PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+				FormatNode * node = it.next();
+				MGLAttribute * attribute = (MGLAttribute *)PyDict_GetItemString(program->attributes, name);
+
+				if (!attribute) {
+					MGLError * error = MGLError_New(TRACE, "%s is not a valid attribute", name);
+					PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+					return 0;
+				}
+
+				int scalars = attribute->dimension * attribute->array_length;
+
+				if (scalars != node->count) {
+					MGLError * error = MGLError_New(TRACE, "%s size is %d not %d", name, scalars, node->count);
+					PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+					return 0;
+				}
+
+				if (attribute->shape != node->shape) {
+					MGLError * error = MGLError_New(TRACE, "%s shape is '%c' not '%c'", name, attribute->shape, node->shape);
+					PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 					return 0;
 				}
 			}
@@ -592,7 +637,8 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 	}
 
 	if (index_buffer != (MGLBuffer *)Py_None && Py_TYPE(index_buffer) != &MGLBuffer_Type) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "index_buffer must be a ModernGL.Buffer not %s", Py_TYPE(index_buffer)->tp_name);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
@@ -605,7 +651,10 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 		PyObject * format = PyTuple_GET_ITEM(tuple, 1);
 		PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
 
-		PyObject * new_tuple = PyTuple_Pack(3, buffer, format, PyList_AsTuple(attributes));
+		PyObject * new_attributes = PyList_AsTuple(attributes);
+		PyObject * new_tuple = PyTuple_Pack(3, buffer, format, new_attributes);
+		Py_DECREF(new_attributes);
+
 		PyTuple_SET_ITEM(vertex_array_content, i, new_tuple);
 	}
 
@@ -618,6 +667,8 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 	gl.GenVertexArrays(1, (GLuint *)&array->obj);
 	gl.BindVertexArray(array->obj);
 
+	array->content = vertex_array_content;
+
 	Py_INCREF(index_buffer);
 	array->index_buffer = index_buffer;
 
@@ -627,8 +678,6 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 	} else {
 		array->num_vertices = -1;
 	}
-
-	// printf("array->num_vertices: %d\n", array->num_vertices);
 
 	for (int i = 0; i < content_len; ++i) {
 		PyObject * tuple = PyTuple_GET_ITEM(vertex_array_content, i);
@@ -640,20 +689,11 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 		FormatIterator it = FormatIterator(format);
 		FormatInfo format_info = it.info();
 
-		if (!format_info.valid) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
 		int buf_vertices = buffer->size / format_info.size;
-
-		// printf("buf_vertices: %d\n", buf_vertices);
 
 		if (!format_info.per_instance && array->index_buffer == (MGLBuffer *)Py_None && (!i || array->num_vertices > buf_vertices)) {
 			array->num_vertices = buf_vertices;
 		}
-
-		// printf("array->num_vertices: %d\n", array->num_vertices);
 
 		gl.BindBuffer(GL_ARRAY_BUFFER, buffer->obj);
 
@@ -662,26 +702,30 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 		int attributes_len = PyTuple_GET_SIZE(attributes);
 
 		for (int j = 0; j < attributes_len; ++j) {
-			char * attribute = PyUnicode_AsUTF8(PyTuple_GET_ITEM(attributes, j));
-			int location = gl.GetAttribLocation(program->obj, attribute);
-
 			FormatNode * node = it.next();
+			MGLAttribute * attribute = (MGLAttribute *)PyDict_GetItem(program->attributes, PyTuple_GET_ITEM(attributes, j));
 
-			if (location >= 0) {
-				if (node->type == GL_INT) {
-					gl.VertexAttribIPointer(location, node->count, node->type, format_info.size, ptr);
-				} else {
-					gl.VertexAttribPointer(location, node->count, node->type, false, format_info.size, ptr);
+			// TODO: fix padding
+
+			if (true) { // TODO: attrib found
+				for (int r = 0; r < attribute->rows_length; ++r) {
+					int location = attribute->location + r;
+
+					if (attribute->normalizable) {
+						((ASD1)attribute->gl_attrib_ptr_proc)(location, attribute->row_length, attribute->scalar_type, false, format_info.size, ptr);
+					} else {
+						((ASD2)attribute->gl_attrib_ptr_proc)(location, attribute->row_length, attribute->scalar_type, format_info.size, ptr);
+					}
+
+					if (format_info.per_instance) {
+						gl.VertexAttribDivisor(location, 1);
+					}
+
+					gl.EnableVertexAttribArray(location);
+
+					ptr += attribute->row_size;
 				}
-
-				if (format_info.per_instance) {
-					gl.VertexAttribDivisor(location, 1);
-				}
-
-				gl.EnableVertexAttribArray(location);
 			}
-
-			ptr += node->count * node->size;
 		}
 	}
 
@@ -727,7 +771,6 @@ MGLVertexArray * MGLContext_SimpleVertexArray(MGLContext * self, PyObject * args
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
@@ -783,13 +826,13 @@ MGLProgram * MGLContext_Program(MGLContext * self, PyObject * args, PyObject * k
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
 	if (varyings != Py_None) {
 		if (Py_TYPE(varyings) != &PyList_Type) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			MGLError * error = MGLError_New(TRACE, "varyings must be a list not %s", Py_TYPE(varyings)->tp_name);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
@@ -798,7 +841,8 @@ MGLProgram * MGLContext_Program(MGLContext * self, PyObject * args, PyObject * k
 		for (int i = 0; i < num_varyings; ++i) {
 			PyObject * item = PyList_GET_ITEM(varyings, i);
 			if (Py_TYPE(item) != &PyUnicode_Type) {
-				PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+				MGLError * error = MGLError_New(TRACE, "varyings[%d] must be a str not %s", i, Py_TYPE(item)->tp_name);
+				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 				return 0;
 			}
 		}
@@ -808,16 +852,26 @@ MGLProgram * MGLContext_Program(MGLContext * self, PyObject * args, PyObject * k
 
 	if (Py_TYPE(shaders) == &PyList_Type) {
 
+		int counter[NUM_SHADER_SLOTS] = {};
+
 		int num_shaders = PyList_GET_SIZE(shaders);
 
 		for (int i = 0; i < num_shaders; ++i) {
 			PyObject * item = PyList_GET_ITEM(shaders, i);
 			if (Py_TYPE(item) != &MGLShader_Type) {
-				PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+				MGLError * error = MGLError_New(TRACE, "shaders[%d] must be a ModernGL.Shader not %s", i, Py_TYPE(item)->tp_name);
+				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 				return 0;
 			}
 
-			// check duplicate types
+			MGLShader * shader = (MGLShader *)item;
+			counter[shader->shader_slot] += 1;
+
+			if (counter[shader->shader_slot] > 1) {
+				MGLError * error = MGLError_New(TRACE, "shaders has duplicate %s", SHADER_NAME[shader->shader_slot]);
+				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+				return 0;
+			}
 		}
 
 		program_shaders = PyList_AsTuple(shaders);
@@ -828,15 +882,14 @@ MGLProgram * MGLContext_Program(MGLContext * self, PyObject * args, PyObject * k
 		program_shaders = PyTuple_Pack(1, shaders);
 
 	} else {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "shaders must be a list not %s", Py_TYPE(shaders)->tp_name);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
 	GLMethods & gl = self->gl;
 
 	MGLProgram * program = MGLProgram_New();
-
-	// printf("Program: %d\n", Py_REFCNT(program));
 
 	program->shaders = program_shaders;
 
@@ -860,7 +913,7 @@ const char * MGLContext_Program_doc = R"(
 	Create a Program.
 )";
 
-template <int ShaderType>
+template <int ShaderSlot>
 MGLShader * MGLContext_Shader(MGLContext * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"source", 0};
 
@@ -875,18 +928,19 @@ MGLShader * MGLContext_Shader(MGLContext * self, PyObject * args, PyObject * kwa
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
 	if (!PyUnicode_Check(source)) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "source must be a str not %s", Py_TYPE(source)->tp_name);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
 	MGLShader * shader = MGLShader_New();
 
-	shader->shader_type = ShaderType;
+	shader->shader_slot = ShaderSlot;
+	shader->shader_type = SHADER_TYPE[ShaderSlot];
 
 	Py_INCREF(source);
 	shader->source = source;
@@ -900,8 +954,6 @@ MGLShader * MGLContext_Shader(MGLContext * self, PyObject * args, PyObject * kwa
 		Py_DECREF(shader);
 		return 0;
 	}
-
-	// printf("%p %d\n", shader, Py_REFCNT(shader));
 
 	Py_INCREF(shader);
 	return shader;
@@ -928,41 +980,34 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
 	int attachments_len = PyList_GET_SIZE(attachments);
 
-	bool has_depth_attachment = false;
+	int depth_attachment_index = -1;
 
 	for (int i = 0; i < attachments_len; ++i) {
 		PyObject * item = PyList_GET_ITEM(attachments, i);
 		if (Py_TYPE(item) == &MGLTexture_Type) {
 			MGLTexture * texture = (MGLTexture *)item;
 			if (texture->depth) {
-				if (has_depth_attachment) {
-					PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+				if (depth_attachment_index >= 0) {
+					MGLError * error = MGLError_New(TRACE, "attachments[%d] and attachments[%d] are both depth attachments", i, depth_attachment_index);
+					PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 					return 0;
 				}
-				has_depth_attachment = true;
+				depth_attachment_index = i;
 			}
-		// } else if (Py_TYPE(item) == &MGLTexture_Type) {
-		// 	MGLTexture * texture = (MGLTexture *)item;
-		// 	if (texture->depth) {
-		// 		if (has_depth_attachment) {
-		// 			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-		// 			return 0;
-		// 		}
-		// 		has_depth_attachment = true;
-		// 	}
+			// TODO: renderbuffer
 		} else {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			MGLError * error = MGLError_New(TRACE, "attachments[%d] must be a ModernGL.Texture or ModernGL.Renderbuffer not %s", i, Py_TYPE(item)->tp_name);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 	}
 
-	PyObject * color_attachments = PyTuple_New(attachments_len - has_depth_attachment ? 1 : 0);
+	PyObject * color_attachments = PyTuple_New(attachments_len - (depth_attachment_index >= 0) ? 1 : 0);
 	PyObject * depth_attachment = Py_None;
 
 	int color_attachments_len = 0;
@@ -979,35 +1024,46 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 	gl.BindFramebuffer(GL_FRAMEBUFFER, framebuffer->obj);
 
 	for (int i = 0; i < attachments_len; ++i) {
+		if (i == depth_attachment_index) {
+			continue;
+		}
+
 		PyObject * item = PyList_GET_ITEM(attachments, i);
 		if (Py_TYPE(item) == &MGLTexture_Type) {
 			MGLTexture * texture = (MGLTexture *)item;
-			if (texture->depth) {
-				gl.FramebufferTexture2D(
-					GL_FRAMEBUFFER,
-					GL_DEPTH_ATTACHMENT,
-					GL_TEXTURE_2D,
-					texture->obj,
-					0
-				);
 
-				Py_INCREF(item);
-				depth_attachment = item;
-			} else {
+			gl.FramebufferTexture2D(
+				GL_FRAMEBUFFER,
+				GL_COLOR_ATTACHMENT0 + i,
+				GL_TEXTURE_2D,
+				texture->obj,
+				0
+			);
 
-				gl.FramebufferTexture2D(
-					GL_FRAMEBUFFER,
-					GL_COLOR_ATTACHMENT0 + i,
-					GL_TEXTURE_2D,
-					texture->obj,
-					0
-				);
-
-				PyTuple_SET_ITEM(color_attachments, color_attachments_len, item);
-				color_attachments_len += 1;
-			}
-		// } else if (Py_TYPE(item) == &MGLTexture_Type) {
+			PyTuple_SET_ITEM(color_attachments, color_attachments_len, item);
+			color_attachments_len += 1;
 		}
+		// TODO: renderbuffer
+	}
+
+	if (depth_attachment_index >= 0) {
+		PyObject * item = PyList_GET_ITEM(attachments, depth_attachment_index);
+
+		if (Py_TYPE(item) == &MGLTexture_Type) {
+			MGLTexture * texture = (MGLTexture *)item;
+
+			gl.FramebufferTexture2D(
+				GL_FRAMEBUFFER,
+				GL_DEPTH_ATTACHMENT,
+				GL_TEXTURE_2D,
+				texture->obj,
+				0
+			);
+
+			Py_INCREF(item);
+			depth_attachment = item;
+		}
+		// TODO: renderbuffer
 	}
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, draw_framebuffer);
@@ -1015,7 +1071,8 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 	int status = gl.CheckFramebufferStatus(framebuffer->obj);
 
 	if (status != GL_FRAMEBUFFER_COMPLETE) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "framebuffer is not complete");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
@@ -1050,21 +1107,22 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"VertexArray", (PyCFunction)MGLContext_VertexArray, METH_VARARGS | METH_KEYWORDS, MGLContext_VertexArray_doc},
 	{"SimpleVertexArray", (PyCFunction)MGLContext_SimpleVertexArray, METH_VARARGS | METH_KEYWORDS, MGLContext_SimpleVertexArray_doc},
 	{"Program", (PyCFunction)MGLContext_Program, METH_VARARGS | METH_KEYWORDS, MGLContext_Program_doc},
-	{"VertexShader", (PyCFunction)MGLContext_Shader<GL_VERTEX_SHADER>, METH_VARARGS | METH_KEYWORDS, MGLContext_Shader_doc},
-	{"FragmentShader", (PyCFunction)MGLContext_Shader<GL_FRAGMENT_SHADER>, METH_VARARGS | METH_KEYWORDS, MGLContext_Shader_doc},
-	{"GeometryShader", (PyCFunction)MGLContext_Shader<GL_GEOMETRY_SHADER>, METH_VARARGS | METH_KEYWORDS, MGLContext_Shader_doc},
-	{"TessEvaluationShader", (PyCFunction)MGLContext_Shader<GL_TESS_EVALUATION_SHADER>, METH_VARARGS | METH_KEYWORDS, MGLContext_Shader_doc},
-	{"TessControlShader", (PyCFunction)MGLContext_Shader<GL_TESS_CONTROL_SHADER>, METH_VARARGS | METH_KEYWORDS, MGLContext_Shader_doc},
+	{"VertexShader", (PyCFunction)MGLContext_Shader<VERTEX_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, MGLContext_Shader_doc},
+	{"FragmentShader", (PyCFunction)MGLContext_Shader<FRAGMENT_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, MGLContext_Shader_doc},
+	{"GeometryShader", (PyCFunction)MGLContext_Shader<GEOMETRY_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, MGLContext_Shader_doc},
+	{"TessEvaluationShader", (PyCFunction)MGLContext_Shader<TESSELATION_EVALUATION_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, MGLContext_Shader_doc},
+	{"TessControlShader", (PyCFunction)MGLContext_Shader<TESSELATION_CONTROL_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, MGLContext_Shader_doc},
 	{"Framebuffer", (PyCFunction)MGLContext_Framebuffer, METH_VARARGS | METH_KEYWORDS, MGLContext_Framebuffer_doc},
 
 	{0},
 };
 
+// TODO: getter
+
 int MGLContext_set_line_width(MGLContext * self, PyObject * value) {
 	float line_width = (float)PyFloat_AsDouble(value);
 
 	if (PyErr_Occurred()) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return -1;
 	}
 
@@ -1079,11 +1137,12 @@ char MGLContext_line_width_doc[] = R"(
 	Set the default line width.
 )";
 
+// TODO: getter
+
 int MGLContext_set_point_size(MGLContext * self, PyObject * value) {
 	float point_size = (float)PyFloat_AsDouble(value);
 
 	if (PyErr_Occurred()) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return -1;
 	}
 
@@ -1115,12 +1174,12 @@ int MGLContext_set_viewport(MGLContext * self, PyObject * value) {
 	int size = PyTuple_Size(value);
 
 	if (PyErr_Occurred()) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return -1;
 	}
 
 	if (size != 4) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "viewport must be a tuple of size 4 not %d", size);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
 
@@ -1130,7 +1189,6 @@ int MGLContext_set_viewport(MGLContext * self, PyObject * value) {
 	int height = PyLong_AsLong(PyTuple_GET_ITEM(value, 3));
 
 	if (PyErr_Occurred()) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return -1;
 	}
 
@@ -1153,7 +1211,6 @@ int MGLContext_set_default_texture_unit(MGLContext * self, PyObject * value) {
 	int default_texture_unit = PyLong_AsLong(value);
 
 	if (PyErr_Occurred()) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return -1;
 	}
 

@@ -19,7 +19,7 @@ void MGLVersion_tp_dealloc(MGLVersion * self) {
 	printf("MGLVersion_tp_dealloc %p\n", self);
 	#endif
 
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 int MGLVersion_tp_init(MGLVersion * self, PyObject * args, PyObject * kwargs) {

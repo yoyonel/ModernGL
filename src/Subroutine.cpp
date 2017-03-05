@@ -1,5 +1,6 @@
 #include "Subroutine.hpp"
 
+#include "Error.hpp"
 #include "InvalidObject.hpp"
 
 PyObject * MGLSubroutine_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
@@ -22,9 +23,7 @@ void MGLSubroutine_tp_dealloc(MGLSubroutine * self) {
 	printf("MGLSubroutine_tp_dealloc %p\n", self);
 	#endif
 
-	Py_XDECREF(self->name);
-
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	MGLSubroutine_Type.tp_free((PyObject *)self);
 }
 
 int MGLSubroutine_tp_init(MGLSubroutine * self, PyObject * args, PyObject * kwargs) {

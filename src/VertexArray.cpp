@@ -1,9 +1,11 @@
 #include "VertexArray.hpp"
 
+#include "Error.hpp"
 #include "InvalidObject.hpp"
-
 #include "Primitive.hpp"
 #include "Buffer.hpp"
+
+// TODO: implement VertexAttrib as VertexArray member
 
 PyObject * MGLVertexArray_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLVertexArray * self = (MGLVertexArray *)type->tp_alloc(type, 0);
@@ -27,7 +29,7 @@ void MGLVertexArray_tp_dealloc(MGLVertexArray * self) {
 	printf("MGLVertexArray_tp_dealloc %p\n", self);
 	#endif
 
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	MGLVertexArray_Type.tp_free((PyObject *)self);
 }
 
 int MGLVertexArray_tp_init(MGLVertexArray * self, PyObject * args, PyObject * kwargs) {
@@ -59,17 +61,25 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args, PyObjec
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
 	if (vertices < 0) {
 		if (self->num_vertices < 0) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			MGLError * error = MGLError_New(TRACE, "Cannot detect the number of vertices");
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
 		vertices = self->num_vertices;
+	}
+
+	MGLPrimitive * gs_input = self->program->geometry_input;
+
+	if (gs_input && gs_input->primitive != mode->geometry_primitive) {
+		MGLError * error = MGLError_New(TRACE, "GeometryShader input is different from render mode");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
 	}
 
 	GLMethods & gl = self->context->gl;
@@ -94,14 +104,13 @@ const char * MGLVertexArray_render_doc = R"(
 )";
 
 PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"output", "mode", "vertices", "first", "instances", "output_mode", 0};
+	static const char * kwlist[] = {"output", "mode", "vertices", "first", "instances", 0};
 
 	MGLBuffer * output;
 	MGLPrimitive * mode = MGL_TRIANGLES;
 	int vertices = -1;
 	int first = 0;
 	int instances = 1;
-	MGLPrimitive * output_mode = (MGLPrimitive *)Py_None;
 
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
@@ -114,41 +123,29 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args, PyOb
 		&mode,
 		&vertices,
 		&first,
-		&instances,
-		&MGLPrimitive_Type,
-		&output_mode
+		&instances
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
 	if (vertices < 0) {
 		if (self->num_vertices < 0) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			MGLError * error = MGLError_New(TRACE, "Cannot detect the number of vertices");
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
 		vertices = self->num_vertices;
 	}
 
-	int output_primitive = 0;
+	MGLPrimitive * gs_input = self->program->geometry_input;
 
-	if (output_mode != (MGLPrimitive *)Py_None) {
-		if (output_mode->primitive != output_mode->transform_primitive) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		output_primitive = output_mode->transform_primitive;
-
-	} else {
-		if (self->program->geometry_output) {
-			output_primitive = self->program->geometry_output->transform_primitive;
-		} else {
-			output_primitive = mode->transform_primitive;
-		}
+	if (gs_input && gs_input->primitive != mode->geometry_primitive) {
+		MGLError * error = MGLError_New(TRACE, "GeometryShader input is different from transform mode");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
 	}
 
 	GLMethods & gl = self->context->gl;
@@ -315,7 +312,8 @@ void MGLVertexArray_Invalidate(MGLVertexArray * array) {
 	printf("MGLVertexArray_Invalidate %p\n", array);
 	#endif
 
-	// TODO: release
+	GLMethods & gl = array->context->gl;
+	gl.DeleteVertexArrays(1, (GLuint *)&array->obj);
 
 	if (Py_REFCNT(array->program) == 2) {
 		MGLProgram_Invalidate(array->program);
@@ -323,13 +321,18 @@ void MGLVertexArray_Invalidate(MGLVertexArray * array) {
 
 	Py_DECREF(array->program);
 
-	// int content_len = PyList_GET_SIZE(array->content);
+	int content_len = PyTuple_GET_SIZE(array->content);
 
-	// for (int i = 0; i < content_len; ++i) {
-	// 	// TODO:
-	// }
+	for (int i = 0; i < content_len; ++i) {
+		PyObject * tuple = PyTuple_GET_ITEM(array->content, i);
+		MGLBuffer * buffer = (MGLBuffer *)PyTuple_GET_ITEM(tuple, 0);
 
-	// Py_DECREF(array->content);
+		if (Py_REFCNT(buffer) == 2) {
+			MGLBuffer_Invalidate(buffer);
+		}
+	}
+
+	Py_DECREF(array->content);
 
 	if (array->index_buffer != (MGLBuffer *)Py_None) {
 		if (Py_REFCNT(array->index_buffer) == 2) {

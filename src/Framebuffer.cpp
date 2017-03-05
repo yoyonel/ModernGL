@@ -1,9 +1,9 @@
 #include "Framebuffer.hpp"
 
+#include "Error.hpp"
 #include "InvalidObject.hpp"
-
-#include "Texture.hpp"
 #include "Renderbuffer.hpp"
+#include "Texture.hpp"
 
 PyObject * MGLFramebuffer_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLFramebuffer * self = (MGLFramebuffer *)type->tp_alloc(type, 0);
@@ -26,7 +26,7 @@ void MGLFramebuffer_tp_dealloc(MGLFramebuffer * self) {
 	printf("MGLFramebuffer_tp_dealloc %p\n", self);
 	#endif
 
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	MGLFramebuffer_Type.tp_free((PyObject *)self);
 }
 
 int MGLFramebuffer_tp_init(MGLFramebuffer * self, PyObject * args, PyObject * kwargs) {

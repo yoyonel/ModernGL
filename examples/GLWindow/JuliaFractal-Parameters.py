@@ -45,6 +45,8 @@ frag = ctx.FragmentShader('''
 
 prog = ctx.Program([vert, frag])
 
+print(prog.geometry_input)
+
 vbo = ctx.Buffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
 vao = ctx.SimpleVertexArray(prog, vbo, '2f', ['vert'])
 

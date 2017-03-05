@@ -1,5 +1,6 @@
 #include "Uniform.hpp"
 
+#include "Error.hpp"
 #include "InvalidObject.hpp"
 
 PyObject * MGLUniform_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
@@ -26,7 +27,7 @@ void MGLUniform_tp_dealloc(MGLUniform * self) {
 	printf("MGLUniform_tp_dealloc %p\n", self);
 	#endif
 
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	MGLUniform_Type.tp_free((PyObject *)self);
 }
 
 int MGLUniform_tp_init(MGLUniform * self, PyObject * args, PyObject * kwargs) {
@@ -38,12 +39,12 @@ PyObject * MGLUniform_tp_str(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_read(MGLUniform * self) {
-	// printf("self->value_reader = %p\n", self->value_reader);
 	PyObject * result = PyBytes_FromStringAndSize(0, self->element_size);
 
 	// TODO: remove
 	if (!self->gl_value_reader_proc) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "gl_value_reader_proc is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
@@ -67,18 +68,19 @@ int MGLUniform_write(MGLUniform * self, PyObject * args, PyObject * kwargs) {
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return -1;
 	}
 
 	// TODO: remove
 	if (!self->gl_value_writer_proc) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-		return 0;
+		MGLError * error = MGLError_New(TRACE, "gl_value_writer_proc is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return -1;
 	}
 
 	if (size != self->array_len * self->element_size) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "data size mismatch %d != %d", size, self->array_len * self->element_size);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
 
@@ -115,15 +117,11 @@ char MGLUniform_location_doc[] = R"(
 )";
 
 PyObject * MGLUniform_get_value(MGLUniform * self, void * closure) {
-	// if (self->array_len > 1) {
-	// 	PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	// 	return 0;
-	// }
 
 	// TODO: remove
-
 	if (!self->value_getter) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "value_getter is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
@@ -131,10 +129,11 @@ PyObject * MGLUniform_get_value(MGLUniform * self, void * closure) {
 }
 
 int MGLUniform_set_value(MGLUniform * self, PyObject * value, void * closure) {
-	// TODO: remove
 
+	// TODO: remove
 	if (!self->value_setter) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "value_setter is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 

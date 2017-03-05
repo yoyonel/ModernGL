@@ -10,7 +10,7 @@ PyObject * MGLContextMember_tp_new(PyTypeObject * type, PyObject * args, PyObjec
 }
 
 void MGLContextMember_tp_dealloc(MGLContextMember * self) {
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 int MGLContextMember_tp_init(MGLContextMember * self, PyObject * args, PyObject * kwargs) {

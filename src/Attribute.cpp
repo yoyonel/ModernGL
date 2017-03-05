@@ -1,5 +1,6 @@
 #include "Attribute.hpp"
 
+#include "Error.hpp"
 #include "InvalidObject.hpp"
 
 PyObject * MGLAttribute_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
@@ -12,11 +13,7 @@ PyObject * MGLAttribute_tp_new(PyTypeObject * type, PyObject * args, PyObject * 
 	if (self) {
 		self->name = 0;
 
-		self->value_getter = 0;
-		self->value_setter = 0;
-
-		self->gl_value_reader_proc = 0;
-		self->gl_value_writer_proc = 0;
+		self->gl_attrib_ptr_proc = 0;
 	}
 
 	return (PyObject *)self;
@@ -28,7 +25,7 @@ void MGLAttribute_tp_dealloc(MGLAttribute * self) {
 	printf("MGLAttribute_tp_dealloc %p\n", self);
 	#endif
 
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	MGLAttribute_Type.tp_free((PyObject *)self);
 }
 
 int MGLAttribute_tp_init(MGLAttribute * self, PyObject * args, PyObject * kwargs) {
@@ -60,26 +57,36 @@ char MGLAttribute_location_doc[] = R"(
 	location
 )";
 
-PyObject * MGLAttribute_get_default(MGLAttribute * self, void * closure) {
-	// TODO:
-	PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	return 0;
+PyObject * MGLAttribute_get_array_length(MGLAttribute * self, void * closure) {
+	return PyLong_FromLong(self->array_length);
 }
 
-int MGLAttribute_set_default(MGLAttribute * self, PyObject * value, void * closure) {
-	// TODO:
-	PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	return 0;
+char MGLAttribute_array_length_doc[] = R"(
+	array_length
+)";
+
+PyObject * MGLAttribute_get_dimension(MGLAttribute * self, void * closure) {
+	return PyLong_FromLong(self->dimension);
 }
 
-char MGLAttribute_default_doc[] = R"(
-	default
+char MGLAttribute_dimension_doc[] = R"(
+	dimension
+)";
+
+PyObject * MGLAttribute_get_shape(MGLAttribute * self, void * closure) {
+	return PyUnicode_FromFormat("%c", self->shape);
+}
+
+char MGLAttribute_shape_doc[] = R"(
+	shape
 )";
 
 PyGetSetDef MGLAttribute_tp_getseters[] = {
 	{(char *)"name", (getter)MGLAttribute_get_name, 0, MGLAttribute_name_doc, 0},
 	{(char *)"location", (getter)MGLAttribute_get_location, 0, MGLAttribute_location_doc, 0},
-	{(char *)"default", (getter)MGLAttribute_get_default, (setter)MGLAttribute_set_default, MGLAttribute_default_doc, 0},
+	{(char *)"array_length", (getter)MGLAttribute_get_array_length, 0, MGLAttribute_array_length_doc, 0},
+	{(char *)"dimension", (getter)MGLAttribute_get_dimension, 0, MGLAttribute_dimension_doc, 0},
+	{(char *)"shape", (getter)MGLAttribute_get_shape, 0, MGLAttribute_shape_doc, 0},
 	{0},
 };
 
@@ -145,4 +152,522 @@ void MGLAttribute_Invalidate(MGLAttribute * attribute) {
 	attribute->initial_type = &MGLAttribute_Type;
 
 	Py_DECREF(attribute);
+}
+
+void MGLAttribute_Complete(MGLAttribute * self) {
+	switch (self->type) {
+		case GL_INT:
+			self->dimension = 1;
+
+			self->scalar_type = GL_INT;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 1;
+			self->row_size = 4;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+
+			self->normalizable = false;
+			self->shape = 'i';
+			break;
+
+		case GL_INT_VEC2:
+			self->dimension = 2;
+
+			self->scalar_type = GL_INT;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 2;
+			self->row_size = 8;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+
+			self->normalizable = false;
+			self->shape = 'i';
+			break;
+
+		case GL_INT_VEC3:
+			self->dimension = 3;
+
+			self->scalar_type = GL_INT;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 3;
+			self->row_size = 12;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+
+			self->normalizable = false;
+			self->shape = 'i';
+			break;
+
+		case GL_INT_VEC4:
+			self->dimension = 4;
+
+			self->scalar_type = GL_INT;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 4;
+			self->row_size = 16;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+
+			self->normalizable = false;
+			self->shape = 'i';
+			break;
+
+		case GL_UNSIGNED_INT:
+			self->dimension = 1;
+
+			self->scalar_type = GL_UNSIGNED_INT;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 1;
+			self->row_size = 4;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+
+			self->normalizable = false;
+			self->shape = 'I';
+			break;
+
+		case GL_UNSIGNED_INT_VEC2:
+			self->dimension = 2;
+
+			self->scalar_type = GL_UNSIGNED_INT;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 2;
+			self->row_size = 8;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+
+			self->normalizable = false;
+			self->shape = 'I';
+			break;
+
+		case GL_UNSIGNED_INT_VEC3:
+			self->dimension = 3;
+
+			self->scalar_type = GL_UNSIGNED_INT;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 3;
+			self->row_size = 12;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+
+			self->normalizable = false;
+			self->shape = 'I';
+			break;
+
+		case GL_UNSIGNED_INT_VEC4:
+			self->dimension = 4;
+
+			self->scalar_type = GL_UNSIGNED_INT;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 4;
+			self->row_size = 16;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+
+			self->normalizable = false;
+			self->shape = 'I';
+			break;
+
+		case GL_FLOAT:
+			self->dimension = 1;
+
+			self->scalar_type = GL_FLOAT;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 1;
+			self->row_size = 4;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+
+			self->normalizable = true;
+			self->shape = 'f';
+			break;
+
+		case GL_FLOAT_VEC2:
+			self->dimension = 2;
+
+			self->scalar_type = GL_FLOAT;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 2;
+			self->row_size = 8;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+
+			self->normalizable = true;
+			self->shape = 'f';
+			break;
+
+		case GL_FLOAT_VEC3:
+			self->dimension = 3;
+
+			self->scalar_type = GL_FLOAT;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 3;
+			self->row_size = 12;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+
+			self->normalizable = true;
+			self->shape = 'f';
+			break;
+
+		case GL_FLOAT_VEC4:
+			self->dimension = 4;
+
+			self->scalar_type = GL_FLOAT;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 4;
+			self->row_size = 16;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+
+			self->normalizable = true;
+			self->shape = 'f';
+			break;
+
+		case GL_DOUBLE:
+			self->dimension = 1;
+
+			self->scalar_type = GL_DOUBLE;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 1;
+			self->row_size = 8;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+
+			self->normalizable = false;
+			self->shape = 'd';
+			break;
+
+		case GL_DOUBLE_VEC2:
+			self->dimension = 2;
+
+			self->scalar_type = GL_DOUBLE;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 2;
+			self->row_size = 16;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+
+			self->normalizable = false;
+			self->shape = 'd';
+			break;
+
+		case GL_DOUBLE_VEC3:
+			self->dimension = 3;
+
+			self->scalar_type = GL_DOUBLE;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 3;
+			self->row_size = 24;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+
+			self->normalizable = false;
+			self->shape = 'd';
+			break;
+
+		case GL_DOUBLE_VEC4:
+			self->dimension = 4;
+
+			self->scalar_type = GL_DOUBLE;
+
+			self->rows_length = self->array_length * 1;
+			self->row_length = 4;
+			self->row_size = 32;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+
+			self->normalizable = false;
+			self->shape = 'd';
+			break;
+
+		case GL_FLOAT_MAT2:
+			self->dimension = 4;
+
+			self->scalar_type = GL_FLOAT;
+
+			self->rows_length = self->array_length * 2;
+			self->row_length = 2;
+			self->row_size = 8;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+
+			self->normalizable = true;
+			self->shape = 'f';
+			break;
+
+		case GL_FLOAT_MAT2x3:
+			self->dimension = 6;
+
+			self->scalar_type = GL_FLOAT;
+
+			self->rows_length = self->array_length * 2;
+			self->row_length = 3;
+			self->row_size = 12;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+
+			self->normalizable = true;
+			self->shape = 'f';
+			break;
+
+		case GL_FLOAT_MAT2x4:
+			self->dimension = 8;
+
+			self->scalar_type = GL_FLOAT;
+
+			self->rows_length = self->array_length * 2;
+			self->row_length = 4;
+			self->row_size = 16;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+
+			self->normalizable = true;
+			self->shape = 'f';
+			break;
+
+		case GL_FLOAT_MAT3x2:
+			self->dimension = 6;
+
+			self->scalar_type = GL_FLOAT;
+
+			self->rows_length = self->array_length * 3;
+			self->row_length = 2;
+			self->row_size = 8;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+
+			self->normalizable = true;
+			self->shape = 'f';
+			break;
+
+		case GL_FLOAT_MAT3:
+			self->dimension = 9;
+
+			self->scalar_type = GL_FLOAT;
+
+			self->rows_length = self->array_length * 3;
+			self->row_length = 3;
+			self->row_size = 12;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+
+			self->normalizable = true;
+			self->shape = 'f';
+			break;
+
+		case GL_FLOAT_MAT3x4:
+			self->dimension = 12;
+
+			self->scalar_type = GL_FLOAT;
+
+			self->rows_length = self->array_length * 3;
+			self->row_length = 4;
+			self->row_size = 16;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+
+			self->normalizable = true;
+			self->shape = 'f';
+			break;
+
+		case GL_FLOAT_MAT4x2:
+			self->dimension = 8;
+
+			self->scalar_type = GL_FLOAT;
+
+			self->rows_length = self->array_length * 4;
+			self->row_length = 2;
+			self->row_size = 8;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+
+			self->normalizable = true;
+			self->shape = 'f';
+			break;
+
+		case GL_FLOAT_MAT4x3:
+			self->dimension = 12;
+
+			self->scalar_type = GL_FLOAT;
+
+			self->rows_length = self->array_length * 4;
+			self->row_length = 3;
+			self->row_size = 12;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+
+			self->normalizable = true;
+			self->shape = 'f';
+			break;
+
+		case GL_FLOAT_MAT4:
+			self->dimension = 16;
+
+			self->scalar_type = GL_FLOAT;
+
+			self->rows_length = self->array_length * 4;
+			self->row_length = 4;
+			self->row_size = 16;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+
+			self->normalizable = true;
+			self->shape = 'f';
+			break;
+
+		case GL_DOUBLE_MAT2:
+			self->dimension = 4;
+
+			self->scalar_type = GL_DOUBLE;
+
+			self->rows_length = self->array_length * 2;
+			self->row_length = 2;
+			self->row_size = 16;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+
+			self->normalizable = false;
+			self->shape = 'd';
+			break;
+
+		case GL_DOUBLE_MAT2x3:
+			self->dimension = 6;
+
+			self->scalar_type = GL_DOUBLE;
+
+			self->rows_length = self->array_length * 2;
+			self->row_length = 3;
+			self->row_size = 24;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+
+			self->normalizable = false;
+			self->shape = 'd';
+			break;
+
+		case GL_DOUBLE_MAT2x4:
+			self->dimension = 8;
+
+			self->scalar_type = GL_DOUBLE;
+
+			self->rows_length = self->array_length * 2;
+			self->row_length = 4;
+			self->row_size = 32;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+
+			self->normalizable = false;
+			self->shape = 'd';
+			break;
+
+		case GL_DOUBLE_MAT3x2:
+			self->dimension = 6;
+
+			self->scalar_type = GL_DOUBLE;
+
+			self->rows_length = self->array_length * 3;
+			self->row_length = 2;
+			self->row_size = 16;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+
+			self->normalizable = false;
+			self->shape = 'd';
+			break;
+
+		case GL_DOUBLE_MAT3:
+			self->dimension = 9;
+
+			self->scalar_type = GL_DOUBLE;
+
+			self->rows_length = self->array_length * 3;
+			self->row_length = 3;
+			self->row_size = 24;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+
+			self->normalizable = false;
+			self->shape = 'd';
+			break;
+
+		case GL_DOUBLE_MAT3x4:
+			self->dimension = 12;
+
+			self->scalar_type = GL_DOUBLE;
+
+			self->rows_length = self->array_length * 3;
+			self->row_length = 4;
+			self->row_size = 32;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+
+			self->normalizable = false;
+			self->shape = 'd';
+			break;
+
+		case GL_DOUBLE_MAT4x2:
+			self->dimension = 8;
+
+			self->scalar_type = GL_DOUBLE;
+
+			self->rows_length = self->array_length * 4;
+			self->row_length = 2;
+			self->row_size = 16;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+
+			self->normalizable = false;
+			self->shape = 'd';
+			break;
+
+		case GL_DOUBLE_MAT4x3:
+			self->dimension = 12;
+
+			self->scalar_type = GL_DOUBLE;
+
+			self->rows_length = self->array_length * 4;
+			self->row_length = 3;
+			self->row_size = 24;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+
+			self->normalizable = false;
+			self->shape = 'd';
+			break;
+
+		case GL_DOUBLE_MAT4:
+			self->dimension = 16;
+
+			self->scalar_type = GL_DOUBLE;
+
+			self->rows_length = self->array_length * 4;
+			self->row_length = 4;
+			self->row_size = 32;
+
+			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+
+			self->normalizable = false;
+			self->shape = 'd';
+			break;
+
+		default:
+			self->gl_attrib_ptr_proc = 0; // TODO:
+			break;
+	}
 }

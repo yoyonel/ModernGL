@@ -8,6 +8,7 @@ struct MGLPrimitive : public MGLObject {
 	const char * name;
 
 	int primitive;
+	int geometry_primitive;
 	int transform_primitive;
 };
 

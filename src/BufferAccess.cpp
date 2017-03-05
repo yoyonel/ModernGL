@@ -1,5 +1,7 @@
 #include "BufferAccess.hpp"
 
+#include "Error.hpp"
+
 PyObject * MGLBufferAccess_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLBufferAccess * self = (MGLBufferAccess *)type->tp_alloc(type, 0);
 
@@ -20,7 +22,7 @@ void MGLBufferAccess_tp_dealloc(MGLBufferAccess * self) {
 	printf("MGLBufferAccess_tp_dealloc %p\n", self);
 	#endif
 
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	MGLBufferAccess_Type.tp_free((PyObject *)self);
 }
 
 int MGLBufferAccess_tp_init(MGLBufferAccess * self, PyObject * args, PyObject * kwargs) {
@@ -33,7 +35,8 @@ PyObject * MGLBufferAccess_tp_str(MGLBufferAccess * self) {
 
 MGLBufferAccess * MGLBufferAccess_open(MGLBufferAccess * self) {
 	if (self->ptr) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "BufferAccess.open: Already open");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
@@ -42,7 +45,8 @@ MGLBufferAccess * MGLBufferAccess_open(MGLBufferAccess * self) {
 	self->ptr = gl.MapBufferRange(GL_ARRAY_BUFFER, self->offset, self->size, self->access);
 
 	if (!self->ptr) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "BufferAccess.open: Cannot map buffer");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
@@ -57,40 +61,11 @@ const char * MGLBufferAccess_open_doc = R"(
 )";
 
 PyObject * MGLBufferAccess_close(MGLBufferAccess * self, PyObject * args, PyObject * kwargs) {
-	// static const char * kwlist[] = {"type", "value", "traceback", 0};
-
-	// PyObject * exc_type = 0;
-	// PyObject * exc_value = 0;
-	// PyObject * exc_traceback = 0;
-
-	// int args_ok = PyArg_ParseTupleAndKeywords(
-	// 	args,
-	// 	kwargs,
-	// 	"|OOO",
-	// 	(char **)kwlist,
-	// 	&exc_type,
-	// 	&exc_value,
-	// 	&exc_traceback
-	// );
-
-	// if (!args_ok) {
-	// 	// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	// 	return 0;
-	// }
-
-	// if (!self->ptr) {
-	// 	PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	// 	return 0;
-	// }
-
-	// TODO: check silent fail
-
 	if (self->ptr) {
 		GLMethods & gl = self->buffer->context->gl;
 		gl.BindBuffer(GL_ARRAY_BUFFER, self->obj);
 		gl.UnmapBuffer(GL_ARRAY_BUFFER);
 	}
-
 	Py_RETURN_NONE;
 }
 
@@ -116,7 +91,6 @@ PyObject * MGLBufferAccess_read(MGLBufferAccess * self, PyObject * args, PyObjec
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
@@ -125,12 +99,14 @@ PyObject * MGLBufferAccess_read(MGLBufferAccess * self, PyObject * args, PyObjec
 	}
 
 	if (offset < 0 || size < 0 || size + offset > self->size) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "BufferAccess.read: offset = %d or size = %d out of range", offset, size);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
 	if (!self->ptr) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "BufferAccess.read: Call BufferAccess.open() first");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
@@ -168,17 +144,18 @@ PyObject * MGLBufferAccess_write(MGLBufferAccess * self, PyObject * args, PyObje
 	);
 
 	if (!args_ok) {
-		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		return 0;
 	}
 
 	if (offset < 0 || size + offset > self->size) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "BufferAccess.write: offset = %d or size = %d out of range", offset, size);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
 	if (!self->ptr) {
-		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_New(TRACE, "BufferAccess.write: Call BufferAccess.open() first");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
@@ -200,14 +177,6 @@ const char * MGLBufferAccess_write_doc = R"(
 		None
 )";
 
-// PyObject * MGLBufferAccess_write_chunks(MGLBufferAccess * self, PyObject * args, PyObject * kwargs) {
-// 	return 0;
-// }
-
-// PyObject * MGLBufferAccess_write_many(MGLBufferAccess * self, PyObject * args, PyObject * kwargs) {
-// 	return 0;
-// }
-
 PyMethodDef MGLBufferAccess_tp_methods[] = {
 	{"open", (PyCFunction)MGLBufferAccess_open, METH_NOARGS, MGLBufferAccess_open_doc},
 	{"close", (PyCFunction)MGLBufferAccess_close, METH_VARARGS | METH_KEYWORDS, MGLBufferAccess_close_doc},
@@ -217,8 +186,6 @@ PyMethodDef MGLBufferAccess_tp_methods[] = {
 
 	{"read", (PyCFunction)MGLBufferAccess_read, METH_VARARGS | METH_KEYWORDS, MGLBufferAccess_read_doc},
 	{"write", (PyCFunction)MGLBufferAccess_write, METH_VARARGS | METH_KEYWORDS, MGLBufferAccess_write_doc},
-	// {"write_chunks", (PyCFunction)MGLBufferAccess_write_chunks, METH_VARARGS | METH_KEYWORDS, 0},
-	// {"write_many", (PyCFunction)MGLBufferAccess_write_many, METH_VARARGS | METH_KEYWORDS, 0},
 	{0},
 };
 

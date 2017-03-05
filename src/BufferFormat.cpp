@@ -1,7 +1,5 @@
 #include "BufferFormat.hpp"
 
-#include "OpenGL.hpp"
-
 FormatNode * InvalidFormat = (FormatNode *)(-1);
 
 FormatIterator::FormatIterator(const char * str) : ptr(str) {
@@ -21,7 +19,7 @@ FormatInfo FormatIterator::info() {
 			break;
 		}
 		info.size += node->count * node->size;
-		if (node->type) {
+		if (node->shape != 'x') {
 			++info.nodes;
 		}
 	}
@@ -74,41 +72,40 @@ FormatNode * FormatIterator::next() {
 				if (node.count == 0) {
 					node.count = 1;
 				}
-				if (node.count > 4) {
-					return InvalidFormat;
-				}
-				node.type = GL_FLOAT;
 				node.size = 4;
+				node.shape = 'f';
 				return &node;
 
 			case 'd':
 				if (node.count == 0) {
 					node.count = 1;
 				}
-				if (node.count > 4) {
-					return InvalidFormat;
-				}
-				node.type = GL_DOUBLE;
 				node.size = 8;
+				node.shape = 'd';
 				return &node;
 
 			case 'i':
 				if (node.count == 0) {
 					node.count = 1;
 				}
-				if (node.count > 4) {
-					return InvalidFormat;
-				}
-				node.type = GL_INT;
 				node.size = 4;
+				node.shape = 'i';
+				return &node;
+
+			case 'I':
+				if (node.count == 0) {
+					node.count = 1;
+				}
+				node.size = 4;
+				node.shape = 'I';
 				return &node;
 
 			case 'x':
 				if (node.count == 0) {
 					node.count = 1;
 				}
-				node.type = 0;
 				node.size = 1;
+				node.shape = 'x';
 				return &node;
 
 			case 0:

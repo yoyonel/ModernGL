@@ -18,7 +18,7 @@ struct MGLUniform : public MGLProgramMember {
 	int type;
 
 	int dimension;
-	int element_size; // TODO:
+	int element_size;
 	int array_len;
 
 	bool matrix;

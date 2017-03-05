@@ -10,7 +10,7 @@ PyObject * MGLObject_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwa
 }
 
 void MGLObject_tp_dealloc(MGLObject * self) {
-	Py_TYPE(self)->tp_free((PyObject*)self);
+	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 int MGLObject_tp_init(MGLObject * self, PyObject * args, PyObject * kwargs) {

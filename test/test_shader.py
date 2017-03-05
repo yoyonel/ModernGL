@@ -23,8 +23,8 @@ class TestShader(unittest.TestCase):
 				color = vec4(0, 0, 0, 0);
 			}
 		''')
-		print(a.source)
-		print(a, b)
+		# print(a.source)
+		# print(a, b)
 
 if __name__ == '__main__':
 	unittest.main()
