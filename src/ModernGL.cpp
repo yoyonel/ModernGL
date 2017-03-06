@@ -175,10 +175,10 @@ const char * create_standalone_context_doc = R"(
 	Extended description of function.
 
 	Keyword Arguments:
-		require (version): OpenGL version
+		require (version): OpenGL version.
 
 	Returns:
-		~ModernGL.Context: ....
+		~ModernGL.Context: OpenGL context.
 )";
 
 MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs) {
@@ -216,13 +216,8 @@ MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs)
 const char * create_context_doc = R"(
 	create_context(size)
 
-	Extended description of function.
-
-	Keyword Arguments:
-		require (version): OpenGL version
-
-	Returns:
-		~ModernGL.Context: ....
+	Args:
+		require (version): OpenGL version.
 )";
 
 PyMethodDef MGL_module_methods[] = {
