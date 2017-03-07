@@ -1,5 +1,7 @@
 Shader
-********************
+******
+
+.. currentmodule:: ModernGL
 
 .. autoclass:: ModernGL.Shader
 	:members:

@@ -1,5 +1,7 @@
 Framebuffer
-********************
+***********
+
+.. currentmodule:: ModernGL
 
 .. autoclass:: ModernGL.Framebuffer
 	:members:

@@ -1,5 +1,7 @@
 Version
-********************
+*******
+
+.. currentmodule:: ModernGL
 
 .. autoclass:: ModernGL.Version
 	:members:

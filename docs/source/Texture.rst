@@ -1,5 +1,7 @@
 Texture
-********************
+*******
+
+.. currentmodule:: ModernGL
 
 .. autoclass:: ModernGL.Texture
 	:members:

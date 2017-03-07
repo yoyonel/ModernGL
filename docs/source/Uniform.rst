@@ -1,5 +1,7 @@
 Uniform
-********************
+*******
+
+.. currentmodule:: ModernGL
 
 .. autoclass:: ModernGL.Uniform
 	:members:

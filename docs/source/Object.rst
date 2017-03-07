@@ -1,9 +1,9 @@
-Buffer
+Object
 ******
 
 .. currentmodule:: ModernGL
 
-.. autoclass:: ModernGL.Buffer
+.. autoclass:: ModernGL.Object
 	:members:
 	:undoc-members:
 	:inherited-members:
@@ -13,4 +13,7 @@ Buffer
 	:maxdepth: 4
 	:caption: Classes:
 
-	BufferAccess <BufferAccess.rst>
+	EnableFlag <EnableFlag.rst>
+	InvalidObject <InvalidObject.rst>
+	Primitive <Primitive.rst>
+	Version <Version.rst>

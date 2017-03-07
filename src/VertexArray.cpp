@@ -82,7 +82,7 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args, PyObjec
 		return 0;
 	}
 
-	GLMethods & gl = self->context->gl;
+	const GLMethods & gl = self->context->gl;
 
 	gl.UseProgram(self->program->obj);
 	gl.BindVertexArray(self->obj);
@@ -100,7 +100,18 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args, PyObjec
 const char * MGLVertexArray_render_doc = R"(
 	render(mode, vertices, first, instances)
 
-	Render
+	The render primitive (mode) must be the same as the input primitive of the GeometryShader.
+
+	Args:
+		optional mode: By default :py:const:`~ModernGL.TRIANGLES` will be used.
+		optional vertices: The number of vertices to transform.
+
+	Keyword Args:
+		first: The index of the first vertex to start with.
+		instances: The number of instances.
+
+	Returns:
+		None
 )";
 
 PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args, PyObject * kwargs) {
@@ -148,7 +159,7 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args, PyOb
 		return 0;
 	}
 
-	GLMethods & gl = self->context->gl;
+	const GLMethods & gl = self->context->gl;
 
 	gl.UseProgram(self->program->obj);
 	gl.BindVertexArray(self->obj);
@@ -173,9 +184,23 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args, PyOb
 }
 
 const char * MGLVertexArray_transform_doc = R"(
-	transform(output, mode, vertices, first, instances, output_mode)
+	transform(output, mode, vertices, first, instances)
 
-	Transform
+	Transform vertices.
+	Stores the output in a single buffer.
+	The transform primitive (mode) must be the same as the input primitive of the GeometryShader.
+
+	Args:
+		output: The buffer to store the output.
+		optional mode: By default :py:const:`~ModernGL.TRIANGLES` will be used.
+		optional vertices: The number of vertices to transform.
+
+	Keyword Args:
+		first: The index of the first vertex to start with.
+		instances: The number of instances.
+
+	Returns:
+		None
 )";
 
 PyObject * MGLVertexArray_release(MGLVertexArray * self) {
@@ -186,7 +211,7 @@ PyObject * MGLVertexArray_release(MGLVertexArray * self) {
 const char * MGLVertexArray_release_doc = R"(
 	release()
 
-	Release
+	Release the vertex array.
 )";
 
 PyMethodDef MGLVertexArray_tp_methods[] = {
@@ -204,7 +229,8 @@ MGLProgram * MGLVertexArray_get_program(MGLVertexArray * self, void * closure) {
 char MGLVertexArray_program_doc[] = R"(
 	program
 
-	The program.
+	The program assinged to the VertexArray.
+	The program will be used automatically when rendering and transforming.
 )";
 
 PyObject * MGLVertexArray_get_content(MGLVertexArray * self, void * closure) {
@@ -214,7 +240,7 @@ PyObject * MGLVertexArray_get_content(MGLVertexArray * self, void * closure) {
 char MGLVertexArray_content_doc[] = R"(
 	content
 
-	The content.
+	The content assinged to the VertexArray.
 )";
 
 PyObject * MGLVertexArray_get_index_buffer(MGLVertexArray * self, void * closure) {
@@ -225,7 +251,7 @@ PyObject * MGLVertexArray_get_index_buffer(MGLVertexArray * self, void * closure
 char MGLVertexArray_index_buffer_doc[] = R"(
 	index_buffer
 
-	The index buffer.
+	The index buffer if the index_buffer is set otherwise ``None``.
 )";
 
 PyObject * MGLVertexArray_get_vertices(MGLVertexArray * self, void * closure) {
@@ -235,7 +261,10 @@ PyObject * MGLVertexArray_get_vertices(MGLVertexArray * self, void * closure) {
 char MGLVertexArray_vertices_doc[] = R"(
 	vertices
 
-	The vertices.
+	The number of vertices detected.
+	This is the minimum of the number of vertices possible per Buffer.
+	The size of the index_buffer will be used when the VertexArray has a valid index_buffer set.
+	Per instance vertex attributes does not affect this number.
 )";
 
 PyGetSetDef MGLVertexArray_tp_getseters[] = {
@@ -248,8 +277,6 @@ PyGetSetDef MGLVertexArray_tp_getseters[] = {
 
 const char * MGLVertexArray_tp_doc = R"(
 	VertexArray
-
-	The VertexArray.
 )";
 
 PyTypeObject MGLVertexArray_Type = {
@@ -312,7 +339,7 @@ void MGLVertexArray_Invalidate(MGLVertexArray * array) {
 	printf("MGLVertexArray_Invalidate %p\n", array);
 	#endif
 
-	GLMethods & gl = array->context->gl;
+	const GLMethods & gl = array->context->gl;
 	gl.DeleteVertexArrays(1, (GLuint *)&array->obj);
 
 	if (Py_REFCNT(array->program) == 2) {

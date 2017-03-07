@@ -50,7 +50,7 @@ PyObject * MGLTexture_use(MGLTexture * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
-	GLMethods & gl = self->context->gl;
+	const GLMethods & gl = self->context->gl;
 	gl.ActiveTexture(GL_TEXTURE0 + index);
 	gl.BindTexture(GL_TEXTURE_2D, self->obj);
 
@@ -59,6 +59,14 @@ PyObject * MGLTexture_use(MGLTexture * self, PyObject * args, PyObject * kwargs)
 
 const char * MGLTexture_use_doc = R"(
 	use(index = 0)
+
+	Args:
+		optional index: The texture location.
+			Same as the integer value that is used for sampler2D uniforms in the shaders.
+			The value ``0`` will bind the texture to the ``GL_TEXTURE0`` binding point.
+
+	Returns:
+		:py:data:`None`
 )";
 
 PyObject * MGLTexture_read(PyObject * self, PyObject * args, PyObject * kwargs) {
@@ -83,6 +91,11 @@ PyObject * MGLTexture_read(PyObject * self, PyObject * args, PyObject * kwargs) 
 
 const char * MGLTexture_read_doc = R"(
 	read(...)
+
+	NOT YET IMPLEMENTED.
+
+	Returns:
+		None
 )";
 
 PyObject * MGLTexture_write(PyObject * self, PyObject * args, PyObject * kwargs) {
@@ -107,6 +120,11 @@ PyObject * MGLTexture_write(PyObject * self, PyObject * args, PyObject * kwargs)
 
 const char * MGLTexture_write_doc = R"(
 	write(...)
+
+	NOT YET IMPLEMENTED.
+
+	Returns:
+		None
 )";
 
 PyObject * MGLTexture_release(MGLTexture * self) {
@@ -116,6 +134,8 @@ PyObject * MGLTexture_release(MGLTexture * self) {
 
 const char * MGLTexture_release_doc = R"(
 	release()
+
+	Release the texture.
 )";
 
 PyMethodDef MGLTexture_tp_methods[] = {

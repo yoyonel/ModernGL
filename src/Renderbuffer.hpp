@@ -2,14 +2,12 @@
 
 #include <Python.h>
 
-#include "ContextMember.hpp"
+#include "FramebufferAttachment.hpp"
 
-// TODO:
-
-struct MGLRenderbuffer : public MGLContextMember {
-	int obj;
+struct MGLRenderbuffer : public FramebufferAttachment {
 };
 
 extern PyTypeObject MGLRenderbuffer_Type;
 
 MGLRenderbuffer * MGLRenderbuffer_New();
+void MGLRenderbuffer_Invalidate(MGLRenderbuffer * renderbuffer);

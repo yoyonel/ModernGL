@@ -1,5 +1,7 @@
 InvalidObject
-********************
+*************
+
+.. currentmodule:: ModernGL
 
 .. autoclass:: ModernGL.InvalidObject
 	:members:

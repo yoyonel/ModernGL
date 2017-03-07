@@ -1,5 +1,7 @@
 Program
-********************
+*******
+
+.. currentmodule:: ModernGL
 
 .. autoclass:: ModernGL.Program
 	:members:

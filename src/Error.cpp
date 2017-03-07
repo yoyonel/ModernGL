@@ -52,15 +52,19 @@ PyObject * MGLError_get_github(MGLError * self) {
 	}
 }
 
+char MGLError_github_doc[] = R"(
+	github
+
+	A link to the source code, where the error occurred.
+)";
+
 PyGetSetDef MGLError_tp_getseters[] = {
-	{(char *)"github", (getter)MGLError_get_github, 0, 0, 0},
+	{(char *)"github", (getter)MGLError_get_github, 0, MGLError_github_doc, 0},
 	{0},
 };
 
 const char * MGLError_tp_doc = R"(
 	Error
-
-	A ModernGL object turns into an Error once the release method is successfully called.
 )";
 
 PyTypeObject MGLError_Type = {
@@ -104,7 +108,7 @@ PyTypeObject MGLError_Type = {
 	MGLError_tp_new,                                        // tp_new
 };
 
-#define GITHUB_URL "https://github.com/cprogrammer1994/ModernGL/blob/ModernGL3-beta"
+#define GITHUB_URL "https://github.com/cprogrammer1994/ModernGL/blob/ModernGL3"
 #define GITHUB(path) GITHUB_URL # path
 
 MGLError * MGLError_New(const char * filename, int line, const char * format, ...) {

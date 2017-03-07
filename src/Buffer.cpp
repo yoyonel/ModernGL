@@ -79,12 +79,12 @@ MGLBufferAccess * MGLBuffer_access(MGLBuffer * self, PyObject * args, PyObject *
 }
 
 const char * MGLBuffer_access_doc = R"(
-	access(size = -1, offset = 0, readonly = False)
+	access(size, offset = 0, readonly = False)
 
-	Keyword Arguments:
-		size (int): The size.
-		offset (int): The offset.
-		readonly (bool): The readonly.
+	Keyword Args:
+		size: The size.
+		offset: The offset.
+		readonly: The readonly.
 )";
 
 PyObject * MGLBuffer_read(MGLBuffer * self, PyObject * args, PyObject * kwargs) {
@@ -116,7 +116,7 @@ PyObject * MGLBuffer_read(MGLBuffer * self, PyObject * args, PyObject * kwargs) 
 		return 0;
 	}
 
-	GLMethods & gl = self->context->gl;
+	const GLMethods & gl = self->context->gl;
 
 	gl.BindBuffer(GL_ARRAY_BUFFER, self->obj);
 	void * map = gl.MapBufferRange(GL_ARRAY_BUFFER, offset, size, GL_MAP_READ_BIT);
@@ -135,16 +135,18 @@ PyObject * MGLBuffer_read(MGLBuffer * self, PyObject * args, PyObject * kwargs) 
 }
 
 const char * MGLBuffer_read_doc = R"(
-	read(size = -1, offset = 0)
+	read(size, offset = 0)
 
 	Read the content.
 
-	Arguments:
-		size (int): The size. Value `-1` means all.
-		offset (int): The offset.
+	Args:
+		size: The size. Value `-1` means all.
+
+	Keyword Args:
+		offset: The offset.
 
 	Returns:
-		bytes: binary data
+		bytes: binary data.
 )";
 
 PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args, PyObject * kwargs) {
@@ -174,7 +176,7 @@ PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
-	GLMethods & gl = self->context->gl;
+	const GLMethods & gl = self->context->gl;
 	gl.BindBuffer(GL_ARRAY_BUFFER, self->obj);
 	gl.BufferSubData(GL_ARRAY_BUFFER, (GLintptr)offset, size, data);
 	Py_RETURN_NONE;
@@ -185,16 +187,18 @@ const char * MGLBuffer_write_doc = R"(
 
 	Write the content.
 
-	Arguments:
-		size (int): The data.
-		offset (int): The offset.
+	Args:
+		data: The data.
+
+	Keyword Args:
+		offset: The offset.
 
 	Returns:
 		None
 )";
 
 PyObject * MGLBuffer_orphan(MGLBuffer * self) {
-	GLMethods & gl = self->context->gl;
+	const GLMethods & gl = self->context->gl;
 	gl.BindBuffer(GL_ARRAY_BUFFER, self->obj);
 	gl.BufferData(GL_ARRAY_BUFFER, self->size, 0, self->dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 	Py_RETURN_NONE;
@@ -202,6 +206,8 @@ PyObject * MGLBuffer_orphan(MGLBuffer * self) {
 
 const char * MGLBuffer_orphan_doc = R"(
 	orphan()
+
+	Orphan the buffer.
 )";
 
 PyObject * MGLBuffer_release(MGLBuffer * self) {
@@ -211,6 +217,8 @@ PyObject * MGLBuffer_release(MGLBuffer * self) {
 
 const char * MGLBuffer_release_doc = R"(
 	release()
+
+	Release the buffer.
 )";
 
 PyMethodDef MGLBuffer_tp_methods[] = {
@@ -228,6 +236,8 @@ PyObject * MGL_Buffer_get_size(MGLBuffer * self, void * closure) {
 
 char MGL_Buffer_size_doc[] = R"(
 	size
+
+	The size of the buffer.
 )";
 
 PyObject * MGL_Buffer_get_dynamic(MGLBuffer * self, void * closure) {
@@ -247,7 +257,7 @@ PyGetSetDef MGLBuffer_tp_getseters[] = {
 int MGLBuffer_tp_as_buffer_get_vew(MGLBuffer * self, Py_buffer * view, int flags) {
 	int access = (flags == PyBUF_SIMPLE) ? GL_MAP_READ_BIT : (GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
 
-	GLMethods & gl = self->context->gl;
+	const GLMethods & gl = self->context->gl;
 	gl.BindBuffer(GL_ARRAY_BUFFER, self->obj);
 	void * map = gl.MapBufferRange(GL_ARRAY_BUFFER, 0, self->size, access);
 
@@ -273,7 +283,7 @@ int MGLBuffer_tp_as_buffer_get_vew(MGLBuffer * self, Py_buffer * view, int flags
 }
 
 void MGLBuffer_tp_as_buffer_release_view(MGLBuffer * self, Py_buffer * view) {
-	GLMethods & gl = self->context->gl;
+	const GLMethods & gl = self->context->gl;
 	gl.BindBuffer(GL_ARRAY_BUFFER, self->obj);
 	gl.UnmapBuffer(GL_ARRAY_BUFFER);
 }
@@ -284,6 +294,9 @@ PyBufferProcs MGLBuffer_tp_as_buffer = {
 };
 
 const char * MGLBuffer_tp_doc = R"(
+	Buffer
+
+	Create a :py:class:`~ModernGL.Buffer` using :py:meth:`~ModernGL.Context.Buffer`.
 )";
 
 PyTypeObject MGLBuffer_Type = {
@@ -346,7 +359,7 @@ void MGLBuffer_Invalidate(MGLBuffer * buffer) {
 	printf("MGLBuffer_Invalidate %p\n", buffer);
 	#endif
 
-	GLMethods & gl = buffer->context->gl;
+	const GLMethods & gl = buffer->context->gl;
 	gl.DeleteBuffers(1, (GLuint *)&buffer->obj);
 
 	Py_DECREF(buffer->context);

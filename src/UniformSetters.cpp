@@ -1174,8 +1174,8 @@ int MGLUniform_bool_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1213,8 +1213,8 @@ int MGLUniform_bvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1273,8 +1273,8 @@ int MGLUniform_bvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1333,8 +1333,8 @@ int MGLUniform_bvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1393,8 +1393,8 @@ int MGLUniform_int_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1428,8 +1428,8 @@ int MGLUniform_ivec2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1484,8 +1484,8 @@ int MGLUniform_ivec3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1540,8 +1540,8 @@ int MGLUniform_ivec4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1596,8 +1596,8 @@ int MGLUniform_uint_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1631,8 +1631,8 @@ int MGLUniform_uvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1687,8 +1687,8 @@ int MGLUniform_uvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1743,8 +1743,8 @@ int MGLUniform_uvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1799,8 +1799,8 @@ int MGLUniform_float_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1834,8 +1834,8 @@ int MGLUniform_vec2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1890,8 +1890,8 @@ int MGLUniform_vec3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1946,8 +1946,8 @@ int MGLUniform_vec4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2002,8 +2002,8 @@ int MGLUniform_double_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2037,8 +2037,8 @@ int MGLUniform_dvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2093,8 +2093,8 @@ int MGLUniform_dvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2149,8 +2149,8 @@ int MGLUniform_dvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2205,8 +2205,8 @@ int MGLUniform_sampler_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2240,8 +2240,8 @@ int MGLUniform_float_matrix_2x2_array_value_setter(MGLUniform * self, PyObject *
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2296,8 +2296,8 @@ int MGLUniform_float_matrix_2x3_array_value_setter(MGLUniform * self, PyObject *
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2352,8 +2352,8 @@ int MGLUniform_float_matrix_2x4_array_value_setter(MGLUniform * self, PyObject *
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2408,8 +2408,8 @@ int MGLUniform_float_matrix_3x2_array_value_setter(MGLUniform * self, PyObject *
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2464,8 +2464,8 @@ int MGLUniform_float_matrix_3x3_array_value_setter(MGLUniform * self, PyObject *
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2520,8 +2520,8 @@ int MGLUniform_float_matrix_3x4_array_value_setter(MGLUniform * self, PyObject *
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2576,8 +2576,8 @@ int MGLUniform_float_matrix_4x2_array_value_setter(MGLUniform * self, PyObject *
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2632,8 +2632,8 @@ int MGLUniform_float_matrix_4x3_array_value_setter(MGLUniform * self, PyObject *
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2688,8 +2688,8 @@ int MGLUniform_float_matrix_4x4_array_value_setter(MGLUniform * self, PyObject *
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2744,8 +2744,8 @@ int MGLUniform_double_matrix_2x2_array_value_setter(MGLUniform * self, PyObject 
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2800,8 +2800,8 @@ int MGLUniform_double_matrix_2x3_array_value_setter(MGLUniform * self, PyObject 
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2856,8 +2856,8 @@ int MGLUniform_double_matrix_2x4_array_value_setter(MGLUniform * self, PyObject 
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2912,8 +2912,8 @@ int MGLUniform_double_matrix_3x2_array_value_setter(MGLUniform * self, PyObject 
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -2968,8 +2968,8 @@ int MGLUniform_double_matrix_3x3_array_value_setter(MGLUniform * self, PyObject 
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -3024,8 +3024,8 @@ int MGLUniform_double_matrix_3x4_array_value_setter(MGLUniform * self, PyObject 
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -3080,8 +3080,8 @@ int MGLUniform_double_matrix_4x2_array_value_setter(MGLUniform * self, PyObject 
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -3136,8 +3136,8 @@ int MGLUniform_double_matrix_4x3_array_value_setter(MGLUniform * self, PyObject 
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -3192,8 +3192,8 @@ int MGLUniform_double_matrix_4x4_array_value_setter(MGLUniform * self, PyObject 
 
 	int size = PyList_GET_SIZE(value);
 
-	if (size != self->array_len) {
-		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_len, size);
+	if (size != self->array_length) {
+		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}

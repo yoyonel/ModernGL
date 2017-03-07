@@ -8,13 +8,15 @@
 struct MGLContext : public MGLObject {
 	PyTypeObject * initial_type;
 
+	PyObject * default_framebuffer;
+
 	void * rc_handle;
 	void * dc_handle;
 
 	int max_texture_units;
 	int default_texture_unit;
 
-	bool standalone; // TODO:
+	bool standalone;
 
 	GLMethods gl;
 };

@@ -1,5 +1,7 @@
 Error
-********************
+*****
+
+.. currentmodule:: ModernGL
 
 .. autoclass:: ModernGL.Error
 	:members:

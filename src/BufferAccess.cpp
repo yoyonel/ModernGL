@@ -40,7 +40,7 @@ MGLBufferAccess * MGLBufferAccess_open(MGLBufferAccess * self) {
 		return 0;
 	}
 
-	GLMethods & gl = self->buffer->context->gl;
+	const GLMethods & gl = self->buffer->context->gl;
 	gl.BindBuffer(GL_ARRAY_BUFFER, self->obj);
 	self->ptr = gl.MapBufferRange(GL_ARRAY_BUFFER, self->offset, self->size, self->access);
 
@@ -62,7 +62,7 @@ const char * MGLBufferAccess_open_doc = R"(
 
 PyObject * MGLBufferAccess_close(MGLBufferAccess * self, PyObject * args, PyObject * kwargs) {
 	if (self->ptr) {
-		GLMethods & gl = self->buffer->context->gl;
+		const GLMethods & gl = self->buffer->context->gl;
 		gl.BindBuffer(GL_ARRAY_BUFFER, self->obj);
 		gl.UnmapBuffer(GL_ARRAY_BUFFER);
 	}
@@ -114,13 +114,15 @@ PyObject * MGLBufferAccess_read(MGLBufferAccess * self, PyObject * args, PyObjec
 }
 
 const char * MGLBufferAccess_read_doc = R"(
-	read(size = -1, offset = 0)
+	read(size, offset = 0)
 
 	Read the content.
 
-	Arguments:
-		size (int): The size. Value `-1` means all.
-		offset (int): The offset.
+	Args:
+		size: The size. Value `-1` means all.
+
+	Keyword Args:
+		offset: The offset.
 
 	Returns:
 		bytes: binary data
@@ -169,9 +171,11 @@ const char * MGLBufferAccess_write_doc = R"(
 
 	Write the content.
 
-	Arguments:
-		size (int): The data.
-		offset (int): The offset.
+	Args:
+		size: The data.
+
+	Keyword Args:
+		offset: The offset.
 
 	Returns:
 		None

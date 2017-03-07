@@ -1,6 +1,8 @@
 Context
 *******
 
+.. currentmodule:: ModernGL
+
 .. autoclass:: ModernGL.Context
 	:members:
 	:undoc-members:

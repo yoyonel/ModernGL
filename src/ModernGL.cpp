@@ -5,6 +5,7 @@
 #include "Program.hpp"
 #include "Shader.hpp"
 #include "Framebuffer.hpp"
+#include "Renderbuffer.hpp"
 #include "Object.hpp"
 #include "InvalidObject.hpp"
 #include "Primitive.hpp"
@@ -21,21 +22,30 @@
 #include <Windows.h>
 
 MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"size", 0};
+	static const char * kwlist[] = {"size", "require", 0};
 
 	int width = 256;
 	int height = 256;
 
+	MGLVersion * require = (MGLVersion *)Py_None;
+
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"|(II)",
+		"|(II)$O",
 		(char **)kwlist,
 		&width,
-		&height
+		&height,
+		&require
 	);
 
 	if (!args_ok) {
+		return 0;
+	}
+
+	if (require != (MGLVersion *)Py_None && Py_TYPE(require) != &MGLVersion_Type) {
+		MGLError * error = MGLError_New(TRACE, "require must be a ModernGL.Version not %s", Py_TYPE(require)->tp_name);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
@@ -160,6 +170,11 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 
 	MGLContext * ctx = MGLContext_New();
 
+	ctx->standalone = true;
+
+	ctx->rc_handle = (void *)rc;
+	ctx->dc_handle = (void *)dc;
+
 	MGLContext_Initialize(ctx);
 
 	if (PyErr_Occurred()) {
@@ -170,15 +185,13 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 }
 
 const char * create_standalone_context_doc = R"(
-	create_standalone_context(size)
-
-	Extended description of function.
+	create_standalone_context(require = None)
 
 	Keyword Arguments:
 		require (version): OpenGL version.
 
 	Returns:
-		~ModernGL.Context: OpenGL context.
+		:py:class:`ModernGL.Context`
 )";
 
 MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs) {
@@ -189,9 +202,8 @@ MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs)
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"|$O!",
+		"|$O",
 		(char **)kwlist,
-		&MGLVersion_Type,
 		&require
 	);
 
@@ -199,10 +211,27 @@ MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
+	if (require != (MGLVersion *)Py_None && Py_TYPE(require) != &MGLVersion_Type) {
+		MGLError * error = MGLError_New(TRACE, "require must be a ModernGL.Version not %s", Py_TYPE(require)->tp_name);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
+
+	void * rc_handle = wglGetCurrentContext();
+	void * dc_handle = wglGetCurrentDC();
+
+	if (!rc_handle || !dc_handle) {
+		MGLError * error = MGLError_New(TRACE, "Cannot detect current context.");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
+
 	MGLContext * ctx = MGLContext_New();
 
-	ctx->rc_handle = wglGetCurrentContext();
-	ctx->dc_handle = wglGetCurrentDC();
+	ctx->standalone = false;
+
+	ctx->rc_handle = rc_handle;
+	ctx->dc_handle = dc_handle;
 
 	MGLContext_Initialize(ctx);
 
@@ -214,10 +243,13 @@ MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs)
 }
 
 const char * create_context_doc = R"(
-	create_context(size)
+	create_context(require = None)
 
-	Args:
+	Keyword Arguments:
 		require (version): OpenGL version.
+
+	Returns:
+		:py:class:`ModernGL.Context`
 )";
 
 PyMethodDef MGL_module_methods[] = {
@@ -463,6 +495,17 @@ extern "C" PyObject * PyInit_ModernGL() {
 		Py_INCREF(&MGLError_Type);
 
 		PyModule_AddObject(module, "Error", (PyObject *)&MGLError_Type);
+	}
+
+	{
+		if (PyType_Ready(&MGLRenderbuffer_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Renderbuffer in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+
+		Py_INCREF(&MGLRenderbuffer_Type);
+
+		PyModule_AddObject(module, "Renderbuffer", (PyObject *)&MGLRenderbuffer_Type);
 	}
 
 	{

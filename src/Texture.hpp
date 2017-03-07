@@ -2,17 +2,9 @@
 
 #include <Python.h>
 
-#include "ContextMember.hpp"
+#include "FramebufferAttachment.hpp"
 
-struct MGLTexture : public MGLContextMember {
-	int obj;
-
-	int width;
-	int height;
-	int components;
-
-	bool floats;
-	bool depth;
+struct MGLTexture : public FramebufferAttachment {
 };
 
 extern PyTypeObject MGLTexture_Type;

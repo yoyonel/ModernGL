@@ -1,5 +1,7 @@
 EnableFlag
-********************
+**********
+
+.. currentmodule:: ModernGL
 
 .. autoclass:: ModernGL.EnableFlag
 	:members:

@@ -1,9 +1,9 @@
-BufferAccess
+Renderbuffer
 ************
 
 .. currentmodule:: ModernGL
 
-.. autoclass:: ModernGL.BufferAccess
+.. autoclass:: ModernGL.Renderbuffer
 	:members:
 	:undoc-members:
 	:inherited-members:

@@ -32,6 +32,8 @@ MGLProgram * MGLProgramMember_get_program(MGLProgramMember * self, void * closur
 
 char MGLProgramMember_program_doc[] = R"(
 	program
+
+	The Program object used for creation.
 )";
 
 PyGetSetDef MGLProgramMember_tp_getseters[] = {

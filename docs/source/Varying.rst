@@ -1,5 +1,7 @@
 Varying
-********************
+*******
+
+.. currentmodule:: ModernGL
 
 .. autoclass:: ModernGL.Varying
 	:members:

@@ -19,7 +19,7 @@ struct MGLUniform : public MGLProgramMember {
 
 	int dimension;
 	int element_size;
-	int array_len;
+	int array_length;
 
 	bool matrix;
 };

@@ -1,5 +1,7 @@
 Primitive
-********************
+*********
+
+.. currentmodule:: ModernGL
 
 .. autoclass:: ModernGL.Primitive
 	:members:

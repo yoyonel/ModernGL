@@ -1,5 +1,7 @@
 VertexArray
-********************
+***********
+
+.. currentmodule:: ModernGL
 
 .. autoclass:: ModernGL.VertexArray
 	:members:

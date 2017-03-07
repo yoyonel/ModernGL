@@ -1,5 +1,7 @@
 Attribute
-********************
+*********
+
+.. currentmodule:: ModernGL
 
 .. autoclass:: ModernGL.Attribute
 	:members:

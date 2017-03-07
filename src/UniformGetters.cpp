@@ -390,7 +390,7 @@ PyObject * MGLUniform_double_matrix_4x4_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_bool_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -403,7 +403,7 @@ PyObject * MGLUniform_bool_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_bvec2_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -423,7 +423,7 @@ PyObject * MGLUniform_bvec2_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_bvec3_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -444,7 +444,7 @@ PyObject * MGLUniform_bvec3_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_bvec4_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -466,7 +466,7 @@ PyObject * MGLUniform_bvec4_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_int_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -479,7 +479,7 @@ PyObject * MGLUniform_int_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_ivec2_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -499,7 +499,7 @@ PyObject * MGLUniform_ivec2_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_ivec3_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -520,7 +520,7 @@ PyObject * MGLUniform_ivec3_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_ivec4_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -542,7 +542,7 @@ PyObject * MGLUniform_ivec4_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_uint_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -555,7 +555,7 @@ PyObject * MGLUniform_uint_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_uvec2_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -575,7 +575,7 @@ PyObject * MGLUniform_uvec2_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_uvec3_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -596,7 +596,7 @@ PyObject * MGLUniform_uvec3_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_uvec4_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -618,7 +618,7 @@ PyObject * MGLUniform_uvec4_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_float_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -631,7 +631,7 @@ PyObject * MGLUniform_float_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_vec2_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -651,7 +651,7 @@ PyObject * MGLUniform_vec2_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_vec3_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -672,7 +672,7 @@ PyObject * MGLUniform_vec3_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_vec4_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -694,7 +694,7 @@ PyObject * MGLUniform_vec4_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_double_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -707,7 +707,7 @@ PyObject * MGLUniform_double_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_dvec2_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -727,7 +727,7 @@ PyObject * MGLUniform_dvec2_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_dvec3_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -748,7 +748,7 @@ PyObject * MGLUniform_dvec3_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_dvec4_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -770,7 +770,7 @@ PyObject * MGLUniform_dvec4_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_sampler_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -783,7 +783,7 @@ PyObject * MGLUniform_sampler_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_float_matrix_2x2_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -804,7 +804,7 @@ PyObject * MGLUniform_float_matrix_2x2_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_float_matrix_2x3_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -825,7 +825,7 @@ PyObject * MGLUniform_float_matrix_2x3_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_float_matrix_2x4_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -846,7 +846,7 @@ PyObject * MGLUniform_float_matrix_2x4_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_float_matrix_3x2_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -867,7 +867,7 @@ PyObject * MGLUniform_float_matrix_3x2_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_float_matrix_3x3_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -888,7 +888,7 @@ PyObject * MGLUniform_float_matrix_3x3_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_float_matrix_3x4_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -909,7 +909,7 @@ PyObject * MGLUniform_float_matrix_3x4_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_float_matrix_4x2_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -930,7 +930,7 @@ PyObject * MGLUniform_float_matrix_4x2_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_float_matrix_4x3_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -951,7 +951,7 @@ PyObject * MGLUniform_float_matrix_4x3_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_float_matrix_4x4_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -972,7 +972,7 @@ PyObject * MGLUniform_float_matrix_4x4_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_double_matrix_2x2_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -993,7 +993,7 @@ PyObject * MGLUniform_double_matrix_2x2_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_double_matrix_2x3_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -1014,7 +1014,7 @@ PyObject * MGLUniform_double_matrix_2x3_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_double_matrix_2x4_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -1035,7 +1035,7 @@ PyObject * MGLUniform_double_matrix_2x4_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_double_matrix_3x2_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -1056,7 +1056,7 @@ PyObject * MGLUniform_double_matrix_3x2_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_double_matrix_3x3_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -1077,7 +1077,7 @@ PyObject * MGLUniform_double_matrix_3x3_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_double_matrix_3x4_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -1098,7 +1098,7 @@ PyObject * MGLUniform_double_matrix_3x4_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_double_matrix_4x2_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -1119,7 +1119,7 @@ PyObject * MGLUniform_double_matrix_4x2_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_double_matrix_4x3_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {
@@ -1140,7 +1140,7 @@ PyObject * MGLUniform_double_matrix_4x3_array_value_getter(MGLUniform * self) {
 }
 
 PyObject * MGLUniform_double_matrix_4x4_array_value_getter(MGLUniform * self) {
-	int size = self->array_len;
+	int size = self->array_length;
 
 	PyObject * lst = PyList_New(size);
 	for (int i = 0; i < size; ++i) {

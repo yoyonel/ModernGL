@@ -32,6 +32,8 @@ MGLContext * MGLContextMember_get_context(MGLContextMember * self, void * closur
 
 char MGLContextMember_context_doc[] = R"(
 	context
+
+	The Context object used for creation.
 )";
 
 PyGetSetDef MGLContextMember_tp_getseters[] = {

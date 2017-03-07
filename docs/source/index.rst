@@ -7,10 +7,11 @@ Welcome to ModernGL's documentation!
 ====================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
-   ModernGL
+   ModernGL <ModernGL.rst>
+   Examples <Examples.rst>
 
 
 

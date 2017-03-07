@@ -1,5 +1,7 @@
 Subroutine
-********************
+**********
+
+.. currentmodule:: ModernGL
 
 .. autoclass:: ModernGL.Subroutine
 	:members:
