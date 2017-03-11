@@ -9,4 +9,4 @@ struct MGLProgramStage : public MGLProgramMember {
 
 extern PyTypeObject MGLProgramStage_Type;
 
-MGLProgramStage * MGLUniform_New();
+MGLProgramStage * MGLProgramStage_New();

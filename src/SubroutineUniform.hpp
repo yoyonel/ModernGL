@@ -2,9 +2,9 @@
 
 #include <Python.h>
 
-#include "ProgramMember.hpp"
+#include "ProgramStageMember.hpp"
 
-struct MGLSubroutineUniform : public MGLProgramMember {
+struct MGLSubroutineUniform : public MGLProgramStageMember {
 };
 
 extern PyTypeObject MGLSubroutineUniform_Type;
