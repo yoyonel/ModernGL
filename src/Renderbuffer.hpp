@@ -4,7 +4,7 @@
 
 #include "FramebufferAttachment.hpp"
 
-struct MGLRenderbuffer : public FramebufferAttachment {
+struct MGLRenderbuffer : public MGLFramebufferAttachment {
 };
 
 extern PyTypeObject MGLRenderbuffer_Type;

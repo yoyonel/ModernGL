@@ -35,7 +35,7 @@ const char * MGLMultisampleRenderbuffer_tp_doc = R"(
 
 PyTypeObject MGLMultisampleRenderbuffer_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.MultisampleRenderbuffer"                      // tp_name
+	"ModernGL.MultisampleRenderbuffer",                     // tp_name
 	sizeof(MGLMultisampleRenderbuffer),                     // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLMultisampleRenderbuffer_tp_dealloc,      // tp_dealloc

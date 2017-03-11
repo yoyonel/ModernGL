@@ -4,7 +4,7 @@
 
 #include "ContextMember.hpp"
 
-struct FramebufferAttachment : public MGLContextMember {
+struct MGLFramebufferAttachment : public MGLContextMember {
 	int obj;
 
 	int width;
@@ -17,4 +17,4 @@ struct FramebufferAttachment : public MGLContextMember {
 	int samples;
 };
 
-extern PyTypeObject FramebufferAttachment_Type;
+extern PyTypeObject MGLFramebufferAttachment_Type;

@@ -1,7 +1,7 @@
-#include "VertexArrayMatrixAttribute.hpp"
+#include "VertexArrayMember.hpp"
 
-PyObject * MGLVertexArrayMatrixAttribute_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
-	MGLVertexArrayMatrixAttribute * self = (MGLVertexArrayMatrixAttribute *)type->tp_alloc(type, 0);
+PyObject * MGLVertexArrayMember_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+	MGLVertexArrayMember * self = (MGLVertexArrayMember *)type->tp_alloc(type, 0);
 
 	if (self) {
 	}
@@ -9,67 +9,79 @@ PyObject * MGLVertexArrayMatrixAttribute_tp_new(PyTypeObject * type, PyObject * 
 	return (PyObject *)self;
 }
 
-void MGLVertexArrayMatrixAttribute_tp_dealloc(MGLVertexArrayMatrixAttribute * self) {
+void MGLVertexArrayMember_tp_dealloc(MGLVertexArrayMember * self) {
 	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
-int MGLVertexArrayMatrixAttribute_tp_init(MGLVertexArrayMatrixAttribute * self, PyObject * args, PyObject * kwargs) {
+int MGLVertexArrayMember_tp_init(MGLVertexArrayMember * self, PyObject * args, PyObject * kwargs) {
 	return -1;
 }
 
-PyObject * MGLVertexArrayMatrixAttribute_tp_str(MGLVertexArrayMatrixAttribute * self) {
-	return PyUnicode_FromFormat("<ModernGL.VertexArrayMatrixAttribute>");
+PyObject * MGLVertexArrayMember_tp_str(MGLVertexArrayMember * self) {
+	return PyUnicode_FromFormat("<ModernGL.VertexArrayMember>");
 }
 
-PyMethodDef MGLVertexArrayMatrixAttribute_tp_methods[] = {
+PyMethodDef MGLVertexArrayMember_tp_methods[] = {
 	{0},
 };
 
-PyGetSetDef MGLVertexArrayMatrixAttribute_tp_getseters[] = {
-	{0},
-};
+MGLVertexArray * MGLVertexArrayMember_get_vertex_array(MGLVertexArrayMember * self, void * closure) {
+	Py_INCREF(self->vertex_array);
+	return self->vertex_array;
+}
 
-const char * MGLVertexArrayMatrixAttribute_tp_doc = R"(
-	VertexArrayMatrixAttribute
+char MGLVertexArrayMember_vertex_array_doc[] = R"(
+	vertex_array
+
+	The Program object used for creation.
 )";
 
-PyTypeObject MGLVertexArrayMatrixAttribute_Type = {
+PyGetSetDef MGLVertexArrayMember_tp_getseters[] = {
+	{(char *)"vertex_array", (getter)MGLVertexArrayMember_get_vertex_array, 0, MGLVertexArrayMember_vertex_array_doc, 0},
+	{0},
+};
+
+const char * MGLVertexArrayMember_tp_doc = R"(
+	VertexArrayMember
+)";
+
+PyTypeObject MGLVertexArrayMember_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.VertexArrayMatrixAttribute",                  // tp_name
-	sizeof(MGLVertexArrayMatrixAttribute),                  // tp_basicsize
+	"ModernGL.VertexArrayMember",                           // tp_name
+	sizeof(MGLVertexArrayMember),                           // tp_basicsize
 	0,                                                      // tp_itemsize
-	(destructor)MGLVertexArrayMatrixAttribute_tp_dealloc,   // tp_dealloc
+	(destructor)MGLVertexArrayMember_tp_dealloc,            // tp_dealloc
 	0,                                                      // tp_print
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLVertexArrayMatrixAttribute_tp_str,         // tp_repr
+	(reprfunc)MGLVertexArrayMember_tp_str,                  // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call
-	(reprfunc)MGLVertexArrayMatrixAttribute_tp_str,         // tp_str
+	(reprfunc)MGLVertexArrayMember_tp_str,                  // tp_str
 	0,                                                      // tp_getattro
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLVertexArrayMatrixAttribute_tp_doc,                   // tp_doc
+	MGLVertexArrayMember_tp_doc,                            // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare
 	0,                                                      // tp_weaklistoffset
 	0,                                                      // tp_iter
 	0,                                                      // tp_iternext
-	MGLVertexArrayMatrixAttribute_tp_methods,               // tp_methods
+	MGLVertexArrayMember_tp_methods,                        // tp_methods
 	0,                                                      // tp_members
-	MGLVertexArrayMatrixAttribute_tp_getseters,             // tp_getset
+	MGLVertexArrayMember_tp_getseters,                      // tp_getset
 	&MGLObject_Type,                                        // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLVertexArrayMatrixAttribute_tp_init,        // tp_init
+	(initproc)MGLVertexArrayMember_tp_init,                 // tp_init
 	0,                                                      // tp_alloc
-	MGLVertexArrayMatrixAttribute_tp_new,                   // tp_new
+	MGLVertexArrayMember_tp_new,                            // tp_new
 };

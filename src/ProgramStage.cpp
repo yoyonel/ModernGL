@@ -1,7 +1,7 @@
-#include "VertexArrayMatrixAttribute.hpp"
+#include "ProgramStage.hpp"
 
-PyObject * MGLVertexArrayMatrixAttribute_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
-	MGLVertexArrayMatrixAttribute * self = (MGLVertexArrayMatrixAttribute *)type->tp_alloc(type, 0);
+PyObject * MGLProgramStage_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
+	MGLProgramStage * self = (MGLProgramStage *)type->tp_alloc(type, 0);
 
 	if (self) {
 	}
@@ -9,67 +9,67 @@ PyObject * MGLVertexArrayMatrixAttribute_tp_new(PyTypeObject * type, PyObject * 
 	return (PyObject *)self;
 }
 
-void MGLVertexArrayMatrixAttribute_tp_dealloc(MGLVertexArrayMatrixAttribute * self) {
+void MGLProgramStage_tp_dealloc(MGLProgramStage * self) {
 	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
-int MGLVertexArrayMatrixAttribute_tp_init(MGLVertexArrayMatrixAttribute * self, PyObject * args, PyObject * kwargs) {
+int MGLProgramStage_tp_init(MGLProgramStage * self, PyObject * args, PyObject * kwargs) {
 	return -1;
 }
 
-PyObject * MGLVertexArrayMatrixAttribute_tp_str(MGLVertexArrayMatrixAttribute * self) {
-	return PyUnicode_FromFormat("<ModernGL.VertexArrayMatrixAttribute>");
+PyObject * MGLProgramStage_tp_str(MGLProgramStage * self) {
+	return PyUnicode_FromFormat("<ModernGL.ProgramStage>");
 }
 
-PyMethodDef MGLVertexArrayMatrixAttribute_tp_methods[] = {
+PyMethodDef MGLProgramStage_tp_methods[] = {
 	{0},
 };
 
-PyGetSetDef MGLVertexArrayMatrixAttribute_tp_getseters[] = {
+PyGetSetDef MGLProgramStage_tp_getseters[] = {
 	{0},
 };
 
-const char * MGLVertexArrayMatrixAttribute_tp_doc = R"(
-	VertexArrayMatrixAttribute
+const char * MGLProgramStage_tp_doc = R"(
+	ProgramStage
 )";
 
-PyTypeObject MGLVertexArrayMatrixAttribute_Type = {
+PyTypeObject MGLProgramStage_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.VertexArrayMatrixAttribute",                  // tp_name
-	sizeof(MGLVertexArrayMatrixAttribute),                  // tp_basicsize
+	"ModernGL.ProgramStage",                                // tp_name
+	sizeof(MGLProgramStage),                                // tp_basicsize
 	0,                                                      // tp_itemsize
-	(destructor)MGLVertexArrayMatrixAttribute_tp_dealloc,   // tp_dealloc
+	(destructor)MGLProgramStage_tp_dealloc,                 // tp_dealloc
 	0,                                                      // tp_print
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLVertexArrayMatrixAttribute_tp_str,         // tp_repr
+	(reprfunc)MGLProgramStage_tp_str,                       // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call
-	(reprfunc)MGLVertexArrayMatrixAttribute_tp_str,         // tp_str
+	(reprfunc)MGLProgramStage_tp_str,                       // tp_str
 	0,                                                      // tp_getattro
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLVertexArrayMatrixAttribute_tp_doc,                   // tp_doc
+	MGLProgramStage_tp_doc,                                 // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare
 	0,                                                      // tp_weaklistoffset
 	0,                                                      // tp_iter
 	0,                                                      // tp_iternext
-	MGLVertexArrayMatrixAttribute_tp_methods,               // tp_methods
+	MGLProgramStage_tp_methods,                             // tp_methods
 	0,                                                      // tp_members
-	MGLVertexArrayMatrixAttribute_tp_getseters,             // tp_getset
+	MGLProgramStage_tp_getseters,                           // tp_getset
 	&MGLObject_Type,                                        // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLVertexArrayMatrixAttribute_tp_init,        // tp_init
+	(initproc)MGLProgramStage_tp_init,                      // tp_init
 	0,                                                      // tp_alloc
-	MGLVertexArrayMatrixAttribute_tp_new,                   // tp_new
+	MGLProgramStage_tp_new,                                 // tp_new
 };

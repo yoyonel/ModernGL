@@ -4,7 +4,7 @@
 
 #include "FramebufferAttachment.hpp"
 
-struct MGLTexture : public FramebufferAttachment {
+struct MGLTexture : public MGLFramebufferAttachment {
 };
 
 extern PyTypeObject MGLTexture_Type;
