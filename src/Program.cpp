@@ -222,7 +222,7 @@ PyTypeObject MGLProgram_Type = {
 	MGLProgram_tp_methods,                                  // tp_methods
 	0,                                                      // tp_members
 	MGLProgram_tp_getseters,                                // tp_getset
-	&MGLContextMember_Type,                                 // tp_base
+	&MGLGenericProgram_Type,                                // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
@@ -392,9 +392,9 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * varyings) {
 	MGLProgram_LoadSubroutines(program);
 
 	// TODO:
-	int num_uniform_blocks = 0;
-	gl.GetProgramiv(obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
-	printf("num_uniform_blocks = %d\n", num_uniform_blocks);
+	// int num_uniform_blocks = 0;
+	// gl.GetProgramiv(obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
+	// printf("num_uniform_blocks = %d\n", num_uniform_blocks);
 
 	// TODO:
 	// glGetProgramStageiv

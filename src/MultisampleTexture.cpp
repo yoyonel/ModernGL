@@ -64,7 +64,7 @@ PyTypeObject MGLMultisampleTexture_Type = {
 	MGLMultisampleTexture_tp_methods,                       // tp_methods
 	0,                                                      // tp_members
 	MGLMultisampleTexture_tp_getseters,                     // tp_getset
-	&MGLObject_Type,                                        // tp_base
+	&MGLFramebufferAttachment_Type,                         // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set

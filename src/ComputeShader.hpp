@@ -2,12 +2,10 @@
 
 #include <Python.h>
 
-#include "ContextMember.hpp"
-#include "Primitive.hpp"
+#include "GenericProgram.hpp"
 
-struct MGLComputeShader : public MGLContextMember {
-	int program_obj;
-	int shader_obj;
+struct MGLComputeShader : public MGLGenericProgram {
+	int shader;
 
 	// TODO:
 };

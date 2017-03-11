@@ -2,10 +2,10 @@
 
 #include <Python.h>
 
-#include "ContextMember.hpp"
+#include "GenericProgram.hpp"
 #include "Primitive.hpp"
 
-struct MGLProgram : public MGLContextMember {
+struct MGLProgram : public MGLGenericProgram {
 	PyObject * shaders;
 
 	PyObject * uniforms;
@@ -20,8 +20,6 @@ struct MGLProgram : public MGLContextMember {
 
 	MGLPrimitive * geometry_input;
 	MGLPrimitive * geometry_output;
-
-	int obj;
 };
 
 extern PyTypeObject MGLProgram_Type;
