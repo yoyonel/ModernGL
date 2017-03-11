@@ -1156,7 +1156,7 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 				return 0;
 			}
 
-			PyObject * attachment = (FramebufferAttachment *)item;
+			FramebufferAttachment * attachment = (FramebufferAttachment *)item;
 
 			if (attachment->depth) {
 				if (depth_attachment_index >= 0) {

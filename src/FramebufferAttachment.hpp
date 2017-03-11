@@ -17,4 +17,4 @@ struct FramebufferAttachment : public MGLContextMember {
 	int samples;
 };
 
-// extern PyTypeObject FramebufferAttachment_Type;
+extern PyTypeObject FramebufferAttachment_Type;

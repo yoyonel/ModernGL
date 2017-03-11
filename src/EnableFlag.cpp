@@ -26,6 +26,8 @@ int MGLEnableFlag_tp_init(MGLEnableFlag * self, PyObject * args, PyObject * kwar
 	return -1;
 }
 
+// TODO: number_methods
+
 PyObject * MGLEnableFlag_tp_str(MGLEnableFlag * self) {
 	return PyUnicode_FromFormat("<ModernGL.EnableFlag>");
 }

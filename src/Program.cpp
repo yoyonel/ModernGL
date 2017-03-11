@@ -392,8 +392,9 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * varyings) {
 	MGLProgram_LoadSubroutines(program);
 
 	// TODO:
-	// int num_uniform_blocks = 0;
-	// gl.GetProgramiv(obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
+	int num_uniform_blocks = 0;
+	gl.GetProgramiv(obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
+	printf("num_uniform_blocks = %d\n", num_uniform_blocks);
 
 	// TODO:
 	// glGetProgramStageiv

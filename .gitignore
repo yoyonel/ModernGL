@@ -1,5 +1,7 @@
 **/__pycache__
 
+examples/Temp
+
 .cache
 build
 docs/build
