@@ -7,6 +7,7 @@
 struct MGLSubroutine : public MGLProgramStageMember {
 	PyObject * name;
 
+	int number;
 	int index;
 	int location;
 	int type;

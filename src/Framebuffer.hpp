@@ -8,7 +8,7 @@ struct MGLFramebuffer : public MGLContextMember {
 	PyObject * color_attachments;
 	PyObject * depth_attachment;
 
-	int obj;
+	int framebuffer_obj;
 };
 
 extern PyTypeObject MGLFramebuffer_Type;

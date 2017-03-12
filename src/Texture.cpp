@@ -52,7 +52,7 @@ PyObject * MGLTexture_use(MGLTexture * self, PyObject * args, PyObject * kwargs)
 
 	const GLMethods & gl = self->context->gl;
 	gl.ActiveTexture(GL_TEXTURE0 + index);
-	gl.BindTexture(GL_TEXTURE_2D, self->obj);
+	gl.BindTexture(GL_TEXTURE_2D, self->texture_obj);
 
 	Py_RETURN_NONE;
 }
@@ -247,7 +247,7 @@ void MGLTexture_Invalidate(MGLTexture * texture) {
 	printf("MGLTexture_Invalidate %p\n", texture);
 	#endif
 
-	texture->context->gl.DeleteTextures(1, (GLuint *)&texture->obj);
+	texture->context->gl.DeleteTextures(1, (GLuint *)&texture->texture_obj);
 
 	Py_DECREF(texture->context);
 

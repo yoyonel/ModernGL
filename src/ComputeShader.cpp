@@ -22,6 +22,7 @@ PyObject * MGLComputeShader_tp_str(MGLComputeShader * self) {
 }
 
 PyMethodDef MGLComputeShader_tp_methods[] = {
+	{"run", 0, 0, 0},
 	{0},
 };
 

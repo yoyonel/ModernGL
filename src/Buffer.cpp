@@ -12,7 +12,6 @@ PyObject * MGLBuffer_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwa
 	#endif
 
 	if (self) {
-		self->context = 0;
 	}
 
 	return (PyObject *)self;
@@ -69,7 +68,7 @@ MGLBufferAccess * MGLBuffer_access(MGLBuffer * self, PyObject * args, PyObject *
 	MGLBufferAccess * access = MGLBufferAccess_New();
 
 	access->buffer = self;
-	access->obj = self->obj;
+	access->buffer_obj = self->buffer_obj;
 	access->offset = offset;
 	access->size = size;
 	access->access = readonly ? GL_MAP_READ_BIT : (GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
@@ -118,7 +117,7 @@ PyObject * MGLBuffer_read(MGLBuffer * self, PyObject * args, PyObject * kwargs) 
 
 	const GLMethods & gl = self->context->gl;
 
-	gl.BindBuffer(GL_ARRAY_BUFFER, self->obj);
+	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
 	void * map = gl.MapBufferRange(GL_ARRAY_BUFFER, offset, size, GL_MAP_READ_BIT);
 
 	if (!map) {
@@ -177,7 +176,7 @@ PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args, PyObject * kwargs)
 	}
 
 	const GLMethods & gl = self->context->gl;
-	gl.BindBuffer(GL_ARRAY_BUFFER, self->obj);
+	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
 	gl.BufferSubData(GL_ARRAY_BUFFER, (GLintptr)offset, size, data);
 	Py_RETURN_NONE;
 }
@@ -199,7 +198,7 @@ const char * MGLBuffer_write_doc = R"(
 
 PyObject * MGLBuffer_orphan(MGLBuffer * self) {
 	const GLMethods & gl = self->context->gl;
-	gl.BindBuffer(GL_ARRAY_BUFFER, self->obj);
+	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
 	gl.BufferData(GL_ARRAY_BUFFER, self->size, 0, self->dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 	Py_RETURN_NONE;
 }
@@ -258,7 +257,7 @@ int MGLBuffer_tp_as_buffer_get_vew(MGLBuffer * self, Py_buffer * view, int flags
 	int access = (flags == PyBUF_SIMPLE) ? GL_MAP_READ_BIT : (GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
 
 	const GLMethods & gl = self->context->gl;
-	gl.BindBuffer(GL_ARRAY_BUFFER, self->obj);
+	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
 	void * map = gl.MapBufferRange(GL_ARRAY_BUFFER, 0, self->size, access);
 
 	if (!map) {
@@ -284,7 +283,7 @@ int MGLBuffer_tp_as_buffer_get_vew(MGLBuffer * self, Py_buffer * view, int flags
 
 void MGLBuffer_tp_as_buffer_release_view(MGLBuffer * self, Py_buffer * view) {
 	const GLMethods & gl = self->context->gl;
-	gl.BindBuffer(GL_ARRAY_BUFFER, self->obj);
+	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
 	gl.UnmapBuffer(GL_ARRAY_BUFFER);
 }
 
@@ -360,7 +359,7 @@ void MGLBuffer_Invalidate(MGLBuffer * buffer) {
 	#endif
 
 	const GLMethods & gl = buffer->context->gl;
-	gl.DeleteBuffers(1, (GLuint *)&buffer->obj);
+	gl.DeleteBuffers(1, (GLuint *)&buffer->buffer_obj);
 
 	Py_DECREF(buffer->context);
 

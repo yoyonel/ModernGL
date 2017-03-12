@@ -5,7 +5,7 @@
 #include "GenericProgram.hpp"
 
 struct MGLComputeShader : public MGLGenericProgram {
-	int shader;
+	int compute_shader;
 
 	// TODO:
 };

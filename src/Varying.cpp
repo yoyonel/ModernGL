@@ -11,7 +11,6 @@ PyObject * MGLVarying_tp_new(PyTypeObject * type, PyObject * args, PyObject * kw
 	#endif
 
 	if (self) {
-		self->name = 0;
 	}
 
 	return (PyObject *)self;

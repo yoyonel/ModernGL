@@ -10,7 +10,6 @@ PyObject * MGLBufferAccess_tp_new(PyTypeObject * type, PyObject * args, PyObject
 	#endif
 
 	if (self) {
-		self->buffer = 0;
 	}
 
 	return (PyObject *)self;
@@ -41,7 +40,7 @@ MGLBufferAccess * MGLBufferAccess_open(MGLBufferAccess * self) {
 	}
 
 	const GLMethods & gl = self->buffer->context->gl;
-	gl.BindBuffer(GL_ARRAY_BUFFER, self->obj);
+	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
 	self->ptr = gl.MapBufferRange(GL_ARRAY_BUFFER, self->offset, self->size, self->access);
 
 	if (!self->ptr) {
@@ -63,7 +62,7 @@ const char * MGLBufferAccess_open_doc = R"(
 PyObject * MGLBufferAccess_close(MGLBufferAccess * self, PyObject * args, PyObject * kwargs) {
 	if (self->ptr) {
 		const GLMethods & gl = self->buffer->context->gl;
-		gl.BindBuffer(GL_ARRAY_BUFFER, self->obj);
+		gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
 		gl.UnmapBuffer(GL_ARRAY_BUFFER);
 	}
 	Py_RETURN_NONE;

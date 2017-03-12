@@ -11,9 +11,6 @@ PyObject * MGLAttribute_tp_new(PyTypeObject * type, PyObject * args, PyObject * 
 	#endif
 
 	if (self) {
-		self->name = 0;
-
-		self->gl_attrib_ptr_proc = 0;
 	}
 
 	return (PyObject *)self;

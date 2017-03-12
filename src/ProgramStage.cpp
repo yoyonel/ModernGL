@@ -1,5 +1,8 @@
 #include "ProgramStage.hpp"
 
+#include "Subroutine.hpp"
+#include "SubroutineUniform.hpp"
+
 PyObject * MGLProgramStage_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLProgramStage * self = (MGLProgramStage *)type->tp_alloc(type, 0);
 
@@ -25,7 +28,19 @@ PyMethodDef MGLProgramStage_tp_methods[] = {
 	{0},
 };
 
+PyObject * MGLProgramStage_get_subroutines(MGLProgramStage * self, void * closure) {
+	Py_INCREF(self->subroutines);
+	return self->subroutines;
+}
+
+PyObject * MGLProgramStage_get_subroutine_uniforms(MGLProgramStage * self, void * closure) {
+	Py_INCREF(self->subroutine_uniforms);
+	return self->subroutine_uniforms;
+}
+
 PyGetSetDef MGLProgramStage_tp_getseters[] = {
+	{(char *)"subroutines", (getter)MGLProgramStage_get_subroutines, 0, 0, 0},
+	{(char *)"subroutine_uniforms", (getter)MGLProgramStage_get_subroutine_uniforms, 0, 0, 0},
 	{0},
 };
 
@@ -73,3 +88,79 @@ PyTypeObject MGLProgramStage_Type = {
 	0,                                                      // tp_alloc
 	MGLProgramStage_tp_new,                                 // tp_new
 };
+
+MGLProgramStage * MGLProgramStage_New() {
+	MGLProgramStage * self = (MGLProgramStage *)MGLProgramStage_tp_new(&MGLProgramStage_Type, 0, 0);
+	return self;
+}
+
+void MGLProgramStage_Complete(MGLProgramStage * program_stage) {
+	const GLMethods & gl = program_stage->program->context->gl;
+
+	PyObject * subroutines = PyDict_New();
+	PyObject * subroutine_uniforms = PyDict_New();
+
+	int shader_type = program_stage->shader->shader_type;
+
+	int num_subroutines = 0;
+	gl.GetProgramStageiv(program_stage->program->program_obj, shader_type, GL_ACTIVE_SUBROUTINES, &num_subroutines);
+
+	int num_subroutine_uniforms = 0;
+	gl.GetProgramStageiv(program_stage->program->program_obj, shader_type, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_subroutine_uniforms);
+
+	int num_subroutine_uniform_locations = 0;
+	gl.GetProgramStageiv(program_stage->program->program_obj, shader_type, GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS, &num_subroutine_uniform_locations);
+
+	// TODO: create array [subroutine_uniform_locations]
+
+	// typedef GLint (GLAPI * PROC_glGetSubroutineUniformLocation)(GLuint program, GLenum shadertype, const GLchar * name);
+	// typedef GLuint (GLAPI * PROC_glGetSubroutineIndex)(GLuint program, GLenum shadertype, const GLchar * name);
+	// typedef GLvoid (GLAPI * PROC_glGetActiveSubroutineUniformiv)(GLuint program, GLenum shadertype, GLuint index, GLenum pname, GLint * values);
+	// typedef GLvoid (GLAPI * PROC_glGetActiveSubroutineUniformName)(GLuint program, GLenum shadertype, GLuint index, GLsizei bufsize, GLsizei * length, GLchar * name);
+	// typedef GLvoid (GLAPI * PROC_glGetActiveSubroutineName)(GLuint program, GLenum shadertype, GLuint index, GLsizei bufsize, GLsizei * length, GLchar * name);
+	// typedef GLvoid (GLAPI * PROC_glUniformSubroutinesuiv)(GLenum shadertype, GLsizei count, const GLuint * indices);
+	// typedef GLvoid (GLAPI * PROC_glGetUniformSubroutineuiv)(GLenum shadertype, GLint location, GLuint * params);
+
+	for (int i = 0; i < num_subroutines; ++i) {
+		MGLSubroutine * subroutine = MGLSubroutine_New();
+
+		int name_len = 0;
+		char name[256];
+
+		gl.GetActiveSubroutineName(program_stage->program->program_obj, shader_type, i, 256, &name_len, name);
+
+		subroutine->index = gl.GetSubroutineIndex(program_stage->program->program_obj, shader_type, name);
+
+		subroutine->number = i;
+		subroutine->program_stage = program_stage;
+		subroutine->name = PyUnicode_FromStringAndSize(name, name_len);
+
+		MGLSubroutine_Complete(subroutine);
+
+		PyDict_SetItem(subroutines, subroutine->name, (PyObject *)subroutine);
+		Py_DECREF(subroutine);
+	}
+
+	for (int i = 0; i < num_subroutine_uniforms; ++i) {
+		MGLSubroutineUniform * subroutine_uniform = MGLSubroutineUniform_New();
+
+		int name_len = 0;
+		char name[256];
+
+		gl.GetActiveSubroutineUniformName(program_stage->program->program_obj, shader_type, i, 256, &name_len, name);
+
+		subroutine_uniform->index = gl.GetSubroutineUniformLocation(program_stage->program->program_obj, shader_type, name);
+
+		subroutine_uniform->number = i;
+		subroutine_uniform->program_stage = program_stage;
+		subroutine_uniform->name = PyUnicode_FromStringAndSize(name, name_len);
+
+		MGLSubroutineUniform_Complete(subroutine_uniform);
+
+		PyDict_SetItem(subroutine_uniforms, subroutine_uniform->name, (PyObject *)subroutine_uniform);
+		Py_DECREF(subroutine_uniform);
+	}
+
+	program_stage->subroutines = PyDictProxy_New(subroutines);
+	program_stage->subroutine_uniforms = PyDictProxy_New(subroutine_uniforms);
+}

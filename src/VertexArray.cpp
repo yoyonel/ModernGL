@@ -15,9 +15,6 @@ PyObject * MGLVertexArray_tp_new(PyTypeObject * type, PyObject * args, PyObject 
 	#endif
 
 	if (self) {
-		self->program = 0;
-		self->content = 0;
-		self->index_buffer = 0;
 	}
 
 	return (PyObject *)self;
@@ -84,8 +81,8 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args, PyObjec
 
 	const GLMethods & gl = self->context->gl;
 
-	gl.UseProgram(self->program->obj);
-	gl.BindVertexArray(self->obj);
+	gl.UseProgram(self->program->program_obj);
+	gl.BindVertexArray(self->vertex_array_obj);
 
 	if (self->index_buffer != (MGLBuffer *)Py_None) {
 		const void * ptr = (const void *)((GLintptr)first * 4);
@@ -161,10 +158,10 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args, PyOb
 
 	const GLMethods & gl = self->context->gl;
 
-	gl.UseProgram(self->program->obj);
-	gl.BindVertexArray(self->obj);
+	gl.UseProgram(self->program->program_obj);
+	gl.BindVertexArray(self->vertex_array_obj);
 
-	gl.BindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, output->obj);
+	gl.BindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, output->buffer_obj);
 
 	gl.Enable(GL_RASTERIZER_DISCARD);
 	gl.BeginTransformFeedback(mode->primitive);
@@ -340,7 +337,7 @@ void MGLVertexArray_Invalidate(MGLVertexArray * array) {
 	#endif
 
 	const GLMethods & gl = array->context->gl;
-	gl.DeleteVertexArrays(1, (GLuint *)&array->obj);
+	gl.DeleteVertexArrays(1, (GLuint *)&array->vertex_array_obj);
 
 	if (Py_REFCNT(array->program) == 2) {
 		MGLProgram_Invalidate(array->program);

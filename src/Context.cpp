@@ -26,8 +26,6 @@ PyObject * MGLContext_tp_new(PyTypeObject * type, PyObject * args, PyObject * kw
 	#endif
 
 	if (self) {
-		self->rc_handle = 0;
-		self->dc_handle = 0;
 	}
 
 	return (PyObject *)self;
@@ -239,8 +237,8 @@ PyObject * MGLContext_copy_buffer(MGLContext * self, PyObject * args, PyObject *
 
 	const GLMethods & gl = self->gl;
 
-	gl.BindBuffer(GL_COPY_READ_BUFFER, src->obj);
-	gl.BindBuffer(GL_COPY_WRITE_BUFFER, dst->obj);
+	gl.BindBuffer(GL_COPY_READ_BUFFER, src->buffer_obj);
+	gl.BindBuffer(GL_COPY_WRITE_BUFFER, dst->buffer_obj);
 	gl.CopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, read_offset, write_offset, size);
 
 	Py_RETURN_NONE;
@@ -321,16 +319,16 @@ MGLBuffer * MGLContext_Buffer(MGLContext * self, PyObject * args, PyObject * kwa
 
 	const GLMethods & gl = self->gl;
 
-	buffer->obj = 0;
-	gl.GenBuffers(1, (GLuint *)&buffer->obj);
+	buffer->buffer_obj = 0;
+	gl.GenBuffers(1, (GLuint *)&buffer->buffer_obj);
 
-	if (!buffer->obj) {
+	if (!buffer->buffer_obj) {
 		MGLError * error = MGLError_New(TRACE, "Cannot create buffer object.");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
-	gl.BindBuffer(GL_ARRAY_BUFFER, buffer->obj);
+	gl.BindBuffer(GL_ARRAY_BUFFER, buffer->buffer_obj);
 	gl.BufferData(GL_ARRAY_BUFFER, buffer->size, buffer_view.buf, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 
 	Py_INCREF(self);
@@ -425,9 +423,9 @@ MGLTexture * MGLContext_Texture(MGLContext * self, PyObject * args, PyObject * k
 
 	MGLTexture * texture = MGLTexture_New();
 
-	texture->obj = 0;
-	gl.GenTextures(1, (GLuint *)&texture->obj);
-	gl.BindTexture(GL_TEXTURE_2D, texture->obj);
+	texture->texture_obj = 0;
+	gl.GenTextures(1, (GLuint *)&texture->texture_obj);
+	gl.BindTexture(GL_TEXTURE_2D, texture->texture_obj);
 	gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	gl.TexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, pixel_type, buffer_view.buf);
@@ -516,9 +514,9 @@ MGLTexture * MGLContext_DepthTexture(MGLContext * self, PyObject * args, PyObjec
 
 	MGLTexture * texture = MGLTexture_New();
 
-	texture->obj = 0;
-	gl.GenTextures(1, (GLuint *)&texture->obj);
-	gl.BindTexture(GL_TEXTURE_2D, texture->obj);
+	texture->texture_obj = 0;
+	gl.GenTextures(1, (GLuint *)&texture->texture_obj);
+	gl.BindTexture(GL_TEXTURE_2D, texture->texture_obj);
 	gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	gl.TexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, pixel_type, buffer_view.buf);
@@ -721,9 +719,9 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 	Py_INCREF(program);
 	array->program = program;
 
-	array->obj = 0;
-	gl.GenVertexArrays(1, (GLuint *)&array->obj);
-	gl.BindVertexArray(array->obj);
+	array->vertex_array_obj = 0;
+	gl.GenVertexArrays(1, (GLuint *)&array->vertex_array_obj);
+	gl.BindVertexArray(array->vertex_array_obj);
 
 	array->content = vertex_array_content;
 
@@ -732,7 +730,7 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 
 	if (index_buffer != (MGLBuffer *)Py_None) {
 		array->num_vertices = index_buffer->size / 4;
-		gl.BindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer->obj);
+		gl.BindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer->buffer_obj);
 	} else {
 		array->num_vertices = -1;
 	}
@@ -753,7 +751,7 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 			array->num_vertices = buf_vertices;
 		}
 
-		gl.BindBuffer(GL_ARRAY_BUFFER, buffer->obj);
+		gl.BindBuffer(GL_ARRAY_BUFFER, buffer->buffer_obj);
 
 		char * ptr = 0;
 
@@ -1225,9 +1223,9 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 
 	MGLFramebuffer * framebuffer = MGLFramebuffer_New();
 
-	framebuffer->obj = 0;
-	gl.GenFramebuffers(1, (GLuint *)&framebuffer->obj);
-	gl.BindFramebuffer(GL_FRAMEBUFFER, framebuffer->obj);
+	framebuffer->framebuffer_obj = 0;
+	gl.GenFramebuffers(1, (GLuint *)&framebuffer->framebuffer_obj);
+	gl.BindFramebuffer(GL_FRAMEBUFFER, framebuffer->framebuffer_obj);
 
 	if (color_attachments) {
 		int color_attachments_len = PyTuple_GET_SIZE(color_attachments);
@@ -1243,7 +1241,7 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 					GL_FRAMEBUFFER,
 					GL_COLOR_ATTACHMENT0 + i,
 					GL_TEXTURE_2D,
-					texture->obj,
+					texture->texture_obj,
 					0
 				);
 
@@ -1255,7 +1253,7 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 					GL_FRAMEBUFFER,
 					GL_COLOR_ATTACHMENT0 + i,
 					GL_RENDERBUFFER,
-					renderbuffer->obj
+					renderbuffer->renderbuffer_obj
 				);
 			}
 		}
@@ -1269,7 +1267,7 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 				GL_FRAMEBUFFER,
 				GL_DEPTH_ATTACHMENT,
 				GL_TEXTURE_2D,
-				texture->obj,
+				texture->texture_obj,
 				0
 			);
 
@@ -1280,7 +1278,7 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 				GL_FRAMEBUFFER,
 				GL_DEPTH_ATTACHMENT,
 				GL_RENDERBUFFER,
-				renderbuffer->obj
+				renderbuffer->renderbuffer_obj
 			);
 		}
 	}
@@ -1393,9 +1391,9 @@ MGLRenderbuffer * MGLContext_Renderbuffer(MGLContext * self, PyObject * args, Py
 
 	MGLRenderbuffer * renderbuffer = MGLRenderbuffer_New();
 
-	renderbuffer->obj = 0;
-	gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->obj);
-	gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->obj);
+	renderbuffer->renderbuffer_obj = 0;
+	gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
+	gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->renderbuffer_obj);
 	gl.RenderbufferStorage(GL_RENDERBUFFER, format, width, height);
 
 	renderbuffer->width = width;
@@ -1450,9 +1448,9 @@ MGLRenderbuffer * MGLContext_DepthRenderbuffer(MGLContext * self, PyObject * arg
 
 	MGLRenderbuffer * renderbuffer = MGLRenderbuffer_New();
 
-	renderbuffer->obj = 0;
-	gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->obj);
-	gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->obj);
+	renderbuffer->renderbuffer_obj = 0;
+	gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
+	gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->renderbuffer_obj);
 	gl.RenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
 
 	renderbuffer->width = width;
@@ -1645,7 +1643,7 @@ PyObject * MGLContext_get_default_framebuffer(MGLContext * self) {
 	if (!self->default_framebuffer) {
 		MGLFramebuffer * framebuffer = MGLFramebuffer_New();
 
-		framebuffer->obj = 0;
+		framebuffer->framebuffer_obj = 0;
 
 		framebuffer->color_attachments = 0;
 		framebuffer->depth_attachment = 0;

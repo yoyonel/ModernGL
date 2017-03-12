@@ -11,11 +11,6 @@ PyObject * MGLUniform_tp_new(PyTypeObject * type, PyObject * args, PyObject * kw
 	#endif
 
 	if (self) {
-		self->name = 0;
-		self->value_getter = 0;
-		self->value_setter = 0;
-		self->gl_value_reader_proc = 0;
-		self->gl_value_writer_proc = 0;
 	}
 
 	return (PyObject *)self;
@@ -48,7 +43,7 @@ PyObject * MGLUniform_read(MGLUniform * self) {
 		return 0;
 	}
 
-	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program->obj, self->location, PyBytes_AS_STRING(result));
+	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program->program_obj, self->location, PyBytes_AS_STRING(result));
 	return result;
 }
 
@@ -94,9 +89,9 @@ int MGLUniform_write(MGLUniform * self, PyObject * args, PyObject * kwargs) {
 	}
 
 	if (self->matrix) {
-		((gl_uniform_matrix_writer_proc)self->gl_value_writer_proc)(self->program->obj, self->location, self->array_length, false, buffer);
+		((gl_uniform_matrix_writer_proc)self->gl_value_writer_proc)(self->program->program_obj, self->location, self->array_length, false, buffer);
 	} else {
-		((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program->obj, self->location, self->array_length, buffer);
+		((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program->program_obj, self->location, self->array_length, buffer);
 	}
 
 	return 0;

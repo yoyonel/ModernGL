@@ -11,7 +11,6 @@ PyObject * MGLSubroutine_tp_new(PyTypeObject * type, PyObject * args, PyObject *
 	#endif
 
 	if (self) {
-		self->name = 0;
 	}
 
 	return (PyObject *)self;
@@ -123,4 +122,7 @@ void MGLSubroutine_Invalidate(MGLSubroutine * subroutine) {
 	subroutine->initial_type = &MGLSubroutine_Type;
 
 	Py_DECREF(subroutine);
+}
+
+void MGLSubroutine_Complete(MGLSubroutine * subroutine) {
 }

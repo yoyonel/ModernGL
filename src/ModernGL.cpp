@@ -1,22 +1,37 @@
-#include "Context.hpp"
-#include "Buffer.hpp"
-#include "Texture.hpp"
-#include "VertexArray.hpp"
-#include "Program.hpp"
-#include "Shader.hpp"
-#include "Framebuffer.hpp"
-#include "Renderbuffer.hpp"
-#include "Object.hpp"
-#include "InvalidObject.hpp"
-#include "Primitive.hpp"
-#include "Uniform.hpp"
 #include "Attribute.hpp"
-#include "Varying.hpp"
-#include "Subroutine.hpp"
+#include "Buffer.hpp"
 #include "BufferAccess.hpp"
+#include "ComputeShader.hpp"
+#include "Context.hpp"
+#include "ContextMember.hpp"
 #include "EnableFlag.hpp"
-#include "Version.hpp"
 #include "Error.hpp"
+#include "Framebuffer.hpp"
+#include "FramebufferAttachment.hpp"
+#include "GenericProgram.hpp"
+#include "InvalidObject.hpp"
+#include "MultisampleRenderbuffer.hpp"
+#include "MultisampleTexture.hpp"
+#include "Object.hpp"
+#include "Primitive.hpp"
+#include "Program.hpp"
+#include "ProgramMember.hpp"
+#include "ProgramStage.hpp"
+#include "ProgramStageMember.hpp"
+#include "Renderbuffer.hpp"
+#include "Shader.hpp"
+#include "Subroutine.hpp"
+#include "SubroutineUniform.hpp"
+#include "Texture.hpp"
+#include "Uniform.hpp"
+#include "UniformBlock.hpp"
+#include "Varying.hpp"
+#include "Version.hpp"
+#include "VertexArray.hpp"
+#include "VertexArrayAttribute.hpp"
+#include "VertexArrayListAttribute.hpp"
+#include "VertexArrayMatrixAttribute.hpp"
+#include "VertexArrayMember.hpp"
 
 #include <Python.h>
 #include <Windows.h>
@@ -278,14 +293,47 @@ extern "C" PyObject * PyInit_ModernGL() {
 	PyObject * module = PyModule_Create(&MGL_moduledef);
 
 	{
-		if (PyType_Ready(&MGLObject_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register Object in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		if (PyType_Ready(&MGLAttribute_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Attribute in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return 0;
 		}
+	
+		Py_INCREF(&MGLAttribute_Type);
+	
+		PyModule_AddObject(module, "Attribute", (PyObject *)&MGLAttribute_Type);
+	}
 
-		Py_INCREF(&MGLObject_Type);
+	{
+		if (PyType_Ready(&MGLBuffer_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Buffer in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLBuffer_Type);
+	
+		PyModule_AddObject(module, "Buffer", (PyObject *)&MGLBuffer_Type);
+	}
 
-		PyModule_AddObject(module, "Object", (PyObject *)&MGLObject_Type);
+	{
+		if (PyType_Ready(&MGLBufferAccess_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register BufferAccess in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLBufferAccess_Type);
+	
+		PyModule_AddObject(module, "BufferAccess", (PyObject *)&MGLBufferAccess_Type);
+	}
+
+	{
+		if (PyType_Ready(&MGLComputeShader_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register ComputeShader in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLComputeShader_Type);
+	
+		PyModule_AddObject(module, "ComputeShader", (PyObject *)&MGLComputeShader_Type);
 	}
 
 	{
@@ -293,9 +341,9 @@ extern "C" PyObject * PyInit_ModernGL() {
 			PyErr_Format(PyExc_ImportError, "Cannot register Context in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return 0;
 		}
-
+	
 		Py_INCREF(&MGLContext_Type);
-
+	
 		PyModule_AddObject(module, "Context", (PyObject *)&MGLContext_Type);
 	}
 
@@ -304,120 +352,10 @@ extern "C" PyObject * PyInit_ModernGL() {
 			PyErr_Format(PyExc_ImportError, "Cannot register ContextMember in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return 0;
 		}
-
+	
 		Py_INCREF(&MGLContextMember_Type);
-
+	
 		PyModule_AddObject(module, "ContextMember", (PyObject *)&MGLContextMember_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLBuffer_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register Buffer in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLBuffer_Type);
-
-		PyModule_AddObject(module, "Buffer", (PyObject *)&MGLBuffer_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLTexture_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register Texture in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLTexture_Type);
-
-		PyModule_AddObject(module, "Texture", (PyObject *)&MGLTexture_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLVertexArray_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register VertexArray in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLVertexArray_Type);
-
-		PyModule_AddObject(module, "VertexArray", (PyObject *)&MGLVertexArray_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLProgram_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register Program in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLProgram_Type);
-
-		PyModule_AddObject(module, "Program", (PyObject *)&MGLProgram_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLShader_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register Shader in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLShader_Type);
-
-		PyModule_AddObject(module, "Shader", (PyObject *)&MGLShader_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLFramebuffer_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register Framebuffer in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLFramebuffer_Type);
-
-		PyModule_AddObject(module, "Framebuffer", (PyObject *)&MGLFramebuffer_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLInvalidObject_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register InvalidObject in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLInvalidObject_Type);
-
-		PyModule_AddObject(module, "InvalidObject", (PyObject *)&MGLInvalidObject_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLPrimitive_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register Primitive in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLPrimitive_Type);
-
-		PyModule_AddObject(module, "Primitive", (PyObject *)&MGLPrimitive_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLUniform_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register Uniform in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLUniform_Type);
-
-		PyModule_AddObject(module, "Uniform", (PyObject *)&MGLUniform_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLBufferAccess_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register BufferAccess in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLBufferAccess_Type);
-
-		PyModule_AddObject(module, "BufferAccess", (PyObject *)&MGLBufferAccess_Type);
 	}
 
 	{
@@ -425,65 +363,10 @@ extern "C" PyObject * PyInit_ModernGL() {
 			PyErr_Format(PyExc_ImportError, "Cannot register EnableFlag in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return 0;
 		}
-
+	
 		Py_INCREF(&MGLEnableFlag_Type);
-
+	
 		PyModule_AddObject(module, "EnableFlag", (PyObject *)&MGLEnableFlag_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLProgramMember_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register ProgramMember in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLProgramMember_Type);
-
-		PyModule_AddObject(module, "ProgramMember", (PyObject *)&MGLProgramMember_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLVersion_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register Version in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLVersion_Type);
-
-		PyModule_AddObject(module, "Version", (PyObject *)&MGLVersion_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLAttribute_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register Attribute in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLAttribute_Type);
-
-		PyModule_AddObject(module, "Attribute", (PyObject *)&MGLAttribute_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLSubroutine_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register Subroutine in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLSubroutine_Type);
-
-		PyModule_AddObject(module, "Subroutine", (PyObject *)&MGLSubroutine_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLVarying_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register Varying in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLVarying_Type);
-
-		PyModule_AddObject(module, "Varying", (PyObject *)&MGLVarying_Type);
 	}
 
 	{
@@ -491,21 +374,296 @@ extern "C" PyObject * PyInit_ModernGL() {
 			PyErr_Format(PyExc_ImportError, "Cannot register Error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return 0;
 		}
-
+	
 		Py_INCREF(&MGLError_Type);
-
+	
 		PyModule_AddObject(module, "Error", (PyObject *)&MGLError_Type);
 	}
 
+	{
+		if (PyType_Ready(&MGLFramebuffer_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Framebuffer in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLFramebuffer_Type);
+	
+		PyModule_AddObject(module, "Framebuffer", (PyObject *)&MGLFramebuffer_Type);
+	}
+
+	{
+		if (PyType_Ready(&MGLFramebufferAttachment_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register FramebufferAttachment in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLFramebufferAttachment_Type);
+	
+		PyModule_AddObject(module, "FramebufferAttachment", (PyObject *)&MGLFramebufferAttachment_Type);
+	}
+
+	{
+		if (PyType_Ready(&MGLGenericProgram_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register GenericProgram in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLGenericProgram_Type);
+	
+		PyModule_AddObject(module, "GenericProgram", (PyObject *)&MGLGenericProgram_Type);
+	}
+
+	{
+		if (PyType_Ready(&MGLInvalidObject_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register InvalidObject in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLInvalidObject_Type);
+	
+		PyModule_AddObject(module, "InvalidObject", (PyObject *)&MGLInvalidObject_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLMultisampleRenderbuffer_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register MultisampleRenderbuffer in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLMultisampleRenderbuffer_Type);
+	
+		PyModule_AddObject(module, "MultisampleRenderbuffer", (PyObject *)&MGLMultisampleRenderbuffer_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLMultisampleTexture_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register MultisampleTexture in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLMultisampleTexture_Type);
+	
+		PyModule_AddObject(module, "MultisampleTexture", (PyObject *)&MGLMultisampleTexture_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLObject_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Object in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLObject_Type);
+	
+		PyModule_AddObject(module, "Object", (PyObject *)&MGLObject_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLPrimitive_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Primitive in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLPrimitive_Type);
+	
+		PyModule_AddObject(module, "Primitive", (PyObject *)&MGLPrimitive_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLProgram_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Program in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLProgram_Type);
+	
+		PyModule_AddObject(module, "Program", (PyObject *)&MGLProgram_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLProgramMember_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register ProgramMember in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLProgramMember_Type);
+	
+		PyModule_AddObject(module, "ProgramMember", (PyObject *)&MGLProgramMember_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLProgramStage_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register ProgramStage in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLProgramStage_Type);
+	
+		PyModule_AddObject(module, "ProgramStage", (PyObject *)&MGLProgramStage_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLProgramStageMember_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register ProgramStageMember in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLProgramStageMember_Type);
+	
+		PyModule_AddObject(module, "ProgramStageMember", (PyObject *)&MGLProgramStageMember_Type);
+	}
+	
 	{
 		if (PyType_Ready(&MGLRenderbuffer_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Renderbuffer in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return 0;
 		}
-
+	
 		Py_INCREF(&MGLRenderbuffer_Type);
-
+	
 		PyModule_AddObject(module, "Renderbuffer", (PyObject *)&MGLRenderbuffer_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLShader_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Shader in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLShader_Type);
+	
+		PyModule_AddObject(module, "Shader", (PyObject *)&MGLShader_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLSubroutine_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Subroutine in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLSubroutine_Type);
+	
+		PyModule_AddObject(module, "Subroutine", (PyObject *)&MGLSubroutine_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLSubroutineUniform_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register SubroutineUniform in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLSubroutineUniform_Type);
+	
+		PyModule_AddObject(module, "SubroutineUniform", (PyObject *)&MGLSubroutineUniform_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLTexture_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Texture in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLTexture_Type);
+	
+		PyModule_AddObject(module, "Texture", (PyObject *)&MGLTexture_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLUniform_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Uniform in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLUniform_Type);
+	
+		PyModule_AddObject(module, "Uniform", (PyObject *)&MGLUniform_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLUniformBlock_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register UniformBlock in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLUniformBlock_Type);
+	
+		PyModule_AddObject(module, "UniformBlock", (PyObject *)&MGLUniformBlock_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLVarying_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Varying in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLVarying_Type);
+	
+		PyModule_AddObject(module, "Varying", (PyObject *)&MGLVarying_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLVersion_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Version in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLVersion_Type);
+	
+		PyModule_AddObject(module, "Version", (PyObject *)&MGLVersion_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLVertexArray_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register VertexArray in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLVertexArray_Type);
+	
+		PyModule_AddObject(module, "VertexArray", (PyObject *)&MGLVertexArray_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLVertexArrayAttribute_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register VertexArrayAttribute in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLVertexArrayAttribute_Type);
+	
+		PyModule_AddObject(module, "VertexArrayAttribute", (PyObject *)&MGLVertexArrayAttribute_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLVertexArrayListAttribute_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register VertexArrayListAttribute in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLVertexArrayListAttribute_Type);
+	
+		PyModule_AddObject(module, "VertexArrayListAttribute", (PyObject *)&MGLVertexArrayListAttribute_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLVertexArrayMatrixAttribute_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register VertexArrayMatrixAttribute in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLVertexArrayMatrixAttribute_Type);
+	
+		PyModule_AddObject(module, "VertexArrayMatrixAttribute", (PyObject *)&MGLVertexArrayMatrixAttribute_Type);
+	}
+	
+	{
+		if (PyType_Ready(&MGLVertexArrayMember_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register VertexArrayMember in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+	
+		Py_INCREF(&MGLVertexArrayMember_Type);
+	
+		PyModule_AddObject(module, "VertexArrayMember", (PyObject *)&MGLVertexArrayMember_Type);
 	}
 
 	{

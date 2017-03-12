@@ -5,7 +5,10 @@
 #include "ContextMember.hpp"
 
 struct MGLFramebufferAttachment : public MGLContextMember {
-	int obj;
+	union {
+		int renderbuffer_obj;
+		int texture_obj;
+	};
 
 	int width;
 	int height;

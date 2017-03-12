@@ -13,8 +13,6 @@ PyObject * MGLFramebuffer_tp_new(PyTypeObject * type, PyObject * args, PyObject 
 	#endif
 
 	if (self) {
-		self->color_attachments = 0;
-		self->depth_attachment = 0;
 	}
 
 	return (PyObject *)self;
@@ -92,7 +90,7 @@ const char * MGLFramebuffer_read_doc = R"(
 )";
 
 PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
-	self->context->gl.BindFramebuffer(GL_FRAMEBUFFER, self->obj);
+	self->context->gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
 	Py_RETURN_NONE;
 }
 
@@ -203,8 +201,8 @@ void MGLFramebuffer_Invalidate(MGLFramebuffer * framebuffer) {
 	printf("MGLFramebuffer_Invalidate %p\n", framebuffer);
 	#endif
 
-	if (framebuffer->obj) {
-		framebuffer->context->gl.DeleteFramebuffers(1, (GLuint *)&framebuffer->obj);
+	if (framebuffer->framebuffer_obj) {
+		framebuffer->context->gl.DeleteFramebuffers(1, (GLuint *)&framebuffer->framebuffer_obj);
 
 		if (framebuffer->color_attachments) {
 			int color_attachments_len = PyList_GET_SIZE(framebuffer->color_attachments);

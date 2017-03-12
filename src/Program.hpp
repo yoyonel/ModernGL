@@ -8,18 +8,24 @@
 struct MGLProgram : public MGLGenericProgram {
 	PyObject * shaders;
 
-	PyObject * uniforms;
-	PyObject * attributes;
-	PyObject * subroutines;
-	PyObject * varyings;
+	PyObject * vertex_shader;
+	PyObject * fragment_shader;
+	PyObject * geometry_shader;
+	PyObject * tesselation_evaluation_shader;
+	PyObject * tesselation_control_shader;
 
-	PyObject * uniforms_proxy;
+	// TODO:
+	PyObject * attributes;
 	PyObject * attributes_proxy;
-	PyObject * subroutines_proxy;
+
+	PyObject * varyings;
 	PyObject * varyings_proxy;
 
 	MGLPrimitive * geometry_input;
 	MGLPrimitive * geometry_output;
+
+	// TODO:
+	MGLPrimitive * geometry_vertices;
 };
 
 extern PyTypeObject MGLProgram_Type;
@@ -30,5 +36,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * varyings);
 
 void MGLProgram_LoadUniforms(MGLProgram * program);
 void MGLProgram_LoadAttributes(MGLProgram * program);
-void MGLProgram_LoadSubroutines(MGLProgram * program);
 void MGLProgram_LoadVaryings(MGLProgram * program);
+
+// TODO:
+void MGLProgram_LoadProgramStages(MGLProgram * program);

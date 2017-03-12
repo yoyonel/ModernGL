@@ -35,7 +35,6 @@ PyObject * MGLShader_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwa
 	#endif
 
 	if (self) {
-		self->source = 0;
 	}
 
 	return (PyObject *)self;
@@ -174,7 +173,7 @@ void MGLShader_Invalidate(MGLShader * shader) {
 	#endif
 
 	const GLMethods & gl = shader->context->gl;
-	gl.DeleteShader(shader->obj);
+	gl.DeleteShader(shader->shader_obj);
 
 	Py_DECREF(shader->source);
 	Py_DECREF(shader->context);
@@ -218,5 +217,5 @@ void MGLShader_Compile(MGLShader * shader) {
 		return;
 	}
 
-	shader->obj = obj;
+	shader->shader_obj = obj;
 }

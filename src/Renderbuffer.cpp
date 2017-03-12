@@ -150,7 +150,7 @@ void MGLRenderbuffer_Invalidate(MGLRenderbuffer * renderbuffer) {
 	printf("MGLRenderbuffer_Invalidate %p\n", renderbuffer);
 	#endif
 
-	renderbuffer->context->gl.DeleteRenderbuffers(1, (GLuint *)&renderbuffer->obj);
+	renderbuffer->context->gl.DeleteRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
 
 	Py_DECREF(renderbuffer->context);
 

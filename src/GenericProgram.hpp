@@ -5,7 +5,10 @@
 #include "ContextMember.hpp"
 
 struct MGLGenericProgram : public MGLContextMember {
-	int obj;
+	int program_obj;
+
+	PyObject * uniforms;
+	PyObject * uniforms_proxy;
 };
 
 extern PyTypeObject MGLGenericProgram_Type;

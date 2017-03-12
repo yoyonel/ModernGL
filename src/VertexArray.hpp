@@ -8,10 +8,15 @@
 
 struct MGLVertexArray : public MGLContextMember {
 	MGLProgram * program;
+
 	PyObject * content;
+
 	MGLBuffer * index_buffer;
 
-	int obj;
+	// TODO:
+	PyObject * attributes;
+
+	int vertex_array_obj;
 	int num_vertices;
 };
 

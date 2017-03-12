@@ -19,7 +19,7 @@ extern const char * SHADER_NAME[];
 struct MGLShader : public MGLContextMember {
 	PyObject * source;
 
-	int obj;
+	int shader_obj;
 	int shader_type;
 	int shader_slot;
 };

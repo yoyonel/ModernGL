@@ -5,7 +5,7 @@
 #include "ContextMember.hpp"
 
 struct MGLBuffer : public MGLContextMember {
-	int obj;
+	int buffer_obj;
 
 	int size;
 	bool dynamic;

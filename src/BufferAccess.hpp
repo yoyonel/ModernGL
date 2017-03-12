@@ -9,7 +9,7 @@ struct MGLBufferAccess : public MGLObject {
 
 	void * ptr;
 
-	int obj;
+	int buffer_obj;
 	int offset;
 	int size;
 	int access;
