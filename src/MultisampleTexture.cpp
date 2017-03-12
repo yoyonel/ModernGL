@@ -1,7 +1,14 @@
 #include "MultisampleTexture.hpp"
 
+#include "Error.hpp"
+#include "InvalidObject.hpp"
+
 PyObject * MGLMultisampleTexture_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLMultisampleTexture * self = (MGLMultisampleTexture *)type->tp_alloc(type, 0);
+
+	#ifdef MGL_VERBOSE
+	printf("MGLMultisampleTexture_tp_new %p\n", self);
+	#endif
 
 	if (self) {
 	}
@@ -10,7 +17,12 @@ PyObject * MGLMultisampleTexture_tp_new(PyTypeObject * type, PyObject * args, Py
 }
 
 void MGLMultisampleTexture_tp_dealloc(MGLMultisampleTexture * self) {
-	Py_TYPE(self)->tp_free((PyObject *)self);
+
+	#ifdef MGL_VERBOSE
+	printf("MGLMultisampleTexture_tp_dealloc %p\n", self);
+	#endif
+
+	MGLMultisampleTexture_Type.tp_free((PyObject *)self);
 }
 
 int MGLMultisampleTexture_tp_init(MGLMultisampleTexture * self, PyObject * args, PyObject * kwargs) {
@@ -21,7 +33,56 @@ PyObject * MGLMultisampleTexture_tp_str(MGLMultisampleTexture * self) {
 	return PyUnicode_FromFormat("<ModernGL.MultisampleTexture>");
 }
 
+PyObject * MGLMultisampleTexture_use(MGLMultisampleTexture * self, PyObject * args, PyObject * kwargs) {
+	static const char * kwlist[] = {"index", 0};
+
+	int index = 0;
+
+	int args_ok = PyArg_ParseTupleAndKeywords(
+		args,
+		kwargs,
+		"|I",
+		(char **)kwlist,
+		&index
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	const GLMethods & gl = self->context->gl;
+	gl.ActiveTexture(GL_TEXTURE0 + index);
+	gl.BindTexture(GL_TEXTURE_2D_MULTISAMPLE, self->texture_obj);
+
+	Py_RETURN_NONE;
+}
+
+const char * MGLMultisampleTexture_use_doc = R"(
+	use(index = 0)
+
+	Args:
+		optional index: The texture location.
+			Same as the integer value that is used for sampler2D uniforms in the shaders.
+			The value ``0`` will bind the texture to the ``GL_TEXTURE0`` binding point.
+
+	Returns:
+		:py:data:`None`
+)";
+
+PyObject * MGLMultisampleTexture_release(MGLMultisampleTexture * self) {
+	MGLMultisampleTexture_Invalidate(self);
+	Py_RETURN_NONE;
+}
+
+const char * MGLMultisampleTexture_release_doc = R"(
+	release()
+
+	Release the texture.
+)";
+
 PyMethodDef MGLMultisampleTexture_tp_methods[] = {
+	{"use", (PyCFunction)MGLMultisampleTexture_use, METH_VARARGS | METH_KEYWORDS, MGLMultisampleTexture_use_doc},
+	{"release", (PyCFunction)MGLMultisampleTexture_release, METH_NOARGS, MGLMultisampleTexture_release_doc},
 	{0},
 };
 
@@ -73,3 +134,32 @@ PyTypeObject MGLMultisampleTexture_Type = {
 	0,                                                      // tp_alloc
 	MGLMultisampleTexture_tp_new,                           // tp_new
 };
+
+MGLMultisampleTexture * MGLMultisampleTexture_New() {
+	MGLMultisampleTexture * self = (MGLMultisampleTexture *)MGLMultisampleTexture_tp_new(&MGLMultisampleTexture_Type, 0, 0);
+	return self;
+}
+
+void MGLMultisampleTexture_Invalidate(MGLMultisampleTexture * texture) {
+	if (Py_TYPE(texture) == &MGLInvalidObject_Type) {
+
+		#ifdef MGL_VERBOSE
+		printf("MGLMultisampleTexture_Invalidate %p already released\n", texture);
+		#endif
+
+		return;
+	}
+
+	#ifdef MGL_VERBOSE
+	printf("MGLMultisampleTexture_Invalidate %p\n", texture);
+	#endif
+
+	texture->context->gl.DeleteTextures(1, (GLuint *)&texture->texture_obj);
+
+	Py_DECREF(texture->context);
+
+	texture->ob_base.ob_type = &MGLInvalidObject_Type;
+	texture->initial_type = &MGLMultisampleTexture_Type;
+
+	Py_DECREF(texture);
+}

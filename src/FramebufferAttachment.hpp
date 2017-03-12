@@ -14,10 +14,10 @@ struct MGLFramebufferAttachment : public MGLContextMember {
 	int height;
 	int components;
 
+	int samples;
+
 	bool floats;
 	bool depth;
-
-	int samples;
 };
 
 extern PyTypeObject MGLFramebufferAttachment_Type;

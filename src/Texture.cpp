@@ -41,7 +41,7 @@ PyObject * MGLTexture_use(MGLTexture * self, PyObject * args, PyObject * kwargs)
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"|i",
+		"|I",
 		(char **)kwlist,
 		&index
 	);
@@ -69,64 +69,6 @@ const char * MGLTexture_use_doc = R"(
 		:py:data:`None`
 )";
 
-PyObject * MGLTexture_read(PyObject * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"value", 0};
-
-	int value = 0;
-
-	int args_ok = PyArg_ParseTupleAndKeywords(
-		args,
-		kwargs,
-		"|i",
-		(char **)kwlist,
-		&value
-	);
-
-	if (!args_ok) {
-		return 0;
-	}
-
-	Py_RETURN_NONE;
-}
-
-const char * MGLTexture_read_doc = R"(
-	read(...)
-
-	NOT YET IMPLEMENTED.
-
-	Returns:
-		None
-)";
-
-PyObject * MGLTexture_write(PyObject * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"value", 0};
-
-	int value = 0;
-
-	int args_ok = PyArg_ParseTupleAndKeywords(
-		args,
-		kwargs,
-		"|i",
-		(char **)kwlist,
-		&value
-	);
-
-	if (!args_ok) {
-		return 0;
-	}
-
-	Py_RETURN_NONE;
-}
-
-const char * MGLTexture_write_doc = R"(
-	write(...)
-
-	NOT YET IMPLEMENTED.
-
-	Returns:
-		None
-)";
-
 PyObject * MGLTexture_release(MGLTexture * self) {
 	MGLTexture_Invalidate(self);
 	Py_RETURN_NONE;
@@ -140,8 +82,6 @@ const char * MGLTexture_release_doc = R"(
 
 PyMethodDef MGLTexture_tp_methods[] = {
 	{"use", (PyCFunction)MGLTexture_use, METH_VARARGS | METH_KEYWORDS, MGLTexture_use_doc},
-	{"read", (PyCFunction)MGLTexture_read, METH_VARARGS | METH_KEYWORDS, MGLTexture_read_doc},
-	{"write", (PyCFunction)MGLTexture_write, METH_VARARGS | METH_KEYWORDS, MGLTexture_write_doc},
 	{"release", (PyCFunction)MGLTexture_release, METH_NOARGS, MGLTexture_release_doc},
 	{0},
 };

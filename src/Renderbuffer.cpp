@@ -49,40 +49,7 @@ PyMethodDef MGLRenderbuffer_tp_methods[] = {
 	{0},
 };
 
-PyObject * MGLRenderbuffer_get_width(MGLRenderbuffer * self, void * closure) {
-	return PyLong_FromLong(self->width);
-}
-
-char MGLRenderbuffer_width_doc[] = R"(
-	width
-
-	The width
-)";
-
-PyObject * MGLRenderbuffer_get_height(MGLRenderbuffer * self, void * closure) {
-	return PyLong_FromLong(self->height);
-}
-
-char MGLRenderbuffer_height_doc[] = R"(
-	height
-
-	The height
-)";
-
-PyObject * MGLRenderbuffer_get_size(MGLRenderbuffer * self, void * closure) {
-	return PyTuple_Pack(2, PyLong_FromLong(self->width), PyLong_FromLong(self->height));
-}
-
-char MGLRenderbuffer_size_doc[] = R"(
-	size
-
-	The size
-)";
-
 PyGetSetDef MGLRenderbuffer_tp_getseters[] = {
-	{(char *)"width", (getter)MGLRenderbuffer_get_width, 0, MGLRenderbuffer_width_doc, 0},
-	{(char *)"height", (getter)MGLRenderbuffer_get_height, 0, MGLRenderbuffer_height_doc, 0},
-	{(char *)"size", (getter)MGLRenderbuffer_get_size, 0, MGLRenderbuffer_size_doc, 0},
 	{0},
 };
 
