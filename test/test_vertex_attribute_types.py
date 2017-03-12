@@ -1,10 +1,7 @@
 import os; os.chdir(os.path.dirname(__file__))
 import unittest
 
-import ModernGL as GL
-import struct
-
-ctx = GL.create_standalone_context()
+import ModernGL, struct
 
 vtypes = [
 	{
@@ -181,7 +178,15 @@ vtypes = [
 
 class TestCase(unittest.TestCase):
 
-	def test_1(self):
+	@classmethod
+	def setUpClass(cls):
+		cls.ctx = ModernGL.create_standalone_context()
+
+	@classmethod
+	def tearDownClass(cls):
+		cls.ctx.release()
+
+	def test_simple(self):
 		vert_src = '''
 			#version 410
 
@@ -194,21 +199,22 @@ class TestCase(unittest.TestCase):
 		'''
 
 		for vtype in vtypes:
-			print(vtype['type'])
-			prog = ctx.Program(ctx.VertexShader(vert_src % vtype), ['v_out'])
-			fmt = GL.detect_format(prog, ['v_in'])
-			vbo1 = ctx.Buffer(struct.pack(fmt, *vtype['input']))
-			vbo2 = ctx.Buffer(b'\xAA' * struct.calcsize(fmt))
-			vao = ctx.SimpleVertexArray(prog, vbo1, fmt, ['v_in'])
-			vao.transform(vbo2, GL.POINTS, 1)
-
-			# print(vbo1.read().hex())
-			# print(vbo2.read().hex())
+			prog = self.ctx.Program(self.ctx.VertexShader(vert_src % vtype), ['v_out'])
+			fmt = ModernGL.detect_format(prog, ['v_in'])
+			vbo1 = self.ctx.Buffer(struct.pack(fmt, *vtype['input']))
+			vbo2 = self.ctx.Buffer(b'\xAA' * struct.calcsize(fmt))
+			vao = self.ctx.SimpleVertexArray(prog, vbo1, fmt, ['v_in'])
+			vao.transform(vbo2, ModernGL.POINTS, 1)
 
 			for a, b in zip(struct.unpack(fmt, vbo2.read()), vtype['output']):
 				self.assertAlmostEqual(a, b)
 
-	def q_test_2(self):
+			vbo1.release()
+			vbo2.release()
+			vao.release()
+			prog.release()
+
+	def test_arrays(self):
 		vert_src = '''
 			#version 410
 
@@ -222,19 +228,20 @@ class TestCase(unittest.TestCase):
 		'''
 
 		for vtype in vtypes:
-			print(vtype['type'])
-			prog = ctx.Program(ctx.VertexShader(vert_src % vtype), ['v_out'])
-			fmt = GL.detect_format(prog, ['v_in'])
-			vbo1 = ctx.Buffer(struct.pack(fmt, *(vtype['input'] * 2)))
-			vbo2 = ctx.Buffer(b'\xAA' * struct.calcsize(fmt))
-			vao = ctx.SimpleVertexArray(prog, vbo1, fmt, ['v_in'])
-			vao.transform(vbo2, GL.POINTS, 1)
-
-			# print(vbo1.read().hex())
-			# print(vbo2.read().hex())
+			prog = self.ctx.Program(self.ctx.VertexShader(vert_src % vtype), ['v_out'])
+			fmt = ModernGL.detect_format(prog, ['v_in'])
+			vbo1 = self.ctx.Buffer(struct.pack(fmt, *(vtype['input'] * 2)))
+			vbo2 = self.ctx.Buffer(b'\xAA' * struct.calcsize(fmt))
+			vao = self.ctx.SimpleVertexArray(prog, vbo1, fmt, ['v_in'])
+			vao.transform(vbo2, ModernGL.POINTS, 1)
 
 			for a, b in zip(struct.unpack(fmt, vbo2.read()), vtype['output'] * 2):
 				self.assertAlmostEqual(a, b)
+
+			vbo1.release()
+			vbo2.release()
+			vao.release()
+			prog.release()
 
 
 if __name__ == '__main__':

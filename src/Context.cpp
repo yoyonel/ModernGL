@@ -1484,8 +1484,16 @@ const char * MGLContext_DepthRenderbuffer_doc = R"(
 		:py:class:`Renderbuffer`
 )";
 
+PyObject * MGLContext_release(PyObject * self) {
+	// TODO:
+
+	Py_RETURN_NONE;
+}
+
 PyMethodDef MGLContext_tp_methods[] = {
 	// {"make_current", (PyCFunction)MGLContext_make_current, METH_NOARGS, MGLContext_make_current_doc},
+
+	{"release", (PyCFunction)MGLContext_release, METH_NOARGS, 0},
 
 	{"clear", (PyCFunction)MGLContext_clear, METH_VARARGS | METH_KEYWORDS, MGLContext_clear_doc},
 	{"enable", (PyCFunction)MGLContext_enable, METH_VARARGS | METH_KEYWORDS, MGLContext_enable_doc},
