@@ -1,7 +1,14 @@
 #include "MultisampleRenderbuffer.hpp"
 
+#include "Error.hpp"
+#include "InvalidObject.hpp"
+
 PyObject * MGLMultisampleRenderbuffer_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLMultisampleRenderbuffer * self = (MGLMultisampleRenderbuffer *)type->tp_alloc(type, 0);
+
+	#ifdef MGL_VERBOSE
+	printf("MGLMultisampleRenderbuffer_tp_new %p\n", self);
+	#endif
 
 	if (self) {
 	}
@@ -10,7 +17,12 @@ PyObject * MGLMultisampleRenderbuffer_tp_new(PyTypeObject * type, PyObject * arg
 }
 
 void MGLMultisampleRenderbuffer_tp_dealloc(MGLMultisampleRenderbuffer * self) {
-	Py_TYPE(self)->tp_free((PyObject *)self);
+
+	#ifdef MGL_VERBOSE
+	printf("MGLMultisampleRenderbuffer_tp_dealloc %p\n", self);
+	#endif
+
+	MGLMultisampleRenderbuffer_Type.tp_free((PyObject *)self);
 }
 
 int MGLMultisampleRenderbuffer_tp_init(MGLMultisampleRenderbuffer * self, PyObject * args, PyObject * kwargs) {
@@ -21,7 +33,19 @@ PyObject * MGLMultisampleRenderbuffer_tp_str(MGLMultisampleRenderbuffer * self) 
 	return PyUnicode_FromFormat("<ModernGL.MultisampleRenderbuffer>");
 }
 
+PyObject * MGLMultisampleRenderbuffer_release(MGLMultisampleRenderbuffer * self) {
+	MGLMultisampleRenderbuffer_Invalidate(self);
+	Py_RETURN_NONE;
+}
+
+const char * MGLMultisampleRenderbuffer_release_doc = R"(
+	release()
+
+	Release the renderbuffer.
+)";
+
 PyMethodDef MGLMultisampleRenderbuffer_tp_methods[] = {
+	{"release", (PyCFunction)MGLMultisampleRenderbuffer_release, METH_NOARGS, MGLMultisampleRenderbuffer_release_doc},
 	{0},
 };
 
@@ -73,3 +97,32 @@ PyTypeObject MGLMultisampleRenderbuffer_Type = {
 	0,                                                      // tp_alloc
 	MGLMultisampleRenderbuffer_tp_new,                      // tp_new
 };
+
+MGLMultisampleRenderbuffer * MGLMultisampleRenderbuffer_New() {
+	MGLMultisampleRenderbuffer * self = (MGLMultisampleRenderbuffer *)MGLMultisampleRenderbuffer_tp_new(&MGLMultisampleRenderbuffer_Type, 0, 0);
+	return self;
+}
+
+void MGLMultisampleRenderbuffer_Invalidate(MGLMultisampleRenderbuffer * renderbuffer) {
+	if (Py_TYPE(renderbuffer) == &MGLInvalidObject_Type) {
+
+		#ifdef MGL_VERBOSE
+		printf("MGLMultisampleRenderbuffer_Invalidate %p already released\n", renderbuffer);
+		#endif
+
+		return;
+	}
+
+	#ifdef MGL_VERBOSE
+	printf("MGLMultisampleRenderbuffer_Invalidate %p\n", renderbuffer);
+	#endif
+
+	renderbuffer->context->gl.DeleteRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
+
+	Py_DECREF(renderbuffer->context);
+
+	renderbuffer->ob_base.ob_type = &MGLInvalidObject_Type;
+	renderbuffer->initial_type = &MGLMultisampleRenderbuffer_Type;
+
+	Py_DECREF(renderbuffer);
+}
