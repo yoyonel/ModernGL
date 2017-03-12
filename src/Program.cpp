@@ -4,6 +4,7 @@
 #include "InvalidObject.hpp"
 #include "Shader.hpp"
 #include "Uniform.hpp"
+#include "UniformBlock.hpp"
 #include "Attribute.hpp"
 #include "Subroutine.hpp"
 #include "SubroutineUniform.hpp"
@@ -18,23 +19,6 @@ PyObject * MGLProgram_tp_new(PyTypeObject * type, PyObject * args, PyObject * kw
 	#endif
 
 	if (self) {
-
-		// TODO:
-
-		self->shaders = 0;
-
-		self->uniforms = 0;
-		self->attributes = 0;
-		// self->subroutines = 0;
-		self->varyings = 0;
-
-		self->uniforms_proxy = 0;
-		self->attributes_proxy = 0;
-		// self->subroutines_proxy = 0;
-		self->varyings_proxy = 0;
-
-		self->geometry_input = 0;
-		self->geometry_output = 0;
 	}
 
 	return (PyObject *)self;
@@ -124,19 +108,6 @@ char MGLProgram_attributes_doc[] = R"(
 	It can be used to access attributes by name.
 )";
 
-// PyObject * MGLProgram_get_subroutines(MGLProgram * self, void * closure) {
-// 	Py_INCREF(self->subroutines_proxy);
-// 	return self->subroutines_proxy;
-// }
-
-// char MGLProgram_subroutines_doc[] = R"(
-// 	subroutines
-
-// 	The program's subroutines.
-// 	The return value is a dictinary.
-// 	It can be used to access subroutines by name.
-// )";
-
 PyObject * MGLProgram_get_geometry_input(MGLProgram * self, void * closure) {
 	if (self->geometry_input) {
 		Py_INCREF(self->geometry_input);
@@ -217,10 +188,10 @@ PyObject * MGLProgram_get_tesselation_control_shader(MGLProgram * self, void * c
 
 PyGetSetDef MGLProgram_tp_getseters[] = {
 	{(char *)"shaders", (getter)MGLProgram_get_shaders, 0, MGLProgram_shaders_doc, 0},
-	{(char *)"varyings", (getter)MGLProgram_get_varyings, 0, MGLProgram_varyings_doc, 0},
 	{(char *)"uniforms", (getter)MGLProgram_get_uniforms, 0, MGLProgram_uniforms_doc, 0},
 	{(char *)"attributes", (getter)MGLProgram_get_attributes, 0, MGLProgram_attributes_doc, 0},
-	// {(char *)"subroutines", (getter)MGLProgram_get_subroutines, 0, MGLProgram_subroutines_doc, 0},
+	{(char *)"varyings", (getter)MGLProgram_get_varyings, 0, MGLProgram_varyings_doc, 0},
+
 	{(char *)"geometry_input", (getter)MGLProgram_get_geometry_input, 0, MGLProgram_geometry_input_doc, 0},
 	{(char *)"geometry_output", (getter)MGLProgram_get_geometry_output, 0, MGLProgram_geometry_output_doc, 0},
 
@@ -320,6 +291,7 @@ void MGLProgram_Invalidate(MGLProgram * program) {
 		}
 
 		Py_DECREF(program->uniforms);
+		Py_DECREF(program->uniforms_proxy);
 	}
 
 	{
@@ -331,18 +303,8 @@ void MGLProgram_Invalidate(MGLProgram * program) {
 		}
 
 		Py_DECREF(program->attributes);
+		Py_DECREF(program->attributes_proxy);
 	}
-
-	// {
-	// 	MGLSubroutine * subroutine = 0;
-	// 	Py_ssize_t pos = 0;
-
-	// 	while (PyDict_Next(program->subroutines, &pos, 0, (PyObject **)&subroutine)) {
-	// 		MGLSubroutine_Invalidate(subroutine);
-	// 	}
-
-	// 	Py_DECREF(program->subroutines);
-	// }
 
 	{
 		MGLVarying * varying = 0;
@@ -353,26 +315,24 @@ void MGLProgram_Invalidate(MGLProgram * program) {
 		}
 
 		Py_DECREF(program->varyings);
+		Py_DECREF(program->varyings_proxy);
 	}
 
-	int shaders_len = PyTuple_GET_SIZE(program->shaders);
+	{
+		int shaders_len = PyTuple_GET_SIZE(program->shaders);
 
-	for (int i = 0; i < shaders_len; ++i) {
-		MGLShader * shader = (MGLShader *)PyTuple_GET_ITEM(program->shaders, i);
-		if (Py_REFCNT(shader) == 2) {
-			MGLShader_Invalidate(shader);
+		for (int i = 0; i < shaders_len; ++i) {
+			MGLShader * shader = (MGLShader *)PyTuple_GET_ITEM(program->shaders, i);
+			if (Py_REFCNT(shader) == 2) {
+				MGLShader_Invalidate(shader);
+			}
 		}
-	}
 
-	Py_DECREF(program->uniforms_proxy);
-	Py_DECREF(program->attributes_proxy);
-	// Py_DECREF(program->subroutines_proxy);
-	Py_DECREF(program->varyings_proxy);
+		Py_DECREF(program->shaders);
+	}
 
 	Py_XDECREF(program->geometry_input);
 	Py_XDECREF(program->geometry_output);
-
-	Py_DECREF(program->shaders);
 
 	Py_DECREF(program->context);
 
@@ -382,34 +342,43 @@ void MGLProgram_Invalidate(MGLProgram * program) {
 	Py_DECREF(program);
 }
 
-void MGLProgram_Compile(MGLProgram * program, PyObject * varyings) {
+void clean_program_member_name(char * name, int & name_len) {
+	if (name_len && name[name_len - 1] == ']') {
+		name_len -= 1;
+		while (name_len && name[name_len] != '[') {
+			name_len -= 1;
+		}
+	}
+	name[name_len] = 0;
+}
+
+void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	const GLMethods & gl = program->context->gl;
 
 	int obj = gl.CreateProgram();
 
-	bool has_geometry_shader = false;
+	MGLShader * shaders[NUM_SHADER_SLOTS] = {};
 
 	int num_shaders = PyTuple_GET_SIZE(program->shaders);
 
 	for (int i = 0; i < num_shaders; ++i) {
 		MGLShader * shader = (MGLShader *)PyTuple_GET_ITEM(program->shaders, i);
-		if (shader->shader_slot == GEOMETRY_SHADER_SLOT) {
-			has_geometry_shader = true;
-		}
+		shaders[shader->shader_slot] = shader;
+
 		gl.AttachShader(obj, shader->shader_obj);
 	}
 
-	if (varyings != Py_None) {
-		int varyings_len = PyList_GET_SIZE(varyings);
+	if (outputs != Py_None) {
+		int outputs_len = PyList_GET_SIZE(outputs);
 
-		if (varyings_len) {
-			char ** varyings_array = new char * [varyings_len];
+		if (outputs_len) {
+			char ** varyings_array = new char * [outputs_len];
 
-			for (int i = 0; i < varyings_len; ++i) {
-				varyings_array[i] = PyUnicode_AsUTF8(PyList_GET_ITEM(varyings, i));
+			for (int i = 0; i < outputs_len; ++i) {
+				varyings_array[i] = PyUnicode_AsUTF8(PyList_GET_ITEM(outputs, i));
 			}
 
-			gl.TransformFeedbackVaryings(obj, varyings_len, varyings_array, GL_INTERLEAVED_ATTRIBS);
+			gl.TransformFeedbackVaryings(obj, outputs_len, varyings_array, GL_INTERLEAVED_ATTRIBS);
 
 			delete[] varyings_array;
 		}
@@ -442,28 +411,205 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * varyings) {
 
 	program->program_obj = obj;
 
-	MGLProgram_LoadProgramStages(program);
+	if (shaders[VERTEX_SHADER_SLOT]) {
+		MGLProgramStage * program_stage = MGLProgramStage_New();
+		program_stage->program = program;
+		program_stage->shader = shaders[VERTEX_SHADER_SLOT];
+		MGLProgramStage_Complete(program_stage);
+		program->vertex_shader = (PyObject *)program_stage;
+	} else {
+		program->vertex_shader = 0;
+	}
 
-	MGLProgram_LoadUniforms(program);
-	MGLProgram_LoadAttributes(program);
-	MGLProgram_LoadVaryings(program);
-	// MGLProgram_LoadSubroutines(program);
+	if (shaders[FRAGMENT_SHADER_SLOT]) {
+		MGLProgramStage * program_stage = MGLProgramStage_New();
+		program_stage->program = program;
+		program_stage->shader = shaders[FRAGMENT_SHADER_SLOT];
+		MGLProgramStage_Complete(program_stage);
+		program->fragment_shader = (PyObject *)program_stage;
+	} else {
+		program->fragment_shader = 0;
+	}
 
-	// TODO:
-	// int num_uniform_blocks = 0;
-	// gl.GetProgramiv(obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
-	// printf("num_uniform_blocks = %d\n", num_uniform_blocks);
+	if (shaders[GEOMETRY_SHADER_SLOT]) {
+		MGLProgramStage * program_stage = MGLProgramStage_New();
+		program_stage->program = program;
+		program_stage->shader = shaders[GEOMETRY_SHADER_SLOT];
+		MGLProgramStage_Complete(program_stage);
+		program->geometry_shader = (PyObject *)program_stage;
+	} else {
+		program->geometry_shader = 0;
+	}
 
-	// TODO:
-	// glGetProgramStageiv
-	// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glGetProgramStage.xhtml
+	if (shaders[TESSELATION_EVALUATION_SHADER_SLOT]) {
+		MGLProgramStage * program_stage = MGLProgramStage_New();
+		program_stage->program = program;
+		program_stage->shader = shaders[TESSELATION_EVALUATION_SHADER_SLOT];
+		MGLProgramStage_Complete(program_stage);
+		program->tesselation_evaluation_shader = (PyObject *)program_stage;
+	} else {
+		program->tesselation_evaluation_shader = 0;
+	}
 
-	// Py_INCREF(...);
+	if (shaders[TESSELATION_CONTROL_SHADER_SLOT]) {
+		MGLProgramStage * program_stage = MGLProgramStage_New();
+		program_stage->program = program;
+		program_stage->shader = shaders[TESSELATION_CONTROL_SHADER_SLOT];
+		MGLProgramStage_Complete(program_stage);
+		program->tesselation_control_shader = (PyObject *)program_stage;
+	} else {
+		program->tesselation_control_shader = 0;
+	}
 
-	int geometry_in = 0;
-	int geometry_out = 0;
+	PyObject * uniforms = PyDict_New();
 
-	if (has_geometry_shader) {
+	int num_uniforms = 0;
+	gl.GetProgramiv(program->program_obj, GL_ACTIVE_UNIFORMS, &num_uniforms);
+
+	for (int i = 0; i < num_uniforms; ++i) {
+		MGLUniform * uniform = MGLUniform_New();
+
+		int name_len = 0;
+		char name[256];
+
+		gl.GetActiveUniform(program->program_obj, i, 256, &name_len, &uniform->array_length, (GLenum *)&uniform->type, name);
+
+		uniform->location = gl.GetUniformLocation(program->program_obj, name);
+
+		if (uniform->location < 0) {
+			Py_DECREF((PyObject *)uniform);
+			continue;
+		}
+
+		uniform->number = i;
+		uniform->program = program;
+		uniform->name = PyUnicode_FromStringAndSize(name, name_len);
+
+		MGLUniform_Complete(uniform);
+
+		clean_program_member_name(name, name_len);
+
+		// TODO: check shadow and sampler cube
+
+		PyDict_SetItem(uniforms, uniform->name, (PyObject *)uniform);
+		Py_DECREF(uniform);
+	}
+
+	program->uniforms = uniforms;
+
+	Py_INCREF(uniforms); // TODO: maybe not needed
+	program->uniforms_proxy = PyDictProxy_New(uniforms);
+
+	PyObject * uniform_blocks = PyDict_New();
+
+	int num_uniform_blocks = 0;
+	gl.GetProgramiv(obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
+
+	for (int i = 0; i < num_uniform_blocks; ++i) {
+		MGLUniformBlock * uniform_block = MGLUniformBlock_New();
+
+		int name_len = 0;
+		char name[256];
+
+		gl.GetActiveUniformBlockName(program->program_obj, i, 256, &name_len, name);
+		gl.GetActiveUniformBlockiv(program->program_obj, i, GL_UNIFORM_BLOCK_BINDING, &uniform_block->location);
+		gl.GetActiveUniformBlockiv(program->program_obj, i, GL_UNIFORM_BLOCK_DATA_SIZE, &uniform_block->array_length);
+
+		if (uniform_block->location < 0) {
+			Py_DECREF((PyObject *)uniform_block);
+			continue;
+		}
+
+		uniform_block->number = i;
+		uniform_block->program = program;
+		uniform_block->name = PyUnicode_FromStringAndSize(name, name_len);
+
+		MGLUniformBlock_Complete(uniform_block);
+
+		clean_program_member_name(name, name_len);
+
+		// TODO: check shadow and sampler cube
+
+		PyDict_SetItem(uniform_blocks, uniform_block->name, (PyObject *)uniform_block);
+		Py_DECREF(uniform_block);
+	}
+
+	program->uniforms = uniforms;
+
+	Py_INCREF(uniforms); // TODO: maybe not needed
+	program->uniforms_proxy = PyDictProxy_New(uniforms);
+
+
+
+	PyObject * attributes = PyDict_New();
+
+	int num_attributes = 0;
+	gl.GetProgramiv(program->program_obj, GL_ACTIVE_ATTRIBUTES, &num_attributes);
+
+	for (int i = 0; i < num_attributes; ++i) {
+		MGLAttribute * attribute = MGLAttribute_New();
+
+		int name_len = 0;
+		char name[256];
+
+		gl.GetActiveAttrib(program->program_obj, i, 256, &name_len, &attribute->array_length, (GLenum *)&attribute->type, name);
+
+		attribute->location = gl.GetAttribLocation(program->program_obj, name);
+
+		if (attribute->location < 0) {
+			Py_DECREF(attribute);
+			continue;
+		}
+
+		clean_program_member_name(name, name_len);
+
+		attribute->number = i;
+		attribute->program = program;
+		attribute->name = PyUnicode_FromStringAndSize(name, name_len);
+
+		MGLAttribute_Complete(attribute);
+
+		PyDict_SetItem(attributes, attribute->name, (PyObject *)attribute);
+		Py_DECREF(attribute);
+	}
+
+	program->attributes = attributes;
+
+	Py_INCREF(attributes); // TODO: maybe not needed
+	program->attributes_proxy = PyDictProxy_New(attributes);
+
+	PyObject * varyings = PyDict_New();
+
+	int num_varyings = 0;
+	gl.GetProgramiv(program->program_obj, GL_TRANSFORM_FEEDBACK_VARYINGS, &num_varyings);
+
+	for (int i = 0; i < num_varyings; ++i) {
+		MGLVarying * varying = MGLVarying_New();
+
+		int name_len = 0;
+		char name[256];
+
+		gl.GetTransformFeedbackVarying(program->program_obj, i, 256, &name_len, &varying->array_length, (GLenum *)&varying->type, name);
+
+		varying->number = i;
+		varying->program = program;
+		varying->name = PyUnicode_FromStringAndSize(name, name_len);
+
+		PyDict_SetItem(varyings, varying->name, (PyObject *)varying);
+		Py_DECREF(varying);
+	}
+
+	program->varyings = varyings;
+
+	Py_INCREF(varyings); // TODO: maybe not needed
+	program->varyings_proxy = PyDictProxy_New(varyings);
+
+
+	if (shaders[GEOMETRY_SHADER_SLOT]) {
+
+		int geometry_in = 0;
+		int geometry_out = 0;
+
 		gl.GetProgramiv(obj, GL_GEOMETRY_INPUT_TYPE, &geometry_in);
 		gl.GetProgramiv(obj, GL_GEOMETRY_OUTPUT_TYPE, &geometry_out);
 
@@ -566,209 +712,18 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * varyings) {
 				program->geometry_output = 0;
 				break;
 		}
-	}
 
-	if (program->geometry_input) {
-		Py_INCREF(program->geometry_input);
-	}
-
-	if (program->geometry_output) {
-		Py_INCREF(program->geometry_output);
-	}
-}
-
-void clean_program_member_name(char * name, int & name_len) {
-	if (name_len && name[name_len - 1] == ']') {
-		name_len -= 1;
-		while (name_len && name[name_len] != '[') {
-			name_len -= 1;
-		}
-	}
-	name[name_len] = 0;
-}
-
-void MGLProgram_LoadProgramStages(MGLProgram * program) {
-	MGLShader * shaders[NUM_SHADER_SLOTS] = {};
-
-	program->vertex_shader = 0;
-	program->fragment_shader = 0;
-	program->geometry_shader = 0;
-	program->tesselation_evaluation_shader = 0;
-	program->tesselation_control_shader = 0;
-
-	int num_shaders = PyTuple_GET_SIZE(program->shaders);
-
-	for (int i = 0; i < num_shaders; ++i) {
-		MGLShader * shader = (MGLShader *)PyTuple_GET_ITEM(program->shaders, i);
-		if (shaders[shader->shader_slot]) {
-			// TODO:
+		if (program->geometry_input) {
+			Py_INCREF(program->geometry_input);
 		}
 
-		shaders[shader->shader_slot] = shader;
-	}
-
-	if (shaders[VERTEX_SHADER_SLOT]) {
-		MGLProgramStage * program_stage = MGLProgramStage_New();
-		program_stage->program = program;
-		program_stage->shader = shaders[VERTEX_SHADER_SLOT];
-		MGLProgramStage_Complete(program_stage);
-		program->vertex_shader = (PyObject *)program_stage;
-	}
-
-	if (shaders[FRAGMENT_SHADER_SLOT]) {
-		MGLProgramStage * program_stage = MGLProgramStage_New();
-		program_stage->program = program;
-		program_stage->shader = shaders[FRAGMENT_SHADER_SLOT];
-		MGLProgramStage_Complete(program_stage);
-		program->fragment_shader = (PyObject *)program_stage;
-	}
-
-	if (shaders[GEOMETRY_SHADER_SLOT]) {
-		MGLProgramStage * program_stage = MGLProgramStage_New();
-		program_stage->program = program;
-		program_stage->shader = shaders[GEOMETRY_SHADER_SLOT];
-		MGLProgramStage_Complete(program_stage);
-		program->geometry_shader = (PyObject *)program_stage;
-	}
-
-	if (shaders[TESSELATION_EVALUATION_SHADER_SLOT]) {
-		MGLProgramStage * program_stage = MGLProgramStage_New();
-		program_stage->program = program;
-		program_stage->shader = shaders[TESSELATION_EVALUATION_SHADER_SLOT];
-		MGLProgramStage_Complete(program_stage);
-		program->tesselation_evaluation_shader = (PyObject *)program_stage;
-	}
-
-	if (shaders[TESSELATION_CONTROL_SHADER_SLOT]) {
-		MGLProgramStage * program_stage = MGLProgramStage_New();
-		program_stage->program = program;
-		program_stage->shader = shaders[TESSELATION_CONTROL_SHADER_SLOT];
-		MGLProgramStage_Complete(program_stage);
-		program->tesselation_control_shader = (PyObject *)program_stage;
-	}
-}
-
-void MGLProgram_LoadUniforms(MGLProgram * program) {
-	const GLMethods & gl = program->context->gl;
-
-	PyObject * uniforms = PyDict_New();
-
-	int num_uniforms = 0;
-	gl.GetProgramiv(program->program_obj, GL_ACTIVE_UNIFORMS, &num_uniforms);
-
-	for (int i = 0; i < num_uniforms; ++i) {
-		MGLUniform * uniform = MGLUniform_New();
-
-		int name_len = 0;
-		char name[256];
-
-		gl.GetActiveUniform(program->program_obj, i, 256, &name_len, &uniform->array_length, (GLenum *)&uniform->type, name);
-
-		uniform->location = gl.GetUniformLocation(program->program_obj, name);
-
-		if (uniform->location < 0) {
-			Py_DECREF((PyObject *)uniform);
-			continue;
+		if (program->geometry_output) {
+			Py_INCREF(program->geometry_output);
 		}
 
-		uniform->index = i;
-		uniform->program = program;
-		uniform->name = PyUnicode_FromStringAndSize(name, name_len);
+	} else {
 
-		MGLUniform_Complete(uniform);
-
-		clean_program_member_name(name, name_len);
-
-		// TODO: check shadow and sampler cube
-
-		PyDict_SetItem(uniforms, uniform->name, (PyObject *)uniform);
-		Py_DECREF(uniform);
+		program->geometry_input = 0;
+		program->geometry_output = 0;
 	}
-
-	program->uniforms = uniforms;
-
-	Py_INCREF(uniforms); // TODO: maybe not needed
-	program->uniforms_proxy = PyDictProxy_New(uniforms);
 }
-
-void MGLProgram_LoadAttributes(MGLProgram * program) {
-	const GLMethods & gl = program->context->gl;
-
-	PyObject * attributes = PyDict_New();
-
-	int num_attributes = 0;
-	gl.GetProgramiv(program->program_obj, GL_ACTIVE_ATTRIBUTES, &num_attributes);
-
-	for (int i = 0; i < num_attributes; ++i) {
-		MGLAttribute * attribute = MGLAttribute_New();
-
-		int name_len = 0;
-		char name[256];
-
-		gl.GetActiveAttrib(program->program_obj, i, 256, &name_len, &attribute->array_length, (GLenum *)&attribute->type, name);
-
-		attribute->location = gl.GetAttribLocation(program->program_obj, name);
-
-		if (attribute->location < 0) {
-			Py_DECREF(attribute);
-			continue;
-		}
-
-		clean_program_member_name(name, name_len);
-
-		attribute->number = i;
-		attribute->program = program;
-		attribute->name = PyUnicode_FromStringAndSize(name, name_len);
-
-		MGLAttribute_Complete(attribute);
-
-		PyDict_SetItem(attributes, attribute->name, (PyObject *)attribute);
-		Py_DECREF(attribute);
-	}
-
-	program->attributes = attributes;
-
-	Py_INCREF(attributes); // TODO: maybe not needed
-	program->attributes_proxy = PyDictProxy_New(attributes);
-}
-
-void MGLProgram_LoadVaryings(MGLProgram * program) {
-	const GLMethods & gl = program->context->gl;
-
-	PyObject * varyings = PyDict_New();
-
-	int num_varyings = 0;
-	gl.GetProgramiv(program->program_obj, GL_TRANSFORM_FEEDBACK_VARYINGS, &num_varyings);
-
-	for (int i = 0; i < num_varyings; ++i) {
-		MGLVarying * varying = MGLVarying_New();
-
-		int name_len = 0;
-		char name[256];
-
-		gl.GetTransformFeedbackVarying(program->program_obj, i, 256, &name_len, &varying->array_length, (GLenum *)&varying->type, name);
-
-		varying->index = i;
-		varying->program = program;
-		varying->name = PyUnicode_FromStringAndSize(name, name_len);
-
-		PyDict_SetItem(varyings, varying->name, (PyObject *)varying);
-		Py_DECREF(varying);
-	}
-
-	program->varyings = varyings;
-
-	Py_INCREF(varyings); // TODO: maybe not needed
-	program->varyings_proxy = PyDictProxy_New(varyings);
-}
-
-// void MGLProgram_LoadSubroutines(MGLProgram * program) {
-// 	const GLMethods & gl = program->context->gl;
-
-// 	PyObject * subroutines = PyDict_New();
-
-// 	program->subroutines = subroutines;
-
-// 	Py_INCREF(subroutines); // TODO: maybe not needed
-// 	program->subroutines_proxy = PyDictProxy_New(subroutines);
-// }

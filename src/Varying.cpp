@@ -46,17 +46,17 @@ char MGLVarying_name_doc[] = R"(
 	name
 )";
 
-PyObject * MGLVarying_get_index(MGLVarying * self, void * closure) {
-	return PyLong_FromLong(self->index);
+PyObject * MGLVarying_get_number(MGLVarying * self, void * closure) {
+	return PyLong_FromLong(self->number);
 }
 
-char MGLVarying_index_doc[] = R"(
-	index
+char MGLVarying_number_doc[] = R"(
+	number
 )";
 
 PyGetSetDef MGLVarying_tp_getseters[] = {
 	{(char *)"name", (getter)MGLVarying_get_name, 0, MGLVarying_name_doc, 0},
-	{(char *)"index", (getter)MGLVarying_get_index, 0, MGLVarying_index_doc, 0},
+	{(char *)"number", (getter)MGLVarying_get_number, 0, MGLVarying_number_doc, 0},
 	{0},
 };
 

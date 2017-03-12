@@ -32,11 +32,4 @@ extern PyTypeObject MGLProgram_Type;
 
 MGLProgram * MGLProgram_New();
 void MGLProgram_Invalidate(MGLProgram * program);
-void MGLProgram_Compile(MGLProgram * program, PyObject * varyings);
-
-void MGLProgram_LoadUniforms(MGLProgram * program);
-void MGLProgram_LoadAttributes(MGLProgram * program);
-void MGLProgram_LoadVaryings(MGLProgram * program);
-
-// TODO:
-void MGLProgram_LoadProgramStages(MGLProgram * program);
+void MGLProgram_Compile(MGLProgram * program, PyObject * outputs);

@@ -9,6 +9,9 @@ struct MGLGenericProgram : public MGLContextMember {
 
 	PyObject * uniforms;
 	PyObject * uniforms_proxy;
+
+	PyObject * uniform_blocks;
+	PyObject * uniform_blocks_proxy;
 };
 
 extern PyTypeObject MGLGenericProgram_Type;

@@ -228,11 +228,13 @@ PyObject * MGLContext_copy_buffer(MGLContext * self, PyObject * args, PyObject *
 	if (read_offset < 0 || write_offset < 0) {
 		MGLError * error = MGLError_New(TRACE, "buffer underflow");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
 	}
 
 	if (read_offset + size > src->size || write_offset + size > dst->size) {
 		MGLError * error = MGLError_New(TRACE, "buffer overflow");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
 	}
 
 	const GLMethods & gl = self->gl;

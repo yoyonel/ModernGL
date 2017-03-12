@@ -13,7 +13,7 @@ struct MGLUniform : public MGLProgramMember {
 	void * gl_value_reader_proc;
 	void * gl_value_writer_proc;
 
-	int index;
+	int number;
 	int location;
 	int type;
 

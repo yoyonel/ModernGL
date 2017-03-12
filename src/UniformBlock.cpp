@@ -73,3 +73,11 @@ PyTypeObject MGLUniformBlock_Type = {
 	0,                                                      // tp_alloc
 	MGLUniformBlock_tp_new,                                 // tp_new
 };
+
+MGLUniformBlock * MGLUniformBlock_New() {
+	MGLUniformBlock * self = (MGLUniformBlock *)MGLUniformBlock_tp_new(&MGLUniformBlock_Type, 0, 0);
+	return self;
+}
+
+void MGLUniformBlock_Complete(MGLUniformBlock * uniform_block) {
+}

@@ -13,7 +13,7 @@ struct MGLVarying : public MGLProgramMember {
 	void * gl_value_reader_proc;
 	void * gl_value_writer_proc;
 
-	int index;
+	int number;
 	int type;
 
 	int dimension;
