@@ -23,13 +23,12 @@ frag = ctx.FragmentShader('''
 	in vec2 tex;
 	out vec4 color;
 
-	uniform float scale;
 	uniform vec2 center;
 	uniform int iter;
 
 	void main() {
 		vec2 z = vec2(5.0 * (tex.x - 0.5), 3.0 * (tex.y - 0.5));
-		vec2 c = vec2(1.33 * (tex.x - 0.5) * scale - center.x, (tex.y - 0.5) * scale - center.y);
+		vec2 c = center;
 
 		int i;
 		for(i = 0; i < iter; i++) {
@@ -49,18 +48,14 @@ vbo = ctx.Buffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
 vao = ctx.SimpleVertexArray(prog, vbo, '2f', ['vert'])
 
 prog.uniforms['iter'].value = 100
-prog.uniforms['scale'].value = 1.0
-prog.uniforms['center'].value = (0.3, 0.2)
 
-x, y, scale = 0, 0, 1
+x, y = (0.49, 0.32)
 
 while GLWindow.Update():
 	ctx.clear(240, 240, 240)
-	mx, my, mw = GLWindow.GetMouse()
-	scale *= 1.1 ** (mw / 150)
-	x += mx / 100
-	y += my / 100
+	mx, my, _ = GLWindow.GetMouse()
+	x -= mx / 100
+	y -= my / 100
 
-	prog.uniforms['center'].value = (x, y)
-	prog.uniforms['scale'].value = scale
+	prog.uniforms['center'].value = (y, x)
 	vao.render(ModernGL.TRIANGLE_STRIP)
