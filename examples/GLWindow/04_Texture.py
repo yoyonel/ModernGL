@@ -62,7 +62,7 @@ vao = ctx.SimpleVertexArray(prog, vbo, '2f', ['vert'])
 
 # Texture
 
-img = Image.open('../DataFiles/Noise.jpg')
+img = Image.open('../data/noise.jpg')
 texture = ctx.Texture(img.size, 3, img.tobytes())
 texture.use()
 

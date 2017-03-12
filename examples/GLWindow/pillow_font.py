@@ -10,7 +10,7 @@ ctx = ModernGL.create_context()
 
 # Using Pillow to create a Texture
 
-font = ImageFont.truetype('../DataFiles/OpenSans-Regular.ttf', 120)
+font = ImageFont.truetype('../data/OpenSans-Regular.ttf', 120)
 
 msg = 'Hello World!'
 msg_size = font.getsize(msg)
