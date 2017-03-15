@@ -1,5 +1,7 @@
 #include "ContextMember.hpp"
 
+#include "Error.hpp"
+
 PyObject * MGLContextMember_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLContextMember * self = (MGLContextMember *)type->tp_alloc(type, 0);
 
@@ -14,6 +16,8 @@ void MGLContextMember_tp_dealloc(MGLContextMember * self) {
 }
 
 int MGLContextMember_tp_init(MGLContextMember * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.ContextMember manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 

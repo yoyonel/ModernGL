@@ -26,6 +26,8 @@ void MGLUniform_tp_dealloc(MGLUniform * self) {
 }
 
 int MGLUniform_tp_init(MGLUniform * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Uniform manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
@@ -334,7 +336,6 @@ void MGLUniform_Invalidate(MGLUniform * uniform) {
 	Py_DECREF(uniform->name);
 
 	uniform->ob_base.ob_type = &MGLInvalidObject_Type;
-	uniform->initial_type = &MGLUniform_Type;
 
 	Py_DECREF(uniform);
 }

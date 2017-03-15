@@ -1,11 +1,13 @@
 #include "Version.hpp"
 
+#include "Error.hpp"
+
 PyObject * MGLVersion_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLVersion * self = (MGLVersion *)type->tp_alloc(type, 0);
 
-	#ifdef MGL_VERBOSE
-	printf("MGLVersion_tp_new %p\n", self);
-	#endif
+	// #ifdef MGL_VERBOSE
+	// printf("MGLVersion_tp_new %p\n", self);
+	// #endif
 
 	if (self) {
 	}
@@ -15,14 +17,16 @@ PyObject * MGLVersion_tp_new(PyTypeObject * type, PyObject * args, PyObject * kw
 
 void MGLVersion_tp_dealloc(MGLVersion * self) {
 
-	#ifdef MGL_VERBOSE
-	printf("MGLVersion_tp_dealloc %p\n", self);
-	#endif
+	// #ifdef MGL_VERBOSE
+	// printf("MGLVersion_tp_dealloc %p\n", self);
+	// #endif
 
 	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 int MGLVersion_tp_init(MGLVersion * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Version manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 

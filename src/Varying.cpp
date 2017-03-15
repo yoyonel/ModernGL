@@ -26,6 +26,8 @@ void MGLVarying_tp_dealloc(MGLVarying * self) {
 }
 
 int MGLVarying_tp_init(MGLVarying * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Varying manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
@@ -119,7 +121,6 @@ void MGLVarying_Invalidate(MGLVarying * varying) {
 	Py_DECREF(varying->name);
 
 	varying->ob_base.ob_type = &MGLInvalidObject_Type;
-	varying->initial_type = &MGLVarying_Type;
 
 	Py_DECREF(varying);
 }

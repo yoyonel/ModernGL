@@ -26,6 +26,8 @@ void MGLMultisampleRenderbuffer_tp_dealloc(MGLMultisampleRenderbuffer * self) {
 }
 
 int MGLMultisampleRenderbuffer_tp_init(MGLMultisampleRenderbuffer * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.MultisampleRenderbuffer manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
@@ -122,7 +124,6 @@ void MGLMultisampleRenderbuffer_Invalidate(MGLMultisampleRenderbuffer * renderbu
 	Py_DECREF(renderbuffer->context);
 
 	renderbuffer->ob_base.ob_type = &MGLInvalidObject_Type;
-	renderbuffer->initial_type = &MGLMultisampleRenderbuffer_Type;
 
 	Py_DECREF(renderbuffer);
 }

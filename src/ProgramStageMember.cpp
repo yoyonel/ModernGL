@@ -1,5 +1,7 @@
 #include "ProgramStageMember.hpp"
 
+#include "Error.hpp"
+
 PyObject * MGLProgramStageMember_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLProgramStageMember * self = (MGLProgramStageMember *)type->tp_alloc(type, 0);
 
@@ -14,6 +16,8 @@ void MGLProgramStageMember_tp_dealloc(MGLProgramStageMember * self) {
 }
 
 int MGLProgramStageMember_tp_init(MGLProgramStageMember * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.ProgramStageMember manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 

@@ -26,6 +26,8 @@ void MGLAttribute_tp_dealloc(MGLAttribute * self) {
 }
 
 int MGLAttribute_tp_init(MGLAttribute * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Attribute manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
@@ -261,7 +263,6 @@ void MGLAttribute_Invalidate(MGLAttribute * attribute) {
 	Py_DECREF(attribute->name);
 
 	attribute->ob_base.ob_type = &MGLInvalidObject_Type;
-	attribute->initial_type = &MGLAttribute_Type;
 
 	Py_DECREF(attribute);
 }

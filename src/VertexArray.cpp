@@ -5,6 +5,11 @@
 #include "Primitive.hpp"
 #include "Buffer.hpp"
 
+#include "Attribute.hpp"
+#include "VertexArrayAttribute.hpp"
+#include "VertexArrayListAttribute.hpp"
+#include "VertexArrayMatrixAttribute.hpp"
+
 // TODO: implement VertexAttrib as VertexArray member
 
 PyObject * MGLVertexArray_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
@@ -30,6 +35,8 @@ void MGLVertexArray_tp_dealloc(MGLVertexArray * self) {
 }
 
 int MGLVertexArray_tp_init(MGLVertexArray * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.VertexArray manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
@@ -234,10 +241,20 @@ PyObject * MGLVertexArray_get_content(MGLVertexArray * self, void * closure) {
 	Py_INCREF(self->content);
 	return self->content;
 }
+
 char MGLVertexArray_content_doc[] = R"(
 	content
 
 	The content assinged to the VertexArray.
+)";
+
+PyObject * MGLVertexArray_get_attributes(MGLVertexArray * self, void * closure) {
+	Py_INCREF(self->attributes_proxy);
+	return self->attributes_proxy;
+}
+
+char MGLVertexArray_attributes_doc[] = R"(
+	attributes
 )";
 
 PyObject * MGLVertexArray_get_index_buffer(MGLVertexArray * self, void * closure) {
@@ -267,6 +284,7 @@ char MGLVertexArray_vertices_doc[] = R"(
 PyGetSetDef MGLVertexArray_tp_getseters[] = {
 	{(char *)"program", (getter)MGLVertexArray_get_program, 0, MGLVertexArray_program_doc, 0},
 	{(char *)"content", (getter)MGLVertexArray_get_content, 0, MGLVertexArray_content_doc, 0},
+	{(char *)"attributes", (getter)MGLVertexArray_get_attributes, 0, MGLVertexArray_attributes_doc, 0},
 	{(char *)"index_buffer", (getter)MGLVertexArray_get_index_buffer, 0, MGLVertexArray_index_buffer_doc, 0},
 	{(char *)"vertices", (getter)MGLVertexArray_get_vertices, 0, MGLVertexArray_vertices_doc, 0},
 	{0},
@@ -368,7 +386,87 @@ void MGLVertexArray_Invalidate(MGLVertexArray * array) {
 	Py_DECREF(array->context);
 
 	array->ob_base.ob_type = &MGLInvalidObject_Type;
-	array->initial_type = &MGLVertexArray_Type;
 
 	Py_DECREF(array);
+}
+
+void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
+	PyObject * name;
+	MGLAttribute * program_attribute;
+	Py_ssize_t pos = 0;
+
+	PyObject * attributes = PyDict_New();
+
+	while (PyDict_Next(vertex_array->program->attributes, &pos, &name, (PyObject **)&program_attribute)) {
+
+		if (program_attribute->array_length > 1) {
+
+			if (program_attribute->rows_length > 1) {
+
+				MGLVertexArrayListAttribute * attrib_list = MGLVertexArrayListAttribute_New();
+				attrib_list->content = PyTuple_New(program_attribute->array_length);
+				attrib_list->location = program_attribute->location;
+
+				for (int i = 0; i < program_attribute->array_length; ++i) {
+					MGLVertexArrayMatrixAttribute * matrix = MGLVertexArrayMatrixAttribute_New();
+					matrix->content = PyTuple_New(program_attribute->rows_length);
+					matrix->location = attrib_list->location + i * program_attribute->rows_length;
+
+					for (int j = 0; j < program_attribute->rows_length; ++j) {
+						MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
+						attrib->location = matrix->location + j;
+
+						PyTuple_SET_ITEM(matrix->content, j, (PyObject *)attrib);
+					}
+
+					PyTuple_SET_ITEM(attrib_list->content, i, (PyObject *)matrix);
+				}
+
+				PyDict_SetItem(attributes, name, (PyObject *)attrib_list);
+
+			} else {
+
+				MGLVertexArrayListAttribute * attrib_list = MGLVertexArrayListAttribute_New();
+				attrib_list->content = PyTuple_New(program_attribute->array_length);
+				attrib_list->location = program_attribute->location;
+
+				for (int i = 0; i < program_attribute->array_length; ++i) {
+					MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
+					attrib->location = attrib_list->location + i;
+
+					PyTuple_SET_ITEM(attrib_list->content, i, (PyObject *)attrib);
+				}
+
+				PyDict_SetItem(attributes, name, (PyObject *)attrib_list);
+
+			}
+
+		} else {
+
+			if (program_attribute->rows_length > 1) {
+				MGLVertexArrayMatrixAttribute * matrix = MGLVertexArrayMatrixAttribute_New();
+				matrix->content = PyTuple_New(program_attribute->rows_length);
+				matrix->location = program_attribute->location;
+
+				for (int j = 0; j < program_attribute->rows_length; ++j) {
+					MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
+					attrib->location = matrix->location + j;
+
+					PyTuple_SET_ITEM(matrix->content, j, (PyObject *)attrib);
+				}
+
+				PyDict_SetItem(attributes, name, (PyObject *)matrix);
+
+			} else {
+				
+				MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
+				attrib->location = program_attribute->location;
+				PyDict_SetItem(attributes, name, (PyObject *)attrib);
+
+			}
+		}
+	}
+
+	vertex_array->attributes = attributes;
+	vertex_array->attributes_proxy = PyDictProxy_New(attributes);
 }

@@ -6,8 +6,6 @@
 #include "GLMethods.hpp"
 
 struct MGLContext : public MGLObject {
-	PyTypeObject * initial_type;
-
 	PyObject * default_framebuffer;
 
 	void * rc_handle;

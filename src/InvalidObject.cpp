@@ -1,5 +1,7 @@
 #include "InvalidObject.hpp"
 
+#include "Error.hpp"
+
 PyObject * MGLInvalidObject_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLInvalidObject * self = (MGLInvalidObject *)type->tp_alloc(type, 0);
 
@@ -15,10 +17,12 @@ void MGLInvalidObject_tp_dealloc(MGLInvalidObject * self) {
 	printf("MGLInvalidObject_tp_dealloc %p\n", self);
 	#endif
 
-	self->initial_type->tp_dealloc((PyObject *)self);
+	MGLInvalidObject_Type.tp_free((PyObject *)self);
 }
 
 int MGLInvalidObject_tp_init(MGLInvalidObject * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.InvalidObject manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 

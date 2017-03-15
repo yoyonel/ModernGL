@@ -27,6 +27,8 @@ void MGLBuffer_tp_dealloc(MGLBuffer * self) {
 }
 
 int MGLBuffer_tp_init(MGLBuffer * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Buffer manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
@@ -364,7 +366,6 @@ void MGLBuffer_Invalidate(MGLBuffer * buffer) {
 	Py_DECREF(buffer->context);
 
 	buffer->ob_base.ob_type = &MGLInvalidObject_Type;
-	buffer->initial_type = &MGLBuffer_Type;
 
 	Py_DECREF(buffer);
 }

@@ -26,6 +26,8 @@ void MGLSubroutine_tp_dealloc(MGLSubroutine * self) {
 }
 
 int MGLSubroutine_tp_init(MGLSubroutine * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Subroutine manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
@@ -119,7 +121,6 @@ void MGLSubroutine_Invalidate(MGLSubroutine * subroutine) {
 	Py_DECREF(subroutine->name);
 
 	subroutine->ob_base.ob_type = &MGLInvalidObject_Type;
-	subroutine->initial_type = &MGLSubroutine_Type;
 
 	Py_DECREF(subroutine);
 }

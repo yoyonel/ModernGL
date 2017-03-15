@@ -1,5 +1,7 @@
 #include "VertexArrayMember.hpp"
 
+#include "Error.hpp"
+
 PyObject * MGLVertexArrayMember_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLVertexArrayMember * self = (MGLVertexArrayMember *)type->tp_alloc(type, 0);
 
@@ -14,6 +16,8 @@ void MGLVertexArrayMember_tp_dealloc(MGLVertexArrayMember * self) {
 }
 
 int MGLVertexArrayMember_tp_init(MGLVertexArrayMember * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.VertexArrayMember manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 

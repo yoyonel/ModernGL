@@ -6,10 +6,7 @@
 #include "ProgramStage.hpp"
 
 struct MGLProgramStageMember : public MGLObject {
-	union {
-		PyTypeObject * initial_type;
-		MGLProgramStage * program_stage;
-	};
+	MGLProgramStage * program_stage;
 };
 
 extern PyTypeObject MGLProgramStageMember_Type;

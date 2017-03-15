@@ -1,10 +1,15 @@
 #include "ProgramStage.hpp"
 
+#include "Error.hpp"
 #include "Subroutine.hpp"
 #include "SubroutineUniform.hpp"
 
 PyObject * MGLProgramStage_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLProgramStage * self = (MGLProgramStage *)type->tp_alloc(type, 0);
+
+	#ifdef MGL_VERBOSE
+	printf("MGLProgramStage_tp_new %p\n", self);
+	#endif
 
 	if (self) {
 	}
@@ -13,10 +18,17 @@ PyObject * MGLProgramStage_tp_new(PyTypeObject * type, PyObject * args, PyObject
 }
 
 void MGLProgramStage_tp_dealloc(MGLProgramStage * self) {
+
+	#ifdef MGL_VERBOSE
+	printf("MGLProgramStage_tp_dealloc %p\n", self);
+	#endif
+
 	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 int MGLProgramStage_tp_init(MGLProgramStage * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.ProgramStage manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 

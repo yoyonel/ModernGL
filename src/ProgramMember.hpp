@@ -6,10 +6,7 @@
 #include "Program.hpp"
 
 struct MGLProgramMember : public MGLObject {
-	union {
-		PyTypeObject * initial_type;
-		MGLProgram * program;
-	};
+	MGLProgram * program;
 };
 
 extern PyTypeObject MGLProgramMember_Type;

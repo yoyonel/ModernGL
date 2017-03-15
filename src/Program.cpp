@@ -34,6 +34,8 @@ void MGLProgram_tp_dealloc(MGLProgram * self) {
 }
 
 int MGLProgram_tp_init(MGLProgram * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Program manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
@@ -337,7 +339,6 @@ void MGLProgram_Invalidate(MGLProgram * program) {
 	Py_DECREF(program->context);
 
 	program->ob_base.ob_type = &MGLInvalidObject_Type;
-	program->initial_type = &MGLProgram_Type;
 
 	Py_DECREF(program);
 }
@@ -476,6 +477,8 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		uniform->location = gl.GetUniformLocation(program->program_obj, name);
 
+		// Skip uniforms from uniform buffers
+
 		if (uniform->location < 0) {
 			Py_DECREF((PyObject *)uniform);
 			continue;
@@ -515,10 +518,10 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		gl.GetActiveUniformBlockiv(program->program_obj, i, GL_UNIFORM_BLOCK_BINDING, &uniform_block->location);
 		gl.GetActiveUniformBlockiv(program->program_obj, i, GL_UNIFORM_BLOCK_DATA_SIZE, &uniform_block->array_length);
 
-		if (uniform_block->location < 0) {
-			Py_DECREF((PyObject *)uniform_block);
-			continue;
-		}
+		// if (uniform_block->location < 0) {
+		// 	Py_DECREF((PyObject *)uniform_block);
+		// 	continue;
+		// }
 
 		uniform_block->number = i;
 		uniform_block->program = program;
@@ -556,10 +559,10 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		attribute->location = gl.GetAttribLocation(program->program_obj, name);
 
-		if (attribute->location < 0) {
-			Py_DECREF(attribute);
-			continue;
-		}
+		// if (attribute->location < 0) {
+		// 	Py_DECREF(attribute);
+		// 	continue;
+		// }
 
 		clean_program_member_name(name, name_len);
 

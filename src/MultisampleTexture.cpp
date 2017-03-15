@@ -26,6 +26,8 @@ void MGLMultisampleTexture_tp_dealloc(MGLMultisampleTexture * self) {
 }
 
 int MGLMultisampleTexture_tp_init(MGLMultisampleTexture * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.MultisampleTexture manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
@@ -159,7 +161,6 @@ void MGLMultisampleTexture_Invalidate(MGLMultisampleTexture * texture) {
 	Py_DECREF(texture->context);
 
 	texture->ob_base.ob_type = &MGLInvalidObject_Type;
-	texture->initial_type = &MGLMultisampleTexture_Type;
 
 	Py_DECREF(texture);
 }

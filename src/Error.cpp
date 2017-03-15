@@ -37,6 +37,8 @@ void MGLError_tp_dealloc(MGLError * self) {
 }
 
 int MGLError_tp_init(MGLError * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Error manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 

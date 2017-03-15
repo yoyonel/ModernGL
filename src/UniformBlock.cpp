@@ -1,7 +1,13 @@
 #include "UniformBlock.hpp"
 
+#include "Error.hpp"
+
 PyObject * MGLUniformBlock_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLUniformBlock * self = (MGLUniformBlock *)type->tp_alloc(type, 0);
+
+	#ifdef MGL_VERBOSE
+	printf("MGLUniformBlock_tp_new %p\n", self);
+	#endif
 
 	if (self) {
 	}
@@ -10,10 +16,17 @@ PyObject * MGLUniformBlock_tp_new(PyTypeObject * type, PyObject * args, PyObject
 }
 
 void MGLUniformBlock_tp_dealloc(MGLUniformBlock * self) {
+
+	#ifdef MGL_VERBOSE
+	printf("MGLUniformBlock_tp_dealloc %p\n", self);
+	#endif
+
 	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 int MGLUniformBlock_tp_init(MGLUniformBlock * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.UniformBlock manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 

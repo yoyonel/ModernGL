@@ -1,5 +1,7 @@
 #include "EnableFlag.hpp"
 
+#include "Error.hpp"
+
 PyObject * MGLEnableFlag_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLEnableFlag * self = (MGLEnableFlag *)type->tp_alloc(type, 0);
 
@@ -23,6 +25,8 @@ void MGLEnableFlag_tp_dealloc(MGLEnableFlag * self) {
 }
 
 int MGLEnableFlag_tp_init(MGLEnableFlag * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.EnableFlag manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 

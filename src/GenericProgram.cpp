@@ -1,5 +1,8 @@
 #include "GenericProgram.hpp"
 
+#include "Error.hpp"
+
+
 PyObject * MGLGenericProgram_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLGenericProgram * self = (MGLGenericProgram *)type->tp_alloc(type, 0);
 
@@ -14,6 +17,8 @@ void MGLGenericProgram_tp_dealloc(MGLGenericProgram * self) {
 }
 
 int MGLGenericProgram_tp_init(MGLGenericProgram * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.GenericProgram manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 

@@ -1,5 +1,7 @@
 #include "ProgramMember.hpp"
 
+#include "Error.hpp"
+
 PyObject * MGLProgramMember_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLProgramMember * self = (MGLProgramMember *)type->tp_alloc(type, 0);
 
@@ -14,6 +16,8 @@ void MGLProgramMember_tp_dealloc(MGLProgramMember * self) {
 }
 
 int MGLProgramMember_tp_init(MGLProgramMember * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.ProgramMember manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 

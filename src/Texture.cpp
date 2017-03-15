@@ -26,6 +26,8 @@ void MGLTexture_tp_dealloc(MGLTexture * self) {
 }
 
 int MGLTexture_tp_init(MGLTexture * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Texture manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
@@ -192,7 +194,6 @@ void MGLTexture_Invalidate(MGLTexture * texture) {
 	Py_DECREF(texture->context);
 
 	texture->ob_base.ob_type = &MGLInvalidObject_Type;
-	texture->initial_type = &MGLTexture_Type;
 
 	Py_DECREF(texture);
 }

@@ -6,10 +6,7 @@
 #include "Context.hpp"
 
 struct MGLContextMember : public MGLObject {
-	union {
-		PyTypeObject * initial_type;
-		MGLContext * context;
-	};
+	MGLContext * context;
 };
 
 extern PyTypeObject MGLContextMember_Type;

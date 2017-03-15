@@ -1,7 +1,13 @@
 #include "VertexArrayListAttribute.hpp"
 
+#include "Error.hpp"
+
 PyObject * MGLVertexArrayListAttribute_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLVertexArrayListAttribute * self = (MGLVertexArrayListAttribute *)type->tp_alloc(type, 0);
+
+	#ifdef MGL_VERBOSE
+	printf("MGLVertexArrayListAttribute_tp_new %p\n", self);
+	#endif
 
 	if (self) {
 	}
@@ -10,10 +16,17 @@ PyObject * MGLVertexArrayListAttribute_tp_new(PyTypeObject * type, PyObject * ar
 }
 
 void MGLVertexArrayListAttribute_tp_dealloc(MGLVertexArrayListAttribute * self) {
+
+	#ifdef MGL_VERBOSE
+	printf("MGLVertexArrayListAttribute_tp_dealloc %p\n", self);
+	#endif
+
 	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 int MGLVertexArrayListAttribute_tp_init(MGLVertexArrayListAttribute * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.VertexArrayListAttribute manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
@@ -73,3 +86,8 @@ PyTypeObject MGLVertexArrayListAttribute_Type = {
 	0,                                                      // tp_alloc
 	MGLVertexArrayListAttribute_tp_new,                     // tp_new
 };
+
+MGLVertexArrayListAttribute * MGLVertexArrayListAttribute_New() {
+	MGLVertexArrayListAttribute * self = (MGLVertexArrayListAttribute *)MGLVertexArrayListAttribute_tp_new(&MGLVertexArrayListAttribute_Type, 0, 0);
+	return self;
+}

@@ -1,5 +1,7 @@
 #include "Object.hpp"
 
+#include "Error.hpp"
+
 PyObject * MGLObject_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLObject * self = (MGLObject *)type->tp_alloc(type, 0);
 
@@ -14,6 +16,8 @@ void MGLObject_tp_dealloc(MGLObject * self) {
 }
 
 int MGLObject_tp_init(MGLObject * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Object manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 

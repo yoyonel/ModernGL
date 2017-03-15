@@ -1,7 +1,13 @@
 #include "VertexArrayAttribute.hpp"
 
+#include "Error.hpp"
+
 PyObject * MGLVertexArrayAttribute_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLVertexArrayAttribute * self = (MGLVertexArrayAttribute *)type->tp_alloc(type, 0);
+
+	#ifdef MGL_VERBOSE
+	printf("MGLVertexArrayAttribute_tp_new %p\n", self);
+	#endif
 
 	if (self) {
 	}
@@ -10,10 +16,17 @@ PyObject * MGLVertexArrayAttribute_tp_new(PyTypeObject * type, PyObject * args, 
 }
 
 void MGLVertexArrayAttribute_tp_dealloc(MGLVertexArrayAttribute * self) {
+
+	#ifdef MGL_VERBOSE
+	printf("MGLVertexArrayAttribute_tp_dealloc %p\n", self);
+	#endif
+
 	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 int MGLVertexArrayAttribute_tp_init(MGLVertexArrayAttribute * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.VertexArrayAttribute manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
@@ -73,3 +86,8 @@ PyTypeObject MGLVertexArrayAttribute_Type = {
 	0,                                                      // tp_alloc
 	MGLVertexArrayAttribute_tp_new,                         // tp_new
 };
+
+MGLVertexArrayAttribute * MGLVertexArrayAttribute_New() {
+	MGLVertexArrayAttribute * self = (MGLVertexArrayAttribute *)MGLVertexArrayAttribute_tp_new(&MGLVertexArrayAttribute_Type, 0, 0);
+	return self;
+}

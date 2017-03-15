@@ -41,6 +41,8 @@ void MGLContext_tp_dealloc(MGLContext * self) {
 }
 
 int MGLContext_tp_init(MGLContext * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create %s manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
@@ -50,7 +52,8 @@ PyObject * MGLContext_tp_str(MGLContext * self) {
 
 // PyObject * MGLContext_make_current(MGLContext * self) {
 // 	if (!wglMakeCurrent(self->dc_handle, self->rc_handle)) {
-// 		PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+// 		MGLError * error = MGLError_New(TRACE, "Cannot select context");
+// 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 // 		return 0;
 // 	}
 
@@ -795,6 +798,8 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 	Py_INCREF(self);
 	array->context = self;
 
+	MGLVertexArray_Complete(array);
+
 	Py_INCREF(array);
 	return array;
 }
@@ -1144,8 +1149,6 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 		}
 
 		int depth_attachment_index = -1;
-
-		int width, height;
 
 		for (int i = 0; i < attachments_len; ++i) {
 			PyObject * item = PyList_GET_ITEM(attachments, i);
@@ -1767,7 +1770,6 @@ void MGLContext_Invalidate(MGLContext * context) {
 	// TODO: destroy standalone context
 
 	context->ob_base.ob_type = &MGLInvalidObject_Type;
-	context->initial_type = &MGLContext_Type;
 
 	Py_DECREF(context);
 }

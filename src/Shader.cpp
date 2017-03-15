@@ -50,6 +50,8 @@ void MGLShader_tp_dealloc(MGLShader * self) {
 }
 
 int MGLShader_tp_init(MGLShader * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Shader manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
@@ -179,7 +181,6 @@ void MGLShader_Invalidate(MGLShader * shader) {
 	Py_DECREF(shader->context);
 
 	shader->ob_base.ob_type = &MGLInvalidObject_Type;
-	shader->initial_type = &MGLShader_Type;
 
 	Py_DECREF(shader);
 }

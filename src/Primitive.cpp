@@ -1,11 +1,13 @@
 #include "Primitive.hpp"
 
+#include "Error.hpp"
+
 PyObject * MGLPrimitive_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLPrimitive * self = (MGLPrimitive *)type->tp_alloc(type, 0);
 
-	#ifdef MGL_VERBOSE
-	printf("MGLPrimitive_tp_new %p\n", self);
-	#endif
+	// #ifdef MGL_VERBOSE
+	// printf("MGLPrimitive_tp_new %p\n", self);
+	// #endif
 
 	if (self) {
 	}
@@ -15,14 +17,16 @@ PyObject * MGLPrimitive_tp_new(PyTypeObject * type, PyObject * args, PyObject * 
 
 void MGLPrimitive_tp_dealloc(MGLPrimitive * self) {
 
-	#ifdef MGL_VERBOSE
-	printf("MGLPrimitive_tp_dealloc %p\n", self);
-	#endif
+	// #ifdef MGL_VERBOSE
+	// printf("MGLPrimitive_tp_dealloc %p\n", self);
+	// #endif
 
 	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 int MGLPrimitive_tp_init(MGLPrimitive * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Primitive manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 

@@ -26,6 +26,8 @@ void MGLRenderbuffer_tp_dealloc(MGLRenderbuffer * self) {
 }
 
 int MGLRenderbuffer_tp_init(MGLRenderbuffer * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Renderbuffer manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
@@ -122,7 +124,6 @@ void MGLRenderbuffer_Invalidate(MGLRenderbuffer * renderbuffer) {
 	Py_DECREF(renderbuffer->context);
 
 	renderbuffer->ob_base.ob_type = &MGLInvalidObject_Type;
-	renderbuffer->initial_type = &MGLRenderbuffer_Type;
 
 	Py_DECREF(renderbuffer);
 }

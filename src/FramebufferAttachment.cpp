@@ -1,5 +1,7 @@
 #include "FramebufferAttachment.hpp"
 
+#include "Error.hpp"
+
 PyObject * MGLFramebufferAttachment_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLFramebufferAttachment * self = (MGLFramebufferAttachment *)type->tp_alloc(type, 0);
 
@@ -14,6 +16,8 @@ void MGLFramebufferAttachment_tp_dealloc(MGLFramebufferAttachment * self) {
 }
 
 int MGLFramebufferAttachment_tp_init(MGLFramebufferAttachment * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.FramebufferAttachment manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 

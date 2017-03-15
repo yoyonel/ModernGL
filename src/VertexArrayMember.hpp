@@ -6,10 +6,7 @@
 #include "VertexArray.hpp"
 
 struct MGLVertexArrayMember : public MGLObject {
-	union {
-		PyTypeObject * initial_type;
-		MGLVertexArray * vertex_array;
-	};
+	MGLVertexArray * vertex_array;
 };
 
 extern PyTypeObject MGLVertexArrayMember_Type;

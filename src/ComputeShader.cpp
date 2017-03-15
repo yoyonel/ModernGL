@@ -1,7 +1,13 @@
 #include "ComputeShader.hpp"
 
+#include "Error.hpp"
+
 PyObject * MGLComputeShader_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLComputeShader * self = (MGLComputeShader *)type->tp_alloc(type, 0);
+
+	#ifdef MGL_VERBOSE
+	printf("MGLComputeShader_tp_new %p\n", self);
+	#endif
 
 	if (self) {
 	}
@@ -10,10 +16,17 @@ PyObject * MGLComputeShader_tp_new(PyTypeObject * type, PyObject * args, PyObjec
 }
 
 void MGLComputeShader_tp_dealloc(MGLComputeShader * self) {
+
+	#ifdef MGL_VERBOSE
+	printf("MGLComputeShader_tp_dealloc %p\n", self);
+	#endif
+
 	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 int MGLComputeShader_tp_init(MGLComputeShader * self, PyObject * args, PyObject * kwargs) {
+	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.ComputeShader manually");
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
