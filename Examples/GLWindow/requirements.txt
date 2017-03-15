@@ -1,3 +1,0 @@
-ModernGL>=2.4.0
-GLWindow>=1.0.0
-Pillow

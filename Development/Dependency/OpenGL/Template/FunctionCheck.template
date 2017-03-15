@@ -1,3 +1,0 @@
-bool is%(name)s() {
-	return %(name)s != 0;
-}
