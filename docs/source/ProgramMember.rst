@@ -12,8 +12,3 @@ ProgramMember
 .. toctree::
 	:maxdepth: 4
 	:caption: Classes:
-
-	Uniform <Uniform.rst>
-	Subroutine <Subroutine.rst>
-	Attribute <Attribute.rst>
-	Varying <Varying.rst>

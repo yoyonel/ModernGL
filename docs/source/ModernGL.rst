@@ -13,9 +13,18 @@ ModernGL
 
 	Context <Context.rst>
 
+	Program <Program.rst>
+	Shader <Shader.rst>
+
+	Buffer <Buffer.rst>
+	VertexArray <VertexArray.rst>
+
+	Texture <Texture.rst>
+	Renderbuffer <Renderbuffer.rst>
+	Framebuffer <Framebuffer.rst>
+
 	ContextMember <ContextMember.rst>
 	VertexArrayMember <VertexArrayMember.rst>
-	ProgramMember <ProgramMember.rst>
 
 	Constants <Constants.rst>
 
