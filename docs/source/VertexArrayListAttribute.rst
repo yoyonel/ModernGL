@@ -1,9 +1,9 @@
-ContextMember
-*************
+VertexArrayListAttribute
+************************
 
 .. currentmodule:: ModernGL
 
-.. autoclass:: ModernGL.ContextMember
+.. autoclass:: ModernGL.VertexArrayListAttribute
 	:members:
 	:undoc-members:
 	:inherited-members:

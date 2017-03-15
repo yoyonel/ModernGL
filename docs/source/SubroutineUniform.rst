@@ -1,9 +1,9 @@
-ContextMember
-*************
+SubroutineUniform
+*****************
 
 .. currentmodule:: ModernGL
 
-.. autoclass:: ModernGL.ContextMember
+.. autoclass:: ModernGL.SubroutineUniform
 	:members:
 	:undoc-members:
 	:inherited-members:

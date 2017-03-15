@@ -8,3 +8,11 @@ VertexArray
 	:undoc-members:
 	:inherited-members:
 	:show-inheritance:
+
+.. toctree::
+	:maxdepth: 4
+	:caption: Classes:
+
+	VertexArrayAttribute <VertexArrayAttribute.rst>
+	VertexArrayListAttribute <VertexArrayListAttribute.rst>
+	VertexArrayMatrixAttribute <VertexArrayMatrixAttribute.rst>

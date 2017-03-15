@@ -1,9 +1,9 @@
-ContextMember
-*************
+GenericProgram
+**************
 
 .. currentmodule:: ModernGL
 
-.. autoclass:: ModernGL.ContextMember
+.. autoclass:: ModernGL.GenericProgram
 	:members:
 	:undoc-members:
 	:inherited-members:

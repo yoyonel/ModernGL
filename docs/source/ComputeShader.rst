@@ -1,9 +1,9 @@
-ContextMember
+ComputeShader
 *************
 
 .. currentmodule:: ModernGL
 
-.. autoclass:: ModernGL.ContextMember
+.. autoclass:: ModernGL.ComputeShader
 	:members:
 	:undoc-members:
 	:inherited-members:

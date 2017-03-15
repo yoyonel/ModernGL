@@ -19,14 +19,17 @@ ModernGL
 	Buffer <Buffer.rst>
 	VertexArray <VertexArray.rst>
 
-	Texture <Texture.rst>
-	Renderbuffer <Renderbuffer.rst>
 	Framebuffer <Framebuffer.rst>
 
-	ContextMember <ContextMember.rst>
-	VertexArrayMember <VertexArrayMember.rst>
+	Texture <Texture.rst>
+	Renderbuffer <Renderbuffer.rst>
+
+	MultisampleTexture <MultisampleTexture.rst>
+	MultisampleRenderbuffer <MultisampleRenderbuffer.rst>
+	
+	ComputeShader <ComputeShader.rst>
 
 	Constants <Constants.rst>
-
-	Object <Object.rst>
 	Error <Error.rst>
+
+	Others <Others.rst>

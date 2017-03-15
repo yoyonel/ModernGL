@@ -1,9 +1,9 @@
-ContextMember
-*************
+MultisampleRenderbuffer
+***********************
 
 .. currentmodule:: ModernGL
 
-.. autoclass:: ModernGL.ContextMember
+.. autoclass:: ModernGL.MultisampleRenderbuffer
 	:members:
 	:undoc-members:
 	:inherited-members:

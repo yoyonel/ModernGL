@@ -14,8 +14,8 @@ Program
 	:caption: Classes:
 
 	Uniform <Uniform.rst>
-	Subroutine <Subroutine.rst>
+	UniformBlock <UniformBlock.rst>
 	Attribute <Attribute.rst>
 	Varying <Varying.rst>
 
-	ProgramMember <ProgramMember.rst>
+	ProgramStage <ProgramStage.rst>

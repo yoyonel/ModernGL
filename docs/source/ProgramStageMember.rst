@@ -1,9 +1,9 @@
-ContextMember
-*************
+ProgramStageMember
+******************
 
 .. currentmodule:: ModernGL
 
-.. autoclass:: ModernGL.ContextMember
+.. autoclass:: ModernGL.ProgramStageMember
 	:members:
 	:undoc-members:
 	:inherited-members:

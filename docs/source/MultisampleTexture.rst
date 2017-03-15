@@ -1,9 +1,9 @@
-ContextMember
-*************
+MultisampleTexture
+******************
 
 .. currentmodule:: ModernGL
 
-.. autoclass:: ModernGL.ContextMember
+.. autoclass:: ModernGL.MultisampleTexture
 	:members:
 	:undoc-members:
 	:inherited-members:

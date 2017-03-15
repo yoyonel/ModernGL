@@ -1,9 +1,9 @@
-ContextMember
-*************
+UniformBlock
+************
 
 .. currentmodule:: ModernGL
 
-.. autoclass:: ModernGL.ContextMember
+.. autoclass:: ModernGL.UniformBlock
 	:members:
 	:undoc-members:
 	:inherited-members:
