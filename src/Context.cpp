@@ -190,6 +190,7 @@ const char * MGLContext_finish_doc = R"(
 )";
 
 PyObject * MGLContext_info(MGLContext * self) {
+	// TODO:
 	return 0;
 }
 
@@ -265,6 +266,36 @@ const char * MGLContext_copy_buffer_doc = R"(
 
 	Returns:
 		``None``
+)";
+
+PyObject * MGLContext_copy_texture(MGLContext * self, PyObject * args, PyObject * kwargs) {
+	static const char * kwlist[] = {"value", 0};
+
+	// TODO:
+
+	int value = 0;
+
+	int args_ok = PyArg_ParseTupleAndKeywords(
+		args,
+		kwargs,
+		"|i",
+		(char **)kwlist,
+		&value
+	);
+
+	if (!args_ok) {
+		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		return 0;
+	}
+
+	PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+	return 0;
+
+	// Py_RETURN_NONE;
+}
+
+const char * MGLContext_copy_texture_doc = R"(
+	copy_texture()
 )";
 
 MGLBuffer * MGLContext_Buffer(MGLContext * self, PyObject * args, PyObject * kwargs) {
@@ -581,7 +612,17 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 		return 0;
 	}
 
-	const GLMethods & gl = self->gl;
+	if (program->context != self) {
+		MGLError * error = MGLError_New(TRACE, "program belongs to a different context");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
+
+	if (index_buffer != (MGLBuffer *)Py_None && index_buffer->context != self) {
+		MGLError * error = MGLError_New(TRACE, "index_buffer belongs to a different context");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
 
 	int content_len = PyList_GET_SIZE(content);
 
@@ -630,11 +671,17 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 			return 0;
 		}
 
+		if (((MGLBuffer *)buffer)->context != self) {
+			MGLError * error = MGLError_New(TRACE, "content[%d][0] belongs to a different context", i);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return 0;
+		}
+
 		FormatIterator it = FormatIterator(PyUnicode_AsUTF8(format));
 		FormatInfo format_info = it.info();
 
 		if (!format_info.valid) {
-			MGLError * error = MGLError_New(TRACE, "content[%d][1] is an invalid format", i, Py_TYPE(attributes)->tp_name);
+			MGLError * error = MGLError_New(TRACE, "content[%d][1] is an invalid format", i);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -719,6 +766,8 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 		PyTuple_SET_ITEM(vertex_array_content, i, new_tuple);
 	}
 
+	const GLMethods & gl = self->gl;
+
 	MGLVertexArray * array = MGLVertexArray_New();
 
 	Py_INCREF(program);
@@ -771,9 +820,6 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 			}
 
 			MGLAttribute * attribute = (MGLAttribute *)PyDict_GetItem(program->attributes, PyTuple_GET_ITEM(attributes, j));
-
-			// if (!attribute) {
-			// }
 
 			for (int r = 0; r < attribute->rows_length; ++r) {
 				int location = attribute->location + r;
@@ -957,6 +1003,13 @@ MGLProgram * MGLContext_Program(MGLContext * self, PyObject * args, PyObject * k
 			}
 
 			MGLShader * shader = (MGLShader *)item;
+
+			if (shader->context != self) {
+				MGLError * error = MGLError_New(TRACE, "shaders[%d] belongs to a different context", i);
+				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+				return 0;
+			}
+
 			counter[shader->shader_slot] += 1;
 
 			if (counter[shader->shader_slot] > 1) {
@@ -1153,13 +1206,26 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 		for (int i = 0; i < attachments_len; ++i) {
 			PyObject * item = PyList_GET_ITEM(attachments, i);
 
-			if (Py_TYPE(item) != &MGLTexture_Type && Py_TYPE(item) != &MGLRenderbuffer_Type) {
-				MGLError * error = MGLError_New(TRACE, "attachments[%d] must be a ModernGL.Texture or ModernGL.Renderbuffer not %s", i, Py_TYPE(item)->tp_name);
+			// if (Py_TYPE(item) != &MGLTexture_Type && Py_TYPE(item) != &MGLRenderbuffer_Type) {
+			// 	MGLError * error = MGLError_New(TRACE, "attachments[%d] must be a ModernGL.Texture or ModernGL.Renderbuffer not %s", i, Py_TYPE(item)->tp_name);
+			// 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			// 	return 0;
+			// }
+
+			// TODO: better
+			if (!PyObject_IsSubclass((PyObject *)Py_TYPE(item), (PyObject *)&MGLFramebufferAttachment_Type)) {
+				MGLError * error = MGLError_New(TRACE, "attachments[%d] must be a ModernGL.FramebufferAttachment not %s", i, Py_TYPE(item)->tp_name);
 				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 				return 0;
 			}
 
 			MGLFramebufferAttachment * attachment = (MGLFramebufferAttachment *)item;
+
+			if (attachment->context != self) {
+				MGLError * error = MGLError_New(TRACE, "attachments[%d] belongs to a different context", i);
+				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+				return 0;
+			}
 
 			if (attachment->depth) {
 				if (depth_attachment_index >= 0) {
@@ -1503,6 +1569,8 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"disable", (PyCFunction)MGLContext_disable, METH_VARARGS | METH_KEYWORDS, MGLContext_disable_doc},
 	{"finish", (PyCFunction)MGLContext_finish, METH_NOARGS, MGLContext_finish_doc},
 	{"copy_buffer", (PyCFunction)MGLContext_copy_buffer, METH_VARARGS | METH_KEYWORDS, MGLContext_copy_buffer_doc},
+	{"copy_texture", (PyCFunction)MGLContext_copy_texture_doc, METH_VARARGS | METH_KEYWORDS, MGLContext_copy_texture_doc},
+
 
 	{"Buffer", (PyCFunction)MGLContext_Buffer, METH_VARARGS | METH_KEYWORDS, MGLContext_Buffer_doc},
 	{"Texture", (PyCFunction)MGLContext_Texture, METH_VARARGS | METH_KEYWORDS, MGLContext_Texture_doc},

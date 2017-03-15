@@ -31,14 +31,23 @@ int MGLVertexArrayMatrixAttribute_tp_init(MGLVertexArrayMatrixAttribute * self, 
 }
 
 PyObject * MGLVertexArrayMatrixAttribute_tp_str(MGLVertexArrayMatrixAttribute * self) {
-	return PyUnicode_FromFormat("<ModernGL.VertexArrayMatrixAttribute>");
+	return PyUnicode_FromFormat("<ModernGL.VertexArrayMatrixAttribute: location = %d>", self->location);
 }
 
 PyMethodDef MGLVertexArrayMatrixAttribute_tp_methods[] = {
 	{0},
 };
 
+PyObject * MGLVertexArrayMatrixAttribute_get_location(MGLVertexArrayMatrixAttribute * self, void * closure) {
+	return PyLong_FromLong(self->location);
+}
+
+char MGLVertexArrayMatrixAttribute_location_doc[] = R"(
+	location
+)";
+
 PyGetSetDef MGLVertexArrayMatrixAttribute_tp_getseters[] = {
+	{(char *)"location", (getter)MGLVertexArrayMatrixAttribute_get_location, 0, MGLVertexArrayMatrixAttribute_location_doc, 0},
 	{0},
 };
 

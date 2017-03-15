@@ -31,14 +31,119 @@ int MGLVertexArrayAttribute_tp_init(MGLVertexArrayAttribute * self, PyObject * a
 }
 
 PyObject * MGLVertexArrayAttribute_tp_str(MGLVertexArrayAttribute * self) {
-	return PyUnicode_FromFormat("<ModernGL.VertexArrayAttribute>");
+	return PyUnicode_FromFormat("<ModernGL.VertexArrayAttribute: location = %d>", self->location);
 }
 
+PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject * args, PyObject * kwargs) {
+	static const char * kwlist[] = {"buffer", "offset", "stride", "divisor", 0};
+
+	MGLBuffer * buffer;
+	int offset;
+	int stride;
+	int divisor;
+
+	int args_ok = PyArg_ParseTupleAndKeywords(
+		args,
+		kwargs,
+		"O!|II",
+		(char **)kwlist,
+		&MGLBuffer_Type,
+		&buffer,
+		&offset,
+		&stride,
+		&divisor
+	);
+
+	if (!args_ok) {
+		// PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		return 0;
+	}
+
+	PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+	return 0;
+
+	// Py_RETURN_NONE;
+}
+
+const char * MGLVertexArrayAttribute_bind_doc = R"(
+	bind()
+)";
+
 PyMethodDef MGLVertexArrayAttribute_tp_methods[] = {
+	{"bind", (PyCFunction)MGLVertexArrayAttribute_bind_doc, METH_VARARGS | METH_KEYWORDS, MGLVertexArrayAttribute_bind_doc},
 	{0},
 };
 
+PyObject * MGLVertexArrayAttribute_get_location(MGLVertexArrayAttribute * self, void * closure) {
+	return PyLong_FromLong(self->location);
+}
+
+char MGLVertexArrayAttribute_location_doc[] = R"(
+	location
+)";
+
+PyObject * MGLVertexArrayAttribute_get_default(MGLVertexArrayAttribute * self, void * closure) {
+	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+	return 0;
+}
+
+int MGLVertexArrayAttribute_set_default(MGLVertexArrayAttribute * self, PyObject * value, void * closure) {
+	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+	return -1;
+}
+
+char MGLVertexArrayAttribute_default_doc[] = R"(
+	default
+)";
+
+PyObject * MGLVertexArrayAttribute_get_enable(MGLVertexArrayAttribute * self, void * closure) {
+	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+	return 0;
+}
+
+int MGLVertexArrayAttribute_set_enable(MGLVertexArrayAttribute * self, PyObject * value, void * closure) {
+	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+	return -1;
+}
+
+char MGLVertexArrayAttribute_enable_doc[] = R"(
+	enable
+)";
+
+PyObject * MGLVertexArrayAttribute_get_divisor(MGLVertexArrayAttribute * self, void * closure) {
+	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+	return 0;
+}
+
+int MGLVertexArrayAttribute_set_divisor(MGLVertexArrayAttribute * self, PyObject * value, void * closure) {
+	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+	return -1;
+}
+
+char MGLVertexArrayAttribute_divisor_doc[] = R"(
+	divisor
+)";
+
+PyObject * MGLVertexArrayAttribute_get_stride(MGLVertexArrayAttribute * self, void * closure) {
+	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+	return 0;
+}
+
+int MGLVertexArrayAttribute_set_stride(MGLVertexArrayAttribute * self, PyObject * value, void * closure) {
+	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+	return -1;
+}
+
+char MGLVertexArrayAttribute_stride_doc[] = R"(
+	stride
+)";
+
 PyGetSetDef MGLVertexArrayAttribute_tp_getseters[] = {
+	{(char *)"location", (getter)MGLVertexArrayAttribute_get_location, 0, MGLVertexArrayAttribute_location_doc, 0},
+	{(char *)"default", (getter)MGLVertexArrayAttribute_get_default, (setter)MGLVertexArrayAttribute_set_default, MGLVertexArrayAttribute_default_doc, 0},
+	{(char *)"stride", (getter)MGLVertexArrayAttribute_get_stride, (setter)MGLVertexArrayAttribute_set_stride, MGLVertexArrayAttribute_stride_doc, 0},
+	{(char *)"divisor", (getter)MGLVertexArrayAttribute_get_divisor, (setter)MGLVertexArrayAttribute_set_divisor, MGLVertexArrayAttribute_divisor_doc, 0},
+	{(char *)"enable", (getter)MGLVertexArrayAttribute_get_enable, (setter)MGLVertexArrayAttribute_set_enable, MGLVertexArrayAttribute_enable_doc, 0},
 	{0},
 };
 

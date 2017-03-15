@@ -231,27 +231,27 @@ PyMethodDef MGLBuffer_tp_methods[] = {
 	{0},
 };
 
-PyObject * MGL_Buffer_get_size(MGLBuffer * self, void * closure) {
+PyObject * MGLBuffer_get_size(MGLBuffer * self, void * closure) {
 	return PyLong_FromLong(self->size);
 }
 
-char MGL_Buffer_size_doc[] = R"(
+char MGLBuffer_size_doc[] = R"(
 	size
 
 	The size of the buffer.
 )";
 
-PyObject * MGL_Buffer_get_dynamic(MGLBuffer * self, void * closure) {
+PyObject * MGLBuffer_get_dynamic(MGLBuffer * self, void * closure) {
 	return PyBool_FromLong(self->dynamic);
 }
 
-char MGL_Buffer_dynamic_doc[] = R"(
+char MGLBuffer_dynamic_doc[] = R"(
 	dynamic
 )";
 
 PyGetSetDef MGLBuffer_tp_getseters[] = {
-	{(char *)"size", (getter)MGL_Buffer_get_size, 0, MGL_Buffer_size_doc, 0},
-	{(char *)"dynamic", (getter)MGL_Buffer_get_dynamic, 0, MGL_Buffer_dynamic_doc, 0},
+	{(char *)"size", (getter)MGLBuffer_get_size, 0, MGLBuffer_size_doc, 0},
+	{(char *)"dynamic", (getter)MGLBuffer_get_dynamic, 0, MGLBuffer_dynamic_doc, 0},
 	{0},
 };
 
