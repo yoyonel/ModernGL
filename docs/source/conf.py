@@ -152,14 +152,13 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'ModernGL', 'ModernGL Documentation',
-     author, 'ModernGL', 'One line description of project.',
-     'Miscellaneous'),
+    (master_doc, 'ModernGL', 'ModernGL Documentation', author, 'ModernGL', 'One line description of project.', 'Miscellaneous'),
 ]
 
 
 def setup(app):
     app.add_stylesheet('css/custom.css')
 
+# autodoc_member_order = 'bysource'
 autodoc_member_order = 'groupwise'
 # add_module_names = False

@@ -23,7 +23,10 @@ prog = ctx.Program([
 
 		void main() {
 			frag_color = vert_color;
-			mat2 rot = mat2(cos(rotation), sin(rotation), -sin(rotation), cos(rotation));
+			mat2 rot = mat2(
+				cos(rotation), sin(rotation),
+				-sin(rotation), cos(rotation)
+			);
 			gl_Position = vec4((rot * vert) * scale, 0.0, 1.0);
 		}
 	'''),

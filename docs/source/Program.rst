@@ -3,6 +3,9 @@ Program
 
 .. currentmodule:: ModernGL
 
+.. automethod:: Context.Program
+	:noindex:
+
 .. autoclass:: ModernGL.Program
 	:members:
 	:undoc-members:

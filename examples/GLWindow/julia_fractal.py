@@ -32,13 +32,21 @@ frag = ctx.FragmentShader('''
 
 		int i;
 		for(i = 0; i < iter; i++) {
-			vec2 v = vec2((z.x * z.x - z.y * z.y) + c.x, (z.y * z.x + z.x * z.y) + c.y);
+			vec2 v = vec2(
+				(z.x * z.x - z.y * z.y) + c.x,
+				(z.y * z.x + z.x * z.y) + c.y
+			);
 			if (dot(v, v) > 4.0) break;
 			z = v;
 		}
 
 		float cm = fract((i == iter ? 0.0 : float(i)) * 10 / iter);
-		color = vec4(fract(cm + 0.0 / 3.0), fract(cm + 1.0 / 3.0), fract(cm + 2.0 / 3.0), 1.0);
+		color = vec4(
+			fract(cm + 0.0 / 3.0),
+			fract(cm + 1.0 / 3.0),
+			fract(cm + 2.0 / 3.0),
+			1.0
+		);
 	}
 ''')
 

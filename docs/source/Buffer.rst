@@ -3,6 +3,9 @@ Buffer
 
 .. currentmodule:: ModernGL
 
+.. automethod:: Context.Buffer
+	:noindex:
+
 .. autoclass:: ModernGL.Buffer
 	:members:
 	:undoc-members:

@@ -3,6 +3,9 @@ VertexArray
 
 .. currentmodule:: ModernGL
 
+.. automethod:: Context.VertexArray
+	:noindex:
+
 .. autoclass:: ModernGL.VertexArray
 	:members:
 	:undoc-members:

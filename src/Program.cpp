@@ -152,6 +152,10 @@ PyObject * MGLProgram_get_vertex_shader(MGLProgram * self, void * closure) {
 	}
 }
 
+char MGLProgram_vertex_shader_doc[] = R"(
+	vertex_shader
+)";
+
 PyObject * MGLProgram_get_fragment_shader(MGLProgram * self, void * closure) {
 	if (self->fragment_shader) {
 		Py_INCREF(self->fragment_shader);
@@ -160,6 +164,10 @@ PyObject * MGLProgram_get_fragment_shader(MGLProgram * self, void * closure) {
 		Py_RETURN_NONE;
 	}
 }
+
+char MGLProgram_fragment_shader_doc[] = R"(
+	fragment_shader
+)";
 
 PyObject * MGLProgram_get_geometry_shader(MGLProgram * self, void * closure) {
 	if (self->geometry_shader) {
@@ -170,6 +178,10 @@ PyObject * MGLProgram_get_geometry_shader(MGLProgram * self, void * closure) {
 	}
 }
 
+char MGLProgram_geometry_shader_doc[] = R"(
+	geometry_shader
+)";
+
 PyObject * MGLProgram_get_tesselation_evaluation_shader(MGLProgram * self, void * closure) {
 	if (self->tesselation_evaluation_shader) {
 		Py_INCREF(self->tesselation_evaluation_shader);
@@ -178,6 +190,10 @@ PyObject * MGLProgram_get_tesselation_evaluation_shader(MGLProgram * self, void 
 		Py_RETURN_NONE;
 	}
 }
+
+char MGLProgram_tesselation_evaluation_shader_doc[] = R"(
+	tesselation_evaluation_shader
+)";
 
 PyObject * MGLProgram_get_tesselation_control_shader(MGLProgram * self, void * closure) {
 	if (self->tesselation_control_shader) {
@@ -188,6 +204,10 @@ PyObject * MGLProgram_get_tesselation_control_shader(MGLProgram * self, void * c
 	}
 }
 
+char MGLProgram_tesselation_control_shader_doc[] = R"(
+	tesselation_control_shader
+)";
+
 PyGetSetDef MGLProgram_tp_getseters[] = {
 	{(char *)"shaders", (getter)MGLProgram_get_shaders, 0, MGLProgram_shaders_doc, 0},
 	{(char *)"uniforms", (getter)MGLProgram_get_uniforms, 0, MGLProgram_uniforms_doc, 0},
@@ -197,11 +217,11 @@ PyGetSetDef MGLProgram_tp_getseters[] = {
 	{(char *)"geometry_input", (getter)MGLProgram_get_geometry_input, 0, MGLProgram_geometry_input_doc, 0},
 	{(char *)"geometry_output", (getter)MGLProgram_get_geometry_output, 0, MGLProgram_geometry_output_doc, 0},
 
-	{(char *)"vertex_shader", (getter)MGLProgram_get_vertex_shader, 0, 0, 0},
-	{(char *)"fragment_shader", (getter)MGLProgram_get_fragment_shader, 0, 0, 0},
-	{(char *)"geometry_shader", (getter)MGLProgram_get_geometry_shader, 0, 0, 0},
-	{(char *)"tesselation_evaluation_shader", (getter)MGLProgram_get_tesselation_evaluation_shader, 0, 0, 0},
-	{(char *)"tesselation_control_shader", (getter)MGLProgram_get_tesselation_control_shader, 0, 0, 0},
+	{(char *)"vertex_shader", (getter)MGLProgram_get_vertex_shader, 0, MGLProgram_vertex_shader_doc, 0},
+	{(char *)"fragment_shader", (getter)MGLProgram_get_fragment_shader, 0, MGLProgram_fragment_shader_doc, 0},
+	{(char *)"geometry_shader", (getter)MGLProgram_get_geometry_shader, 0, MGLProgram_geometry_shader_doc, 0},
+	{(char *)"tesselation_evaluation_shader", (getter)MGLProgram_get_tesselation_evaluation_shader, 0, MGLProgram_tesselation_evaluation_shader_doc, 0},
+	{(char *)"tesselation_control_shader", (getter)MGLProgram_get_tesselation_control_shader, 0, MGLProgram_tesselation_control_shader_doc, 0},
 	{0},
 };
 

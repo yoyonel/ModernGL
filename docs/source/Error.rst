@@ -3,7 +3,7 @@ Error
 
 .. currentmodule:: ModernGL
 
-.. autoclass:: ModernGL.Error
+.. autoexception:: ModernGL.Error
 	:members:
 	:undoc-members:
 	:inherited-members:
