@@ -7,6 +7,8 @@ build
 docs/build
 dist
 
+.vscode
+
 *.egg-info
 *.pyd
 *.bat

@@ -3,6 +3,9 @@ VertexArray
 
 .. currentmodule:: ModernGL
 
+.. automethod:: Context.SimpleVertexArray
+	:noindex:
+
 .. automethod:: Context.VertexArray
 	:noindex:
 

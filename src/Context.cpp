@@ -1538,13 +1538,12 @@ MGLRenderbuffer * MGLContext_DepthRenderbuffer(MGLContext * self, PyObject * arg
 }
 
 const char * MGLContext_DepthRenderbuffer_doc = R"(
-	Renderbuffer(size, components, floats = True)
+	DepthRenderbuffer(size, floats = True)
 
 	Create a Renderbuffer.
 
 	Args:
 		size: Width, height.
-		components: The number of components 1, 2, 3 or 4.
 
 	Keyword Args:
 		floats: Use floating point precision.
