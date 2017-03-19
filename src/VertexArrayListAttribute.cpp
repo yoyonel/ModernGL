@@ -51,6 +51,31 @@ PyGetSetDef MGLVertexArrayListAttribute_tp_getseters[] = {
 	{0},
 };
 
+Py_ssize_t MGLVertexArrayListAttribute_tp_sequence_length(MGLVertexArrayListAttribute * self) {
+	return PyTuple_GET_SIZE(self->content);
+}
+
+PyObject * MGLVertexArrayListAttribute_tp_sequence_item(MGLVertexArrayListAttribute * self, Py_ssize_t key) {
+	PyObject * item = PyTuple_GetItem(self->content, key);
+	
+	if (item) {
+		Py_INCREF(item);
+	}
+
+	return item;
+}
+
+PySequenceMethods MGLVertexArrayListAttribute_tp_sequence = {
+	(lenfunc)MGLVertexArrayListAttribute_tp_sequence_length,         // sq_length
+	0,                                                               // sq_concat
+	0,                                                               // sq_repeat
+	(ssizeargfunc)MGLVertexArrayListAttribute_tp_sequence_item,      // sq_item
+	0,                                                               // sq_ass_item
+	0,                                                               // sq_contains
+	0,                                                               // sq_inplace_concat
+	0,                                                               // sq_inplace_repeat
+};
+
 const char * MGLVertexArrayListAttribute_tp_doc = R"(
 	VertexArrayListAttribute
 )";
@@ -67,7 +92,7 @@ PyTypeObject MGLVertexArrayListAttribute_Type = {
 	0,                                                      // tp_reserved
 	(reprfunc)MGLVertexArrayListAttribute_tp_str,           // tp_repr
 	0,                                                      // tp_as_number
-	0,                                                      // tp_as_sequence
+	&MGLVertexArrayListAttribute_tp_sequence,               // tp_as_sequence
 	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call

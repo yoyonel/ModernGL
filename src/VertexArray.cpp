@@ -416,6 +416,8 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 						MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
 						attrib->vertex_array = vertex_array;
 						attrib->location = matrix->location + j;
+						attrib->type = program_attribute->type;
+						MGLVertexArrayAttribute_Complete(attrib);
 
 						PyTuple_SET_ITEM(matrix->content, j, (PyObject *)attrib);
 					}
@@ -435,8 +437,9 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 				for (int i = 0; i < program_attribute->array_length; ++i) {
 					MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
 					attrib->vertex_array = vertex_array;
-					
 					attrib->location = attrib_list->location + i;
+					attrib->type = program_attribute->type;
+					MGLVertexArrayAttribute_Complete(attrib);
 
 					PyTuple_SET_ITEM(attrib_list->content, i, (PyObject *)attrib);
 				}
@@ -457,6 +460,8 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 					MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
 					attrib->vertex_array = vertex_array;
 					attrib->location = matrix->location + j;
+					attrib->type = program_attribute->type;
+					MGLVertexArrayAttribute_Complete(attrib);
 
 					PyTuple_SET_ITEM(matrix->content, j, (PyObject *)attrib);
 				}
@@ -468,8 +473,10 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 				MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
 				attrib->vertex_array = vertex_array;
 				attrib->location = program_attribute->location;
-				PyDict_SetItem(attributes, name, (PyObject *)attrib);
+				attrib->type = program_attribute->type;
+				MGLVertexArrayAttribute_Complete(attrib);
 
+				PyDict_SetItem(attributes, name, (PyObject *)attrib);
 			}
 		}
 	}

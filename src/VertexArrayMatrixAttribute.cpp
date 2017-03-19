@@ -51,6 +51,31 @@ PyGetSetDef MGLVertexArrayMatrixAttribute_tp_getseters[] = {
 	{0},
 };
 
+Py_ssize_t MGLVertexArrayMatrixAttribute_tp_sequence_length(MGLVertexArrayMatrixAttribute * self) {
+	return PyTuple_GET_SIZE(self->content);
+}
+
+PyObject * MGLVertexArrayMatrixAttribute_tp_sequence_item(MGLVertexArrayMatrixAttribute * self, Py_ssize_t key) {
+	PyObject * item = PyTuple_GetItem(self->content, key);
+	
+	if (item) {
+		Py_INCREF(item);
+	}
+
+	return item;
+}
+
+PySequenceMethods MGLVertexArrayMatrixAttribute_tp_sequence = {
+	(lenfunc)MGLVertexArrayMatrixAttribute_tp_sequence_length,       // sq_length
+	0,                                                               // sq_concat
+	0,                                                               // sq_repeat
+	(ssizeargfunc)MGLVertexArrayMatrixAttribute_tp_sequence_item,    // sq_item
+	0,                                                               // sq_ass_item
+	0,                                                               // sq_contains
+	0,                                                               // sq_inplace_concat
+	0,                                                               // sq_inplace_repeat
+};
+
 const char * MGLVertexArrayMatrixAttribute_tp_doc = R"(
 	VertexArrayMatrixAttribute
 )";
@@ -67,7 +92,7 @@ PyTypeObject MGLVertexArrayMatrixAttribute_Type = {
 	0,                                                      // tp_reserved
 	(reprfunc)MGLVertexArrayMatrixAttribute_tp_str,         // tp_repr
 	0,                                                      // tp_as_number
-	0,                                                      // tp_as_sequence
+	&MGLVertexArrayMatrixAttribute_tp_sequence,             // tp_as_sequence
 	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call
@@ -80,7 +105,7 @@ PyTypeObject MGLVertexArrayMatrixAttribute_Type = {
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare
-	0,                                                      // tp_weaklistoffset
+	0,                                                      // tp_weakMatrixoffset
 	0,                                                      // tp_iter
 	0,                                                      // tp_iternext
 	MGLVertexArrayMatrixAttribute_tp_methods,               // tp_methods

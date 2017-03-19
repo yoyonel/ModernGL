@@ -117,11 +117,23 @@ char MGLVertexArrayAttribute_location_doc[] = R"(
 )";
 
 PyObject * MGLVertexArrayAttribute_get_default(MGLVertexArrayAttribute * self, void * closure) {
+	if (!self->gl_attrib_getter_proc) {
+		MGLError * error = MGLError_New(TRACE, "gl_attrib_getter_proc is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
+
 	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 	return 0;
 }
 
 int MGLVertexArrayAttribute_set_default(MGLVertexArrayAttribute * self, PyObject * value, void * closure) {
+	if (!self->gl_attrib_setter_proc) {
+		MGLError * error = MGLError_New(TRACE, "gl_attrib_getter_proc is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
+
 	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 	return -1;
 }
@@ -223,4 +235,14 @@ PyTypeObject MGLVertexArrayAttribute_Type = {
 MGLVertexArrayAttribute * MGLVertexArrayAttribute_New() {
 	MGLVertexArrayAttribute * self = (MGLVertexArrayAttribute *)MGLVertexArrayAttribute_tp_new(&MGLVertexArrayAttribute_Type, 0, 0);
 	return self;
+}
+
+void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute) {
+	switch (attribute->type) {
+		default:
+			attribute->gl_attrib_ptr_proc = 0;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+	}
 }
