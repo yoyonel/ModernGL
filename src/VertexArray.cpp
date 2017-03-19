@@ -10,8 +10,6 @@
 #include "VertexArrayListAttribute.hpp"
 #include "VertexArrayMatrixAttribute.hpp"
 
-// TODO: implement VertexAttrib as VertexArray member
-
 PyObject * MGLVertexArray_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLVertexArray * self = (MGLVertexArray *)type->tp_alloc(type, 0);
 

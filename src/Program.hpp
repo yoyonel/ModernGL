@@ -14,7 +14,6 @@ struct MGLProgram : public MGLGenericProgram {
 	PyObject * tesselation_evaluation_shader;
 	PyObject * tesselation_control_shader;
 
-	// TODO:
 	PyObject * attributes;
 	PyObject * attributes_proxy;
 

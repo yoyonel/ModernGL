@@ -10,9 +10,6 @@ PyObject * MGLError_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwar
 	#endif
 
 	if (self) {
-
-		// TODO: call super.tp_new?
-
 		self->dict = 0;
 		self->args = 0;
 		self->traceback = 0;

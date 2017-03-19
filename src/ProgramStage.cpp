@@ -125,14 +125,6 @@ void MGLProgramStage_Complete(MGLProgramStage * program_stage) {
 
 	// TODO: create array [subroutine_uniform_locations]
 
-	// typedef GLint (GLAPI * PROC_glGetSubroutineUniformLocation)(GLuint program, GLenum shadertype, const GLchar * name);
-	// typedef GLuint (GLAPI * PROC_glGetSubroutineIndex)(GLuint program, GLenum shadertype, const GLchar * name);
-	// typedef GLvoid (GLAPI * PROC_glGetActiveSubroutineUniformiv)(GLuint program, GLenum shadertype, GLuint index, GLenum pname, GLint * values);
-	// typedef GLvoid (GLAPI * PROC_glGetActiveSubroutineUniformName)(GLuint program, GLenum shadertype, GLuint index, GLsizei bufsize, GLsizei * length, GLchar * name);
-	// typedef GLvoid (GLAPI * PROC_glGetActiveSubroutineName)(GLuint program, GLenum shadertype, GLuint index, GLsizei bufsize, GLsizei * length, GLchar * name);
-	// typedef GLvoid (GLAPI * PROC_glUniformSubroutinesuiv)(GLenum shadertype, GLsizei count, const GLuint * indices);
-	// typedef GLvoid (GLAPI * PROC_glGetUniformSubroutineuiv)(GLenum shadertype, GLint location, GLuint * params);
-
 	for (int i = 0; i < num_subroutines; ++i) {
 		MGLSubroutine * subroutine = MGLSubroutine_New();
 

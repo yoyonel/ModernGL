@@ -1825,7 +1825,15 @@ void MGLContext_Invalidate(MGLContext * context) {
 	printf("MGLContext_Invalidate %p\n", context);
 	#endif
 
-	// TODO: destroy standalone context
+	if (context->standalone) {
+		if (oglGetCurrentContext() == context->rc_handle) {
+			oglMakeCurrent(0, 0);
+			oglDeleteContext((HGLRC)context->rc_handle);
+			HWND hwnd = WindowFromDC((HDC)context->dc_handle);
+			ReleaseDC(hwnd, (HDC)context->dc_handle);
+			DestroyWindow(hwnd);
+		}
+	}
 
 	context->ob_base.ob_type = &MGLInvalidObject_Type;
 

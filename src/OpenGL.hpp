@@ -1,7 +1,14 @@
 #pragma once
 
-// inline void * GLAPI oglGetProcAddress(const char * name); {return 0;}
+#if defined(_WIN32) || defined(_WIN64)
+#include <Windows.h>
 #define oglGetProcAddress wglGetProcAddress
+#define oglGetCurrentContext wglGetCurrentContext
+#define oglDeleteContext wglDeleteContext
+#define oglMakeCurrent wglMakeCurrent
+#else
+// TODO:
+#endif
 
 #if defined(_WIN32) || defined(_WIN64)
 #define GLAPI __stdcall

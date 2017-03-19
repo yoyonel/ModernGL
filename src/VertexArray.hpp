@@ -13,7 +13,6 @@ struct MGLVertexArray : public MGLContextMember {
 
 	MGLBuffer * index_buffer;
 
-	// TODO:
 	PyObject * attributes;
 	PyObject * attributes_proxy;
 
