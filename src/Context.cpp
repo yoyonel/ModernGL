@@ -717,6 +717,11 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 				const char * name = PyUnicode_AsUTF8(attribute);
 
 				FormatNode * node = it.next();
+
+				while (node->shape == 'x') {
+					node = it.next();
+				}
+	
 				MGLAttribute * attribute = (MGLAttribute *)PyDict_GetItemString(program->attributes, name);
 
 				if (!attribute) {
