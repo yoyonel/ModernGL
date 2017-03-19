@@ -59,18 +59,52 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 		return 0;
 	}
 
-	PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	return 0;
+	if (self->vertex_array->context != buffer->context) {
+		MGLError * error = MGLError_New(TRACE, "buffer belongs to a different context");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
 
-	// Py_RETURN_NONE;
+	const GLMethods & gl = self->vertex_array->context->gl;
+	gl.BindVertexArray(self->vertex_array->vertex_array_obj);
+
+	gl.VertexAttribDivisor(self->location, divisor);
+
+	gl.EnableVertexAttribArray(self->location);
+
+	return 0;
 }
 
 const char * MGLVertexArrayAttribute_bind_doc = R"(
 	bind()
 )";
 
+PyObject * MGLVertexArrayAttribute_enable(MGLVertexArrayAttribute * self) {
+	const GLMethods & gl = self->vertex_array->context->gl;
+	gl.BindVertexArray(self->vertex_array->vertex_array_obj);
+	gl.EnableVertexAttribArray(self->location);
+	Py_RETURN_NONE;
+}
+
+const char * MGLVertexArrayAttribute_enable_doc = R"(
+	enable()
+)";
+
+PyObject * MGLVertexArrayAttribute_disable(MGLVertexArrayAttribute * self) {
+	const GLMethods & gl = self->vertex_array->context->gl;
+	gl.BindVertexArray(self->vertex_array->vertex_array_obj);
+	gl.DisableVertexAttribArray(self->location);
+	Py_RETURN_NONE;
+}
+
+const char * MGLVertexArrayAttribute_disable_doc = R"(
+	disable()
+)";
+
 PyMethodDef MGLVertexArrayAttribute_tp_methods[] = {
 	{"bind", (PyCFunction)MGLVertexArrayAttribute_bind_doc, METH_VARARGS | METH_KEYWORDS, MGLVertexArrayAttribute_bind_doc},
+	{"enable", (PyCFunction)MGLVertexArrayAttribute_enable_doc, METH_NOARGS, MGLVertexArrayAttribute_enable_doc},
+	{"disable", (PyCFunction)MGLVertexArrayAttribute_disable_doc, METH_NOARGS, MGLVertexArrayAttribute_disable_doc},
 	{0},
 };
 
@@ -96,28 +130,24 @@ char MGLVertexArrayAttribute_default_doc[] = R"(
 	default
 )";
 
-PyObject * MGLVertexArrayAttribute_get_enable(MGLVertexArrayAttribute * self, void * closure) {
-	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	return 0;
+PyObject * MGLVertexArrayAttribute_get_enabled(MGLVertexArrayAttribute * self, void * closure) {
+	int enabled = 0;
+	const GLMethods & gl = self->vertex_array->context->gl;
+	gl.BindVertexArray(self->vertex_array->vertex_array_obj);
+	gl.GetVertexAttribiv(self->location, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &enabled);
+	return PyBool_FromLong(enabled);
 }
 
-int MGLVertexArrayAttribute_set_enable(MGLVertexArrayAttribute * self, PyObject * value, void * closure) {
-	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	return -1;
-}
-
-char MGLVertexArrayAttribute_enable_doc[] = R"(
-	enable
+char MGLVertexArrayAttribute_enabled_doc[] = R"(
+	enabled
 )";
 
 PyObject * MGLVertexArrayAttribute_get_divisor(MGLVertexArrayAttribute * self, void * closure) {
-	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	return 0;
-}
-
-int MGLVertexArrayAttribute_set_divisor(MGLVertexArrayAttribute * self, PyObject * value, void * closure) {
-	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	return -1;
+	int divisor = 0;
+	const GLMethods & gl = self->vertex_array->context->gl;
+	gl.BindVertexArray(self->vertex_array->vertex_array_obj);
+	gl.GetVertexAttribiv(self->location, GL_VERTEX_ATTRIB_ARRAY_DIVISOR, &divisor);
+	return PyLong_FromLong(divisor);
 }
 
 char MGLVertexArrayAttribute_divisor_doc[] = R"(
@@ -125,13 +155,11 @@ char MGLVertexArrayAttribute_divisor_doc[] = R"(
 )";
 
 PyObject * MGLVertexArrayAttribute_get_stride(MGLVertexArrayAttribute * self, void * closure) {
-	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	return 0;
-}
-
-int MGLVertexArrayAttribute_set_stride(MGLVertexArrayAttribute * self, PyObject * value, void * closure) {
-	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	return -1;
+	int stride = 0;
+	const GLMethods & gl = self->vertex_array->context->gl;
+	gl.BindVertexArray(self->vertex_array->vertex_array_obj);
+	gl.GetVertexAttribiv(self->location, GL_VERTEX_ATTRIB_ARRAY_STRIDE, &stride);
+	return PyBool_FromLong(stride);
 }
 
 char MGLVertexArrayAttribute_stride_doc[] = R"(
@@ -140,10 +168,10 @@ char MGLVertexArrayAttribute_stride_doc[] = R"(
 
 PyGetSetDef MGLVertexArrayAttribute_tp_getseters[] = {
 	{(char *)"location", (getter)MGLVertexArrayAttribute_get_location, 0, MGLVertexArrayAttribute_location_doc, 0},
+	{(char *)"divisor", (getter)MGLVertexArrayAttribute_get_divisor, 0, MGLVertexArrayAttribute_divisor_doc, 0},
+	{(char *)"stride", (getter)MGLVertexArrayAttribute_get_stride, 0, MGLVertexArrayAttribute_stride_doc, 0},
+	{(char *)"enabled", (getter)MGLVertexArrayAttribute_get_enabled, 0, MGLVertexArrayAttribute_enabled_doc, 0},
 	{(char *)"default", (getter)MGLVertexArrayAttribute_get_default, (setter)MGLVertexArrayAttribute_set_default, MGLVertexArrayAttribute_default_doc, 0},
-	{(char *)"stride", (getter)MGLVertexArrayAttribute_get_stride, (setter)MGLVertexArrayAttribute_set_stride, MGLVertexArrayAttribute_stride_doc, 0},
-	{(char *)"divisor", (getter)MGLVertexArrayAttribute_get_divisor, (setter)MGLVertexArrayAttribute_set_divisor, MGLVertexArrayAttribute_divisor_doc, 0},
-	{(char *)"enable", (getter)MGLVertexArrayAttribute_get_enable, (setter)MGLVertexArrayAttribute_set_enable, MGLVertexArrayAttribute_enable_doc, 0},
 	{0},
 };
 
