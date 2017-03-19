@@ -16,8 +16,6 @@
 
 #include "BufferFormat.hpp"
 
-// TODO: validate same context
-
 PyObject * MGLContext_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLContext * self = (MGLContext *)type->tp_alloc(type, 0);
 
@@ -1206,13 +1204,6 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 		for (int i = 0; i < attachments_len; ++i) {
 			PyObject * item = PyList_GET_ITEM(attachments, i);
 
-			// if (Py_TYPE(item) != &MGLTexture_Type && Py_TYPE(item) != &MGLRenderbuffer_Type) {
-			// 	MGLError * error = MGLError_New(TRACE, "attachments[%d] must be a ModernGL.Texture or ModernGL.Renderbuffer not %s", i, Py_TYPE(item)->tp_name);
-			// 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-			// 	return 0;
-			// }
-
-			// TODO: better
 			if (!PyObject_IsSubclass((PyObject *)Py_TYPE(item), (PyObject *)&MGLFramebufferAttachment_Type)) {
 				MGLError * error = MGLError_New(TRACE, "attachments[%d] must be a ModernGL.FramebufferAttachment not %s", i, Py_TYPE(item)->tp_name);
 				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
