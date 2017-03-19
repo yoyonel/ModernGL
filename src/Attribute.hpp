@@ -9,6 +9,8 @@ struct MGLAttribute : public MGLProgramMember {
 	PyObject * name;
 
 	void * gl_attrib_ptr_proc;
+	void * gl_attrib_getter_proc;
+	void * gl_attrib_setter_proc;
 
 	int number;
 	int location;

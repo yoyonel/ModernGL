@@ -279,6 +279,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 4;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'i';
@@ -294,6 +296,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 8;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'i';
@@ -309,6 +313,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 12;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'i';
@@ -324,6 +330,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'i';
@@ -339,6 +347,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 4;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'I';
@@ -354,6 +364,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 8;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'I';
@@ -369,6 +381,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 12;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'I';
@@ -384,6 +398,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribIPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'I';
@@ -399,6 +415,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 4;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = true;
 			self->shape = 'f';
@@ -414,6 +432,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 8;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = true;
 			self->shape = 'f';
@@ -429,6 +449,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 12;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = true;
 			self->shape = 'f';
@@ -444,6 +466,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = true;
 			self->shape = 'f';
@@ -459,6 +483,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 8;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'd';
@@ -474,6 +500,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'd';
@@ -489,6 +517,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 24;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'd';
@@ -504,6 +534,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 32;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'd';
@@ -519,6 +551,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 8;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = true;
 			self->shape = 'f';
@@ -534,6 +568,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 12;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = true;
 			self->shape = 'f';
@@ -549,6 +585,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = true;
 			self->shape = 'f';
@@ -564,6 +602,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 8;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = true;
 			self->shape = 'f';
@@ -579,6 +619,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 12;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = true;
 			self->shape = 'f';
@@ -594,6 +636,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = true;
 			self->shape = 'f';
@@ -609,6 +653,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 8;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = true;
 			self->shape = 'f';
@@ -624,6 +670,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 12;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = true;
 			self->shape = 'f';
@@ -639,6 +687,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = true;
 			self->shape = 'f';
@@ -654,6 +704,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'd';
@@ -669,6 +721,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 24;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'd';
@@ -684,6 +738,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 32;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'd';
@@ -699,6 +755,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'd';
@@ -714,6 +772,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 24;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'd';
@@ -729,6 +789,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 32;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'd';
@@ -744,6 +806,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'd';
@@ -759,6 +823,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 24;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'd';
@@ -774,6 +840,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 32;
 
 			self->gl_attrib_ptr_proc = (void *)self->program->context->gl.VertexAttribLPointer;
+			self->gl_attrib_getter_proc = (void *)0;
+			self->gl_attrib_setter_proc = (void *)0;
 
 			self->normalizable = false;
 			self->shape = 'd';
@@ -789,6 +857,8 @@ void MGLAttribute_Complete(MGLAttribute * self) {
 			self->row_size = 4;
 
 			self->gl_attrib_ptr_proc = 0;
+			self->gl_attrib_getter_proc = 0;
+			self->gl_attrib_setter_proc = 0;
 
 			self->normalizable = false;
 			self->shape = 0;
