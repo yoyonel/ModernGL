@@ -45,7 +45,7 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"O!|II",
+		"O!|III",
 		(char **)kwlist,
 		&MGLBuffer_Type,
 		&buffer,
