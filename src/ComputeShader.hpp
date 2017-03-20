@@ -5,9 +5,10 @@
 #include "GenericProgram.hpp"
 
 struct MGLComputeShader : public MGLGenericProgram {
-	int compute_shader;
+	int program_obj;
+	int shader_obj;
 
-	// TODO:
+	PyObject * source;
 };
 
 extern PyTypeObject MGLComputeShader_Type;

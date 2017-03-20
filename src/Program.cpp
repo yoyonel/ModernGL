@@ -411,7 +411,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	gl.GetProgramiv(obj, GL_LINK_STATUS, &linked);
 
 	if (!linked) {
-		const char * message = "GLSL Compiler failed";
+		const char * message = "GLSL Linker failed";
 		const char * title = "Program";
 		const char * underline = "=======";
 

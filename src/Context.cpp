@@ -1548,6 +1548,122 @@ const char * MGLContext_DepthRenderbuffer_doc = R"(
 		:py:class:`Renderbuffer`
 )";
 
+MGLRenderbuffer * MGLContext_ComputeShader(MGLContext * self, PyObject * args, PyObject * kwargs) {
+	static const char * kwlist[] = {"source", 0};
+
+	PyObject * source;
+
+	int args_ok = PyArg_ParseTupleAndKeywords(
+		args,
+		kwargs,
+		"O",
+		(char **)kwlist,
+		&source
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (!PyUnicode_Check(source)) {
+		MGLError * error = MGLError_New(TRACE, "source must be a str not %s", Py_TYPE(source)->tp_name);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
+
+	MGLComputeShader * compute_shader = MGLComputeShader_New();
+
+	Py_INCREF(source);
+	compute_shader->source = source;
+
+	Py_INCREF(self);
+	compute_shader->context = self;
+
+	char * source_str = PyUnicode_AsUTF8(source);
+
+	int shader_obj = gl.CreateShader(GL_COMPUTE_SHADER);
+
+	if (!shader_obj) {
+		// TODO:
+	}
+
+	gl.ShaderSource(shader_obj, 1, &source_str, 0);
+	gl.CompileShader(shader_obj);
+
+	int compiled = GL_FALSE;
+	gl.GetShaderiv(shader_obj, GL_COMPILE_STATUS, &compiled);
+
+	if (!compiled) {
+		const char * message = "GLSL Compiler failed";
+		const char * title = "ComputeShader";
+		const char * underline = "=============";
+
+		int log_len = 0;
+		gl.GetShaderiv(shader_obj, GL_INFO_LOG_LENGTH, &log_len);
+
+		char * log = new char[log_len];
+		gl.GetShaderInfoLog(shader_obj, log_len, &log_len, log);
+
+		gl.DeleteShader(shader_obj);
+
+		MGLError * error = MGLError_New(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+
+		delete[] log;
+		return 0;
+	}
+
+	compute_shader->shader_obj = shader_obj;
+
+	int program_obj = gl.CreateProgram();
+
+	if (!program_obj) {
+		// TODO:
+	}
+
+	gl.AttachShader(program_obj, shader_obj);
+	gl.LinkProgram(program_obj);
+
+	int linked = GL_FALSE;
+	gl.GetProgramiv(program_obj, GL_LINK_STATUS, &linked);
+
+	if (!linked) {
+		const char * message = "GLSL Linker failed";
+		const char * title = "ComputeShader";
+		const char * underline = "=============";
+
+		int log_len = 0;
+		gl.GetProgramiv(program_obj, GL_INFO_LOG_LENGTH, &log_len);
+
+		char * log = new char[log_len];
+		gl.GetProgramInfoLog(program_obj, log_len, &log_len, log);
+
+		gl.DeleteProgram(program_obj);
+
+		MGLError * error = MGLError_New(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+
+		delete[] log;
+		return 0;
+	}
+
+	compute_shader->program_obj = program_obj;
+
+	return compute_shader;
+}
+
+const char * MGLContext_ComputeShader_doc = R"(
+	ComputeShader(source)
+
+	Create a ComputeShader.
+
+	Args:
+		source: The source of the compute shader.
+
+	Returns:
+		:py:class:`ComputeShader`
+)";
+
 PyObject * MGLContext_release(PyObject * self) {
 	// TODO:
 
@@ -1581,6 +1697,7 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"Framebuffer", (PyCFunction)MGLContext_Framebuffer, METH_VARARGS | METH_KEYWORDS, MGLContext_Framebuffer_doc},
 	{"Renderbuffer", (PyCFunction)MGLContext_Renderbuffer, METH_VARARGS | METH_KEYWORDS, MGLContext_Renderbuffer_doc},
 	{"DepthRenderbuffer", (PyCFunction)MGLContext_DepthRenderbuffer, METH_VARARGS | METH_KEYWORDS, MGLContext_DepthRenderbuffer_doc},
+	{"ComputeShader", (PyCFunction)MGLContext_ComputeShader, METH_VARARGS | METH_KEYWORDS, MGLContext_ComputeShader_doc},
 
 	{0},
 };
