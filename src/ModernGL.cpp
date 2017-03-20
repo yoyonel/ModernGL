@@ -33,7 +33,6 @@
 #include "VertexArrayMember.hpp"
 
 #include <Python.h>
-#include <Windows.h>
 
 MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"size", "require", 0};
@@ -166,7 +165,7 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 		return 0;
 	}
 
-	HGLRC rc = wglCreateContext(dc);
+	HGLRC rc = oglCreateContext(dc);
 
 	if (!rc) {
 		MGLError * error = MGLError_New(TRACE, "Cannot create OpenGL context");
@@ -174,7 +173,7 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 		return 0;
 	}
 
-	int make_current = wglMakeCurrent(dc, rc);
+	int make_current = oglMakeCurrent(dc, rc);
 
 	if (!make_current) {
 		MGLError * error = MGLError_New(TRACE, "Cannot select OpenGL context");
@@ -231,8 +230,8 @@ MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
-	void * rc_handle = wglGetCurrentContext();
-	void * dc_handle = wglGetCurrentDC();
+	void * rc_handle = oglGetCurrentContext();
+	void * dc_handle = oglGetCurrentDC();
 
 	if (!rc_handle || !dc_handle) {
 		MGLError * error = MGLError_New(TRACE, "Cannot detect current context.");

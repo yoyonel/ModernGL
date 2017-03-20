@@ -4,6 +4,8 @@
 #include <Windows.h>
 #define oglGetProcAddress wglGetProcAddress
 #define oglGetCurrentContext wglGetCurrentContext
+#define oglGetCurrentDC wglGetCurrentDC
+#define oglCreateContext wglCreateContext
 #define oglDeleteContext wglDeleteContext
 #define oglMakeCurrent wglMakeCurrent
 #else
