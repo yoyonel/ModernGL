@@ -8,11 +8,6 @@
 struct MGLVarying : public MGLProgramMember {
 	PyObject * name;
 
-	void * value_getter;
-	void * value_setter;
-	void * gl_value_reader_proc;
-	void * gl_value_writer_proc;
-
 	int number;
 	int type;
 
@@ -27,4 +22,4 @@ extern PyTypeObject MGLVarying_Type;
 
 MGLVarying * MGLVarying_New();
 void MGLVarying_Invalidate(MGLVarying * varying);
-void MGLVarying_Complete(MGLVarying * varying);
+void MGLVarying_Complete(MGLVarying * varying, const GLMethods & gl);

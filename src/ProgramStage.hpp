@@ -15,4 +15,4 @@ struct MGLProgramStage : public MGLProgramMember {
 extern PyTypeObject MGLProgramStage_Type;
 
 MGLProgramStage * MGLProgramStage_New();
-void MGLProgramStage_Complete(MGLProgramStage * program_stage);
+void MGLProgramStage_Complete(MGLProgramStage * program_stage, const GLMethods & gl);

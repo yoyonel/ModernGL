@@ -92,5 +92,6 @@ MGLUniformBlock * MGLUniformBlock_New() {
 	return self;
 }
 
-void MGLUniformBlock_Complete(MGLUniformBlock * uniform_block) {
+void MGLUniformBlock_Complete(MGLUniformBlock * uniform_block, const GLMethods & gl) {
+	// TODO:
 }

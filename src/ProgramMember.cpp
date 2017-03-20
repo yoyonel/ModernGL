@@ -29,19 +29,19 @@ PyMethodDef MGLProgramMember_tp_methods[] = {
 	{0},
 };
 
-MGLProgram * MGLProgramMember_get_program(MGLProgramMember * self, void * closure) {
-	Py_INCREF(self->program);
-	return self->program;
-}
+// MGLProgram * MGLProgramMember_get_program(MGLProgramMember * self, void * closure) {
+// 	Py_INCREF(self->program);
+// 	return self->program;
+// }
 
-char MGLProgramMember_program_doc[] = R"(
-	program
+// char MGLProgramMember_program_doc[] = R"(
+// 	program
 
-	The Program object used for creation.
-)";
+// 	The Program object used for creation.
+// )";
 
 PyGetSetDef MGLProgramMember_tp_getseters[] = {
-	{(char *)"program", (getter)MGLProgramMember_get_program, 0, MGLProgramMember_program_doc, 0},
+	// {(char *)"program", (getter)MGLProgramMember_get_program, 0, MGLProgramMember_program_doc, 0},
 	{0},
 };
 

@@ -28,7 +28,7 @@ extern PyTypeObject MGLUniform_Type;
 
 MGLUniform * MGLUniform_New();
 void MGLUniform_Invalidate(MGLUniform * uniform);
-void MGLUniform_Complete(MGLUniform * self);
+void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl);
 
 typedef void (GLAPI * gl_uniform_reader_proc)(GLuint program, GLint location, void * value);
 typedef void (GLAPI * gl_uniform_vector_writer_proc)(GLuint program, GLint location, GLsizei count, const void * value);

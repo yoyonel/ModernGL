@@ -31,7 +31,7 @@ extern PyTypeObject MGLAttribute_Type;
 
 MGLAttribute * MGLAttribute_New();
 void MGLAttribute_Invalidate(MGLAttribute * attribute);
-void MGLAttribute_Complete(MGLAttribute * attribute);
+void MGLAttribute_Complete(MGLAttribute * attribute, const GLMethods & gl);
 
 typedef GLvoid (GLAPI * gl_attribute_normal_ptr_proc)(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer);
 typedef GLvoid (GLAPI * gl_attribute_ptr_proc)(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid * pointer);

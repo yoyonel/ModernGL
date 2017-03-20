@@ -106,22 +106,20 @@ MGLProgramStage * MGLProgramStage_New() {
 	return self;
 }
 
-void MGLProgramStage_Complete(MGLProgramStage * program_stage) {
-	const GLMethods & gl = program_stage->program->context->gl;
-
+void MGLProgramStage_Complete(MGLProgramStage * program_stage, const GLMethods & gl) {
 	PyObject * subroutines = PyDict_New();
 	PyObject * subroutine_uniforms = PyDict_New();
 
 	int shader_type = program_stage->shader->shader_type;
 
 	int num_subroutines = 0;
-	gl.GetProgramStageiv(program_stage->program->program_obj, shader_type, GL_ACTIVE_SUBROUTINES, &num_subroutines);
+	gl.GetProgramStageiv(program_stage->program_obj, shader_type, GL_ACTIVE_SUBROUTINES, &num_subroutines);
 
 	int num_subroutine_uniforms = 0;
-	gl.GetProgramStageiv(program_stage->program->program_obj, shader_type, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_subroutine_uniforms);
+	gl.GetProgramStageiv(program_stage->program_obj, shader_type, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_subroutine_uniforms);
 
 	int num_subroutine_uniform_locations = 0;
-	gl.GetProgramStageiv(program_stage->program->program_obj, shader_type, GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS, &num_subroutine_uniform_locations);
+	gl.GetProgramStageiv(program_stage->program_obj, shader_type, GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS, &num_subroutine_uniform_locations);
 
 	// TODO: create array [subroutine_uniform_locations]
 
@@ -131,9 +129,9 @@ void MGLProgramStage_Complete(MGLProgramStage * program_stage) {
 		int name_len = 0;
 		char name[256];
 
-		gl.GetActiveSubroutineName(program_stage->program->program_obj, shader_type, i, 256, &name_len, name);
+		gl.GetActiveSubroutineName(program_stage->program_obj, shader_type, i, 256, &name_len, name);
 
-		subroutine->index = gl.GetSubroutineIndex(program_stage->program->program_obj, shader_type, name);
+		subroutine->index = gl.GetSubroutineIndex(program_stage->program_obj, shader_type, name);
 
 		subroutine->number = i;
 		subroutine->program_stage = program_stage;
@@ -151,9 +149,9 @@ void MGLProgramStage_Complete(MGLProgramStage * program_stage) {
 		int name_len = 0;
 		char name[256];
 
-		gl.GetActiveSubroutineUniformName(program_stage->program->program_obj, shader_type, i, 256, &name_len, name);
+		gl.GetActiveSubroutineUniformName(program_stage->program_obj, shader_type, i, 256, &name_len, name);
 
-		subroutine_uniform->index = gl.GetSubroutineUniformLocation(program_stage->program->program_obj, shader_type, name);
+		subroutine_uniform->index = gl.GetSubroutineUniformLocation(program_stage->program_obj, shader_type, name);
 
 		subroutine_uniform->number = i;
 		subroutine_uniform->program_stage = program_stage;

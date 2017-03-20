@@ -434,9 +434,9 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 	if (shaders[VERTEX_SHADER_SLOT]) {
 		MGLProgramStage * program_stage = MGLProgramStage_New();
-		program_stage->program = program;
+		program_stage->program_obj = program->program_obj;
 		program_stage->shader = shaders[VERTEX_SHADER_SLOT];
-		MGLProgramStage_Complete(program_stage);
+		MGLProgramStage_Complete(program_stage, gl);
 		program->vertex_shader = (PyObject *)program_stage;
 	} else {
 		program->vertex_shader = 0;
@@ -444,9 +444,9 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 	if (shaders[FRAGMENT_SHADER_SLOT]) {
 		MGLProgramStage * program_stage = MGLProgramStage_New();
-		program_stage->program = program;
+		program_stage->program_obj = program->program_obj;
 		program_stage->shader = shaders[FRAGMENT_SHADER_SLOT];
-		MGLProgramStage_Complete(program_stage);
+		MGLProgramStage_Complete(program_stage, gl);
 		program->fragment_shader = (PyObject *)program_stage;
 	} else {
 		program->fragment_shader = 0;
@@ -454,9 +454,9 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 	if (shaders[GEOMETRY_SHADER_SLOT]) {
 		MGLProgramStage * program_stage = MGLProgramStage_New();
-		program_stage->program = program;
+		program_stage->program_obj = program->program_obj;
 		program_stage->shader = shaders[GEOMETRY_SHADER_SLOT];
-		MGLProgramStage_Complete(program_stage);
+		MGLProgramStage_Complete(program_stage, gl);
 		program->geometry_shader = (PyObject *)program_stage;
 	} else {
 		program->geometry_shader = 0;
@@ -464,9 +464,9 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 	if (shaders[TESSELATION_EVALUATION_SHADER_SLOT]) {
 		MGLProgramStage * program_stage = MGLProgramStage_New();
-		program_stage->program = program;
+		program_stage->program_obj = program->program_obj;
 		program_stage->shader = shaders[TESSELATION_EVALUATION_SHADER_SLOT];
-		MGLProgramStage_Complete(program_stage);
+		MGLProgramStage_Complete(program_stage, gl);
 		program->tesselation_evaluation_shader = (PyObject *)program_stage;
 	} else {
 		program->tesselation_evaluation_shader = 0;
@@ -474,9 +474,9 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 	if (shaders[TESSELATION_CONTROL_SHADER_SLOT]) {
 		MGLProgramStage * program_stage = MGLProgramStage_New();
-		program_stage->program = program;
+		program_stage->program_obj = program->program_obj;
 		program_stage->shader = shaders[TESSELATION_CONTROL_SHADER_SLOT];
-		MGLProgramStage_Complete(program_stage);
+		MGLProgramStage_Complete(program_stage, gl);
 		program->tesselation_control_shader = (PyObject *)program_stage;
 	} else {
 		program->tesselation_control_shader = 0;
@@ -505,10 +505,10 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		}
 
 		uniform->number = i;
-		uniform->program = program;
+		uniform->program_obj = program->program_obj;
 		uniform->name = PyUnicode_FromStringAndSize(name, name_len);
 
-		MGLUniform_Complete(uniform);
+		MGLUniform_Complete(uniform, gl);
 
 		clean_program_member_name(name, name_len);
 
@@ -544,10 +544,10 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		// }
 
 		uniform_block->number = i;
-		uniform_block->program = program;
+		uniform_block->program_obj = program->program_obj;
 		uniform_block->name = PyUnicode_FromStringAndSize(name, name_len);
 
-		MGLUniformBlock_Complete(uniform_block);
+		MGLUniformBlock_Complete(uniform_block, gl);
 
 		clean_program_member_name(name, name_len);
 
@@ -587,10 +587,10 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		clean_program_member_name(name, name_len);
 
 		attribute->number = i;
-		attribute->program = program;
+		attribute->program_obj = program->program_obj;
 		attribute->name = PyUnicode_FromStringAndSize(name, name_len);
 
-		MGLAttribute_Complete(attribute);
+		MGLAttribute_Complete(attribute, gl);
 
 		PyDict_SetItem(attributes, attribute->name, (PyObject *)attribute);
 		Py_DECREF(attribute);
@@ -615,8 +615,10 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		gl.GetTransformFeedbackVarying(program->program_obj, i, 256, &name_len, &varying->array_length, (GLenum *)&varying->type, name);
 
 		varying->number = i;
-		varying->program = program;
+		varying->program_obj = program->program_obj;
 		varying->name = PyUnicode_FromStringAndSize(name, name_len);
+
+		// TODO: complete
 
 		PyDict_SetItem(varyings, varying->name, (PyObject *)varying);
 		Py_DECREF(varying);
