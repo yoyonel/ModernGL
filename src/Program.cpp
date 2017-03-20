@@ -97,6 +97,19 @@ char MGLProgram_uniforms_doc[] = R"(
 	It can be used to access uniforms by name.
 )";
 
+PyObject * MGLProgram_get_uniform_blocks(MGLProgram * self, void * closure) {
+	Py_INCREF(self->uniform_blocks_proxy);
+	return self->uniform_blocks_proxy;
+}
+
+char MGLProgram_uniform_blocks_doc[] = R"(
+	uniform_blocks
+
+	The program's uniform blocks.
+	The return value is a dictinary.
+	It can be used to access uniform blocks by name.
+)";
+
 PyObject * MGLProgram_get_attributes(MGLProgram * self, void * closure) {
 	Py_INCREF(self->attributes_proxy);
 	return self->attributes_proxy;
@@ -211,6 +224,7 @@ char MGLProgram_tesselation_control_shader_doc[] = R"(
 PyGetSetDef MGLProgram_tp_getseters[] = {
 	{(char *)"shaders", (getter)MGLProgram_get_shaders, 0, MGLProgram_shaders_doc, 0},
 	{(char *)"uniforms", (getter)MGLProgram_get_uniforms, 0, MGLProgram_uniforms_doc, 0},
+	{(char *)"uniform_blocks", (getter)MGLProgram_get_uniform_blocks, 0, MGLProgram_uniform_blocks_doc, 0},
 	{(char *)"attributes", (getter)MGLProgram_get_attributes, 0, MGLProgram_attributes_doc, 0},
 	{(char *)"varyings", (getter)MGLProgram_get_varyings, 0, MGLProgram_varyings_doc, 0},
 
