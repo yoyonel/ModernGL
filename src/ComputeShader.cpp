@@ -66,7 +66,7 @@ const char * MGLComputeShader_run_doc = R"(
 )";
 
 PyMethodDef MGLComputeShader_tp_methods[] = {
-	{"run", (PyCFunction)MGLComputeShader_run_doc, METH_VARARGS | METH_KEYWORDS, MGLComputeShader_run_doc},
+	{"run", (PyCFunction)MGLComputeShader_run, METH_VARARGS | METH_KEYWORDS, MGLComputeShader_run_doc},
 	{0},
 };
 

@@ -40,7 +40,7 @@ void MGLContext_tp_dealloc(MGLContext * self) {
 }
 
 int MGLContext_tp_init(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_New(TRACE, "Cannot create %s manually");
+	MGLError * error = MGLError_New(TRACE, "Cannot create Context manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
@@ -186,14 +186,6 @@ const char * MGLContext_finish_doc = R"(
 	finish()
 
 	Not used.
-)";
-
-PyObject * MGLContext_info(MGLContext * self) {
-	// TODO:
-	return 0;
-}
-
-const char * MGLContext_info_doc = R"(
 )";
 
 PyObject * MGLContext_copy_buffer(MGLContext * self, PyObject * args, PyObject * kwargs) {
@@ -1857,6 +1849,55 @@ PyObject * MGLContext_get_default_framebuffer(MGLContext * self) {
 char MGLContext_default_framebuffer_doc[] = R"(
 )";
 
+PyObject * MGLContext_get_vendor(MGLContext * self, void * closure) {
+	const char * vendor = (const char *)self->gl.GetString(GL_VENDOR);
+
+	if (!vendor) {
+		MGLError * error = MGLError_New(TRACE, "Missing vendor information");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
+
+	return PyUnicode_FromFormat("%s", vendor);
+
+}
+
+char MGLContext_vendor_doc[] = R"(
+	vendor
+)";
+
+PyObject * MGLContext_get_renderer(MGLContext * self, void * closure) {
+	const char * renderer = (const char *)self->gl.GetString(GL_RENDERER);
+
+	if (!renderer) {
+		MGLError * error = MGLError_New(TRACE, "Missing renderer information");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
+
+	return PyUnicode_FromFormat("%s", renderer);
+}
+
+char MGLContext_renderer_doc[] = R"(
+	renderer
+)";
+
+PyObject * MGLContext_get_version(MGLContext * self, void * closure) {
+	const char * version = (const char *)self->gl.GetString(GL_VERSION);
+
+	if (!version) {
+		MGLError * error = MGLError_New(TRACE, "Missing version information");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
+
+	return PyUnicode_FromFormat("%s", version);
+}
+
+char MGLContext_version_doc[] = R"(
+	version
+)";
+
 PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"line_width", (getter)MGLContext_get_line_width, (setter)MGLContext_set_line_width, MGLContext_line_width_doc, 0},
 	{(char *)"point_size", (getter)MGLContext_get_point_size, (setter)MGLContext_set_point_size, MGLContext_point_size_doc, 0},
@@ -1864,6 +1905,11 @@ PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"default_texture_unit", (getter)MGLContext_get_default_texture_unit, (setter)MGLContext_set_default_texture_unit, MGLContext_default_texture_unit_doc, 0},
 	{(char *)"max_texture_units", (getter)MGLContext_get_max_texture_units, 0, MGLContext_max_texture_units_doc, 0},
 	{(char *)"default_framebuffer", (getter)MGLContext_get_default_framebuffer, 0, MGLContext_default_framebuffer_doc, 0},
+
+	{(char *)"vendor", (getter)MGLContext_get_vendor, 0, MGLContext_vendor_doc, 0},
+	{(char *)"renderer", (getter)MGLContext_get_renderer, 0, MGLContext_renderer_doc, 0},
+	{(char *)"version", (getter)MGLContext_get_version, 0, MGLContext_version_doc, 0},
+
 	{(char *)"vsync", 0, 0, 0, 0}, // TODO:
 	{0},
 };
