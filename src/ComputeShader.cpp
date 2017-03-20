@@ -34,8 +34,39 @@ PyObject * MGLComputeShader_tp_str(MGLComputeShader * self) {
 	return PyUnicode_FromFormat("<ModernGL.ComputeShader>");
 }
 
+PyObject * MGLComputeShader_run(MGLComputeShader * self, PyObject * args, PyObject * kwargs) {
+	static const char * kwlist[] = {"x", "y", "z", 0};
+
+	int x = 1;
+	int y = 1;
+	int z = 1;
+
+	int args_ok = PyArg_ParseTupleAndKeywords(
+		args,
+		kwargs,
+		"|iii",
+		(char **)kwlist,
+		&x,
+		&y,
+		&z
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+	return 0;
+
+	// Py_RETURN_NONE;
+}
+
+const char * MGLComputeShader_run_doc = R"(
+	run(x = 1, y = 1, z = 1)
+)";
+
 PyMethodDef MGLComputeShader_tp_methods[] = {
-	{"run", 0, 0, 0},
+	{"run", (PyCFunction)MGLComputeShader_run_doc, METH_VARARGS | METH_KEYWORDS, MGLComputeShader_run_doc},
 	{0},
 };
 
