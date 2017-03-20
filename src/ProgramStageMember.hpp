@@ -6,7 +6,8 @@
 #include "ProgramStage.hpp"
 
 struct MGLProgramStageMember : public MGLObject {
-	MGLProgramStage * program_stage;
+	int program_obj;
+	int shader_type;
 };
 
 extern PyTypeObject MGLProgramStageMember_Type;
