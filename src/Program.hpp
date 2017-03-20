@@ -2,10 +2,10 @@
 
 #include <Python.h>
 
-#include "GenericProgram.hpp"
+#include "ContextMember.hpp"
 #include "Primitive.hpp"
 
-struct MGLProgram : public MGLGenericProgram {
+struct MGLProgram : public MGLContextMember {
 	PyObject * shaders;
 
 	PyObject * vertex_shader;
@@ -13,6 +13,12 @@ struct MGLProgram : public MGLGenericProgram {
 	PyObject * geometry_shader;
 	PyObject * tesselation_evaluation_shader;
 	PyObject * tesselation_control_shader;
+
+	PyObject * uniforms;
+	PyObject * uniforms_proxy;
+
+	PyObject * uniform_blocks;
+	PyObject * uniform_blocks_proxy;
 
 	PyObject * attributes;
 	PyObject * attributes_proxy;
@@ -25,6 +31,8 @@ struct MGLProgram : public MGLGenericProgram {
 
 	// TODO:
 	MGLPrimitive * geometry_vertices;
+
+	int program_obj;
 };
 
 extern PyTypeObject MGLProgram_Type;

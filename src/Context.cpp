@@ -2,6 +2,7 @@
 
 #include "Error.hpp"
 #include "Buffer.hpp"
+#include "ComputeShader.hpp"
 #include "Texture.hpp"
 #include "VertexArray.hpp"
 #include "Program.hpp"
@@ -1548,7 +1549,7 @@ const char * MGLContext_DepthRenderbuffer_doc = R"(
 		:py:class:`Renderbuffer`
 )";
 
-MGLRenderbuffer * MGLContext_ComputeShader(MGLContext * self, PyObject * args, PyObject * kwargs) {
+MGLComputeShader * MGLContext_ComputeShader(MGLContext * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"source", 0};
 
 	PyObject * source;
@@ -1580,6 +1581,8 @@ MGLRenderbuffer * MGLContext_ComputeShader(MGLContext * self, PyObject * args, P
 	compute_shader->context = self;
 
 	char * source_str = PyUnicode_AsUTF8(source);
+
+	const GLMethods & gl = self->gl;
 
 	int shader_obj = gl.CreateShader(GL_COMPUTE_SHADER);
 

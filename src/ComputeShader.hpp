@@ -2,13 +2,13 @@
 
 #include <Python.h>
 
-#include "GenericProgram.hpp"
+#include "ContextMember.hpp"
 
-struct MGLComputeShader : public MGLGenericProgram {
+struct MGLComputeShader : public MGLContextMember {
+	PyObject * source;
+
 	int program_obj;
 	int shader_obj;
-
-	PyObject * source;
 };
 
 extern PyTypeObject MGLComputeShader_Type;

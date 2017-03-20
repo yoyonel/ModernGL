@@ -8,7 +8,6 @@
 #include "Error.hpp"
 #include "Framebuffer.hpp"
 #include "FramebufferAttachment.hpp"
-#include "GenericProgram.hpp"
 #include "InvalidObject.hpp"
 #include "MultisampleRenderbuffer.hpp"
 #include "MultisampleTexture.hpp"
@@ -400,17 +399,6 @@ extern "C" PyObject * PyInit_ModernGL() {
 		Py_INCREF(&MGLFramebufferAttachment_Type);
 
 		PyModule_AddObject(module, "FramebufferAttachment", (PyObject *)&MGLFramebufferAttachment_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLGenericProgram_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register GenericProgram in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		Py_INCREF(&MGLGenericProgram_Type);
-
-		PyModule_AddObject(module, "GenericProgram", (PyObject *)&MGLGenericProgram_Type);
 	}
 
 	{

@@ -78,7 +78,7 @@ PyTypeObject MGLComputeShader_Type = {
 	MGLComputeShader_tp_methods,                            // tp_methods
 	0,                                                      // tp_members
 	MGLComputeShader_tp_getseters,                          // tp_getset
-	&MGLGenericProgram_Type,                                // tp_base
+	&MGLContextMember_Type,                                 // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
@@ -87,3 +87,8 @@ PyTypeObject MGLComputeShader_Type = {
 	0,                                                      // tp_alloc
 	MGLComputeShader_tp_new,                                // tp_new
 };
+
+MGLComputeShader * MGLComputeShader_New() {
+	MGLComputeShader * self = (MGLComputeShader *)MGLComputeShader_tp_new(&MGLComputeShader_Type, 0, 0);
+	return self;
+}
