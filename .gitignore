@@ -1,15 +1,14 @@
 **/__pycache__
+**/Temp
+**/build
 
-examples/Temp
-
-.cache
-build
-docs/build
 dist
 
+.cache
 .vscode
 
 *.egg-info
 *.pyd
+*.pyc
 *.bat
 *.whl
