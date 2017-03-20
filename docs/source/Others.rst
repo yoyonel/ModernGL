@@ -14,7 +14,6 @@ Constants
 	Primitive <Primitive.rst>
 	Version <Version.rst>
 
-	GenericProgram <GenericProgram.rst>
 	FramebufferAttachment <FramebufferAttachment.rst>
 
 	ContextMember <ContextMember.rst>
