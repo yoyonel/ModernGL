@@ -62,6 +62,8 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 		return 0;
 	}
 
+	// TODO: windows
+
 	HINSTANCE inst = GetModuleHandle(0);
 
 	static bool registered = false;
@@ -165,7 +167,7 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 		return 0;
 	}
 
-	HGLRC rc = oglCreateContext(dc);
+	HGLRC rc = wglCreateContext(dc);
 
 	if (!rc) {
 		MGLError * error = MGLError_New(TRACE, "Cannot create OpenGL context");
@@ -173,7 +175,7 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 		return 0;
 	}
 
-	int make_current = oglMakeCurrent(dc, rc);
+	int make_current = wglMakeCurrent(dc, rc);
 
 	if (!make_current) {
 		MGLError * error = MGLError_New(TRACE, "Cannot select OpenGL context");
@@ -230,8 +232,9 @@ MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
-	void * rc_handle = oglGetCurrentContext();
-	void * dc_handle = oglGetCurrentDC();
+	// TODO: windows
+	void * rc_handle = wglGetCurrentContext();
+	void * dc_handle = wglGetCurrentDC();
 
 	if (!rc_handle || !dc_handle) {
 		MGLError * error = MGLError_New(TRACE, "Cannot detect current context.");

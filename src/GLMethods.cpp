@@ -1,6 +1,5 @@
 #include "GLMethods.hpp"
 
-#include <Windows.h>
 #include <cstdio>
 
 /*
@@ -718,7 +717,9 @@ define = '\n\t'.join('PROC_gl%s %s;' % (method, method) for method in methods)
 
 */
 
-void dummy_method() {
+#if defined(_WIN32) || defined(_WIN64)
+
+void __stdcall dummy_method() {
 	printf("DUMMY METHOD\n");
 	exit(0);
 }
@@ -729,11 +730,37 @@ void * LoadMethod(const char * method) {
 	void * proc = (void *)GetProcAddress(opengl32, method);
 
 	if (proc) {
+		return proc;
+	}
+
+	proc = (void *)wglGetProcAddress(method);
+
+	if (proc) {
+		return proc;
+	}
+
+	return (void *)dummy_method;
+}
+
+#else
+
+void dummy_method() {
+	printf("DUMMY METHOD\n");
+	exit(0);
+}
+
+void * LoadMethod(const char * method) {
+	static void * libgl = dlopen("libGL.so.1", RTLD_LAZY);
+
+	void * proc = (void *)dlsym(libgl, method);
+
+	if (proc) {
 		// printf("%s found!\n", method);
 		return proc;
 	}
 
-	proc = (void *)oglGetProcAddress(method);
+	// TODO: load glXGetProcAddress
+	proc = (void *)glXGetProcAddress(method);
 
 	if (proc) {
 		// printf("%s found!\n", method);
@@ -743,6 +770,8 @@ void * LoadMethod(const char * method) {
 	// printf("%s NOT found!\n", method);
 	return (void *)dummy_method;
 }
+
+#endif
 
 void GLMethods::load() {
 	ActiveShaderProgram = (PROC_glActiveShaderProgram)LoadMethod("glActiveShaderProgram");

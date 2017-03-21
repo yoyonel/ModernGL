@@ -1996,10 +1996,11 @@ void MGLContext_Invalidate(MGLContext * context) {
 	printf("MGLContext_Invalidate %p\n", context);
 	#endif
 
+	// TODO: windows
 	if (context->standalone) {
-		if (oglGetCurrentContext() == context->rc_handle) {
-			oglMakeCurrent(0, 0);
-			oglDeleteContext((HGLRC)context->rc_handle);
+		if (wglGetCurrentContext() == context->rc_handle) {
+			wglMakeCurrent(0, 0);
+			wglDeleteContext((HGLRC)context->rc_handle);
 			HWND hwnd = WindowFromDC((HDC)context->dc_handle);
 			ReleaseDC(hwnd, (HDC)context->dc_handle);
 			DestroyWindow(hwnd);

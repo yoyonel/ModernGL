@@ -1,15 +1,21 @@
 #pragma once
 
 #if defined(_WIN32) || defined(_WIN64)
+
 #include <Windows.h>
-#define oglGetProcAddress wglGetProcAddress
-#define oglGetCurrentContext wglGetCurrentContext
-#define oglGetCurrentDC wglGetCurrentDC
-#define oglCreateContext wglCreateContext
-#define oglDeleteContext wglDeleteContext
-#define oglMakeCurrent wglMakeCurrent
+
 #else
-// TODO:
+
+#include <dlfcn.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+
+typedef const void * (* PROC_glXGetProcAddress)(const char *);
+typedef const void * (* PROC_glXGetCurrentContext)();
+
+PROC_glXGetProcAddress glXGetProcAddress;
+PROC_glXGetCurrentContext glXGetCurrentContext;
+
 #endif
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -51,6 +57,9 @@ typedef void (* GLDEBUGPROC) (GLenum source, GLenum type, GLuint id, GLenum seve
 
 #if defined(_WIN32) || defined(_WIN64)
 	typedef int (__stdcall * PROC_glSwapInterval)(int interval);
+#else
+	// TODO: void glXSwapIntervalEXT(Display * dpy, GLXDrawable drawable, int interval);
+	typedef int (* PROC_glSwapInterval)(int interval);
 #endif
 
 typedef GLvoid (GLAPI * PROC_glCullFace)(GLenum mode);
