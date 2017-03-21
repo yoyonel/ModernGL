@@ -1,6 +1,7 @@
 #include "GLMethods.hpp"
 
 #include <cstdio>
+#include <cstdlib>
 
 /*
 
@@ -745,6 +746,7 @@ void * LoadMethod(const char * method) {
 #else
 
 void dummy_method() {
+	// TODO: remove
 	printf("DUMMY METHOD\n");
 	exit(0);
 }
