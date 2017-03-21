@@ -13,6 +13,9 @@ extra_args = {
 	'linux': ['-std=c++11'],
 }
 
+# Some notes during the install on Ubuntu:
+# apt-get install libgl1-mesa-dev libx11-dev
+
 def sources():
 	for path, folders, files in os.walk('src'):
 		for f in files:

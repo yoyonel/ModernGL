@@ -10,11 +10,8 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-typedef const void * (* PROC_glXGetProcAddress)(const char *);
-typedef const void * (* PROC_glXGetCurrentContext)();
-
-PROC_glXGetProcAddress glXGetProcAddress;
-PROC_glXGetCurrentContext glXGetCurrentContext;
+// typedef const void * (* PROC_glXGetProcAddress)(const char *);
+// typedef const void * (* PROC_glXGetCurrentContext)();
 
 #endif
 
