@@ -745,6 +745,9 @@ void * LoadMethod(const char * method) {
 
 #else
 
+typedef void (* GLPROC)();
+extern GLPROC glXGetProcAddress(const GLubyte * procName);
+
 void dummy_method() {
 	// TODO: remove
 	printf("DUMMY METHOD\n");
@@ -754,6 +757,8 @@ void dummy_method() {
 void * LoadMethod(const char * method) {
 	static void * libgl = dlopen("libGL.so.1", RTLD_LAZY);
 
+	glXGetProcAddress = (void *)dlsym(libgl, method);
+
 	void * proc = (void *)dlsym(libgl, method);
 
 	if (proc) {
@@ -761,8 +766,7 @@ void * LoadMethod(const char * method) {
 		return proc;
 	}
 
-	// TODO: load glXGetProcAddress
-	proc = (void *)glXGetProcAddress(method);
+	proc = (void *)glXGetProcAddress((const GLubyte *)method);
 
 	if (proc) {
 		// printf("%s found!\n", method);
