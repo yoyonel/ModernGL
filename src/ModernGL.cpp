@@ -62,7 +62,7 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 		return 0;
 	}
 
-	// TODO: windows
+	#if defined(_WIN32) || defined(_WIN64)
 
 	HINSTANCE inst = GetModuleHandle(0);
 
@@ -183,6 +183,14 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 		return 0;
 	}
 
+	#else
+
+	// TODO: remove
+	void * rc = 0;
+	void * dc = 0;
+
+	#endif
+
 	MGLContext * ctx = MGLContext_New();
 
 	ctx->standalone = true;
@@ -232,7 +240,8 @@ MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
-	// TODO: windows
+	#if defined(_WIN32) || defined(_WIN64)
+
 	void * rc_handle = wglGetCurrentContext();
 	void * dc_handle = wglGetCurrentDC();
 
@@ -241,6 +250,13 @@ MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs)
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
+
+	#else
+
+	void * rc_handle = 0;
+	void * dc_handle = 0;
+
+	#endif
 
 	MGLContext * ctx = MGLContext_New();
 

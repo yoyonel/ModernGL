@@ -1028,8 +1028,6 @@ MGLProgram * MGLContext_Program(MGLContext * self, PyObject * args, PyObject * k
 		return 0;
 	}
 
-	const GLMethods & gl = self->gl;
-
 	MGLProgram * program = MGLProgram_New();
 
 	program->shaders = program_shaders;
