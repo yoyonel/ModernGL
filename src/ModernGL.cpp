@@ -253,6 +253,7 @@ MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs)
 
 	#else
 
+	// TODO: remove
 	void * rc_handle = 0;
 	void * dc_handle = 0;
 

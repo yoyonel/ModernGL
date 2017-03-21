@@ -1994,7 +1994,8 @@ void MGLContext_Invalidate(MGLContext * context) {
 	printf("MGLContext_Invalidate %p\n", context);
 	#endif
 
-	// TODO: windows
+	#if defined(_WIN32) || defined(_WIN64)
+
 	if (context->standalone) {
 		if (wglGetCurrentContext() == context->rc_handle) {
 			wglMakeCurrent(0, 0);
@@ -2004,6 +2005,12 @@ void MGLContext_Invalidate(MGLContext * context) {
 			DestroyWindow(hwnd);
 		}
 	}
+
+	#else
+
+	// TODO: release
+
+	#endif
 
 	context->ob_base.ob_type = &MGLInvalidObject_Type;
 
