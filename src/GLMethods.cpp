@@ -757,8 +757,6 @@ void dummy_method() {
 void * LoadMethod(const char * method) {
 	static void * libgl = dlopen("libGL.so.1", RTLD_LAZY);
 
-	glXGetProcAddress = (void *)dlsym(libgl, method);
-
 	void * proc = (void *)dlsym(libgl, method);
 
 	if (proc) {
