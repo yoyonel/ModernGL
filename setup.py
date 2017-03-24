@@ -5,7 +5,7 @@ target = platform.system().lower()
 
 libraries = {
 	'windows': ['gdi32', 'opengl32', 'user32'],
-	'linux': ['GL', 'dl'],
+	'linux': ['GL', 'dl', 'X11'],
 }
 
 extra_args = {

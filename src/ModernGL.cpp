@@ -34,6 +34,8 @@
 
 #include <Python.h>
 
+extern void LinuxContext();
+
 MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"size", "require", 0};
 
@@ -184,6 +186,8 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 	}
 
 	#else
+
+	LinuxContext();
 
 	// TODO: remove
 	void * rc = 0;
