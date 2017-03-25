@@ -407,7 +407,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		int outputs_len = PyList_GET_SIZE(outputs);
 
 		if (outputs_len) {
-			char ** varyings_array = new char * [outputs_len];
+			const char ** varyings_array = new const char * [outputs_len];
 
 			for (int i = 0; i < outputs_len; ++i) {
 				varyings_array[i] = PyUnicode_AsUTF8(PyList_GET_ITEM(outputs, i));

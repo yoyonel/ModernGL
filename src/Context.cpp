@@ -789,7 +789,7 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 		PyObject * tuple = PyTuple_GET_ITEM(vertex_array_content, i);
 
 		MGLBuffer * buffer = (MGLBuffer *)PyTuple_GET_ITEM(tuple, 0);
-		char * format = PyUnicode_AsUTF8(PyTuple_GET_ITEM(tuple, 1));
+		const char * format = PyUnicode_AsUTF8(PyTuple_GET_ITEM(tuple, 1));
 		PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
 
 		FormatIterator it = FormatIterator(format);
@@ -1570,7 +1570,7 @@ MGLComputeShader * MGLContext_ComputeShader(MGLContext * self, PyObject * args, 
 	Py_INCREF(self);
 	compute_shader->context = self;
 
-	char * source_str = PyUnicode_AsUTF8(source);
+	const char * source_str = PyUnicode_AsUTF8(source);
 
 	const GLMethods & gl = self->gl;
 
