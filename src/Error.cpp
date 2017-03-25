@@ -29,7 +29,7 @@ void MGLError_tp_dealloc(MGLError * self) {
 
 	Py_XDECREF(self->github);
 
-	PyTypeObject * super = self->ob_base.ob_type->tp_base;
+	PyTypeObject * super = Py_TYPE(self)->tp_base;
 	return super->tp_dealloc((PyObject *)self);
 }
 
