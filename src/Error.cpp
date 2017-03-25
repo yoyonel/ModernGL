@@ -15,7 +15,11 @@ PyObject * MGLError_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwar
 		self->traceback = 0;
 		self->context = 0;
 		self->cause = 0;
+
+		// TODO: fix this :)
+		#if PY_MAJOR_VERSION >= 3
 		self->suppress_context = 0;
+		#endif
 	}
 
 	return (PyObject *)self;
