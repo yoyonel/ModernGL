@@ -255,6 +255,8 @@ PyGetSetDef MGLBuffer_tp_getseters[] = {
 	{0},
 };
 
+#if PY_MAJOR_VERSION >= 3
+
 int MGLBuffer_tp_as_buffer_get_vew(MGLBuffer * self, Py_buffer * view, int flags) {
 	int access = (flags == PyBUF_SIMPLE) ? GL_MAP_READ_BIT : (GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
 
@@ -294,6 +296,12 @@ PyBufferProcs MGLBuffer_tp_as_buffer = {
 	(releasebufferproc)MGLBuffer_tp_as_buffer_release_view,         // releasebufferproc bf_releasebuffer
 };
 
+#else
+
+// TODO:
+
+#endif
+
 const char * MGLBuffer_tp_doc = R"(
 	Buffer
 
@@ -319,7 +327,7 @@ PyTypeObject MGLBuffer_Type = {
 	(reprfunc)MGLBuffer_tp_str,                             // tp_str
 	0,                                                      // tp_getattro
 	0,                                                      // tp_setattro
-	0,                                                      // tp_as_buffer
+	0,                                                      // tp_as_buffer // TODO: missing
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
 	MGLBuffer_tp_doc,                                       // tp_doc
 	0,                                                      // tp_traverse
