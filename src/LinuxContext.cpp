@@ -1,3 +1,9 @@
+#if defined(_WIN32) || defined(_WIN64)
+
+// TODO: rename file + add windows context loading here
+
+#else
+
 #include <GL/glx.h>
 #include <GL/gl.h>
 // #include <unistd.h>
@@ -40,3 +46,5 @@ void LinuxContext() {
  
 	glXMakeCurrent (dpy, win, ctx);
 }
+
+#endif
