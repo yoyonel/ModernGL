@@ -720,6 +720,20 @@ define = '\n\t'.join('PROC_gl%s %s;' % (method, method) for method in methods)
 
 */
 
+// TODO: better
+
+void GLAPI FakeGetProgramStageiv(GLuint program, GLenum shadertype, GLenum pname, GLint * values) {
+	values[0] = 0;
+
+	// switch (pname) {
+	// 	case GL_ACTIVE_SUBROUTINES:
+	// 	case GL_ACTIVE_SUBROUTINE_UNIFORMS:
+	// 	case GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS:
+	// 		values[0] = 0;
+	// 		break;
+	// }
+}
+
 void GLAPI dummy_method() {
 	printf("DUMMY METHOD\n");
 	exit(0);
@@ -742,7 +756,7 @@ void * LoadMethod(const char * method) {
 		return proc;
 	}
 
-	printf("%s NOT found!\n", method);
+	// printf("%s NOT found!\n", method);
 	return (void *)dummy_method;
 }
 
@@ -766,7 +780,7 @@ void * LoadMethod(const char * method) {
 		return proc;
 	}
 
-	printf("%s NOT found!\n", method);
+	// printf("%s NOT found!\n", method);
 	return (void *)dummy_method;
 }
 
@@ -1426,6 +1440,12 @@ void GLMethods::load() {
 	ViewportArrayv = (PROC_glViewportArrayv)LoadMethod("glViewportArrayv");
 	ViewportIndexedf = (PROC_glViewportIndexedf)LoadMethod("glViewportIndexedf");
 	ViewportIndexedfv = (PROC_glViewportIndexedfv)LoadMethod("glViewportIndexedfv");
+
+	// TODO: better
+
+	if (MGL_INVALID_METHOD(GetProgramStageiv)) {
+		GetProgramStageiv = FakeGetProgramStageiv;
+	}
 
 	// printf("%s\n", GetString(GL_VENDOR));
 	// printf("%s\n", GetString(GL_VERSION));
