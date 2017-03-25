@@ -160,7 +160,7 @@ void MGLMultisampleTexture_Invalidate(MGLMultisampleTexture * texture) {
 
 	Py_DECREF(texture->context);
 
-	texture->ob_base.ob_type = &MGLInvalidObject_Type;
+	Py_TYPE(texture) = &MGLInvalidObject_Type;
 
 	Py_DECREF(texture);
 }

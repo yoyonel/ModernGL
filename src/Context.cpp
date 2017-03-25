@@ -2012,7 +2012,7 @@ void MGLContext_Invalidate(MGLContext * context) {
 
 	#endif
 
-	context->ob_base.ob_type = &MGLInvalidObject_Type;
+	Py_TYPE(context) = &MGLInvalidObject_Type;
 
 	Py_DECREF(context);
 }

@@ -180,7 +180,7 @@ void MGLShader_Invalidate(MGLShader * shader) {
 	Py_DECREF(shader->source);
 	Py_DECREF(shader->context);
 
-	shader->ob_base.ob_type = &MGLInvalidObject_Type;
+	Py_TYPE(shader) = &MGLInvalidObject_Type;
 
 	Py_DECREF(shader);
 }

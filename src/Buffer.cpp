@@ -365,7 +365,7 @@ void MGLBuffer_Invalidate(MGLBuffer * buffer) {
 
 	Py_DECREF(buffer->context);
 
-	buffer->ob_base.ob_type = &MGLInvalidObject_Type;
+	Py_TYPE(buffer) = &MGLInvalidObject_Type;
 
 	Py_DECREF(buffer);
 }

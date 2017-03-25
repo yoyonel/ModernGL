@@ -120,7 +120,7 @@ void MGLVarying_Invalidate(MGLVarying * varying) {
 
 	Py_DECREF(varying->name);
 
-	varying->ob_base.ob_type = &MGLInvalidObject_Type;
+	Py_TYPE(varying) = &MGLInvalidObject_Type;
 
 	Py_DECREF(varying);
 }

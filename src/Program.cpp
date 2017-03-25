@@ -372,7 +372,7 @@ void MGLProgram_Invalidate(MGLProgram * program) {
 
 	Py_DECREF(program->context);
 
-	program->ob_base.ob_type = &MGLInvalidObject_Type;
+	Py_TYPE(program) = &MGLInvalidObject_Type;
 
 	Py_DECREF(program);
 }

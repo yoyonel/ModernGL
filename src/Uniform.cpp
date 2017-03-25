@@ -335,7 +335,7 @@ void MGLUniform_Invalidate(MGLUniform * uniform) {
 
 	Py_DECREF(uniform->name);
 
-	uniform->ob_base.ob_type = &MGLInvalidObject_Type;
+	Py_TYPE(uniform) = &MGLInvalidObject_Type;
 
 	Py_DECREF(uniform);
 }

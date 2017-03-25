@@ -120,7 +120,7 @@ void MGLSubroutine_Invalidate(MGLSubroutine * subroutine) {
 
 	Py_DECREF(subroutine->name);
 
-	subroutine->ob_base.ob_type = &MGLInvalidObject_Type;
+	Py_TYPE(subroutine) = &MGLInvalidObject_Type;
 
 	Py_DECREF(subroutine);
 }

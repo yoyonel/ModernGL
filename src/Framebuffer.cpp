@@ -247,7 +247,7 @@ void MGLFramebuffer_Invalidate(MGLFramebuffer * framebuffer) {
 		Py_DECREF(framebuffer->context);
 	}
 
-	framebuffer->ob_base.ob_type = &MGLInvalidObject_Type;
+	Py_TYPE(framebuffer) = &MGLInvalidObject_Type;
 
 	Py_DECREF(framebuffer);
 }
