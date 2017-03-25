@@ -5,6 +5,8 @@
 
 /*
 
+# TODO: remove this
+
 methods = sorted(set([
 	'ActiveTexture',
 	'AttachShader',
@@ -718,12 +720,12 @@ define = '\n\t'.join('PROC_gl%s %s;' % (method, method) for method in methods)
 
 */
 
-#if defined(_WIN32) || defined(_WIN64)
-
-void __stdcall dummy_method() {
+void GLAPI dummy_method() {
 	printf("DUMMY METHOD\n");
 	exit(0);
 }
+
+#if defined(_WIN32) || defined(_WIN64)
 
 void * LoadMethod(const char * method) {
 	static HMODULE opengl32 = LoadLibrary("opengl32.dll");
@@ -740,16 +742,11 @@ void * LoadMethod(const char * method) {
 		return proc;
 	}
 
+	printf("%s NOT found!\n", method);
 	return (void *)dummy_method;
 }
 
 #else
-
-void dummy_method() {
-	// TODO: remove
-	printf("DUMMY METHOD\n");
-	exit(0);
-}
 
 void * LoadMethod(const char * method) {
 	static void * libgl = dlopen("libGL.so.1", RTLD_LAZY);

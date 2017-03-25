@@ -2,6 +2,10 @@
 
 #include "OpenGL.hpp"
 
+// TODO: move
+extern void GLAPI dummy_method();
+#define MGL_INVALID_METHOD(method) (!(method) || ((void *)method == (void *)dummy_method))
+
 struct GLMethods {
 	PROC_glActiveShaderProgram ActiveShaderProgram;
 	PROC_glActiveTexture ActiveTexture;
