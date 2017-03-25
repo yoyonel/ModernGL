@@ -299,21 +299,7 @@ const char * MGL_module_doc = R"(
 	ModernGL
 )";
 
-PyModuleDef MGL_moduledef = {
-	PyModuleDef_HEAD_INIT,
-	"ModernGL",
-	MGL_module_doc,
-	-1,
-	MGL_module_methods,
-	0,
-	0,
-	0,
-	0,
-};
-
-extern "C" PyObject * PyInit_ModernGL() {
-	PyObject * module = PyModule_Create(&MGL_moduledef);
-
+bool MGL_InitializeModule(PyObject * module) {
 	{
 		if (PyType_Ready(&MGLAttribute_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Attribute in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
@@ -815,5 +801,45 @@ extern "C" PyObject * PyInit_ModernGL() {
 		PyModule_AddObject(module, "CORE_450", (PyObject *)CORE_450);
 	}
 
+	// TODO: replace 0 with false (above)
+	return true;
+}
+
+#if PY_MAJOR_VERSION >= 3
+
+PyModuleDef MGL_moduledef = {
+	PyModuleDef_HEAD_INIT,
+	"ModernGL",
+	MGL_module_doc,
+	-1,
+	MGL_module_methods,
+	0,
+	0,
+	0,
+	0,
+};
+
+extern "C" PyObject * PyInit_ModernGL() {
+	PyObject * module = PyModule_Create(&MGL_moduledef);
+
+	if (!MGL_InitializeModule(module)) {
+		return 0;
+	}
+
 	return module;
 }
+
+#else
+
+extern "C" PyObject * initModernGL() {
+	PyObject * module = Py_InitModule("ModernGL", MGL_module_methods);
+
+	if (!MGL_InitializeModule(module)) {
+		return 0;
+	}
+
+	return module;
+}
+
+#endif
+
