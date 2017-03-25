@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Python.h>
+#include "Python.hpp"
 
 #define TRACE __FILE__, __LINE__
 

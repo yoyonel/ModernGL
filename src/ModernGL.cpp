@@ -32,7 +32,7 @@
 #include "VertexArrayMatrixAttribute.hpp"
 #include "VertexArrayMember.hpp"
 
-#include <Python.h>
+#include "Python.hpp"
 
 extern void LinuxContext();
 
