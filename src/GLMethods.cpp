@@ -722,6 +722,8 @@ define = '\n\t'.join('PROC_gl%s %s;' % (method, method) for method in methods)
 
 // TODO: better
 
+#define INVALID_METHOD(method) (!(method) || ((void *)method == (void *)dummy_method))
+
 void GLAPI FakeGetProgramStageiv(GLuint program, GLenum shadertype, GLenum pname, GLint * values) {
 	values[0] = 0;
 
@@ -1443,7 +1445,7 @@ void GLMethods::load() {
 
 	// TODO: better
 
-	if (MGL_INVALID_METHOD(GetProgramStageiv)) {
+	if (INVALID_METHOD(GetProgramStageiv)) {
 		GetProgramStageiv = FakeGetProgramStageiv;
 	}
 

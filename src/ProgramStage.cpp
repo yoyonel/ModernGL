@@ -110,14 +110,6 @@ void MGLProgramStage_Complete(MGLProgramStage * program_stage, const GLMethods &
 	PyObject * subroutines = PyDict_New();
 	PyObject * subroutine_uniforms = PyDict_New();
 
-	program_stage->subroutines = PyDictProxy_New(subroutines);
-	program_stage->subroutine_uniforms = PyDictProxy_New(subroutine_uniforms);
-
-	// TODO: better
-	if (MGL_INVALID_METHOD(gl.GetProgramStageiv)) {
-		return;
-	}
-
 	int shader_type = program_stage->shader->shader_type;
 
 	int num_subroutines = 0;
@@ -172,4 +164,7 @@ void MGLProgramStage_Complete(MGLProgramStage * program_stage, const GLMethods &
 		PyDict_SetItem(subroutine_uniforms, subroutine_uniform->name, (PyObject *)subroutine_uniform);
 		Py_DECREF(subroutine_uniform);
 	}
+
+	program_stage->subroutines = PyDictProxy_New(subroutines);
+	program_stage->subroutine_uniforms = PyDictProxy_New(subroutine_uniforms);
 }
