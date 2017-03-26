@@ -2,7 +2,7 @@
 
 #if PY_MAJOR_VERSION >= 3
 
-// TODO:
+#define PyBufferProcs_PADDING
 
 #else
 
@@ -16,5 +16,7 @@
 	PyObject * context; \
 	PyObject * cause; \
 	char suppress_context;
+
+#define PyBufferProcs_PADDING 0, 0, 0, 0,
 
 #endif
