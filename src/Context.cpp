@@ -46,7 +46,8 @@ int MGLContext_tp_init(MGLContext * self, PyObject * args, PyObject * kwargs) {
 }
 
 PyObject * MGLContext_tp_str(MGLContext * self) {
-	return PyUnicode_FromFormat("<ModernGL.Context: rc = %p, dc = %p>", self->rc_handle, self->dc_handle);
+//	return PyUnicode_FromFormat("<ModernGL.Context: rc = %p, dc = %p>", self->rc_handle, self->dc_handle);
+	return PyUnicode_FromFormat("<ModernGL.Context");
 }
 
 // PyObject * MGLContext_make_current(MGLContext * self) {
@@ -1994,23 +1995,7 @@ void MGLContext_Invalidate(MGLContext * context) {
 	printf("MGLContext_Invalidate %p\n", context);
 	#endif
 
-	#if defined(_WIN32) || defined(_WIN64)
-
-	if (context->standalone) {
-		if (wglGetCurrentContext() == context->rc_handle) {
-			wglMakeCurrent(0, 0);
-			wglDeleteContext((HGLRC)context->rc_handle);
-			HWND hwnd = WindowFromDC((HDC)context->dc_handle);
-			ReleaseDC(hwnd, (HDC)context->dc_handle);
-			DestroyWindow(hwnd);
-		}
-	}
-
-	#else
-
-	// TODO: release
-
-	#endif
+	DestroyGLContext(context->gl_context);
 
 	Py_TYPE(context) = &MGLInvalidObject_Type;
 
