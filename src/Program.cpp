@@ -533,8 +533,6 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	}
 
 	program->uniforms = uniforms;
-
-	Py_INCREF(uniforms); // TODO: maybe not needed
 	program->uniforms_proxy = PyDictProxy_New(uniforms);
 
 	PyObject * uniform_blocks = PyDict_New();
@@ -572,10 +570,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	}
 
 	program->uniforms = uniforms;
-
-	Py_INCREF(uniforms); // TODO: maybe not needed
 	program->uniforms_proxy = PyDictProxy_New(uniforms);
-
 
 
 	PyObject * attributes = PyDict_New();
@@ -611,9 +606,8 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	}
 
 	program->attributes = attributes;
-
-	Py_INCREF(attributes); // TODO: maybe not needed
 	program->attributes_proxy = PyDictProxy_New(attributes);
+
 
 	PyObject * varyings = PyDict_New();
 
@@ -639,8 +633,6 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	}
 
 	program->varyings = varyings;
-
-	Py_INCREF(varyings); // TODO: maybe not needed
 	program->varyings_proxy = PyDictProxy_New(varyings);
 
 

@@ -720,20 +720,10 @@ define = '\n\t'.join('PROC_gl%s %s;' % (method, method) for method in methods)
 
 */
 
-// TODO: better
-
 #define INVALID_METHOD(method) (!(method) || ((void *)(method) == (void *)dummy_method))
 
 void GLAPI FakeGetProgramStageiv(GLuint program, GLenum shadertype, GLenum pname, GLint * values) {
 	values[0] = 0;
-
-	// switch (pname) {
-	// 	case GL_ACTIVE_SUBROUTINES:
-	// 	case GL_ACTIVE_SUBROUTINE_UNIFORMS:
-	// 	case GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS:
-	// 		values[0] = 0;
-	// 		break;
-	// }
 }
 
 void GLAPI dummy_method() {
@@ -1450,23 +1440,7 @@ void GLMethods::load() {
 	ViewportIndexedf = (PROC_glViewportIndexedf)LoadMethod("glViewportIndexedf");
 	ViewportIndexedfv = (PROC_glViewportIndexedfv)LoadMethod("glViewportIndexedfv");
 
-	// TODO: better
-
 	if (INVALID_METHOD(GetProgramStageiv)) {
 		GetProgramStageiv = FakeGetProgramStageiv;
 	}
-
-	// printf("%s\n", GetString(GL_VENDOR));
-	// printf("%s\n", GetString(GL_VERSION));
-
-	/*
-
-	If glGetString(GL_VENDOR) returns something other than "Microsoft
-	Corporation", it means you're using the board's ICD. If it returns
-	"Microsoft Corporation", this implies you chose a pixel format that your
-	device can't accelerate. However, glGetString(GL_VENDOR) also returns this
-	if your device has an MCD instead of an ICD, which means you might still
-	be hardware accelerated in this case.
-
-	*/
 }

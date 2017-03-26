@@ -1578,7 +1578,9 @@ MGLComputeShader * MGLContext_ComputeShader(MGLContext * self, PyObject * args, 
 	int shader_obj = gl.CreateShader(GL_COMPUTE_SHADER);
 
 	if (!shader_obj) {
-		// TODO:
+		MGLError * error = MGLError_New(TRACE, "cannot create shader object");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
 	}
 
 	gl.ShaderSource(shader_obj, 1, &source_str, 0);
@@ -1612,7 +1614,9 @@ MGLComputeShader * MGLContext_ComputeShader(MGLContext * self, PyObject * args, 
 	int program_obj = gl.CreateProgram();
 
 	if (!program_obj) {
-		// TODO:
+		MGLError * error = MGLError_New(TRACE, "cannot create program object");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
 	}
 
 	gl.AttachShader(program_obj, shader_obj);
@@ -1908,8 +1912,6 @@ PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"vendor", (getter)MGLContext_get_vendor, 0, MGLContext_vendor_doc, 0},
 	{(char *)"renderer", (getter)MGLContext_get_renderer, 0, MGLContext_renderer_doc, 0},
 	{(char *)"version", (getter)MGLContext_get_version, 0, MGLContext_version_doc, 0},
-
-	{(char *)"vsync", 0, 0, 0, 0}, // TODO:
 	{0},
 };
 

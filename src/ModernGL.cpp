@@ -651,7 +651,6 @@ bool MGL_InitializeModule(PyObject * module) {
 		PyModule_AddObject(module, "CORE_450", (PyObject *)CORE_450);
 	}
 
-	// TODO: replace 0 with false (above)
 	return true;
 }
 
