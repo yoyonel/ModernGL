@@ -1,18 +1,6 @@
 #pragma once
 
 #if defined(_WIN32) || defined(_WIN64)
-#include <Windows.h>
-#define oglGetProcAddress wglGetProcAddress
-#define oglGetCurrentContext wglGetCurrentContext
-#define oglGetCurrentDC wglGetCurrentDC
-#define oglCreateContext wglCreateContext
-#define oglDeleteContext wglDeleteContext
-#define oglMakeCurrent wglMakeCurrent
-#else
-// TODO:
-#endif
-
-#if defined(_WIN32) || defined(_WIN64)
 #define GLAPI __stdcall
 #else
 #define GLAPI
@@ -48,10 +36,6 @@ typedef unsigned short GLushort;
 typedef void GLvoid;
 
 typedef void (* GLDEBUGPROC) (GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar * message, const void * userParam);
-
-#if defined(_WIN32) || defined(_WIN64)
-	typedef int (__stdcall * PROC_glSwapInterval)(int interval);
-#endif
 
 typedef GLvoid (GLAPI * PROC_glCullFace)(GLenum mode);
 typedef GLvoid (GLAPI * PROC_glFrontFace)(GLenum mode);

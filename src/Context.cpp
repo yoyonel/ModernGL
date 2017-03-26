@@ -46,7 +46,8 @@ int MGLContext_tp_init(MGLContext * self, PyObject * args, PyObject * kwargs) {
 }
 
 PyObject * MGLContext_tp_str(MGLContext * self) {
-	return PyUnicode_FromFormat("<ModernGL.Context: rc = %p, dc = %p>", self->rc_handle, self->dc_handle);
+//	return PyUnicode_FromFormat("<ModernGL.Context: rc = %p, dc = %p>", self->rc_handle, self->dc_handle);
+	return PyUnicode_FromFormat("<ModernGL.Context");
 }
 
 // PyObject * MGLContext_make_current(MGLContext * self) {
@@ -789,7 +790,7 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 		PyObject * tuple = PyTuple_GET_ITEM(vertex_array_content, i);
 
 		MGLBuffer * buffer = (MGLBuffer *)PyTuple_GET_ITEM(tuple, 0);
-		char * format = PyUnicode_AsUTF8(PyTuple_GET_ITEM(tuple, 1));
+		const char * format = PyUnicode_AsUTF8(PyTuple_GET_ITEM(tuple, 1));
 		PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
 
 		FormatIterator it = FormatIterator(format);
@@ -1027,8 +1028,6 @@ MGLProgram * MGLContext_Program(MGLContext * self, PyObject * args, PyObject * k
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
-
-	const GLMethods & gl = self->gl;
 
 	MGLProgram * program = MGLProgram_New();
 
@@ -1572,7 +1571,7 @@ MGLComputeShader * MGLContext_ComputeShader(MGLContext * self, PyObject * args, 
 	Py_INCREF(self);
 	compute_shader->context = self;
 
-	char * source_str = PyUnicode_AsUTF8(source);
+	const char * source_str = PyUnicode_AsUTF8(source);
 
 	const GLMethods & gl = self->gl;
 
@@ -1996,17 +1995,9 @@ void MGLContext_Invalidate(MGLContext * context) {
 	printf("MGLContext_Invalidate %p\n", context);
 	#endif
 
-	if (context->standalone) {
-		if (oglGetCurrentContext() == context->rc_handle) {
-			oglMakeCurrent(0, 0);
-			oglDeleteContext((HGLRC)context->rc_handle);
-			HWND hwnd = WindowFromDC((HDC)context->dc_handle);
-			ReleaseDC(hwnd, (HDC)context->dc_handle);
-			DestroyWindow(hwnd);
-		}
-	}
+	DestroyGLContext(context->gl_context);
 
-	context->ob_base.ob_type = &MGLInvalidObject_Type;
+	Py_TYPE(context) = &MGLInvalidObject_Type;
 
 	Py_DECREF(context);
 }

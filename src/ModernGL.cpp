@@ -32,7 +32,7 @@
 #include "VertexArrayMatrixAttribute.hpp"
 #include "VertexArrayMember.hpp"
 
-#include <Python.h>
+#include "GLContext.hpp"
 
 MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"size", "require", 0};
@@ -62,131 +62,13 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 		return 0;
 	}
 
-	HINSTANCE inst = GetModuleHandle(0);
-
-	static bool registered = false;
-
-	if (!registered) {
-		WNDCLASS wndClass = {
-			CS_OWNDC,                            // style
-			DefWindowProc,                       // lpfnWndProc
-			0,                                   // cbClsExtra
-			0,                                   // cbWndExtra
-			inst,                                // hInstance
-			0,                                   // hIcon
-			0,                                   // hCursor
-			0,                                   // hbrBackground
-			0,                                   // lpszMenuName
-			"standalone_context_class",          // lpszClassName
-		};
-
-		if (!RegisterClass(&wndClass)) {
-			MGLError * error = MGLError_New(TRACE, "Cannot register window class");
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-			return 0;
-		}
-
-		registered = true;
-	}
-
-	HWND hwnd = CreateWindowEx(
-		0,                                   // exStyle
-		"standalone_context_class",          // lpClassName
-		0,                                   // lpWindowName
-		0,                                   // dwStyle
-		0,                                   // x
-		0,                                   // y
-		0,                                   // nWidth
-		0,                                   // nHeight
-		0,                                   // hWndParent
-		0,                                   // hMenu
-		inst,                                // hInstance
-		0                                    // lpParam
-	);
-
-	if (!hwnd) {
-		MGLError * error = MGLError_New(TRACE, "Cannot create window");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
-	}
-
-	HDC dc = GetDC(hwnd);
-
-	if (!dc) {
-		return 0;
-	}
-
-	BYTE pixel_bits = 32;
-
-	PIXELFORMATDESCRIPTOR pfd = {
-		sizeof(PIXELFORMATDESCRIPTOR),   // nSize
-		1,                               // nVersion
-		PFD_DRAW_TO_WINDOW |
-		PFD_GENERIC_ACCELERATED |
-		PFD_SUPPORT_OPENGL,              // dwFlags
-		PFD_TYPE_RGBA,                   // iPixelType
-		pixel_bits,                      // cColorBits
-		0,                               // cRedBits
-		0,                               // cRedShift
-		0,                               // cGreenBits
-		0,                               // cGreenShift
-		0,                               // cBlueBits
-		0,                               // cBlueShift
-		0,                               // cAlphaBits
-		0,                               // cAlphaShift
-		0,                               // cAccumBits
-		0,                               // cAccumRedBits
-		0,                               // cAccumGreenBits
-		0,                               // cAccumBlueBits
-		0,                               // cAccumAlphaBits
-		24,                              // cDepthBits
-		0,                               // cStencilBits
-		0,                               // cAuxBuffers
-		0,                               // iLayerType
-		0,                               // bReserved
-		0,                               // dwLayerMask
-		0,                               // dwVisibleMask
-		0,                               // dwDamageMask
-	};
-
-	int pf = ChoosePixelFormat(dc, &pfd);
-
-	if (!pf) {
-		MGLError * error = MGLError_New(TRACE, "Cannot choose pixel format");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
-	}
-
-	int set_pixel_format = SetPixelFormat(dc, pf, &pfd);
-
-	if (!set_pixel_format) {
-		MGLError * error = MGLError_New(TRACE, "Cannot set pixel format");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
-	}
-
-	HGLRC rc = oglCreateContext(dc);
-
-	if (!rc) {
-		MGLError * error = MGLError_New(TRACE, "Cannot create OpenGL context");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
-	}
-
-	int make_current = oglMakeCurrent(dc, rc);
-
-	if (!make_current) {
-		MGLError * error = MGLError_New(TRACE, "Cannot select OpenGL context");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
-	}
-
 	MGLContext * ctx = MGLContext_New();
 
-	ctx->standalone = true;
+	ctx->gl_context = CreateGLContext();
 
-	ctx->rc_handle = (void *)rc;
-	ctx->dc_handle = (void *)dc;
+	if (PyErr_Occurred()) {
+		return 0;
+	}
 
 	MGLContext_Initialize(ctx);
 
@@ -230,21 +112,13 @@ MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
-	void * rc_handle = oglGetCurrentContext();
-	void * dc_handle = oglGetCurrentDC();
-
-	if (!rc_handle || !dc_handle) {
-		MGLError * error = MGLError_New(TRACE, "Cannot detect current context.");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
-	}
-
 	MGLContext * ctx = MGLContext_New();
 
-	ctx->standalone = false;
+	ctx->gl_context = LoadCurrentGLContext();
 
-	ctx->rc_handle = rc_handle;
-	ctx->dc_handle = dc_handle;
+	if (PyErr_Occurred()) {
+		return 0;
+	}
 
 	MGLContext_Initialize(ctx);
 
@@ -275,25 +149,11 @@ const char * MGL_module_doc = R"(
 	ModernGL
 )";
 
-PyModuleDef MGL_moduledef = {
-	PyModuleDef_HEAD_INIT,
-	"ModernGL",
-	MGL_module_doc,
-	-1,
-	MGL_module_methods,
-	0,
-	0,
-	0,
-	0,
-};
-
-extern "C" PyObject * PyInit_ModernGL() {
-	PyObject * module = PyModule_Create(&MGL_moduledef);
-
+bool MGL_InitializeModule(PyObject * module) {
 	{
 		if (PyType_Ready(&MGLAttribute_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Attribute in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLAttribute_Type);
@@ -304,7 +164,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLBuffer_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Buffer in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLBuffer_Type);
@@ -315,7 +175,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLBufferAccess_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register BufferAccess in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLBufferAccess_Type);
@@ -326,7 +186,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLComputeShader_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register ComputeShader in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLComputeShader_Type);
@@ -337,7 +197,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLContext_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Context in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLContext_Type);
@@ -348,7 +208,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLContextMember_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register ContextMember in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLContextMember_Type);
@@ -359,7 +219,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLEnableFlag_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register EnableFlag in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLEnableFlag_Type);
@@ -370,7 +230,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLError_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLError_Type);
@@ -381,7 +241,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLFramebuffer_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Framebuffer in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLFramebuffer_Type);
@@ -392,7 +252,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLFramebufferAttachment_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register FramebufferAttachment in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLFramebufferAttachment_Type);
@@ -403,7 +263,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLInvalidObject_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register InvalidObject in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLInvalidObject_Type);
@@ -414,7 +274,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLMultisampleRenderbuffer_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register MultisampleRenderbuffer in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLMultisampleRenderbuffer_Type);
@@ -425,7 +285,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLMultisampleTexture_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register MultisampleTexture in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLMultisampleTexture_Type);
@@ -436,7 +296,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLObject_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Object in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLObject_Type);
@@ -447,7 +307,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLPrimitive_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Primitive in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLPrimitive_Type);
@@ -458,7 +318,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLProgram_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Program in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLProgram_Type);
@@ -469,7 +329,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLProgramMember_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register ProgramMember in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLProgramMember_Type);
@@ -480,7 +340,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLProgramStage_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register ProgramStage in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLProgramStage_Type);
@@ -491,7 +351,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLProgramStageMember_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register ProgramStageMember in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLProgramStageMember_Type);
@@ -502,7 +362,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLRenderbuffer_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Renderbuffer in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLRenderbuffer_Type);
@@ -513,7 +373,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLShader_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Shader in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLShader_Type);
@@ -524,7 +384,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLSubroutine_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Subroutine in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLSubroutine_Type);
@@ -535,7 +395,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLSubroutineUniform_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register SubroutineUniform in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLSubroutineUniform_Type);
@@ -546,7 +406,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLTexture_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Texture in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLTexture_Type);
@@ -557,7 +417,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLUniform_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Uniform in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLUniform_Type);
@@ -568,7 +428,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLUniformBlock_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register UniformBlock in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLUniformBlock_Type);
@@ -579,7 +439,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLVarying_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Varying in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLVarying_Type);
@@ -590,7 +450,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLVersion_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Version in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLVersion_Type);
@@ -601,7 +461,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLVertexArray_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register VertexArray in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLVertexArray_Type);
@@ -612,7 +472,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLVertexArrayAttribute_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register VertexArrayAttribute in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLVertexArrayAttribute_Type);
@@ -623,7 +483,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLVertexArrayListAttribute_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register VertexArrayListAttribute in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLVertexArrayListAttribute_Type);
@@ -634,7 +494,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLVertexArrayMatrixAttribute_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register VertexArrayMatrixAttribute in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLVertexArrayMatrixAttribute_Type);
@@ -645,7 +505,7 @@ extern "C" PyObject * PyInit_ModernGL() {
 	{
 		if (PyType_Ready(&MGLVertexArrayMember_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register VertexArrayMember in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
+			return false;
 		}
 
 		Py_INCREF(&MGLVertexArrayMember_Type);
@@ -791,5 +651,45 @@ extern "C" PyObject * PyInit_ModernGL() {
 		PyModule_AddObject(module, "CORE_450", (PyObject *)CORE_450);
 	}
 
+	// TODO: replace 0 with false (above)
+	return true;
+}
+
+#if PY_MAJOR_VERSION >= 3
+
+PyModuleDef MGL_moduledef = {
+	PyModuleDef_HEAD_INIT,
+	"ModernGL",
+	MGL_module_doc,
+	-1,
+	MGL_module_methods,
+	0,
+	0,
+	0,
+	0,
+};
+
+extern "C" PyObject * PyInit_ModernGL() {
+	PyObject * module = PyModule_Create(&MGL_moduledef);
+
+	if (!MGL_InitializeModule(module)) {
+		return 0;
+	}
+
 	return module;
 }
+
+#else
+
+extern "C" PyObject * initModernGL() {
+	PyObject * module = Py_InitModule("ModernGL", MGL_module_methods);
+
+	if (!MGL_InitializeModule(module)) {
+		return 0;
+	}
+
+	return module;
+}
+
+#endif
+

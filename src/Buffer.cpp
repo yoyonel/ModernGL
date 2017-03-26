@@ -255,7 +255,7 @@ PyGetSetDef MGLBuffer_tp_getseters[] = {
 	{0},
 };
 
-int MGLBuffer_tp_as_buffer_get_vew(MGLBuffer * self, Py_buffer * view, int flags) {
+int MGLBuffer_tp_as_buffer_get_view(MGLBuffer * self, Py_buffer * view, int flags) {
 	int access = (flags == PyBUF_SIMPLE) ? GL_MAP_READ_BIT : (GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
 
 	const GLMethods & gl = self->context->gl;
@@ -290,8 +290,9 @@ void MGLBuffer_tp_as_buffer_release_view(MGLBuffer * self, Py_buffer * view) {
 }
 
 PyBufferProcs MGLBuffer_tp_as_buffer = {
-	(getbufferproc)MGLBuffer_tp_as_buffer_get_vew,                  // getbufferproc bf_getbuffer
-	(releasebufferproc)MGLBuffer_tp_as_buffer_release_view,         // releasebufferproc bf_releasebuffer
+	PyBufferProcs_PADDING
+	(getbufferproc)MGLBuffer_tp_as_buffer_get_view,                  // getbufferproc bf_getbuffer
+	(releasebufferproc)MGLBuffer_tp_as_buffer_release_view,          // releasebufferproc bf_releasebuffer
 };
 
 const char * MGLBuffer_tp_doc = R"(
@@ -319,7 +320,7 @@ PyTypeObject MGLBuffer_Type = {
 	(reprfunc)MGLBuffer_tp_str,                             // tp_str
 	0,                                                      // tp_getattro
 	0,                                                      // tp_setattro
-	0,                                                      // tp_as_buffer
+	&MGLBuffer_tp_as_buffer,                                // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
 	MGLBuffer_tp_doc,                                       // tp_doc
 	0,                                                      // tp_traverse
@@ -365,7 +366,7 @@ void MGLBuffer_Invalidate(MGLBuffer * buffer) {
 
 	Py_DECREF(buffer->context);
 
-	buffer->ob_base.ob_type = &MGLInvalidObject_Type;
+	Py_TYPE(buffer) = &MGLInvalidObject_Type;
 
 	Py_DECREF(buffer);
 }

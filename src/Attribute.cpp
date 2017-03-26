@@ -262,7 +262,7 @@ void MGLAttribute_Invalidate(MGLAttribute * attribute) {
 
 	Py_DECREF(attribute->name);
 
-	attribute->ob_base.ob_type = &MGLInvalidObject_Type;
+	Py_TYPE(attribute) = &MGLInvalidObject_Type;
 
 	Py_DECREF(attribute);
 }

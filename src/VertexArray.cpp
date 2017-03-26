@@ -383,7 +383,7 @@ void MGLVertexArray_Invalidate(MGLVertexArray * array) {
 	Py_DECREF(array->index_buffer);
 	Py_DECREF(array->context);
 
-	array->ob_base.ob_type = &MGLInvalidObject_Type;
+	Py_TYPE(array) = &MGLInvalidObject_Type;
 
 	Py_DECREF(array);
 }

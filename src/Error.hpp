@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Python.h>
+#include "Python.hpp"
 
 #define TRACE __FILE__, __LINE__
 
@@ -13,4 +13,3 @@ struct MGLError {
 extern PyTypeObject MGLError_Type;
 
 MGLError * MGLError_New(const char * filename, int line, const char * format, ...);
-// void MGLError_LinkSource(MGLError * error, const char * filename, int line);

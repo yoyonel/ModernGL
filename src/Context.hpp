@@ -1,20 +1,19 @@
 #pragma once
 
-#include <Python.h>
+#include "Python.hpp"
 
 #include "Object.hpp"
+
 #include "GLMethods.hpp"
+#include "GLContext.hpp"
 
 struct MGLContext : public MGLObject {
 	PyObject * default_framebuffer;
 
-	void * rc_handle;
-	void * dc_handle;
+	GLContext gl_context;
 
 	int max_texture_units;
 	int default_texture_unit;
-
-	bool standalone;
 
 	GLMethods gl;
 };

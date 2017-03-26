@@ -1,9 +1,11 @@
 #include "GLMethods.hpp"
 
-#include <Windows.h>
 #include <cstdio>
+#include <cstdlib>
 
 /*
+
+# TODO: remove this
 
 methods = sorted(set([
 	'ActiveTexture',
@@ -718,10 +720,30 @@ define = '\n\t'.join('PROC_gl%s %s;' % (method, method) for method in methods)
 
 */
 
-void dummy_method() {
+// TODO: better
+
+#define INVALID_METHOD(method) (!(method) || ((void *)(method) == (void *)dummy_method))
+
+void GLAPI FakeGetProgramStageiv(GLuint program, GLenum shadertype, GLenum pname, GLint * values) {
+	values[0] = 0;
+
+	// switch (pname) {
+	// 	case GL_ACTIVE_SUBROUTINES:
+	// 	case GL_ACTIVE_SUBROUTINE_UNIFORMS:
+	// 	case GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS:
+	// 		values[0] = 0;
+	// 		break;
+	// }
+}
+
+void GLAPI dummy_method() {
 	printf("DUMMY METHOD\n");
 	exit(0);
 }
+
+#if defined(_WIN32) || defined(_WIN64)
+
+#include <Windows.h>
 
 void * LoadMethod(const char * method) {
 	static HMODULE opengl32 = LoadLibrary("opengl32.dll");
@@ -729,11 +751,39 @@ void * LoadMethod(const char * method) {
 	void * proc = (void *)GetProcAddress(opengl32, method);
 
 	if (proc) {
+		return proc;
+	}
+
+	proc = (void *)wglGetProcAddress(method);
+
+	if (proc) {
+		return proc;
+	}
+
+	// printf("%s NOT found!\n", method);
+	return (void *)dummy_method;
+}
+
+#else
+
+#include <dlfcn.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+
+typedef const void * (* PROC_glXGetProcAddress)(const char *);
+
+void * LoadMethod(const char * method) {
+	static void * libgl = dlopen("libGL.so.1", RTLD_LAZY);
+	static PROC_glXGetProcAddress glXGetProcAddress = (PROC_glXGetProcAddress)dlsym(libgl, "glXGetProcAddress");
+
+	void * proc = (void *)dlsym(libgl, method);
+
+	if (proc) {
 		// printf("%s found!\n", method);
 		return proc;
 	}
 
-	proc = (void *)oglGetProcAddress(method);
+	proc = (void *)glXGetProcAddress(method);
 
 	if (proc) {
 		// printf("%s found!\n", method);
@@ -743,6 +793,8 @@ void * LoadMethod(const char * method) {
 	// printf("%s NOT found!\n", method);
 	return (void *)dummy_method;
 }
+
+#endif
 
 void GLMethods::load() {
 	ActiveShaderProgram = (PROC_glActiveShaderProgram)LoadMethod("glActiveShaderProgram");
@@ -1204,7 +1256,6 @@ void GLMethods::load() {
 	StencilMaskSeparate = (PROC_glStencilMaskSeparate)LoadMethod("glStencilMaskSeparate");
 	StencilOp = (PROC_glStencilOp)LoadMethod("glStencilOp");
 	StencilOpSeparate = (PROC_glStencilOpSeparate)LoadMethod("glStencilOpSeparate");
-	SwapInterval = (PROC_glSwapInterval)LoadMethod("glSwapInterval");
 	TexBuffer = (PROC_glTexBuffer)LoadMethod("glTexBuffer");
 	TexBufferRange = (PROC_glTexBufferRange)LoadMethod("glTexBufferRange");
 	TexImage1D = (PROC_glTexImage1D)LoadMethod("glTexImage1D");
@@ -1398,6 +1449,12 @@ void GLMethods::load() {
 	ViewportArrayv = (PROC_glViewportArrayv)LoadMethod("glViewportArrayv");
 	ViewportIndexedf = (PROC_glViewportIndexedf)LoadMethod("glViewportIndexedf");
 	ViewportIndexedfv = (PROC_glViewportIndexedfv)LoadMethod("glViewportIndexedfv");
+
+	// TODO: better
+
+	if (INVALID_METHOD(GetProgramStageiv)) {
+		GetProgramStageiv = FakeGetProgramStageiv;
+	}
 
 	// printf("%s\n", GetString(GL_VENDOR));
 	// printf("%s\n", GetString(GL_VERSION));

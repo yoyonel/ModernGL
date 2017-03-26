@@ -123,7 +123,7 @@ void MGLMultisampleRenderbuffer_Invalidate(MGLMultisampleRenderbuffer * renderbu
 
 	Py_DECREF(renderbuffer->context);
 
-	renderbuffer->ob_base.ob_type = &MGLInvalidObject_Type;
+	Py_TYPE(renderbuffer) = &MGLInvalidObject_Type;
 
 	Py_DECREF(renderbuffer);
 }

@@ -1,9 +1,14 @@
+ifeq ($(OS), Windows_NT)
+	PYTHON = python
+else
+	PYTHON = python3
+endif
+
 all:
-	python setup.py install
-#	cd docs && make
+	$(PYTHON) setup.py install
 
 wheel:
-	python setup.py bdist_wheel
+	$(PYTHON) setup.py bdist_wheel
 
 Run:
-	python -m pytest
+	$(PYTHON) -m pytest
