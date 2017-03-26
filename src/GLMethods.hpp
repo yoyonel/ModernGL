@@ -462,7 +462,6 @@ struct GLMethods {
 	PROC_glStencilMaskSeparate StencilMaskSeparate;
 	PROC_glStencilOp StencilOp;
 	PROC_glStencilOpSeparate StencilOpSeparate;
-	PROC_glSwapInterval SwapInterval;
 	PROC_glTexBuffer TexBuffer;
 	PROC_glTexBufferRange TexBufferRange;
 	PROC_glTexImage1D TexImage1D;

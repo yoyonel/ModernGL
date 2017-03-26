@@ -722,7 +722,7 @@ define = '\n\t'.join('PROC_gl%s %s;' % (method, method) for method in methods)
 
 // TODO: better
 
-#define INVALID_METHOD(method) (!(method) || ((void *)method == (void *)dummy_method))
+#define INVALID_METHOD(method) (!(method) || ((void *)(method) == (void *)dummy_method))
 
 void GLAPI FakeGetProgramStageiv(GLuint program, GLenum shadertype, GLenum pname, GLint * values) {
 	values[0] = 0;
@@ -742,6 +742,8 @@ void GLAPI dummy_method() {
 }
 
 #if defined(_WIN32) || defined(_WIN64)
+
+#include <Windows.h>
 
 void * LoadMethod(const char * method) {
 	static HMODULE opengl32 = LoadLibrary("opengl32.dll");
@@ -763,6 +765,12 @@ void * LoadMethod(const char * method) {
 }
 
 #else
+
+#include <dlfcn.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+
+typedef const void * (* PROC_glXGetProcAddress)(const char *);
 
 void * LoadMethod(const char * method) {
 	static void * libgl = dlopen("libGL.so.1", RTLD_LAZY);
@@ -1248,7 +1256,6 @@ void GLMethods::load() {
 	StencilMaskSeparate = (PROC_glStencilMaskSeparate)LoadMethod("glStencilMaskSeparate");
 	StencilOp = (PROC_glStencilOp)LoadMethod("glStencilOp");
 	StencilOpSeparate = (PROC_glStencilOpSeparate)LoadMethod("glStencilOpSeparate");
-	SwapInterval = (PROC_glSwapInterval)LoadMethod("glSwapInterval");
 	TexBuffer = (PROC_glTexBuffer)LoadMethod("glTexBuffer");
 	TexBufferRange = (PROC_glTexBufferRange)LoadMethod("glTexBufferRange");
 	TexImage1D = (PROC_glTexImage1D)LoadMethod("glTexImage1D");

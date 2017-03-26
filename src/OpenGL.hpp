@@ -1,21 +1,6 @@
 #pragma once
 
 #if defined(_WIN32) || defined(_WIN64)
-
-#include <Windows.h>
-
-#else
-
-#include <dlfcn.h>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-
-typedef const void * (* PROC_glXGetProcAddress)(const char *);
-// typedef const void * (* PROC_glXGetCurrentContext)();
-
-#endif
-
-#if defined(_WIN32) || defined(_WIN64)
 #define GLAPI __stdcall
 #else
 #define GLAPI
@@ -51,13 +36,6 @@ typedef unsigned short GLushort;
 typedef void GLvoid;
 
 typedef void (* GLDEBUGPROC) (GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar * message, const void * userParam);
-
-#if defined(_WIN32) || defined(_WIN64)
-	typedef int (__stdcall * PROC_glSwapInterval)(int interval);
-#else
-	// TODO: void glXSwapIntervalEXT(Display * dpy, GLXDrawable drawable, int interval);
-	typedef int (* PROC_glSwapInterval)(int interval);
-#endif
 
 typedef GLvoid (GLAPI * PROC_glCullFace)(GLenum mode);
 typedef GLvoid (GLAPI * PROC_glFrontFace)(GLenum mode);
