@@ -1,2 +1,6 @@
 include src/*
-include test/*
+include tests/*
+include conftest.py
+include pytest.ini
+include README.md
+include LICENSE
