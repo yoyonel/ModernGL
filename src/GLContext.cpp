@@ -186,7 +186,7 @@ void DestroyGLContext(const GLContext & context) {
 #define GLX_CONTEXT_MAJOR_VERSION_ARB 0x2091
 #define GLX_CONTEXT_MINOR_VERSION_ARB 0x2092
 
-typedef GLXContext (GLAPI * GLXCREATECONTEXTATTRIBSARBPROC)(Display * display, GLXFBConfig config, GLXContext context, Bool direct, const int * attribs);
+typedef GLXContext (* GLXCREATECONTEXTATTRIBSARBPROC)(Display * display, GLXFBConfig config, GLXContext context, Bool direct, const int * attribs);
 
 GLContext LoadCurrentGLContext() {
 	GLContext context = {};
