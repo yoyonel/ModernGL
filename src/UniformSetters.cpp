@@ -35,7 +35,7 @@ int MGLUniform_bvec2_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 2) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -71,7 +71,7 @@ int MGLUniform_bvec3_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 3) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -107,7 +107,7 @@ int MGLUniform_bvec4_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -157,7 +157,7 @@ int MGLUniform_ivec2_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 2) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -189,7 +189,7 @@ int MGLUniform_ivec3_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 3) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -221,7 +221,7 @@ int MGLUniform_ivec4_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -267,7 +267,7 @@ int MGLUniform_uvec2_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 2) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -299,7 +299,7 @@ int MGLUniform_uvec3_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 3) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -331,7 +331,7 @@ int MGLUniform_uvec4_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -377,7 +377,7 @@ int MGLUniform_vec2_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 2) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -409,7 +409,7 @@ int MGLUniform_vec3_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 3) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -441,7 +441,7 @@ int MGLUniform_vec4_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -487,7 +487,7 @@ int MGLUniform_dvec2_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 2) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -519,7 +519,7 @@ int MGLUniform_dvec3_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 3) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -551,7 +551,7 @@ int MGLUniform_dvec4_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -597,7 +597,7 @@ int MGLUniform_float_matrix_2x2_value_setter(MGLUniform * self, PyObject * value
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -629,7 +629,7 @@ int MGLUniform_float_matrix_2x3_value_setter(MGLUniform * self, PyObject * value
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 6) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -661,7 +661,7 @@ int MGLUniform_float_matrix_2x4_value_setter(MGLUniform * self, PyObject * value
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 8) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -693,7 +693,7 @@ int MGLUniform_float_matrix_3x2_value_setter(MGLUniform * self, PyObject * value
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 6) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -725,7 +725,7 @@ int MGLUniform_float_matrix_3x3_value_setter(MGLUniform * self, PyObject * value
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 9) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -757,7 +757,7 @@ int MGLUniform_float_matrix_3x4_value_setter(MGLUniform * self, PyObject * value
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 12) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -789,7 +789,7 @@ int MGLUniform_float_matrix_4x2_value_setter(MGLUniform * self, PyObject * value
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 8) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -821,7 +821,7 @@ int MGLUniform_float_matrix_4x3_value_setter(MGLUniform * self, PyObject * value
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 12) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -853,7 +853,7 @@ int MGLUniform_float_matrix_4x4_value_setter(MGLUniform * self, PyObject * value
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 16) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -885,7 +885,7 @@ int MGLUniform_double_matrix_2x2_value_setter(MGLUniform * self, PyObject * valu
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -917,7 +917,7 @@ int MGLUniform_double_matrix_2x3_value_setter(MGLUniform * self, PyObject * valu
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 6) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -949,7 +949,7 @@ int MGLUniform_double_matrix_2x4_value_setter(MGLUniform * self, PyObject * valu
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 8) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -981,7 +981,7 @@ int MGLUniform_double_matrix_3x2_value_setter(MGLUniform * self, PyObject * valu
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 6) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -1013,7 +1013,7 @@ int MGLUniform_double_matrix_3x3_value_setter(MGLUniform * self, PyObject * valu
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 9) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -1045,7 +1045,7 @@ int MGLUniform_double_matrix_3x4_value_setter(MGLUniform * self, PyObject * valu
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 12) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -1077,7 +1077,7 @@ int MGLUniform_double_matrix_4x2_value_setter(MGLUniform * self, PyObject * valu
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 8) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -1109,7 +1109,7 @@ int MGLUniform_double_matrix_4x3_value_setter(MGLUniform * self, PyObject * valu
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 12) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -1141,7 +1141,7 @@ int MGLUniform_double_matrix_4x4_value_setter(MGLUniform * self, PyObject * valu
 		return -1;
 	}
 
-	int size = PyTuple_GET_SIZE(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 16) {
 		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
@@ -1172,7 +1172,7 @@ int MGLUniform_bool_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1211,7 +1211,7 @@ int MGLUniform_bvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1232,7 +1232,7 @@ int MGLUniform_bvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 2) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 2 not %d", k, tuple_size);
@@ -1271,7 +1271,7 @@ int MGLUniform_bvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1292,7 +1292,7 @@ int MGLUniform_bvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 3) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 3 not %d", k, tuple_size);
@@ -1331,7 +1331,7 @@ int MGLUniform_bvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1352,7 +1352,7 @@ int MGLUniform_bvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 4) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 4 not %d", k, tuple_size);
@@ -1391,7 +1391,7 @@ int MGLUniform_int_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1426,7 +1426,7 @@ int MGLUniform_ivec2_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1447,7 +1447,7 @@ int MGLUniform_ivec2_array_value_setter(MGLUniform * self, PyObject * value) {
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 2) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 2 not %d", k, tuple_size);
@@ -1482,7 +1482,7 @@ int MGLUniform_ivec3_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1503,7 +1503,7 @@ int MGLUniform_ivec3_array_value_setter(MGLUniform * self, PyObject * value) {
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 3) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 3 not %d", k, tuple_size);
@@ -1538,7 +1538,7 @@ int MGLUniform_ivec4_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1559,7 +1559,7 @@ int MGLUniform_ivec4_array_value_setter(MGLUniform * self, PyObject * value) {
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 4) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 4 not %d", k, tuple_size);
@@ -1594,7 +1594,7 @@ int MGLUniform_uint_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1629,7 +1629,7 @@ int MGLUniform_uvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1650,7 +1650,7 @@ int MGLUniform_uvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 2) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 2 not %d", k, tuple_size);
@@ -1685,7 +1685,7 @@ int MGLUniform_uvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1706,7 +1706,7 @@ int MGLUniform_uvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 3) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 3 not %d", k, tuple_size);
@@ -1741,7 +1741,7 @@ int MGLUniform_uvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1762,7 +1762,7 @@ int MGLUniform_uvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 4) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 4 not %d", k, tuple_size);
@@ -1797,7 +1797,7 @@ int MGLUniform_float_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1832,7 +1832,7 @@ int MGLUniform_vec2_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1853,7 +1853,7 @@ int MGLUniform_vec2_array_value_setter(MGLUniform * self, PyObject * value) {
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 2) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 2 not %d", k, tuple_size);
@@ -1888,7 +1888,7 @@ int MGLUniform_vec3_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1909,7 +1909,7 @@ int MGLUniform_vec3_array_value_setter(MGLUniform * self, PyObject * value) {
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 3) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 3 not %d", k, tuple_size);
@@ -1944,7 +1944,7 @@ int MGLUniform_vec4_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -1965,7 +1965,7 @@ int MGLUniform_vec4_array_value_setter(MGLUniform * self, PyObject * value) {
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 4) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 4 not %d", k, tuple_size);
@@ -2000,7 +2000,7 @@ int MGLUniform_double_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2035,7 +2035,7 @@ int MGLUniform_dvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2056,7 +2056,7 @@ int MGLUniform_dvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 2) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 2 not %d", k, tuple_size);
@@ -2091,7 +2091,7 @@ int MGLUniform_dvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2112,7 +2112,7 @@ int MGLUniform_dvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 3) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 3 not %d", k, tuple_size);
@@ -2147,7 +2147,7 @@ int MGLUniform_dvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2168,7 +2168,7 @@ int MGLUniform_dvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 4) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 4 not %d", k, tuple_size);
@@ -2203,7 +2203,7 @@ int MGLUniform_sampler_array_value_setter(MGLUniform * self, PyObject * value) {
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2238,7 +2238,7 @@ int MGLUniform_float_matrix_2x2_array_value_setter(MGLUniform * self, PyObject *
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2259,7 +2259,7 @@ int MGLUniform_float_matrix_2x2_array_value_setter(MGLUniform * self, PyObject *
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 4) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 4 not %d", k, tuple_size);
@@ -2294,7 +2294,7 @@ int MGLUniform_float_matrix_2x3_array_value_setter(MGLUniform * self, PyObject *
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2315,7 +2315,7 @@ int MGLUniform_float_matrix_2x3_array_value_setter(MGLUniform * self, PyObject *
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 6) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 6 not %d", k, tuple_size);
@@ -2350,7 +2350,7 @@ int MGLUniform_float_matrix_2x4_array_value_setter(MGLUniform * self, PyObject *
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2371,7 +2371,7 @@ int MGLUniform_float_matrix_2x4_array_value_setter(MGLUniform * self, PyObject *
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 8) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 8 not %d", k, tuple_size);
@@ -2406,7 +2406,7 @@ int MGLUniform_float_matrix_3x2_array_value_setter(MGLUniform * self, PyObject *
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2427,7 +2427,7 @@ int MGLUniform_float_matrix_3x2_array_value_setter(MGLUniform * self, PyObject *
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 6) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 6 not %d", k, tuple_size);
@@ -2462,7 +2462,7 @@ int MGLUniform_float_matrix_3x3_array_value_setter(MGLUniform * self, PyObject *
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2483,7 +2483,7 @@ int MGLUniform_float_matrix_3x3_array_value_setter(MGLUniform * self, PyObject *
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 9) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 9 not %d", k, tuple_size);
@@ -2518,7 +2518,7 @@ int MGLUniform_float_matrix_3x4_array_value_setter(MGLUniform * self, PyObject *
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2539,7 +2539,7 @@ int MGLUniform_float_matrix_3x4_array_value_setter(MGLUniform * self, PyObject *
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 12) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 12 not %d", k, tuple_size);
@@ -2574,7 +2574,7 @@ int MGLUniform_float_matrix_4x2_array_value_setter(MGLUniform * self, PyObject *
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2595,7 +2595,7 @@ int MGLUniform_float_matrix_4x2_array_value_setter(MGLUniform * self, PyObject *
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 8) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 8 not %d", k, tuple_size);
@@ -2630,7 +2630,7 @@ int MGLUniform_float_matrix_4x3_array_value_setter(MGLUniform * self, PyObject *
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2651,7 +2651,7 @@ int MGLUniform_float_matrix_4x3_array_value_setter(MGLUniform * self, PyObject *
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 12) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 12 not %d", k, tuple_size);
@@ -2686,7 +2686,7 @@ int MGLUniform_float_matrix_4x4_array_value_setter(MGLUniform * self, PyObject *
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2707,7 +2707,7 @@ int MGLUniform_float_matrix_4x4_array_value_setter(MGLUniform * self, PyObject *
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 16) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 16 not %d", k, tuple_size);
@@ -2742,7 +2742,7 @@ int MGLUniform_double_matrix_2x2_array_value_setter(MGLUniform * self, PyObject 
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2763,7 +2763,7 @@ int MGLUniform_double_matrix_2x2_array_value_setter(MGLUniform * self, PyObject 
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 4) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 4 not %d", k, tuple_size);
@@ -2798,7 +2798,7 @@ int MGLUniform_double_matrix_2x3_array_value_setter(MGLUniform * self, PyObject 
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2819,7 +2819,7 @@ int MGLUniform_double_matrix_2x3_array_value_setter(MGLUniform * self, PyObject 
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 6) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 6 not %d", k, tuple_size);
@@ -2854,7 +2854,7 @@ int MGLUniform_double_matrix_2x4_array_value_setter(MGLUniform * self, PyObject 
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2875,7 +2875,7 @@ int MGLUniform_double_matrix_2x4_array_value_setter(MGLUniform * self, PyObject 
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 8) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 8 not %d", k, tuple_size);
@@ -2910,7 +2910,7 @@ int MGLUniform_double_matrix_3x2_array_value_setter(MGLUniform * self, PyObject 
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2931,7 +2931,7 @@ int MGLUniform_double_matrix_3x2_array_value_setter(MGLUniform * self, PyObject 
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 6) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 6 not %d", k, tuple_size);
@@ -2966,7 +2966,7 @@ int MGLUniform_double_matrix_3x3_array_value_setter(MGLUniform * self, PyObject 
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -2987,7 +2987,7 @@ int MGLUniform_double_matrix_3x3_array_value_setter(MGLUniform * self, PyObject 
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 9) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 9 not %d", k, tuple_size);
@@ -3022,7 +3022,7 @@ int MGLUniform_double_matrix_3x4_array_value_setter(MGLUniform * self, PyObject 
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -3043,7 +3043,7 @@ int MGLUniform_double_matrix_3x4_array_value_setter(MGLUniform * self, PyObject 
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 12) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 12 not %d", k, tuple_size);
@@ -3078,7 +3078,7 @@ int MGLUniform_double_matrix_4x2_array_value_setter(MGLUniform * self, PyObject 
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -3099,7 +3099,7 @@ int MGLUniform_double_matrix_4x2_array_value_setter(MGLUniform * self, PyObject 
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 8) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 8 not %d", k, tuple_size);
@@ -3134,7 +3134,7 @@ int MGLUniform_double_matrix_4x3_array_value_setter(MGLUniform * self, PyObject 
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -3155,7 +3155,7 @@ int MGLUniform_double_matrix_4x3_array_value_setter(MGLUniform * self, PyObject 
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 12) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 12 not %d", k, tuple_size);
@@ -3190,7 +3190,7 @@ int MGLUniform_double_matrix_4x4_array_value_setter(MGLUniform * self, PyObject 
 		return -1;
 	}
 
-	int size = PyList_GET_SIZE(value);
+	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
 		MGLError * error = MGLError_New(TRACE, "value must be a list of size %d not %d", self->array_length, size);
@@ -3211,7 +3211,7 @@ int MGLUniform_double_matrix_4x4_array_value_setter(MGLUniform * self, PyObject 
 			return -1;
 		}
 
-		int tuple_size = PyTuple_GET_SIZE(tuple);
+		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 16) {
 			MGLError * error = MGLError_New(TRACE, "value[%d] must be a tuple of size 16 not %d", k, tuple_size);

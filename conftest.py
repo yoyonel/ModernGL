@@ -1,8 +1,11 @@
-import os, sys
+import pytest, os, sys
 
-here = os.path.dirname(os.path.abspath(__file__))
+here = os.path.dirname(os.path.abspath(__file__)).lower()
 
 os.chdir('tests')
 
-if here in sys.path:
-	sys.path.remove(here)
+for p in sys.path.copy():
+	if p.lower() == here:
+		sys.path.remove(p)
+
+open('x.txt', 'w').write(str(sys.path))

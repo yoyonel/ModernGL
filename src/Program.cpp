@@ -355,7 +355,7 @@ void MGLProgram_Invalidate(MGLProgram * program) {
 	}
 
 	{
-		int shaders_len = PyTuple_GET_SIZE(program->shaders);
+		int shaders_len = (int)PyTuple_GET_SIZE(program->shaders);
 
 		for (int i = 0; i < shaders_len; ++i) {
 			MGLShader * shader = (MGLShader *)PyTuple_GET_ITEM(program->shaders, i);
@@ -394,7 +394,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 	MGLShader * shaders[NUM_SHADER_SLOTS] = {};
 
-	int num_shaders = PyTuple_GET_SIZE(program->shaders);
+	int num_shaders = (int)PyTuple_GET_SIZE(program->shaders);
 
 	for (int i = 0; i < num_shaders; ++i) {
 		MGLShader * shader = (MGLShader *)PyTuple_GET_ITEM(program->shaders, i);
@@ -404,7 +404,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	}
 
 	if (outputs != Py_None) {
-		int outputs_len = PyList_GET_SIZE(outputs);
+		int outputs_len = (int)PyList_GET_SIZE(outputs);
 
 		if (outputs_len) {
 			const char ** varyings_array = new const char * [outputs_len];

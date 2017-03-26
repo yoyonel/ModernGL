@@ -361,7 +361,7 @@ void MGLVertexArray_Invalidate(MGLVertexArray * array) {
 
 	Py_DECREF(array->program);
 
-	int content_len = PyTuple_GET_SIZE(array->content);
+	int content_len = (int)PyTuple_GET_SIZE(array->content);
 
 	for (int i = 0; i < content_len; ++i) {
 		PyObject * tuple = PyTuple_GET_ITEM(array->content, i);
