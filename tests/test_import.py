@@ -1,4 +1,3 @@
-import os; os.chdir(os.path.dirname(__file__))
 import unittest, importlib
 
 class TestImport(unittest.TestCase):

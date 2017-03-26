@@ -209,7 +209,7 @@ GLContext CreateGLContext() {
 	swa.border_pixel = 0;
 	swa.event_mask = StructureNotifyMask;
 	Window win = XCreateWindow(dpy, RootWindow(dpy, vi->screen), 0, 0, 100, 100, 0, vi->depth, InputOutput, vi->visual, CWBorderPixel | CWColormap | CWEventMask, &swa);
-	XMapWindow(dpy, win);
+	// XMapWindow(dpy, win);
 
 	// TODO: keep this as a plan B
 	// oldstyle context:
