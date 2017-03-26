@@ -188,7 +188,9 @@ class TestCase(unittest.TestCase):
 
 	def test_simple(self):
 		vert_src = '''
-			#version 410
+			#version 330
+			#extension GL_ARB_gpu_shader_fp64 : enable
+			#extension GL_ARB_vertex_attrib_64bit : enable
 
 			in %(type)s v_in;
 			out %(type)s v_out;
@@ -216,7 +218,9 @@ class TestCase(unittest.TestCase):
 
 	def test_arrays(self):
 		vert_src = '''
-			#version 410
+			#version 330
+			#extension GL_ARB_gpu_shader_fp64 : enable
+			#extension GL_ARB_vertex_attrib_64bit : enable
 
 			in %(type)s v_in[];
 			out %(type)s v_out[];
