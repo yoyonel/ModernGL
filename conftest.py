@@ -6,4 +6,3 @@ os.chdir('tests')
 
 if here in sys.path:
 	sys.path.remove(here)
-
