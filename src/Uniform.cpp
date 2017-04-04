@@ -58,7 +58,7 @@ const char * MGLUniform_read_doc = R"(
 		``bytes``
 )";
 
-int MGLUniform_write(MGLUniform * self, PyObject * args, PyObject * kwargs) {
+PyObject * MGLUniform_write(MGLUniform * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"data", 0};
 
 	const char * buffer;
@@ -74,20 +74,20 @@ int MGLUniform_write(MGLUniform * self, PyObject * args, PyObject * kwargs) {
 	);
 
 	if (!args_ok) {
-		return -1;
+		return 0;
 	}
 
 	// TODO: remove
 	if (!self->gl_value_writer_proc) {
 		MGLError * error = MGLError_New(TRACE, "gl_value_writer_proc is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return -1;
+		return 0;
 	}
 
 	if (size != self->array_length * self->element_size) {
 		MGLError * error = MGLError_New(TRACE, "data size mismatch %d != %d", size, self->array_length * self->element_size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return -1;
+		return 0;
 	}
 
 	if (self->matrix) {
@@ -96,7 +96,7 @@ int MGLUniform_write(MGLUniform * self, PyObject * args, PyObject * kwargs) {
 		((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, self->array_length, buffer);
 	}
 
-	return 0;
+	Py_RETURN_NONE;
 }
 
 const char * MGLUniform_write_doc = R"(
