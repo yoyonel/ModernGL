@@ -7,5 +7,3 @@ os.chdir('tests')
 for p in sys.path.copy():
 	if p.lower() == here:
 		sys.path.remove(p)
-
-open('x.txt', 'w').write(str(sys.path))
