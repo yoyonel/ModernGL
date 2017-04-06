@@ -636,7 +636,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		varying->program_obj = program->program_obj;
 		varying->name = PyUnicode_FromStringAndSize(name, name_len);
 
-		// TODO: complete
+		MGLVarying_Complete(varying, gl);
 
 		PyDict_SetItem(varyings, varying->name, (PyObject *)varying);
 		Py_DECREF(varying);

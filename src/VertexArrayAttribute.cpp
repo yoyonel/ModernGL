@@ -239,6 +239,8 @@ MGLVertexArrayAttribute * MGLVertexArrayAttribute_New() {
 
 void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute) {
 	switch (attribute->type) {
+		// TODO:
+
 		default:
 			attribute->gl_attrib_ptr_proc = 0;
 			attribute->gl_attrib_getter_proc = 0;
