@@ -120,7 +120,7 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args, PyOb
 	static const char * kwlist[] = {"output", "mode", "vertices", "first", "instances", 0};
 
 	MGLBuffer * output;
-	MGLPrimitive * mode = MGL_TRIANGLES;
+	MGLPrimitive * mode = MGL_POINTS;
 	int vertices = -1;
 	int first = 0;
 	int instances = 1;
