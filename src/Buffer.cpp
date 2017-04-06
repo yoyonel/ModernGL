@@ -256,40 +256,29 @@ const char * MGLBuffer_bind_to_uniform_block_doc = R"(
 )";
 
 PyObject * MGLBuffer_bind_to_storage_buffer(MGLBuffer * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"data", "offset", 0};
+	static const char * kwlist[] = {"location", 0};
 
-	const char * data = 0;
-	int size = 0;
-	int offset = 0;
+	int location = 0;
 
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"y#|$I",
+		"|i",
 		(char **)kwlist,
-		&data,
-		&size,
-		&offset
+		&location
 	);
 
 	if (!args_ok) {
 		return 0;
 	}
 
-	if (offset < 0 || size + offset > self->size) {
-		MGLError * error = MGLError_New(TRACE, "offset = %d or size = %d out of range", offset, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
-	}
-
 	const GLMethods & gl = self->context->gl;
-	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
-	gl.BufferSubData(GL_ARRAY_BUFFER, (GLintptr)offset, size, data);
+	gl.BindBufferBase(GL_SHADER_STORAGE_BUFFER, location, self->buffer_obj);
 	Py_RETURN_NONE;
 }
 
 const char * MGLBuffer_bind_to_storage_buffer_doc = R"(
-	bind_to_storage_buffer()
+	bind_to_storage_buffer(location = 0)
 )";
 
 PyObject * MGLBuffer_release(MGLBuffer * self) {
