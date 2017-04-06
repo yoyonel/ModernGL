@@ -1663,7 +1663,7 @@ const char * MGLContext_ComputeShader_doc = R"(
 )";
 
 PyObject * MGLContext_release(MGLContext * self) {
-	MGLContext_Invalidate(self);
+	// MGLContext_Invalidate(self);
 	Py_RETURN_NONE;
 }
 
