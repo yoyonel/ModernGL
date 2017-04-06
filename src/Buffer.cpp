@@ -211,6 +211,80 @@ const char * MGLBuffer_orphan_doc = R"(
 	Orphan the buffer.
 )";
 
+PyObject * MGLBuffer_bind_to_uniform_block(MGLBuffer * self, PyObject * args, PyObject * kwargs) {
+	static const char * kwlist[] = {"data", "offset", 0};
+
+	const char * data = 0;
+	int size = 0;
+	int offset = 0;
+
+	int args_ok = PyArg_ParseTupleAndKeywords(
+		args,
+		kwargs,
+		"y#|$I",
+		(char **)kwlist,
+		&data,
+		&size,
+		&offset
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (offset < 0 || size + offset > self->size) {
+		MGLError * error = MGLError_New(TRACE, "offset = %d or size = %d out of range", offset, size);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
+
+	const GLMethods & gl = self->context->gl;
+	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
+	gl.BufferSubData(GL_ARRAY_BUFFER, (GLintptr)offset, size, data);
+	Py_RETURN_NONE;
+}
+
+const char * MGLBuffer_bind_to_uniform_block_doc = R"(
+	bind_to_uniform_block()
+)";
+
+PyObject * MGLBuffer_bind_to_storage_buffer(MGLBuffer * self, PyObject * args, PyObject * kwargs) {
+	static const char * kwlist[] = {"data", "offset", 0};
+
+	const char * data = 0;
+	int size = 0;
+	int offset = 0;
+
+	int args_ok = PyArg_ParseTupleAndKeywords(
+		args,
+		kwargs,
+		"y#|$I",
+		(char **)kwlist,
+		&data,
+		&size,
+		&offset
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (offset < 0 || size + offset > self->size) {
+		MGLError * error = MGLError_New(TRACE, "offset = %d or size = %d out of range", offset, size);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
+
+	const GLMethods & gl = self->context->gl;
+	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
+	gl.BufferSubData(GL_ARRAY_BUFFER, (GLintptr)offset, size, data);
+	Py_RETURN_NONE;
+}
+
+const char * MGLBuffer_bind_to_storage_buffer_doc = R"(
+	bind_to_storage_buffer()
+)";
+
 PyObject * MGLBuffer_release(MGLBuffer * self) {
 	MGLBuffer_Invalidate(self);
 	Py_RETURN_NONE;
@@ -227,6 +301,8 @@ PyMethodDef MGLBuffer_tp_methods[] = {
 	{"read", (PyCFunction)MGLBuffer_read, METH_VARARGS | METH_KEYWORDS, MGLBuffer_read_doc},
 	{"write", (PyCFunction)MGLBuffer_write, METH_VARARGS | METH_KEYWORDS, MGLBuffer_write_doc},
 	{"orphan", (PyCFunction)MGLBuffer_orphan, METH_NOARGS, MGLBuffer_orphan_doc},
+	{"bind_to_uniform_block", (PyCFunction)MGLBuffer_bind_to_uniform_block, METH_VARARGS | METH_KEYWORDS, MGLBuffer_bind_to_uniform_block_doc},
+	{"bind_to_storage_buffer", (PyCFunction)MGLBuffer_bind_to_storage_buffer, METH_VARARGS | METH_KEYWORDS, MGLBuffer_bind_to_storage_buffer_doc},
 	{"release", (PyCFunction)MGLBuffer_release, METH_NOARGS, MGLBuffer_release_doc},
 	{0},
 };

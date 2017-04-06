@@ -38,7 +38,26 @@ PyMethodDef MGLUniformBlock_tp_methods[] = {
 	{0},
 };
 
+PyObject * MGLUniformBlock_get_name(MGLUniformBlock * self, void * closure) {
+	Py_INCREF(self->name);
+	return self->name;
+}
+
+char MGLUniformBlock_name_doc[] = R"(
+	name
+)";
+
+PyObject * MGLUniformBlock_get_location(MGLUniformBlock * self, void * closure) {
+	return PyLong_FromLong(self->location);
+}
+
+char MGLUniformBlock_location_doc[] = R"(
+	location
+)";
+
 PyGetSetDef MGLUniformBlock_tp_getseters[] = {
+	{(char *)"name", (getter)MGLUniformBlock_get_name, 0, MGLUniformBlock_name_doc, 0},
+	{(char *)"location", (getter)MGLUniformBlock_get_location, 0, MGLUniformBlock_location_doc, 0},
 	{0},
 };
 

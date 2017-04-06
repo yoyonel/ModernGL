@@ -569,9 +569,8 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		Py_DECREF(uniform_block);
 	}
 
-	program->uniforms = uniforms;
-	program->uniforms_proxy = PyDictProxy_New(uniforms);
-
+	program->uniform_blocks = uniform_blocks;
+	program->uniform_blocks_proxy = PyDictProxy_New(uniform_blocks);
 
 	PyObject * attributes = PyDict_New();
 

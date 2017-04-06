@@ -44,6 +44,7 @@ class TestCase(unittest.TestCase):
 		])
 
 		print(self.prog.uniforms)
+		print(self.prog.uniform_blocks)
 
 		vao.release()
 
