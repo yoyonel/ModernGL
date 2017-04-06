@@ -1662,9 +1662,8 @@ const char * MGLContext_ComputeShader_doc = R"(
 		:py:class:`ComputeShader`
 )";
 
-PyObject * MGLContext_release(PyObject * self) {
-	// TODO:
-
+PyObject * MGLContext_release(MGLContext * self) {
+	MGLContext_Invalidate(self);
 	Py_RETURN_NONE;
 }
 
