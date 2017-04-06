@@ -11,8 +11,8 @@ struct MGLVarying : public MGLProgramMember {
 	int number;
 	int type;
 
-	int dimension;
-	int element_size;
+	// int dimension;
+	// int element_size;
 	int array_length;
 
 	bool matrix;

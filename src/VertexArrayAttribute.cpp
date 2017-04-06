@@ -237,8 +237,212 @@ MGLVertexArrayAttribute * MGLVertexArrayAttribute_New() {
 	return self;
 }
 
-void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute) {
+void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const GLMethods & gl) {
 	switch (attribute->type) {
+		case GL_INT:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_INT_VEC2:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_INT_VEC3:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_INT_VEC4:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_UNSIGNED_INT:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_UNSIGNED_INT_VEC2:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_UNSIGNED_INT_VEC3:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_UNSIGNED_INT_VEC4:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_FLOAT:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_FLOAT_VEC2:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_FLOAT_VEC3:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_FLOAT_VEC4:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_DOUBLE:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_DOUBLE_VEC2:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_DOUBLE_VEC3:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_DOUBLE_VEC4:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_FLOAT_MAT2:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_FLOAT_MAT2x3:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_FLOAT_MAT2x4:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_FLOAT_MAT3x2:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_FLOAT_MAT3:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_FLOAT_MAT3x4:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_FLOAT_MAT4x2:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_FLOAT_MAT4x3:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_FLOAT_MAT4:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_DOUBLE_MAT2:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_DOUBLE_MAT2x3:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_DOUBLE_MAT2x4:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_DOUBLE_MAT3x2:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_DOUBLE_MAT3:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_DOUBLE_MAT3x4:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_DOUBLE_MAT4x2:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_DOUBLE_MAT4x3:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
+		case GL_DOUBLE_MAT4:
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
+			attribute->gl_attrib_getter_proc = 0;
+			attribute->gl_attrib_setter_proc = 0;
+			break;
+
 		default:
 			attribute->gl_attrib_ptr_proc = 0;
 			attribute->gl_attrib_getter_proc = 0;

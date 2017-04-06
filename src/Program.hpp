@@ -29,8 +29,7 @@ struct MGLProgram : public MGLContextMember {
 	MGLPrimitive * geometry_input;
 	MGLPrimitive * geometry_output;
 
-	// TODO:
-	MGLPrimitive * geometry_vertices;
+	int geometry_vertices;
 
 	int program_obj;
 };

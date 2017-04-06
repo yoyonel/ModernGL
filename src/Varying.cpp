@@ -124,3 +124,6 @@ void MGLVarying_Invalidate(MGLVarying * varying) {
 
 	Py_DECREF(varying);
 }
+
+void MGLVarying_Complete(MGLVarying * self, const GLMethods & gl) {
+}

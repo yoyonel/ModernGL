@@ -36,7 +36,7 @@ ModernGL = Extension(
 )
 
 setup(
-	name = 'ModernGL-beta',
+	name = 'ModernGL',
 	version = '3.1.3',
 	packages = ['ModernGL'],
 	ext_modules = [ModernGL],

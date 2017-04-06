@@ -25,8 +25,6 @@ class TestBuffer(unittest.TestCase):
 
 	@classmethod
 	def tearDownClass(cls):
-		cls.vert.release()
-		cls.prog.release()
 		cls.ctx.release()
 
 	def test_1(self):
@@ -49,8 +47,6 @@ class TestBuffer(unittest.TestCase):
 		self.assertAlmostEqual(tup[5], 106.0)
 		self.assertAlmostEqual(tup[6], 17.0)
 		self.assertAlmostEqual(tup[7], 108.0)
-
-		vao.release()
 
 
 if __name__ == '__main__':

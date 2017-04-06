@@ -342,7 +342,7 @@ MGLBuffer * MGLContext_Buffer(MGLContext * self, PyObject * args, PyObject * kwa
 
 	MGLBuffer * buffer = MGLBuffer_New();
 
-	buffer->size = buffer_view.len;
+	buffer->size = (int)buffer_view.len;
 	buffer->dynamic = dynamic ? true : false;
 
 	const GLMethods & gl = self->gl;
@@ -616,7 +616,7 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 		return 0;
 	}
 
-	int content_len = PyList_GET_SIZE(content);
+	int content_len = (int)PyList_GET_SIZE(content);
 
 	if (!content_len) {
 		MGLError * error = MGLError_New(TRACE, "content must not be emtpy");
@@ -633,7 +633,7 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 			return 0;
 		}
 
-		int size = PyTuple_GET_SIZE(tuple);
+		int size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (size != 3) {
 			MGLError * error = MGLError_New(TRACE, "content[%d] must be a tuple of size 3 not %d", i, size);
@@ -684,7 +684,7 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 			return 0;
 		}
 
-		int attributes_len = PyList_GET_SIZE(attributes);
+		int attributes_len = (int)PyList_GET_SIZE(attributes);
 
 		if (!attributes_len) {
 			MGLError * error = MGLError_New(TRACE, "content[%d][2] must not be empty", i);
@@ -806,7 +806,7 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 
 		char * ptr = 0;
 
-		int attributes_len = PyTuple_GET_SIZE(attributes);
+		int attributes_len = (int)PyTuple_GET_SIZE(attributes);
 
 		for (int j = 0; j < attributes_len; ++j) {
 			FormatNode * node = it.next();
@@ -971,7 +971,7 @@ MGLProgram * MGLContext_Program(MGLContext * self, PyObject * args, PyObject * k
 			return 0;
 		}
 
-		int num_varyings = PyList_GET_SIZE(varyings);
+		int num_varyings = (int)PyList_GET_SIZE(varyings);
 
 		for (int i = 0; i < num_varyings; ++i) {
 			PyObject * item = PyList_GET_ITEM(varyings, i);
@@ -989,7 +989,7 @@ MGLProgram * MGLContext_Program(MGLContext * self, PyObject * args, PyObject * k
 
 		int counter[NUM_SHADER_SLOTS] = {};
 
-		int num_shaders = PyList_GET_SIZE(shaders);
+		int num_shaders = (int)PyList_GET_SIZE(shaders);
 
 		for (int i = 0; i < num_shaders; ++i) {
 			PyObject * item = PyList_GET_ITEM(shaders, i);
@@ -1188,7 +1188,7 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 
 	if (Py_TYPE(attachments) == &PyList_Type) {
 
-		int attachments_len = PyList_GET_SIZE(attachments);
+		int attachments_len = (int)PyList_GET_SIZE(attachments);
 
 		if (!attachments_len) {
 			MGLError * error = MGLError_New(TRACE, "attachments must not be empty");
@@ -1287,7 +1287,7 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 	gl.BindFramebuffer(GL_FRAMEBUFFER, framebuffer->framebuffer_obj);
 
 	if (color_attachments) {
-		int color_attachments_len = PyTuple_GET_SIZE(color_attachments);
+		int color_attachments_len = (int)PyTuple_GET_SIZE(color_attachments);
 
 		for (int i = 0; i < color_attachments_len; ++i) {
 			PyObject * item = PyTuple_GET_ITEM(color_attachments, i);
@@ -1578,7 +1578,9 @@ MGLComputeShader * MGLContext_ComputeShader(MGLContext * self, PyObject * args, 
 	int shader_obj = gl.CreateShader(GL_COMPUTE_SHADER);
 
 	if (!shader_obj) {
-		// TODO:
+		MGLError * error = MGLError_New(TRACE, "cannot create shader object");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
 	}
 
 	gl.ShaderSource(shader_obj, 1, &source_str, 0);
@@ -1612,7 +1614,9 @@ MGLComputeShader * MGLContext_ComputeShader(MGLContext * self, PyObject * args, 
 	int program_obj = gl.CreateProgram();
 
 	if (!program_obj) {
-		// TODO:
+		MGLError * error = MGLError_New(TRACE, "cannot create program object");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
 	}
 
 	gl.AttachShader(program_obj, shader_obj);
@@ -1658,9 +1662,8 @@ const char * MGLContext_ComputeShader_doc = R"(
 		:py:class:`ComputeShader`
 )";
 
-PyObject * MGLContext_release(PyObject * self) {
-	// TODO:
-
+PyObject * MGLContext_release(MGLContext * self) {
+	// MGLContext_Invalidate(self);
 	Py_RETURN_NONE;
 }
 
@@ -1762,7 +1765,7 @@ PyObject * MGLContext_get_viewport(MGLContext * self) {
 }
 
 int MGLContext_set_viewport(MGLContext * self, PyObject * value) {
-	int size = PyTuple_Size(value);
+	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (PyErr_Occurred()) {
 		return -1;
@@ -1908,8 +1911,6 @@ PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"vendor", (getter)MGLContext_get_vendor, 0, MGLContext_vendor_doc, 0},
 	{(char *)"renderer", (getter)MGLContext_get_renderer, 0, MGLContext_renderer_doc, 0},
 	{(char *)"version", (getter)MGLContext_get_version, 0, MGLContext_version_doc, 0},
-
-	{(char *)"vsync", 0, 0, 0, 0}, // TODO:
 	{0},
 };
 

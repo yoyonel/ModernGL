@@ -207,7 +207,7 @@ void MGLFramebuffer_Invalidate(MGLFramebuffer * framebuffer) {
 		framebuffer->context->gl.DeleteFramebuffers(1, (GLuint *)&framebuffer->framebuffer_obj);
 
 		if (framebuffer->color_attachments) {
-			int color_attachments_len = PyList_GET_SIZE(framebuffer->color_attachments);
+			int color_attachments_len = (int)PyList_GET_SIZE(framebuffer->color_attachments);
 
 			for (int i = 0; i < color_attachments_len; ++i) {
 				PyObject * attachment = PyList_GET_ITEM(framebuffer->color_attachments, i);

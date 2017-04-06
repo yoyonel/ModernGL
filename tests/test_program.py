@@ -69,10 +69,6 @@ class TestCase(unittest.TestCase):
 		self.assertTrue('vert' in program.attributes)
 		self.assertTrue('pos' not in program.attributes)
 
-		vertex_shader.release()
-		fragment_shader.release()
-		program.release()
-
 
 if __name__ == '__main__':
 	unittest.main()

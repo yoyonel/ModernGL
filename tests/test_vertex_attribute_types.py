@@ -247,11 +247,6 @@ class TestCase(unittest.TestCase):
 			for a, b in zip(struct.unpack(fmt, vbo2.read()), vtype['output']):
 				self.assertAlmostEqual(a, b)
 
-			vbo1.release()
-			vbo2.release()
-			vao.release()
-			prog.release()
-
 	def test_arrays(self):
 		vert_src = '''
 			#version %(version)s
@@ -280,11 +275,6 @@ class TestCase(unittest.TestCase):
 
 			for a, b in zip(struct.unpack(fmt, vbo2.read()), vtype['output'] * 2):
 				self.assertAlmostEqual(a, b)
-
-			vbo1.release()
-			vbo2.release()
-			vao.release()
-			prog.release()
 
 
 if __name__ == '__main__':

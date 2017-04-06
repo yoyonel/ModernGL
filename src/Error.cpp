@@ -108,8 +108,8 @@ PyTypeObject MGLError_Type = {
 	MGLError_tp_new,                                        // tp_new
 };
 
-#define GITHUB_URL "https://github.com/cprogrammer1994/ModernGL/blob/ModernGL3"
-#define GITHUB(path) GITHUB_URL # path
+#define GITHUB_URL "https://github.com/cprogrammer1994/ModernGL/blob/master"
+#define GITHUB(path) GITHUB_URL path
 
 MGLError * MGLError_New(const char * filename, int line, const char * format, ...) {
 	MGLError * self = (MGLError *)MGLError_tp_new(&MGLError_Type, 0, 0);

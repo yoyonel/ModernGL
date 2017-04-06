@@ -156,6 +156,16 @@ char MGLProgram_geometry_output_doc[] = R"(
 	The GeometryShader's output primitive if the GeometryShader is present otherwise ``None``.
 )";
 
+PyObject * MGLProgram_get_geometry_vertices(MGLProgram * self, void * closure) {
+	return PyLong_FromLong(self->geometry_vertices);
+}
+
+char MGLProgram_geometry_vertices_doc[] = R"(
+	geometry_vertices
+
+	The maximum number of vertices that the geometry shader in program will output.
+)";
+
 PyObject * MGLProgram_get_vertex_shader(MGLProgram * self, void * closure) {
 	if (self->vertex_shader) {
 		Py_INCREF(self->vertex_shader);
@@ -230,6 +240,7 @@ PyGetSetDef MGLProgram_tp_getseters[] = {
 
 	{(char *)"geometry_input", (getter)MGLProgram_get_geometry_input, 0, MGLProgram_geometry_input_doc, 0},
 	{(char *)"geometry_output", (getter)MGLProgram_get_geometry_output, 0, MGLProgram_geometry_output_doc, 0},
+	{(char *)"geometry_vertices", (getter)MGLProgram_get_geometry_vertices, 0, MGLProgram_geometry_vertices_doc, 0},
 
 	{(char *)"vertex_shader", (getter)MGLProgram_get_vertex_shader, 0, MGLProgram_vertex_shader_doc, 0},
 	{(char *)"fragment_shader", (getter)MGLProgram_get_fragment_shader, 0, MGLProgram_fragment_shader_doc, 0},
@@ -355,7 +366,7 @@ void MGLProgram_Invalidate(MGLProgram * program) {
 	}
 
 	{
-		int shaders_len = PyTuple_GET_SIZE(program->shaders);
+		int shaders_len = (int)PyTuple_GET_SIZE(program->shaders);
 
 		for (int i = 0; i < shaders_len; ++i) {
 			MGLShader * shader = (MGLShader *)PyTuple_GET_ITEM(program->shaders, i);
@@ -394,7 +405,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 	MGLShader * shaders[NUM_SHADER_SLOTS] = {};
 
-	int num_shaders = PyTuple_GET_SIZE(program->shaders);
+	int num_shaders = (int)PyTuple_GET_SIZE(program->shaders);
 
 	for (int i = 0; i < num_shaders; ++i) {
 		MGLShader * shader = (MGLShader *)PyTuple_GET_ITEM(program->shaders, i);
@@ -404,7 +415,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	}
 
 	if (outputs != Py_None) {
-		int outputs_len = PyList_GET_SIZE(outputs);
+		int outputs_len = (int)PyList_GET_SIZE(outputs);
 
 		if (outputs_len) {
 			const char ** varyings_array = new const char * [outputs_len];
@@ -511,6 +522,8 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		uniform->location = gl.GetUniformLocation(program->program_obj, name);
 
+		clean_program_member_name(name, name_len);
+
 		// Skip uniforms from uniform buffers
 
 		if (uniform->location < 0) {
@@ -524,8 +537,6 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		MGLUniform_Complete(uniform, gl);
 
-		clean_program_member_name(name, name_len);
-
 		// TODO: check shadow and sampler cube
 
 		PyDict_SetItem(uniforms, uniform->name, (PyObject *)uniform);
@@ -533,9 +544,8 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	}
 
 	program->uniforms = uniforms;
-
-	Py_INCREF(uniforms); // TODO: maybe not needed
 	program->uniforms_proxy = PyDictProxy_New(uniforms);
+	Py_INCREF(uniforms);
 
 	PyObject * uniform_blocks = PyDict_New();
 
@@ -552,6 +562,8 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		gl.GetActiveUniformBlockiv(program->program_obj, i, GL_UNIFORM_BLOCK_BINDING, &uniform_block->location);
 		gl.GetActiveUniformBlockiv(program->program_obj, i, GL_UNIFORM_BLOCK_DATA_SIZE, &uniform_block->array_length);
 
+		clean_program_member_name(name, name_len);
+
 		// if (uniform_block->location < 0) {
 		// 	Py_DECREF((PyObject *)uniform_block);
 		// 	continue;
@@ -563,20 +575,15 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		MGLUniformBlock_Complete(uniform_block, gl);
 
-		clean_program_member_name(name, name_len);
-
 		// TODO: check shadow and sampler cube
 
 		PyDict_SetItem(uniform_blocks, uniform_block->name, (PyObject *)uniform_block);
 		Py_DECREF(uniform_block);
 	}
 
-	program->uniforms = uniforms;
-
-	Py_INCREF(uniforms); // TODO: maybe not needed
-	program->uniforms_proxy = PyDictProxy_New(uniforms);
-
-
+	program->uniform_blocks = uniform_blocks;
+	program->uniform_blocks_proxy = PyDictProxy_New(uniform_blocks);
+	Py_INCREF(uniform_blocks);
 
 	PyObject * attributes = PyDict_New();
 
@@ -593,12 +600,12 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		attribute->location = gl.GetAttribLocation(program->program_obj, name);
 
+		clean_program_member_name(name, name_len);
+
 		// if (attribute->location < 0) {
 		// 	Py_DECREF(attribute);
 		// 	continue;
 		// }
-
-		clean_program_member_name(name, name_len);
 
 		attribute->number = i;
 		attribute->program_obj = program->program_obj;
@@ -611,9 +618,8 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	}
 
 	program->attributes = attributes;
-
-	Py_INCREF(attributes); // TODO: maybe not needed
 	program->attributes_proxy = PyDictProxy_New(attributes);
+	Py_INCREF(attributes);
 
 	PyObject * varyings = PyDict_New();
 
@@ -632,25 +638,25 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		varying->program_obj = program->program_obj;
 		varying->name = PyUnicode_FromStringAndSize(name, name_len);
 
-		// TODO: complete
+		MGLVarying_Complete(varying, gl);
 
 		PyDict_SetItem(varyings, varying->name, (PyObject *)varying);
 		Py_DECREF(varying);
 	}
 
 	program->varyings = varyings;
-
-	Py_INCREF(varyings); // TODO: maybe not needed
 	program->varyings_proxy = PyDictProxy_New(varyings);
-
+	Py_INCREF(varyings);
 
 	if (shaders[GEOMETRY_SHADER_SLOT]) {
 
 		int geometry_in = 0;
 		int geometry_out = 0;
+		program->geometry_vertices = 0;
 
 		gl.GetProgramiv(obj, GL_GEOMETRY_INPUT_TYPE, &geometry_in);
 		gl.GetProgramiv(obj, GL_GEOMETRY_OUTPUT_TYPE, &geometry_out);
+		gl.GetProgramiv(obj, GL_GEOMETRY_VERTICES_OUT, &program->geometry_vertices);
 
 		switch (geometry_in) {
 			case GL_TRIANGLES:
@@ -764,5 +770,6 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		program->geometry_input = 0;
 		program->geometry_output = 0;
+		program->geometry_vertices = 0;
 	}
 }

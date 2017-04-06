@@ -22,8 +22,6 @@ class TestCase(unittest.TestCase):
 			}
 		''')
 
-		shader.release()
-
 	def test_fragment_shader(self):
 
 		shader = self.ctx.FragmentShader('''
@@ -35,8 +33,6 @@ class TestCase(unittest.TestCase):
 				color = vec4(0, 0, 0, 0);
 			}
 		''')
-
-		shader.release()
 
 
 if __name__ == '__main__':

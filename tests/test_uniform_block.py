@@ -29,13 +29,13 @@ class TestCase(unittest.TestCase):
 
 	@classmethod
 	def tearDownClass(cls):
-		cls.vert.release()
-		cls.prog.release()
 		cls.ctx.release()
 
 	def test_1(self):
 		buf_m = self.ctx.Buffer(struct.pack('4f', 1, 1, 1, 2))
 		buf_v = self.ctx.Buffer(struct.pack('2f', 4, 7))
+		buf_u = self.ctx.Buffer(struct.pack('f', 123))
+		buf_r = self.ctx.Buffer(reserve = buf_v.size)
 		res = self.ctx.Buffer(reserve = buf_v.size)
 
 		vao = self.ctx.VertexArray(self.prog, [
@@ -43,9 +43,16 @@ class TestCase(unittest.TestCase):
 			(buf_v, '2f', ['in_v']),
 		])
 
-		print(self.prog.uniforms)
+		self.assertFalse('Block' in self.prog.uniforms)
+		self.assertTrue('Block' in self.prog.uniform_blocks)
 
-		vao.release()
+		buf_u.bind_to_uniform_block(self.prog.uniform_blocks['Block'])
+
+		vao.transform(buf_r, ModernGL.POINTS)
+		a, b = struct.unpack('2f', buf_r.read())
+
+		self.assertAlmostEqual(a, 1353.0)
+		self.assertAlmostEqual(b, 2214.0)
 
 
 if __name__ == '__main__':
