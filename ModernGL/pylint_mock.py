@@ -27,6 +27,18 @@ class Buffer:
 	def __init__(self, data, reserve = 0, dynamic = False):
 		'''
 		'''
+	
+	def read(self, size, offset = 0):
+		'''
+		'''
+
+	def write(self, data, offset = 0):
+		'''
+		'''
+
+	def access(self, size, offset = 0, readonly = False):
+		'''
+		'''
 
 class Program:
 	'''
@@ -92,11 +104,15 @@ class VertexArray:
 		https://cprogrammer1994.github.io/ModernGL/VertexArray.html
 	'''
 
-	def __init(self, program, content, index_buffer = None, skip_errors = False):
+	def __init__(self, program, content, index_buffer = None, skip_errors = False):
 		'''
 		'''
 
-	def render(self, mode, vertices, first = 0, instances = 1):
+	def render(self, mode = TRIANGLES, vertices = 1, first = 0, instances = 1):
+		'''
+		'''
+
+	def transform(self, output, mode = POINTS, vertices = 1, first = 0, instances = 1):
 		'''
 		'''
 
@@ -109,7 +125,11 @@ class SimpleVertexArray:
 		'''
 		'''
 
-	def render(self, mode, vertices, first = 0, instances = 1):
+	def render(self, mode = TRIANGLES, vertices = 1, first = 0, instances = 1):
+		'''
+		'''
+
+	def transform(self, output, mode = POINTS, vertices = 1, first = 0, instances = 1):
 		'''
 		'''
 
