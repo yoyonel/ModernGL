@@ -511,6 +511,8 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		uniform->location = gl.GetUniformLocation(program->program_obj, name);
 
+		clean_program_member_name(name, name_len);
+
 		// Skip uniforms from uniform buffers
 
 		if (uniform->location < 0) {
@@ -523,8 +525,6 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		uniform->name = PyUnicode_FromStringAndSize(name, name_len);
 
 		MGLUniform_Complete(uniform, gl);
-
-		clean_program_member_name(name, name_len);
 
 		// TODO: check shadow and sampler cube
 
@@ -550,6 +550,8 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		gl.GetActiveUniformBlockiv(program->program_obj, i, GL_UNIFORM_BLOCK_BINDING, &uniform_block->location);
 		gl.GetActiveUniformBlockiv(program->program_obj, i, GL_UNIFORM_BLOCK_DATA_SIZE, &uniform_block->array_length);
 
+		clean_program_member_name(name, name_len);
+
 		// if (uniform_block->location < 0) {
 		// 	Py_DECREF((PyObject *)uniform_block);
 		// 	continue;
@@ -560,8 +562,6 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		uniform_block->name = PyUnicode_FromStringAndSize(name, name_len);
 
 		MGLUniformBlock_Complete(uniform_block, gl);
-
-		clean_program_member_name(name, name_len);
 
 		// TODO: check shadow and sampler cube
 
@@ -587,12 +587,12 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		attribute->location = gl.GetAttribLocation(program->program_obj, name);
 
+		clean_program_member_name(name, name_len);
+
 		// if (attribute->location < 0) {
 		// 	Py_DECREF(attribute);
 		// 	continue;
 		// }
-
-		clean_program_member_name(name, name_len);
 
 		attribute->number = i;
 		attribute->program_obj = program->program_obj;
