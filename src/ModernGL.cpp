@@ -126,6 +126,8 @@ MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs)
 		return 0;
 	}
 
+	Py_INCREF(ctx);
+
 	return ctx;
 }
 
