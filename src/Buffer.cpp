@@ -4,6 +4,8 @@
 #include "InvalidObject.hpp"
 #include "BufferAccess.hpp"
 
+#include "UniformBlock.hpp"
+
 PyObject * MGLBuffer_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLBuffer * self = (MGLBuffer *)type->tp_alloc(type, 0);
 
@@ -212,40 +214,45 @@ const char * MGLBuffer_orphan_doc = R"(
 )";
 
 PyObject * MGLBuffer_bind_to_uniform_block(MGLBuffer * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"data", "offset", 0};
+	static const char * kwlist[] = {"location", 0};
 
-	const char * data = 0;
-	int size = 0;
-	int offset = 0;
+	PyObject * location = 0;
 
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"y#|$I",
+		"|O",
 		(char **)kwlist,
-		&data,
-		&size,
-		&offset
+		&location
 	);
 
 	if (!args_ok) {
 		return 0;
 	}
 
-	if (offset < 0 || size + offset > self->size) {
-		MGLError * error = MGLError_New(TRACE, "offset = %d or size = %d out of range", offset, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
+	int block = 0;
+
+	if (location) {
+		if (Py_TYPE(location) == &MGLUniformBlock_Type) {
+			block = ((MGLUniformBlock *)location)->location;
+		}
+	} else {
+		block = PyLong_AsLong(location);
+
+		if (PyErr_Occurred()) {
+			MGLError * error = MGLError_New(TRACE, "location must be either UniformBlock or int not %s", Py_TYPE(location));
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return 0;
+		}
 	}
 
 	const GLMethods & gl = self->context->gl;
-	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
-	gl.BufferSubData(GL_ARRAY_BUFFER, (GLintptr)offset, size, data);
+	gl.BindBufferBase(GL_UNIFORM_BUFFER, block, self->buffer_obj);
 	Py_RETURN_NONE;
 }
 
 const char * MGLBuffer_bind_to_uniform_block_doc = R"(
-	bind_to_uniform_block()
+	bind_to_uniform_block(location = 0)
 )";
 
 PyObject * MGLBuffer_bind_to_storage_buffer(MGLBuffer * self, PyObject * args, PyObject * kwargs) {
