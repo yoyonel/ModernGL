@@ -33,8 +33,6 @@ class TestCase(unittest.TestCase):
 
 	@classmethod
 	def tearDownClass(cls):
-		cls.vert.release()
-		cls.prog.release()
 		cls.ctx.release()
 
 	def test_padding_1(self):

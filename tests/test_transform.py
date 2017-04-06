@@ -52,9 +52,6 @@ class TestCase(unittest.TestCase):
 		self.assertTrue('vert_length' not in program.attributes)
 		self.assertTrue('vert_length' in program.varyings)
 
-		vertex_shader.release()
-		program.release()
-
 
 if __name__ == '__main__':
 	unittest.main()

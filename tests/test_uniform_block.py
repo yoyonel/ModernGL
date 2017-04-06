@@ -29,8 +29,6 @@ class TestCase(unittest.TestCase):
 
 	@classmethod
 	def tearDownClass(cls):
-		cls.vert.release()
-		cls.prog.release()
 		cls.ctx.release()
 
 	def test_1(self):
@@ -55,8 +53,6 @@ class TestCase(unittest.TestCase):
 
 		self.assertAlmostEqual(a, 1353.0)
 		self.assertAlmostEqual(b, 2214.0)
-
-		vao.release()
 
 
 if __name__ == '__main__':
