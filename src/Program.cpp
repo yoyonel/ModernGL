@@ -156,6 +156,16 @@ char MGLProgram_geometry_output_doc[] = R"(
 	The GeometryShader's output primitive if the GeometryShader is present otherwise ``None``.
 )";
 
+PyObject * MGLProgram_get_geometry_vertices(MGLProgram * self, void * closure) {
+	return PyLong_FromLong(self->geometry_vertices);
+}
+
+char MGLProgram_geometry_vertices_doc[] = R"(
+	geometry_vertices
+
+	The maximum number of vertices that the geometry shader in program will output.
+)";
+
 PyObject * MGLProgram_get_vertex_shader(MGLProgram * self, void * closure) {
 	if (self->vertex_shader) {
 		Py_INCREF(self->vertex_shader);
@@ -230,6 +240,7 @@ PyGetSetDef MGLProgram_tp_getseters[] = {
 
 	{(char *)"geometry_input", (getter)MGLProgram_get_geometry_input, 0, MGLProgram_geometry_input_doc, 0},
 	{(char *)"geometry_output", (getter)MGLProgram_get_geometry_output, 0, MGLProgram_geometry_output_doc, 0},
+	{(char *)"geometry_vertices", (getter)MGLProgram_get_geometry_vertices, 0, MGLProgram_geometry_vertices_doc, 0},
 
 	{(char *)"vertex_shader", (getter)MGLProgram_get_vertex_shader, 0, MGLProgram_vertex_shader_doc, 0},
 	{(char *)"fragment_shader", (getter)MGLProgram_get_fragment_shader, 0, MGLProgram_fragment_shader_doc, 0},
@@ -634,14 +645,15 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	program->varyings = varyings;
 	program->varyings_proxy = PyDictProxy_New(varyings);
 
-
 	if (shaders[GEOMETRY_SHADER_SLOT]) {
 
 		int geometry_in = 0;
 		int geometry_out = 0;
+		program->geometry_vertices = 0;
 
 		gl.GetProgramiv(obj, GL_GEOMETRY_INPUT_TYPE, &geometry_in);
 		gl.GetProgramiv(obj, GL_GEOMETRY_OUTPUT_TYPE, &geometry_out);
+		gl.GetProgramiv(obj, GL_GEOMETRY_VERTICES_OUT, &program->geometry_vertices);
 
 		switch (geometry_in) {
 			case GL_TRIANGLES:
@@ -755,5 +767,6 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		program->geometry_input = 0;
 		program->geometry_output = 0;
+		program->geometry_vertices = 0;
 	}
 }
