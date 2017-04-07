@@ -67,7 +67,7 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 
 	const GLMethods & gl = self->vertex_array->context->gl;
 	gl.BindVertexArray(self->vertex_array->vertex_array_obj);
-	
+
 	if (self->normalizable) {
 		((gl_attribute_normal_ptr_proc)self->gl_attrib_ptr_proc)(self->location, self->row_length, self->scalar_type, false, self->row_length, (void *)offset);
 	} else {
@@ -107,9 +107,9 @@ const char * MGLVertexArrayAttribute_disable_doc = R"(
 )";
 
 PyMethodDef MGLVertexArrayAttribute_tp_methods[] = {
-	{"bind", (PyCFunction)MGLVertexArrayAttribute_bind_doc, METH_VARARGS | METH_KEYWORDS, MGLVertexArrayAttribute_bind_doc},
-	{"enable", (PyCFunction)MGLVertexArrayAttribute_enable_doc, METH_NOARGS, MGLVertexArrayAttribute_enable_doc},
-	{"disable", (PyCFunction)MGLVertexArrayAttribute_disable_doc, METH_NOARGS, MGLVertexArrayAttribute_disable_doc},
+	{"bind", (PyCFunction)MGLVertexArrayAttribute_bind, METH_VARARGS | METH_KEYWORDS, MGLVertexArrayAttribute_bind_doc},
+	{"enable", (PyCFunction)MGLVertexArrayAttribute_enable, METH_NOARGS, MGLVertexArrayAttribute_enable_doc},
+	{"disable", (PyCFunction)MGLVertexArrayAttribute_disable, METH_NOARGS, MGLVertexArrayAttribute_disable_doc},
 	{0},
 };
 
