@@ -10,5 +10,5 @@ all:
 wheel:
 	$(PYTHON) setup.py bdist_wheel
 
-Run:
+test:
 	$(PYTHON) -m pytest
