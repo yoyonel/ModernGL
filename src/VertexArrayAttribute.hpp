@@ -12,6 +12,11 @@ struct MGLVertexArrayAttribute : public MGLVertexArrayMember {
 	void * gl_attrib_ptr_proc;
 	void * gl_attrib_getter_proc;
 	void * gl_attrib_setter_proc;
+
+	int scalar_type;
+	int row_length;
+
+	bool normalizable;
 };
 
 extern PyTypeObject MGLVertexArrayAttribute_Type;

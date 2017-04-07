@@ -67,16 +67,21 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 
 	const GLMethods & gl = self->vertex_array->context->gl;
 	gl.BindVertexArray(self->vertex_array->vertex_array_obj);
-
+	
+	if (self->normalizable) {
+		((gl_attribute_normal_ptr_proc)self->gl_attrib_ptr_proc)(self->location, self->row_length, self->scalar_type, false, self->row_length, (void *)offset);
+	} else {
+		((gl_attribute_ptr_proc)self->gl_attrib_ptr_proc)(self->location, self->row_length, self->scalar_type, self->row_length, (void *)offset);
+	}
+	
 	gl.VertexAttribDivisor(self->location, divisor);
-
 	gl.EnableVertexAttribArray(self->location);
 
-	return 0;
+	Py_RETURN_NONE;
 }
 
 const char * MGLVertexArrayAttribute_bind_doc = R"(
-	bind()
+	bind(buffer, offset, stride, divisor)
 )";
 
 PyObject * MGLVertexArrayAttribute_enable(MGLVertexArrayAttribute * self) {
@@ -240,210 +245,350 @@ MGLVertexArrayAttribute * MGLVertexArrayAttribute_New() {
 void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const GLMethods & gl) {
 	switch (attribute->type) {
 		case GL_INT:
+			attribute->normalizable = false;
+			attribute->row_length = 1;
+			attribute->scalar_type = GL_INT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_INT_VEC2:
+			attribute->normalizable = false;
+			attribute->row_length = 2;
+			attribute->scalar_type = GL_INT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_INT_VEC3:
+			attribute->normalizable = false;
+			attribute->row_length = 3;
+			attribute->scalar_type = GL_INT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_INT_VEC4:
+			attribute->normalizable = false;
+			attribute->row_length = 4;
+			attribute->scalar_type = GL_INT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_UNSIGNED_INT:
+			attribute->normalizable = false;
+			attribute->row_length = 1;
+			attribute->scalar_type = GL_UNSIGNED_INT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_UNSIGNED_INT_VEC2:
+			attribute->normalizable = false;
+			attribute->row_length = 2;
+			attribute->scalar_type = GL_UNSIGNED_INT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_UNSIGNED_INT_VEC3:
+			attribute->normalizable = false;
+			attribute->row_length = 3;
+			attribute->scalar_type = GL_UNSIGNED_INT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_UNSIGNED_INT_VEC4:
+			attribute->normalizable = false;
+			attribute->row_length = 4;
+			attribute->scalar_type = GL_UNSIGNED_INT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT:
+			attribute->normalizable = true;
+			attribute->row_length = 1;
+			attribute->scalar_type = GL_FLOAT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_VEC2:
+			attribute->normalizable = true;
+			attribute->row_length = 2;
+			attribute->scalar_type = GL_FLOAT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_VEC3:
+			attribute->normalizable = true;
+			attribute->row_length = 3;
+			attribute->scalar_type = GL_FLOAT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_VEC4:
+			attribute->normalizable = true;
+			attribute->row_length = 4;
+			attribute->scalar_type = GL_FLOAT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE:
+			attribute->normalizable = false;
+			attribute->row_length = 1;
+			attribute->scalar_type = GL_DOUBLE;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_VEC2:
+			attribute->normalizable = false;
+			attribute->row_length = 2;
+			attribute->scalar_type = GL_DOUBLE;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_VEC3:
+			attribute->normalizable = false;
+			attribute->row_length = 3;
+			attribute->scalar_type = GL_DOUBLE;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_VEC4:
+			attribute->normalizable = false;
+			attribute->row_length = 4;
+			attribute->scalar_type = GL_DOUBLE;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT2:
+			attribute->normalizable = true;
+			attribute->row_length = 2;
+			attribute->scalar_type = GL_FLOAT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT2x3:
+			attribute->normalizable = true;
+			attribute->row_length = 3;
+			attribute->scalar_type = GL_FLOAT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT2x4:
+			attribute->normalizable = true;
+			attribute->row_length = 4;
+			attribute->scalar_type = GL_FLOAT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT3x2:
+			attribute->normalizable = true;
+			attribute->row_length = 2;
+			attribute->scalar_type = GL_FLOAT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT3:
+			attribute->normalizable = true;
+			attribute->row_length = 3;
+			attribute->scalar_type = GL_FLOAT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT3x4:
+			attribute->normalizable = true;
+			attribute->row_length = 4;
+			attribute->scalar_type = GL_FLOAT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT4x2:
+			attribute->normalizable = true;
+			attribute->row_length = 2;
+			attribute->scalar_type = GL_FLOAT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT4x3:
+			attribute->normalizable = true;
+			attribute->row_length = 3;
+			attribute->scalar_type = GL_FLOAT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT4:
+			attribute->normalizable = true;
+			attribute->row_length = 4;
+			attribute->scalar_type = GL_FLOAT;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT2:
+			attribute->normalizable = false;
+			attribute->row_length = 2;
+			attribute->scalar_type = GL_DOUBLE;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT2x3:
+			attribute->normalizable = false;
+			attribute->row_length = 3;
+			attribute->scalar_type = GL_DOUBLE;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT2x4:
+			attribute->normalizable = false;
+			attribute->row_length = 4;
+			attribute->scalar_type = GL_DOUBLE;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT3x2:
+			attribute->normalizable = false;
+			attribute->row_length = 2;
+			attribute->scalar_type = GL_DOUBLE;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT3:
+			attribute->normalizable = false;
+			attribute->row_length = 3;
+			attribute->scalar_type = GL_DOUBLE;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT3x4:
+			attribute->normalizable = false;
+			attribute->row_length = 4;
+			attribute->scalar_type = GL_DOUBLE;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT4x2:
+			attribute->normalizable = false;
+			attribute->row_length = 2;
+			attribute->scalar_type = GL_DOUBLE;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT4x3:
+			attribute->normalizable = false;
+			attribute->row_length = 3;
+			attribute->scalar_type = GL_DOUBLE;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT4:
+			attribute->normalizable = false;
+			attribute->row_length = 4;
+			attribute->scalar_type = GL_DOUBLE;
+
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		default:
+			attribute->normalizable = false;
+			attribute->row_length = 1;
+			attribute->scalar_type = 0;
+
 			attribute->gl_attrib_ptr_proc = 0;
 			attribute->gl_attrib_getter_proc = 0;
 			attribute->gl_attrib_setter_proc = 0;
