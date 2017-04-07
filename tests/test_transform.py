@@ -44,7 +44,7 @@ class TestCase(unittest.TestCase):
 		self.assertEqual(len(program.attributes), 1)
 
 		self.assertEqual(len(program.varyings), 1)
-		# self.assertEqual(len(program.uniform_blocks), 0)
+		self.assertEqual(len(program.uniform_blocks), 0)
 
 		self.assertTrue('vert' in program.attributes)
 		self.assertTrue('vert' not in program.varyings)
