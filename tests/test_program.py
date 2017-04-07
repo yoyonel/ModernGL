@@ -60,7 +60,7 @@ class TestCase(unittest.TestCase):
 		self.assertEqual(len(program.attributes), 1)
 
 		self.assertEqual(len(program.varyings), 0)
-		# self.assertEqual(len(program.uniform_blocks), 0)
+		self.assertEqual(len(program.uniform_blocks), 0)
 
 		self.assertTrue('pos' in program.uniforms)
 		self.assertTrue('scale' in program.uniforms)
