@@ -48,7 +48,7 @@ vao.render(ModernGL.TRIANGLES)
 ## How to install
 
 ```
-pip install ModernGL-beta
+pip install ModernGL
 ```
 
 -----
@@ -57,7 +57,7 @@ for **Ubuntu**:
 ```
 apt-get install python3-dev
 apt-get install libgl1-mesa-dev
-pip3 install ModernGL-beta
+pip3 install ModernGL
 ```
 
 ...
