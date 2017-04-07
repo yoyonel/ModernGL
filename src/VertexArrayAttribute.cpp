@@ -67,11 +67,12 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 
 	const GLMethods & gl = self->vertex_array->context->gl;
 	gl.BindVertexArray(self->vertex_array->vertex_array_obj);
+	gl.BindBuffer(GL_ARRAY_BUFFER, buffer->buffer_obj);
 
 	if (self->normalizable) {
-		((gl_attribute_normal_ptr_proc)self->gl_attrib_ptr_proc)(self->location, self->row_length, self->scalar_type, false, self->row_length, (void *)offset);
+		((gl_attribute_normal_ptr_proc)self->gl_attrib_ptr_proc)(self->location, self->row_length, self->scalar_type, false, stride, (void *)offset);
 	} else {
-		((gl_attribute_ptr_proc)self->gl_attrib_ptr_proc)(self->location, self->row_length, self->scalar_type, self->row_length, (void *)offset);
+		((gl_attribute_ptr_proc)self->gl_attrib_ptr_proc)(self->location, self->row_length, self->scalar_type, stride, (void *)offset);
 	}
 	
 	gl.VertexAttribDivisor(self->location, divisor);
