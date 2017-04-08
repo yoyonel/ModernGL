@@ -1,7 +1,7 @@
 # ModernGL
 :boom: modern OpenGL binding for Python
 
-## [Docs and examples](https://cprogrammer1994.github.io/ModernGL/)
+## [Docs](https://moderngl.github.io) and [Examples](https://moderngl.github.io/Examples.html)
 
 ## Description
 
@@ -55,8 +55,7 @@ pip install ModernGL
 
 for **Ubuntu**:
 ```
-apt-get install python3-dev
-apt-get install libgl1-mesa-dev
+apt-get install python3-dev libgl1-mesa-dev libx11-dev
 pip3 install ModernGL
 ```
 
