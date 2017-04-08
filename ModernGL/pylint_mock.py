@@ -6,7 +6,7 @@
 
 class Primitive:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/Primitive.html
+		https://moderngl.github.io/Primitive.html
 	'''
 
 	def __init__(self):
@@ -27,7 +27,7 @@ TRIANGLES_ADJACENCY = Primitive()
 
 class Buffer:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/Buffer.html
+		https://moderngl.github.io/Buffer.html
 	'''
 
 	def __init__(self, data, reserve = 0, dynamic = False):
@@ -54,7 +54,7 @@ class Buffer:
 
 class Program:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/Program.html
+		https://moderngl.github.io/Program.html
 	'''
 
 	def __init__(self, shaders, varyings = None):
@@ -72,12 +72,12 @@ class Program:
 
 class Shader:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/Shader.html
+		https://moderngl.github.io/Shader.html
 	'''
 
 class VertexShader:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/Shader.html
+		https://moderngl.github.io/Shader.html
 	'''
 
 	def __init__(self, source):
@@ -92,7 +92,7 @@ class VertexShader:
 
 class FragmentShader:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/Shader.html
+		https://moderngl.github.io/Shader.html
 	'''
 
 	def __init__(self, source):
@@ -107,7 +107,7 @@ class FragmentShader:
 
 class GeometryShader:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/Shader.html
+		https://moderngl.github.io/Shader.html
 	'''
 
 	def __init__(self, source):
@@ -122,7 +122,7 @@ class GeometryShader:
 
 class TessEvaluationShader:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/Shader.html
+		https://moderngl.github.io/Shader.html
 	'''
 
 	def __init__(self, source):
@@ -137,7 +137,7 @@ class TessEvaluationShader:
 
 class TessControlShader:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/Shader.html
+		https://moderngl.github.io/Shader.html
 	'''
 
 	def __init__(self, source):
@@ -152,7 +152,7 @@ class TessControlShader:
 
 class VertexArray:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/VertexArray.html
+		https://moderngl.github.io/VertexArray.html
 	'''
 
 	def __init__(self, program, content, index_buffer = None, skip_errors = False):
@@ -173,7 +173,7 @@ class VertexArray:
 
 class SimpleVertexArray:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/VertexArray.html
+		https://moderngl.github.io/VertexArray.html
 	'''
 
 	def __init__(self, program, buffer, format, attributes, index_buffer = None, skip_errors = False):
@@ -194,7 +194,7 @@ class SimpleVertexArray:
 
 class Framebuffer:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/Framebuffer.html
+		https://moderngl.github.io/Framebuffer.html
 	'''
 
 	def __init__(self, attachments):
@@ -207,7 +207,7 @@ class Framebuffer:
 
 class Renderbuffer:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/Renderbuffer.html
+		https://moderngl.github.io/Renderbuffer.html
 	'''
 
 	def __init__(self, size, components, floats = True):
@@ -220,7 +220,7 @@ class Renderbuffer:
 
 class DepthRenderbuffer:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/DepthRenderbuffer.html
+		https://moderngl.github.io/DepthRenderbuffer.html
 	'''
 
 	def __init__(self, size):
@@ -233,7 +233,7 @@ class DepthRenderbuffer:
 
 class Texture:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/Texture.html
+		https://moderngl.github.io/Texture.html
 	'''
 
 	def __init__(self, size, components, data = None, floats = False):
@@ -246,7 +246,7 @@ class Texture:
 
 class DepthTexture:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/DepthTexture.html
+		https://moderngl.github.io/DepthTexture.html
 	'''
 
 	def __init__(self, size, data = None):
@@ -259,17 +259,17 @@ class DepthTexture:
 
 class MultisampleRenderbuffer:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/MultisampleRenderbuffer.html
+		https://moderngl.github.io/MultisampleRenderbuffer.html
 	'''
 
 class MultisampleTexture:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/MultisampleTexture.html
+		https://moderngl.github.io/MultisampleTexture.html
 	'''
 
 class Context:
 	'''
-		https://cprogrammer1994.github.io/ModernGL/Context.html
+		https://moderngl.github.io/Context.html
 	'''
 
 	def __init__(self):
@@ -304,14 +304,14 @@ class Context:
 
 def create_context():
 	'''
-		https://cprogrammer1994.github.io/ModernGL/ModernGL.html#ModernGL.create_context
+		https://moderngl.github.io/ModernGL.html#ModernGL.create_context
 	'''
 
 	return Context()
 
 def create_standalone_context():
 	'''
-		https://cprogrammer1994.github.io/ModernGL/ModernGL.html#ModernGL.create_standalone_context
+		https://moderngl.github.io/ModernGL.html#ModernGL.create_standalone_context
 	'''
 
 	return Context()
