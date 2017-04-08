@@ -1,6 +1,8 @@
-from PIL import Image, ImageDraw, ImageFont
-import ModernGL, GLWindow
 import struct
+
+import GLWindow
+import ModernGL
+from PIL import Image, ImageDraw, ImageFont
 
 GLWindow.Init()
 
