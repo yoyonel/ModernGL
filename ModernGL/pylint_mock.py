@@ -1,3 +1,9 @@
+# pylint: disable=import-error
+# pylint: disable=line-too-long
+# pylint: disable=wildcard-import
+# pylint: disable=mixed-indentation
+# pylint: disable=bad-whitespace
+
 class Primitive:
 	'''
 		https://cprogrammer1994.github.io/ModernGL/Primitive.html
@@ -27,6 +33,8 @@ class Buffer:
 	def __init__(self, data, reserve = 0, dynamic = False):
 		'''
 		'''
+
+		self.size = 0
 	
 	def read(self, size, offset = 0):
 		'''
@@ -40,12 +48,25 @@ class Buffer:
 		'''
 		'''
 
+	def release(self):
+		'''
+		'''
+
 class Program:
 	'''
 		https://cprogrammer1994.github.io/ModernGL/Program.html
 	'''
 
 	def __init__(self, shaders, varyings = None):
+		'''
+		'''
+
+		self.uniforms = {}
+		self.uniform_blocks = {}
+		self.attributes = {}
+		self.varyings = {}
+
+	def release(self):
 		'''
 		'''
 
@@ -63,12 +84,24 @@ class VertexShader:
 		'''
 		'''
 
+		self.source = ''
+
+	def release(self):
+		'''
+		'''
+
 class FragmentShader:
 	'''
 		https://cprogrammer1994.github.io/ModernGL/Shader.html
 	'''
 
 	def __init__(self, source):
+		'''
+		'''
+
+		self.source = ''
+
+	def release(self):
 		'''
 		'''
 
@@ -81,6 +114,12 @@ class GeometryShader:
 		'''
 		'''
 
+		self.source = ''
+
+	def release(self):
+		'''
+		'''
+
 class TessEvaluationShader:
 	'''
 		https://cprogrammer1994.github.io/ModernGL/Shader.html
@@ -90,12 +129,24 @@ class TessEvaluationShader:
 		'''
 		'''
 
+		self.source = ''
+
+	def release(self):
+		'''
+		'''
+
 class TessControlShader:
 	'''
 		https://cprogrammer1994.github.io/ModernGL/Shader.html
 	'''
 
 	def __init__(self, source):
+		'''
+		'''
+
+		self.source = ''
+
+	def release(self):
 		'''
 		'''
 
@@ -116,6 +167,10 @@ class VertexArray:
 		'''
 		'''
 
+	def release(self):
+		'''
+		'''
+
 class SimpleVertexArray:
 	'''
 		https://cprogrammer1994.github.io/ModernGL/VertexArray.html
@@ -133,12 +188,20 @@ class SimpleVertexArray:
 		'''
 		'''
 
+	def release(self):
+		'''
+		'''
+
 class Framebuffer:
 	'''
 		https://cprogrammer1994.github.io/ModernGL/Framebuffer.html
 	'''
 
 	def __init__(self, attachments):
+		'''
+		'''
+
+	def release(self):
 		'''
 		'''
 
@@ -151,12 +214,20 @@ class Renderbuffer:
 		'''
 		'''
 
+	def release(self):
+		'''
+		'''
+
 class DepthRenderbuffer:
 	'''
 		https://cprogrammer1994.github.io/ModernGL/DepthRenderbuffer.html
 	'''
 
 	def __init__(self, size):
+		'''
+		'''
+
+	def release(self):
 		'''
 		'''
 
@@ -169,12 +240,20 @@ class Texture:
 		'''
 		'''
 
+	def release(self):
+		'''
+		'''
+
 class DepthTexture:
 	'''
 		https://cprogrammer1994.github.io/ModernGL/DepthTexture.html
 	'''
 
 	def __init__(self, size, data = None):
+		'''
+		'''
+
+	def release(self):
 		'''
 		'''
 
@@ -216,6 +295,10 @@ class Context:
 		self.MultisampleTexture = MultisampleTexture
 
 	def clear(self, r = 0, g = 0, b = 0, a = 0):
+		'''
+		'''
+
+	def release(self):
 		'''
 		'''
 

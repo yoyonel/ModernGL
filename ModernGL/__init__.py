@@ -2,17 +2,18 @@
 # pylint: disable=line-too-long
 # pylint: disable=wildcard-import
 # pylint: disable=mixed-indentation
+# pylint: disable=bad-whitespace
 
 '''
 	ModernGL
 '''
 
 try:
-	from pylint_mock import *
+	from ModernGL.pylint_mock import *
 except ImportError:
 	pass
 
-from .ModernGL import *
+from ModernGL.ModernGL import *
 
 def detect_format(program, attributes):
 	'''
