@@ -1,5 +1,7 @@
-import ModernGL, GLWindow
 import struct
+
+import GLWindow
+import ModernGL
 
 GLWindow.Init()
 

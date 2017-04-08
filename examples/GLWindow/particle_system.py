@@ -1,5 +1,9 @@
-import ModernGL, GLWindow
-import struct, random, math
+import math
+import random
+import struct
+
+import GLWindow
+import ModernGL
 
 GLWindow.Init()
 
