@@ -1,11 +1,20 @@
-language: python. c++
-python:
-  - "3.6"
+language: python
 
-# install:
-#  - pip install wheel
+sudo: false
+
+matrix:
+  fast_finish: true
+
+python:
+  - 3.6
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.8
+      - g++-4.8
 
 install:
-  - CC=gcc-4.8 CXX=g++-4.8 python setup.py build_ext
-
-# script: python setup.py build_ext
+  - CC=gcc-4.8 CXX=g++-4.8 python setup.py build_ext --inplace
