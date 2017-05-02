@@ -18,3 +18,5 @@ addons:
 
 install:
   - CC=gcc-4.8 CXX=g++-4.8 python setup.py build_ext --inplace
+
+script: pytest
