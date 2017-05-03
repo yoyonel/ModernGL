@@ -1,6 +1,10 @@
 language: python
 
-sudo: true
+os:
+  - linux
+  - osx
+
+sudo: false
 
 matrix:
   fast_finish: true
@@ -20,4 +24,4 @@ install:
   - CC=gcc-4.8 CXX=g++-4.8 python setup.py build_ext --inplace
 #  - python setup.py install
 
-script: python setup.py install
+script: pip install -e .
