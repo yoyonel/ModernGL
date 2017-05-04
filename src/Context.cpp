@@ -289,6 +289,60 @@ const char * MGLContext_copy_texture_doc = R"(
 	copy_texture()
 )";
 
+PyObject * MGLContext_read_pixels(MGLContext * self, PyObject * args, PyObject * kwargs) {
+	static const char * kwlist[] = {"x", "y", "width", "height", "components", "floats", 0};
+
+	int x = 0;
+	int y = 0;
+	int width = 0;
+	int height = 0;
+	int components = 3;
+	int floats = false;
+
+	int args_ok = PyArg_ParseTupleAndKeywords(
+		args,
+		kwargs,
+		"IIII|Ip",
+		(char **)kwlist,
+		&x,
+		&y,
+		&width,
+		&height
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (x < 0 || y < 0 || width <= 0 || height <= 0 || components < 1 || components > 4) {
+		MGLError * error = MGLError_New(TRACE, "range check error");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
+
+	int size = floats ? (width * height * 4) : (height * ((width * components + 3) & ~3));
+	int pixel_type = floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+
+	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
+	int format = formats[components];
+
+	PyObject * bytes = PyBytes_FromStringAndSize(0, size);
+	char * data = PyBytes_AS_STRING(bytes);
+	memset(data, 0, size);
+
+	const GLMethods & gl = self->gl;
+
+	// gl.Finish();
+	// Sometimes glReadPixels does not change the content of data
+	gl.ReadPixels(x, y, width, height, format, pixel_type, data);
+
+	return bytes;
+}
+
+const char * MGLContext_read_pixels_doc = R"(
+	read_pixels(x, y, width, height, components = 3, floats = False)
+)";
+
 MGLBuffer * MGLContext_Buffer(MGLContext * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"data", "reserve", "dynamic", 0};
 
@@ -1676,8 +1730,8 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"disable", (PyCFunction)MGLContext_disable, METH_VARARGS | METH_KEYWORDS, MGLContext_disable_doc},
 	{"finish", (PyCFunction)MGLContext_finish, METH_NOARGS, MGLContext_finish_doc},
 	{"copy_buffer", (PyCFunction)MGLContext_copy_buffer, METH_VARARGS | METH_KEYWORDS, MGLContext_copy_buffer_doc},
-	{"copy_texture", (PyCFunction)MGLContext_copy_texture_doc, METH_VARARGS | METH_KEYWORDS, MGLContext_copy_texture_doc},
-
+	{"copy_texture", (PyCFunction)MGLContext_copy_texture, METH_VARARGS | METH_KEYWORDS, MGLContext_copy_texture_doc},
+	{"read_pixels", (PyCFunction)MGLContext_read_pixels, METH_VARARGS | METH_KEYWORDS, MGLContext_read_pixels_doc},
 
 	{"Buffer", (PyCFunction)MGLContext_Buffer, METH_VARARGS | METH_KEYWORDS, MGLContext_Buffer_doc},
 	{"Texture", (PyCFunction)MGLContext_Texture, METH_VARARGS | METH_KEYWORDS, MGLContext_Texture_doc},
