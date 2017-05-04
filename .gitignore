@@ -1,8 +1,7 @@
 **/__pycache__
 **/Temp
 **/build
-
-dist
+**/dist
 
 .cache
 .vscode
