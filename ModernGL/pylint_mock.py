@@ -210,7 +210,7 @@ class Renderbuffer:
 		https://moderngl.github.io/Renderbuffer.html
 	'''
 
-	def __init__(self, size, components, floats = True):
+	def __init__(self, size, components = 4, floats = True):
 		'''
 		'''
 
@@ -237,6 +237,10 @@ class Texture:
 	'''
 
 	def __init__(self, size, components, data = None, floats = False):
+		'''
+		'''
+
+	def use(self, location = 0):
 		'''
 		'''
 
@@ -295,6 +299,14 @@ class Context:
 		self.MultisampleTexture = MultisampleTexture
 
 	def clear(self, r = 0, g = 0, b = 0, a = 0):
+		'''
+		'''
+
+	def enable(self, flag):
+		'''
+		'''
+
+	def disable(self, flag):
 		'''
 		'''
 
