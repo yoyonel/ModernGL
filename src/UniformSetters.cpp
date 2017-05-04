@@ -74,7 +74,7 @@ int MGLUniform_bvec3_value_setter(MGLUniform * self, PyObject * value) {
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 3) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 3 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -110,7 +110,7 @@ int MGLUniform_bvec4_value_setter(MGLUniform * self, PyObject * value) {
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 4 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -192,7 +192,7 @@ int MGLUniform_ivec3_value_setter(MGLUniform * self, PyObject * value) {
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 3) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 3 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -224,7 +224,7 @@ int MGLUniform_ivec4_value_setter(MGLUniform * self, PyObject * value) {
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 4 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -302,7 +302,7 @@ int MGLUniform_uvec3_value_setter(MGLUniform * self, PyObject * value) {
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 3) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 3 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -334,7 +334,7 @@ int MGLUniform_uvec4_value_setter(MGLUniform * self, PyObject * value) {
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 4 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -412,7 +412,7 @@ int MGLUniform_vec3_value_setter(MGLUniform * self, PyObject * value) {
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 3) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 3 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -444,7 +444,7 @@ int MGLUniform_vec4_value_setter(MGLUniform * self, PyObject * value) {
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 4 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -522,7 +522,7 @@ int MGLUniform_dvec3_value_setter(MGLUniform * self, PyObject * value) {
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 3) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 3 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -554,7 +554,7 @@ int MGLUniform_dvec4_value_setter(MGLUniform * self, PyObject * value) {
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 4 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -600,7 +600,7 @@ int MGLUniform_float_matrix_2x2_value_setter(MGLUniform * self, PyObject * value
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 4 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -632,7 +632,7 @@ int MGLUniform_float_matrix_2x3_value_setter(MGLUniform * self, PyObject * value
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 6) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 6 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -664,7 +664,7 @@ int MGLUniform_float_matrix_2x4_value_setter(MGLUniform * self, PyObject * value
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 8) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 8 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -696,7 +696,7 @@ int MGLUniform_float_matrix_3x2_value_setter(MGLUniform * self, PyObject * value
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 6) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 6 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -728,7 +728,7 @@ int MGLUniform_float_matrix_3x3_value_setter(MGLUniform * self, PyObject * value
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 9) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 9 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -760,7 +760,7 @@ int MGLUniform_float_matrix_3x4_value_setter(MGLUniform * self, PyObject * value
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 12) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 12 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -792,7 +792,7 @@ int MGLUniform_float_matrix_4x2_value_setter(MGLUniform * self, PyObject * value
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 8) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 8 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -824,7 +824,7 @@ int MGLUniform_float_matrix_4x3_value_setter(MGLUniform * self, PyObject * value
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 12) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 12 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -856,7 +856,7 @@ int MGLUniform_float_matrix_4x4_value_setter(MGLUniform * self, PyObject * value
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 16) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 16 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -888,7 +888,7 @@ int MGLUniform_double_matrix_2x2_value_setter(MGLUniform * self, PyObject * valu
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 4 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -920,7 +920,7 @@ int MGLUniform_double_matrix_2x3_value_setter(MGLUniform * self, PyObject * valu
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 6) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 6 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -952,7 +952,7 @@ int MGLUniform_double_matrix_2x4_value_setter(MGLUniform * self, PyObject * valu
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 8) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 8 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -984,7 +984,7 @@ int MGLUniform_double_matrix_3x2_value_setter(MGLUniform * self, PyObject * valu
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 6) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 6 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1016,7 +1016,7 @@ int MGLUniform_double_matrix_3x3_value_setter(MGLUniform * self, PyObject * valu
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 9) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 9 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1048,7 +1048,7 @@ int MGLUniform_double_matrix_3x4_value_setter(MGLUniform * self, PyObject * valu
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 12) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 12 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1080,7 +1080,7 @@ int MGLUniform_double_matrix_4x2_value_setter(MGLUniform * self, PyObject * valu
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 8) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 8 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1112,7 +1112,7 @@ int MGLUniform_double_matrix_4x3_value_setter(MGLUniform * self, PyObject * valu
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 12) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 12 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1144,7 +1144,7 @@ int MGLUniform_double_matrix_4x4_value_setter(MGLUniform * self, PyObject * valu
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 16) {
-		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 2 not %d", size);
+		MGLError * error = MGLError_New(TRACE, "value must be a tuple of size 16 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
