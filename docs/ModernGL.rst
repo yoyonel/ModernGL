@@ -26,7 +26,7 @@ ModernGL
 
 	MultisampleTexture <MultisampleTexture.rst>
 	MultisampleRenderbuffer <MultisampleRenderbuffer.rst>
-	
+
 	ComputeShader <ComputeShader.rst>
 
 	Constants <Constants.rst>

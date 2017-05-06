@@ -471,7 +471,7 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 				PyDict_SetItem(attributes, name, (PyObject *)matrix);
 
 			} else {
-				
+
 				MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
 				attrib->vertex_array = vertex_array;
 				attrib->location = program_attribute->location;

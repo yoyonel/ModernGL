@@ -693,4 +693,3 @@ extern "C" PyObject * initModernGL() {
 }
 
 #endif
-

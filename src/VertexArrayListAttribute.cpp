@@ -57,7 +57,7 @@ Py_ssize_t MGLVertexArrayListAttribute_tp_sequence_length(MGLVertexArrayListAttr
 
 PyObject * MGLVertexArrayListAttribute_tp_sequence_item(MGLVertexArrayListAttribute * self, Py_ssize_t key) {
 	PyObject * item = PyTuple_GetItem(self->content, key);
-	
+
 	if (item) {
 		Py_INCREF(item);
 	}

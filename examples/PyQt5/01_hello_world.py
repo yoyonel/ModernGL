@@ -25,7 +25,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 			'''),
 			self.ctx.FragmentShader('''
 				#version 330
-			
+
 				out vec4 color;
 
 				void main() {
@@ -48,4 +48,3 @@ app = QtWidgets.QApplication([])
 window = QGLControllerWidget()
 window.show()
 app.exec_()
-

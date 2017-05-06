@@ -768,7 +768,7 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 				while (node->shape == 'x') {
 					node = it.next();
 				}
-	
+
 				MGLAttribute * attribute = (MGLAttribute *)PyDict_GetItemString(program->attributes, name);
 
 				if (!attribute) {

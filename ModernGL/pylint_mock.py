@@ -35,7 +35,7 @@ class Buffer:
 		'''
 
 		self.size = 0
-	
+
 	def read(self, size, offset = 0):
 		'''
 		'''
