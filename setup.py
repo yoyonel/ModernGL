@@ -1,5 +1,8 @@
-from setuptools import setup, Extension
-import os, platform
+import glob
+import os
+import platform
+
+from setuptools import Extension, setup
 
 target = platform.system().lower()
 
@@ -25,12 +28,6 @@ extra_linker_args = {
 	'darwin': ['-framework', 'OpenGL', '-Wno-deprecated'],
 }
 
-def sources():
-	for path, folders, files in os.walk('src'):
-		for f in files:
-			if f.endswith('.cpp'):
-				yield os.path.join(path, f)
-
 ModernGL = Extension(
 	name = 'ModernGL.ModernGL',
 	include_dirs = ['src'],
@@ -38,7 +35,7 @@ ModernGL = Extension(
 	libraries = libraries[target],
 	extra_compile_args = extra_compile_args[target],
 	extra_link_args = extra_linker_args[target],
-	sources = list(sources()),
+	sources = glob.glob('src/**/*.cpp', recursive = True),
 )
 
 short_description = 'ModernGL: PyOpenGL alternative'
