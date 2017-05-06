@@ -9,5 +9,5 @@
 
 	Hello World!
 
-.. literalinclude:: ../../../examples/GLWindow/01_hello_world.py
+.. literalinclude:: ../../examples/GLWindow/01_hello_world.py
 	:linenos:

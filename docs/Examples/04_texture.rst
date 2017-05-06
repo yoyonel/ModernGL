@@ -9,5 +9,5 @@
 
 	Texture
 
-.. literalinclude:: ../../../examples/GLWindow/04_texture.py
+.. literalinclude:: ../../examples/GLWindow/04_texture.py
 	:linenos:

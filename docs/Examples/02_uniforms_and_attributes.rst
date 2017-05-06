@@ -9,5 +9,5 @@
 
 	Uniforms and Attributes
 
-.. literalinclude:: ../../../examples/GLWindow/02_uniforms_and_attributes.py
+.. literalinclude:: ../../examples/GLWindow/02_uniforms_and_attributes.py
 	:linenos:

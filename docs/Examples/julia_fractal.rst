@@ -9,5 +9,5 @@ Julia Fractal
 
 	Julia Fractal
 
-.. literalinclude:: ../../../examples/GLWindow/julia_fractal.py
+.. literalinclude:: ../../examples/GLWindow/julia_fractal.py
 	:linenos:

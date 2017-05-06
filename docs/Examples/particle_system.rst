@@ -9,5 +9,5 @@ Particle System
 
 	Particle System
 
-.. literalinclude:: ../../../examples/GLWindow/particle_system.py
+.. literalinclude:: ../../examples/GLWindow/particle_system.py
 	:linenos:

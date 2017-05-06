@@ -9,5 +9,5 @@
 
 	Blending
 
-.. literalinclude:: ../../../examples/GLWindow/03_blending.py
+.. literalinclude:: ../../examples/GLWindow/03_blending.py
 	:linenos:

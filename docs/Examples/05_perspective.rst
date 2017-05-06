@@ -9,5 +9,5 @@
 
 	Perspective projection
 
-.. literalinclude:: ../../../examples/GLWindow/05_perspective.py
+.. literalinclude:: ../../examples/GLWindow/05_perspective.py
 	:linenos:
