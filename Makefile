@@ -4,16 +4,21 @@ else
 	PYTHON = python3
 endif
 
-all:
-	$(PYTHON) setup.py install
+all: build
 
-docs:
-	cd docs && $(MAKE)
+build:
+	$(PYTHON) setup.py build_ext -b .
+
+docs: build
+	$(PYTHON) setup.py build_sphinx
 
 wheel:
 	$(PYTHON) setup.py bdist_wheel
 
-test:
+test: build
 	$(PYTHON) -m pytest
 
-.PHONY: all docs wheel test
+install:
+	$(PYTHON) setup.py install
+
+.PHONY: all build docs wheel install test
