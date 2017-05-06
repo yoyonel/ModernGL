@@ -76,6 +76,8 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 		return 0;
 	}
 
+	Py_INCREF(ctx); // TODO: why was this line missing?
+
 	return ctx;
 }
 

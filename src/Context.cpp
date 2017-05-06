@@ -2060,7 +2060,12 @@ void MGLContext_Initialize(MGLContext * self) {
 
 	GLMethods & gl = self->gl;
 
-	gl.load();
+	if (!gl.load()) {
+		// TODO: wich one?
+		MGLError * error = MGLError_New(TRACE, "Some OpenGL functions are missing (not supported)");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return;
+	}
 
 	gl.BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
