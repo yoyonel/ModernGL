@@ -47,8 +47,8 @@ void * LoadMethod(const char * method) {
 void * LoadMethod(const char * method) {
 	NSSymbol symbol = 0;
 
-	if (NSIsSymbolNameDefined(name)) {
-		symbol = NSLookupAndBindSymbol(name);
+	if (NSIsSymbolNameDefined(method)) {
+		symbol = NSLookupAndBindSymbol(method);
 	}
 
 	return symbol ? NSAddressOfSymbol(symbol) : 0;
