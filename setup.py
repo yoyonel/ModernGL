@@ -35,7 +35,7 @@ ModernGL = Extension(
 	libraries = libraries[target],
 	extra_compile_args = extra_compile_args[target],
 	extra_link_args = extra_linker_args[target],
-	sources = glob.glob('src/**/*.cpp', recursive = True),
+	sources = glob.glob('src/*.cpp'),
 )
 
 short_description = 'ModernGL: PyOpenGL alternative'
