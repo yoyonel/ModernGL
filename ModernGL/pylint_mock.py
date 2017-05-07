@@ -25,12 +25,17 @@ LINES_ADJACENCY = Primitive()
 TRIANGLE_STRIP_ADJACENCY = Primitive()
 TRIANGLES_ADJACENCY = Primitive()
 
+BLEND = int
+DEPTH_TEST = int
+CULL_FACE = int
+MULTISAMPLE = int
+
 class Buffer:
 	'''
 		https://moderngl.github.io/Buffer.html
 	'''
 
-	def __init__(self, data, reserve = 0, dynamic = False):
+	def __init__(self, data = None, reserve = 0, dynamic = False):
 		'''
 		'''
 
@@ -312,6 +317,11 @@ class Context:
 
 	def release(self):
 		'''
+		'''
+
+	def copy_buffer(self, dst, src, size, read_offset, write_offset):
+		'''
+			copy_buffer(dst, src, size = -1, read_offset = 0, write_offset = 0)
 		'''
 
 def create_context():
