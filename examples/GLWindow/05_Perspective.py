@@ -3,8 +3,9 @@ import struct
 import GLWindow
 import ModernGL
 
-GLWindow.Init()
+# Window & Context
 
+wnd = GLWindow.create_window()
 ctx = ModernGL.create_context()
 
 vert = ctx.VertexShader('''
@@ -61,7 +62,7 @@ frag = ctx.FragmentShader('''
 	}
 ''')
 
-width, height = GLWindow.GetSize()
+width, height = wnd.size
 
 prog = ctx.Program([vert, frag])
 
@@ -83,6 +84,7 @@ for i in range(0, 65):
 vbo = ctx.Buffer(grid)
 vao = ctx.SimpleVertexArray(prog, vbo, '3f', ['vert'])
 
-while GLWindow.Update():
+while wnd.update():
+	ctx.viewport = wnd.viewport
 	ctx.clear(240, 240, 240)
 	vao.render(ModernGL.LINES, 65 * 4)

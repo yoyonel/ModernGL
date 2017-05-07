@@ -5,8 +5,9 @@ import struct
 import GLWindow
 import ModernGL
 
-GLWindow.Init()
+# Window & Context
 
+wnd = GLWindow.create_window()
 ctx = ModernGL.create_context()
 
 tvert = ctx.VertexShader('''
@@ -70,7 +71,8 @@ idx = 0
 
 ctx.point_size = 5.0
 
-while GLWindow.Update():
+while wnd.update():
+	ctx.viewport = wnd.viewport
 	ctx.clear(240, 240, 240)
 
 	for i in range(8):

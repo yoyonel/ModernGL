@@ -3,10 +3,9 @@ import struct
 import GLWindow
 import ModernGL
 
-GLWindow.Init()
+# Window & Context
 
-# Context
-
+wnd = GLWindow.create_window()
 ctx = ModernGL.create_context()
 
 # Shaders & Program
@@ -49,7 +48,7 @@ prog = ctx.Program([
 scale = prog.uniforms['scale']
 rotation = prog.uniforms['rotation']
 
-width, height = GLWindow.GetSize()
+width, height = wnd.size
 scale.value = (height / width * 0.75, 0.75)
 
 # Buffer
@@ -71,13 +70,8 @@ vao = ctx.SimpleVertexArray(prog, vbo, '2f3f', ['vert', 'vert_color'])
 
 # Main loop
 
-while GLWindow.Update():
+while wnd.update():
+	ctx.viewport = wnd.viewport
 	ctx.clear(240, 240, 240)
-	rotation.value = GLWindow.GetTime()
+	rotation.value = wnd.time
 	vao.render()
-
-# Cleanup
-
-vao.release()
-vbo.release()
-prog.release()

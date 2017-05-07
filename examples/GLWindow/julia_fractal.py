@@ -3,8 +3,9 @@ import struct
 import GLWindow
 import ModernGL
 
-GLWindow.Init()
+# Window & Context
 
+wnd = GLWindow.create_window()
 ctx = ModernGL.create_context()
 
 vert = ctx.VertexShader('''
@@ -61,9 +62,12 @@ prog.uniforms['iter'].value = 100
 
 x, y = (0.49, 0.32)
 
-while GLWindow.Update():
+wnd.grab_mouse(True)
+
+while wnd.update():
+	ctx.viewport = wnd.viewport
 	ctx.clear(240, 240, 240)
-	mx, my, _ = GLWindow.GetMouse()
+	mx, my = wnd.mouse_delta
 	x -= mx / 100
 	y -= my / 100
 

@@ -4,10 +4,9 @@ import GLWindow
 import ModernGL
 from PIL import Image, ImageDraw, ImageFont
 
-GLWindow.Init()
+# Window & Context
 
-# Context
-
+wnd = GLWindow.create_window()
 ctx = ModernGL.create_context()
 
 # Using Pillow to create a Texture
@@ -58,7 +57,7 @@ prog = ctx.Program([
 	'''),
 ])
 
-prog.uniforms['Screen'].value = GLWindow.GetSize()
+prog.uniforms['Screen'].value = wnd.size
 
 # Buffer
 
@@ -82,13 +81,8 @@ vao = ctx.SimpleVertexArray(prog, vbo, '2f2f', ['vert', 'texcoord'])
 
 # Main loop
 
-while GLWindow.Update():
+while wnd.update():
+	ctx.viewport = wnd.viewport
 	ctx.clear(240, 240, 240)
 	ctx.enable(ModernGL.BLEND)
 	vao.render(ModernGL.TRIANGLE_STRIP)
-
-# Cleanup
-
-vao.release()
-vbo.release()
-prog.release()

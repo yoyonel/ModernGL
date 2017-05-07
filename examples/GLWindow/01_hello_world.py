@@ -3,10 +3,9 @@ import struct
 import GLWindow
 import ModernGL
 
-GLWindow.Init()
+# Window & Context
 
-# Context
-
+wnd = GLWindow.create_window()
 ctx = ModernGL.create_context()
 
 # Shaders & Program
@@ -46,12 +45,7 @@ vao = ctx.SimpleVertexArray(prog, vbo, '2f', ['vert'])
 
 # Main loop
 
-while GLWindow.Update():
+while wnd.update():
+	ctx.viewport = wnd.viewport
 	ctx.clear(240, 240, 240)
 	vao.render()
-
-# Cleanup
-
-vao.release()
-vbo.release()
-prog.release()
