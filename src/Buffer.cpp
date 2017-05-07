@@ -48,7 +48,7 @@ MGLBufferAccess * MGLBuffer_access(MGLBuffer * self, PyObject * args, PyObject *
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"|$iip",
+		"|iip",
 		(char **)kwlist,
 		&size,
 		&offset,
@@ -99,7 +99,7 @@ PyObject * MGLBuffer_read(MGLBuffer * self, PyObject * args, PyObject * kwargs) 
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"|I$I",
+		"|II",
 		(char **)kwlist,
 		&size,
 		&offset
@@ -162,7 +162,7 @@ PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args, PyObject * kwargs)
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"y#|$I",
+		"y#|I",
 		(char **)kwlist,
 		&data,
 		&size,

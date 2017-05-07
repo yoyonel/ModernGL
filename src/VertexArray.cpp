@@ -53,7 +53,7 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args, PyObjec
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"|O!I$II",
+		"|O!III",
 		(char **)kwlist,
 		&MGLPrimitive_Type,
 		&mode,
@@ -128,7 +128,7 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args, PyOb
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"O!|O!I$IIO!",
+		"O!|O!III",
 		(char **)kwlist,
 		&MGLBuffer_Type,
 		&output,

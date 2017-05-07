@@ -85,7 +85,7 @@ PyObject * MGLBufferAccess_read(MGLBufferAccess * self, PyObject * args, PyObjec
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"|I$I",
+		"|II",
 		(char **)kwlist,
 		&size,
 		&offset
@@ -139,7 +139,7 @@ PyObject * MGLBufferAccess_write(MGLBufferAccess * self, PyObject * args, PyObje
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"y#|$I",
+		"y#|I",
 		(char **)kwlist,
 		&data,
 		&size,

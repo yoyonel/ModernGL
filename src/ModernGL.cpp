@@ -45,7 +45,7 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"|(II)$O",
+		"|(II)O",
 		(char **)kwlist,
 		&width,
 		&height,
@@ -99,7 +99,7 @@ MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs)
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"|$O",
+		"|O",
 		(char **)kwlist,
 		&require
 	);

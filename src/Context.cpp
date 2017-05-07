@@ -202,7 +202,7 @@ PyObject * MGLContext_copy_buffer(MGLContext * self, PyObject * args, PyObject *
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"O!O!|I$II",
+		"O!O!|III",
 		(char **)kwlist,
 		&MGLBuffer_Type,
 		&dst,
@@ -353,7 +353,7 @@ MGLBuffer * MGLContext_Buffer(MGLContext * self, PyObject * args, PyObject * kwa
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"|O$Ip",
+		"|OIp",
 		(char **)kwlist,
 		&data,
 		&reserve,
@@ -454,7 +454,7 @@ MGLTexture * MGLContext_Texture(MGLContext * self, PyObject * args, PyObject * k
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"(II)|IO$p",
+		"(II)|IOp",
 		(char **)kwlist,
 		&width,
 		&height,
@@ -643,7 +643,7 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"O!O!|O$p",
+		"O!O!|Op",
 		(char **)kwlist,
 		&MGLProgram_Type,
 		&program,
@@ -930,7 +930,7 @@ MGLVertexArray * MGLContext_SimpleVertexArray(MGLContext * self, PyObject * args
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"O!O!O!O!|O$O!",
+		"O!O!O!O!|OO!",
 		(char **)kwlist,
 		&MGLProgram_Type,
 		&program,
@@ -1476,7 +1476,7 @@ MGLRenderbuffer * MGLContext_Renderbuffer(MGLContext * self, PyObject * args, Py
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"(II)|I$p",
+		"(II)|Ip",
 		(char **)kwlist,
 		&width,
 		&height,

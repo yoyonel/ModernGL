@@ -61,7 +61,7 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args, PyObject 
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"(II)|(II)$Ip",
+		"(II)|(II)Ip",
 		(char **)kwlist,
 		&width,
 		&height,
