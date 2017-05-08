@@ -19,7 +19,7 @@ libraries = {
 extra_compile_args = {
 	'windows': [],
 	'linux': ['-std=c++11'],
-	'darwin': ['-std=c++11'],
+	'darwin': ['-std=c++11'], # -Wno-deprecated-declarations
 }
 
 extra_linker_args = {
