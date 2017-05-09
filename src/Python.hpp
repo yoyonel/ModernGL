@@ -6,7 +6,6 @@
 
 #else
 
-// TODO: fix memleak for python2
 #define PyUnicode_AsUTF8(obj) PyUnicode_AS_DATA(PyUnicode_AsASCIIString(obj))
 
 #define PyException_HEAD \
