@@ -569,6 +569,16 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		// 	continue;
 		// }
 
+		// gl.GetUniformBlockIndex
+		// GLuint indices[4];
+		// glGetUniformIndices(programHandle, 4, names, indices);
+
+		// GLint offset[4];
+		// glGetActiveUniformsiv(programHandle, 4, indices,
+		// GL_UNIFORM_OFFSET, offset);
+
+		// glBindBufferBase( GL_UNIFORM_BUFFER, blockIndex, uboHandle );
+
 		uniform_block->number = i;
 		uniform_block->program_obj = program->program_obj;
 		uniform_block->name = PyUnicode_FromStringAndSize(name, name_len);
