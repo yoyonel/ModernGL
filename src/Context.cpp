@@ -2031,7 +2031,7 @@ void MGLContext_Initialize(MGLContext * self) {
 	GLMethods & gl = self->gl;
 
 	if (!gl.load()) {
-		// TODO: wich one?
+		// TODO: which one?
 		MGLError * error = MGLError_New(TRACE, "Some OpenGL functions are missing (not supported)");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return;
