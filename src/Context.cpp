@@ -260,35 +260,6 @@ const char * MGLContext_copy_buffer_doc = R"(
 		``None``
 )";
 
-PyObject * MGLContext_copy_texture(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"value", 0};
-
-	// TODO:
-
-	int value = 0;
-
-	int args_ok = PyArg_ParseTupleAndKeywords(
-		args,
-		kwargs,
-		"|i",
-		(char **)kwlist,
-		&value
-	);
-
-	if (!args_ok) {
-		return 0;
-	}
-
-	PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	return 0;
-
-	// Py_RETURN_NONE;
-}
-
-const char * MGLContext_copy_texture_doc = R"(
-	copy_texture()
-)";
-
 PyObject * MGLContext_read_pixels(MGLContext * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"x", "y", "width", "height", "components", "floats", 0};
 
@@ -1730,7 +1701,6 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"disable", (PyCFunction)MGLContext_disable, METH_VARARGS | METH_KEYWORDS, MGLContext_disable_doc},
 	{"finish", (PyCFunction)MGLContext_finish, METH_NOARGS, MGLContext_finish_doc},
 	{"copy_buffer", (PyCFunction)MGLContext_copy_buffer, METH_VARARGS | METH_KEYWORDS, MGLContext_copy_buffer_doc},
-	{"copy_texture", (PyCFunction)MGLContext_copy_texture, METH_VARARGS | METH_KEYWORDS, MGLContext_copy_texture_doc},
 	{"read_pixels", (PyCFunction)MGLContext_read_pixels, METH_VARARGS | METH_KEYWORDS, MGLContext_read_pixels_doc},
 
 	{"Buffer", (PyCFunction)MGLContext_Buffer, METH_VARARGS | METH_KEYWORDS, MGLContext_Buffer_doc},
