@@ -2,6 +2,7 @@ import unittest
 
 import ModernGL
 
+
 class TestContext(unittest.TestCase):
 
 	def test_context(self):

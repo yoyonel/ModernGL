@@ -1,6 +1,7 @@
 import unittest, importlib
 
-class TestImport(unittest.TestCase):
+
+class TestCase(unittest.TestCase):
 
 	def test_import(self):
 		importlib.import_module('ModernGL')

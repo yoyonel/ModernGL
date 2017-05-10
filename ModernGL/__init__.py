@@ -8,6 +8,8 @@
 	ModernGL
 '''
 
+version = '3.1.5'
+
 try:
 	from ModernGL.pylint_mock import *
 except ImportError:
