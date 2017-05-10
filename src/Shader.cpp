@@ -74,45 +74,15 @@ PyObject * MGLShader_get_source(MGLShader * self, void * closure) {
 	return self->source;
 }
 
-char MGLShader_source_doc[] = R"(
-	source
-
-	The source code of the shader.
-)";
-
 PyObject * MGLShader_get_typename(MGLShader * self, void * closure) {
 	return PyUnicode_FromFormat("%s", SHADER_NAME[self->shader_slot]);
 }
 
-char MGLShader_typename_doc[] = R"(
-	typename
-
-	The type of the shader. The return value is a string.
-
-		- ``'VertexShader'``
-		- ``'FragmentShader'``
-		- ``'GeometryShader'``
-		- ``'TessEvaluationShader'``
-		- ``'TessControlShader'``
-)";
-
 PyGetSetDef MGLShader_tp_getseters[] = {
-	{(char *)"source", (getter)MGLShader_get_source, 0, MGLShader_source_doc, 0},
-	{(char *)"typename", (getter)MGLShader_get_typename, 0, MGLShader_typename_doc, 0},
+	{(char *)"source", (getter)MGLShader_get_source, 0, 0, 0},
+	{(char *)"typename", (getter)MGLShader_get_typename, 0, 0, 0},
 	{0},
 };
-
-const char * MGLShader_tp_doc = R"(
-	Shader
-
-	Create a :py:class:`~ModernGL.Shader` using:
-
-		- :py:meth:`~ModernGL.Context.VertexShader`
-		- :py:meth:`~ModernGL.Context.FragmentShader`
-		- :py:meth:`~ModernGL.Context.GeometryShader`
-		- :py:meth:`~ModernGL.Context.TessEvaluationShader`
-		- :py:meth:`~ModernGL.Context.TessControlShader`
-)";
 
 PyTypeObject MGLShader_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -135,7 +105,7 @@ PyTypeObject MGLShader_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLShader_tp_doc,                                       // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

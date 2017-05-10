@@ -60,22 +60,15 @@ PyObject * MGLContext_tp_str(MGLContext * self) {
 // 	Py_RETURN_NONE;
 // }
 
-const char * MGLContext_make_current_doc = R"(
-)";
-
 PyObject * MGLContext_clear(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"r", "g", "b", "a", 0};
+	int r;
+	int g;
+	int b;
+	int a;
 
-	int r = 0;
-	int g = 0;
-	int b = 0;
-	int a = 0;
-
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
-		"|BBBB",
-		(char **)kwlist,
+		"BBBB",
 		&r,
 		&g,
 		&b,
@@ -95,29 +88,12 @@ PyObject * MGLContext_clear(MGLContext * self, PyObject * args, PyObject * kwarg
 	Py_RETURN_NONE;
 }
 
-const char * MGLContext_clear_doc = R"(
-	clear(r = 0, g = 0, b = 0, a = 0)
-
-	Clear the framebuffer.
-
-	Args:
-		optional r, g, b: color components.
-		optional a: alpha component.
-
-	Returns:
-		``None``
-)";
-
 PyObject * MGLContext_enable(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"flags", 0};
-
 	MGLEnableFlag * flags;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
 		"O!",
-		(char **)kwlist,
 		&MGLEnableFlag_Type,
 		&flags
 	);
@@ -131,28 +107,12 @@ PyObject * MGLContext_enable(MGLContext * self, PyObject * args, PyObject * kwar
 	Py_RETURN_NONE;
 }
 
-const char * MGLContext_enable_doc = R"(
-	enable(flags)
-
-	Enable flags.
-
-	Args:
-		flags: flags to enable.
-
-	Returns:
-		``None``
-)";
-
 PyObject * MGLContext_disable(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"flags", 0};
-
 	MGLEnableFlag * flags;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
 		"O!",
-		(char **)kwlist,
 		&MGLEnableFlag_Type,
 		&flags
 	);
@@ -166,44 +126,22 @@ PyObject * MGLContext_disable(MGLContext * self, PyObject * args, PyObject * kwa
 	Py_RETURN_NONE;
 }
 
-const char * MGLContext_disable_doc = R"(
-	disable(flags)
-
-	Disable flags.
-
-	Args:
-		flags: flags to disable.
-
-	Returns:
-		``None``
-)";
-
 PyObject * MGLContext_finish(MGLContext * self) {
 	self->gl.Finish();
 	Py_RETURN_NONE;
 }
 
-const char * MGLContext_finish_doc = R"(
-	finish()
-
-	Not used.
-)";
-
 PyObject * MGLContext_copy_buffer(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"dst", "src", "size", "read_offset", "write_offset", 0};
-
 	MGLBuffer * dst;
 	MGLBuffer * src;
 
-	int size = -1;
-	int read_offset = 0;
-	int write_offset = 0;
+	int size;
+	int read_offset;
+	int write_offset;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
-		"O!O!|III",
-		(char **)kwlist,
+		"O!O!III",
 		&MGLBuffer_Type,
 		&dst,
 		&MGLBuffer_Type,
@@ -242,43 +180,23 @@ PyObject * MGLContext_copy_buffer(MGLContext * self, PyObject * args, PyObject *
 	Py_RETURN_NONE;
 }
 
-const char * MGLContext_copy_buffer_doc = R"(
-	copy_buffer(dst, src, size, read_offset = 0, write_offset = 0)
-
-	Copy buffer content.
-
-	Args:
-		dst: Destination buffer.
-		src: Source buffer.
-		optional size: Size to copy.
-
-	Keyword Args:
-		read_offset: Read offset.
-		write_offset: Write offset.
-
-	Returns:
-		``None``
-)";
-
 PyObject * MGLContext_read_pixels(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"x", "y", "width", "height", "components", "floats", 0};
+	int x;
+	int y;
+	int width;
+	int height;
+	int components;
+	int floats;
 
-	int x = 0;
-	int y = 0;
-	int width = 0;
-	int height = 0;
-	int components = 3;
-	int floats = false;
-
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
-		"IIII|Ip",
-		(char **)kwlist,
+		"IIIIIp",
 		&x,
 		&y,
 		&width,
-		&height
+		&height,
+		&components,
+		&floats
 	);
 
 	if (!args_ok) {
@@ -310,22 +228,14 @@ PyObject * MGLContext_read_pixels(MGLContext * self, PyObject * args, PyObject *
 	return bytes;
 }
 
-const char * MGLContext_read_pixels_doc = R"(
-	read_pixels(x, y, width, height, components = 3, floats = False)
-)";
-
 MGLBuffer * MGLContext_Buffer(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"data", "reserve", "dynamic", 0};
+	PyObject * data;
+	int reserve;
+	int dynamic;
 
-	PyObject * data = Py_None;
-	int reserve = 0;
-	int dynamic = false;
-
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
-		"|OIp",
-		(char **)kwlist,
+		"OIp",
 		&data,
 		&reserve,
 		&dynamic
@@ -394,39 +304,19 @@ MGLBuffer * MGLContext_Buffer(MGLContext * self, PyObject * args, PyObject * kwa
 	return buffer;
 }
 
-const char * MGLContext_Buffer_doc = R"(
-	Buffer(data, reserve = 0, dynamic = False)
-
-	Create a Buffer.
-
-	Args:
-		data: Content of the new buffer.
-
-	Keyword Args:
-		reserve: The number of bytes to reserve.
-		dynamic: Treat buffer as dynamic.
-
-	Returns:
-		:py:class:`Buffer`
-)";
-
 MGLTexture * MGLContext_Texture(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"size", "components", "data", "floats", 0};
-
 	int width;
 	int height;
 
-	int components = 3;
+	int components;
 
-	PyObject * data = Py_None;
+	PyObject * data;
 
-	int floats = false;
+	int floats;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
-		"(II)|IOp",
-		(char **)kwlist,
+		"(II)IOp",
 		&width,
 		&height,
 		&components,
@@ -499,36 +389,15 @@ MGLTexture * MGLContext_Texture(MGLContext * self, PyObject * args, PyObject * k
 	return texture;
 }
 
-const char * MGLContext_Texture_doc = R"(
-	Texture(size, components, data = None, floats = False)
-
-	Create a Texture.
-
-	Args:
-		size: Width, height.
-		components: The number of components 1, 2, 3 or 4.
-		optional data: Content of the image.
-
-	Keyword Args:
-		floats: Use floating point precision.
-
-	Returns:
-		:py:class:`Texture`
-)";
-
 MGLTexture * MGLContext_DepthTexture(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"size", "data", 0};
-
 	int width;
 	int height;
 
-	PyObject * data = Py_None;
+	PyObject * data;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
-		"(II)|O",
-		(char **)kwlist,
+		"(II)O",
 		&width,
 		&height,
 		&data
@@ -590,32 +459,15 @@ MGLTexture * MGLContext_DepthTexture(MGLContext * self, PyObject * args, PyObjec
 	return texture;
 }
 
-const char * MGLContext_DepthTexture_doc = R"(
-	DepthTexture(size, data = None)
-
-	Create a DepthTexture.
-
-	Args:
-		size: The width and height.
-		optional data: The pixels.
-
-	Returns:
-		:py:class:`Texture`
-)";
-
 MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"program", "content", "index_buffer", "skip_errors", 0};
-
 	MGLProgram * program;
 	PyObject * content;
-	MGLBuffer * index_buffer = (MGLBuffer *)Py_None;
-	int skip_errors = false;
+	MGLBuffer * index_buffer;
+	int skip_errors;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
-		"O!O!|Op",
-		(char **)kwlist,
+		"O!O!Op",
 		&MGLProgram_Type,
 		&program,
 		&PyList_Type,
@@ -871,115 +723,13 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 	return array;
 }
 
-const char * MGLContext_VertexArray_doc = R"(
-	VertexArray(program, content, index_buffer = None, skip_errors = False)
-
-	Create a VertexArray.
-
-	Args:
-		program: The program used by :py:meth:`~VertexArray.render` and :py:meth:`~VertexArray.transform`.
-		content: A list of (buffer, format, attributes).
-		optional index_buffer: An index buffer.
-
-	Keyword Args:
-		skip_errors: Ignore missing attributes.
-
-	Returns:
-		:py:class:`VertexArray`
-)";
-
-MGLVertexArray * MGLContext_SimpleVertexArray(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"program", "buffer", "format", "attributes", "index_buffer", "skip_errors", 0};
-
-	PyObject * program;
-	PyObject * buffer;
-	PyObject * format;
-	PyObject * attributes;
-	PyObject * index_buffer = Py_None;
-	PyObject * skip_errors = Py_False;
-
-	int args_ok = PyArg_ParseTupleAndKeywords(
-		args,
-		kwargs,
-		"O!O!O!O!|OO!",
-		(char **)kwlist,
-		&MGLProgram_Type,
-		&program,
-		&MGLBuffer_Type,
-		&buffer,
-		&PyUnicode_Type,
-		&format,
-		&PyList_Type,
-		&attributes,
-		&index_buffer,
-		&PyBool_Type,
-		&skip_errors
-	);
-
-	if (!args_ok) {
-		return 0;
-	}
-
-	Py_INCREF(program);
-	Py_INCREF(buffer);
-	Py_INCREF(format);
-	Py_INCREF(attributes);
-	Py_INCREF(index_buffer);
-
-	PyObject * new_tuple = PyTuple_New(3);
-	PyTuple_SET_ITEM(new_tuple, 0, buffer);
-	PyTuple_SET_ITEM(new_tuple, 1, format);
-	PyTuple_SET_ITEM(new_tuple, 2, attributes);
-
-	PyObject * content = PyList_New(1);
-	PyList_SET_ITEM(content, 0, new_tuple);
-
-	PyObject * new_args = PyTuple_New(3);
-	PyTuple_SET_ITEM(new_args, 0, program);
-	PyTuple_SET_ITEM(new_args, 1, content);
-	PyTuple_SET_ITEM(new_args, 2, index_buffer);
-
-	PyObject * new_kwargs = PyDict_New();
-	PyDict_SetItemString(new_kwargs, "skip_errors", skip_errors);
-
-	MGLVertexArray * result = MGLContext_VertexArray(self, new_args, new_kwargs);
-
-	Py_DECREF(new_args);
-	Py_DECREF(new_kwargs);
-
-	return result;
-}
-
-const char * MGLContext_SimpleVertexArray_doc = R"(
-	SimpleVertexArray(program, buffer, format, attributes, index_buffer = None, skip_errors = False)
-
-	Create a SimpleVertexArray.
-
-	Args:
-		program: The program used by :py:meth:`~VertexArray.render` and :py:meth:`~VertexArray.transform`.
-		buffer: The buffer.
-		format: The buffer format string.
-		attributes: A list of attribute names.
-		optional index_buffer: An index buffer.
-
-	Keyword Args:
-		skip_errors: Ignore missing attributes.
-
-	Returns:
-		:py:class:`VertexArray`
-)";
-
 MGLProgram * MGLContext_Program(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"shaders", "varyings", 0};
-
 	PyObject * shaders;
-	PyObject * varyings = Py_None;
+	PyObject * varyings;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
-		"O|O",
-		(char **)kwlist,
+		"OO",
 		&shaders,
 		&varyings
 	);
@@ -1071,30 +821,13 @@ MGLProgram * MGLContext_Program(MGLContext * self, PyObject * args, PyObject * k
 	return program;
 }
 
-const char * MGLContext_Program_doc = R"(
-	Program(shaders, varyings = None)
-
-	Create a Program.
-
-	Args:
-		shaders: A list of :py:class:`Shader` objects.
-		optional varyings: A list of varying names.
-
-	Returns:
-		:py:class:`Program`
-)";
-
 template <int ShaderSlot>
 MGLShader * MGLContext_Shader(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"source", 0};
-
 	PyObject * source;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
 		"O",
-		(char **)kwlist,
 		&source
 	);
 
@@ -1130,76 +863,12 @@ MGLShader * MGLContext_Shader(MGLContext * self, PyObject * args, PyObject * kwa
 	return shader;
 }
 
-const char * MGLContext_VertexShader_doc = R"(
-	VertexShader(source)
-
-	Create a Shader.
-
-	Args:
-		source: The source code in GLSL.
-
-	Returns:
-		:py:class:`Shader`
-)";
-
-const char * MGLContext_FragmentShader_doc = R"(
-	FragmentShader(source)
-
-	Create a Shader.
-
-	Args:
-		source: The source code in GLSL.
-
-	Returns:
-		:py:class:`Shader`
-)";
-
-const char * MGLContext_GeometryShader_doc = R"(
-	GeometryShader(source)
-
-	Create a Shader.
-
-	Args:
-		source: The source code in GLSL.
-
-	Returns:
-		:py:class:`Shader`
-)";
-
-const char * MGLContext_TessEvaluationShader_doc = R"(
-	TessEvaluationShader(source)
-
-	Create a Shader.
-
-	Args:
-		source: The source code in GLSL.
-
-	Returns:
-		:py:class:`Shader`
-)";
-
-const char * MGLContext_TessControlShader_doc = R"(
-	TessControlShader(source)
-
-	Create a Shader.
-
-	Args:
-		source: The source code in GLSL.
-
-	Returns:
-		:py:class:`Shader`
-)";
-
 MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"attachments", 0};
-
 	PyObject * attachments;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
 		"O",
-		(char **)kwlist,
 		&attachments
 	);
 
@@ -1422,33 +1091,17 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 	return framebuffer;
 }
 
-const char * MGLContext_Framebuffer_doc = R"(
-	Framebuffer(attachments)
-
-	Create a Framebuffer.
-
-	Args:
-		attachments: A list of :py:class:`Texture` or :py:class:`Renderbuffer` objects.
-
-	Returns:
-		:py:class:`Framebuffer`
-)";
-
 MGLRenderbuffer * MGLContext_Renderbuffer(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"size", "components", "floats", 0};
-
 	int width;
 	int height;
 
-	int components = 4;
+	int components;
 
-	int floats = true;
+	int floats;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
-		"(II)|Ip",
-		(char **)kwlist,
+		"(II)Ip",
 		&width,
 		&height,
 		&components,
@@ -1492,33 +1145,13 @@ MGLRenderbuffer * MGLContext_Renderbuffer(MGLContext * self, PyObject * args, Py
 	return renderbuffer;
 }
 
-const char * MGLContext_Renderbuffer_doc = R"(
-	Renderbuffer(size, components, floats = True)
-
-	Create a Renderbuffer.
-
-	Args:
-		size: Width, height.
-		components: The number of components 1, 2, 3 or 4.
-
-	Keyword Args:
-		floats: Use floating point precision.
-
-	Returns:
-		:py:class:`Renderbuffer`
-)";
-
 MGLRenderbuffer * MGLContext_DepthRenderbuffer(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"size", 0};
-
 	int width;
 	int height;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
 		"(II)",
-		(char **)kwlist,
 		&width,
 		&height
 	);
@@ -1549,31 +1182,12 @@ MGLRenderbuffer * MGLContext_DepthRenderbuffer(MGLContext * self, PyObject * arg
 	return renderbuffer;
 }
 
-const char * MGLContext_DepthRenderbuffer_doc = R"(
-	DepthRenderbuffer(size, floats = True)
-
-	Create a Renderbuffer.
-
-	Args:
-		size: Width, height.
-
-	Keyword Args:
-		floats: Use floating point precision.
-
-	Returns:
-		:py:class:`Renderbuffer`
-)";
-
 MGLComputeShader * MGLContext_ComputeShader(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"source", 0};
-
 	PyObject * source;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
 		"O",
-		(char **)kwlist,
 		&source
 	);
 
@@ -1674,18 +1288,6 @@ MGLComputeShader * MGLContext_ComputeShader(MGLContext * self, PyObject * args, 
 	return compute_shader;
 }
 
-const char * MGLContext_ComputeShader_doc = R"(
-	ComputeShader(source)
-
-	Create a ComputeShader.
-
-	Args:
-		source: The source of the compute shader.
-
-	Returns:
-		:py:class:`ComputeShader`
-)";
-
 PyObject * MGLContext_release(MGLContext * self) {
 	// MGLContext_Invalidate(self);
 	Py_RETURN_NONE;
@@ -1696,28 +1298,27 @@ PyMethodDef MGLContext_tp_methods[] = {
 
 	{"release", (PyCFunction)MGLContext_release, METH_NOARGS, 0},
 
-	{"clear", (PyCFunction)MGLContext_clear, METH_VARARGS | METH_KEYWORDS, MGLContext_clear_doc},
-	{"enable", (PyCFunction)MGLContext_enable, METH_VARARGS | METH_KEYWORDS, MGLContext_enable_doc},
-	{"disable", (PyCFunction)MGLContext_disable, METH_VARARGS | METH_KEYWORDS, MGLContext_disable_doc},
-	{"finish", (PyCFunction)MGLContext_finish, METH_NOARGS, MGLContext_finish_doc},
-	{"copy_buffer", (PyCFunction)MGLContext_copy_buffer, METH_VARARGS | METH_KEYWORDS, MGLContext_copy_buffer_doc},
-	{"read_pixels", (PyCFunction)MGLContext_read_pixels, METH_VARARGS | METH_KEYWORDS, MGLContext_read_pixels_doc},
+	{"clear", (PyCFunction)MGLContext_clear, METH_VARARGS | METH_KEYWORDS, 0},
+	{"enable", (PyCFunction)MGLContext_enable, METH_VARARGS | METH_KEYWORDS, 0},
+	{"disable", (PyCFunction)MGLContext_disable, METH_VARARGS | METH_KEYWORDS, 0},
+	{"finish", (PyCFunction)MGLContext_finish, METH_NOARGS, 0},
+	{"copy_buffer", (PyCFunction)MGLContext_copy_buffer, METH_VARARGS | METH_KEYWORDS, 0},
+	{"read_pixels", (PyCFunction)MGLContext_read_pixels, METH_VARARGS | METH_KEYWORDS, 0},
 
-	{"Buffer", (PyCFunction)MGLContext_Buffer, METH_VARARGS | METH_KEYWORDS, MGLContext_Buffer_doc},
-	{"Texture", (PyCFunction)MGLContext_Texture, METH_VARARGS | METH_KEYWORDS, MGLContext_Texture_doc},
-	{"DepthTexture", (PyCFunction)MGLContext_DepthTexture, METH_VARARGS | METH_KEYWORDS, MGLContext_DepthTexture_doc},
-	{"VertexArray", (PyCFunction)MGLContext_VertexArray, METH_VARARGS | METH_KEYWORDS, MGLContext_VertexArray_doc},
-	{"SimpleVertexArray", (PyCFunction)MGLContext_SimpleVertexArray, METH_VARARGS | METH_KEYWORDS, MGLContext_SimpleVertexArray_doc},
-	{"Program", (PyCFunction)MGLContext_Program, METH_VARARGS | METH_KEYWORDS, MGLContext_Program_doc},
-	{"VertexShader", (PyCFunction)MGLContext_Shader<VERTEX_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, MGLContext_VertexShader_doc},
-	{"FragmentShader", (PyCFunction)MGLContext_Shader<FRAGMENT_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, MGLContext_FragmentShader_doc},
-	{"GeometryShader", (PyCFunction)MGLContext_Shader<GEOMETRY_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, MGLContext_GeometryShader_doc},
-	{"TessEvaluationShader", (PyCFunction)MGLContext_Shader<TESSELATION_EVALUATION_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, MGLContext_TessEvaluationShader_doc},
-	{"TessControlShader", (PyCFunction)MGLContext_Shader<TESSELATION_CONTROL_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, MGLContext_TessControlShader_doc},
-	{"Framebuffer", (PyCFunction)MGLContext_Framebuffer, METH_VARARGS | METH_KEYWORDS, MGLContext_Framebuffer_doc},
-	{"Renderbuffer", (PyCFunction)MGLContext_Renderbuffer, METH_VARARGS | METH_KEYWORDS, MGLContext_Renderbuffer_doc},
-	{"DepthRenderbuffer", (PyCFunction)MGLContext_DepthRenderbuffer, METH_VARARGS | METH_KEYWORDS, MGLContext_DepthRenderbuffer_doc},
-	{"ComputeShader", (PyCFunction)MGLContext_ComputeShader, METH_VARARGS | METH_KEYWORDS, MGLContext_ComputeShader_doc},
+	{"Buffer", (PyCFunction)MGLContext_Buffer, METH_VARARGS | METH_KEYWORDS, 0},
+	{"Texture", (PyCFunction)MGLContext_Texture, METH_VARARGS | METH_KEYWORDS, 0},
+	{"DepthTexture", (PyCFunction)MGLContext_DepthTexture, METH_VARARGS | METH_KEYWORDS, 0},
+	{"VertexArray", (PyCFunction)MGLContext_VertexArray, METH_VARARGS | METH_KEYWORDS, 0},
+	{"Program", (PyCFunction)MGLContext_Program, METH_VARARGS | METH_KEYWORDS, 0},
+	{"VertexShader", (PyCFunction)MGLContext_Shader<VERTEX_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, 0},
+	{"FragmentShader", (PyCFunction)MGLContext_Shader<FRAGMENT_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, 0},
+	{"GeometryShader", (PyCFunction)MGLContext_Shader<GEOMETRY_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, 0},
+	{"TessEvaluationShader", (PyCFunction)MGLContext_Shader<TESSELATION_EVALUATION_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, 0},
+	{"TessControlShader", (PyCFunction)MGLContext_Shader<TESSELATION_CONTROL_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, 0},
+	{"Framebuffer", (PyCFunction)MGLContext_Framebuffer, METH_VARARGS | METH_KEYWORDS, 0},
+	{"Renderbuffer", (PyCFunction)MGLContext_Renderbuffer, METH_VARARGS | METH_KEYWORDS, 0},
+	{"DepthRenderbuffer", (PyCFunction)MGLContext_DepthRenderbuffer, METH_VARARGS | METH_KEYWORDS, 0},
+	{"ComputeShader", (PyCFunction)MGLContext_ComputeShader, METH_VARARGS | METH_KEYWORDS, 0},
 
 	{0},
 };
@@ -1742,12 +1343,6 @@ int MGLContext_set_line_width(MGLContext * self, PyObject * value) {
 	return 0;
 }
 
-char MGLContext_line_width_doc[] = R"(
-	line_width
-
-	Set the default line width.
-)";
-
 PyObject * MGLContext_get_point_size(MGLContext * self) {
 	float point_size = 0.0f;
 
@@ -1767,12 +1362,6 @@ int MGLContext_set_point_size(MGLContext * self, PyObject * value) {
 
 	return 0;
 }
-
-char MGLContext_point_size_doc[] = R"(
-	point_size
-
-	Set the default point size.
-)";
 
 PyObject * MGLContext_get_viewport(MGLContext * self) {
 	int viewport[4] = {};
@@ -1814,12 +1403,6 @@ int MGLContext_set_viewport(MGLContext * self, PyObject * value) {
 	return 0;
 }
 
-char MGLContext_viewport_doc[] = R"(
-	viewport
-
-	The viewport.
-)";
-
 PyObject * MGLContext_get_default_texture_unit(MGLContext * self) {
 	return PyLong_FromLong(self->default_texture_unit);
 }
@@ -1836,21 +1419,9 @@ int MGLContext_set_default_texture_unit(MGLContext * self, PyObject * value) {
 	return 0;
 }
 
-char MGLContext_default_texture_unit_doc[] = R"(
-	default_texture_unit
-
-	The default texture unit.
-)";
-
 PyObject * MGLContext_get_max_texture_units(MGLContext * self) {
 	return PyLong_FromLong(self->max_texture_units);
 }
-
-char MGLContext_max_texture_units_doc[] = R"(
-	max_texture_units
-
-	The max texture units.
-)";
 
 PyObject * MGLContext_get_default_framebuffer(MGLContext * self) {
 	if (!self->default_framebuffer) {
@@ -1871,9 +1442,6 @@ PyObject * MGLContext_get_default_framebuffer(MGLContext * self) {
 	return self->default_framebuffer;
 }
 
-char MGLContext_default_framebuffer_doc[] = R"(
-)";
-
 PyObject * MGLContext_get_vendor(MGLContext * self, void * closure) {
 	const char * vendor = (const char *)self->gl.GetString(GL_VENDOR);
 
@@ -1887,10 +1455,6 @@ PyObject * MGLContext_get_vendor(MGLContext * self, void * closure) {
 
 }
 
-char MGLContext_vendor_doc[] = R"(
-	vendor
-)";
-
 PyObject * MGLContext_get_renderer(MGLContext * self, void * closure) {
 	const char * renderer = (const char *)self->gl.GetString(GL_RENDERER);
 
@@ -1902,10 +1466,6 @@ PyObject * MGLContext_get_renderer(MGLContext * self, void * closure) {
 
 	return PyUnicode_FromFormat("%s", renderer);
 }
-
-char MGLContext_renderer_doc[] = R"(
-	renderer
-)";
 
 PyObject * MGLContext_get_version(MGLContext * self, void * closure) {
 	const char * version = (const char *)self->gl.GetString(GL_VERSION);
@@ -1919,45 +1479,19 @@ PyObject * MGLContext_get_version(MGLContext * self, void * closure) {
 	return PyUnicode_FromFormat("%s", version);
 }
 
-char MGLContext_version_doc[] = R"(
-	version
-)";
-
 PyGetSetDef MGLContext_tp_getseters[] = {
-	{(char *)"line_width", (getter)MGLContext_get_line_width, (setter)MGLContext_set_line_width, MGLContext_line_width_doc, 0},
-	{(char *)"point_size", (getter)MGLContext_get_point_size, (setter)MGLContext_set_point_size, MGLContext_point_size_doc, 0},
-	{(char *)"viewport", (getter)MGLContext_get_viewport, (setter)MGLContext_set_viewport, MGLContext_viewport_doc, 0},
-	{(char *)"default_texture_unit", (getter)MGLContext_get_default_texture_unit, (setter)MGLContext_set_default_texture_unit, MGLContext_default_texture_unit_doc, 0},
-	{(char *)"max_texture_units", (getter)MGLContext_get_max_texture_units, 0, MGLContext_max_texture_units_doc, 0},
-	{(char *)"default_framebuffer", (getter)MGLContext_get_default_framebuffer, 0, MGLContext_default_framebuffer_doc, 0},
+	{(char *)"line_width", (getter)MGLContext_get_line_width, (setter)MGLContext_set_line_width, 0, 0},
+	{(char *)"point_size", (getter)MGLContext_get_point_size, (setter)MGLContext_set_point_size, 0, 0},
+	{(char *)"viewport", (getter)MGLContext_get_viewport, (setter)MGLContext_set_viewport, 0, 0},
+	{(char *)"default_texture_unit", (getter)MGLContext_get_default_texture_unit, (setter)MGLContext_set_default_texture_unit, 0, 0},
+	{(char *)"max_texture_units", (getter)MGLContext_get_max_texture_units, 0, 0, 0},
+	{(char *)"default_framebuffer", (getter)MGLContext_get_default_framebuffer, 0, 0, 0},
 
-	{(char *)"vendor", (getter)MGLContext_get_vendor, 0, MGLContext_vendor_doc, 0},
-	{(char *)"renderer", (getter)MGLContext_get_renderer, 0, MGLContext_renderer_doc, 0},
-	{(char *)"version", (getter)MGLContext_get_version, 0, MGLContext_version_doc, 0},
+	{(char *)"vendor", (getter)MGLContext_get_vendor, 0, 0, 0},
+	{(char *)"renderer", (getter)MGLContext_get_renderer, 0, 0, 0},
+	{(char *)"version", (getter)MGLContext_get_version, 0, 0, 0},
 	{0},
 };
-
-const char * MGLContext_tp_doc = R"(
-	Context
-
-	Create a :py:class:`Context` using:
-
-		- :py:func:`~ModernGL.create_context`
-		- :py:func:`~ModernGL.create_standalone_context`
-
-	Members:
-
-		- :py:meth:`Context.Buffer`
-		- :py:meth:`Context.DepthRenderbuffer`
-		- :py:meth:`Context.DepthTexture`
-		- :py:meth:`Context.Framebuffer`
-		- :py:meth:`Context.Program`
-		- :py:meth:`Context.Renderbuffer`
-		- :py:meth:`Context.Shader`
-		- :py:meth:`Context.SimpleVertexArray`
-		- :py:meth:`Context.Texture`
-		- :py:meth:`Context.VertexArray`
-)";
 
 PyTypeObject MGLContext_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -1980,7 +1514,7 @@ PyTypeObject MGLContext_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLContext_tp_doc,                                      // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

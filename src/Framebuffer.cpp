@@ -42,27 +42,17 @@ PyObject * MGLFramebuffer_release(MGLFramebuffer * self) {
 	Py_RETURN_NONE;
 }
 
-const char * MGLFramebuffer_release_doc = R"(
-	release()
-
-	Release the framebuffer.
-)";
-
-PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"size", "origin", "components", "floats", 0};
-
+PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	int width;
 	int height;
-	int origin_x = 0;
-	int origin_y = 0;
-	int components = 4;
-	int floats = false;
+	int origin_x;
+	int origin_y;
+	int components;
+	int floats;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
-		"(II)|(II)Ip",
-		(char **)kwlist,
+		"(II)(II)Ip",
 		&width,
 		&height,
 		&origin_x,
@@ -87,25 +77,15 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args, PyObject 
 	return result;
 }
 
-const char * MGLFramebuffer_read_doc = R"(
-	read()
-)";
-
 PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
 	self->context->gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
 	Py_RETURN_NONE;
 }
 
-const char * MGLFramebuffer_use_doc = R"(
-	use()
-
-	Bind the framebuffer. Set the target for the :py:func:`~VertexArray.render` or :py:func:`~VertexArray.transform` methods.
-)";
-
 PyMethodDef MGLFramebuffer_tp_methods[] = {
-	{"release", (PyCFunction)MGLFramebuffer_release, METH_NOARGS, MGLFramebuffer_release_doc},
-	{"read", (PyCFunction)MGLFramebuffer_read, METH_VARARGS | METH_KEYWORDS, MGLFramebuffer_read_doc},
-	{"use", (PyCFunction)MGLFramebuffer_use, METH_NOARGS, MGLFramebuffer_use_doc},
+	{"release", (PyCFunction)MGLFramebuffer_release, METH_NOARGS, 0},
+	{"read", (PyCFunction)MGLFramebuffer_read, METH_VARARGS, 0},
+	{"use", (PyCFunction)MGLFramebuffer_use, METH_NOARGS, 0},
 	{0},
 };
 
@@ -118,9 +98,6 @@ PyObject * MGLFramebuffer_get_color_attachments(MGLFramebuffer * self, void * cl
 	}
 }
 
-char MGLFramebuffer_color_attachments_doc[] = R"(
-)";
-
 PyObject * MGLFramebuffer_get_depth_attachment(MGLFramebuffer * self, void * closure) {
 	if (self->depth_attachment) {
 		Py_INCREF(self->depth_attachment);
@@ -130,18 +107,11 @@ PyObject * MGLFramebuffer_get_depth_attachment(MGLFramebuffer * self, void * clo
 	}
 }
 
-char MGLFramebuffer_depth_attachment_doc[] = R"(
-)";
-
 PyGetSetDef MGLFramebuffer_tp_getseters[] = {
-	{(char *)"color_attachments", (getter)MGLFramebuffer_get_color_attachments, 0, MGLFramebuffer_color_attachments_doc, 0},
-	{(char *)"depth_attachment", (getter)MGLFramebuffer_get_depth_attachment, 0, MGLFramebuffer_depth_attachment_doc, 0},
+	{(char *)"color_attachments", (getter)MGLFramebuffer_get_color_attachments, 0, 0, 0},
+	{(char *)"depth_attachment", (getter)MGLFramebuffer_get_depth_attachment, 0, 0, 0},
 	{0},
 };
-
-const char * MGLFramebuffer_tp_doc = R"(
-	Framebuffer
-)";
 
 PyTypeObject MGLFramebuffer_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -164,7 +134,7 @@ PyTypeObject MGLFramebuffer_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLFramebuffer_tp_doc,                                  // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

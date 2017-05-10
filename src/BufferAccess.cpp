@@ -34,7 +34,7 @@ PyObject * MGLBufferAccess_tp_str(MGLBufferAccess * self) {
 	return PyUnicode_FromFormat("<ModernGL.BufferAccess>");
 }
 
-MGLBufferAccess * MGLBufferAccess_open(MGLBufferAccess * self) {
+PyObject * MGLBufferAccess_open(MGLBufferAccess * self) {
 	if (self->ptr) {
 		MGLError * error = MGLError_New(TRACE, "BufferAccess.open: Already open");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
@@ -51,17 +51,10 @@ MGLBufferAccess * MGLBufferAccess_open(MGLBufferAccess * self) {
 		return 0;
 	}
 
-	Py_INCREF(self);
-	return self;
+	Py_RETURN_NONE;
 }
 
-const char * MGLBufferAccess_open_doc = R"(
-	open()
-
-	Map the buffer.
-)";
-
-PyObject * MGLBufferAccess_close(MGLBufferAccess * self, PyObject * args, PyObject * kwargs) {
+PyObject * MGLBufferAccess_close(MGLBufferAccess * self, PyObject * args) {
 	if (self->ptr) {
 		const GLMethods & gl = self->buffer->context->gl;
 		gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
@@ -70,23 +63,13 @@ PyObject * MGLBufferAccess_close(MGLBufferAccess * self, PyObject * args, PyObje
 	Py_RETURN_NONE;
 }
 
-const char * MGLBufferAccess_close_doc = R"(
-	close()
+PyObject * MGLBufferAccess_read(MGLBufferAccess * self, PyObject * args) {
+	int size;
+	int offset;
 
-	Unmap the buffer.
-)";
-
-PyObject * MGLBufferAccess_read(MGLBufferAccess * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"size", "offset", 0};
-
-	int size = -1;
-	int offset = 0;
-
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
-		"|II",
-		(char **)kwlist,
+		"II",
 		&size,
 		&offset
 	);
@@ -114,33 +97,14 @@ PyObject * MGLBufferAccess_read(MGLBufferAccess * self, PyObject * args, PyObjec
 	return PyBytes_FromStringAndSize((const char *)self->ptr, size);
 }
 
-const char * MGLBufferAccess_read_doc = R"(
-	read(size, offset = 0)
+PyObject * MGLBufferAccess_write(MGLBufferAccess * self, PyObject * args) {
+	const char * data;
+	int size;
+	int offset;
 
-	Read the content.
-
-	Args:
-		size: The size. Value `-1` means all.
-
-	Keyword Args:
-		offset: The offset.
-
-	Returns:
-		bytes: binary data
-)";
-
-PyObject * MGLBufferAccess_write(MGLBufferAccess * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"data", "offset", 0};
-
-	const char * data = 0;
-	int size = 0;
-	int offset = 0;
-
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
-		"y#|I",
-		(char **)kwlist,
+		"y#I",
 		&data,
 		&size,
 		&offset
@@ -167,30 +131,15 @@ PyObject * MGLBufferAccess_write(MGLBufferAccess * self, PyObject * args, PyObje
 	Py_RETURN_NONE;
 }
 
-const char * MGLBufferAccess_write_doc = R"(
-	write(data, offset = 0)
-
-	Write the content.
-
-	Args:
-		size: The data.
-
-	Keyword Args:
-		offset: The offset.
-
-	Returns:
-		None
-)";
-
 PyMethodDef MGLBufferAccess_tp_methods[] = {
-	{"open", (PyCFunction)MGLBufferAccess_open, METH_NOARGS, MGLBufferAccess_open_doc},
-	{"close", (PyCFunction)MGLBufferAccess_close, METH_VARARGS | METH_KEYWORDS, MGLBufferAccess_close_doc},
+	{"open", (PyCFunction)MGLBufferAccess_open, METH_NOARGS, 0},
+	{"close", (PyCFunction)MGLBufferAccess_close, METH_VARARGS, 0},
 
 	{"__enter__", (PyCFunction)MGLBufferAccess_open, METH_NOARGS, 0},
-	{"__exit__", (PyCFunction)MGLBufferAccess_close, METH_VARARGS | METH_KEYWORDS, 0},
+	{"__exit__", (PyCFunction)MGLBufferAccess_close, METH_VARARGS, 0},
 
-	{"read", (PyCFunction)MGLBufferAccess_read, METH_VARARGS | METH_KEYWORDS, MGLBufferAccess_read_doc},
-	{"write", (PyCFunction)MGLBufferAccess_write, METH_VARARGS | METH_KEYWORDS, MGLBufferAccess_write_doc},
+	{"read", (PyCFunction)MGLBufferAccess_read, METH_VARARGS, 0},
+	{"write", (PyCFunction)MGLBufferAccess_write, METH_VARARGS, 0},
 	{0},
 };
 
@@ -199,52 +148,25 @@ MGLBuffer * MGLBufferAccess_get_buffer(MGLBufferAccess * self) {
 	return self->buffer;
 }
 
-char MGLBufferAccess_buffer_doc[] = R"(
-	buffer
-
-	The buffer.
-)";
-
 PyObject * MGLBufferAccess_get_offset(MGLBufferAccess * self) {
 	return PyLong_FromLong(self->offset);
 }
-
-char MGLBufferAccess_offset_doc[] = R"(
-	offset
-
-	The offset.
-)";
 
 PyObject * MGLBufferAccess_get_size(MGLBufferAccess * self) {
 	return PyLong_FromLong(self->size);
 }
 
-char MGLBufferAccess_size_doc[] = R"(
-	size
-
-	The size.
-)";
-
 PyObject * MGLBufferAccess_get_readonly(MGLBufferAccess * self) {
 	return PyBool_FromLong(self->access & GL_MAP_WRITE_BIT);
 }
 
-char MGLBufferAccess_readonly_doc[] = R"(
-	readonly
-
-	Is readonly.
-)";
-
 PyGetSetDef MGLBufferAccess_tp_getseters[] = {
-	{(char *)"buffer", (getter)MGLBufferAccess_get_buffer, 0, MGLBufferAccess_buffer_doc, 0},
-	{(char *)"offset", (getter)MGLBufferAccess_get_offset, 0, MGLBufferAccess_offset_doc, 0},
-	{(char *)"size", (getter)MGLBufferAccess_get_size, 0, MGLBufferAccess_size_doc, 0},
-	{(char *)"readonly", (getter)MGLBufferAccess_get_readonly, 0, MGLBufferAccess_readonly_doc, 0},
+	{(char *)"buffer", (getter)MGLBufferAccess_get_buffer, 0, 0, 0},
+	{(char *)"offset", (getter)MGLBufferAccess_get_offset, 0, 0, 0},
+	{(char *)"size", (getter)MGLBufferAccess_get_size, 0, 0, 0},
+	{(char *)"readonly", (getter)MGLBufferAccess_get_readonly, 0, 0, 0},
 	{0},
 };
-
-const char * MGLBufferAccess_tp_doc = R"(
-)";
 
 PyTypeObject MGLBufferAccess_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -267,7 +189,7 @@ PyTypeObject MGLBufferAccess_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLBufferAccess_tp_doc,                                 // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

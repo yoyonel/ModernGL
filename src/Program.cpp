@@ -48,14 +48,8 @@ PyObject * MGLProgram_release(MGLProgram * self) {
 	Py_RETURN_NONE;
 }
 
-char MGLProgram_release_doc[] = R"(
-	release()
-
-	Release the program object.
-)";
-
 PyMethodDef MGLProgram_tp_methods[] = {
-	{"release", (PyCFunction)MGLProgram_release, METH_NOARGS, MGLProgram_release_doc},
+	{"release", (PyCFunction)MGLProgram_release, METH_NOARGS, 0},
 	{0},
 };
 
@@ -64,64 +58,25 @@ PyObject * MGLProgram_get_shaders(MGLProgram * self, void * closure) {
 	return self->shaders;
 }
 
-char MGLProgram_shaders_doc[] = R"(
-	shaders
-
-	The shaders.
-	The return value is a tuple.
-)";
-
 PyObject * MGLProgram_get_varyings(MGLProgram * self, void * closure) {
 	Py_INCREF(self->varyings_proxy);
 	return self->varyings_proxy;
 }
-
-char MGLProgram_varyings_doc[] = R"(
-	varyings
-
-	The program's varyings.
-	The return value is a dictinary.
-	It can be used to access varyings by name.
-)";
 
 PyObject * MGLProgram_get_uniforms(MGLProgram * self, void * closure) {
 	Py_INCREF(self->uniforms_proxy);
 	return self->uniforms_proxy;
 }
 
-char MGLProgram_uniforms_doc[] = R"(
-	uniforms
-
-	The program's uniforms.
-	The return value is a dictinary.
-	It can be used to access uniforms by name.
-)";
-
 PyObject * MGLProgram_get_uniform_blocks(MGLProgram * self, void * closure) {
 	Py_INCREF(self->uniform_blocks_proxy);
 	return self->uniform_blocks_proxy;
 }
 
-char MGLProgram_uniform_blocks_doc[] = R"(
-	uniform_blocks
-
-	The program's uniform blocks.
-	The return value is a dictinary.
-	It can be used to access uniform blocks by name.
-)";
-
 PyObject * MGLProgram_get_attributes(MGLProgram * self, void * closure) {
 	Py_INCREF(self->attributes_proxy);
 	return self->attributes_proxy;
 }
-
-char MGLProgram_attributes_doc[] = R"(
-	attributes
-
-	The program's attributes.
-	The return value is a dictinary.
-	It can be used to access attributes by name.
-)";
 
 PyObject * MGLProgram_get_geometry_input(MGLProgram * self, void * closure) {
 	if (self->geometry_input) {
@@ -132,14 +87,6 @@ PyObject * MGLProgram_get_geometry_input(MGLProgram * self, void * closure) {
 	}
 }
 
-char MGLProgram_geometry_input_doc[] = R"(
-	geometry_input
-
-	The geometry input primitive.
-	The GeometryShader's input primitive if the GeometryShader is present otherwise ``None``.
-	The geometry input primitive will be used for validation when rendering.
-)";
-
 PyObject * MGLProgram_get_geometry_output(MGLProgram * self, void * closure) {
 	if (self->geometry_output) {
 		Py_INCREF(self->geometry_output);
@@ -149,22 +96,9 @@ PyObject * MGLProgram_get_geometry_output(MGLProgram * self, void * closure) {
 	}
 }
 
-char MGLProgram_geometry_output_doc[] = R"(
-	geometry_output
-
-	The geometry output primitive.
-	The GeometryShader's output primitive if the GeometryShader is present otherwise ``None``.
-)";
-
 PyObject * MGLProgram_get_geometry_vertices(MGLProgram * self, void * closure) {
 	return PyLong_FromLong(self->geometry_vertices);
 }
-
-char MGLProgram_geometry_vertices_doc[] = R"(
-	geometry_vertices
-
-	The maximum number of vertices that the geometry shader in program will output.
-)";
 
 PyObject * MGLProgram_get_vertex_shader(MGLProgram * self, void * closure) {
 	if (self->vertex_shader) {
@@ -175,10 +109,6 @@ PyObject * MGLProgram_get_vertex_shader(MGLProgram * self, void * closure) {
 	}
 }
 
-char MGLProgram_vertex_shader_doc[] = R"(
-	vertex_shader
-)";
-
 PyObject * MGLProgram_get_fragment_shader(MGLProgram * self, void * closure) {
 	if (self->fragment_shader) {
 		Py_INCREF(self->fragment_shader);
@@ -187,10 +117,6 @@ PyObject * MGLProgram_get_fragment_shader(MGLProgram * self, void * closure) {
 		Py_RETURN_NONE;
 	}
 }
-
-char MGLProgram_fragment_shader_doc[] = R"(
-	fragment_shader
-)";
 
 PyObject * MGLProgram_get_geometry_shader(MGLProgram * self, void * closure) {
 	if (self->geometry_shader) {
@@ -201,10 +127,6 @@ PyObject * MGLProgram_get_geometry_shader(MGLProgram * self, void * closure) {
 	}
 }
 
-char MGLProgram_geometry_shader_doc[] = R"(
-	geometry_shader
-)";
-
 PyObject * MGLProgram_get_tesselation_evaluation_shader(MGLProgram * self, void * closure) {
 	if (self->tesselation_evaluation_shader) {
 		Py_INCREF(self->tesselation_evaluation_shader);
@@ -213,10 +135,6 @@ PyObject * MGLProgram_get_tesselation_evaluation_shader(MGLProgram * self, void 
 		Py_RETURN_NONE;
 	}
 }
-
-char MGLProgram_tesselation_evaluation_shader_doc[] = R"(
-	tesselation_evaluation_shader
-)";
 
 PyObject * MGLProgram_get_tesselation_control_shader(MGLProgram * self, void * closure) {
 	if (self->tesselation_control_shader) {
@@ -227,26 +145,21 @@ PyObject * MGLProgram_get_tesselation_control_shader(MGLProgram * self, void * c
 	}
 }
 
-char MGLProgram_tesselation_control_shader_doc[] = R"(
-	tesselation_control_shader
-)";
-
 PyGetSetDef MGLProgram_tp_getseters[] = {
-	{(char *)"shaders", (getter)MGLProgram_get_shaders, 0, MGLProgram_shaders_doc, 0},
-	{(char *)"uniforms", (getter)MGLProgram_get_uniforms, 0, MGLProgram_uniforms_doc, 0},
-	{(char *)"uniform_blocks", (getter)MGLProgram_get_uniform_blocks, 0, MGLProgram_uniform_blocks_doc, 0},
-	{(char *)"attributes", (getter)MGLProgram_get_attributes, 0, MGLProgram_attributes_doc, 0},
-	{(char *)"varyings", (getter)MGLProgram_get_varyings, 0, MGLProgram_varyings_doc, 0},
+	{(char *)"uniforms", (getter)MGLProgram_get_uniforms, 0, 0, 0},
+	{(char *)"uniform_blocks", (getter)MGLProgram_get_uniform_blocks, 0, 0, 0},
+	{(char *)"attributes", (getter)MGLProgram_get_attributes, 0, 0, 0},
+	{(char *)"varyings", (getter)MGLProgram_get_varyings, 0, 0, 0},
 
-	{(char *)"geometry_input", (getter)MGLProgram_get_geometry_input, 0, MGLProgram_geometry_input_doc, 0},
-	{(char *)"geometry_output", (getter)MGLProgram_get_geometry_output, 0, MGLProgram_geometry_output_doc, 0},
-	{(char *)"geometry_vertices", (getter)MGLProgram_get_geometry_vertices, 0, MGLProgram_geometry_vertices_doc, 0},
+	{(char *)"geometry_input", (getter)MGLProgram_get_geometry_input, 0, 0, 0},
+	{(char *)"geometry_output", (getter)MGLProgram_get_geometry_output, 0, 0, 0},
+	{(char *)"geometry_vertices", (getter)MGLProgram_get_geometry_vertices, 0, 0, 0},
 
-	{(char *)"vertex_shader", (getter)MGLProgram_get_vertex_shader, 0, MGLProgram_vertex_shader_doc, 0},
-	{(char *)"fragment_shader", (getter)MGLProgram_get_fragment_shader, 0, MGLProgram_fragment_shader_doc, 0},
-	{(char *)"geometry_shader", (getter)MGLProgram_get_geometry_shader, 0, MGLProgram_geometry_shader_doc, 0},
-	{(char *)"tesselation_evaluation_shader", (getter)MGLProgram_get_tesselation_evaluation_shader, 0, MGLProgram_tesselation_evaluation_shader_doc, 0},
-	{(char *)"tesselation_control_shader", (getter)MGLProgram_get_tesselation_control_shader, 0, MGLProgram_tesselation_control_shader_doc, 0},
+	{(char *)"vertex_shader", (getter)MGLProgram_get_vertex_shader, 0, 0, 0},
+	{(char *)"fragment_shader", (getter)MGLProgram_get_fragment_shader, 0, 0, 0},
+	{(char *)"geometry_shader", (getter)MGLProgram_get_geometry_shader, 0, 0, 0},
+	{(char *)"tesselation_evaluation_shader", (getter)MGLProgram_get_tesselation_evaluation_shader, 0, 0, 0},
+	{(char *)"tesselation_control_shader", (getter)MGLProgram_get_tesselation_control_shader, 0, 0, 0},
 	{0},
 };
 
@@ -261,9 +174,6 @@ PyMappingMethods Program_map = {
 	// (binaryfunc)Program_get_item,
 	// (objobjargproc)Program_set_item,
 };
-
-const char * MGLProgram_tp_doc = R"(
-)";
 
 PyTypeObject MGLProgram_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -286,7 +196,7 @@ PyTypeObject MGLProgram_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLProgram_tp_doc,                                      // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

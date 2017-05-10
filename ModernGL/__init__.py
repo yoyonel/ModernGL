@@ -56,6 +56,7 @@ class Attribute:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -64,6 +65,7 @@ class Attribute:
 
 class Buffer:
 	'''
+		Create a :py:class:`~ModernGL.Buffer` using :py:meth:`~ModernGL.Context.Buffer`.
 	'''
 
 	def __init__(self):
@@ -81,6 +83,7 @@ class Buffer:
 	@property
 	def size(self):
 		'''
+			The size of the buffer.
 		'''
 
 		return self._o.size
@@ -89,6 +92,7 @@ class Buffer:
 	@property
 	def dynamic(self):
 		'''
+
 		'''
 
 		return self._o.dynamic
@@ -111,7 +115,7 @@ class Buffer:
 				readonly: The readonly.
 		'''
 
-		return self._o.access(size, offset, readonly)
+		return BufferAccess._new(self._o.access(size, offset, readonly))
 
 
 	def read(self, size = -1, offset = 0):
@@ -155,6 +159,7 @@ class Buffer:
 
 	def bind_to_uniform_block(self, location = 0):
 		'''
+
 		'''
 
 		self._o.bind_to_uniform_block(location)
@@ -162,6 +167,7 @@ class Buffer:
 
 	def bind_to_storage_buffer(self, location = 0):
 		'''
+
 		'''
 
 		self._o.bind_to_storage_buffer(location)
@@ -177,7 +183,8 @@ class BufferAccess:
 
 
 	def __enter__(self):
-		return self._o.open()
+		self._o.open()
+		return self
 
 
 	def __exit__(self, *args):
@@ -193,6 +200,7 @@ class BufferAccess:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -215,7 +223,7 @@ class BufferAccess:
 		self._o.close()
 
 
-	def read(self, size, offset = 0):
+	def read(self, size = -1, offset = 0):
 		'''
 			Read the content.
 
@@ -300,6 +308,7 @@ class ComputeShader:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -324,6 +333,7 @@ class EnableFlag:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -348,6 +358,7 @@ class Framebuffer:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -356,6 +367,7 @@ class Framebuffer:
 
 	def read(self):
 		'''
+
 		'''
 
 		return self._o.read()
@@ -387,6 +399,7 @@ class MultisampleRenderbuffer:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -411,6 +424,7 @@ class MultisampleTexture:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -435,6 +449,7 @@ class Primitive:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -459,6 +474,7 @@ class Program:
 
 	def release(self):
 		'''
+			Release the program object.
 		'''
 
 		self._o.release()
@@ -468,6 +484,9 @@ class Program:
 	@property
 	def uniforms(self):
 		'''
+			The program's uniforms.
+			The return value is a dictinary.
+			It can be used to access uniforms by name.
 		'''
 
 		return self._o.uniforms
@@ -476,6 +495,9 @@ class Program:
 	@property
 	def uniform_blocks(self):
 		'''
+			The program's uniform blocks.
+			The return value is a dictinary.
+			It can be used to access uniform blocks by name.
 		'''
 
 		return self._o.uniform_blocks
@@ -484,6 +506,9 @@ class Program:
 	@property
 	def attributes(self):
 		'''
+			The program's attributes.
+			The return value is a dictinary.
+			It can be used to access attributes by name.
 		'''
 
 		return self._o.attributes
@@ -492,6 +517,9 @@ class Program:
 	@property
 	def varyings(self):
 		'''
+			The program's varyings.
+			The return value is a dictinary.
+			It can be used to access varyings by name.
 		'''
 
 		return self._o.varyings
@@ -500,6 +528,9 @@ class Program:
 	@property
 	def geometry_input(self):
 		'''
+			The geometry input primitive.
+			The GeometryShader's input primitive if the GeometryShader is present otherwise ``None``.
+			The geometry input primitive will be used for validation when rendering.
 		'''
 
 		return self._o.geometry_input
@@ -508,6 +539,8 @@ class Program:
 	@property
 	def geometry_output(self):
 		'''
+			The geometry output primitive.
+			The GeometryShader's output primitive if the GeometryShader is present otherwise ``None``.
 		'''
 
 		return self._o.geometry_output
@@ -516,6 +549,7 @@ class Program:
 	@property
 	def geometry_vertices(self):
 		'''
+			The maximum number of vertices that the geometry shader in program will output.
 		'''
 
 		return self._o.geometry_vertices
@@ -524,6 +558,7 @@ class Program:
 	@property
 	def vertex_shader(self):
 		'''
+
 		'''
 
 		return self._o.vertex_shader
@@ -532,6 +567,7 @@ class Program:
 	@property
 	def fragment_shader(self):
 		'''
+
 		'''
 
 		return self._o.fragment_shader
@@ -540,6 +576,7 @@ class Program:
 	@property
 	def geometry_shader(self):
 		'''
+
 		'''
 
 		return self._o.geometry_shader
@@ -548,6 +585,7 @@ class Program:
 	@property
 	def tesselation_evaluation_shader(self):
 		'''
+
 		'''
 
 		return self._o.tesselation_evaluation_shader
@@ -556,6 +594,7 @@ class Program:
 	@property
 	def tesselation_control_shader(self):
 		'''
+
 		'''
 
 		return self._o.tesselation_control_shader
@@ -579,6 +618,7 @@ class ProgramStage:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -603,6 +643,7 @@ class Renderbuffer:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -611,6 +652,13 @@ class Renderbuffer:
 
 class Shader:
 	'''
+		Create a :py:class:`~ModernGL.Shader` using:
+
+			- :py:meth:`~ModernGL.Context.VertexShader`
+			- :py:meth:`~ModernGL.Context.FragmentShader`
+			- :py:meth:`~ModernGL.Context.GeometryShader`
+			- :py:meth:`~ModernGL.Context.TessEvaluationShader`
+			- :py:meth:`~ModernGL.Context.TessControlShader`
 	'''
 
 	def __init__(self):
@@ -625,8 +673,34 @@ class Shader:
 		return r
 
 
+	@property
+	def source(self):
+		'''
+			The source code of the shader.
+		'''
+
+		return self._o.source
+
+
+	@property
+	def typename(self):
+		'''
+			The type of the shader.
+			The return value is a string.
+
+			- ``'VertexShader'``
+			- ``'FragmentShader'``
+			- ``'GeometryShader'``
+			- ``'TessEvaluationShader'``
+			- ``'TessControlShader'``
+		'''
+
+		return self._o.typename
+
+
 	def release(self):
 		'''
+			Release the shader object.
 		'''
 
 		self._o.release()
@@ -651,6 +725,7 @@ class Subroutine:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -675,6 +750,7 @@ class SubroutineUniform:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -697,12 +773,58 @@ class Texture:
 		return r
 
 
+	@property
+	def width(self):
+		'''
+		'''
+
+		return self._o.width
+
+
+	@property
+	def height(self):
+		'''
+		'''
+
+		return self._o.height
+
+
+	@property
+	def size(self):
+		'''
+		'''
+
+		return (self._o.width, self._o.height)
+
+
 	def release(self):
 		'''
+			Release the texture object.
 		'''
 
 		self._o.release()
 		self.__class__ = InvalidObject
+
+
+	def update(self, data, size = None, offset = (0, 0)):
+		'''
+
+		'''
+
+		self._o.update()
+
+
+	def use(self, index = 0):
+		'''
+			Bind the texture.
+
+			Args:
+				index (int): The texture location.
+					Same as the integer value that is used for sampler2D uniforms in the shaders.
+					The value ``0`` will bind the texture to the ``GL_TEXTURE0`` binding point.
+		'''
+
+		self._o.use(index)
 
 
 class Uniform:
@@ -723,6 +845,7 @@ class Uniform:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -747,6 +870,7 @@ class UniformBlock:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -771,6 +895,7 @@ class Varying:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -795,6 +920,7 @@ class Version:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -819,6 +945,7 @@ class VertexArray:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -828,6 +955,7 @@ class VertexArray:
 	@property
 	def program(self):
 		'''
+
 		'''
 
 		return self._o.program
@@ -836,6 +964,7 @@ class VertexArray:
 	@property
 	def content(self):
 		'''
+
 		'''
 
 		return self._o.content
@@ -844,6 +973,7 @@ class VertexArray:
 	@property
 	def attributes(self):
 		'''
+
 		'''
 
 		return self._o.attributes
@@ -852,6 +982,7 @@ class VertexArray:
 	@property
 	def index_buffer(self):
 		'''
+
 		'''
 
 		return self._o.index_buffer
@@ -860,6 +991,7 @@ class VertexArray:
 	@property
 	def vertices(self):
 		'''
+
 		'''
 
 		return self._o.vertices
@@ -867,6 +999,7 @@ class VertexArray:
 
 	def render(self, mode = TRIANGLES, vertices = -1, first = 0, instances = 1):
 		'''
+
 		'''
 
 		self._o.render(mode, vertices, first, instances)
@@ -909,6 +1042,7 @@ class VertexArrayAttribute:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -933,6 +1067,7 @@ class VertexArrayListAttribute:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -957,6 +1092,7 @@ class VertexArrayMatrixAttribute:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -965,6 +1101,23 @@ class VertexArrayMatrixAttribute:
 
 class Context:
 	'''
+		Create a :py:class:`Context` using:
+
+			- :py:func:`~ModernGL.create_context`
+			- :py:func:`~ModernGL.create_standalone_context`
+
+		Members:
+
+			- :py:meth:`Context.Buffer`
+			- :py:meth:`Context.DepthRenderbuffer`
+			- :py:meth:`Context.DepthTexture`
+			- :py:meth:`Context.Framebuffer`
+			- :py:meth:`Context.Program`
+			- :py:meth:`Context.Renderbuffer`
+			- :py:meth:`Context.Shader`
+			- :py:meth:`Context.SimpleVertexArray`
+			- :py:meth:`Context.Texture`
+			- :py:meth:`Context.VertexArray`
 	'''
 
 	def __init__(self):
@@ -981,6 +1134,7 @@ class Context:
 
 	def release(self):
 		'''
+
 		'''
 
 		self._o.release()
@@ -990,6 +1144,7 @@ class Context:
 	@property
 	def line_width(self):
 		'''
+			Set the default line width.
 		'''
 
 		return self._o.line_width
@@ -1003,6 +1158,7 @@ class Context:
 	@property
 	def point_size(self):
 		'''
+			Set the default point size.
 		'''
 
 		return self._o.point_size
@@ -1016,6 +1172,7 @@ class Context:
 	@property
 	def viewport(self):
 		'''
+			The viewport.
 		'''
 
 		return self._o.viewport
@@ -1029,6 +1186,7 @@ class Context:
 	@property
 	def default_texture_unit(self):
 		'''
+			The default texture unit.
 		'''
 
 		return self._o.default_texture_unit
@@ -1042,6 +1200,7 @@ class Context:
 	@property
 	def max_texture_units(self):
 		'''
+			The max texture units.
 		'''
 
 		return self._o.max_texture_units
@@ -1050,6 +1209,7 @@ class Context:
 	@property
 	def default_framebuffer(self):
 		'''
+
 		'''
 
 		return self._o.default_framebuffer
@@ -1060,6 +1220,11 @@ class Context:
 
 	def clear(self, r = 0, g = 0, b = 0, a = 0):
 		'''
+			Clear the framebuffer.
+
+			Args:
+				r, g, b: color components.
+				a: alpha component.
 		'''
 
 		self._o.clear(r, g, b, a)
@@ -1067,6 +1232,10 @@ class Context:
 
 	def enable(self, flag):
 		'''
+			Enable flags.
+
+			Args:
+				flags: flags to enable.
 		'''
 
 		self._o.enable(flag)
@@ -1074,6 +1243,10 @@ class Context:
 
 	def disable(self, flag):
 		'''
+			Disable flags.
+
+			Args:
+				flags: flags to disable.
 		'''
 
 		self._o.disable(flag)
@@ -1081,6 +1254,7 @@ class Context:
 
 	def finish(self):
 		'''
+			Wait for all drawing commands to finish.
 		'''
 
 		self._o.finish()
@@ -1088,6 +1262,16 @@ class Context:
 
 	def copy_buffer(self, dst, src, size = -1, read_offset = 0, write_offset = 0):
 		'''
+		Copy buffer content.
+
+		Args:
+			dst: Destination buffer.
+			src: Source buffer.
+			optional size: Size to copy.
+
+		Keyword Args:
+			read_offset: Read offset.
+			write_offset: Write offset.
 		'''
 
 		self._o.copy_buffer(dst._o, src._o, size, read_offset, write_offset)
@@ -1095,6 +1279,7 @@ class Context:
 
 	def read_pixels(self, x, y, width, height, components = 3, floats = False):
 		'''
+
 		'''
 
 		return self._o.read_pixels(x, y, width, height, components, floats)
@@ -1102,6 +1287,17 @@ class Context:
 
 	def Buffer(self, data = None, reserve = 0, dynamic = False):
 		'''
+			Create a Buffer.
+
+			Args:
+				data: Content of the new buffer.
+
+			Keyword Args:
+				reserve: The number of bytes to reserve.
+				dynamic: Treat buffer as dynamic.
+
+			Returns:
+				:py:class:`Buffer`
 		'''
 
 		return Buffer._new(self._o.Buffer(data, reserve, dynamic))
@@ -1109,6 +1305,18 @@ class Context:
 
 	def Texture(self, size, components, data = None, floats = False):
 		'''
+			Create a Texture.
+
+			Args:
+				size: Width, height.
+				components: The number of components 1, 2, 3 or 4.
+				optional data: Content of the image.
+
+			Keyword Args:
+				floats: Use floating point precision.
+
+			Returns:
+				:py:class:`Texture`
 		'''
 
 		return Texture._new(self._o.Texture(size, components, data, floats))
@@ -1116,6 +1324,14 @@ class Context:
 
 	def DepthTexture(self, size, data = None):
 		'''
+			Create a DepthTexture.
+
+			Args:
+				size: The width and height.
+				optional data: The pixels.
+
+			Returns:
+				:py:class:`Texture`
 		'''
 
 		return Texture._new(self._o.DepthTexture(size, data))
@@ -1123,6 +1339,18 @@ class Context:
 
 	def VertexArray(self, program, content, index_buffer = None, skip_errors = False):
 		'''
+			Create a VertexArray.
+
+			Args:
+				program: The program used by :py:meth:`~VertexArray.render` and :py:meth:`~VertexArray.transform`.
+				content: A list of (buffer, format, attributes).
+				optional index_buffer: An index buffer.
+
+			Keyword Args:
+				skip_errors: Ignore missing attributes.
+
+			Returns:
+				:py:class:`VertexArray`
 		'''
 
 		if index_buffer is not None:
@@ -1135,6 +1363,20 @@ class Context:
 
 	def SimpleVertexArray(self, program, buffer, format, attributes, index_buffer = None, skip_errors = False):
 		'''
+			Create a SimpleVertexArray.
+
+			Args:
+				program: The program used by :py:meth:`~VertexArray.render` and :py:meth:`~VertexArray.transform`.
+				buffer: The buffer.
+				format: The buffer format string.
+				attributes: A list of attribute names.
+				optional index_buffer: An index buffer.
+
+			Keyword Args:
+				skip_errors: Ignore missing attributes.
+
+			Returns:
+				:py:class:`VertexArray`
 		'''
 
 		return self.VertexArray(program, [(buffer, format, attributes)], index_buffer, skip_errors)
@@ -1142,6 +1384,14 @@ class Context:
 
 	def Program(self, shaders, varyings = []):
 		'''
+			Create a Program.
+
+			Args:
+				shaders: A list of :py:class:`Shader` objects.
+				optional varyings: A list of varying names.
+
+			Returns:
+				:py:class:`Program`
 		'''
 
 		if isinstance(shaders, Shader):
@@ -1152,6 +1402,13 @@ class Context:
 
 	def VertexShader(self, source):
 		'''
+			Create a VertexShader.
+
+			Args:
+				source: The source code in GLSL.
+
+			Returns:
+				:py:class:`Shader`
 		'''
 
 		return Shader._new(self._o.VertexShader(source))
@@ -1159,6 +1416,13 @@ class Context:
 
 	def FragmentShader(self, source):
 		'''
+			Create a FragmentShader.
+
+			Args:
+				source: The source code in GLSL.
+
+			Returns:
+				:py:class:`Shader`
 		'''
 
 		return Shader._new(self._o.FragmentShader(source))
@@ -1166,6 +1430,13 @@ class Context:
 
 	def GeometryShader(self, source):
 		'''
+			Create a GeometryShader.
+
+			Args:
+				source: The source code in GLSL.
+
+			Returns:
+				:py:class:`Shader`
 		'''
 
 		return Shader._new(self._o.GeometryShader(source))
@@ -1173,6 +1444,13 @@ class Context:
 
 	def TessEvaluationShader(self, source):
 		'''
+			Create a TessEvaluationShader.
+
+			Args:
+				source: The source code in GLSL.
+
+			Returns:
+				:py:class:`Shader`
 		'''
 
 		return Shader._new(self._o.TessEvaluationShader(source))
@@ -1180,6 +1458,13 @@ class Context:
 
 	def TessControlShader(self, source):
 		'''
+			Create a TessControlShader.
+
+			Args:
+				source: The source code in GLSL.
+
+			Returns:
+				:py:class:`Shader`
 		'''
 
 		return Shader._new(self._o.TessControlShader(source))
@@ -1187,6 +1472,13 @@ class Context:
 
 	def Framebuffer(self, attachments):
 		'''
+			Create a Framebuffer.
+
+			Args:
+				attachments: A list of :py:class:`Texture` or :py:class:`Renderbuffer` objects.
+
+			Returns:
+				:py:class:`Framebuffer`
 		'''
 
 		return Framebuffer._new(self._o.Framebuffer(attachments))
@@ -1194,6 +1486,17 @@ class Context:
 
 	def Renderbuffer(self, size, components, floats = True):
 		'''
+			Create a Renderbuffer.
+
+			Args:
+				size: Width, height.
+				components: The number of components 1, 2, 3 or 4.
+
+			Keyword Args:
+				floats: Use floating point precision.
+
+			Returns:
+				:py:class:`Renderbuffer`
 		'''
 
 		return Renderbuffer._new(self._o.Renderbuffer(size, components, floats))
@@ -1201,6 +1504,16 @@ class Context:
 
 	def DepthRenderbuffer(self, size, floats = True):
 		'''
+			Create a Renderbuffer.
+
+			Args:
+				size: Width, height.
+
+			Keyword Args:
+				floats: Use floating point precision.
+
+			Returns:
+				:py:class:`Renderbuffer`
 		'''
 
 		return Renderbuffer._new(self._o.DepthRenderbuffer(size, floats))
@@ -1208,6 +1521,13 @@ class Context:
 
 	def ComputeShader(self, source):
 		'''
+			Create a ComputeShader.
+
+			Args:
+				source: The source of the compute shader.
+
+			Returns:
+				:py:class:`ComputeShader`
 		'''
 
 		return ComputeShader._new(self._o.ComputeShader(source))
@@ -1216,7 +1536,7 @@ class Context:
 def create_context(require = None):
 	'''
 		Create a context and load OpenGL functions.
-		An OpenGL context must eWxists.
+		An OpenGL context must exists.
 
 		Keyword Arguments:
 			require (:py:class:`ModernGL.Version`): OpenGL version.

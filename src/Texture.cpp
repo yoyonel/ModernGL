@@ -140,10 +140,6 @@ PyObject * MGLTexture_update(MGLTexture * self, PyObject * args, PyObject * kwar
 	Py_RETURN_NONE;
 }
 
-const char * MGLTexture_update_doc = R"(
-	update()
-)";
-
 PyObject * MGLTexture_use(MGLTexture * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"index", 0};
 
@@ -168,33 +164,15 @@ PyObject * MGLTexture_use(MGLTexture * self, PyObject * args, PyObject * kwargs)
 	Py_RETURN_NONE;
 }
 
-const char * MGLTexture_use_doc = R"(
-	use(index = 0)
-
-	Args:
-		optional index: The texture location.
-			Same as the integer value that is used for sampler2D uniforms in the shaders.
-			The value ``0`` will bind the texture to the ``GL_TEXTURE0`` binding point.
-
-	Returns:
-		:py:data:`None`
-)";
-
 PyObject * MGLTexture_release(MGLTexture * self) {
 	MGLTexture_Invalidate(self);
 	Py_RETURN_NONE;
 }
 
-const char * MGLTexture_release_doc = R"(
-	release()
-
-	Release the texture.
-)";
-
 PyMethodDef MGLTexture_tp_methods[] = {
-	{"update", (PyCFunction)MGLTexture_update, METH_VARARGS | METH_KEYWORDS, MGLTexture_update_doc},
-	{"use", (PyCFunction)MGLTexture_use, METH_VARARGS | METH_KEYWORDS, MGLTexture_use_doc},
-	{"release", (PyCFunction)MGLTexture_release, METH_NOARGS, MGLTexture_release_doc},
+	{"update", (PyCFunction)MGLTexture_update, METH_VARARGS | METH_KEYWORDS, 0},
+	{"use", (PyCFunction)MGLTexture_use, METH_VARARGS | METH_KEYWORDS, 0},
+	{"release", (PyCFunction)MGLTexture_release, METH_NOARGS, 0},
 	{0},
 };
 
@@ -202,42 +180,15 @@ PyObject * MGLTexture_get_width(MGLTexture * self, void * closure) {
 	return PyLong_FromLong(self->width);
 }
 
-char MGLTexture_width_doc[] = R"(
-	width
-
-	The width
-)";
-
 PyObject * MGLTexture_get_height(MGLTexture * self, void * closure) {
 	return PyLong_FromLong(self->height);
 }
 
-char MGLTexture_height_doc[] = R"(
-	height
-
-	The height
-)";
-
-PyObject * MGLTexture_get_size(MGLTexture * self, void * closure) {
-	return PyTuple_Pack(2, PyLong_FromLong(self->width), PyLong_FromLong(self->height));
-}
-
-char MGLTexture_size_doc[] = R"(
-	size
-
-	The size
-)";
-
 PyGetSetDef MGLTexture_tp_getseters[] = {
-	{(char *)"width", (getter)MGLTexture_get_width, 0, MGLTexture_width_doc, 0},
-	{(char *)"height", (getter)MGLTexture_get_height, 0, MGLTexture_height_doc, 0},
-	{(char *)"size", (getter)MGLTexture_get_size, 0, MGLTexture_size_doc, 0},
+	{(char *)"width", (getter)MGLTexture_get_width, 0, 0, 0},
+	{(char *)"height", (getter)MGLTexture_get_height, 0, 0, 0},
 	{0},
 };
-
-const char * MGLTexture_tp_doc = R"(
-	Texture
-)";
 
 PyTypeObject MGLTexture_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -260,7 +211,7 @@ PyTypeObject MGLTexture_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLTexture_tp_doc,                                      // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare
