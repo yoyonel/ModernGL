@@ -42,11 +42,6 @@ class TestCase(unittest.TestCase):
 
 		program = self.ctx.Program([vertex_shader, fragment_shader])
 
-		self.assertEqual(len(program.shaders), 2)
-
-		self.assertTrue(vertex_shader in program.shaders)
-		self.assertTrue(fragment_shader in program.shaders)
-
 		self.assertIsNot(program.vertex_shader, None)
 		self.assertIsNot(program.fragment_shader, None)
 		self.assertIs(program.geometry_shader, None)

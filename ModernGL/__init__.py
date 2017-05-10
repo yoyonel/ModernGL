@@ -18,7 +18,24 @@ VERSION = '3.1.5'
 from ModernGL import ModernGL as _mgl
 
 
-InvalidObject = _mgl.InvalidObject
+Error = _mgl.Error
+
+
+TRIANGLES = _mgl.TRIANGLES
+TRIANGLE_STRIP = _mgl.TRIANGLE_STRIP
+TRIANGLE_FAN = _mgl.TRIANGLE_FAN
+LINES = _mgl.LINES
+LINE_STRIP = _mgl.LINE_STRIP
+LINE_LOOP = _mgl.LINE_LOOP
+POINTS = _mgl.POINTS
+LINE_STRIP_ADJACENCY = _mgl.LINE_STRIP_ADJACENCY
+LINES_ADJACENCY = _mgl.LINES_ADJACENCY
+TRIANGLE_STRIP_ADJACENCY = _mgl.TRIANGLE_STRIP_ADJACENCY
+TRIANGLES_ADJACENCY = _mgl.TRIANGLES_ADJACENCY
+
+
+class InvalidObject:
+	pass
 
 
 class Attribute:
@@ -26,7 +43,8 @@ class Attribute:
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -36,12 +54,22 @@ class Attribute:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class Buffer:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -51,12 +79,111 @@ class Buffer:
 		return r
 
 
+	@property
+	def size(self):
+		'''
+		'''
+
+		return self._o.size
+
+
+	@property
+	def dynamic(self):
+		'''
+		'''
+
+		return self._o.dynamic
+
+
+	def release(self):
+		'''
+			Release the buffer.
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
+	def access(self, size = -1, offset = 0, readonly = False):
+		'''
+			Keyword Args:
+				size: The size.
+				offset: The offset.
+				readonly: The readonly.
+		'''
+
+		return self._o.access(size, offset, readonly)
+
+
+	def read(self, size = -1, offset = 0):
+		'''
+			Read the content.
+
+			Args:
+				size: The size. Value `-1` means all.
+
+			Keyword Args:
+				offset: The offset.
+
+			Returns:
+				bytes: binary data.
+		'''
+
+		return self._o.read(size, offset)
+
+
+	def write(self, data, offset = 0):
+		'''
+			Write the content.
+
+			Args:
+				data: The data.
+
+			Keyword Args:
+				offset: The offset.
+		'''
+
+		self._o.write(data, offset)
+
+
+	def orphan(self):
+		'''
+			Orphan the buffer.
+		'''
+
+		self._o.orphan()
+
+
+	def bind_to_uniform_block(self, location = 0):
+		'''
+		'''
+
+		self._o.bind_to_uniform_block(location)
+
+
+	def bind_to_storage_buffer(self, location = 0):
+		'''
+		'''
+
+		self._o.bind_to_storage_buffer(location)
+
+
 class BufferAccess:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
+
+
+	def __enter__(self):
+		return self._o.open()
+
+
+	def __exit__(self, *args):
+		self._o.close()
 
 
 	@staticmethod
@@ -66,12 +193,105 @@ class BufferAccess:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
+	def open(self):
+		'''
+			Map the buffer.
+		'''
+
+		return self._o.open()
+
+
+	def close(self):
+		'''
+			Unmap the buffer.
+		'''
+
+		self._o.close()
+
+
+	def read(self, size, offset = 0):
+		'''
+			Read the content.
+
+			Args:
+				size: The size. Value `-1` means all.
+
+			Keyword Args:
+				offset: The offset.
+
+			Returns:
+				bytes: binary data
+		'''
+
+		return self._o.read(size, offset)
+
+
+	def write(self, data, offset = 0):
+		'''
+			Write the content.
+
+			Args:
+				size: The data.
+
+			Keyword Args:
+				offset: The offset.
+		'''
+
+		return self._o.write(data, offset)
+
+
+	@property
+	def buffer(self):
+		'''
+			The buffer.
+		'''
+
+		return self._o.buffer
+
+
+	@property
+	def offset(self):
+		'''
+			The offset.
+		'''
+
+		return self._o.offset
+
+
+	@property
+	def size(self):
+		'''
+			The size.
+		'''
+
+		return self._o.size
+
+
+	@property
+	def readonly(self):
+		'''
+			Is readonly.
+		'''
+
+		return self._o.readonly
+
+
 class ComputeShader:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -81,12 +301,22 @@ class ComputeShader:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class EnableFlag:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -96,12 +326,22 @@ class EnableFlag:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class Framebuffer:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -111,12 +351,37 @@ class Framebuffer:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
+	def read(self):
+		'''
+		'''
+
+		return self._o.read()
+
+
+	def use(self):
+		'''
+			Bind the framebuffer. Set the target for the :py:func:`~VertexArray.render` or :py:func:`~VertexArray.transform` methods.
+		'''
+
+		self._o.use()
+
+
 class MultisampleRenderbuffer:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -126,12 +391,22 @@ class MultisampleRenderbuffer:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class MultisampleTexture:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -141,12 +416,22 @@ class MultisampleTexture:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class Primitive:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -156,12 +441,22 @@ class Primitive:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class Program:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -171,12 +466,118 @@ class Program:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
+	@property
+	def uniforms(self):
+		'''
+		'''
+
+		return self._o.uniforms
+
+
+	@property
+	def uniform_blocks(self):
+		'''
+		'''
+
+		return self._o.uniform_blocks
+
+
+	@property
+	def attributes(self):
+		'''
+		'''
+
+		return self._o.attributes
+
+
+	@property
+	def varyings(self):
+		'''
+		'''
+
+		return self._o.varyings
+
+
+	@property
+	def geometry_input(self):
+		'''
+		'''
+
+		return self._o.geometry_input
+
+
+	@property
+	def geometry_output(self):
+		'''
+		'''
+
+		return self._o.geometry_output
+
+
+	@property
+	def geometry_vertices(self):
+		'''
+		'''
+
+		return self._o.geometry_vertices
+
+
+	@property
+	def vertex_shader(self):
+		'''
+		'''
+
+		return self._o.vertex_shader
+
+
+	@property
+	def fragment_shader(self):
+		'''
+		'''
+
+		return self._o.fragment_shader
+
+
+	@property
+	def geometry_shader(self):
+		'''
+		'''
+
+		return self._o.geometry_shader
+
+
+	@property
+	def tesselation_evaluation_shader(self):
+		'''
+		'''
+
+		return self._o.tesselation_evaluation_shader
+
+
+	@property
+	def tesselation_control_shader(self):
+		'''
+		'''
+
+		return self._o.tesselation_control_shader
+
+
 class ProgramStage:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -186,12 +587,22 @@ class ProgramStage:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class Renderbuffer:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -201,12 +612,22 @@ class Renderbuffer:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class Shader:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -216,12 +637,22 @@ class Shader:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class Subroutine:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -231,12 +662,22 @@ class Subroutine:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class SubroutineUniform:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -246,12 +687,22 @@ class SubroutineUniform:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class Texture:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -261,12 +712,22 @@ class Texture:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class Uniform:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -276,12 +737,22 @@ class Uniform:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class UniformBlock:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -291,12 +762,22 @@ class UniformBlock:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class Varying:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -306,12 +787,22 @@ class Varying:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class Version:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -321,12 +812,22 @@ class Version:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class VertexArray:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -336,12 +837,89 @@ class VertexArray:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
+	@property
+	def program(self):
+		'''
+		'''
+
+		return self._o.program
+
+
+	@property
+	def content(self):
+		'''
+		'''
+
+		return self._o.content
+
+
+	@property
+	def attributes(self):
+		'''
+		'''
+
+		return self._o.attributes
+
+
+	@property
+	def index_buffer(self):
+		'''
+		'''
+
+		return self._o.index_buffer
+
+
+	@property
+	def vertices(self):
+		'''
+		'''
+
+		return self._o.vertices
+
+
+	def render(self, mode = TRIANGLES, vertices = -1, first = 0, instances = 1):
+		'''
+		'''
+
+		self._o.render(mode, vertices, first, instances)
+
+
+	def transform(self, output, mode = TRIANGLES, vertices = -1, first = 0, instances = 1):
+		'''
+			Transform vertices.
+			Stores the output in a single buffer.
+			The transform primitive (mode) must be the same as the input primitive of the GeometryShader.
+
+			Args:
+				output: The buffer to store the output.
+				optional mode: By default :py:const:`~ModernGL.TRIANGLES` will be used.
+				optional vertices: The number of vertices to transform.
+
+			Keyword Args:
+				first: The index of the first vertex to start with.
+				instances: The number of instances.
+		'''
+
+		print(dir(output))
+		self._o.transform(output._o, mode, vertices, first, instances)
+
+
 class VertexArrayAttribute:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -351,12 +929,22 @@ class VertexArrayAttribute:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class VertexArrayListAttribute:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -366,12 +954,22 @@ class VertexArrayListAttribute:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class VertexArrayMatrixAttribute:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -381,12 +979,22 @@ class VertexArrayMatrixAttribute:
 		return r
 
 
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
+
+
 class Context:
 	'''
 	'''
 
 	def __init__(self):
-		pass
+		self._o = None
+		raise NotImplementedError()
 
 
 	@staticmethod
@@ -394,6 +1002,15 @@ class Context:
 		r = Context.__new__(Context)
 		r._o = o
 		return r
+
+
+	def release(self):
+		'''
+		'''
+
+		self._o.release()
+		del self._o
+		self.__class__ = InvalidObject
 
 
 	@property
@@ -469,6 +1086,7 @@ class Context:
 		'''
 
 		self._o.release()
+		del self._o
 
 
 	def clear(self, r = 0, g = 0, b = 0, a = 0):
@@ -503,7 +1121,7 @@ class Context:
 		'''
 		'''
 
-		self._o.copy_buffer(dst, src, size, read_offset, write_offset)
+		self._o.copy_buffer(dst._o, src._o, size, read_offset, write_offset)
 
 
 	def read_pixels(self, x, y, width, height, components = 3, floats = False):
@@ -513,7 +1131,7 @@ class Context:
 		return self._o.read_pixels(x, y, width, height, components, floats)
 
 
-	def Buffer(self, data, reserve = 0, dynamic = False):
+	def Buffer(self, data = None, reserve = 0, dynamic = False):
 		'''
 		'''
 
@@ -538,7 +1156,12 @@ class Context:
 		'''
 		'''
 
-		return VertexArray._new(self._o.VertexArray(program, content, index_buffer, skip_errors))
+		if index_buffer is not None:
+			index_buffer = index_buffer._o
+
+		content = list((a._o, b, c) for a, b, c in content) # tuple
+
+		return VertexArray._new(self._o.VertexArray(program._o, list(content), index_buffer, skip_errors)) # tuple
 
 
 	def SimpleVertexArray(self, program, buffer, format, attributes, index_buffer = None, skip_errors = False):
@@ -548,11 +1171,14 @@ class Context:
 		return VertexArray._new(self.VertexArray(program, [(buffer, format, attributes)], index_buffer, skip_errors))
 
 
-	def Program(self, shaders, varyings = None):
+	def Program(self, shaders, varyings = []):
 		'''
 		'''
 
-		return Program._new(self._o.Program(shaders, varyings))
+		if isinstance(shaders, Shader):
+			shaders = [shaders]
+
+		return Program._new(self._o.Program([x._o for x in shaders], varyings)) # TODO: tuple
 
 
 	def VertexShader(self, source):
@@ -621,7 +1247,7 @@ class Context:
 def create_context(require = None):
 	'''
 		Create a context and load OpenGL functions.
-		An OpenGL context must exists.
+		An OpenGL context must eWxists.
 
 		Keyword Arguments:
 			require (:py:class:`ModernGL.Version`): OpenGL version.
@@ -630,7 +1256,7 @@ def create_context(require = None):
 			:py:class:`ModernGL.Context`
 	'''
 
-	return _mgl.create_context(require)
+	return Context._new(_mgl.create_context(require))
 
 
 def create_standalone_context(size = (256, 256), require = None):
@@ -646,7 +1272,7 @@ def create_standalone_context(size = (256, 256), require = None):
 			:py:class:`ModernGL.Context`
 	'''
 
-	return _mgl.create_standalone_context(size, require)
+	return Context._new(_mgl.create_standalone_context(size, require))
 
 
 def detect_format(program, attributes):
