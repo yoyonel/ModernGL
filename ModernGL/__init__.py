@@ -909,7 +909,6 @@ class VertexArray:
 				instances: The number of instances.
 		'''
 
-		print(dir(output))
 		self._o.transform(output._o, mode, vertices, first, instances)
 
 
@@ -1168,7 +1167,7 @@ class Context:
 		'''
 		'''
 
-		return VertexArray._new(self.VertexArray(program, [(buffer, format, attributes)], index_buffer, skip_errors))
+		return self.VertexArray(program, [(buffer, format, attributes)], index_buffer, skip_errors)
 
 
 	def Program(self, shaders, varyings = []):
