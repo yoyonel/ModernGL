@@ -10,11 +10,6 @@
 
 version = '3.1.5'
 
-try:
-	from ModernGL.pylint_mock import *
-except ImportError:
-	pass
-
 from ModernGL.ModernGL import *
 
 def detect_format(program, attributes):
