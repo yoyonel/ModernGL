@@ -99,20 +99,20 @@ classifiers = [
 ]
 
 args = {
-	'name' : 'ModernGL',
-	'version' : '3.1.5',
-	'description' : short_description,
-	'long_description' : long_description.strip(),
-	'url' : 'https://github.com/cprogrammer1994/ModernGL',
-	'download_url' : 'https://github.com/cprogrammer1994/ModernGL/releases',
-	'author' : 'Szabolcs Dombi',
-	'author_email' : 'cprogrammer1994@gmail.com',
-	'license' : 'MIT',
-	'classifiers' : classifiers,
-	'keywords' : keywords,
-	'packages' : ['ModernGL'],
-	'ext_modules' : [ModernGL],
-	'platforms' : ['any'],
+	'name': 'ModernGL',
+	'version': '3.1.5',
+	'description': short_description,
+	'long_description': long_description.strip(),
+	'url': 'https://github.com/cprogrammer1994/ModernGL',
+	'download_url': 'https://github.com/cprogrammer1994/ModernGL/releases',
+	'author': 'Szabolcs Dombi',
+	'author_email': 'cprogrammer1994@gmail.com',
+	'license': 'MIT',
+	'classifiers': classifiers,
+	'keywords': keywords,
+	'packages': ['ModernGL'],
+	'ext_modules': [ModernGL],
+	'platforms': ['any'],
 }
 
 if target == 'windows':
