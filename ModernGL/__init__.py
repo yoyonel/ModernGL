@@ -59,7 +59,6 @@ class Attribute:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -101,7 +100,6 @@ class Buffer:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -198,7 +196,6 @@ class BufferAccess:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -306,7 +303,6 @@ class ComputeShader:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -331,7 +327,6 @@ class EnableFlag:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -356,7 +351,6 @@ class Framebuffer:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -396,7 +390,6 @@ class MultisampleRenderbuffer:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -421,7 +414,6 @@ class MultisampleTexture:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -446,7 +438,6 @@ class Primitive:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -471,7 +462,6 @@ class Program:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -592,7 +582,6 @@ class ProgramStage:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -617,7 +606,6 @@ class Renderbuffer:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -642,7 +630,6 @@ class Shader:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -667,7 +654,6 @@ class Subroutine:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -692,7 +678,6 @@ class SubroutineUniform:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -717,7 +702,6 @@ class Texture:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -742,7 +726,6 @@ class Uniform:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -767,7 +750,6 @@ class UniformBlock:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -792,7 +774,6 @@ class Varying:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -817,7 +798,6 @@ class Version:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -842,7 +822,6 @@ class VertexArray:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -933,7 +912,6 @@ class VertexArrayAttribute:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -958,7 +936,6 @@ class VertexArrayListAttribute:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -983,7 +960,6 @@ class VertexArrayMatrixAttribute:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -1008,7 +984,6 @@ class Context:
 		'''
 
 		self._o.release()
-		del self._o
 		self.__class__ = InvalidObject
 
 
@@ -1080,12 +1055,7 @@ class Context:
 		return self._o.default_framebuffer
 
 
-	def release(self):
-		'''
-		'''
-
 		self._o.release()
-		del self._o
 
 
 	def clear(self, r = 0, g = 0, b = 0, a = 0):

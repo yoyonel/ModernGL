@@ -45,9 +45,8 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"O!|III",
+		"O|III",
 		(char **)kwlist,
-		&MGLBuffer_Type,
 		&buffer,
 		&offset,
 		&stride,
@@ -55,6 +54,14 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 	);
 
 	if (!args_ok) {
+		return 0;
+	}
+
+	buffer = (MGLBuffer *)PyObject_GetAttrString((PyObject *)buffer, "_o"); // TODO: fix
+
+	if (!buffer || Py_TYPE(buffer) != &MGLBuffer_Type) {
+		MGLError * error = MGLError_New(TRACE, "buffer must be a Buffer"); // TODO: fix
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
