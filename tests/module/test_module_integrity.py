@@ -11,16 +11,16 @@ def readfile(name):
 
 
 here = os.path.dirname(os.path.abspath(__file__))
-parent = os.path.dirname(here)
+repo = os.path.dirname(os.path.dirname(here))
 
 
 class TestCase(unittest.TestCase):
 
 	def test_version(self):
-		setup = readfile(os.path.join(parent, 'setup.py'))
-		init = readfile(os.path.join(parent, 'ModernGL', '__init__.py'))
-		main = readfile(os.path.join(parent, 'ModernGL', '__main__.py'))
-		docs = readfile(os.path.join(parent, 'docs', 'conf.py'))
+		setup = readfile(os.path.join(repo, 'setup.py'))
+		init = readfile(os.path.join(repo, 'ModernGL', '__init__.py'))
+		main = readfile(os.path.join(repo, 'ModernGL', '__main__.py'))
+		docs = readfile(os.path.join(repo, 'docs', 'conf.py'))
 
 		match0 = re.search(r'\'version\': \'(\d+\.\d+\.\d+)\'', setup, flags = re.M)
 		version = match0.group(1)
