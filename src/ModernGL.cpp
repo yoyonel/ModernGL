@@ -37,15 +37,15 @@
 MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObject * kwargs) {
 	static const char * kwlist[] = {"size", "require", 0};
 
-	int width = 256;
-	int height = 256;
+	int width;
+	int height;
 
-	MGLVersion * require = (MGLVersion *)Py_None;
+	MGLVersion * require;
 
 	int args_ok = PyArg_ParseTupleAndKeywords(
 		args,
 		kwargs,
-		"|(II)O",
+		"(II)O",
 		(char **)kwlist,
 		&width,
 		&height,

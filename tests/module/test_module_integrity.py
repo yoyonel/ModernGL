@@ -25,7 +25,7 @@ class TestCase(unittest.TestCase):
 		match0 = re.search(r'\'version\': \'(\d+\.\d+\.\d+)\'', setup, flags = re.M)
 		version = match0.group(1)
 
-		match1 = re.search(r'version = \'(\d+\.\d+\.\d+)\'', init, flags = re.M)
+		match1 = re.search(r'VERSION = \'(\d+\.\d+\.\d+)\'', init, flags = re.M)
 		match2 = re.search(r'version = \'%\(prog\)s (\d+\.\d+\.\d+)\'', main, flags = re.M)
 		match3 = re.search(r'version = \'(\d+\.\d+\.\d+)\'', docs, flags = re.M)
 		match4 = re.search(r'release = \'(\d+\.\d+\.\d+)\'', docs, flags = re.M)
