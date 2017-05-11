@@ -44,27 +44,15 @@ PyObject * MGLSubroutine_get_name(MGLSubroutine * self, void * closure) {
 	return self->name;
 }
 
-char MGLSubroutine_name_doc[] = R"(
-	name
-)";
-
 PyObject * MGLSubroutine_get_location(MGLSubroutine * self, void * closure) {
 	return PyLong_FromLong(self->location);
 }
 
-char MGLSubroutine_location_doc[] = R"(
-	location
-)";
-
 PyGetSetDef MGLSubroutine_tp_getseters[] = {
-	{(char *)"name", (getter)MGLSubroutine_get_name, 0, MGLSubroutine_name_doc, 0},
-	{(char *)"location", (getter)MGLSubroutine_get_location, 0, MGLSubroutine_location_doc, 0},
+	{(char *)"name", (getter)MGLSubroutine_get_name, 0, 0, 0},
+	{(char *)"location", (getter)MGLSubroutine_get_location, 0, 0, 0},
 	{0},
 };
-
-const char * MGLSubroutine_tp_doc = R"(
-	Subroutine
-)";
 
 PyTypeObject MGLSubroutine_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -87,7 +75,7 @@ PyTypeObject MGLSubroutine_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLSubroutine_tp_doc,                                   // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

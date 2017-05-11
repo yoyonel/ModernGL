@@ -60,7 +60,7 @@ PyObject * MGLContext_tp_str(MGLContext * self) {
 // 	Py_RETURN_NONE;
 // }
 
-PyObject * MGLContext_clear(MGLContext * self, PyObject * args, PyObject * kwargs) {
+PyObject * MGLContext_clear(MGLContext * self, PyObject * args) {
 	int r;
 	int g;
 	int b;
@@ -88,7 +88,7 @@ PyObject * MGLContext_clear(MGLContext * self, PyObject * args, PyObject * kwarg
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLContext_enable(MGLContext * self, PyObject * args, PyObject * kwargs) {
+PyObject * MGLContext_enable(MGLContext * self, PyObject * args) {
 	MGLEnableFlag * flags;
 
 	int args_ok = PyArg_ParseTuple(
@@ -107,7 +107,7 @@ PyObject * MGLContext_enable(MGLContext * self, PyObject * args, PyObject * kwar
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLContext_disable(MGLContext * self, PyObject * args, PyObject * kwargs) {
+PyObject * MGLContext_disable(MGLContext * self, PyObject * args) {
 	MGLEnableFlag * flags;
 
 	int args_ok = PyArg_ParseTuple(
@@ -131,7 +131,7 @@ PyObject * MGLContext_finish(MGLContext * self) {
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLContext_copy_buffer(MGLContext * self, PyObject * args, PyObject * kwargs) {
+PyObject * MGLContext_copy_buffer(MGLContext * self, PyObject * args) {
 	MGLBuffer * dst;
 	MGLBuffer * src;
 
@@ -180,7 +180,7 @@ PyObject * MGLContext_copy_buffer(MGLContext * self, PyObject * args, PyObject *
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLContext_read_pixels(MGLContext * self, PyObject * args, PyObject * kwargs) {
+PyObject * MGLContext_read_pixels(MGLContext * self, PyObject * args) {
 	int x;
 	int y;
 	int width;
@@ -228,7 +228,7 @@ PyObject * MGLContext_read_pixels(MGLContext * self, PyObject * args, PyObject *
 	return bytes;
 }
 
-MGLBuffer * MGLContext_Buffer(MGLContext * self, PyObject * args, PyObject * kwargs) {
+MGLBuffer * MGLContext_Buffer(MGLContext * self, PyObject * args) {
 	PyObject * data;
 	int reserve;
 	int dynamic;
@@ -304,7 +304,7 @@ MGLBuffer * MGLContext_Buffer(MGLContext * self, PyObject * args, PyObject * kwa
 	return buffer;
 }
 
-MGLTexture * MGLContext_Texture(MGLContext * self, PyObject * args, PyObject * kwargs) {
+MGLTexture * MGLContext_Texture(MGLContext * self, PyObject * args) {
 	int width;
 	int height;
 
@@ -389,7 +389,7 @@ MGLTexture * MGLContext_Texture(MGLContext * self, PyObject * args, PyObject * k
 	return texture;
 }
 
-MGLTexture * MGLContext_DepthTexture(MGLContext * self, PyObject * args, PyObject * kwargs) {
+MGLTexture * MGLContext_DepthTexture(MGLContext * self, PyObject * args) {
 	int width;
 	int height;
 
@@ -459,7 +459,7 @@ MGLTexture * MGLContext_DepthTexture(MGLContext * self, PyObject * args, PyObjec
 	return texture;
 }
 
-MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyObject * kwargs) {
+MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args) {
 	MGLProgram * program;
 	PyObject * content;
 	MGLBuffer * index_buffer;
@@ -723,7 +723,7 @@ MGLVertexArray * MGLContext_VertexArray(MGLContext * self, PyObject * args, PyOb
 	return array;
 }
 
-MGLProgram * MGLContext_Program(MGLContext * self, PyObject * args, PyObject * kwargs) {
+MGLProgram * MGLContext_Program(MGLContext * self, PyObject * args) {
 	PyObject * shaders;
 	PyObject * varyings;
 
@@ -822,7 +822,7 @@ MGLProgram * MGLContext_Program(MGLContext * self, PyObject * args, PyObject * k
 }
 
 template <int ShaderSlot>
-MGLShader * MGLContext_Shader(MGLContext * self, PyObject * args, PyObject * kwargs) {
+MGLShader * MGLContext_Shader(MGLContext * self, PyObject * args) {
 	PyObject * source;
 
 	int args_ok = PyArg_ParseTuple(
@@ -863,7 +863,7 @@ MGLShader * MGLContext_Shader(MGLContext * self, PyObject * args, PyObject * kwa
 	return shader;
 }
 
-MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyObject * kwargs) {
+MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args) {
 	PyObject * attachments;
 
 	int args_ok = PyArg_ParseTuple(
@@ -1091,7 +1091,7 @@ MGLFramebuffer * MGLContext_Framebuffer(MGLContext * self, PyObject * args, PyOb
 	return framebuffer;
 }
 
-MGLRenderbuffer * MGLContext_Renderbuffer(MGLContext * self, PyObject * args, PyObject * kwargs) {
+MGLRenderbuffer * MGLContext_Renderbuffer(MGLContext * self, PyObject * args) {
 	int width;
 	int height;
 
@@ -1145,7 +1145,7 @@ MGLRenderbuffer * MGLContext_Renderbuffer(MGLContext * self, PyObject * args, Py
 	return renderbuffer;
 }
 
-MGLRenderbuffer * MGLContext_DepthRenderbuffer(MGLContext * self, PyObject * args, PyObject * kwargs) {
+MGLRenderbuffer * MGLContext_DepthRenderbuffer(MGLContext * self, PyObject * args) {
 	int width;
 	int height;
 
@@ -1182,7 +1182,7 @@ MGLRenderbuffer * MGLContext_DepthRenderbuffer(MGLContext * self, PyObject * arg
 	return renderbuffer;
 }
 
-MGLComputeShader * MGLContext_ComputeShader(MGLContext * self, PyObject * args, PyObject * kwargs) {
+MGLComputeShader * MGLContext_ComputeShader(MGLContext * self, PyObject * args) {
 	PyObject * source;
 
 	int args_ok = PyArg_ParseTuple(
@@ -1294,7 +1294,7 @@ PyObject * MGLContext_release(MGLContext * self) {
 }
 
 PyMethodDef MGLContext_tp_methods[] = {
-	// {"make_current", (PyCFunction)MGLContext_make_current, METH_NOARGS, MGLContext_make_current_doc},
+	// {"make_current", (PyCFunction)MGLContext_make_current, METH_NOARGS, 0},
 
 	{"release", (PyCFunction)MGLContext_release, METH_NOARGS, 0},
 

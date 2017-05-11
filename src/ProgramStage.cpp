@@ -56,10 +56,6 @@ PyGetSetDef MGLProgramStage_tp_getseters[] = {
 	{0},
 };
 
-const char * MGLProgramStage_tp_doc = R"(
-	ProgramStage
-)";
-
 PyTypeObject MGLProgramStage_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
 	"ModernGL.ProgramStage",                                // tp_name
@@ -81,7 +77,7 @@ PyTypeObject MGLProgramStage_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLProgramStage_tp_doc,                                 // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

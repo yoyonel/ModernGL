@@ -40,24 +40,14 @@ PyObject * MGLRenderbuffer_release(MGLRenderbuffer * self) {
 	Py_RETURN_NONE;
 }
 
-const char * MGLRenderbuffer_release_doc = R"(
-	release()
-
-	Release the renderbuffer.
-)";
-
 PyMethodDef MGLRenderbuffer_tp_methods[] = {
-	{"release", (PyCFunction)MGLRenderbuffer_release, METH_NOARGS, MGLRenderbuffer_release_doc},
+	{"release", (PyCFunction)MGLRenderbuffer_release, METH_NOARGS, 0},
 	{0},
 };
 
 PyGetSetDef MGLRenderbuffer_tp_getseters[] = {
 	{0},
 };
-
-const char * MGLRenderbuffer_tp_doc = R"(
-	Renderbuffer
-)";
 
 PyTypeObject MGLRenderbuffer_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -80,7 +70,7 @@ PyTypeObject MGLRenderbuffer_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLRenderbuffer_tp_doc,                                 // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

@@ -35,16 +35,16 @@ PyObject * MGLMultisampleTexture_tp_str(MGLMultisampleTexture * self) {
 	return PyUnicode_FromFormat("<ModernGL.MultisampleTexture>");
 }
 
-PyObject * MGLMultisampleTexture_use(MGLMultisampleTexture * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"index", 0};
+PyObject * MGLMultisampleTexture_use(MGLMultisampleTexture * self, PyObject * args) {
+
 
 	int index = 0;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
+
 		"|I",
-		(char **)kwlist,
+
 		&index
 	);
 
@@ -59,42 +59,20 @@ PyObject * MGLMultisampleTexture_use(MGLMultisampleTexture * self, PyObject * ar
 	Py_RETURN_NONE;
 }
 
-const char * MGLMultisampleTexture_use_doc = R"(
-	use(index = 0)
-
-	Args:
-		optional index: The texture location.
-			Same as the integer value that is used for sampler2D uniforms in the shaders.
-			The value ``0`` will bind the texture to the ``GL_TEXTURE0`` binding point.
-
-	Returns:
-		:py:data:`None`
-)";
-
 PyObject * MGLMultisampleTexture_release(MGLMultisampleTexture * self) {
 	MGLMultisampleTexture_Invalidate(self);
 	Py_RETURN_NONE;
 }
 
-const char * MGLMultisampleTexture_release_doc = R"(
-	release()
-
-	Release the texture.
-)";
-
 PyMethodDef MGLMultisampleTexture_tp_methods[] = {
-	{"use", (PyCFunction)MGLMultisampleTexture_use, METH_VARARGS | METH_KEYWORDS, MGLMultisampleTexture_use_doc},
-	{"release", (PyCFunction)MGLMultisampleTexture_release, METH_NOARGS, MGLMultisampleTexture_release_doc},
+	{"use", (PyCFunction)MGLMultisampleTexture_use, METH_VARARGS | METH_KEYWORDS, 0},
+	{"release", (PyCFunction)MGLMultisampleTexture_release, METH_NOARGS, 0},
 	{0},
 };
 
 PyGetSetDef MGLMultisampleTexture_tp_getseters[] = {
 	{0},
 };
-
-const char * MGLMultisampleTexture_tp_doc = R"(
-	MultisampleTexture
-)";
 
 PyTypeObject MGLMultisampleTexture_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -117,7 +95,7 @@ PyTypeObject MGLMultisampleTexture_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLMultisampleTexture_tp_doc,                           // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

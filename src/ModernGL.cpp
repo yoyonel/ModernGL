@@ -34,19 +34,19 @@
 
 #include "GLContext.hpp"
 
-MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"size", "require", 0};
+MGLContext * create_standalone_context(PyObject * self, PyObject * args) {
+
 
 	int width;
 	int height;
 
 	MGLVersion * require;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
+
 		"(II)O",
-		(char **)kwlist,
+
 		&width,
 		&height,
 		&require
@@ -81,26 +81,16 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args, PyObjec
 	return ctx;
 }
 
-const char * create_standalone_context_doc = R"(
-	create_standalone_context(require = None)
+MGLContext * create_context(PyObject * self, PyObject * args) {
 
-	Keyword Arguments:
-		require (version): OpenGL version.
-
-	Returns:
-		:py:class:`ModernGL.Context`
-)";
-
-MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"require", 0};
 
 	MGLVersion * require = (MGLVersion *)Py_None;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
+
 		"|O",
-		(char **)kwlist,
+
 		&require
 	);
 
@@ -133,25 +123,11 @@ MGLContext * create_context(PyObject * self, PyObject * args, PyObject * kwargs)
 	return ctx;
 }
 
-const char * create_context_doc = R"(
-	create_context(require = None)
-
-	Keyword Arguments:
-		require (version): OpenGL version.
-
-	Returns:
-		:py:class:`ModernGL.Context`
-)";
-
 PyMethodDef MGL_module_methods[] = {
-	{"create_standalone_context", (PyCFunction)create_standalone_context, METH_VARARGS | METH_KEYWORDS, create_standalone_context_doc},
-	{"create_context", (PyCFunction)create_context, METH_VARARGS | METH_KEYWORDS, create_context_doc},
+	{"create_standalone_context", (PyCFunction)create_standalone_context, METH_VARARGS | METH_KEYWORDS, 0},
+	{"create_context", (PyCFunction)create_context, METH_VARARGS | METH_KEYWORDS, 0},
 	{0},
 };
-
-const char * MGL_module_doc = R"(
-	ModernGL
-)";
 
 bool MGL_InitializeModule(PyObject * module) {
 	{
@@ -663,7 +639,7 @@ bool MGL_InitializeModule(PyObject * module) {
 PyModuleDef MGL_moduledef = {
 	PyModuleDef_HEAD_INIT,
 	"ModernGL",
-	MGL_module_doc,
+	0,
 	-1,
 	MGL_module_methods,
 	0,

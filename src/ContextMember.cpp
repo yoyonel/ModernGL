@@ -34,20 +34,10 @@ MGLContext * MGLContextMember_get_context(MGLContextMember * self, void * closur
 	return self->context;
 }
 
-char MGLContextMember_context_doc[] = R"(
-	context
-
-	The Context object used for creation.
-)";
-
 PyGetSetDef MGLContextMember_tp_getseters[] = {
-	{(char *)"context", (getter)MGLContextMember_get_context, 0, MGLContextMember_context_doc, 0},
+	{(char *)"context", (getter)MGLContextMember_get_context, 0, 0, 0},
 	{0},
 };
-
-const char * MGLContextMember_tp_doc = R"(
-	ContextMember
-)";
 
 PyTypeObject MGLContextMember_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -70,7 +60,7 @@ PyTypeObject MGLContextMember_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLContextMember_tp_doc,                                // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

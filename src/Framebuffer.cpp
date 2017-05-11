@@ -73,6 +73,7 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 
 	PyObject * result = PyBytes_FromStringAndSize(0, size);
 	char * data = PyBytes_AS_STRING(result);
+	// TODO: bind maybe
 	self->context->gl.ReadPixels(origin_x, origin_y, width, height, format, type, data);
 	return result;
 }

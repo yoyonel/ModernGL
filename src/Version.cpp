@@ -42,33 +42,15 @@ PyObject * MGLVersion_get_major(MGLVersion * self, void * closure) {
 	return PyLong_FromLong(self->major);
 }
 
-char MGLVersion_major_doc[] = R"(
-	major
-
-	The major
-)";
-
 PyObject * MGLVersion_get_minor(MGLVersion * self, void * closure) {
 	return PyLong_FromLong(self->minor);
 }
 
-char MGLVersion_minor_doc[] = R"(
-	minor
-
-	The minor
-)";
-
 PyGetSetDef MGLVersion_tp_getseters[] = {
-	{(char *)"major", (getter)MGLVersion_get_major, 0, MGLVersion_major_doc, 0},
-	{(char *)"minor", (getter)MGLVersion_get_minor, 0, MGLVersion_minor_doc, 0},
+	{(char *)"major", (getter)MGLVersion_get_major, 0, 0, 0},
+	{(char *)"minor", (getter)MGLVersion_get_minor, 0, 0, 0},
 	{0},
 };
-
-const char * MGLVersion_tp_doc = R"(
-	Version
-
-	OpenGL version.
-)";
 
 PyTypeObject MGLVersion_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -91,7 +73,7 @@ PyTypeObject MGLVersion_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLVersion_tp_doc,                                      // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

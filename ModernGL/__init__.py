@@ -22,20 +22,67 @@ Error = _mgl.Error
 
 
 TRIANGLES = _mgl.TRIANGLES
+'''
+	GL_TRIANGLES
+'''
+
 TRIANGLE_STRIP = _mgl.TRIANGLE_STRIP
+'''
+	GL_TRIANGLE_STRIP
+'''
+
 TRIANGLE_FAN = _mgl.TRIANGLE_FAN
+'''
+	GL_TRIANGLE_FAN
+'''
+
 LINES = _mgl.LINES
+'''
+	GL_LINES
+'''
+
 LINE_STRIP = _mgl.LINE_STRIP
+'''
+	GL_LINE_STRIP
+'''
+
 LINE_LOOP = _mgl.LINE_LOOP
+'''
+	GL_LINE_LOOP
+'''
+
 POINTS = _mgl.POINTS
+'''
+	GL_POINTS
+'''
+
 LINE_STRIP_ADJACENCY = _mgl.LINE_STRIP_ADJACENCY
+'''
+	GL_LINE_STRIP_ADJACENCY
+'''
+
 LINES_ADJACENCY = _mgl.LINES_ADJACENCY
+'''
+	GL_LINES_ADJACENCY
+'''
+
 TRIANGLE_STRIP_ADJACENCY = _mgl.TRIANGLE_STRIP_ADJACENCY
+'''
+	GL_TRIANGLE_STRIP_ADJACENCY
+'''
+
 TRIANGLES_ADJACENCY = _mgl.TRIANGLES_ADJACENCY
+'''
+	GL_TRIANGLES_ADJACENCY
+'''
 
 
 class InvalidObject:
-	pass
+	'''
+		A ModernGL object turns into an InvalidObject once the release method is successfully called.
+	'''
+
+	pass # TODO:
 
 
 class Attribute:
@@ -52,15 +99,6 @@ class Attribute:
 		r = Attribute.__new__(Attribute)
 		r._o = o
 		return r
-
-
-	def release(self):
-		'''
-
-		'''
-
-		self._o.release()
-		self.__class__ = InvalidObject
 
 
 class Buffer:
@@ -92,7 +130,7 @@ class Buffer:
 	@property
 	def dynamic(self):
 		'''
-
+			Is the buffer created with the dynamic flag?
 		'''
 
 		return self._o.dynamic
@@ -109,6 +147,8 @@ class Buffer:
 
 	def access(self, size = -1, offset = 0, readonly = False):
 		'''
+			Create a buffer access object.
+
 			Keyword Args:
 				size: The size.
 				offset: The offset.
@@ -159,7 +199,10 @@ class Buffer:
 
 	def bind_to_uniform_block(self, location = 0):
 		'''
+			Bind the buffer to a uniform block.
 
+			Args:
+				location: The uniform block location.
 		'''
 
 		self._o.bind_to_uniform_block(location)
@@ -167,7 +210,10 @@ class Buffer:
 
 	def bind_to_storage_buffer(self, location = 0):
 		'''
+			Bind the buffer to a shader storage buffer.
 
+			Args:
+				location: The shader storage location.
 		'''
 
 		self._o.bind_to_storage_buffer(location)
@@ -198,21 +244,12 @@ class BufferAccess:
 		return r
 
 
-	def release(self):
-		'''
-
-		'''
-
-		self._o.release()
-		self.__class__ = InvalidObject
-
-
 	def open(self):
 		'''
 			Map the buffer.
 		'''
 
-		return self._o.open()
+		self._o.open()
 
 
 	def close(self):
@@ -331,15 +368,6 @@ class EnableFlag:
 		return r
 
 
-	def release(self):
-		'''
-
-		'''
-
-		self._o.release()
-		self.__class__ = InvalidObject
-
-
 class Framebuffer:
 	'''
 	'''
@@ -358,14 +386,14 @@ class Framebuffer:
 
 	def release(self):
 		'''
-
+			Release the framebuffer.
 		'''
 
 		self._o.release()
 		self.__class__ = InvalidObject
 
 
-	def read(self):
+	def read(self, size = None, origin = (0, 0), components = 3, floats = False):
 		'''
 
 		'''
@@ -430,6 +458,15 @@ class MultisampleTexture:
 		self._o.release()
 		self.__class__ = InvalidObject
 
+	
+	# def use # TODO:
+	'''
+		Args:
+		optional index: The texture location.
+			Same as the integer value that is used for sampler2D uniforms in the shaders.
+			The value ``0`` will bind the texture to the ``GL_TEXTURE0`` binding point.
+	'''
+
 
 class Primitive:
 	'''
@@ -445,15 +482,6 @@ class Primitive:
 		r = Primitive.__new__(Primitive)
 		r._o = o
 		return r
-
-
-	def release(self):
-		'''
-
-		'''
-
-		self._o.release()
-		self.__class__ = InvalidObject
 
 
 class Program:
@@ -616,15 +644,6 @@ class ProgramStage:
 		return r
 
 
-	def release(self):
-		'''
-
-		'''
-
-		self._o.release()
-		self.__class__ = InvalidObject
-
-
 class Renderbuffer:
 	'''
 	'''
@@ -723,15 +742,6 @@ class Subroutine:
 		return r
 
 
-	def release(self):
-		'''
-
-		'''
-
-		self._o.release()
-		self.__class__ = InvalidObject
-
-
 class SubroutineUniform:
 	'''
 	'''
@@ -746,15 +756,6 @@ class SubroutineUniform:
 		r = SubroutineUniform.__new__(SubroutineUniform)
 		r._o = o
 		return r
-
-
-	def release(self):
-		'''
-
-		'''
-
-		self._o.release()
-		self.__class__ = InvalidObject
 
 
 class Texture:
@@ -843,15 +844,6 @@ class Uniform:
 		return r
 
 
-	def release(self):
-		'''
-
-		'''
-
-		self._o.release()
-		self.__class__ = InvalidObject
-
-
 class UniformBlock:
 	'''
 	'''
@@ -866,15 +858,6 @@ class UniformBlock:
 		r = UniformBlock.__new__(UniformBlock)
 		r._o = o
 		return r
-
-
-	def release(self):
-		'''
-
-		'''
-
-		self._o.release()
-		self.__class__ = InvalidObject
 
 
 class Varying:
@@ -893,15 +876,6 @@ class Varying:
 		return r
 
 
-	def release(self):
-		'''
-
-		'''
-
-		self._o.release()
-		self.__class__ = InvalidObject
-
-
 class Version:
 	'''
 	'''
@@ -916,15 +890,6 @@ class Version:
 		r = Version.__new__(Version)
 		r._o = o
 		return r
-
-
-	def release(self):
-		'''
-
-		'''
-
-		self._o.release()
-		self.__class__ = InvalidObject
 
 
 class VertexArray:
@@ -945,7 +910,7 @@ class VertexArray:
 
 	def release(self):
 		'''
-
+			Release the vertex array object.
 		'''
 
 		self._o.release()
@@ -955,7 +920,8 @@ class VertexArray:
 	@property
 	def program(self):
 		'''
-
+			The program assinged to the VertexArray.
+			The program will be used automatically when rendering and transforming.
 		'''
 
 		return self._o.program
@@ -964,7 +930,7 @@ class VertexArray:
 	@property
 	def content(self):
 		'''
-
+			The content assinged to the VertexArray.
 		'''
 
 		return self._o.content
@@ -973,7 +939,8 @@ class VertexArray:
 	@property
 	def attributes(self):
 		'''
-
+			Individual vertex attributes.
+			Use the bind() method to assign vertex attributes to buffers.
 		'''
 
 		return self._o.attributes
@@ -982,7 +949,7 @@ class VertexArray:
 	@property
 	def index_buffer(self):
 		'''
-
+			The index buffer if the index_buffer is set otherwise ``None``.
 		'''
 
 		return self._o.index_buffer
@@ -991,7 +958,10 @@ class VertexArray:
 	@property
 	def vertices(self):
 		'''
-
+			The number of vertices detected.
+			This is the minimum of the number of vertices possible per Buffer.
+			The size of the index_buffer will be used when the VertexArray has a valid index_buffer set.
+			Per instance vertex attributes does not affect this number.
 		'''
 
 		return self._o.vertices
@@ -999,7 +969,15 @@ class VertexArray:
 
 	def render(self, mode = TRIANGLES, vertices = -1, first = 0, instances = 1):
 		'''
+			The render primitive (mode) must be the same as the input primitive of the GeometryShader.
 
+			Args:
+				optional mode: By default :py:const:`~ModernGL.TRIANGLES` will be used.
+				optional vertices: The number of vertices to transform.
+
+			Keyword Args:
+				first: The index of the first vertex to start with.
+				instances: The number of instances.
 		'''
 
 		self._o.render(mode, vertices, first, instances)
@@ -1040,15 +1018,6 @@ class VertexArrayAttribute:
 		return r
 
 
-	def release(self):
-		'''
-
-		'''
-
-		self._o.release()
-		self.__class__ = InvalidObject
-
-
 class VertexArrayListAttribute:
 	'''
 	'''
@@ -1065,15 +1034,6 @@ class VertexArrayListAttribute:
 		return r
 
 
-	def release(self):
-		'''
-
-		'''
-
-		self._o.release()
-		self.__class__ = InvalidObject
-
-
 class VertexArrayMatrixAttribute:
 	'''
 	'''
@@ -1088,15 +1048,6 @@ class VertexArrayMatrixAttribute:
 		r = VertexArrayMatrixAttribute.__new__(VertexArrayMatrixAttribute)
 		r._o = o
 		return r
-
-
-	def release(self):
-		'''
-
-		'''
-
-		self._o.release()
-		self.__class__ = InvalidObject
 
 
 class Context:
@@ -1134,7 +1085,7 @@ class Context:
 
 	def release(self):
 		'''
-
+			Release the OpenGL context.
 		'''
 
 		self._o.release()
@@ -1209,7 +1160,7 @@ class Context:
 	@property
 	def default_framebuffer(self):
 		'''
-
+			The default framebuffer.
 		'''
 
 		return self._o.default_framebuffer
@@ -1262,27 +1213,27 @@ class Context:
 
 	def copy_buffer(self, dst, src, size = -1, read_offset = 0, write_offset = 0):
 		'''
-		Copy buffer content.
+			Copy buffer content.
 
-		Args:
-			dst: Destination buffer.
-			src: Source buffer.
-			optional size: Size to copy.
+			Args:
+				dst: Destination buffer.
+				src: Source buffer.
+				optional size: Size to copy.
 
-		Keyword Args:
-			read_offset: Read offset.
-			write_offset: Write offset.
+			Keyword Args:
+				read_offset: Read offset.
+				write_offset: Write offset.
 		'''
 
 		self._o.copy_buffer(dst._o, src._o, size, read_offset, write_offset)
 
 
-	def read_pixels(self, x, y, width, height, components = 3, floats = False):
-		'''
+	# TODO:
+	# def read_pixels(self, size = None, origin = (0, 0), components = 3, floats = False):
+	# 	'''
+	# 	'''
 
-		'''
-
-		return self._o.read_pixels(x, y, width, height, components, floats)
+	# 	return self._o.read_pixels(x, y, width, height, components, floats)
 
 
 	def Buffer(self, data = None, reserve = 0, dynamic = False):

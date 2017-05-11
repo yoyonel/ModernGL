@@ -34,20 +34,10 @@ PyMethodDef MGLProgramMember_tp_methods[] = {
 // 	return self->program;
 // }
 
-// char MGLProgramMember_program_doc[] = R"(
-// 	program
-
-// 	The Program object used for creation.
-// )";
-
 PyGetSetDef MGLProgramMember_tp_getseters[] = {
-	// {(char *)"program", (getter)MGLProgramMember_get_program, 0, MGLProgramMember_program_doc, 0},
+	// {(char *)"program", (getter)MGLProgramMember_get_program, 0, 0, 0},
 	{0},
 };
-
-const char * MGLProgramMember_tp_doc = R"(
-	ProgramMember
-)";
 
 PyTypeObject MGLProgramMember_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -70,7 +60,7 @@ PyTypeObject MGLProgramMember_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLProgramMember_tp_doc,                                // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

@@ -42,12 +42,8 @@ PyObject * MGLVertexArrayListAttribute_get_location(MGLVertexArrayListAttribute 
 	return PyLong_FromLong(self->location);
 }
 
-char MGLVertexArrayListAttribute_location_doc[] = R"(
-	location
-)";
-
 PyGetSetDef MGLVertexArrayListAttribute_tp_getseters[] = {
-	{(char *)"location", (getter)MGLVertexArrayListAttribute_get_location, 0, MGLVertexArrayListAttribute_location_doc, 0},
+	{(char *)"location", (getter)MGLVertexArrayListAttribute_get_location, 0, 0, 0},
 	{0},
 };
 
@@ -76,10 +72,6 @@ PySequenceMethods MGLVertexArrayListAttribute_tp_sequence = {
 	0,                                                               // sq_inplace_repeat
 };
 
-const char * MGLVertexArrayListAttribute_tp_doc = R"(
-	VertexArrayListAttribute
-)";
-
 PyTypeObject MGLVertexArrayListAttribute_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
 	"ModernGL.VertexArrayListAttribute",                    // tp_name
@@ -101,7 +93,7 @@ PyTypeObject MGLVertexArrayListAttribute_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLVertexArrayListAttribute_tp_doc,                     // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

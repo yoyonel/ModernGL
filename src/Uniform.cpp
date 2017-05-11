@@ -58,17 +58,17 @@ const char * MGLUniform_read_doc = R"(
 		``bytes``
 )";
 
-PyObject * MGLUniform_write(MGLUniform * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"data", 0};
+PyObject * MGLUniform_write(MGLUniform * self, PyObject * args) {
+
 
 	const char * buffer;
 	int size;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
+
 		"y#",
-		(char **)kwlist,
+
 		&buffer,
 		&size
 	);
@@ -112,8 +112,8 @@ const char * MGLUniform_write_doc = R"(
 )";
 
 PyMethodDef MGLUniform_tp_methods[] = {
-	{"read", (PyCFunction)MGLUniform_read, METH_NOARGS, MGLUniform_read_doc},
-	{"write", (PyCFunction)MGLUniform_write, METH_VARARGS | METH_KEYWORDS, MGLUniform_write_doc},
+	{"read", (PyCFunction)MGLUniform_read, METH_NOARGS, 0},
+	{"write", (PyCFunction)MGLUniform_write, METH_VARARGS | METH_KEYWORDS, 0},
 	{0},
 };
 
@@ -269,11 +269,11 @@ char MGLUniform_array_length_doc[] = R"(
 )";
 
 PyGetSetDef MGLUniform_tp_getseters[] = {
-	{(char *)"name", (getter)MGLUniform_get_name, 0, MGLUniform_name_doc, 0},
-	{(char *)"location", (getter)MGLUniform_get_location, 0, MGLUniform_location_doc, 0},
-	{(char *)"dimension", (getter)MGLUniform_get_dimension, 0, MGLUniform_dimension_doc, 0},
-	{(char *)"value", (getter)MGLUniform_get_value, (setter)MGLUniform_set_value, MGLUniform_value_doc, 0},
-	{(char *)"array_length", (getter)MGLUniform_get_array_length, 0, MGLUniform_array_length_doc, 0},
+	{(char *)"name", (getter)MGLUniform_get_name, 0, 0, 0},
+	{(char *)"location", (getter)MGLUniform_get_location, 0, 0, 0},
+	{(char *)"dimension", (getter)MGLUniform_get_dimension, 0, 0, 0},
+	{(char *)"value", (getter)MGLUniform_get_value, (setter)MGLUniform_set_value, 0, 0},
+	{(char *)"array_length", (getter)MGLUniform_get_array_length, 0, 0, 0},
 	{0},
 };
 

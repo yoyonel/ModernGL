@@ -52,20 +52,10 @@ PyObject * MGLError_get_github(MGLError * self) {
 	}
 }
 
-char MGLError_github_doc[] = R"(
-	github
-
-	A link to the source code, where the error occurred.
-)";
-
 PyGetSetDef MGLError_tp_getseters[] = {
-	{(char *)"github", (getter)MGLError_get_github, 0, MGLError_github_doc, 0},
+	{(char *)"github", (getter)MGLError_get_github, 0, 0, 0},
 	{0},
 };
-
-const char * MGLError_tp_doc = R"(
-	Error
-)";
 
 PyTypeObject MGLError_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -88,7 +78,7 @@ PyTypeObject MGLError_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLError_tp_doc,                                        // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

@@ -44,27 +44,15 @@ PyObject * MGLVarying_get_name(MGLVarying * self, void * closure) {
 	return self->name;
 }
 
-char MGLVarying_name_doc[] = R"(
-	name
-)";
-
 PyObject * MGLVarying_get_number(MGLVarying * self, void * closure) {
 	return PyLong_FromLong(self->number);
 }
 
-char MGLVarying_number_doc[] = R"(
-	number
-)";
-
 PyGetSetDef MGLVarying_tp_getseters[] = {
-	{(char *)"name", (getter)MGLVarying_get_name, 0, MGLVarying_name_doc, 0},
-	{(char *)"number", (getter)MGLVarying_get_number, 0, MGLVarying_number_doc, 0},
+	{(char *)"name", (getter)MGLVarying_get_name, 0, 0, 0},
+	{(char *)"number", (getter)MGLVarying_get_number, 0, 0, 0},
 	{0},
 };
-
-const char * MGLVarying_tp_doc = R"(
-	Varying
-)";
 
 PyTypeObject MGLVarying_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -87,7 +75,7 @@ PyTypeObject MGLVarying_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLVarying_tp_doc,                                      // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

@@ -34,20 +34,10 @@ MGLVertexArray * MGLVertexArrayMember_get_vertex_array(MGLVertexArrayMember * se
 	return self->vertex_array;
 }
 
-char MGLVertexArrayMember_vertex_array_doc[] = R"(
-	vertex_array
-
-	The Program object used for creation.
-)";
-
 PyGetSetDef MGLVertexArrayMember_tp_getseters[] = {
-	{(char *)"vertex_array", (getter)MGLVertexArrayMember_get_vertex_array, 0, MGLVertexArrayMember_vertex_array_doc, 0},
+	{(char *)"vertex_array", (getter)MGLVertexArrayMember_get_vertex_array, 0, 0, 0},
 	{0},
 };
-
-const char * MGLVertexArrayMember_tp_doc = R"(
-	VertexArrayMember
-)";
 
 PyTypeObject MGLVertexArrayMember_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -70,7 +60,7 @@ PyTypeObject MGLVertexArrayMember_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLVertexArrayMember_tp_doc,                            // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

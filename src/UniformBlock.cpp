@@ -43,31 +43,19 @@ PyObject * MGLUniformBlock_get_name(MGLUniformBlock * self, void * closure) {
 	return self->name;
 }
 
-char MGLUniformBlock_name_doc[] = R"(
-	name
-)";
-
 PyObject * MGLUniformBlock_get_location(MGLUniformBlock * self, void * closure) {
 	return PyLong_FromLong(self->location);
 }
 
-char MGLUniformBlock_location_doc[] = R"(
-	location
-)";
-
 PyGetSetDef MGLUniformBlock_tp_getseters[] = {
-	{(char *)"name", (getter)MGLUniformBlock_get_name, 0, MGLUniformBlock_name_doc, 0},
-	{(char *)"location", (getter)MGLUniformBlock_get_location, 0, MGLUniformBlock_location_doc, 0},
+	{(char *)"name", (getter)MGLUniformBlock_get_name, 0, 0, 0},
+	{(char *)"location", (getter)MGLUniformBlock_get_location, 0, 0, 0},
 	{0},
 };
 
-const char * MGLUniformBlock_tp_doc = R"(
-	UniformBlock
-)";
-
 PyTypeObject MGLUniformBlock_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.UniformBlock"         ,                       // tp_name
+	"ModernGL.UniformBlock",                                // tp_name
 	sizeof(MGLUniformBlock),                                // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLUniformBlock_tp_dealloc,                 // tp_dealloc
@@ -86,7 +74,7 @@ PyTypeObject MGLUniformBlock_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLUniformBlock_tp_doc,                                 // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

@@ -33,42 +33,20 @@ PyObject * MGLFramebufferAttachment_get_width(MGLFramebufferAttachment * self, v
 	return PyLong_FromLong(self->width);
 }
 
-char MGLFramebufferAttachment_width_doc[] = R"(
-	width
-
-	The width
-)";
-
 PyObject * MGLFramebufferAttachment_get_height(MGLFramebufferAttachment * self, void * closure) {
 	return PyLong_FromLong(self->height);
 }
-
-char MGLFramebufferAttachment_height_doc[] = R"(
-	height
-
-	The height
-)";
 
 PyObject * MGLFramebufferAttachment_get_size(MGLFramebufferAttachment * self, void * closure) {
 	return PyTuple_Pack(2, PyLong_FromLong(self->width), PyLong_FromLong(self->height));
 }
 
-char MGLFramebufferAttachment_size_doc[] = R"(
-	size
-
-	The size
-)";
-
 PyGetSetDef MGLFramebufferAttachment_tp_getseters[] = {
-	{(char *)"width", (getter)MGLFramebufferAttachment_get_width, 0, MGLFramebufferAttachment_width_doc, 0},
-	{(char *)"height", (getter)MGLFramebufferAttachment_get_height, 0, MGLFramebufferAttachment_height_doc, 0},
-	{(char *)"size", (getter)MGLFramebufferAttachment_get_size, 0, MGLFramebufferAttachment_size_doc, 0},
+	{(char *)"width", (getter)MGLFramebufferAttachment_get_width, 0, 0, 0},
+	{(char *)"height", (getter)MGLFramebufferAttachment_get_height, 0, 0, 0},
+	{(char *)"size", (getter)MGLFramebufferAttachment_get_size, 0, 0, 0},
 	{0},
 };
-
-const char * MGLFramebufferAttachment_tp_doc = R"(
-	FramebufferAttachment
-)";
 
 PyTypeObject MGLFramebufferAttachment_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -91,7 +69,7 @@ PyTypeObject MGLFramebufferAttachment_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLFramebufferAttachment_tp_doc,                        // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

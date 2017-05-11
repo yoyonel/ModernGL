@@ -42,19 +42,19 @@ PyObject * MGLVertexArray_tp_str(MGLVertexArray * self) {
 	return PyUnicode_FromFormat("<ModernGL.VertexArray>");
 }
 
-PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"mode", "vertices", "first", "instances", 0};
+PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
+
 
 	MGLPrimitive * mode = MGL_TRIANGLES;
 	int vertices = -1;
 	int first = 0;
 	int instances = 1;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
+
 		"|O!III",
-		(char **)kwlist,
+
 		&MGLPrimitive_Type,
 		&mode,
 		&vertices,
@@ -78,7 +78,7 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args, PyObjec
 
 	MGLPrimitive * gs_input = self->program->geometry_input;
 
-	if (gs_input && gs_input->primitive != mode->geometry_primitive) {
+	if (gs_input && gs_input->primitive != mode->geometry_primitive) { // TODO: check
 		MGLError * error = MGLError_New(TRACE, "GeometryShader input is different from render mode");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
@@ -99,37 +99,16 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args, PyObjec
 	Py_RETURN_NONE;
 }
 
-const char * MGLVertexArray_render_doc = R"(
-	render(mode, vertices, first, instances)
-
-	The render primitive (mode) must be the same as the input primitive of the GeometryShader.
-
-	Args:
-		optional mode: By default :py:const:`~ModernGL.TRIANGLES` will be used.
-		optional vertices: The number of vertices to transform.
-
-	Keyword Args:
-		first: The index of the first vertex to start with.
-		instances: The number of instances.
-
-	Returns:
-		None
-)";
-
-PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"output", "mode", "vertices", "first", "instances", 0};
-
+PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	MGLBuffer * output;
 	MGLPrimitive * mode = MGL_POINTS;
 	int vertices = -1;
 	int first = 0;
 	int instances = 1;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
-		"O!|O!III",
-		(char **)kwlist,
+		"O!O!III",
 		&MGLBuffer_Type,
 		&output,
 		&MGLPrimitive_Type,
@@ -185,41 +164,15 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args, PyOb
 	Py_RETURN_NONE;
 }
 
-const char * MGLVertexArray_transform_doc = R"(
-	transform(output, mode, vertices, first, instances)
-
-	Transform vertices.
-	Stores the output in a single buffer.
-	The transform primitive (mode) must be the same as the input primitive of the GeometryShader.
-
-	Args:
-		output: The buffer to store the output.
-		optional mode: By default :py:const:`~ModernGL.TRIANGLES` will be used.
-		optional vertices: The number of vertices to transform.
-
-	Keyword Args:
-		first: The index of the first vertex to start with.
-		instances: The number of instances.
-
-	Returns:
-		None
-)";
-
 PyObject * MGLVertexArray_release(MGLVertexArray * self) {
 	MGLVertexArray_Invalidate(self);
 	Py_RETURN_NONE;
 }
 
-const char * MGLVertexArray_release_doc = R"(
-	release()
-
-	Release the vertex array.
-)";
-
 PyMethodDef MGLVertexArray_tp_methods[] = {
-	{"render", (PyCFunction)MGLVertexArray_render, METH_VARARGS | METH_KEYWORDS, MGLVertexArray_render_doc},
-	{"transform", (PyCFunction)MGLVertexArray_transform, METH_VARARGS | METH_KEYWORDS, MGLVertexArray_transform_doc},
-	{"release", (PyCFunction)MGLVertexArray_release, METH_NOARGS, MGLVertexArray_release_doc},
+	{"render", (PyCFunction)MGLVertexArray_render, METH_VARARGS, 0},
+	{"transform", (PyCFunction)MGLVertexArray_transform, METH_VARARGS, 0},
+	{"release", (PyCFunction)MGLVertexArray_release, METH_NOARGS, 0},
 	{0},
 };
 
@@ -228,69 +181,33 @@ MGLProgram * MGLVertexArray_get_program(MGLVertexArray * self, void * closure) {
 	return self->program;
 }
 
-char MGLVertexArray_program_doc[] = R"(
-	program
-
-	The program assinged to the VertexArray.
-	The program will be used automatically when rendering and transforming.
-)";
-
 PyObject * MGLVertexArray_get_content(MGLVertexArray * self, void * closure) {
 	Py_INCREF(self->content);
 	return self->content;
 }
-
-char MGLVertexArray_content_doc[] = R"(
-	content
-
-	The content assinged to the VertexArray.
-)";
 
 PyObject * MGLVertexArray_get_attributes(MGLVertexArray * self, void * closure) {
 	Py_INCREF(self->attributes_proxy);
 	return self->attributes_proxy;
 }
 
-char MGLVertexArray_attributes_doc[] = R"(
-	attributes
-)";
-
 PyObject * MGLVertexArray_get_index_buffer(MGLVertexArray * self, void * closure) {
 	Py_INCREF(self->index_buffer);
 	return (PyObject *)self->index_buffer;
 }
 
-char MGLVertexArray_index_buffer_doc[] = R"(
-	index_buffer
-
-	The index buffer if the index_buffer is set otherwise ``None``.
-)";
-
 PyObject * MGLVertexArray_get_vertices(MGLVertexArray * self, void * closure) {
 	return PyLong_FromLong(self->num_vertices);
 }
 
-char MGLVertexArray_vertices_doc[] = R"(
-	vertices
-
-	The number of vertices detected.
-	This is the minimum of the number of vertices possible per Buffer.
-	The size of the index_buffer will be used when the VertexArray has a valid index_buffer set.
-	Per instance vertex attributes does not affect this number.
-)";
-
 PyGetSetDef MGLVertexArray_tp_getseters[] = {
-	{(char *)"program", (getter)MGLVertexArray_get_program, 0, MGLVertexArray_program_doc, 0},
-	{(char *)"content", (getter)MGLVertexArray_get_content, 0, MGLVertexArray_content_doc, 0},
-	{(char *)"attributes", (getter)MGLVertexArray_get_attributes, 0, MGLVertexArray_attributes_doc, 0},
-	{(char *)"index_buffer", (getter)MGLVertexArray_get_index_buffer, 0, MGLVertexArray_index_buffer_doc, 0},
-	{(char *)"vertices", (getter)MGLVertexArray_get_vertices, 0, MGLVertexArray_vertices_doc, 0},
+	{(char *)"program", (getter)MGLVertexArray_get_program, 0, 0, 0},
+	{(char *)"content", (getter)MGLVertexArray_get_content, 0, 0, 0},
+	{(char *)"attributes", (getter)MGLVertexArray_get_attributes, 0, 0, 0},
+	{(char *)"index_buffer", (getter)MGLVertexArray_get_index_buffer, 0, 0, 0},
+	{(char *)"vertices", (getter)MGLVertexArray_get_vertices, 0, 0, 0},
 	{0},
 };
-
-const char * MGLVertexArray_tp_doc = R"(
-	VertexArray
-)";
 
 PyTypeObject MGLVertexArray_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -313,7 +230,7 @@ PyTypeObject MGLVertexArray_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLVertexArray_tp_doc,                                  // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

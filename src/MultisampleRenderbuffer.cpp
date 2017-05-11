@@ -40,24 +40,14 @@ PyObject * MGLMultisampleRenderbuffer_release(MGLMultisampleRenderbuffer * self)
 	Py_RETURN_NONE;
 }
 
-const char * MGLMultisampleRenderbuffer_release_doc = R"(
-	release()
-
-	Release the renderbuffer.
-)";
-
 PyMethodDef MGLMultisampleRenderbuffer_tp_methods[] = {
-	{"release", (PyCFunction)MGLMultisampleRenderbuffer_release, METH_NOARGS, MGLMultisampleRenderbuffer_release_doc},
+	{"release", (PyCFunction)MGLMultisampleRenderbuffer_release, METH_NOARGS, 0},
 	{0},
 };
 
 PyGetSetDef MGLMultisampleRenderbuffer_tp_getseters[] = {
 	{0},
 };
-
-const char * MGLMultisampleRenderbuffer_tp_doc = R"(
-	MultisampleRenderbuffer
-)";
 
 PyTypeObject MGLMultisampleRenderbuffer_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -80,7 +70,7 @@ PyTypeObject MGLMultisampleRenderbuffer_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLMultisampleRenderbuffer_tp_doc,                      // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

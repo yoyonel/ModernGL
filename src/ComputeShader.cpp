@@ -34,18 +34,18 @@ PyObject * MGLComputeShader_tp_str(MGLComputeShader * self) {
 	return PyUnicode_FromFormat("<ModernGL.ComputeShader>");
 }
 
-PyObject * MGLComputeShader_run(MGLComputeShader * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"x", "y", "z", 0};
+PyObject * MGLComputeShader_run(MGLComputeShader * self, PyObject * args) {
+
 
 	int x = 1;
 	int y = 1;
 	int z = 1;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
+
 		"|iii",
-		(char **)kwlist,
+
 		&x,
 		&y,
 		&z
@@ -61,22 +61,14 @@ PyObject * MGLComputeShader_run(MGLComputeShader * self, PyObject * args, PyObje
 	// Py_RETURN_NONE;
 }
 
-const char * MGLComputeShader_run_doc = R"(
-	run(x = 1, y = 1, z = 1)
-)";
-
 PyMethodDef MGLComputeShader_tp_methods[] = {
-	{"run", (PyCFunction)MGLComputeShader_run, METH_VARARGS | METH_KEYWORDS, MGLComputeShader_run_doc},
+	{"run", (PyCFunction)MGLComputeShader_run, METH_VARARGS | METH_KEYWORDS, 0},
 	{0},
 };
 
 PyGetSetDef MGLComputeShader_tp_getseters[] = {
 	{0},
 };
-
-const char * MGLComputeShader_tp_doc = R"(
-	ComputeShader
-)";
 
 PyTypeObject MGLComputeShader_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -99,7 +91,7 @@ PyTypeObject MGLComputeShader_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLComputeShader_tp_doc,                                // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

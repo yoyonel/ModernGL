@@ -38,12 +38,6 @@ PyGetSetDef MGLInvalidObject_tp_getseters[] = {
 	{0},
 };
 
-const char * MGLInvalidObject_tp_doc = R"(
-	InvalidObject
-
-	A ModernGL object turns into an InvalidObject once the release method is successfully called.
-)";
-
 PyTypeObject MGLInvalidObject_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
 	"ModernGL.InvalidObject",                               // tp_name
@@ -65,7 +59,7 @@ PyTypeObject MGLInvalidObject_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLInvalidObject_tp_doc,                                // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

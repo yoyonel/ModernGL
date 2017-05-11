@@ -196,17 +196,13 @@ char MGLAttribute_shape_doc[] = R"(
 )";
 
 PyGetSetDef MGLAttribute_tp_getseters[] = {
-	{(char *)"name", (getter)MGLAttribute_get_name, 0, MGLAttribute_name_doc, 0},
-	{(char *)"location", (getter)MGLAttribute_get_location, 0, MGLAttribute_location_doc, 0},
-	{(char *)"array_length", (getter)MGLAttribute_get_array_length, 0, MGLAttribute_array_length_doc, 0},
-	{(char *)"dimension", (getter)MGLAttribute_get_dimension, 0, MGLAttribute_dimension_doc, 0},
-	{(char *)"shape", (getter)MGLAttribute_get_shape, 0, MGLAttribute_shape_doc, 0},
+	{(char *)"name", (getter)MGLAttribute_get_name, 0, 0, 0},
+	{(char *)"location", (getter)MGLAttribute_get_location, 0, 0, 0},
+	{(char *)"array_length", (getter)MGLAttribute_get_array_length, 0, 0, 0},
+	{(char *)"dimension", (getter)MGLAttribute_get_dimension, 0, 0, 0},
+	{(char *)"shape", (getter)MGLAttribute_get_shape, 0, 0, 0},
 	{0},
 };
-
-const char * MGLAttribute_tp_doc = R"(
-	Attribute
-)";
 
 PyTypeObject MGLAttribute_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -229,7 +225,7 @@ PyTypeObject MGLAttribute_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLAttribute_tp_doc,                                    // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

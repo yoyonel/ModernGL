@@ -35,18 +35,18 @@ PyObject * MGLTexture_tp_str(MGLTexture * self) {
 	return PyUnicode_FromFormat("<ModernGL.Texture>");
 }
 
-PyObject * MGLTexture_update(MGLTexture * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"data", "size", "offset", 0};
+PyObject * MGLTexture_update(MGLTexture * self, PyObject * args) {
+
 
 	PyObject * data;
 	PyObject * size = Py_None;
 	PyObject * offset = Py_None;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
+
 		"O|OO",
-		(char **)kwlist,
+
 		&data,
 		&size,
 		&offset
@@ -140,16 +140,16 @@ PyObject * MGLTexture_update(MGLTexture * self, PyObject * args, PyObject * kwar
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLTexture_use(MGLTexture * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"index", 0};
+PyObject * MGLTexture_use(MGLTexture * self, PyObject * args) {
+
 
 	int index = 0;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
+
 		"|I",
-		(char **)kwlist,
+
 		&index
 	);
 

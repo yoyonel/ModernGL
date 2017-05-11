@@ -34,19 +34,19 @@ PyObject * MGLVertexArrayAttribute_tp_str(MGLVertexArrayAttribute * self) {
 	return PyUnicode_FromFormat("<ModernGL.VertexArrayAttribute: location = %d>", self->location);
 }
 
-PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject * args, PyObject * kwargs) {
-	static const char * kwlist[] = {"buffer", "offset", "stride", "divisor", 0};
+PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject * args) {
+
 
 	MGLBuffer * buffer;
 	int offset;
 	int stride;
 	int divisor;
 
-	int args_ok = PyArg_ParseTupleAndKeywords(
+	int args_ok = PyArg_ParseTuple(
 		args,
-		kwargs,
+
 		"O|III",
-		(char **)kwlist,
+
 		&buffer,
 		&offset,
 		&stride,
@@ -87,20 +87,12 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 	Py_RETURN_NONE;
 }
 
-const char * MGLVertexArrayAttribute_bind_doc = R"(
-	bind(buffer, offset, stride, divisor)
-)";
-
 PyObject * MGLVertexArrayAttribute_enable(MGLVertexArrayAttribute * self) {
 	const GLMethods & gl = self->vertex_array->context->gl;
 	gl.BindVertexArray(self->vertex_array->vertex_array_obj);
 	gl.EnableVertexAttribArray(self->location);
 	Py_RETURN_NONE;
 }
-
-const char * MGLVertexArrayAttribute_enable_doc = R"(
-	enable()
-)";
 
 PyObject * MGLVertexArrayAttribute_disable(MGLVertexArrayAttribute * self) {
 	const GLMethods & gl = self->vertex_array->context->gl;
@@ -109,24 +101,16 @@ PyObject * MGLVertexArrayAttribute_disable(MGLVertexArrayAttribute * self) {
 	Py_RETURN_NONE;
 }
 
-const char * MGLVertexArrayAttribute_disable_doc = R"(
-	disable()
-)";
-
 PyMethodDef MGLVertexArrayAttribute_tp_methods[] = {
-	{"bind", (PyCFunction)MGLVertexArrayAttribute_bind, METH_VARARGS | METH_KEYWORDS, MGLVertexArrayAttribute_bind_doc},
-	{"enable", (PyCFunction)MGLVertexArrayAttribute_enable, METH_NOARGS, MGLVertexArrayAttribute_enable_doc},
-	{"disable", (PyCFunction)MGLVertexArrayAttribute_disable, METH_NOARGS, MGLVertexArrayAttribute_disable_doc},
+	{"bind", (PyCFunction)MGLVertexArrayAttribute_bind, METH_VARARGS | METH_KEYWORDS, 0},
+	{"enable", (PyCFunction)MGLVertexArrayAttribute_enable, METH_NOARGS, 0},
+	{"disable", (PyCFunction)MGLVertexArrayAttribute_disable, METH_NOARGS, 0},
 	{0},
 };
 
 PyObject * MGLVertexArrayAttribute_get_location(MGLVertexArrayAttribute * self, void * closure) {
 	return PyLong_FromLong(self->location);
 }
-
-char MGLVertexArrayAttribute_location_doc[] = R"(
-	location
-)";
 
 PyObject * MGLVertexArrayAttribute_get_default(MGLVertexArrayAttribute * self, void * closure) {
 	if (!self->gl_attrib_getter_proc) {
@@ -150,10 +134,6 @@ int MGLVertexArrayAttribute_set_default(MGLVertexArrayAttribute * self, PyObject
 	return -1;
 }
 
-char MGLVertexArrayAttribute_default_doc[] = R"(
-	default
-)";
-
 PyObject * MGLVertexArrayAttribute_get_enabled(MGLVertexArrayAttribute * self, void * closure) {
 	int enabled = 0;
 	const GLMethods & gl = self->vertex_array->context->gl;
@@ -161,10 +141,6 @@ PyObject * MGLVertexArrayAttribute_get_enabled(MGLVertexArrayAttribute * self, v
 	gl.GetVertexAttribiv(self->location, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &enabled);
 	return PyBool_FromLong(enabled);
 }
-
-char MGLVertexArrayAttribute_enabled_doc[] = R"(
-	enabled
-)";
 
 PyObject * MGLVertexArrayAttribute_get_divisor(MGLVertexArrayAttribute * self, void * closure) {
 	int divisor = 0;
@@ -174,10 +150,6 @@ PyObject * MGLVertexArrayAttribute_get_divisor(MGLVertexArrayAttribute * self, v
 	return PyLong_FromLong(divisor);
 }
 
-char MGLVertexArrayAttribute_divisor_doc[] = R"(
-	divisor
-)";
-
 PyObject * MGLVertexArrayAttribute_get_stride(MGLVertexArrayAttribute * self, void * closure) {
 	int stride = 0;
 	const GLMethods & gl = self->vertex_array->context->gl;
@@ -186,22 +158,14 @@ PyObject * MGLVertexArrayAttribute_get_stride(MGLVertexArrayAttribute * self, vo
 	return PyBool_FromLong(stride);
 }
 
-char MGLVertexArrayAttribute_stride_doc[] = R"(
-	stride
-)";
-
 PyGetSetDef MGLVertexArrayAttribute_tp_getseters[] = {
-	{(char *)"location", (getter)MGLVertexArrayAttribute_get_location, 0, MGLVertexArrayAttribute_location_doc, 0},
-	{(char *)"divisor", (getter)MGLVertexArrayAttribute_get_divisor, 0, MGLVertexArrayAttribute_divisor_doc, 0},
-	{(char *)"stride", (getter)MGLVertexArrayAttribute_get_stride, 0, MGLVertexArrayAttribute_stride_doc, 0},
-	{(char *)"enabled", (getter)MGLVertexArrayAttribute_get_enabled, 0, MGLVertexArrayAttribute_enabled_doc, 0},
-	{(char *)"default", (getter)MGLVertexArrayAttribute_get_default, (setter)MGLVertexArrayAttribute_set_default, MGLVertexArrayAttribute_default_doc, 0},
+	{(char *)"location", (getter)MGLVertexArrayAttribute_get_location, 0, 0, 0},
+	{(char *)"divisor", (getter)MGLVertexArrayAttribute_get_divisor, 0, 0, 0},
+	{(char *)"stride", (getter)MGLVertexArrayAttribute_get_stride, 0, 0, 0},
+	{(char *)"enabled", (getter)MGLVertexArrayAttribute_get_enabled, 0, 0, 0},
+	{(char *)"default", (getter)MGLVertexArrayAttribute_get_default, (setter)MGLVertexArrayAttribute_set_default, 0, 0},
 	{0},
 };
-
-const char * MGLVertexArrayAttribute_tp_doc = R"(
-	VertexArrayAttribute
-)";
 
 PyTypeObject MGLVertexArrayAttribute_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -224,7 +188,7 @@ PyTypeObject MGLVertexArrayAttribute_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLVertexArrayAttribute_tp_doc,                         // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare
