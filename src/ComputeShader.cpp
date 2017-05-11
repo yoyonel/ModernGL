@@ -35,17 +35,13 @@ PyObject * MGLComputeShader_tp_str(MGLComputeShader * self) {
 }
 
 PyObject * MGLComputeShader_run(MGLComputeShader * self, PyObject * args) {
-
-
-	int x = 1;
-	int y = 1;
-	int z = 1;
+	int x;
+	int y;
+	int z;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-
-		"|iii",
-
+		"iii",
 		&x,
 		&y,
 		&z
@@ -62,7 +58,7 @@ PyObject * MGLComputeShader_run(MGLComputeShader * self, PyObject * args) {
 }
 
 PyMethodDef MGLComputeShader_tp_methods[] = {
-	{"run", (PyCFunction)MGLComputeShader_run, METH_VARARGS | METH_KEYWORDS, 0},
+	{"run", (PyCFunction)MGLComputeShader_run, METH_VARARGS, 0},
 	{0},
 };
 

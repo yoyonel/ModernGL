@@ -65,7 +65,7 @@ PyObject * MGLMultisampleTexture_release(MGLMultisampleTexture * self) {
 }
 
 PyMethodDef MGLMultisampleTexture_tp_methods[] = {
-	{"use", (PyCFunction)MGLMultisampleTexture_use, METH_VARARGS | METH_KEYWORDS, 0},
+	{"use", (PyCFunction)MGLMultisampleTexture_use, METH_VARARGS, 0},
 	{"release", (PyCFunction)MGLMultisampleTexture_release, METH_NOARGS, 0},
 	{0},
 };

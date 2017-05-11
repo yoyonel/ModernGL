@@ -54,7 +54,7 @@ PyObject * MGLBufferAccess_open(MGLBufferAccess * self) {
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLBufferAccess_close(MGLBufferAccess * self, PyObject * args) {
+PyObject * MGLBufferAccess_close(MGLBufferAccess * self) {
 	if (self->ptr) {
 		const GLMethods & gl = self->buffer->context->gl;
 		gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
@@ -134,9 +134,6 @@ PyObject * MGLBufferAccess_write(MGLBufferAccess * self, PyObject * args) {
 PyMethodDef MGLBufferAccess_tp_methods[] = {
 	{"open", (PyCFunction)MGLBufferAccess_open, METH_NOARGS, 0},
 	{"close", (PyCFunction)MGLBufferAccess_close, METH_VARARGS, 0},
-
-	{"__enter__", (PyCFunction)MGLBufferAccess_open, METH_NOARGS, 0},
-	{"__exit__", (PyCFunction)MGLBufferAccess_close, METH_VARARGS, 0},
 
 	{"read", (PyCFunction)MGLBufferAccess_read, METH_VARARGS, 0},
 	{"write", (PyCFunction)MGLBufferAccess_write, METH_VARARGS, 0},

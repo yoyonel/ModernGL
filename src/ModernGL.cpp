@@ -25,7 +25,6 @@
 #include "Uniform.hpp"
 #include "UniformBlock.hpp"
 #include "Varying.hpp"
-#include "Version.hpp"
 #include "VertexArray.hpp"
 #include "VertexArrayAttribute.hpp"
 #include "VertexArrayListAttribute.hpp"
@@ -35,30 +34,17 @@
 #include "GLContext.hpp"
 
 MGLContext * create_standalone_context(PyObject * self, PyObject * args) {
-
-
 	int width;
-	int height;
-
-	MGLVersion * require;
+	int height; // TODO: not used
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-
-		"(II)O",
-
+		"II",
 		&width,
-		&height,
-		&require
+		&height
 	);
 
 	if (!args_ok) {
-		return 0;
-	}
-
-	if (require != (MGLVersion *)Py_None && Py_TYPE(require) != &MGLVersion_Type) {
-		MGLError * error = MGLError_New(TRACE, "require must be a ModernGL.Version not %s", Py_TYPE(require)->tp_name);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
@@ -81,29 +67,7 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args) {
 	return ctx;
 }
 
-MGLContext * create_context(PyObject * self, PyObject * args) {
-
-
-	MGLVersion * require = (MGLVersion *)Py_None;
-
-	int args_ok = PyArg_ParseTuple(
-		args,
-
-		"|O",
-
-		&require
-	);
-
-	if (!args_ok) {
-		return 0;
-	}
-
-	if (require != (MGLVersion *)Py_None && Py_TYPE(require) != &MGLVersion_Type) {
-		MGLError * error = MGLError_New(TRACE, "require must be a ModernGL.Version not %s", Py_TYPE(require)->tp_name);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
-	}
-
+MGLContext * create_context(PyObject * self) {
 	MGLContext * ctx = MGLContext_New();
 
 	ctx->gl_context = LoadCurrentGLContext();
@@ -124,8 +88,8 @@ MGLContext * create_context(PyObject * self, PyObject * args) {
 }
 
 PyMethodDef MGL_module_methods[] = {
-	{"create_standalone_context", (PyCFunction)create_standalone_context, METH_VARARGS | METH_KEYWORDS, 0},
-	{"create_context", (PyCFunction)create_context, METH_VARARGS | METH_KEYWORDS, 0},
+	{"create_standalone_context", (PyCFunction)create_standalone_context, METH_VARARGS, 0},
+	{"create_context", (PyCFunction)create_context, 0},
 	{0},
 };
 
@@ -428,17 +392,6 @@ bool MGL_InitializeModule(PyObject * module) {
 	}
 
 	{
-		if (PyType_Ready(&MGLVersion_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register Version in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return false;
-		}
-
-		Py_INCREF(&MGLVersion_Type);
-
-		PyModule_AddObject(module, "Version", (PyObject *)&MGLVersion_Type);
-	}
-
-	{
 		if (PyType_Ready(&MGLVertexArray_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register VertexArray in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return false;
@@ -592,43 +545,6 @@ bool MGL_InitializeModule(PyObject * module) {
 		MGL_MULTISAMPLE->name = "MULTISAMPLE";
 		MGL_MULTISAMPLE->flag = GL_MULTISAMPLE;
 		PyModule_AddObject(module, "MULTISAMPLE", (PyObject *)MGL_MULTISAMPLE);
-	}
-
-	{
-		MGLVersion * CORE_330 = MGLVersion_New();
-		CORE_330->major = 3;
-		CORE_330->minor = 3;
-		PyModule_AddObject(module, "CORE_330", (PyObject *)CORE_330);
-
-		MGLVersion * CORE_400 = MGLVersion_New();
-		CORE_400->major = 4;
-		CORE_400->minor = 0;
-		PyModule_AddObject(module, "CORE_400", (PyObject *)CORE_400);
-
-		MGLVersion * CORE_410 = MGLVersion_New();
-		CORE_410->major = 4;
-		CORE_410->minor = 1;
-		PyModule_AddObject(module, "CORE_410", (PyObject *)CORE_410);
-
-		MGLVersion * CORE_420 = MGLVersion_New();
-		CORE_420->major = 4;
-		CORE_420->minor = 2;
-		PyModule_AddObject(module, "CORE_420", (PyObject *)CORE_420);
-
-		MGLVersion * CORE_430 = MGLVersion_New();
-		CORE_430->major = 4;
-		CORE_430->minor = 3;
-		PyModule_AddObject(module, "CORE_430", (PyObject *)CORE_430);
-
-		MGLVersion * CORE_440 = MGLVersion_New();
-		CORE_440->major = 4;
-		CORE_440->minor = 4;
-		PyModule_AddObject	(module, "CORE_440", (PyObject *)CORE_440);
-
-		MGLVersion * CORE_450 = MGLVersion_New();
-		CORE_450->major = 4;
-		CORE_450->minor = 5;
-		PyModule_AddObject(module, "CORE_450", (PyObject *)CORE_450);
 	}
 
 	return true;

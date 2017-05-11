@@ -102,7 +102,7 @@ PyObject * MGLVertexArrayAttribute_disable(MGLVertexArrayAttribute * self) {
 }
 
 PyMethodDef MGLVertexArrayAttribute_tp_methods[] = {
-	{"bind", (PyCFunction)MGLVertexArrayAttribute_bind, METH_VARARGS | METH_KEYWORDS, 0},
+	{"bind", (PyCFunction)MGLVertexArrayAttribute_bind, METH_VARARGS, 0},
 	{"enable", (PyCFunction)MGLVertexArrayAttribute_enable, METH_NOARGS, 0},
 	{"disable", (PyCFunction)MGLVertexArrayAttribute_disable, METH_NOARGS, 0},
 	{0},

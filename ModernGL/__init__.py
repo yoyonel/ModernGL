@@ -77,6 +77,113 @@ TRIANGLES_ADJACENCY = _mgl.TRIANGLES_ADJACENCY
 '''
 
 
+class Version:
+	'''
+	'''
+
+	def __init__(self, major, minor):
+		self.major = major
+		self.minor = minor
+
+
+CORE_330 = Version(3, 3)
+'''
+	OpenGL 3.3
+'''
+
+CORE_400 = Version(4, 0)
+'''
+	OpenGL 4.0
+'''
+
+CORE_410 = Version(4, 1)
+'''
+	OpenGL 4.1
+'''
+
+CORE_420 = Version(4, 2)
+'''
+	OpenGL 4.2
+'''
+
+CORE_430 = Version(4, 3)
+'''
+	OpenGL 4.3
+'''
+
+CORE_440 = Version(4, 4)
+'''
+	OpenGL 4.4
+'''
+
+CORE_450 = Version(4, 5)
+'''
+	OpenGL 4.5
+'''
+
+
+class UniformMap:
+	'''
+	'''
+
+	def __init__(self):
+		self._o = {}
+		raise NotImplementedError()
+
+
+	@staticmethod
+	def _new(o):
+		r = UniformMap.__new__(UniformMap)
+		r._o = o
+		return r
+
+
+	def __getitem__(self, key):
+		'''
+		'''
+
+		return Uniform._new(self._o[key])
+
+
+	def __contains__(self, key):
+		return key in self._o
+
+
+	def __len__(self):
+		return len(self._o)
+
+
+class AttributeMap:
+	'''
+	'''
+
+	def __init__(self):
+		self._o = {}
+		raise NotImplementedError()
+
+
+	@staticmethod
+	def _new(o):
+		r = UniformMap.__new__(UniformMap)
+		r._o = o
+		return r
+
+
+	def __getitem__(self, key):
+		'''
+		'''
+
+		return Attribute._new(self._o[key])
+
+
+	def __contains__(self, key):
+		return key in self._o
+
+
+	def __len__(self):
+		return len(self._o)
+
+
 class InvalidObject:
 	'''
 		A ModernGL object turns into an InvalidObject once the release method is successfully called.
@@ -458,7 +565,7 @@ class MultisampleTexture:
 		self._o.release()
 		self.__class__ = InvalidObject
 
-	
+
 	# def use # TODO:
 	'''
 		Args:
@@ -517,7 +624,7 @@ class Program:
 			It can be used to access uniforms by name.
 		'''
 
-		return self._o.uniforms
+		return UniformMap._new(self._o.uniforms)
 
 
 	@property
@@ -844,6 +951,51 @@ class Uniform:
 		return r
 
 
+	@property
+	def name(self):
+		'''
+		'''
+
+		return self._o.name
+
+
+	@property
+	def location(self):
+		'''
+		'''
+
+		return self._o.location
+
+
+	@property
+	def dimension(self):
+		'''
+		'''
+
+		return self._o.dimension
+
+
+	@property
+	def array_length(self):
+		'''
+		'''
+
+		return self._o.array_length
+
+
+	@property
+	def value(self):
+		'''
+		'''
+
+		return self._o.value
+
+
+	@value.setter
+	def value(self, value):
+		self._o.value = value
+
+
 class UniformBlock:
 	'''
 	'''
@@ -872,22 +1024,6 @@ class Varying:
 	@staticmethod
 	def _new(o):
 		r = Varying.__new__(Varying)
-		r._o = o
-		return r
-
-
-class Version:
-	'''
-	'''
-
-	def __init__(self):
-		self._o = None
-		raise NotImplementedError()
-
-
-	@staticmethod
-	def _new(o):
-		r = Version.__new__(Version)
 		r._o = o
 		return r
 
@@ -1496,7 +1632,7 @@ def create_context(require = None):
 			:py:class:`ModernGL.Context`
 	'''
 
-	return Context._new(_mgl.create_context(require))
+	return Context._new(_mgl.create_context())
 
 
 def create_standalone_context(size = (256, 256), require = None):
@@ -1512,7 +1648,9 @@ def create_standalone_context(size = (256, 256), require = None):
 			:py:class:`ModernGL.Context`
 	'''
 
-	return Context._new(_mgl.create_standalone_context(size, require))
+	width, height = size
+
+	return Context._new(_mgl.create_standalone_context(width, height))
 
 
 def detect_format(program, attributes):

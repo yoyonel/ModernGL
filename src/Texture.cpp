@@ -170,8 +170,8 @@ PyObject * MGLTexture_release(MGLTexture * self) {
 }
 
 PyMethodDef MGLTexture_tp_methods[] = {
-	{"update", (PyCFunction)MGLTexture_update, METH_VARARGS | METH_KEYWORDS, 0},
-	{"use", (PyCFunction)MGLTexture_use, METH_VARARGS | METH_KEYWORDS, 0},
+	{"update", (PyCFunction)MGLTexture_update, METH_VARARGS, 0},
+	{"use", (PyCFunction)MGLTexture_use, METH_VARARGS, 0},
 	{"release", (PyCFunction)MGLTexture_release, METH_NOARGS, 0},
 	{0},
 };

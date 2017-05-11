@@ -113,7 +113,7 @@ const char * MGLUniform_write_doc = R"(
 
 PyMethodDef MGLUniform_tp_methods[] = {
 	{"read", (PyCFunction)MGLUniform_read, METH_NOARGS, 0},
-	{"write", (PyCFunction)MGLUniform_write, METH_VARARGS | METH_KEYWORDS, 0},
+	{"write", (PyCFunction)MGLUniform_write, METH_VARARGS, 0},
 	{0},
 };
 

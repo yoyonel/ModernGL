@@ -68,7 +68,7 @@ PyObject * MGLContext_clear(MGLContext * self, PyObject * args) {
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"BBBB",
+		"IIII",
 		&r,
 		&g,
 		&b,
@@ -84,6 +84,46 @@ PyObject * MGLContext_clear(MGLContext * self, PyObject * args) {
 	const GLMethods & gl = self->gl;
 	gl.ClearColor(r * c, g * c, b * c, a * c);
 	gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+	Py_RETURN_NONE;
+}
+
+PyObject * MGLContext_clear_rect(MGLContext * self, PyObject * args) {
+	int r;
+	int g;
+	int b;
+	int a;
+
+	int x;
+	int y;
+	int width;
+	int height;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"IIII(IIII)",
+		&r,
+		&g,
+		&b,
+		&a,
+		&x,
+		&y,
+		&width,
+		&height
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	const float c = 1.0f / 255.0f;
+
+	const GLMethods & gl = self->gl;
+	gl.Enable(GL_SCISSOR_TEST);
+	gl.Scissor(x, y, width, height);
+	gl.ClearColor(r * c, g * c, b * c, a * c);
+	gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	gl.Disable(GL_SCISSOR_TEST);
 
 	Py_RETURN_NONE;
 }
@@ -1298,27 +1338,28 @@ PyMethodDef MGLContext_tp_methods[] = {
 
 	{"release", (PyCFunction)MGLContext_release, METH_NOARGS, 0},
 
-	{"clear", (PyCFunction)MGLContext_clear, METH_VARARGS | METH_KEYWORDS, 0},
-	{"enable", (PyCFunction)MGLContext_enable, METH_VARARGS | METH_KEYWORDS, 0},
-	{"disable", (PyCFunction)MGLContext_disable, METH_VARARGS | METH_KEYWORDS, 0},
+	{"clear", (PyCFunction)MGLContext_clear, METH_VARARGS, 0},
+	{"clear_rect", (PyCFunction)MGLContext_clear_rect, METH_VARARGS, 0},
+	{"enable", (PyCFunction)MGLContext_enable, METH_VARARGS, 0},
+	{"disable", (PyCFunction)MGLContext_disable, METH_VARARGS, 0},
 	{"finish", (PyCFunction)MGLContext_finish, METH_NOARGS, 0},
-	{"copy_buffer", (PyCFunction)MGLContext_copy_buffer, METH_VARARGS | METH_KEYWORDS, 0},
-	{"read_pixels", (PyCFunction)MGLContext_read_pixels, METH_VARARGS | METH_KEYWORDS, 0},
+	{"copy_buffer", (PyCFunction)MGLContext_copy_buffer, METH_VARARGS, 0},
+	{"read_pixels", (PyCFunction)MGLContext_read_pixels, METH_VARARGS, 0},
 
-	{"Buffer", (PyCFunction)MGLContext_Buffer, METH_VARARGS | METH_KEYWORDS, 0},
-	{"Texture", (PyCFunction)MGLContext_Texture, METH_VARARGS | METH_KEYWORDS, 0},
-	{"DepthTexture", (PyCFunction)MGLContext_DepthTexture, METH_VARARGS | METH_KEYWORDS, 0},
-	{"VertexArray", (PyCFunction)MGLContext_VertexArray, METH_VARARGS | METH_KEYWORDS, 0},
-	{"Program", (PyCFunction)MGLContext_Program, METH_VARARGS | METH_KEYWORDS, 0},
-	{"VertexShader", (PyCFunction)MGLContext_Shader<VERTEX_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, 0},
-	{"FragmentShader", (PyCFunction)MGLContext_Shader<FRAGMENT_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, 0},
-	{"GeometryShader", (PyCFunction)MGLContext_Shader<GEOMETRY_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, 0},
-	{"TessEvaluationShader", (PyCFunction)MGLContext_Shader<TESSELATION_EVALUATION_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, 0},
-	{"TessControlShader", (PyCFunction)MGLContext_Shader<TESSELATION_CONTROL_SHADER_SLOT>, METH_VARARGS | METH_KEYWORDS, 0},
-	{"Framebuffer", (PyCFunction)MGLContext_Framebuffer, METH_VARARGS | METH_KEYWORDS, 0},
-	{"Renderbuffer", (PyCFunction)MGLContext_Renderbuffer, METH_VARARGS | METH_KEYWORDS, 0},
-	{"DepthRenderbuffer", (PyCFunction)MGLContext_DepthRenderbuffer, METH_VARARGS | METH_KEYWORDS, 0},
-	{"ComputeShader", (PyCFunction)MGLContext_ComputeShader, METH_VARARGS | METH_KEYWORDS, 0},
+	{"Buffer", (PyCFunction)MGLContext_Buffer, METH_VARARGS, 0},
+	{"Texture", (PyCFunction)MGLContext_Texture, METH_VARARGS, 0},
+	{"DepthTexture", (PyCFunction)MGLContext_DepthTexture, METH_VARARGS, 0},
+	{"VertexArray", (PyCFunction)MGLContext_VertexArray, METH_VARARGS, 0},
+	{"Program", (PyCFunction)MGLContext_Program, METH_VARARGS, 0},
+	{"VertexShader", (PyCFunction)MGLContext_Shader<VERTEX_SHADER_SLOT>, METH_VARARGS, 0},
+	{"FragmentShader", (PyCFunction)MGLContext_Shader<FRAGMENT_SHADER_SLOT>, METH_VARARGS, 0},
+	{"GeometryShader", (PyCFunction)MGLContext_Shader<GEOMETRY_SHADER_SLOT>, METH_VARARGS, 0},
+	{"TessEvaluationShader", (PyCFunction)MGLContext_Shader<TESSELATION_EVALUATION_SHADER_SLOT>, METH_VARARGS, 0},
+	{"TessControlShader", (PyCFunction)MGLContext_Shader<TESSELATION_CONTROL_SHADER_SLOT>, METH_VARARGS, 0},
+	{"Framebuffer", (PyCFunction)MGLContext_Framebuffer, METH_VARARGS, 0},
+	{"Renderbuffer", (PyCFunction)MGLContext_Renderbuffer, METH_VARARGS, 0},
+	{"DepthRenderbuffer", (PyCFunction)MGLContext_DepthRenderbuffer, METH_VARARGS, 0},
+	{"ComputeShader", (PyCFunction)MGLContext_ComputeShader, METH_VARARGS, 0},
 
 	{0},
 };
