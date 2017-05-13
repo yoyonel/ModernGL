@@ -25,10 +25,10 @@ class TestCase(unittest.TestCase):
 		match0 = re.search(r'\'version\': \'(\d+\.\d+\.\d+)\'', setup, flags = re.M)
 		version = match0.group(1)
 
-		match1 = re.search(r'VERSION = \'(\d+\.\d+\.\d+)\'', init, flags = re.M)
-		match2 = re.search(r'version = \'%\(prog\)s (\d+\.\d+\.\d+)\'', main, flags = re.M)
-		match3 = re.search(r'version = \'(\d+\.\d+\.\d+)\'', docs, flags = re.M)
-		match4 = re.search(r'release = \'(\d+\.\d+\.\d+)\'', docs, flags = re.M)
+		match1 = re.search(r'VERSION\s*=\s*\'(\d+\.\d+\.\d+)\'', init, flags = re.M)
+		match2 = re.search(r'version\s*=\s*\'%\(prog\)s (\d+\.\d+\.\d+)\'', main, flags = re.M)
+		match3 = re.search(r'version\s*=\s*\'(\d+\.\d+\.\d+)\'', docs, flags = re.M)
+		match4 = re.search(r'release\s*=\s*\'(\d+\.\d+\.\d+)\'', docs, flags = re.M)
 
 		self.assertEqual(version, match1.group(1), msg = 'Version error: ModernGL/__init__.py')
 		self.assertEqual(version, match2.group(1), msg = 'Version error: ModernGL/__main__.py')
