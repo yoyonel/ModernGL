@@ -89,7 +89,7 @@ MGLContext * create_context(PyObject * self) {
 
 PyMethodDef MGL_module_methods[] = {
 	{"create_standalone_context", (PyCFunction)create_standalone_context, METH_VARARGS, 0},
-	{"create_context", (PyCFunction)create_context, 0},
+	{"create_context", (PyCFunction)create_context, METH_NOARGS, 0},
 	{0},
 };
 

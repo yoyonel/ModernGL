@@ -21,6 +21,26 @@ from ModernGL import ModernGL as _mgl
 Error = _mgl.Error
 
 
+BLEND = _mgl.BLEND
+'''
+	GL_BLEND
+'''
+
+DEPTH_TEST = _mgl.DEPTH_TEST
+'''
+	GL_DEPTH_TEST
+'''
+
+CULL_FACE = _mgl.CULL_FACE
+'''
+	GL_CULL_FACE
+'''
+
+MULTISAMPLE = _mgl.MULTISAMPLE
+'''
+	GL_MULTISAMPLE
+'''
+
 TRIANGLES = _mgl.TRIANGLES
 '''
 	GL_TRIANGLES
@@ -1620,17 +1640,17 @@ class Context:
 		return ComputeShader._new(self._o.ComputeShader(source))
 
 
-def create_context(require = None):
+def create_context(require = None) -> Context:
 	'''
 		Create a context and load OpenGL functions.
 		An OpenGL context must exists.
 
 		Keyword Arguments:
-			require (:py:class:`ModernGL.Version`): OpenGL version.
-
-		Returns:
-			:py:class:`ModernGL.Context`
+			require (Version): OpenGL version.
 	'''
+
+		# Returns:
+		# 	Context
 
 	return Context._new(_mgl.create_context())
 
