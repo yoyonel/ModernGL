@@ -1,5 +1,5 @@
 '''
-    Print OpenGL info
+    ModernGL main
 '''
 
 import argparse
@@ -17,13 +17,14 @@ def main():
     parser.add_argument(
         '-v', '--version',
         action='version',
-        version='%(prog)s 3.1.5'
+        version='ModernGL %s' % ModernGL.VERSION
     )
 
     parser.parse_args()
 
     ctx = ModernGL.create_standalone_context()
 
+    print('ModernGL:', ModernGL.VERSION)
     print('Vendor:', ctx.vendor)
     print('Renderer:', ctx.renderer)
     print('Version:', ctx.version)
