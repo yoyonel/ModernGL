@@ -15,16 +15,9 @@ struct MGLProgram : public MGLContextMember {
 	PyObject * tess_control_shader;
 
 	PyObject * uniforms;
-	PyObject * uniforms_proxy;
-
 	PyObject * uniform_blocks;
-	PyObject * uniform_blocks_proxy;
-
 	PyObject * attributes;
-	PyObject * attributes_proxy;
-
 	PyObject * varyings;
-	PyObject * varyings_proxy;
 
 	MGLPrimitive * geometry_input;
 	MGLPrimitive * geometry_output;

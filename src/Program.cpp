@@ -59,23 +59,23 @@ PyObject * MGLProgram_get_shaders(MGLProgram * self, void * closure) {
 }
 
 PyObject * MGLProgram_get_varyings(MGLProgram * self, void * closure) {
-	Py_INCREF(self->varyings_proxy);
-	return self->varyings_proxy;
+	Py_INCREF(self->varyings);
+	return self->varyings;
 }
 
 PyObject * MGLProgram_get_uniforms(MGLProgram * self, void * closure) {
-	Py_INCREF(self->uniforms_proxy);
-	return self->uniforms_proxy;
+	Py_INCREF(self->uniforms);
+	return self->uniforms;
 }
 
 PyObject * MGLProgram_get_uniform_blocks(MGLProgram * self, void * closure) {
-	Py_INCREF(self->uniform_blocks_proxy);
-	return self->uniform_blocks_proxy;
+	Py_INCREF(self->uniform_blocks);
+	return self->uniform_blocks;
 }
 
 PyObject * MGLProgram_get_attributes(MGLProgram * self, void * closure) {
-	Py_INCREF(self->attributes_proxy);
-	return self->attributes_proxy;
+	Py_INCREF(self->attributes);
+	return self->attributes;
 }
 
 PyObject * MGLProgram_get_geometry_input(MGLProgram * self, void * closure) {
@@ -248,7 +248,6 @@ void MGLProgram_Invalidate(MGLProgram * program) {
 		}
 
 		Py_DECREF(program->uniforms);
-		Py_DECREF(program->uniforms_proxy);
 	}
 
 	{
@@ -260,7 +259,6 @@ void MGLProgram_Invalidate(MGLProgram * program) {
 		}
 
 		Py_DECREF(program->attributes);
-		Py_DECREF(program->attributes_proxy);
 	}
 
 	{
@@ -272,7 +270,6 @@ void MGLProgram_Invalidate(MGLProgram * program) {
 		}
 
 		Py_DECREF(program->varyings);
-		Py_DECREF(program->varyings_proxy);
 	}
 
 	{
@@ -452,7 +449,6 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	}
 
 	program->uniforms = uniforms;
-	program->uniforms_proxy = PyDictProxy_New(uniforms);
 	Py_INCREF(uniforms);
 
 	PyObject * uniform_blocks = PyDict_New();
@@ -500,7 +496,6 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	}
 
 	program->uniform_blocks = uniform_blocks;
-	program->uniform_blocks_proxy = PyDictProxy_New(uniform_blocks);
 	Py_INCREF(uniform_blocks);
 
 	PyObject * attributes = PyDict_New();
@@ -536,7 +531,6 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	}
 
 	program->attributes = attributes;
-	program->attributes_proxy = PyDictProxy_New(attributes);
 	Py_INCREF(attributes);
 
 	PyObject * varyings = PyDict_New();
@@ -563,7 +557,6 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	}
 
 	program->varyings = varyings;
-	program->varyings_proxy = PyDictProxy_New(varyings);
 	Py_INCREF(varyings);
 
 	if (shaders[GEOMETRY_SHADER_SLOT]) {

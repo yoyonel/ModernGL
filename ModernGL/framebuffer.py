@@ -13,7 +13,7 @@ class Framebuffer(Object):
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = Framebuffer.__new__(Framebuffer)
@@ -22,7 +22,7 @@ class Framebuffer(Object):
 
     def read(self, viewport=None, components=3, floats=False) -> bytes:
         '''
-            read
+            Read the framebuffer content.
         '''
 
         return self.mglo.read(viewport, components, floats)

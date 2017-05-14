@@ -183,8 +183,8 @@ PyObject * MGLVertexArray_get_content(MGLVertexArray * self, void * closure) {
 }
 
 PyObject * MGLVertexArray_get_attributes(MGLVertexArray * self, void * closure) {
-	Py_INCREF(self->attributes_proxy);
-	return self->attributes_proxy;
+	Py_INCREF(self->attributes);
+	return self->attributes;
 }
 
 PyObject * MGLVertexArray_get_index_buffer(MGLVertexArray * self, void * closure) {
@@ -397,5 +397,4 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 	}
 
 	vertex_array->attributes = attributes;
-	vertex_array->attributes_proxy = PyDictProxy_New(attributes);
 }

@@ -43,20 +43,20 @@ PyObject * MGLFramebuffer_release(MGLFramebuffer * self) {
 }
 
 PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
+	int x;
+	int y;
 	int width;
 	int height;
-	int origin_x;
-	int origin_y;
 	int components;
 	int floats;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"(II)(II)Ip",
+		"(IIII)Ip",
+		&x,
+		&y,
 		&width,
 		&height,
-		&origin_x,
-		&origin_y,
 		&components,
 		&floats
 	);
@@ -73,8 +73,13 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 
 	PyObject * result = PyBytes_FromStringAndSize(0, size);
 	char * data = PyBytes_AS_STRING(result);
-	// TODO: bind maybe
-	self->context->gl.ReadPixels(origin_x, origin_y, width, height, format, type, data);
+
+	// TODO: bind maybe (check)
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
+	gl.ReadPixels(x, y, width, height, format, type, data);
 	return result;
 }
 

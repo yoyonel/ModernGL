@@ -468,3 +468,45 @@ def create_standalone_context(size=(256, 256), require=None) -> Context:
         raise Exception('TODO')
 
     return ctx
+
+
+class ContextManager:
+    '''
+        ContextManager
+    '''
+
+    cache = {}
+
+    @staticmethod
+    def create_context(name='primary', standalone=False) -> Context:
+        '''
+            Create a named OpenGL context.
+        '''
+
+        ctx = ContextManager.cache.get(name)
+
+        if not ctx:
+            if standalone:
+                ctx = create_standalone_context()
+            else:
+                ctx = create_context()
+
+        ContextManager.cache[name] = ctx
+
+        return ctx
+
+    @staticmethod
+    def release_context(name):
+        '''
+            Release a named context.
+            Fails silently.
+        '''
+
+        ctx = ContextManager.cache.get(name)
+
+        if not ctx:
+            return
+
+        ctx.release()
+
+        del ContextManager.cache[name]

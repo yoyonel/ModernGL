@@ -14,7 +14,6 @@ struct MGLVertexArray : public MGLContextMember {
 	MGLBuffer * index_buffer;
 
 	PyObject * attributes;
-	PyObject * attributes_proxy;
 
 	int vertex_array_obj;
 	int num_vertices;
