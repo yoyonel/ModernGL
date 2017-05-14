@@ -214,7 +214,7 @@ class Attribute:
     @property
     def array_length(self):
         '''
-            If the attribute is an array the array_length is the length of the array otherwise it is ``1``.
+            If the attribute is an array the array_length is the length of the array otherwise `1`.
         '''
 
         return self.mglo.array_length
