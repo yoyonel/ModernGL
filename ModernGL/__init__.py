@@ -2,317 +2,35 @@
     ModernGL: PyOpenGL alternative
 '''
 
-
-# pylint: disable=line-too-long, protected-access, too-few-public-methods, too-many-public-methods, too-many-arguments, invalid-name, too-many-lines, fixme, using-constant-test
-
-
 from typing import Dict
 
 from ModernGL import ModernGL as _mgl
 
+from .objects import Object
+from .errors import Error
+
+from .constants import (
+    Version,
+    CORE_330, CORE_400, CORE_410, CORE_420, CORE_430, CORE_440, CORE_450,
+    BLEND, DEPTH_TEST, CULL_FACE, MULTISAMPLE,
+    TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN,
+    LINES, LINE_STRIP, LINE_LOOP,
+    POINTS,
+    LINE_STRIP_ADJACENCY, LINES_ADJACENCY,
+    TRIANGLE_STRIP_ADJACENCY, TRIANGLES_ADJACENCY,
+)
+
+from .program_members import (
+    Uniform, UniformMap,
+    UniformBlock,
+    Varying,
+    Attribute, AttributeMap,
+)
 
 VERSION = '3.1.5'
 '''
     ModernGL version
 '''
-
-
-if False:
-    _mgl.Error = object
-
-    _mgl.BLEND = 'BLEND'
-    _mgl.DEPTH_TEST = 'DEPTH_TEST'
-    _mgl.CULL_FACE = 'CULL_FACE'
-    _mgl.MULTISAMPLE = 'MULTISAMPLE'
-
-    _mgl.TRIANGLES = 'TRIANGLES'
-    _mgl.TRIANGLE_STRIP = 'TRIANGLE_STRIP'
-    _mgl.TRIANGLE_FAN = 'TRIANGLE_FAN'
-    _mgl.LINES = 'LINES'
-    _mgl.LINE_STRIP = 'LINE_STRIP'
-    _mgl.LINE_LOOP = 'LINE_LOOP'
-    _mgl.POINTS = 'POINTS'
-    _mgl.LINE_STRIP_ADJACENCY = 'LINE_STRIP_ADJACENCY'
-    _mgl.LINES_ADJACENCY = 'LINES_ADJACENCY'
-    _mgl.TRIANGLE_STRIP_ADJACENCY = 'TRIANGLE_STRIP_ADJACENCY'
-    _mgl.TRIANGLES_ADJACENCY = 'TRIANGLES_ADJACENCY'
-
-
-Error = _mgl.Error
-
-
-BLEND = _mgl.BLEND
-'''
-    GL_BLEND
-'''
-
-DEPTH_TEST = _mgl.DEPTH_TEST
-'''
-    GL_DEPTH_TEST
-'''
-
-CULL_FACE = _mgl.CULL_FACE
-'''
-    GL_CULL_FACE
-'''
-
-MULTISAMPLE = _mgl.MULTISAMPLE
-'''
-    GL_MULTISAMPLE
-'''
-
-TRIANGLES = _mgl.TRIANGLES
-'''
-    GL_TRIANGLES
-'''
-
-TRIANGLE_STRIP = _mgl.TRIANGLE_STRIP
-'''
-    GL_TRIANGLE_STRIP
-'''
-
-TRIANGLE_FAN = _mgl.TRIANGLE_FAN
-'''
-    GL_TRIANGLE_FAN
-'''
-
-LINES = _mgl.LINES
-'''
-    GL_LINES
-'''
-
-LINE_STRIP = _mgl.LINE_STRIP
-'''
-    GL_LINE_STRIP
-'''
-
-LINE_LOOP = _mgl.LINE_LOOP
-'''
-    GL_LINE_LOOP
-'''
-
-POINTS = _mgl.POINTS
-'''
-    GL_POINTS
-'''
-
-LINE_STRIP_ADJACENCY = _mgl.LINE_STRIP_ADJACENCY
-'''
-    GL_LINE_STRIP_ADJACENCY
-'''
-
-LINES_ADJACENCY = _mgl.LINES_ADJACENCY
-'''
-    GL_LINES_ADJACENCY
-'''
-
-TRIANGLE_STRIP_ADJACENCY = _mgl.TRIANGLE_STRIP_ADJACENCY
-'''
-    GL_TRIANGLE_STRIP_ADJACENCY
-'''
-
-TRIANGLES_ADJACENCY = _mgl.TRIANGLES_ADJACENCY
-'''
-    GL_TRIANGLES_ADJACENCY
-'''
-
-
-class Version:
-    '''
-        Version
-    '''
-
-    def __init__(self, major, minor):
-        self.major = major
-        self.minor = minor
-
-
-CORE_330 = Version(3, 3)
-'''
-    OpenGL 3.3
-'''
-
-CORE_400 = Version(4, 0)
-'''
-    OpenGL 4.0
-'''
-
-CORE_410 = Version(4, 1)
-'''
-    OpenGL 4.1
-'''
-
-CORE_420 = Version(4, 2)
-'''
-    OpenGL 4.2
-'''
-
-CORE_430 = Version(4, 3)
-'''
-    OpenGL 4.3
-'''
-
-CORE_440 = Version(4, 4)
-'''
-    OpenGL 4.4
-'''
-
-CORE_450 = Version(4, 5)
-'''
-    OpenGL 4.5
-'''
-
-
-class Uniform:
-    '''
-        Uniform
-    '''
-
-    def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
-
-    @staticmethod
-    def _new(o):
-        r = Uniform.__new__(Uniform)
-        r._o = o
-        return r
-
-
-    @property
-    def name(self) -> str:
-        '''
-            name
-        '''
-
-        return self._o.name
-
-
-    @property
-    def location(self) -> int:
-        '''
-            location
-        '''
-
-        return self._o.location
-
-
-    @property
-    def dimension(self) -> int:
-        '''
-            dimension
-        '''
-
-        return self._o.dimension
-
-
-    @property
-    def array_length(self) -> int:
-        '''
-            array_length
-        '''
-
-        return self._o.array_length
-
-
-    @property
-    def value(self):
-        '''
-            value
-        '''
-
-        return self._o.value
-
-
-    @value.setter
-    def value(self, value):
-        self._o.value = value
-
-
-class UniformBlock:
-    '''
-        UniformBlock
-    '''
-
-    def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
-
-    @staticmethod
-    def _new(o):
-        r = UniformBlock.__new__(UniformBlock)
-        r._o = o
-        return r
-
-
-class Varying:
-    '''
-        Varying
-    '''
-
-    def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
-
-    @staticmethod
-    def _new(o):
-        r = Varying.__new__(Varying)
-        r._o = o
-        return r
-
-
-class UniformMap:
-    '''
-        UniformMap
-    '''
-
-    def __init__(self):
-        self._o = {}
-        raise NotImplementedError()
-
-
-    @staticmethod
-    def _new(o):
-        r = UniformMap.__new__(UniformMap)
-        r._o = o
-        return r
-
-
-    def __getitem__(self, key) -> Uniform:
-        '''
-        '''
-
-        return Uniform._new(self._o[key])
-
-
-    def __contains__(self, key):
-        return key in self._o
-
-
-    def __len__(self):
-        return len(self._o)
-
-
-class Attribute:
-    '''
-        Attribute
-    '''
-
-    def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
-
-    @staticmethod
-    def _new(o):
-        r = Attribute.__new__(Attribute)
-        r._o = o
-        return r
-
-
 
 
 class VertexArrayAttribute:
@@ -321,15 +39,58 @@ class VertexArrayAttribute:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('VertexArrayAttribute')
 
     @staticmethod
-    def _new(o):
-        r = VertexArrayAttribute.__new__(VertexArrayAttribute)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
+
+        res = VertexArrayAttribute.__new__(VertexArrayAttribute)
+        res.mglo = obj
+        return res
+
+    @property
+    def location(self):
+        '''
+            location
+        '''
+
+        return self.mglo.location
+
+    @property
+    def divisor(self):
+        '''
+            divisor
+        '''
+
+        return self.mglo.divisor
+
+    @property
+    def stride(self):
+        '''
+            stride
+        '''
+
+        return self.mglo.stride
+
+    @property
+    def enabled(self):
+        '''
+            enabled
+        '''
+
+        return self.mglo.enabled
+
+    @property
+    def default(self):
+        '''
+            default
+        '''
+
+        return self.mglo.default
 
 
 class VertexArrayListAttribute:
@@ -338,15 +99,18 @@ class VertexArrayListAttribute:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('VertexArrayListAttribute')
 
     @staticmethod
-    def _new(o):
-        r = VertexArrayListAttribute.__new__(VertexArrayListAttribute)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
+
+        res = VertexArrayListAttribute.__new__(VertexArrayListAttribute)
+        res.mglo = obj
+        return res
 
 
 class VertexArrayMatrixAttribute:
@@ -355,56 +119,26 @@ class VertexArrayMatrixAttribute:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
-
-    @staticmethod
-    def _new(o):
-        r = VertexArrayMatrixAttribute.__new__(VertexArrayMatrixAttribute)
-        r._o = o
-        return r
-
-
-class AttributeMap:
-    '''
-        AttributeMap
-    '''
-
-    def __init__(self):
-        self._o = {}
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('VertexArrayMatrixAttribute')
 
     @staticmethod
-    def _new(o):
-        r = UniformMap.__new__(UniformMap)
-        r._o = o
-        return r
-
-
-    def __getitem__(self, key) -> Attribute:
+    def new(obj):
         '''
+            internal use only
         '''
 
-        return Attribute._new(self._o[key])
+        res = VertexArrayMatrixAttribute.__new__(VertexArrayMatrixAttribute)
+        res.mglo = obj
+        return res
 
 
-    def __contains__(self, key):
-        return key in self._o
-
-
-    def __len__(self):
-        return len(self._o)
-
-
+# TODO:
 class InvalidObject:
     '''
         A ModernGL object turns into an InvalidObject
         once the release method is successfully called.
     '''
-
-    pass # TODO:
 
 
 class BufferAccess:
@@ -413,41 +147,39 @@ class BufferAccess:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('BufferAccess')
 
     def __enter__(self):
-        self._o.open()
+        self.mglo.open()
         return self
 
-
     def __exit__(self, *args):
-        self._o.close()
-
+        self.mglo.close()
 
     @staticmethod
-    def _new(o):
-        r = BufferAccess.__new__(BufferAccess)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
 
+        res = BufferAccess.__new__(BufferAccess)
+        res.mglo = obj
+        return res
 
     def open(self):
         '''
             Map the buffer.
         '''
 
-        self._o.open()
-
+        self.mglo.open()
 
     def close(self):
         '''
             Unmap the buffer.
         '''
 
-        self._o.close()
-
+        self.mglo.close()
 
     def read(self, size=-1, offset=0) -> bytes:
         '''
@@ -463,8 +195,7 @@ class BufferAccess:
                 bytes: binary data
         '''
 
-        return self._o.read(size, offset)
-
+        return self.mglo.read(size, offset)
 
     def write(self, data, offset=0):
         '''
@@ -477,8 +208,7 @@ class BufferAccess:
                 offset: The offset.
         '''
 
-        self._o.write(data, offset)
-
+        self.mglo.write(data, offset)
 
     # @property
     # def buffer(self) -> Buffer:
@@ -486,8 +216,7 @@ class BufferAccess:
     # 		The buffer.
     # 	'''
 
-    # 	return self._o.buffer
-
+    # 	return self.mglo.buffer
 
     @property
     def offset(self) -> int:
@@ -495,8 +224,7 @@ class BufferAccess:
             The offset.
         '''
 
-        return self._o.offset
-
+        return self.mglo.offset
 
     @property
     def size(self) -> int:
@@ -504,8 +232,7 @@ class BufferAccess:
             The size.
         '''
 
-        return self._o.size
-
+        return self.mglo.size
 
     @property
     def readonly(self) -> bool:
@@ -513,7 +240,7 @@ class BufferAccess:
             Is readonly.
         '''
 
-        return self._o.readonly
+        return self.mglo.readonly
 
 
 class Buffer:
@@ -522,16 +249,18 @@ class Buffer:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('Buffer')
 
     @staticmethod
-    def _new(o):
-        r = Buffer.__new__(Buffer)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
 
+        res = Buffer.__new__(Buffer)
+        res.mglo = obj
+        return res
 
     @property
     def size(self) -> int:
@@ -539,8 +268,7 @@ class Buffer:
             The size of the buffer.
         '''
 
-        return self._o.size
-
+        return self.mglo.size
 
     @property
     def dynamic(self) -> bool:
@@ -548,17 +276,15 @@ class Buffer:
             Is the buffer created with the dynamic flag?
         '''
 
-        return self._o.dynamic
-
+        return self.mglo.dynamic
 
     def release(self):
         '''
             Release the buffer.
         '''
 
-        self._o.release()
+        self.mglo.release()
         self.__class__ = InvalidObject
-
 
     def access(self, size=-1, offset=0, readonly=False) -> BufferAccess:
         '''
@@ -570,8 +296,7 @@ class Buffer:
                 readonly: The readonly.
         '''
 
-        return BufferAccess._new(self._o.access(size, offset, readonly))
-
+        return BufferAccess.new(self.mglo.access(size, offset, readonly))
 
     def read(self, size=-1, offset=0) -> bytes:
         '''
@@ -587,8 +312,7 @@ class Buffer:
                 bytes: binary data.
         '''
 
-        return self._o.read(size, offset)
-
+        return self.mglo.read(size, offset)
 
     def write(self, data, offset=0):
         '''
@@ -601,16 +325,14 @@ class Buffer:
                 offset: The offset.
         '''
 
-        self._o.write(data, offset)
-
+        self.mglo.write(data, offset)
 
     def orphan(self):
         '''
             Orphan the buffer.
         '''
 
-        self._o.orphan()
-
+        self.mglo.orphan()
 
     def bind_to_uniform_block(self, location=0):
         '''
@@ -620,8 +342,7 @@ class Buffer:
                 location: The uniform block location.
         '''
 
-        self._o.bind_to_uniform_block(location)
-
+        self.mglo.bind_to_uniform_block(location)
 
     def bind_to_storage_buffer(self, location=0):
         '''
@@ -631,7 +352,7 @@ class Buffer:
                 location: The shader storage location.
         '''
 
-        self._o.bind_to_storage_buffer(location)
+        self.mglo.bind_to_storage_buffer(location)
 
 
 class ComputeShader:
@@ -640,23 +361,25 @@ class ComputeShader:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('ComputeShader')
 
     @staticmethod
-    def _new(o):
-        r = ComputeShader.__new__(ComputeShader)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
 
+        res = ComputeShader.__new__(ComputeShader)
+        res.mglo = obj
+        return res
 
     def release(self):
         '''
             release
         '''
 
-        self._o.release()
+        self.mglo.release()
         self.__class__ = InvalidObject
 
 
@@ -666,15 +389,18 @@ class EnableFlag:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('EnableFlag')
 
     @staticmethod
-    def _new(o):
-        r = EnableFlag.__new__(EnableFlag)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
+
+        res = EnableFlag.__new__(EnableFlag)
+        res.mglo = obj
+        return res
 
 
 class Framebuffer:
@@ -683,33 +409,34 @@ class Framebuffer:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('Framebuffer')
 
     @staticmethod
-    def _new(o):
-        r = Framebuffer.__new__(Framebuffer)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
 
+        res = Framebuffer.__new__(Framebuffer)
+        res.mglo = obj
+        return res
 
     def release(self):
         '''
             Release the framebuffer.
         '''
 
-        self._o.release()
+        self.mglo.release()
         self.__class__ = InvalidObject
 
-
-    def read(self, size=None, origin=(0, 0), components=3, floats=False) -> bytes:
+    def read(self, viewport=None, components=3, floats=False) -> bytes:
         '''
             read
         '''
 
-        return self._o.read(size, origin, components, floats)
-
+        # TODO: fix
+        return self.mglo.read(viewport, components, floats)
 
     def use(self):
         '''
@@ -717,7 +444,7 @@ class Framebuffer:
             `VertexArray.render` or `VertexArray.transform` methods.
         '''
 
-        self._o.use()
+        self.mglo.use()
 
 
 class MultisampleRenderbuffer:
@@ -726,23 +453,25 @@ class MultisampleRenderbuffer:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('MultisampleRenderbuffer')
 
     @staticmethod
-    def _new(o):
-        r = MultisampleRenderbuffer.__new__(MultisampleRenderbuffer)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
 
+        res = MultisampleRenderbuffer.__new__(MultisampleRenderbuffer)
+        res.mglo = obj
+        return res
 
     def release(self):
         '''
             release
         '''
 
-        self._o.release()
+        self.mglo.release()
         self.__class__ = InvalidObject
 
 
@@ -752,35 +481,37 @@ class MultisampleTexture:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('MultisampleTexture')
 
     @staticmethod
-    def _new(o):
-        r = MultisampleTexture.__new__(MultisampleTexture)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
 
+        res = MultisampleTexture.__new__(MultisampleTexture)
+        res.mglo = obj
+        return res
 
     def release(self):
         '''
             release
         '''
 
-        self._o.release()
+        self.mglo.release()
         self.__class__ = InvalidObject
-
 
     def use(self, location=0):
         '''
             Args:
-            optional index: The texture location.
-                Same as the integer value that is used for sampler2D uniforms in the shaders.
-                The value ``0`` will bind the texture to the ``GL_TEXTURE0`` binding point.
+                location (int): The texture location.
+                        Same as the integer value that is used for sampler2D
+                        uniforms in the shaders. The value ``0`` will bind the
+                        texture to the ``GL_TEXTURE0`` binding point.
         '''
 
-        self._o.use(location)
+        self.mglo.use(location)
 
 
 class Primitive:
@@ -789,15 +520,18 @@ class Primitive:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('Primitive')
 
     @staticmethod
-    def _new(o):
-        r = Primitive.__new__(Primitive)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
+
+        res = Primitive.__new__(Primitive)
+        res.mglo = obj
+        return res
 
 
 class Shader:
@@ -812,16 +546,18 @@ class Shader:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('GeometryShader')
 
     @staticmethod
-    def _new(o):
-        r = Shader.__new__(Shader)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
 
+        res = Shader.__new__(Shader)
+        res.mglo = obj
+        return res
 
     @property
     def source(self) -> str:
@@ -829,8 +565,7 @@ class Shader:
             The source code of the shader.
         '''
 
-        return self._o.source
-
+        return self.mglo.source
 
     @property
     def typename(self) -> str:
@@ -845,15 +580,14 @@ class Shader:
             - ``'TessControlShader'``
         '''
 
-        return self._o.typename
-
+        return self.mglo.typename
 
     def release(self):
         '''
             Release the shader object.
         '''
 
-        self._o.release()
+        self.mglo.release()
         self.__class__ = InvalidObject
 
 
@@ -863,25 +597,26 @@ class Program:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('Program')
 
     @staticmethod
-    def _new(o):
-        r = Program.__new__(Program)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
 
+        res = Program.__new__(Program)
+        res.mglo = obj
+        return res
 
     def release(self):
         '''
             Release the program object.
         '''
 
-        self._o.release()
+        self.mglo.release()
         self.__class__ = InvalidObject
-
 
     @property
     def uniforms(self) -> Dict[str, Uniform]:
@@ -891,8 +626,7 @@ class Program:
             It can be used to access uniforms by name.
         '''
 
-        return UniformMap._new(self._o.uniforms)
-
+        return UniformMap.new(self.mglo.uniforms)
 
     @property
     def uniform_blocks(self) -> Dict[str, UniformBlock]:
@@ -902,8 +636,7 @@ class Program:
             It can be used to access uniform blocks by name.
         '''
 
-        return self._o.uniform_blocks
-
+        return self.mglo.uniform_blocks
 
     @property
     def attributes(self) -> Dict[str, Attribute]:
@@ -913,8 +646,7 @@ class Program:
             It can be used to access attributes by name.
         '''
 
-        return self._o.attributes
-
+        return self.mglo.attributes
 
     @property
     def varyings(self) -> Dict[str, Varying]:
@@ -924,38 +656,35 @@ class Program:
             It can be used to access varyings by name.
         '''
 
-        return self._o.varyings
-
+        return self.mglo.varyings
 
     @property
     def geometry_input(self) -> Primitive:
         '''
             The geometry input primitive.
-            The GeometryShader's input primitive if the GeometryShader is present.
-            The geometry input primitive will be used for validation when rendering.
+            The GeometryShader's input primitive if the GeometryShader exists.
+            The geometry input primitive will be used for validation.
         '''
 
-        return self._o.geometry_input
-
+        return self.mglo.geometry_input
 
     @property
     def geometry_output(self) -> Primitive:
         '''
             The geometry output primitive.
-            The GeometryShader's output primitive if the GeometryShader is present.
+            The GeometryShader's output primitive if the GeometryShader exists.
         '''
 
-        return self._o.geometry_output
-
+        return self.mglo.geometry_output
 
     @property
     def geometry_vertices(self) -> int:
         '''
-            The maximum number of vertices that the geometry shader in program will output.
+            The maximum number of vertices that the geometry shader in program
+            will output.
         '''
 
-        return self._o.geometry_vertices
-
+        return self.mglo.geometry_vertices
 
     @property
     def vertex_shader(self) -> Shader:
@@ -963,8 +692,7 @@ class Program:
             vertex_shader
         '''
 
-        return self._o.vertex_shader
-
+        return self.mglo.vertex_shader
 
     @property
     def fragment_shader(self) -> Shader:
@@ -972,8 +700,7 @@ class Program:
             fragment_shader
         '''
 
-        return self._o.fragment_shader
-
+        return self.mglo.fragment_shader
 
     @property
     def geometry_shader(self) -> Shader:
@@ -981,8 +708,7 @@ class Program:
             geometry_shader
         '''
 
-        return self._o.geometry_shader
-
+        return self.mglo.geometry_shader
 
     @property
     def tesselation_evaluation_shader(self) -> Shader:
@@ -990,8 +716,7 @@ class Program:
             tesselation_evaluation_shader
         '''
 
-        return self._o.tesselation_evaluation_shader
-
+        return self.mglo.tesselation_evaluation_shader
 
     @property
     def tesselation_control_shader(self) -> Shader:
@@ -999,7 +724,7 @@ class Program:
             tesselation_control_shader
         '''
 
-        return self._o.tesselation_control_shader
+        return self.mglo.tesselation_control_shader
 
 
 class ProgramStage:
@@ -1008,15 +733,18 @@ class ProgramStage:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('ProgramStage')
 
     @staticmethod
-    def _new(o):
-        r = ProgramStage.__new__(ProgramStage)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
+
+        res = ProgramStage.__new__(ProgramStage)
+        res.mglo = obj
+        return res
 
 
 class Renderbuffer:
@@ -1025,23 +753,25 @@ class Renderbuffer:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('Renderbuffer')
 
     @staticmethod
-    def _new(o):
-        r = Renderbuffer.__new__(Renderbuffer)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
 
+        res = Renderbuffer.__new__(Renderbuffer)
+        res.mglo = obj
+        return res
 
     def release(self):
         '''
             release
         '''
 
-        self._o.release()
+        self.mglo.release()
         self.__class__ = InvalidObject
 
 
@@ -1051,15 +781,18 @@ class Subroutine:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('Subroutine')
 
     @staticmethod
-    def _new(o):
-        r = Subroutine.__new__(Subroutine)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
+
+        res = Subroutine.__new__(Subroutine)
+        res.mglo = obj
+        return res
 
 
 class SubroutineUniform:
@@ -1068,15 +801,18 @@ class SubroutineUniform:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('SubroutineUniform')
 
     @staticmethod
-    def _new(o):
-        r = SubroutineUniform.__new__(SubroutineUniform)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
+
+        res = SubroutineUniform.__new__(SubroutineUniform)
+        res.mglo = obj
+        return res
 
 
 class Texture:
@@ -1085,16 +821,18 @@ class Texture:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('Texture')
 
     @staticmethod
-    def _new(o):
-        r = Texture.__new__(Texture)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
 
+        res = Texture.__new__(Texture)
+        res.mglo = obj
+        return res
 
     @property
     def width(self) -> int:
@@ -1102,8 +840,7 @@ class Texture:
             width
         '''
 
-        return self._o.width
-
+        return self.mglo.width
 
     @property
     def height(self) -> int:
@@ -1111,8 +848,7 @@ class Texture:
             height
         '''
 
-        return self._o.height
-
+        return self.mglo.height
 
     @property
     def size(self) -> tuple:
@@ -1120,37 +856,35 @@ class Texture:
             size
         '''
 
-        return (self._o.width, self._o.height)
-
+        return (self.mglo.width, self.mglo.height)
 
     def release(self):
         '''
             Release the texture object.
         '''
 
-        self._o.release()
+        self.mglo.release()
         self.__class__ = InvalidObject
-
 
     def update(self, data, size=None, offset=(0, 0)):
         '''
             update
         '''
 
-        self._o.update(data, size, offset)
+        self.mglo.update(data, size, offset)
 
-
-    def use(self, index=0):
+    def use(self, location=0):
         '''
             Bind the texture.
 
             Args:
-                index (int): The texture location.
-                    Same as the integer value that is used for sampler2D uniforms in the shaders.
-                    The value ``0`` will bind the texture to the ``GL_TEXTURE0`` binding point.
+                location (int): The texture location.
+                    Same as the integer value that is used for sampler2D
+                    uniforms in the shaders. The value ``0`` will bind the
+                    texture to the ``GL_TEXTURE0`` binding point.
         '''
 
-        self._o.use(index)
+        self.mglo.use(location)
 
 
 class VertexArray:
@@ -1159,35 +893,35 @@ class VertexArray:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('VertexArray')
 
     @staticmethod
-    def _new(o):
-        r = VertexArray.__new__(VertexArray)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
 
+        res = VertexArray.__new__(VertexArray)
+        res.mglo = obj
+        return res
 
     def release(self):
         '''
             Release the vertex array object.
         '''
 
-        self._o.release()
+        self.mglo.release()
         self.__class__ = InvalidObject
-
 
     @property
     def program(self) -> Program:
         '''
             The program assinged to the VertexArray.
-            The program will be used automatically when rendering and transforming.
+            The program used when rendering or transforming primitives.
         '''
 
-        return self._o.program
-
+        return self.mglo.program
 
     @property
     def content(self) -> list:
@@ -1195,8 +929,7 @@ class VertexArray:
             The content assinged to the VertexArray.
         '''
 
-        return self._o.content
-
+        return self.mglo.content
 
     @property
     def attributes(self) -> Dict[str, VertexArrayAttribute]:
@@ -1205,8 +938,7 @@ class VertexArray:
             Use the bind() method to assign vertex attributes to buffers.
         '''
 
-        return self._o.attributes
-
+        return self.mglo.attributes
 
     @property
     def index_buffer(self) -> Buffer:
@@ -1214,20 +946,18 @@ class VertexArray:
             The index buffer if the index_buffer is set otherwise ``None``.
         '''
 
-        return self._o.index_buffer
-
+        return self.mglo.index_buffer
 
     @property
     def vertices(self) -> int:
         '''
             The number of vertices detected.
             This is the minimum of the number of vertices possible per Buffer.
-            The size of the index_buffer will be used when the index_buffer is set.
+            The size of the index_buffer determines the number of vertices.
             Per instance vertex attributes does not affect this number.
         '''
 
-        return self._o.vertices
-
+        return self.mglo.vertices
 
     def render(self, mode=TRIANGLES, vertices=-1, first=0, instances=1):
         '''
@@ -1235,18 +965,17 @@ class VertexArray:
             the input primitive of the GeometryShader.
 
             Args:
-                optional mode: By default :py:const:`~ModernGL.TRIANGLES` will be used.
-                optional vertices: The number of vertices to transform.
+                mode: By default `TRIANGLES` will be used.
+                vertices: The number of vertices to transform.
 
             Keyword Args:
                 first: The index of the first vertex to start with.
                 instances: The number of instances.
         '''
 
-        self._o.render(mode, vertices, first, instances)
+        self.mglo.render(mode, vertices, first, instances)
 
-
-    def transform(self, output, mode=TRIANGLES, vertices=-1, first=0, instances=1):
+    def transform(self, buf, mode=POINTS, vertices=-1, first=0, instances=1):
         '''
             Transform vertices.
             Stores the output in a single buffer.
@@ -1255,15 +984,15 @@ class VertexArray:
 
             Args:
                 output: The buffer to store the output.
-                optional mode: By default :py:const:`~ModernGL.TRIANGLES` will be used.
-                optional vertices: The number of vertices to transform.
+                mode: By default `TRIANGLES` will be used.
+                vertices: The number of vertices to transform.
 
             Keyword Args:
                 first: The index of the first vertex to start with.
                 instances: The number of instances.
         '''
 
-        self._o.transform(output._o, mode, vertices, first, instances)
+        self.mglo.transform(buf.mglo, mode, vertices, first, instances)
 
 
 class Context:
@@ -1288,25 +1017,26 @@ class Context:
     '''
 
     def __init__(self):
-        self._o = None
-        raise NotImplementedError()
-
+        self.mglo = None
+        raise NotImplementedError('SimpleVertexArray')
 
     @staticmethod
-    def _new(o):
-        r = Context.__new__(Context)
-        r._o = o
-        return r
+    def new(obj):
+        '''
+            internal use only
+        '''
 
+        res = Context.__new__(Context)
+        res.mglo = obj
+        return res
 
     def release(self):
         '''
             Release the OpenGL context.
         '''
 
-        self._o.release()
+        self.mglo.release()
         self.__class__ = InvalidObject
-
 
     @property
     def line_width(self) -> float:
@@ -1314,13 +1044,11 @@ class Context:
             Set the default line width.
         '''
 
-        return self._o.line_width
-
+        return self.mglo.line_width
 
     @line_width.setter
     def line_width(self, value):
-        self._o.line_width = value
-
+        self.mglo.line_width = value
 
     @property
     def point_size(self) -> float:
@@ -1328,13 +1056,11 @@ class Context:
             Set the default point size.
         '''
 
-        return self._o.point_size
-
+        return self.mglo.point_size
 
     @point_size.setter
     def point_size(self, value):
-        self._o.point_size = value
-
+        self.mglo.point_size = value
 
     @property
     def viewport(self) -> tuple:
@@ -1342,13 +1068,11 @@ class Context:
             The viewport.
         '''
 
-        return self._o.viewport
-
+        return self.mglo.viewport
 
     @viewport.setter
     def viewport(self, value):
-        self._o.viewport = tuple(value)
-
+        self.mglo.viewport = tuple(value)
 
     @property
     def default_texture_unit(self) -> int:
@@ -1356,13 +1080,11 @@ class Context:
             The default texture unit.
         '''
 
-        return self._o.default_texture_unit
-
+        return self.mglo.default_texture_unit
 
     @default_texture_unit.setter
     def default_texture_unit(self, value):
-        self._o.default_texture_unit = value
-
+        self.mglo.default_texture_unit = value
 
     @property
     def max_texture_units(self) -> int:
@@ -1370,8 +1092,7 @@ class Context:
             The max texture units.
         '''
 
-        return self._o.max_texture_units
-
+        return self.mglo.max_texture_units
 
     @property
     def default_framebuffer(self) -> Framebuffer:
@@ -1379,8 +1100,7 @@ class Context:
             The default framebuffer.
         '''
 
-        return self._o.default_framebuffer
-
+        return self.mglo.default_framebuffer
 
     @property
     def vendor(self) -> str:
@@ -1388,8 +1108,7 @@ class Context:
             vendor
         '''
 
-        return self._o.vendor
-
+        return self.mglo.vendor
 
     @property
     def renderer(self) -> str:
@@ -1397,8 +1116,7 @@ class Context:
             renderer
         '''
 
-        return self._o.renderer
-
+        return self.mglo.renderer
 
     @property
     def version(self) -> str:
@@ -1406,20 +1124,18 @@ class Context:
             version
         '''
 
-        return self._o.version
+        return self.mglo.version
 
-
-    def clear(self, r=0, g=0, b=0, a=0):
+    def clear(self, red=0, green=0, blue=0, alpha=0):
         '''
             Clear the framebuffer.
 
             Args:
-                r, g, b: color components.
-                a: alpha component.
+                red, green, blue: color components.
+                alpha: alpha component.
         '''
 
-        self._o.clear(r, g, b, a)
-
+        self.mglo.clear(red, green, blue, alpha)
 
     def enable(self, flag):
         '''
@@ -1429,8 +1145,7 @@ class Context:
                 flags: flags to enable.
         '''
 
-        self._o.enable(flag)
-
+        self.mglo.enable(flag)
 
     def disable(self, flag):
         '''
@@ -1440,18 +1155,16 @@ class Context:
                 flags: flags to disable.
         '''
 
-        self._o.disable(flag)
-
+        self.mglo.disable(flag)
 
     def finish(self):
         '''
             Wait for all drawing commands to finish.
         '''
 
-        self._o.finish()
+        self.mglo.finish()
 
-
-    def copy_buffer(self, dst, src, size=-1, read_offset=0, write_offset=0):
+    def copy_buffer(self, dst, src, size=-1, src_offset=0, dst_offset=0):
         '''
             Copy buffer content.
 
@@ -1461,12 +1174,11 @@ class Context:
                 optional size: Size to copy.
 
             Keyword Args:
-                read_offset: Read offset.
-                write_offset: Write offset.
+                src_offset: Read offset.
+                dst_offset: Write offset.
         '''
 
-        self._o.copy_buffer(dst._o, src._o, size, read_offset, write_offset)
-
+        self.mglo.copy_buffer(dst.mglo, src.mglo, size, src_offset, dst_offset)
 
     def Buffer(self, data=None, reserve=0, dynamic=False) -> Buffer:
         '''
@@ -1483,8 +1195,7 @@ class Context:
                 :py:class:`Buffer`
         '''
 
-        return Buffer._new(self._o.Buffer(data, reserve, dynamic))
-
+        return Buffer.new(self.mglo.Buffer(data, reserve, dynamic))
 
     def Texture(self, size, components, data=None, floats=False) -> Texture:
         '''
@@ -1502,8 +1213,7 @@ class Context:
                 :py:class:`Texture`
         '''
 
-        return Texture._new(self._o.Texture(size, components, data, floats))
-
+        return Texture.new(self.mglo.Texture(size, components, data, floats))
 
     def DepthTexture(self, size, data=None) -> Texture:
         '''
@@ -1517,41 +1227,38 @@ class Context:
                 :py:class:`Texture`
         '''
 
-        return Texture._new(self._o.DepthTexture(size, data))
+        return Texture.new(self.mglo.DepthTexture(size, data))
 
-
-    def VertexArray(self, program, content, index_buffer=None, skip_errors=False) -> VertexArray:
+    def VertexArray(self, program, content, index_buffer=None) -> VertexArray:
         '''
             Create a VertexArray.
 
             Args:
-                program: The program used by :py:meth:`render` and :py:meth:`transform`.
+                program: The program used by `render` and `transform`.
                 content: A list of (buffer, format, attributes).
                 optional index_buffer: An index buffer.
-
-            Keyword Args:
-                skip_errors: Ignore missing attributes.
 
             Returns:
                 :py:class:`VertexArray`
         '''
 
         if index_buffer is not None:
-            index_buffer = index_buffer._o
+            index_buffer = index_buffer.mglo
 
-        content = list((a._o, b, c) for a, b, c in content)
+        content = list((a.mglo, b, c) for a, b, c in content)
 
-        return VertexArray._new(self._o.VertexArray(program._o, list(content), index_buffer, skip_errors))
+        vao = self.mglo.VertexArray(program.mglo, list(content), index_buffer)
+        return VertexArray.new(vao)
 
-
-    def SimpleVertexArray(self, program, buffer, vertex_format, attributes, index_buffer=None, skip_errors=False) -> VertexArray:
+    def SimpleVertexArray(
+            self, program, buffer, attributes,
+            index_buffer=None) -> VertexArray:
         '''
             Create a SimpleVertexArray.
 
             Args:
-                program: The program used by :py:meth:`render` and :py:meth:`transform`.
+                program: The program used by `render` and `transform`.
                 buffer: The buffer.
-                vertex_format: The buffer format string.
                 attributes: A list of attribute names.
                 optional index_buffer: An index buffer.
 
@@ -1562,10 +1269,10 @@ class Context:
                 :py:class:`VertexArray`
         '''
 
-        return self.VertexArray(program, [(buffer, vertex_format, attributes)], index_buffer, skip_errors)
+        content = [(buffer, detect_format(program, attributes), attributes)]
+        return self.VertexArray(program, content, index_buffer)
 
-
-    def Program(self, shaders, varyings=[]) -> Program:
+    def Program(self, shaders, varyings=()) -> Program:
         '''
             Create a Program.
 
@@ -1580,8 +1287,9 @@ class Context:
         if isinstance(shaders, Shader):
             shaders = [shaders]
 
-        return Program._new(self._o.Program([x._o for x in shaders], varyings)) # TODO: tuple
-
+        # TODO: tuple
+        prog = self.mglo.Program([x.mglo for x in shaders], varyings)
+        return Program.new(prog)
 
     def VertexShader(self, source) -> Shader:
         '''
@@ -1594,8 +1302,7 @@ class Context:
                 :py:class:`Shader`
         '''
 
-        return Shader._new(self._o.VertexShader(source))
-
+        return Shader.new(self.mglo.VertexShader(source))
 
     def FragmentShader(self, source) -> Shader:
         '''
@@ -1608,8 +1315,7 @@ class Context:
                 :py:class:`Shader`
         '''
 
-        return Shader._new(self._o.FragmentShader(source))
-
+        return Shader.new(self.mglo.FragmentShader(source))
 
     def GeometryShader(self, source) -> Shader:
         '''
@@ -1622,8 +1328,7 @@ class Context:
                 :py:class:`Shader`
         '''
 
-        return Shader._new(self._o.GeometryShader(source))
-
+        return Shader.new(self.mglo.GeometryShader(source))
 
     def TessEvaluationShader(self, source) -> Shader:
         '''
@@ -1636,8 +1341,7 @@ class Context:
                 :py:class:`Shader`
         '''
 
-        return Shader._new(self._o.TessEvaluationShader(source))
-
+        return Shader.new(self.mglo.TessEvaluationShader(source))
 
     def TessControlShader(self, source) -> Shader:
         '''
@@ -1650,22 +1354,20 @@ class Context:
                 :py:class:`Shader`
         '''
 
-        return Shader._new(self._o.TessControlShader(source))
-
+        return Shader.new(self.mglo.TessControlShader(source))
 
     def Framebuffer(self, attachments) -> Framebuffer:
         '''
             Create a Framebuffer.
 
             Args:
-                attachments: A list of :py:class:`Texture` or :py:class:`Renderbuffer` objects.
+                attachments: A list of `Texture` or `Renderbuffer` objects.
 
             Returns:
                 :py:class:`Framebuffer`
         '''
 
-        return Framebuffer._new(self._o.Framebuffer(attachments))
-
+        return Framebuffer.new(self.mglo.Framebuffer(attachments))
 
     def Renderbuffer(self, size, components, floats=True) -> Renderbuffer:
         '''
@@ -1682,8 +1384,8 @@ class Context:
                 :py:class:`Renderbuffer`
         '''
 
-        return Renderbuffer._new(self._o.Renderbuffer(size, components, floats))
-
+        rbo = self.mglo.Renderbuffer(size, components, floats)
+        return Renderbuffer.new(rbo)
 
     def DepthRenderbuffer(self, size, floats=True) -> Renderbuffer:
         '''
@@ -1699,8 +1401,7 @@ class Context:
                 :py:class:`Renderbuffer`
         '''
 
-        return Renderbuffer._new(self._o.DepthRenderbuffer(size, floats))
-
+        return Renderbuffer.new(self.mglo.DepthRenderbuffer(size, floats))
 
     def ComputeShader(self, source) -> ComputeShader:
         '''
@@ -1713,15 +1414,14 @@ class Context:
                 :py:class:`ComputeShader`
         '''
 
-        return ComputeShader._new(self._o.ComputeShader(source))
-
+        return ComputeShader.new(self.mglo.ComputeShader(source))
 
 if False:
     def _create_context() -> Context:
         return Context()
 
-    def _create_standalone_context(width, height) -> Context:
-        return Context()
+    def _create_standalone_context(*args) -> Context:
+        return Context(*args)
 
     _mgl.create_context = _create_context
     _mgl.create_standalone_context = _create_standalone_context
@@ -1739,7 +1439,12 @@ def create_context(require=None) -> Context:
             :py:class:`ModernGL.Context`
     '''
 
-    return Context._new(_mgl.create_context())
+    ctx = Context.new(_mgl.create_context())
+
+    if require is not None and ctx.version < require:
+        raise Exception('TODO')
+
+    return ctx
 
 
 def create_standalone_context(size=(256, 256), require=None) -> Context:
@@ -1755,14 +1460,24 @@ def create_standalone_context(size=(256, 256), require=None) -> Context:
             :py:class:`ModernGL.Context`
     '''
 
-    width, height = size
+    ctx = Context.new(_mgl.create_standalone_context(*size))
 
-    return Context._new(_mgl.create_standalone_context(width, height))
+    if require is not None and ctx.version < require:
+        raise Exception('TODO')
+
+    return ctx
 
 
 def detect_format(program, attributes) -> str:
     '''
-        detect_format(program, attributes)
+        detect_format
     '''
 
-    return ''.join('%d%s' % (program.attributes[a].array_length * program.attributes[a].dimension, program.attributes[a].shape) for a in attributes)
+    def fmt(attr):
+        '''
+            size and shape
+        '''
+
+        return attr.array_length * attr.dimension, attr.shape
+
+    return ''.join('%d%s' % fmt(program.attributes[a]) for a in attributes)
