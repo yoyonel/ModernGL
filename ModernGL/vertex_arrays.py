@@ -2,9 +2,7 @@
     ModernGL Vertex array members
 '''
 
-# pylint: disable=too-few-public-methods, function-redefined
-
-from typing import Dict
+# pylint: disable=too-few-public-methods
 
 from .common import Object, TRIANGLES, POINTS
 from .programs import Program
@@ -26,7 +24,7 @@ class VertexArrayAttribute(Object):
         res.mglo = obj
         return res
 
-    def __getitem__(self, key) -> VertexArrayAttribute:
+    def __getitem__(self, key) -> 'VertexArrayAttribute':
         return VertexArrayAttribute.new(self.mglo[key])
 
     @property
