@@ -13,9 +13,8 @@ from .constants import (
     Version, EnableFlag, Primitive,
     CORE_330, CORE_400, CORE_410, CORE_420, CORE_430, CORE_440, CORE_450,
     BLEND, DEPTH_TEST, CULL_FACE, MULTISAMPLE,
-    TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN, LINES, LINE_STRIP, LINE_LOOP,
-    POINTS, LINE_STRIP_ADJACENCY, LINES_ADJACENCY, TRIANGLE_STRIP_ADJACENCY,
-    TRIANGLES_ADJACENCY,
+    TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN, LINES, LINE_STRIP, LINE_LOOP, POINTS,
+    LINE_STRIP_ADJACENCY, LINES_ADJACENCY, TRIANGLE_STRIP_ADJACENCY, TRIANGLES_ADJACENCY,
 )
 
 from .program_members import (
@@ -26,6 +25,34 @@ from .program_members import (
 from .vertex_array_member import (
     VertexArrayAttribute, VertexArrayListAttribute, VertexArrayMatrixAttribute,
 )
+
+__all__ = [
+    'Version', 'EnableFlag', 'Primitive',
+    'CORE_330', 'CORE_400', 'CORE_410', 'CORE_420', 'CORE_430', 'CORE_440', 'CORE_450',
+    'BLEND', 'DEPTH_TEST', 'CULL_FACE', 'MULTISAMPLE',
+    'TRIANGLES', 'TRIANGLE_STRIP', 'TRIANGLE_FAN', 'LINES', 'LINE_STRIP', 'LINE_LOOP', 'POINTS',
+    'LINE_STRIP_ADJACENCY', 'LINES_ADJACENCY', 'TRIANGLE_STRIP_ADJACENCY', 'TRIANGLES_ADJACENCY',
+    'Uniform', 'UniformMap', 'UniformBlock',
+    'Varying', 'Attribute', 'AttributeMap',
+    'Subroutine', 'SubroutineUniform',
+    'VertexArrayAttribute', 'VertexArrayListAttribute', 'VertexArrayMatrixAttribute',
+    'Object', 'InvalidObject', 'Error',
+    'VERSION',
+    'create_context',
+    'create_standalone_context',
+    'BufferAccess',
+    'Buffer',
+    'ComputeShader',
+    'Framebuffer',
+    'MultisampleRenderbuffer',
+    'MultisampleTexture',
+    'Shader',
+    'Program',
+    'Renderbuffer',
+    'Texture',
+    'VertexArray',
+    'Context',
+]
 
 VERSION = '3.1.5'
 '''
@@ -307,7 +334,6 @@ class Framebuffer:
             read
         '''
 
-        # TODO: fix
         return self.mglo.read(viewport, components, floats)
 
     def use(self):
@@ -767,9 +793,7 @@ class VertexArray:
 
         self.mglo.render(mode, vertices, first, instances)
 
-    def transform(
-        self, buf, mode=POINTS, vertices=-1, *,
-        first=0, instances=1):
+    def transform(self, buf, mode=POINTS, vertices=-1, *, first=0, instances=1):
         '''
             Transform vertices.
             Stores the output in a single buffer.
@@ -958,7 +982,7 @@ class Context:
 
         self.mglo.finish()
 
-    def copy_buffer(self, dst, src, size=-1, src_offset=0, dst_offset=0):
+    def copy_buffer(self, dst, src, size=-1, *, src_offset=0, dst_offset=0):
         '''
             Copy buffer content.
 
@@ -1041,12 +1065,9 @@ class Context:
 
         content = list((a.mglo, b, c) for a, b, c in content)
 
-        vao = self.mglo.VertexArray(program.mglo, list(content), index_buffer)
-        return VertexArray.new(vao)
+        return VertexArray.new(self.mglo.VertexArray(program.mglo, list(content), index_buffer))
 
-    def simple_vertex_array(
-            self, program, buffer, attributes,
-            index_buffer=None) -> VertexArray:
+    def simple_vertex_array(self, program, buffer, attributes, index_buffer=None) -> VertexArray:
         '''
             Create a SimpleVertexArray.
 
@@ -1064,7 +1085,7 @@ class Context:
         '''
 
         content = [(buffer, detect_format(program, attributes), attributes)]
-        return self.VertexArray(program, content, index_buffer)
+        return self.vertex_array(program, content, index_buffer)
 
     def program(self, shaders, varyings=()) -> Program:
         '''
@@ -1081,9 +1102,7 @@ class Context:
         if isinstance(shaders, Shader):
             shaders = [shaders]
 
-        # TODO: tuple
-        prog = self.mglo.Program([x.mglo for x in shaders], varyings)
-        return Program.new(prog)
+        return Program.new(self.mglo.Program([x.mglo for x in shaders], varyings))
 
     def vertex_shader(self, source) -> Shader:
         '''
@@ -1178,8 +1197,7 @@ class Context:
                 :py:class:`Renderbuffer`
         '''
 
-        rbo = self.mglo.Renderbuffer(size, components, floats)
-        return Renderbuffer.new(rbo)
+        return Renderbuffer.new(self.mglo.Renderbuffer(size, components, floats))
 
     def depth_renderbuffer(self, size, floats=True) -> Renderbuffer:
         '''
@@ -1209,6 +1227,7 @@ class Context:
         '''
 
         return ComputeShader.new(self.mglo.ComputeShader(source))
+
 
 if False:
     def _create_context() -> Context:

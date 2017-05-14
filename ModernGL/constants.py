@@ -44,6 +44,7 @@ class EnableFlag:
         res.mglo = obj
         return res
 
+
 BLEND = _mgl.BLEND
 '''
     GL_BLEND
@@ -165,6 +166,7 @@ class Version:
         '''
 
         return self._major
+
 
 CORE_330 = Version(3, 3)
 '''
