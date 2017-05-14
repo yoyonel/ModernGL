@@ -49,15 +49,6 @@ PyObject * MGLUniform_read(MGLUniform * self) {
 	return result;
 }
 
-const char * MGLUniform_read_doc = R"(
-	read()
-
-	Read the uniform value as binary data.
-
-	Returns:
-		``bytes``
-)";
-
 PyObject * MGLUniform_write(MGLUniform * self, PyObject * args) {
 
 
@@ -99,18 +90,6 @@ PyObject * MGLUniform_write(MGLUniform * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-const char * MGLUniform_write_doc = R"(
-	write()
-
-	Write the uniform value as binary data.
-
-	Args:
-		data: Data to write.
-
-	Returns:
-		``None``
-)";
-
 PyMethodDef MGLUniform_tp_methods[] = {
 	{"read", (PyCFunction)MGLUniform_read, METH_NOARGS, 0},
 	{"write", (PyCFunction)MGLUniform_write, METH_VARARGS, 0},
@@ -122,113 +101,13 @@ PyObject * MGLUniform_get_name(MGLUniform * self, void * closure) {
 	return self->name;
 }
 
-char MGLUniform_name_doc[] = R"(
-	name
-)";
-
 PyObject * MGLUniform_get_location(MGLUniform * self, void * closure) {
 	return PyLong_FromLong(self->location);
 }
 
-char MGLUniform_location_doc[] = R"(
-	location
-)";
-
 PyObject * MGLUniform_get_dimension(MGLUniform * self, void * closure) {
 	return PyLong_FromLong(self->dimension);
 }
-
-char MGLUniform_dimension_doc[] = R"(
-	dimension
-
-	The uniform dimension.
-
-	+-----------------+-----------+
-	| GLSL type       | dimension |
-	+=================+===========+
-	| sampler2D       | 1         |
-	+-----------------+-----------+
-	| sampler2DCube   | 1         |
-	+-----------------+-----------+
-	| sampler2DShadow | 1         |
-	+-----------------+-----------+
-	| bool            | 1         |
-	+-----------------+-----------+
-	| bvec2           | 2         |
-	+-----------------+-----------+
-	| bvec3           | 3         |
-	+-----------------+-----------+
-	| bvec4           | 4         |
-	+-----------------+-----------+
-	| int             | 1         |
-	+-----------------+-----------+
-	| ivec2           | 2         |
-	+-----------------+-----------+
-	| ivec3           | 3         |
-	+-----------------+-----------+
-	| ivec4           | 4         |
-	+-----------------+-----------+
-	| uint            | 1         |
-	+-----------------+-----------+
-	| uvec2           | 2         |
-	+-----------------+-----------+
-	| uvec3           | 3         |
-	+-----------------+-----------+
-	| uvec4           | 4         |
-	+-----------------+-----------+
-	| float           | 1         |
-	+-----------------+-----------+
-	| vec2            | 2         |
-	+-----------------+-----------+
-	| vec3            | 3         |
-	+-----------------+-----------+
-	| vec4            | 4         |
-	+-----------------+-----------+
-	| double          | 1         |
-	+-----------------+-----------+
-	| dvec2           | 2         |
-	+-----------------+-----------+
-	| dvec3           | 3         |
-	+-----------------+-----------+
-	| dvec4           | 4         |
-	+-----------------+-----------+
-	| mat2            | 4         |
-	+-----------------+-----------+
-	| mat2x3          | 6         |
-	+-----------------+-----------+
-	| mat2x4          | 8         |
-	+-----------------+-----------+
-	| mat3x2          | 6         |
-	+-----------------+-----------+
-	| mat3            | 9         |
-	+-----------------+-----------+
-	| mat3x4          | 12        |
-	+-----------------+-----------+
-	| mat4x2          | 8         |
-	+-----------------+-----------+
-	| mat4x3          | 12        |
-	+-----------------+-----------+
-	| mat4            | 16        |
-	+-----------------+-----------+
-	| dmat2           | 4         |
-	+-----------------+-----------+
-	| dmat2x3         | 6         |
-	+-----------------+-----------+
-	| dmat2x4         | 8         |
-	+-----------------+-----------+
-	| dmat3x2         | 6         |
-	+-----------------+-----------+
-	| dmat3           | 9         |
-	+-----------------+-----------+
-	| dmat3x4         | 12        |
-	+-----------------+-----------+
-	| dmat4x2         | 8         |
-	+-----------------+-----------+
-	| dmat4x3         | 12        |
-	+-----------------+-----------+
-	| dmat4           | 16        |
-	+-----------------+-----------+
-)";
 
 PyObject * MGLUniform_get_value(MGLUniform * self, void * closure) {
 
@@ -254,19 +133,9 @@ int MGLUniform_set_value(MGLUniform * self, PyObject * value, void * closure) {
 	return ((MGLUniform_Setter)self->value_setter)(self, value);
 }
 
-char MGLUniform_value_doc[] = R"(
-	value
-)";
-
 PyObject * MGLUniform_get_array_length(MGLUniform * self, void * closure) {
 	return PyLong_FromLong(self->array_length);
 }
-
-char MGLUniform_array_length_doc[] = R"(
-	array_length
-
-	If the uniform is an array the array_length is the length of the array otherwise it is ``1``.
-)";
 
 PyGetSetDef MGLUniform_tp_getseters[] = {
 	{(char *)"name", (getter)MGLUniform_get_name, 0, 0, 0},
@@ -276,10 +145,6 @@ PyGetSetDef MGLUniform_tp_getseters[] = {
 	{(char *)"array_length", (getter)MGLUniform_get_array_length, 0, 0, 0},
 	{0},
 };
-
-const char * MGLUniform_tp_doc = R"(
-	Uniform
-)";
 
 PyTypeObject MGLUniform_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -302,7 +167,7 @@ PyTypeObject MGLUniform_Type = {
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,               // tp_flags
-	MGLUniform_tp_doc,                                      // tp_doc
+	0,                                                      // tp_doc
 	0,                                                      // tp_traverse
 	0,                                                      // tp_clear
 	0,                                                      // tp_richcompare

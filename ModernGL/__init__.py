@@ -2,16 +2,14 @@
     ModernGL: PyOpenGL alternative
 '''
 
-# pylint: disable=too-many-public-methods
-
 from .errors import Error
 
 from .common import (
-    Object, InvalidObject, Version, EnableFlag, Primitive,
+    InvalidObject, Object, Version, EnableFlag, Primitive,
+    POINTS, LINES, LINE_STRIP, LINE_LOOP, TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN,
+    LINES_ADJACENCY, LINE_STRIP_ADJACENCY, TRIANGLES_ADJACENCY, TRIANGLE_STRIP_ADJACENCY,
     CORE_330, CORE_400, CORE_410, CORE_420, CORE_430, CORE_440, CORE_450,
     BLEND, DEPTH_TEST, CULL_FACE, MULTISAMPLE,
-    TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN, LINES, LINE_STRIP, LINE_LOOP, POINTS,
-    LINE_STRIP_ADJACENCY, LINES_ADJACENCY, TRIANGLE_STRIP_ADJACENCY, TRIANGLES_ADJACENCY,
 )
 
 from .program_members import (
@@ -30,11 +28,11 @@ from .renderbuffers import Renderbuffer
 from .textures import Texture
 
 __all__ = [
-    'Version', 'EnableFlag', 'Primitive',
+    'InvalidObject', 'Object', 'Version', 'EnableFlag', 'Primitive',
+    'POINTS', 'LINES', 'LINE_STRIP', 'LINE_LOOP', 'TRIANGLES', 'TRIANGLE_STRIP', 'TRIANGLE_FAN',
+    'LINES_ADJACENCY', 'LINE_STRIP_ADJACENCY', 'TRIANGLES_ADJACENCY', 'TRIANGLE_STRIP_ADJACENCY',
     'CORE_330', 'CORE_400', 'CORE_410', 'CORE_420', 'CORE_430', 'CORE_440', 'CORE_450',
     'BLEND', 'DEPTH_TEST', 'CULL_FACE', 'MULTISAMPLE',
-    'TRIANGLES', 'TRIANGLE_STRIP', 'TRIANGLE_FAN', 'LINES', 'LINE_STRIP', 'LINE_LOOP', 'POINTS',
-    'LINE_STRIP_ADJACENCY', 'LINES_ADJACENCY', 'TRIANGLE_STRIP_ADJACENCY', 'TRIANGLES_ADJACENCY',
     'Uniform', 'UniformMap', 'UniformBlock',
     'Varying', 'Attribute', 'AttributeMap',
     'Subroutine', 'SubroutineUniform',

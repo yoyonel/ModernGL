@@ -4,7 +4,7 @@
 
 # pylint: disable=using-constant-test, too-many-public-methods
 
-from ModernGL import ModernGL as _mgl
+from ModernGL import ModernGL as mgl
 
 from .common import Object
 from .buffers import Buffer, detect_format
@@ -203,7 +203,7 @@ class Context(Object):
                 :py:class:`Buffer`
         '''
 
-        return Buffer.new(self.mglo.Buffer(data, reserve, dynamic))
+        return Buffer.new(self.mglo.buffer(data, reserve, dynamic))
 
     def texture(self, size, components, data=None, floats=False) -> Texture:
         '''
@@ -221,7 +221,7 @@ class Context(Object):
                 :py:class:`Texture`
         '''
 
-        return Texture.new(self.mglo.Texture(size, components, data, floats))
+        return Texture.new(self.mglo.texture(size, components, data, floats))
 
     def depth_texture(self, size, data=None) -> Texture:
         '''
@@ -235,7 +235,7 @@ class Context(Object):
                 :py:class:`Texture`
         '''
 
-        return Texture.new(self.mglo.DepthTexture(size, data))
+        return Texture.new(self.mglo.depth_texture(size, data))
 
     def vertex_array(self, program, content, index_buffer=None) -> VertexArray:
         '''
@@ -292,7 +292,7 @@ class Context(Object):
         if isinstance(shaders, Shader):
             shaders = [shaders]
 
-        return Program.new(self.mglo.Program([x.mglo for x in shaders], varyings))
+        return Program.new(self.mglo.program([x.mglo for x in shaders], varyings))
 
     def vertex_shader(self, source) -> Shader:
         '''
@@ -305,7 +305,7 @@ class Context(Object):
                 :py:class:`Shader`
         '''
 
-        return Shader.new(self.mglo.VertexShader(source))
+        return Shader.new(self.mglo.vertex_shader(source))
 
     def fragment_shader(self, source) -> Shader:
         '''
@@ -318,7 +318,7 @@ class Context(Object):
                 :py:class:`Shader`
         '''
 
-        return Shader.new(self.mglo.FragmentShader(source))
+        return Shader.new(self.mglo.fragment_shader(source))
 
     def geometry_shader(self, source) -> Shader:
         '''
@@ -331,7 +331,7 @@ class Context(Object):
                 :py:class:`Shader`
         '''
 
-        return Shader.new(self.mglo.GeometryShader(source))
+        return Shader.new(self.mglo.geometry_shader(source))
 
     def tess_evaluation_shader(self, source) -> Shader:
         '''
@@ -344,7 +344,7 @@ class Context(Object):
                 :py:class:`Shader`
         '''
 
-        return Shader.new(self.mglo.TessEvaluationShader(source))
+        return Shader.new(self.mglo.tess_evaluation_shader(source))
 
     def tess_control_shader(self, source) -> Shader:
         '''
@@ -357,7 +357,7 @@ class Context(Object):
                 :py:class:`Shader`
         '''
 
-        return Shader.new(self.mglo.TessControlShader(source))
+        return Shader.new(self.mglo.tess_control_shader(source))
 
     def framebuffer(self, attachments) -> Framebuffer:
         '''
@@ -370,7 +370,7 @@ class Context(Object):
                 :py:class:`Framebuffer`
         '''
 
-        return Framebuffer.new(self.mglo.Framebuffer(attachments))
+        return Framebuffer.new(self.mglo.framebuffer(attachments))
 
     def renderbuffer(self, size, components, floats=True) -> Renderbuffer:
         '''
@@ -387,7 +387,7 @@ class Context(Object):
                 :py:class:`Renderbuffer`
         '''
 
-        return Renderbuffer.new(self.mglo.Renderbuffer(size, components, floats))
+        return Renderbuffer.new(self.mglo.renderbuffer(size, components, floats))
 
     def depth_renderbuffer(self, size, floats=True) -> Renderbuffer:
         '''
@@ -403,7 +403,7 @@ class Context(Object):
                 :py:class:`Renderbuffer`
         '''
 
-        return Renderbuffer.new(self.mglo.DepthRenderbuffer(size, floats))
+        return Renderbuffer.new(self.mglo.depth_renderbuffer(size, floats))
 
     def compute_shader(self, source) -> ComputeShader:
         '''
@@ -416,7 +416,7 @@ class Context(Object):
                 :py:class:`ComputeShader`
         '''
 
-        return ComputeShader.new(self.mglo.ComputeShader(source))
+        return ComputeShader.new(self.mglo.compute_shader(source))
 
 
 if False:
@@ -426,8 +426,8 @@ if False:
     def _create_standalone_context(*args) -> Context:
         return Context(*args)
 
-    _mgl.create_context = _create_context
-    _mgl.create_standalone_context = _create_standalone_context
+    mgl.create_context = _create_context
+    mgl.create_standalone_context = _create_standalone_context
 
 
 def create_context(require=None) -> Context:
@@ -442,7 +442,7 @@ def create_context(require=None) -> Context:
             :py:class:`ModernGL.Context`
     '''
 
-    ctx = Context.new(_mgl.create_context())
+    ctx = Context.new(mgl.create_context())
 
     if require is not None and ctx.version < require:
         raise Exception('TODO')
@@ -463,7 +463,7 @@ def create_standalone_context(size=(256, 256), require=None) -> Context:
             :py:class:`ModernGL.Context`
     '''
 
-    ctx = Context.new(_mgl.create_standalone_context(*size))
+    ctx = Context.new(mgl.create_standalone_context(*size))
 
     if require is not None and ctx.version < require:
         raise Exception('TODO')

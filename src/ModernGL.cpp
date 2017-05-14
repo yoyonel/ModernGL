@@ -35,7 +35,7 @@
 
 MGLContext * create_standalone_context(PyObject * self, PyObject * args) {
 	int width;
-	int height; // TODO: not used
+	int height;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
@@ -50,7 +50,7 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args) {
 
 	MGLContext * ctx = MGLContext_New();
 
-	ctx->gl_context = CreateGLContext();
+	ctx->gl_context = CreateGLContext(width, height);
 
 	if (PyErr_Occurred()) {
 		return 0;

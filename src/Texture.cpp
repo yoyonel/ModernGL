@@ -36,17 +36,13 @@ PyObject * MGLTexture_tp_str(MGLTexture * self) {
 }
 
 PyObject * MGLTexture_update(MGLTexture * self, PyObject * args) {
-
-
 	PyObject * data;
-	PyObject * size = Py_None;
-	PyObject * offset = Py_None;
+	PyObject * size;
+	PyObject * offset;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-
-		"O|OO",
-
+		"OOO",
 		&data,
 		&size,
 		&offset

@@ -43,18 +43,14 @@ PyObject * MGLVertexArray_tp_str(MGLVertexArray * self) {
 }
 
 PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
-
-
-	MGLPrimitive * mode = MGL_TRIANGLES;
-	int vertices = -1;
-	int first = 0;
-	int instances = 1;
+	MGLPrimitive * mode;
+	int vertices;
+	int first;
+	int instances;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-
-		"|O!III",
-
+		"O!III",
 		&MGLPrimitive_Type,
 		&mode,
 		&vertices,
@@ -101,10 +97,10 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 
 PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	MGLBuffer * output;
-	MGLPrimitive * mode = MGL_POINTS;
-	int vertices = -1;
-	int first = 0;
-	int instances = 1;
+	MGLPrimitive * mode;
+	int vertices;
+	int first;
+	int instances;
 
 	int args_ok = PyArg_ParseTuple(
 		args,

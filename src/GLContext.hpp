@@ -27,5 +27,5 @@ struct GLContext {
 #endif
 
 GLContext LoadCurrentGLContext();
-GLContext CreateGLContext();
+GLContext CreateGLContext(int width, int height);
 void DestroyGLContext(const GLContext & context);

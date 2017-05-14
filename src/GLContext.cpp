@@ -28,7 +28,7 @@ GLContext LoadCurrentGLContext() {
 	return context;
 }
 
-GLContext CreateGLContext() {
+GLContext CreateGLContext(int width, int height) {
 	GLContext context = {};
 
 	HINSTANCE inst = GetModuleHandle(0);
@@ -187,7 +187,7 @@ GLContext LoadCurrentGLContext() {
 	return context;
 }
 
-GLContext CreateGLContext() {
+GLContext CreateGLContext(int width, int height) {
 	GLContext context = {};
 	return context;
 }
@@ -211,7 +211,7 @@ GLContext LoadCurrentGLContext() {
 	return context;
 }
 
-GLContext CreateGLContext() {
+GLContext CreateGLContext(int width, int height) {
 	GLContext context = {};
 
 	Display * dpy = XOpenDisplay(0);
