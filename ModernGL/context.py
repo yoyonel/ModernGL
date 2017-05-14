@@ -6,6 +6,7 @@
 
 from ModernGL import ModernGL as _mgl
 
+from .common import Object
 from .buffers import Buffer, detect_format
 from .programs import ComputeShader, Shader, Program
 from .vertex_arrays import VertexArray
@@ -14,7 +15,7 @@ from .renderbuffers import Renderbuffer
 from .framebuffer import Framebuffer
 
 
-class Context:
+class Context(Object):
     '''
         Create a :py:class:`Context` using:
 
@@ -34,10 +35,6 @@ class Context:
             - :py:meth:`Context.Texture`
             - :py:meth:`Context.VertexArray`
     '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('SimpleVertexArray')
 
     @staticmethod
     def new(obj):

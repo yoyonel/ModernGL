@@ -2,23 +2,19 @@
     ModernGL Vertex array members
 '''
 
+# pylint: disable=too-few-public-methods
+
 from typing import Dict
 
-from .common import TRIANGLES, POINTS
+from .common import Object, TRIANGLES, POINTS
 from .programs import Program
 from .buffers import Buffer
 
-# pylint: disable=too-few-public-methods
 
-
-class VertexArrayAttribute:
+class VertexArrayAttribute(Object):
     '''
         VertexArrayAttribute
     '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('VertexArrayAttribute')
 
     @staticmethod
     def new(obj):
@@ -111,14 +107,10 @@ class VertexArrayMatrixAttribute:
         return res
 
 
-class VertexArray:
+class VertexArray(Object):
     '''
         VertexArray
     '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('VertexArray')
 
     @staticmethod
     def new(obj):

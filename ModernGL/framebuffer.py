@@ -2,15 +2,13 @@
     framebuffer
 '''
 
+from .common import Object
 
-class Framebuffer:
+
+class Framebuffer(Object):
     '''
         Framebuffer
     '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('Framebuffer')
 
     @staticmethod
     def new(obj):

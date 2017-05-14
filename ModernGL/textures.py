@@ -2,17 +2,13 @@
     Placeholder
 '''
 
-from .common import InvalidObject
+from .common import Object
 
 
-class Texture:
+class Texture(Object):
     '''
         Texture
     '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('Texture')
 
     @staticmethod
     def new(obj):
@@ -46,8 +42,7 @@ class Texture:
             size
         '''
 
-        # Turn the Texture into an InvalidObject
-        self.__class__ = InvalidObject
+        return (self.mglo.width, self.mglo.height)
 
     def update(self, data, size=None, offset=(0, 0)):
         '''

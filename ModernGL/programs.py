@@ -6,18 +6,14 @@
 
 from typing import Dict
 
-from .common import Primitive
+from .common import Object, Primitive
 from .program_members import Uniform, UniformBlock, UniformMap, Varying, Attribute
 
 
-class ComputeShader:
+class ComputeShader(Object):
     '''
         ComputeShader
     '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('ComputeShader')
 
     @staticmethod
     def new(obj):
@@ -30,7 +26,7 @@ class ComputeShader:
         return res
 
 
-class Shader:
+class Shader(Object):
     '''
         Create a :py:class:`~ModernGL.Shader` using:
 
@@ -40,10 +36,6 @@ class Shader:
             - :py:meth:`~ModernGL.Context.TessEvaluationShader`
             - :py:meth:`~ModernGL.Context.TessControlShader`
     '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('GeometryShader')
 
     @staticmethod
     def new(obj):
@@ -79,14 +71,10 @@ class Shader:
         return self.mglo.typename
 
 
-class Program:
+class Program(Object):
     '''
         Program
     '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('Program')
 
     @staticmethod
     def new(obj):

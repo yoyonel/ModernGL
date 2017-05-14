@@ -4,15 +4,13 @@
 
 # pylint: disable=too-few-public-methods
 
+from .common import Object
 
-class Renderbuffer:
+
+class Renderbuffer(Object):
     '''
         Renderbuffer
     '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('Renderbuffer')
 
     @staticmethod
     def new(obj):

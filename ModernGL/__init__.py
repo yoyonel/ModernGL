@@ -24,11 +24,8 @@ from .vertex_arrays import (
 )
 
 from .context import Context, create_context, create_standalone_context
-
 from .buffers import Buffer, BufferAccess, detect_format
-
 from .programs import ComputeShader, Shader, Program
-
 from .renderbuffers import Renderbuffer
 from .textures import Texture
 

@@ -2,6 +2,8 @@
     ModernGL buffers
 '''
 
+from .common import Object
+
 
 class BufferAccess:
     '''
@@ -97,14 +99,10 @@ class BufferAccess:
         return self.mglo.readonly
 
 
-class Buffer:
+class Buffer(Object):
     '''
         Create a `Buffer` using `Context.buffer`.
     '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('Buffer')
 
     @staticmethod
     def new(obj):
