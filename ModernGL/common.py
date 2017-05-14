@@ -1,10 +1,11 @@
 '''
-    ModernGL Constants
+    ModernGL Common
 '''
 
 from ModernGL import ModernGL as _mgl
 
-# pylint: disable=using-constant-test, too-few-public-methods
+# pylint: disable=too-few-public-methods, using-constant-test
+
 
 if False:
     _mgl.BLEND = 'BLEND'
@@ -23,6 +24,31 @@ if False:
     _mgl.LINES_ADJACENCY = 'LINES_ADJACENCY'
     _mgl.TRIANGLE_STRIP_ADJACENCY = 'TRIANGLE_STRIP_ADJACENCY'
     _mgl.TRIANGLES_ADJACENCY = 'TRIANGLES_ADJACENCY'
+
+
+class InvalidObject:
+    '''
+        A ModernGL object turns into an InvalidObject
+        once the release method is successfully called.
+    '''
+
+
+class Object:
+    '''
+        Placeholder Object
+    '''
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject
 
 
 class EnableFlag:
@@ -148,24 +174,8 @@ class Version:
     '''
 
     def __init__(self, major, minor):
-        self._major = major
-        self._minor = minor
-
-    @property
-    def major(self):
-        '''
-            major
-        '''
-
-        return self._major
-
-    @property
-    def minor(self):
-        '''
-            major
-        '''
-
-        return self._major
+        self.major = major
+        self.minor = minor
 
 
 CORE_330 = Version(3, 3)
