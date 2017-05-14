@@ -439,7 +439,7 @@ class AttributeMap:
             internal use only
         '''
 
-        res = UniformMap.__new__(UniformMap)
+        res = AttributeMap.__new__(AttributeMap)
         res.mglo = obj
         return res
 

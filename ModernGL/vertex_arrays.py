@@ -66,6 +66,27 @@ class VertexArrayAttribute(Object):
 
         return self.mglo.default
 
+    def bind(self, buffer, offset=0, stride=0, divisor=0):
+        '''
+            bind
+        '''
+
+        self.mglo.bind(buffer.mglo, offset, stride, divisor)
+
+    def enable(self):
+        '''
+            enable
+        '''
+
+        self.mglo.enable()
+
+    def disable(self):
+        '''
+            disable
+        '''
+
+        self.mglo.disable()
+
 
 class VertexArrayListAttribute:
     '''
@@ -107,6 +128,38 @@ class VertexArrayMatrixAttribute:
         return res
 
 
+class VertexArrayAttributeMap:
+    '''
+        VertexArrayAttributeMap
+    '''
+
+    def __init__(self):
+        self.mglo = {}
+        raise NotImplementedError('VertexArrayAttributeMap')
+
+    @staticmethod
+    def new(obj):
+        '''
+            internal use only
+        '''
+
+        res = VertexArrayAttributeMap.__new__(VertexArrayAttributeMap)
+        res.mglo = obj
+        return res
+
+    def __getitem__(self, key) -> VertexArrayAttribute:
+        '''
+        '''
+
+        return VertexArrayAttribute.new(self.mglo[key])
+
+    def __contains__(self, key):
+        return key in self.mglo
+
+    def __len__(self):
+        return len(self.mglo)
+
+
 class VertexArray(Object):
     '''
         VertexArray
@@ -146,7 +199,7 @@ class VertexArray(Object):
             Use the bind() method to assign vertex attributes to buffers.
         '''
 
-        return self.mglo.attributes
+        return VertexArrayAttributeMap.new(self.mglo.attributes)
 
     @property
     def index_buffer(self) -> Buffer:
