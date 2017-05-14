@@ -6,6 +6,7 @@
 
 build.py
 
+.tox
 .cache
 .vscode
 

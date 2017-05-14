@@ -2,9 +2,7 @@
     ModernGL: PyOpenGL alternative
 '''
 
-#pylint: disable=too-many-public-methods
-
-from ModernGL import ModernGL as _mgl
+# pylint: disable=too-many-public-methods
 
 from .errors import Error
 
@@ -58,6 +56,7 @@ __all__ = [
     'Texture',
     'VertexArray',
     'Context',
+    'detect_format',
 ]
 
 VERSION = '3.1.5'
