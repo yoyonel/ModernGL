@@ -10,7 +10,7 @@ import ModernGL
 wnd = GLWindow.create_window()
 ctx = ModernGL.create_context()
 
-tvert = ctx.VertexShader('''
+tvert = ctx.vertex_shader('''
 	#version 330
 
 	uniform vec2 acc;
@@ -27,7 +27,7 @@ tvert = ctx.VertexShader('''
 	}
 ''')
 
-vert = ctx.VertexShader('''
+vert = ctx.vertex_shader('''
 	#version 330
 
 	in vec2 vert;
@@ -37,7 +37,7 @@ vert = ctx.VertexShader('''
 	}
 ''')
 
-frag = ctx.FragmentShader('''
+frag = ctx.fragment_shader('''
 	#version 330
 
 	out vec4 color;
@@ -47,9 +47,9 @@ frag = ctx.FragmentShader('''
 	}
 ''')
 
-prog = ctx.Program([vert, frag])
+prog = ctx.program([vert, frag])
 
-transform = ctx.Program(tvert, ['out_pos', 'out_prev'])
+transform = ctx.program(tvert, ['out_pos', 'out_prev'])
 
 def particle():
 	a = random.uniform(0.0, math.pi * 2.0)
@@ -57,13 +57,15 @@ def particle():
 
 	return struct.pack('2f2f', 0.0, 0.0, math.cos(a) * r - 0.003, math.sin(a) * r - 0.008)
 
-vbo1 = ctx.Buffer(b''.join(particle() for i in range(1024)))
-vbo2 = ctx.Buffer(reserve = vbo1.size)
+vbo1 = ctx.buffer(b''.join(particle() for i in range(1024)))
+vbo2 = ctx.buffer(reserve = vbo1.size)
 
-vao1 = ctx.SimpleVertexArray(transform, vbo1, '2f2f', ['in_pos', 'in_prev'])
-vao2 = ctx.SimpleVertexArray(transform, vbo2, '2f2f', ['in_pos', 'in_prev'])
+vao1 = ctx.simple_vertex_array(transform, vbo1, ['in_pos', 'in_prev'])
+vao2 = ctx.simple_vertex_array(transform, vbo2, ['in_pos', 'in_prev'])
 
-render_vao = ctx.SimpleVertexArray(prog, vbo1, '2f8x', ['vert'])
+render_vao = ctx.vertex_array(prog, [
+	(vbo1, '2f8x', ['vert']),
+])
 
 transform.uniforms['acc'].value = (0, -0.0001)
 

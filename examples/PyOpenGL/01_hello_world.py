@@ -8,7 +8,7 @@ glutCreateWindow(b'Hello World')
 
 ctx = ModernGL.create_context()
 
-vert = ctx.VertexShader('''
+vert = ctx.vertex_shader('''
 	#version 330
 	in vec2 vert;
 	void main() {
@@ -16,7 +16,7 @@ vert = ctx.VertexShader('''
 	}
 ''')
 
-frag = ctx.FragmentShader('''
+frag = ctx.fragment_shader('''
 	#version 330
 	out vec4 color;
 	void main() {
@@ -24,10 +24,10 @@ frag = ctx.FragmentShader('''
 	}
 ''')
 
-prog = ctx.Program([vert, frag])
+prog = ctx.program([vert, frag])
 
-vbo = ctx.Buffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
-vao = ctx.SimpleVertexArray(prog, vbo, '2f', ['vert'])
+vbo = ctx.buffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
+vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
 
 def display():
 	ctx.clear(240, 240, 240)

@@ -13,8 +13,8 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 	def initializeGL(self):
 		self.ctx = ModernGL.create_context()
 
-		prog = self.ctx.Program([
-			self.ctx.VertexShader('''
+		prog = self.ctx.program([
+			self.ctx.vertex_shader('''
 				#version 330
 
 				in vec2 vert;
@@ -23,7 +23,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 					gl_Position = vec4(vert, 0.0, 1.0);
 				}
 			'''),
-			self.ctx.FragmentShader('''
+			self.ctx.fragment_shader('''
 				#version 330
 
 				out vec4 color;
@@ -34,8 +34,8 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 			'''),
 		])
 
-		vbo = self.ctx.Buffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
-		self.vao = self.ctx.SimpleVertexArray(prog, vbo, '2f', ['vert'])
+		vbo = self.ctx.buffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
+		self.vao = self.ctx.simple_vertex_array(prog, vbo, ['vert'])
 
 	def paintGL(self):
 		self.ctx.viewport = (0, 0, self.width(), self.height())

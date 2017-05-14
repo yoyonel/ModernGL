@@ -10,8 +10,8 @@ fbo = ctx.Framebuffer([color_rbo, depth_rbo])
 # fbo = ctx.Framebuffer([color_rbo])
 fbo.use()
 
-prog = ctx.Program([
-	ctx.VertexShader('''
+prog = ctx.program([
+	ctx.vertex_shader('''
 		#version 330
 
 		in vec2 vert;
@@ -22,7 +22,7 @@ prog = ctx.Program([
 			tex = vert / 2.0;
 		}
 	'''),
-	ctx.FragmentShader('''
+	ctx.fragment_shader('''
 		#version 330
 
 		in vec2 tex;
@@ -44,8 +44,8 @@ prog = ctx.Program([
 	''')
 ])
 
-vbo = ctx.Buffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
-vao = ctx.SimpleVertexArray(prog, vbo, '2f', ['vert'])
+vbo = ctx.buffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
+vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
 
 ctx.viewport = (0, 0, size[0], size[1])
 vao.render(ModernGL.TRIANGLE_STRIP)

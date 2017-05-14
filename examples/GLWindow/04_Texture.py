@@ -1,8 +1,10 @@
+import os
 import struct
 
 import GLWindow
-import ModernGL
 from PIL import Image
+
+import ModernGL
 
 # Window & Context
 
@@ -11,8 +13,8 @@ ctx = ModernGL.create_context()
 
 # Shaders & Program
 
-prog = ctx.Program([
-	ctx.VertexShader('''
+prog = ctx.program([
+	ctx.vertex_shader('''
 		#version 330
 
 		in vec2 vert;
@@ -27,7 +29,7 @@ prog = ctx.Program([
 			tex_coord = vert;
 		}
 	'''),
-	ctx.FragmentShader('''
+	ctx.fragment_shader('''
 		#version 330
 
 		uniform sampler2D texture;
@@ -51,7 +53,7 @@ scale.value = (height / width * 0.75, 0.75)
 
 # Buffer
 
-vbo = ctx.Buffer(struct.pack('6f',
+vbo = ctx.buffer(struct.pack('6f',
 	1.0, 0.0,
 	-0.5, 0.86,
 	-0.5, -0.86,
@@ -59,12 +61,12 @@ vbo = ctx.Buffer(struct.pack('6f',
 
 # Put everything together
 
-vao = ctx.SimpleVertexArray(prog, vbo, '2f', ['vert'])
+vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
 
 # Texture
 
-img = Image.open('../data/noise.jpg')
-texture = ctx.Texture(img.size, 3, img.tobytes())
+img = Image.open(os.path.join(os.path.dirname(__file__), '..', 'data', 'noise.jpg'))
+texture = ctx.texture(img.size, 3, img.tobytes())
 texture.use()
 
 # Main loop

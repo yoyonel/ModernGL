@@ -8,7 +8,7 @@ import ModernGL
 wnd = GLWindow.create_window()
 ctx = ModernGL.create_context()
 
-vert = ctx.VertexShader('''
+vert = ctx.vertex_shader('''
 	#version 330
 
 	in vec2 vert;
@@ -20,7 +20,7 @@ vert = ctx.VertexShader('''
 	}
 ''')
 
-frag = ctx.FragmentShader('''
+frag = ctx.fragment_shader('''
 	#version 330
 
 	in vec2 tex;
@@ -53,10 +53,10 @@ frag = ctx.FragmentShader('''
 	}
 ''')
 
-prog = ctx.Program([vert, frag])
+prog = ctx.program([vert, frag])
 
-vbo = ctx.Buffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
-vao = ctx.SimpleVertexArray(prog, vbo, '2f', ['vert'])
+vbo = ctx.buffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
+vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
 
 prog.uniforms['iter'].value = 100
 

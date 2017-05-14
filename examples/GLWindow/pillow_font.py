@@ -27,8 +27,8 @@ tex.use()
 
 # Shaders & Program
 
-prog = ctx.Program([
-	ctx.VertexShader('''
+prog = ctx.program([
+	ctx.vertex_shader('''
 		#version 330
 
 		uniform vec2 Screen;
@@ -43,7 +43,7 @@ prog = ctx.Program([
 			v_texcoord = texcoord;
 		}
 	'''),
-	ctx.FragmentShader('''
+	ctx.fragment_shader('''
 		#version 330
 
 		uniform sampler2D Texture;
@@ -61,7 +61,7 @@ prog.uniforms['Screen'].value = wnd.size
 
 # Buffer
 
-vbo = ctx.Buffer(struct.pack('16f',
+vbo = ctx.buffer(struct.pack('16f',
 	0, 0,
 	0, 0,
 
@@ -77,7 +77,7 @@ vbo = ctx.Buffer(struct.pack('16f',
 
 # Put everything together
 
-vao = ctx.SimpleVertexArray(prog, vbo, '2f2f', ['vert', 'texcoord'])
+vao = ctx.simple_vertex_array(prog, vbo, ['vert', 'texcoord'])
 
 # Main loop
 

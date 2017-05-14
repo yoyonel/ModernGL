@@ -10,8 +10,8 @@ ctx = ModernGL.create_context()
 
 # Shaders & Program
 
-prog = ctx.Program([
-	ctx.VertexShader('''
+prog = ctx.program([
+	ctx.vertex_shader('''
 		#version 330
 
 		in vec2 vert;
@@ -29,7 +29,7 @@ prog = ctx.Program([
 			gl_Position = vec4((rot * vert) * scale, 0.0, 1.0);
 		}
 	'''),
-	ctx.FragmentShader('''
+	ctx.fragment_shader('''
 		#version 330
 
 		in vec4 frag_color;
@@ -51,7 +51,7 @@ scale.value = (height / width * 0.75, 0.75)
 
 # Buffer
 
-vbo = ctx.Buffer(struct.pack('18f',
+vbo = ctx.buffer(struct.pack('18f',
 	1.0, 0.0,
 	1.0, 0.0, 0.0, 0.5,
 
@@ -64,7 +64,7 @@ vbo = ctx.Buffer(struct.pack('18f',
 
 # Put everything together
 
-vao = ctx.SimpleVertexArray(prog, vbo, '2f4f', ['vert', 'vert_color'])
+vao = ctx.simple_vertex_array(prog, vbo, ['vert', 'vert_color'])
 
 # Main loop
 

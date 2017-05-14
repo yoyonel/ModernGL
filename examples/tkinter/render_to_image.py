@@ -11,8 +11,8 @@ depth_rbo = ctx.DepthRenderbuffer(size)
 fbo = ctx.Framebuffer([color_rbo, depth_rbo])
 fbo.use()
 
-prog = ctx.Program([
-	ctx.VertexShader('''
+prog = ctx.program([
+	ctx.vertex_shader('''
 		#version 330
 
 		in vec2 vert;
@@ -21,7 +21,7 @@ prog = ctx.Program([
 			gl_Position = vec4(vert, 0.0, 1.0);
 		}
 	'''),
-	ctx.FragmentShader('''
+	ctx.fragment_shader('''
 		#version 330
 
 		uniform float R;
@@ -36,13 +36,13 @@ prog = ctx.Program([
 	'''),
 ])
 
-vbo = ctx.Buffer(struct.pack('6f',
+vbo = ctx.buffer(struct.pack('6f',
 	0.0, 0.8,
 	-0.6, -0.8,
 	0.6, -0.8,
 ))
 
-vao = ctx.SimpleVertexArray(prog, vbo, '2f', ['vert'])
+vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
 
 ctx.viewport = (0, 0, size[0], size[1])
 ctx.clear(240, 240, 240)

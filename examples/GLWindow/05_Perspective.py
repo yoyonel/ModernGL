@@ -8,7 +8,7 @@ import ModernGL
 wnd = GLWindow.create_window()
 ctx = ModernGL.create_context()
 
-vert = ctx.VertexShader('''
+vert = ctx.vertex_shader('''
 	#version 330
 
 	in vec3 vert;
@@ -52,7 +52,7 @@ vert = ctx.VertexShader('''
 	}
 ''')
 
-frag = ctx.FragmentShader('''
+frag = ctx.fragment_shader('''
 	#version 330
 
 	out vec4 color;
@@ -64,7 +64,7 @@ frag = ctx.FragmentShader('''
 
 width, height = wnd.size
 
-prog = ctx.Program([vert, frag])
+prog = ctx.program([vert, frag])
 
 prog.uniforms['znear'].value = 0.1
 prog.uniforms['zfar'].value = 1000.0
@@ -81,8 +81,8 @@ for i in range(0, 65):
 	grid += struct.pack('6f', i - 32, -32.0, 0.0, i - 32, 32.0, 0.0)
 	grid += struct.pack('6f', -32.0, i - 32, 0.0, 32.0, i - 32, 0.0)
 
-vbo = ctx.Buffer(grid)
-vao = ctx.SimpleVertexArray(prog, vbo, '3f', ['vert'])
+vbo = ctx.buffer(grid)
+vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
 
 while wnd.update():
 	ctx.viewport = wnd.viewport
