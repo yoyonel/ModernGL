@@ -371,7 +371,7 @@ class Context(Object):
 
         return Framebuffer.new(self.mglo.framebuffer(attachments))
 
-    def renderbuffer(self, size, components, floats=True) -> Renderbuffer:
+    def renderbuffer(self, size, components=4, floats=True) -> Renderbuffer:
         '''
             Create a Renderbuffer.
 
