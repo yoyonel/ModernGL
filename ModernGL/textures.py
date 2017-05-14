@@ -44,7 +44,7 @@ class Texture(Object):
 
         return (self.mglo.width, self.mglo.height)
 
-    def update(self, data, size=None, offset=(0, 0)):
+    def update(self, data, size=None, *, offset=(0, 0)):
         '''
             update
         '''

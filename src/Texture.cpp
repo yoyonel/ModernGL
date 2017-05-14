@@ -137,15 +137,11 @@ PyObject * MGLTexture_update(MGLTexture * self, PyObject * args) {
 }
 
 PyObject * MGLTexture_use(MGLTexture * self, PyObject * args) {
-
-
-	int index = 0;
+	int index;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-
-		"|I",
-
+		"I",
 		&index
 	);
 

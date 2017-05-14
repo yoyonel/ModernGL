@@ -36,15 +36,11 @@ PyObject * MGLMultisampleTexture_tp_str(MGLMultisampleTexture * self) {
 }
 
 PyObject * MGLMultisampleTexture_use(MGLMultisampleTexture * self, PyObject * args) {
-
-
-	int index = 0;
+	int index;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-
-		"|I",
-
+		"I",
 		&index
 	);
 
