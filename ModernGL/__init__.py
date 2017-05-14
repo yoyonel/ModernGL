@@ -18,7 +18,7 @@ from .program_members import (
 )
 
 from .vertex_arrays import (
-    VertexArrayAttribute, VertexArrayListAttribute, VertexArrayMatrixAttribute, VertexArray
+    VertexArrayAttribute, VertexArray
 )
 
 from .context import Context, create_context, create_standalone_context
@@ -36,7 +36,7 @@ __all__ = [
     'Uniform', 'UniformMap', 'UniformBlock',
     'Varying', 'Attribute', 'AttributeMap',
     'Subroutine', 'SubroutineUniform',
-    'VertexArrayAttribute', 'VertexArrayListAttribute', 'VertexArrayMatrixAttribute',
+    'VertexArrayAttribute',
     'Object', 'InvalidObject', 'Error',
     'VERSION',
     'create_context',

@@ -2,7 +2,7 @@
     ModernGL Vertex array members
 '''
 
-# pylint: disable=too-few-public-methods
+# pylint: disable=too-few-public-methods, function-redefined
 
 from typing import Dict
 
@@ -19,12 +19,15 @@ class VertexArrayAttribute(Object):
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = VertexArrayAttribute.__new__(VertexArrayAttribute)
         res.mglo = obj
         return res
+
+    def __getitem__(self, key) -> VertexArrayAttribute:
+        return VertexArrayAttribute.new(self.mglo[key])
 
     @property
     def location(self):
@@ -88,46 +91,6 @@ class VertexArrayAttribute(Object):
         self.mglo.disable()
 
 
-class VertexArrayListAttribute:
-    '''
-        VertexArrayAttribute
-    '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('VertexArrayListAttribute')
-
-    @staticmethod
-    def new(obj):
-        '''
-            internal use only
-        '''
-
-        res = VertexArrayListAttribute.__new__(VertexArrayListAttribute)
-        res.mglo = obj
-        return res
-
-
-class VertexArrayMatrixAttribute:
-    '''
-        VertexArrayMatrixAttribute
-    '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('VertexArrayMatrixAttribute')
-
-    @staticmethod
-    def new(obj):
-        '''
-            internal use only
-        '''
-
-        res = VertexArrayMatrixAttribute.__new__(VertexArrayMatrixAttribute)
-        res.mglo = obj
-        return res
-
-
 class VertexArrayAttributeMap:
     '''
         VertexArrayAttributeMap
@@ -148,9 +111,6 @@ class VertexArrayAttributeMap:
         return res
 
     def __getitem__(self, key) -> VertexArrayAttribute:
-        '''
-        '''
-
         return VertexArrayAttribute.new(self.mglo[key])
 
     def __contains__(self, key):
@@ -193,7 +153,7 @@ class VertexArray(Object):
         return self.mglo.content
 
     @property
-    def attributes(self) -> Dict[str, VertexArrayAttribute]:
+    def attributes(self) -> VertexArrayAttributeMap:
         '''
             Individual vertex attributes.
             Use the bind() method to assign vertex attributes to buffers.
