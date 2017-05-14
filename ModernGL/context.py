@@ -172,7 +172,7 @@ class Context(Object):
 
         self.mglo.finish()
 
-    def copy_buffer(self, dst, src, size=-1, *, src_offset=0, dst_offset=0):
+    def copy_buffer(self, dst, src, size=-1, *, read_offset=0, write_offset=0):
         '''
             Copy buffer content.
 
@@ -182,11 +182,11 @@ class Context(Object):
                 optional size: Size to copy.
 
             Keyword Args:
-                src_offset: Read offset.
-                dst_offset: Write offset.
+                read_offset: Read offset.
+                write_offset: Write offset.
         '''
 
-        self.mglo.copy_buffer(dst.mglo, src.mglo, size, src_offset, dst_offset)
+        self.mglo.copy_buffer(dst.mglo, src.mglo, size, read_offset, write_offset)
 
     def buffer(self, data=None, reserve=0, dynamic=False) -> Buffer:
         '''
@@ -253,9 +253,8 @@ class Context(Object):
         if index_buffer is not None:
             index_buffer = index_buffer.mglo
 
-        content = list((a.mglo, b, c) for a, b, c in content)
-
-        return VertexArray.new(self.mglo.VertexArray(program.mglo, list(content), index_buffer))
+        content = tuple((a.mglo, b, tuple(c)) for a, b, c in content)
+        return VertexArray.new(self.mglo.vertex_array(program.mglo, content, index_buffer))
 
     def simple_vertex_array(self, program, buffer, attributes, index_buffer=None) -> VertexArray:
         '''
@@ -292,7 +291,7 @@ class Context(Object):
         if isinstance(shaders, Shader):
             shaders = [shaders]
 
-        return Program.new(self.mglo.program([x.mglo for x in shaders], varyings))
+        return Program.new(self.mglo.program(tuple(x.mglo for x in shaders), tuple(varyings)))
 
     def vertex_shader(self, source) -> Shader:
         '''

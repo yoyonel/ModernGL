@@ -5,16 +5,16 @@ import ModernGL
 class TestCase(unittest.TestCase):
 
 	@classmethod
-	def setUpClass(cls):
-		cls.ctx = ModernGL.create_standalone_context()
+	def setUpClass(self):
+		self.ctx = ModernGL.create_standalone_context()
 
 	@classmethod
-	def tearDownClass(cls):
-		cls.ctx.release()
+	def tearDownClass(self):
+		self.ctx.release()
 
 	def test_transform(self):
 
-		vertex_shader = self.ctx.VertexShader('''
+		vertex_shader = self.ctx.vertex_shader('''
 			#version 330
 
 			in vec4 vert;
@@ -25,13 +25,13 @@ class TestCase(unittest.TestCase):
 			}
 		''')
 
-		program = self.ctx.Program(vertex_shader, ['vert_length'])
+		program = self.ctx.program(vertex_shader, ['vert_length'])
 
 		self.assertIsNot(program.vertex_shader, None)
 		self.assertIs(program.fragment_shader, None)
 		self.assertIs(program.geometry_shader, None)
-		self.assertIs(program.tesselation_evaluation_shader, None)
-		self.assertIs(program.tesselation_control_shader, None)
+		self.assertIs(program.tess_evaluation_shader, None)
+		self.assertIs(program.tess_control_shader, None)
 
 		self.assertIs(program.geometry_input, None)
 		self.assertIs(program.geometry_output, None)

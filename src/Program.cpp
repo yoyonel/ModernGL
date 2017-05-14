@@ -127,19 +127,19 @@ PyObject * MGLProgram_get_geometry_shader(MGLProgram * self, void * closure) {
 	}
 }
 
-PyObject * MGLProgram_get_tesselation_evaluation_shader(MGLProgram * self, void * closure) {
-	if (self->tesselation_evaluation_shader) {
-		Py_INCREF(self->tesselation_evaluation_shader);
-		return self->tesselation_evaluation_shader;
+PyObject * MGLProgram_get_tess_evaluation_shader(MGLProgram * self, void * closure) {
+	if (self->tess_evaluation_shader) {
+		Py_INCREF(self->tess_evaluation_shader);
+		return self->tess_evaluation_shader;
 	} else {
 		Py_RETURN_NONE;
 	}
 }
 
-PyObject * MGLProgram_get_tesselation_control_shader(MGLProgram * self, void * closure) {
-	if (self->tesselation_control_shader) {
-		Py_INCREF(self->tesselation_control_shader);
-		return self->tesselation_control_shader;
+PyObject * MGLProgram_get_tess_control_shader(MGLProgram * self, void * closure) {
+	if (self->tess_control_shader) {
+		Py_INCREF(self->tess_control_shader);
+		return self->tess_control_shader;
 	} else {
 		Py_RETURN_NONE;
 	}
@@ -158,8 +158,8 @@ PyGetSetDef MGLProgram_tp_getseters[] = {
 	{(char *)"vertex_shader", (getter)MGLProgram_get_vertex_shader, 0, 0, 0},
 	{(char *)"fragment_shader", (getter)MGLProgram_get_fragment_shader, 0, 0, 0},
 	{(char *)"geometry_shader", (getter)MGLProgram_get_geometry_shader, 0, 0, 0},
-	{(char *)"tesselation_evaluation_shader", (getter)MGLProgram_get_tesselation_evaluation_shader, 0, 0, 0},
-	{(char *)"tesselation_control_shader", (getter)MGLProgram_get_tesselation_control_shader, 0, 0, 0},
+	{(char *)"tess_evaluation_shader", (getter)MGLProgram_get_tess_evaluation_shader, 0, 0, 0},
+	{(char *)"tess_control_shader", (getter)MGLProgram_get_tess_control_shader, 0, 0, 0},
 	{0},
 };
 
@@ -324,20 +324,18 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		gl.AttachShader(obj, shader->shader_obj);
 	}
 
-	if (outputs != Py_None) {
-		int outputs_len = (int)PyList_GET_SIZE(outputs);
+	int outputs_len = (int)PyTuple_GET_SIZE(outputs);
 
-		if (outputs_len) {
-			const char ** varyings_array = new const char * [outputs_len];
+	if (outputs_len) {
+		const char ** varyings_array = new const char * [outputs_len];
 
-			for (int i = 0; i < outputs_len; ++i) {
-				varyings_array[i] = PyUnicode_AsUTF8(PyList_GET_ITEM(outputs, i));
-			}
-
-			gl.TransformFeedbackVaryings(obj, outputs_len, varyings_array, GL_INTERLEAVED_ATTRIBS);
-
-			delete[] varyings_array;
+		for (int i = 0; i < outputs_len; ++i) {
+			varyings_array[i] = PyUnicode_AsUTF8(PyTuple_GET_ITEM(outputs, i));
 		}
+
+		gl.TransformFeedbackVaryings(obj, outputs_len, varyings_array, GL_INTERLEAVED_ATTRIBS);
+
+		delete[] varyings_array;
 	}
 
 	gl.LinkProgram(obj);
@@ -397,24 +395,24 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		program->geometry_shader = 0;
 	}
 
-	if (shaders[TESSELATION_EVALUATION_SHADER_SLOT]) {
+	if (shaders[TESS_EVALUATION_SHADER_SLOT]) {
 		MGLProgramStage * program_stage = MGLProgramStage_New();
 		program_stage->program_obj = program->program_obj;
-		program_stage->shader = shaders[TESSELATION_EVALUATION_SHADER_SLOT];
+		program_stage->shader = shaders[TESS_EVALUATION_SHADER_SLOT];
 		MGLProgramStage_Complete(program_stage, gl);
-		program->tesselation_evaluation_shader = (PyObject *)program_stage;
+		program->tess_evaluation_shader = (PyObject *)program_stage;
 	} else {
-		program->tesselation_evaluation_shader = 0;
+		program->tess_evaluation_shader = 0;
 	}
 
-	if (shaders[TESSELATION_CONTROL_SHADER_SLOT]) {
+	if (shaders[TESS_CONTROL_SHADER_SLOT]) {
 		MGLProgramStage * program_stage = MGLProgramStage_New();
 		program_stage->program_obj = program->program_obj;
-		program_stage->shader = shaders[TESSELATION_CONTROL_SHADER_SLOT];
+		program_stage->shader = shaders[TESS_CONTROL_SHADER_SLOT];
 		MGLProgramStage_Complete(program_stage, gl);
-		program->tesselation_control_shader = (PyObject *)program_stage;
+		program->tess_control_shader = (PyObject *)program_stage;
 	} else {
-		program->tesselation_control_shader = 0;
+		program->tess_control_shader = 0;
 	}
 
 	PyObject * uniforms = PyDict_New();

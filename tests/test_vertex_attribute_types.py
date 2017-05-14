@@ -212,12 +212,12 @@ vtypes = [
 class TestCase(unittest.TestCase):
 
 	@classmethod
-	def setUpClass(cls):
-		cls.ctx = ModernGL.create_standalone_context()
+	def setUpClass(self):
+		self.ctx = ModernGL.create_standalone_context()
 
 	@classmethod
-	def tearDownClass(cls):
-		cls.ctx.release()
+	def tearDownClass(self):
+		self.ctx.release()
 
 	def test_simple(self):
 		vert_src = '''
@@ -233,14 +233,14 @@ class TestCase(unittest.TestCase):
 
 		for vtype in vtypes:
 			try:
-				prog = self.ctx.Program(self.ctx.VertexShader(vert_src % vtype), ['v_out'])
+				prog = self.ctx.program(self.ctx.vertex_shader(vert_src % vtype), ['v_out'])
 			except ModernGL.Error:
 				# skip when version 410 not supported
 				continue
 
 			fmt = ModernGL.detect_format(prog, ['v_in'])
-			vbo1 = self.ctx.Buffer(struct.pack(fmt, *vtype['input']))
-			vbo2 = self.ctx.Buffer(b'\xAA' * struct.calcsize(fmt))
+			vbo1 = self.ctx.buffer(struct.pack(fmt, *vtype['input']))
+			vbo2 = self.ctx.buffer(b'\xAA' * struct.calcsize(fmt))
 			vao = self.ctx.SimpleVertexArray(prog, vbo1, fmt, ['v_in'])
 			vao.transform(vbo2, ModernGL.POINTS, 1)
 
@@ -262,14 +262,14 @@ class TestCase(unittest.TestCase):
 
 		for vtype in vtypes:
 			try:
-				prog = self.ctx.Program(self.ctx.VertexShader(vert_src % vtype), ['v_out'])
+				prog = self.ctx.program(self.ctx.vertex_shader(vert_src % vtype), ['v_out'])
 			except ModernGL.Error:
 				# skip when version 410 not supported
 				continue
 
 			fmt = ModernGL.detect_format(prog, ['v_in'])
-			vbo1 = self.ctx.Buffer(struct.pack(fmt, *(vtype['input'] * 2)))
-			vbo2 = self.ctx.Buffer(b'\xAA' * struct.calcsize(fmt))
+			vbo1 = self.ctx.buffer(struct.pack(fmt, *(vtype['input'] * 2)))
+			vbo2 = self.ctx.buffer(b'\xAA' * struct.calcsize(fmt))
 			vao = self.ctx.SimpleVertexArray(prog, vbo1, fmt, ['v_in'])
 			vao.transform(vbo2, ModernGL.POINTS, 1)
 

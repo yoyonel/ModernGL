@@ -5,16 +5,16 @@ import ModernGL
 class TestBuffer(unittest.TestCase):
 
 	@classmethod
-	def setUpClass(cls):
-		cls.ctx = ModernGL.create_standalone_context()
+	def setUpClass(self):
+		self.ctx = ModernGL.create_standalone_context()
 
 	@classmethod
-	def tearDownClass(cls):
-		cls.ctx.release()
+	def tearDownClass(self):
+		self.ctx.release()
 
 	def test_1(self):
-		buf1 = self.ctx.Buffer(data = b'\xAA\x55' * 10)
-		buf2 = self.ctx.Buffer(reserve = buf1.size)
+		buf1 = self.ctx.buffer(data = b'\xAA\x55' * 10)
+		buf2 = self.ctx.buffer(reserve = buf1.size)
 		buf2.write(b'Hello World!')
 
 		self.assertEqual(buf1.read(5, offset = 1), b'\x55\xaa\x55\xaa\x55')

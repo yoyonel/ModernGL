@@ -492,17 +492,15 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	MGLProgram * program;
 	PyObject * content;
 	MGLBuffer * index_buffer;
-	int skip_errors;
+	int skip_errors = false;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O!O!Op",
+		"O!OO",
 		&MGLProgram_Type,
 		&program,
-		&PyList_Type,
 		&content,
-		&index_buffer,
-		&skip_errors
+		&index_buffer
 	);
 
 	if (!args_ok) {
@@ -521,7 +519,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	int content_len = (int)PyList_GET_SIZE(content);
+	int content_len = (int)PyTuple_GET_SIZE(content);
 
 	if (!content_len) {
 		MGLError * error = MGLError_New(TRACE, "content must not be emtpy");
@@ -530,7 +528,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	}
 
 	for (int i = 0; i < content_len; ++i) {
-		PyObject * tuple = PyList_GET_ITEM(content, i);
+		PyObject * tuple = PyTuple_GET_ITEM(content, i);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
 			MGLError * error = MGLError_New(TRACE, "content[%d] must be a tuple not %s", i, Py_TYPE(tuple)->tp_name);
@@ -562,7 +560,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 			return 0;
 		}
 
-		if (Py_TYPE(attributes) != &PyList_Type) {
+		if (Py_TYPE(attributes) != &PyTuple_Type) {
 			MGLError * error = MGLError_New(TRACE, "content[%d][2] must be a list not %s", i, Py_TYPE(attributes)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
@@ -589,7 +587,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 			return 0;
 		}
 
-		int attributes_len = (int)PyList_GET_SIZE(attributes);
+		int attributes_len = (int)PyTuple_GET_SIZE(attributes);
 
 		if (!attributes_len) {
 			MGLError * error = MGLError_New(TRACE, "content[%d][2] must not be empty", i);
@@ -604,7 +602,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		}
 
 		for (int j = 0; j < attributes_len; ++j) {
-			PyObject * attribute = PyList_GET_ITEM(attributes, j);
+			PyObject * attribute = PyTuple_GET_ITEM(attributes, j);
 
 			if (Py_TYPE(attribute) != &PyUnicode_Type) {
 				MGLError * error = MGLError_New(TRACE, "content[%d][2][%d] must be a str not %s", i, j, Py_TYPE(attribute)->tp_name);
@@ -652,22 +650,6 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	PyObject * vertex_array_content = PyTuple_New(content_len);
-
-	for (int i = 0; i < content_len; ++i) {
-		PyObject * tuple = PyList_GET_ITEM(content, i);
-
-		PyObject * buffer = PyTuple_GET_ITEM(tuple, 0);
-		PyObject * format = PyTuple_GET_ITEM(tuple, 1);
-		PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
-
-		PyObject * new_attributes = PyList_AsTuple(attributes);
-		PyObject * new_tuple = PyTuple_Pack(3, buffer, format, new_attributes);
-		Py_DECREF(new_attributes);
-
-		PyTuple_SET_ITEM(vertex_array_content, i, new_tuple);
-	}
-
 	const GLMethods & gl = self->gl;
 
 	MGLVertexArray * array = MGLVertexArray_New();
@@ -679,7 +661,8 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	gl.GenVertexArrays(1, (GLuint *)&array->vertex_array_obj);
 	gl.BindVertexArray(array->vertex_array_obj);
 
-	array->content = vertex_array_content;
+	Py_INCREF(content);
+	array->content = content;
 
 	Py_INCREF(index_buffer);
 	array->index_buffer = index_buffer;
@@ -692,7 +675,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	}
 
 	for (int i = 0; i < content_len; ++i) {
-		PyObject * tuple = PyTuple_GET_ITEM(vertex_array_content, i);
+		PyObject * tuple = PyTuple_GET_ITEM(content, i);
 
 		MGLBuffer * buffer = (MGLBuffer *)PyTuple_GET_ITEM(tuple, 0);
 		const char * format = PyUnicode_AsUTF8(PyTuple_GET_ITEM(tuple, 1));
@@ -767,74 +750,50 @@ MGLProgram * MGLContext_program(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	if (varyings != Py_None) {
-		if (Py_TYPE(varyings) != &PyList_Type) {
-			MGLError * error = MGLError_New(TRACE, "varyings must be a list not %s", Py_TYPE(varyings)->tp_name);
+	int num_varyings = (int)PyTuple_GET_SIZE(varyings);
+
+	for (int i = 0; i < num_varyings; ++i) {
+		PyObject * item = PyTuple_GET_ITEM(varyings, i);
+		if (Py_TYPE(item) != &PyUnicode_Type) {
+			MGLError * error = MGLError_New(TRACE, "varyings[%d] must be a str not %s", i, Py_TYPE(item)->tp_name);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return 0;
+		}
+	}
+
+	int counter[NUM_SHADER_SLOTS] = {};
+
+	int num_shaders = (int)PyTuple_GET_SIZE(shaders);
+
+	for (int i = 0; i < num_shaders; ++i) {
+		PyObject * item = PyTuple_GET_ITEM(shaders, i);
+		if (Py_TYPE(item) != &MGLShader_Type) {
+			MGLError * error = MGLError_New(TRACE, "shaders[%d] must be a ModernGL.Shader not %s", i, Py_TYPE(item)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
-		int num_varyings = (int)PyList_GET_SIZE(varyings);
+		MGLShader * shader = (MGLShader *)item;
 
-		for (int i = 0; i < num_varyings; ++i) {
-			PyObject * item = PyList_GET_ITEM(varyings, i);
-			if (Py_TYPE(item) != &PyUnicode_Type) {
-				MGLError * error = MGLError_New(TRACE, "varyings[%d] must be a str not %s", i, Py_TYPE(item)->tp_name);
-				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-				return 0;
-			}
-		}
-	}
-
-	PyObject * program_shaders = 0;
-
-	if (Py_TYPE(shaders) == &PyList_Type) {
-
-		int counter[NUM_SHADER_SLOTS] = {};
-
-		int num_shaders = (int)PyList_GET_SIZE(shaders);
-
-		for (int i = 0; i < num_shaders; ++i) {
-			PyObject * item = PyList_GET_ITEM(shaders, i);
-			if (Py_TYPE(item) != &MGLShader_Type) {
-				MGLError * error = MGLError_New(TRACE, "shaders[%d] must be a ModernGL.Shader not %s", i, Py_TYPE(item)->tp_name);
-				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-				return 0;
-			}
-
-			MGLShader * shader = (MGLShader *)item;
-
-			if (shader->context != self) {
-				MGLError * error = MGLError_New(TRACE, "shaders[%d] belongs to a different context", i);
-				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-				return 0;
-			}
-
-			counter[shader->shader_slot] += 1;
-
-			if (counter[shader->shader_slot] > 1) {
-				MGLError * error = MGLError_New(TRACE, "shaders has duplicate %s", SHADER_NAME[shader->shader_slot]);
-				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-				return 0;
-			}
+		if (shader->context != self) {
+			MGLError * error = MGLError_New(TRACE, "shaders[%d] belongs to a different context", i);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return 0;
 		}
 
-		program_shaders = PyList_AsTuple(shaders);
+		counter[shader->shader_slot] += 1;
 
-	} else if (Py_TYPE(shaders) == &MGLShader_Type) {
-
-		Py_INCREF(shaders);
-		program_shaders = PyTuple_Pack(1, shaders);
-
-	} else {
-		MGLError * error = MGLError_New(TRACE, "shaders must be a list not %s", Py_TYPE(shaders)->tp_name);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
+		if (counter[shader->shader_slot] > 1) {
+			MGLError * error = MGLError_New(TRACE, "shaders has duplicate %s", SHADER_NAME[shader->shader_slot]);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return 0;
+		}
 	}
 
 	MGLProgram * program = MGLProgram_New();
 
-	program->shaders = program_shaders;
+	Py_INCREF(shaders);
+	program->shaders = shaders;
 
 	Py_INCREF(self);
 	program->context = self;
@@ -893,108 +852,62 @@ MGLShader * MGLContext_shader(MGLContext * self, PyObject * args) {
 }
 
 MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
-	PyObject * attachments;
+	PyObject * color_attachments;
+	PyObject * depth_attachment;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O",
-		&attachments
+		"OO",
+		&color_attachments,
+		&depth_attachment
 	);
 
 	if (!args_ok) {
 		return 0;
 	}
 
-	PyObject * color_attachments = 0;
-	PyObject * depth_attachment = 0;
+	int color_attachments_len = (int)PyTuple_GET_SIZE(color_attachments);
 
-	if (Py_TYPE(attachments) == &PyList_Type) {
+	if (!color_attachments_len) {
+		MGLError * error = MGLError_New(TRACE, "color_attachments must not be empty");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
 
-		int attachments_len = (int)PyList_GET_SIZE(attachments);
+	for (int i = 0; i < color_attachments_len; ++i) {
+		PyObject * item = PyTuple_GET_ITEM(color_attachments, i);
 
-		if (!attachments_len) {
-			MGLError * error = MGLError_New(TRACE, "attachments must not be empty");
+		if (!PyObject_IsSubclass((PyObject *)Py_TYPE(item), (PyObject *)&MGLFramebufferAttachment_Type)) {
+			MGLError * error = MGLError_New(TRACE, "attachments[%d] must be a ModernGL.FramebufferAttachment not %s", i, Py_TYPE(item)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
-		int depth_attachment_index = -1;
+		MGLFramebufferAttachment * attachment = (MGLFramebufferAttachment *)item;
 
-		for (int i = 0; i < attachments_len; ++i) {
-			PyObject * item = PyList_GET_ITEM(attachments, i);
+		if (attachment->context != self) {
+			MGLError * error = MGLError_New(TRACE, "attachments[%d] belongs to a different context", i);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return 0;
+		}
+	}
 
-			if (!PyObject_IsSubclass((PyObject *)Py_TYPE(item), (PyObject *)&MGLFramebufferAttachment_Type)) {
-				MGLError * error = MGLError_New(TRACE, "attachments[%d] must be a ModernGL.FramebufferAttachment not %s", i, Py_TYPE(item)->tp_name);
-				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-				return 0;
-			}
-
-			MGLFramebufferAttachment * attachment = (MGLFramebufferAttachment *)item;
-
-			if (attachment->context != self) {
-				MGLError * error = MGLError_New(TRACE, "attachments[%d] belongs to a different context", i);
-				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-				return 0;
-			}
-
-			if (attachment->depth) {
-				if (depth_attachment_index >= 0) {
-					MGLError * error = MGLError_New(TRACE, "attachments[%d] and attachments[%d] are both depth attachments", i, depth_attachment_index);
-					PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-					return 0;
-				}
-				depth_attachment_index = i;
-			}
+	if (depth_attachment != Py_None) {
+		if (!PyObject_IsSubclass((PyObject *)Py_TYPE(depth_attachment), (PyObject *)&MGLFramebufferAttachment_Type)) {
+			MGLError * error = MGLError_New(TRACE, "depth_attachment must be a ModernGL.FramebufferAttachment not %s", Py_TYPE(depth_attachment)->tp_name);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return 0;
 		}
 
-		int color_attachments_cnt = 0;
-		int color_attachments_len = attachments_len - ((depth_attachment_index >= 0) ? 1 : 0);
-		color_attachments = PyTuple_New(color_attachments_len);
+		MGLFramebufferAttachment * attachment = (MGLFramebufferAttachment *)depth_attachment;
 
-		for (int i = 0; i < attachments_len; ++i) {
-			if (i == depth_attachment_index) {
-				continue;
-			}
-
-			PyObject * item = PyList_GET_ITEM(attachments, i);
-
-			Py_INCREF(item);
-			PyTuple_SET_ITEM(color_attachments, color_attachments_cnt, item);
-
-			color_attachments_cnt += 1;
+		if (attachment->context != self) {
+			MGLError * error = MGLError_New(TRACE, "depth_attachment belongs to a different context");
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return 0;
 		}
-
-		if (depth_attachment_index >= 0) {
-			depth_attachment = PyList_GET_ITEM(attachments, depth_attachment_index);
-			Py_INCREF(depth_attachment);
-		}
-
-	} else if (Py_TYPE(attachments) == &MGLTexture_Type) {
-
-		MGLTexture * texture = (MGLTexture *)attachments;
-
-		if (texture->depth) {
-			depth_attachment = attachments;
-			Py_INCREF(depth_attachment);
-		} else {
-			color_attachments = PyTuple_Pack(1, attachments);
-		}
-
-	} else if (Py_TYPE(attachments) == &MGLRenderbuffer_Type) {
-
-		MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)attachments;
-
-		if (renderbuffer->depth) {
-			depth_attachment = attachments;
-			Py_INCREF(depth_attachment);
-		} else {
-			color_attachments = PyTuple_Pack(1, attachments);
-		}
-
 	} else {
-		MGLError * error = MGLError_New(TRACE, "attachments must be a list not %s", Py_TYPE(attachments)->tp_name);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
+		// TODO: create depth renderbuffer here
 	}
 
 	const GLMethods & gl = self->gl;
@@ -1008,60 +921,54 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	gl.GenFramebuffers(1, (GLuint *)&framebuffer->framebuffer_obj);
 	gl.BindFramebuffer(GL_FRAMEBUFFER, framebuffer->framebuffer_obj);
 
-	if (color_attachments) {
-		int color_attachments_len = (int)PyTuple_GET_SIZE(color_attachments);
+	for (int i = 0; i < color_attachments_len; ++i) {
+		PyObject * item = PyTuple_GET_ITEM(color_attachments, i);
 
-		for (int i = 0; i < color_attachments_len; ++i) {
-			PyObject * item = PyTuple_GET_ITEM(color_attachments, i);
+		if (Py_TYPE(item) == &MGLTexture_Type) {
 
-			if (Py_TYPE(item) == &MGLTexture_Type) {
-
-				MGLTexture * texture = (MGLTexture *)item;
-
-				gl.FramebufferTexture2D(
-					GL_FRAMEBUFFER,
-					GL_COLOR_ATTACHMENT0 + i,
-					GL_TEXTURE_2D,
-					texture->texture_obj,
-					0
-				);
-
-			} else if (Py_TYPE(item) == &MGLRenderbuffer_Type) {
-
-				MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)item;
-
-				gl.FramebufferRenderbuffer(
-					GL_FRAMEBUFFER,
-					GL_COLOR_ATTACHMENT0 + i,
-					GL_RENDERBUFFER,
-					renderbuffer->renderbuffer_obj
-				);
-			}
-		}
-	}
-
-	if (depth_attachment) {
-		if (Py_TYPE(depth_attachment) == &MGLTexture_Type) {
-			MGLTexture * texture = (MGLTexture *)depth_attachment;
+			MGLTexture * texture = (MGLTexture *)item;
 
 			gl.FramebufferTexture2D(
 				GL_FRAMEBUFFER,
-				GL_DEPTH_ATTACHMENT,
+				GL_COLOR_ATTACHMENT0 + i,
 				GL_TEXTURE_2D,
 				texture->texture_obj,
 				0
 			);
 
-		} else if (Py_TYPE(depth_attachment) == &MGLRenderbuffer_Type) {
-			MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)depth_attachment;
+		} else if (Py_TYPE(item) == &MGLRenderbuffer_Type) {
+
+			MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)item;
 
 			gl.FramebufferRenderbuffer(
 				GL_FRAMEBUFFER,
-				GL_DEPTH_ATTACHMENT,
+				GL_COLOR_ATTACHMENT0 + i,
 				GL_RENDERBUFFER,
 				renderbuffer->renderbuffer_obj
 			);
 		}
+	}
+
+	if (Py_TYPE(depth_attachment) == &MGLTexture_Type) {
+		MGLTexture * texture = (MGLTexture *)depth_attachment;
+
+		gl.FramebufferTexture2D(
+			GL_FRAMEBUFFER,
+			GL_DEPTH_ATTACHMENT,
+			GL_TEXTURE_2D,
+			texture->texture_obj,
+			0
+		);
+
+	} else if (Py_TYPE(depth_attachment) == &MGLRenderbuffer_Type) {
+		MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)depth_attachment;
+
+		gl.FramebufferRenderbuffer(
+			GL_FRAMEBUFFER,
+			GL_DEPTH_ATTACHMENT,
+			GL_RENDERBUFFER,
+			renderbuffer->renderbuffer_obj
+		);
 	}
 
 	int status = gl.CheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -1323,8 +1230,6 @@ PyObject * MGLContext_release(MGLContext * self) {
 }
 
 PyMethodDef MGLContext_tp_methods[] = {
-	// {"make_current", (PyCFunction)MGLContext_make_current, METH_NOARGS, 0},
-
 	{"release", (PyCFunction)MGLContext_release, METH_NOARGS, 0},
 
 	{"clear", (PyCFunction)MGLContext_clear, METH_VARARGS, 0},
@@ -1343,8 +1248,8 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"vertex_shader", (PyCFunction)MGLContext_shader<VERTEX_SHADER_SLOT>, METH_VARARGS, 0},
 	{"fragment_shader", (PyCFunction)MGLContext_shader<FRAGMENT_SHADER_SLOT>, METH_VARARGS, 0},
 	{"geometry_shader", (PyCFunction)MGLContext_shader<GEOMETRY_SHADER_SLOT>, METH_VARARGS, 0},
-	{"tess_evaluation_shader", (PyCFunction)MGLContext_shader<TESSELATION_EVALUATION_SHADER_SLOT>, METH_VARARGS, 0},
-	{"tess_control_shader", (PyCFunction)MGLContext_shader<TESSELATION_CONTROL_SHADER_SLOT>, METH_VARARGS, 0},
+	{"tess_evaluation_shader", (PyCFunction)MGLContext_shader<TESS_EVALUATION_SHADER_SLOT>, METH_VARARGS, 0},
+	{"tess_control_shader", (PyCFunction)MGLContext_shader<TESS_CONTROL_SHADER_SLOT>, METH_VARARGS, 0},
 	{"framebuffer", (PyCFunction)MGLContext_framebuffer, METH_VARARGS, 0},
 	{"renderbuffer", (PyCFunction)MGLContext_renderbuffer, METH_VARARGS, 0},
 	{"depth_renderbuffer", (PyCFunction)MGLContext_depth_renderbuffer, METH_VARARGS, 0},

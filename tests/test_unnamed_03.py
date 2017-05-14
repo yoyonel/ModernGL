@@ -5,10 +5,10 @@ import ModernGL, struct
 class TestBuffer(unittest.TestCase):
 
 	@classmethod
-	def setUpClass(cls):
-		cls.ctx = ModernGL.create_standalone_context()
+	def setUpClass(self):
+		self.ctx = ModernGL.create_standalone_context()
 
-		cls.vert = cls.ctx.VertexShader('''
+		self.vert = self.ctx.vertex_shader('''
 			#version 330
 
 			in vec2 in_v1;
@@ -21,18 +21,18 @@ class TestBuffer(unittest.TestCase):
 			}
 		''')
 
-		cls.prog = cls.ctx.Program(cls.vert, ['out_v'])
+		self.prog = self.ctx.program(self.vert, ['out_v'])
 
 	@classmethod
-	def tearDownClass(cls):
-		cls.ctx.release()
+	def tearDownClass(self):
+		self.ctx.release()
 
 	def test_1(self):
-		buf_v1 = self.ctx.Buffer(struct.pack('8f', 1, 2, 3, 4, 5, 6, 7, 8))
-		buf_v2 = self.ctx.Buffer(struct.pack('2f', 10, 100))
-		res = self.ctx.Buffer(reserve = buf_v1.size)
+		buf_v1 = self.ctx.buffer(struct.pack('8f', 1, 2, 3, 4, 5, 6, 7, 8))
+		buf_v2 = self.ctx.buffer(struct.pack('2f', 10, 100))
+		res = self.ctx.buffer(reserve = buf_v1.size)
 
-		vao = self.ctx.VertexArray(self.prog, [
+		vao = self.ctx.vertex_array(self.prog, [
 			(buf_v1, '2f', ['in_v1']),
 			(buf_v2, '2f/i', ['in_v2']),
 		])

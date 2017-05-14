@@ -5,10 +5,10 @@ import ModernGL, struct
 class TestCase(unittest.TestCase):
 
 	@classmethod
-	def setUpClass(cls):
-		cls.ctx = ModernGL.create_standalone_context()
+	def setUpClass(self):
+		self.ctx = ModernGL.create_standalone_context()
 
-		cls.vert = cls.ctx.VertexShader('''
+		self.vert = self.ctx.vertex_shader('''
 			#version 330
 
 			in int a_in;
@@ -29,17 +29,17 @@ class TestCase(unittest.TestCase):
 			}
 		''')
 
-		cls.prog = cls.ctx.Program(cls.vert, ['a_out', 'b_out', 'c_out', 'd_out'])
+		self.prog = self.ctx.program(self.vert, ['a_out', 'b_out', 'c_out', 'd_out'])
 
 	@classmethod
-	def tearDownClass(cls):
-		cls.ctx.release()
+	def tearDownClass(self):
+		self.ctx.release()
 
 	def test_padding_1(self):
-		buf = self.ctx.Buffer(struct.pack('=ixi12xii', 1, 2, 3, 4))
-		res = self.ctx.Buffer(reserve = 16)
+		buf = self.ctx.buffer(struct.pack('=ixi12xii', 1, 2, 3, 4))
+		res = self.ctx.buffer(reserve = 16)
 
-		vao = self.ctx.VertexArray(self.prog, [
+		vao = self.ctx.vertex_array(self.prog, [
 			(buf, 'ixi12xii', ['a_in', 'b_in', 'c_in', 'd_in']),
 		])
 
@@ -52,10 +52,10 @@ class TestCase(unittest.TestCase):
 		self.assertEqual(d, 8)
 
 	def test_padding_2(self):
-		buf = self.ctx.Buffer(struct.pack('=i8xi8xi8xi8x', 1, 2, 3, 4))
-		res = self.ctx.Buffer(reserve = 64)
+		buf = self.ctx.buffer(struct.pack('=i8xi8xi8xi8x', 1, 2, 3, 4))
+		res = self.ctx.buffer(reserve = 64)
 
-		vao = self.ctx.VertexArray(self.prog, [
+		vao = self.ctx.vertex_array(self.prog, [
 			(buf, 'i8x', ['a_in']),
 		])
 
@@ -71,10 +71,10 @@ class TestCase(unittest.TestCase):
 		self.assertEqual(a4, 8)
 
 	def test_padding_3(self):
-		buf = self.ctx.Buffer(struct.pack('=1024xiiii', 1, 2, 3, 4))
-		res = self.ctx.Buffer(reserve = 16)
+		buf = self.ctx.buffer(struct.pack('=1024xiiii', 1, 2, 3, 4))
+		res = self.ctx.buffer(reserve = 16)
 
-		vao = self.ctx.VertexArray(self.prog, [
+		vao = self.ctx.vertex_array(self.prog, [
 			(buf, '1024xiiii', ['a_in', 'b_in', 'c_in', 'd_in']),
 		])
 

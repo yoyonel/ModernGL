@@ -11,8 +11,8 @@ struct MGLProgram : public MGLContextMember {
 	PyObject * vertex_shader;
 	PyObject * fragment_shader;
 	PyObject * geometry_shader;
-	PyObject * tesselation_evaluation_shader;
-	PyObject * tesselation_control_shader;
+	PyObject * tess_evaluation_shader;
+	PyObject * tess_control_shader;
 
 	PyObject * uniforms;
 	PyObject * uniforms_proxy;

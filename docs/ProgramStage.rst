@@ -12,10 +12,10 @@ ProgramStage
 .. autoattribute:: ModernGL.Program.geometry_shader
 	:noindex:
 
-.. autoattribute:: ModernGL.Program.tesselation_evaluation_shader
+.. autoattribute:: ModernGL.Program.tess_evaluation_shader
 	:noindex:
 
-.. autoattribute:: ModernGL.Program.tesselation_control_shader
+.. autoattribute:: ModernGL.Program.tess_control_shader
 	:noindex:
 
 .. autoclass:: ModernGL.ProgramStage

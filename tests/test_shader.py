@@ -5,16 +5,16 @@ import ModernGL
 class TestCase(unittest.TestCase):
 
 	@classmethod
-	def setUpClass(cls):
-		cls.ctx = ModernGL.create_standalone_context()
+	def setUpClass(self):
+		self.ctx = ModernGL.create_standalone_context()
 
 	@classmethod
-	def tearDownClass(cls):
-		cls.ctx.release()
+	def tearDownClass(self):
+		self.ctx.release()
 
 	def test_vertex_shader(self):
 
-		shader = self.ctx.VertexShader('''
+		shader = self.ctx.vertex_shader('''
 			#version 330
 
 			void main() {
@@ -24,7 +24,7 @@ class TestCase(unittest.TestCase):
 
 	def test_fragment_shader(self):
 
-		shader = self.ctx.FragmentShader('''
+		shader = self.ctx.fragment_shader('''
 			#version 330
 
 			out vec4 color;
