@@ -6,139 +6,31 @@ from typing import Dict
 
 from ModernGL import ModernGL as _mgl
 
-from .objects import Object
+from .objects import Object, InvalidObject
 from .errors import Error
 
 from .constants import (
-    Version,
+    Version, EnableFlag, Primitive,
     CORE_330, CORE_400, CORE_410, CORE_420, CORE_430, CORE_440, CORE_450,
     BLEND, DEPTH_TEST, CULL_FACE, MULTISAMPLE,
-    TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN,
-    LINES, LINE_STRIP, LINE_LOOP,
-    POINTS,
-    LINE_STRIP_ADJACENCY, LINES_ADJACENCY,
-    TRIANGLE_STRIP_ADJACENCY, TRIANGLES_ADJACENCY,
+    TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN, LINES, LINE_STRIP, LINE_LOOP,
+    POINTS, LINE_STRIP_ADJACENCY, LINES_ADJACENCY, TRIANGLE_STRIP_ADJACENCY,
+    TRIANGLES_ADJACENCY,
 )
 
 from .program_members import (
-    Uniform, UniformMap,
-    UniformBlock,
-    Varying,
-    Attribute, AttributeMap,
+    Uniform, UniformMap, UniformBlock, Varying, Attribute, AttributeMap,
+    Subroutine, SubroutineUniform,
+)
+
+from .vertex_array_member import (
+    VertexArrayAttribute, VertexArrayListAttribute, VertexArrayMatrixAttribute,
 )
 
 VERSION = '3.1.5'
 '''
     ModernGL version
 '''
-
-
-class VertexArrayAttribute:
-    '''
-        VertexArrayAttribute
-    '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('VertexArrayAttribute')
-
-    @staticmethod
-    def new(obj):
-        '''
-            internal use only
-        '''
-
-        res = VertexArrayAttribute.__new__(VertexArrayAttribute)
-        res.mglo = obj
-        return res
-
-    @property
-    def location(self):
-        '''
-            location
-        '''
-
-        return self.mglo.location
-
-    @property
-    def divisor(self):
-        '''
-            divisor
-        '''
-
-        return self.mglo.divisor
-
-    @property
-    def stride(self):
-        '''
-            stride
-        '''
-
-        return self.mglo.stride
-
-    @property
-    def enabled(self):
-        '''
-            enabled
-        '''
-
-        return self.mglo.enabled
-
-    @property
-    def default(self):
-        '''
-            default
-        '''
-
-        return self.mglo.default
-
-
-class VertexArrayListAttribute:
-    '''
-        VertexArrayAttribute
-    '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('VertexArrayListAttribute')
-
-    @staticmethod
-    def new(obj):
-        '''
-            internal use only
-        '''
-
-        res = VertexArrayListAttribute.__new__(VertexArrayListAttribute)
-        res.mglo = obj
-        return res
-
-
-class VertexArrayMatrixAttribute:
-    '''
-        VertexArrayMatrixAttribute
-    '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('VertexArrayMatrixAttribute')
-
-    @staticmethod
-    def new(obj):
-        '''
-            internal use only
-        '''
-
-        res = VertexArrayMatrixAttribute.__new__(VertexArrayMatrixAttribute)
-        res.mglo = obj
-        return res
-
-
-# TODO:
-class InvalidObject:
-    '''
-        A ModernGL object turns into an InvalidObject
-        once the release method is successfully called.
-    '''
 
 
 class BufferAccess:
@@ -383,26 +275,6 @@ class ComputeShader:
         self.__class__ = InvalidObject
 
 
-class EnableFlag:
-    '''
-        EnableFlag
-    '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('EnableFlag')
-
-    @staticmethod
-    def new(obj):
-        '''
-            internal use only
-        '''
-
-        res = EnableFlag.__new__(EnableFlag)
-        res.mglo = obj
-        return res
-
-
 class Framebuffer:
     '''
         Framebuffer
@@ -512,26 +384,6 @@ class MultisampleTexture:
         '''
 
         self.mglo.use(location)
-
-
-class Primitive:
-    '''
-        Primitive
-    '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('Primitive')
-
-    @staticmethod
-    def new(obj):
-        '''
-            internal use only
-        '''
-
-        res = Primitive.__new__(Primitive)
-        res.mglo = obj
-        return res
 
 
 class Shader:
@@ -711,40 +563,20 @@ class Program:
         return self.mglo.geometry_shader
 
     @property
-    def tesselation_evaluation_shader(self) -> Shader:
+    def tess_evaluation_shader(self) -> Shader:
         '''
-            tesselation_evaluation_shader
+            tess_evaluation_shader
         '''
 
-        return self.mglo.tesselation_evaluation_shader
+        return self.mglo.tess_evaluation_shader
 
     @property
-    def tesselation_control_shader(self) -> Shader:
+    def tess_control_shader(self) -> Shader:
         '''
-            tesselation_control_shader
-        '''
-
-        return self.mglo.tesselation_control_shader
-
-
-class ProgramStage:
-    '''
-        ProgramStage
-    '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('ProgramStage')
-
-    @staticmethod
-    def new(obj):
-        '''
-            internal use only
+            tess_control_shader
         '''
 
-        res = ProgramStage.__new__(ProgramStage)
-        res.mglo = obj
-        return res
+        return self.mglo.tess_control_shader
 
 
 class Renderbuffer:
@@ -773,46 +605,6 @@ class Renderbuffer:
 
         self.mglo.release()
         self.__class__ = InvalidObject
-
-
-class Subroutine:
-    '''
-        Subroutine
-    '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('Subroutine')
-
-    @staticmethod
-    def new(obj):
-        '''
-            internal use only
-        '''
-
-        res = Subroutine.__new__(Subroutine)
-        res.mglo = obj
-        return res
-
-
-class SubroutineUniform:
-    '''
-        SubroutineUniform
-    '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('SubroutineUniform')
-
-    @staticmethod
-    def new(obj):
-        '''
-            internal use only
-        '''
-
-        res = SubroutineUniform.__new__(SubroutineUniform)
-        res.mglo = obj
-        return res
 
 
 class Texture:
@@ -975,7 +767,9 @@ class VertexArray:
 
         self.mglo.render(mode, vertices, first, instances)
 
-    def transform(self, buf, mode=POINTS, vertices=-1, first=0, instances=1):
+    def transform(
+        self, buf, mode=POINTS, vertices=-1, *,
+        first=0, instances=1):
         '''
             Transform vertices.
             Stores the output in a single buffer.
@@ -1180,7 +974,7 @@ class Context:
 
         self.mglo.copy_buffer(dst.mglo, src.mglo, size, src_offset, dst_offset)
 
-    def Buffer(self, data=None, reserve=0, dynamic=False) -> Buffer:
+    def buffer(self, data=None, reserve=0, dynamic=False) -> Buffer:
         '''
             Create a Buffer.
 
@@ -1197,7 +991,7 @@ class Context:
 
         return Buffer.new(self.mglo.Buffer(data, reserve, dynamic))
 
-    def Texture(self, size, components, data=None, floats=False) -> Texture:
+    def texture(self, size, components, data=None, floats=False) -> Texture:
         '''
             Create a Texture.
 
@@ -1215,7 +1009,7 @@ class Context:
 
         return Texture.new(self.mglo.Texture(size, components, data, floats))
 
-    def DepthTexture(self, size, data=None) -> Texture:
+    def depth_texture(self, size, data=None) -> Texture:
         '''
             Create a DepthTexture.
 
@@ -1229,7 +1023,7 @@ class Context:
 
         return Texture.new(self.mglo.DepthTexture(size, data))
 
-    def VertexArray(self, program, content, index_buffer=None) -> VertexArray:
+    def vertex_array(self, program, content, index_buffer=None) -> VertexArray:
         '''
             Create a VertexArray.
 
@@ -1250,7 +1044,7 @@ class Context:
         vao = self.mglo.VertexArray(program.mglo, list(content), index_buffer)
         return VertexArray.new(vao)
 
-    def SimpleVertexArray(
+    def simple_vertex_array(
             self, program, buffer, attributes,
             index_buffer=None) -> VertexArray:
         '''
@@ -1272,7 +1066,7 @@ class Context:
         content = [(buffer, detect_format(program, attributes), attributes)]
         return self.VertexArray(program, content, index_buffer)
 
-    def Program(self, shaders, varyings=()) -> Program:
+    def program(self, shaders, varyings=()) -> Program:
         '''
             Create a Program.
 
@@ -1291,7 +1085,7 @@ class Context:
         prog = self.mglo.Program([x.mglo for x in shaders], varyings)
         return Program.new(prog)
 
-    def VertexShader(self, source) -> Shader:
+    def vertex_shader(self, source) -> Shader:
         '''
             Create a VertexShader.
 
@@ -1304,7 +1098,7 @@ class Context:
 
         return Shader.new(self.mglo.VertexShader(source))
 
-    def FragmentShader(self, source) -> Shader:
+    def fragment_shader(self, source) -> Shader:
         '''
             Create a FragmentShader.
 
@@ -1317,7 +1111,7 @@ class Context:
 
         return Shader.new(self.mglo.FragmentShader(source))
 
-    def GeometryShader(self, source) -> Shader:
+    def geometry_shader(self, source) -> Shader:
         '''
             Create a GeometryShader.
 
@@ -1330,7 +1124,7 @@ class Context:
 
         return Shader.new(self.mglo.GeometryShader(source))
 
-    def TessEvaluationShader(self, source) -> Shader:
+    def tess_evaluation_shader(self, source) -> Shader:
         '''
             Create a TessEvaluationShader.
 
@@ -1343,7 +1137,7 @@ class Context:
 
         return Shader.new(self.mglo.TessEvaluationShader(source))
 
-    def TessControlShader(self, source) -> Shader:
+    def tess_control_shader(self, source) -> Shader:
         '''
             Create a TessControlShader.
 
@@ -1356,7 +1150,7 @@ class Context:
 
         return Shader.new(self.mglo.TessControlShader(source))
 
-    def Framebuffer(self, attachments) -> Framebuffer:
+    def framebuffer(self, attachments) -> Framebuffer:
         '''
             Create a Framebuffer.
 
@@ -1369,7 +1163,7 @@ class Context:
 
         return Framebuffer.new(self.mglo.Framebuffer(attachments))
 
-    def Renderbuffer(self, size, components, floats=True) -> Renderbuffer:
+    def renderbuffer(self, size, components, floats=True) -> Renderbuffer:
         '''
             Create a Renderbuffer.
 
@@ -1387,7 +1181,7 @@ class Context:
         rbo = self.mglo.Renderbuffer(size, components, floats)
         return Renderbuffer.new(rbo)
 
-    def DepthRenderbuffer(self, size, floats=True) -> Renderbuffer:
+    def depth_renderbuffer(self, size, floats=True) -> Renderbuffer:
         '''
             Create a Renderbuffer.
 
@@ -1403,7 +1197,7 @@ class Context:
 
         return Renderbuffer.new(self.mglo.DepthRenderbuffer(size, floats))
 
-    def ComputeShader(self, source) -> ComputeShader:
+    def compute_shader(self, source) -> ComputeShader:
         '''
             Create a ComputeShader.
 

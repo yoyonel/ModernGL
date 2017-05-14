@@ -2,7 +2,8 @@
     ModernGL Program members
 '''
 
-# from ModernGL import ModernGL as _mgl
+# pylint: disable=too-few-public-methods
+
 
 class Uniform:
     '''
@@ -262,3 +263,43 @@ class AttributeMap:
 
     def __len__(self):
         return len(self.mglo)
+
+
+class Subroutine:
+    '''
+        Subroutine
+    '''
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError('Subroutine')
+
+    @staticmethod
+    def new(obj):
+        '''
+            internal use only
+        '''
+
+        res = Subroutine.__new__(Subroutine)
+        res.mglo = obj
+        return res
+
+
+class SubroutineUniform:
+    '''
+        SubroutineUniform
+    '''
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError('SubroutineUniform')
+
+    @staticmethod
+    def new(obj):
+        '''
+            internal use only
+        '''
+
+        res = SubroutineUniform.__new__(SubroutineUniform)
+        res.mglo = obj
+        return res

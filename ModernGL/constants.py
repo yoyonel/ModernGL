@@ -4,7 +4,7 @@
 
 from ModernGL import ModernGL as _mgl
 
-# pylint: disable=using-constant-test
+# pylint: disable=using-constant-test, too-few-public-methods
 
 if False:
     _mgl.BLEND = 'BLEND'
@@ -25,6 +25,25 @@ if False:
     _mgl.TRIANGLES_ADJACENCY = 'TRIANGLES_ADJACENCY'
 
 
+class EnableFlag:
+    '''
+        EnableFlag
+    '''
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError('EnableFlag')
+
+    @staticmethod
+    def new(obj):
+        '''
+            internal use only
+        '''
+
+        res = EnableFlag.__new__(EnableFlag)
+        res.mglo = obj
+        return res
+
 BLEND = _mgl.BLEND
 '''
     GL_BLEND
@@ -44,6 +63,27 @@ MULTISAMPLE = _mgl.MULTISAMPLE
 '''
     GL_MULTISAMPLE
 '''
+
+
+class Primitive:
+    '''
+        Primitive
+    '''
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError('Primitive')
+
+    @staticmethod
+    def new(obj):
+        '''
+            internal use only
+        '''
+
+        res = Primitive.__new__(Primitive)
+        res.mglo = obj
+        return res
+
 
 TRIANGLES = _mgl.TRIANGLES
 '''
