@@ -241,7 +241,7 @@ class TestCase(unittest.TestCase):
 			fmt = ModernGL.detect_format(prog, ['v_in'])
 			vbo1 = self.ctx.buffer(struct.pack(fmt, *vtype['input']))
 			vbo2 = self.ctx.buffer(b'\xAA' * struct.calcsize(fmt))
-			vao = self.ctx.SimpleVertexArray(prog, vbo1, fmt, ['v_in'])
+			vao = self.ctx.simple_vertex_array(prog, vbo1, ['v_in'])
 			vao.transform(vbo2, ModernGL.POINTS, 1)
 
 			for a, b in zip(struct.unpack(fmt, vbo2.read()), vtype['output']):
@@ -270,7 +270,7 @@ class TestCase(unittest.TestCase):
 			fmt = ModernGL.detect_format(prog, ['v_in'])
 			vbo1 = self.ctx.buffer(struct.pack(fmt, *(vtype['input'] * 2)))
 			vbo2 = self.ctx.buffer(b'\xAA' * struct.calcsize(fmt))
-			vao = self.ctx.simple_vertex_array(prog, vbo1, fmt, ['v_in'])
+			vao = self.ctx.simple_vertex_array(prog, vbo1, ['v_in'])
 			vao.transform(vbo2, ModernGL.POINTS, 1)
 
 			for a, b in zip(struct.unpack(fmt, vbo2.read()), vtype['output'] * 2):
