@@ -358,7 +358,7 @@ class Context(Object):
 
         return Shader.new(self.mglo.tess_control_shader(source))
 
-    def framebuffer(self, attachments) -> Framebuffer:
+    def framebuffer(self, color_attachments, depth_attachment) -> Framebuffer:
         '''
             Create a Framebuffer.
 
@@ -369,9 +369,14 @@ class Context(Object):
                 :py:class:`Framebuffer`
         '''
 
-        return Framebuffer.new(self.mglo.framebuffer(attachments))
+        if isinstance(color_attachments, Object):
+            color_attachments = [color_attachments]
 
-    def renderbuffer(self, size, components=4, floats=True) -> Renderbuffer:
+        color_attachments = tuple(x.mglo for x in color_attachments)
+
+        return Framebuffer.new(self.mglo.framebuffer(color_attachments, depth_attachment.mglo))
+
+    def renderbuffer(self, size, components=4, *, samples=-1, floats=True) -> Renderbuffer:
         '''
             Create a Renderbuffer.
 
@@ -386,23 +391,20 @@ class Context(Object):
                 :py:class:`Renderbuffer`
         '''
 
-        return Renderbuffer.new(self.mglo.renderbuffer(size, components, floats))
+        return Renderbuffer.new(self.mglo.renderbuffer(size, components, samples, floats))
 
-    def depth_renderbuffer(self, size, floats=True) -> Renderbuffer:
+    def depth_renderbuffer(self, size, *, samples=-1) -> Renderbuffer:
         '''
             Create a Renderbuffer.
 
             Args:
                 size: Width, height.
 
-            Keyword Args:
-                floats: Use floating point precision.
-
             Returns:
                 :py:class:`Renderbuffer`
         '''
 
-        return Renderbuffer.new(self.mglo.depth_renderbuffer(size, floats))
+        return Renderbuffer.new(self.mglo.depth_renderbuffer(size, samples))
 
     def compute_shader(self, source) -> ComputeShader:
         '''

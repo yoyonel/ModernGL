@@ -4,9 +4,9 @@ import ModernGL, struct
 size = 500, 500
 ctx = ModernGL.create_standalone_context()
 
-color_rbo = ctx.Renderbuffer(size)
-depth_rbo = ctx.DepthRenderbuffer(size)
-fbo = ctx.Framebuffer([color_rbo, depth_rbo])
+color_rbo = ctx.renderbuffer(size, samples=1)
+depth_rbo = ctx.depth_renderbuffer(size, samples=1)
+fbo = ctx.framebuffer(color_rbo, depth_rbo)
 # fbo = ctx.Framebuffer([color_rbo])
 fbo.use()
 
@@ -47,8 +47,9 @@ prog = ctx.program([
 vbo = ctx.buffer(struct.pack('8f', -1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0))
 vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
 
-ctx.viewport = (0, 0, size[0], size[1])
+viewport = (0, 0, size[0], size[1])
+ctx.viewport = viewport
 vao.render(ModernGL.TRIANGLE_STRIP)
 
-img = Image.frombytes('RGBA', size, fbo.read(size)).transpose(Image.FLIP_TOP_BOTTOM)
+img = Image.frombytes('RGB', size, fbo.read(viewport)).transpose(Image.FLIP_TOP_BOTTOM)
 img.save('T:/Fractal.png')

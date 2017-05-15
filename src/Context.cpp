@@ -1033,14 +1033,16 @@ MGLRenderbuffer * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 
 	int components;
 
+	int samples;
 	int floats;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"(II)Ip",
+		"(II)IIp",
 		&width,
 		&height,
 		&components,
+		&samples,
 		&floats
 	);
 
@@ -1066,7 +1068,12 @@ MGLRenderbuffer * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 	renderbuffer->renderbuffer_obj = 0;
 	gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
 	gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->renderbuffer_obj);
-	gl.RenderbufferStorage(GL_RENDERBUFFER, format, width, height);
+
+	if (samples < 0) {
+		gl.RenderbufferStorage(GL_RENDERBUFFER, format, width, height);
+	} else {
+		gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, format, width, height);
+	}
 
 	renderbuffer->width = width;
 	renderbuffer->height = height;
@@ -1085,11 +1092,14 @@ MGLRenderbuffer * MGLContext_depth_renderbuffer(MGLContext * self, PyObject * ar
 	int width;
 	int height;
 
+	int samples;
+
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"(II)",
+		"(II)I",
 		&width,
-		&height
+		&height,
+		&samples
 	);
 
 	if (!args_ok) {
@@ -1103,7 +1113,12 @@ MGLRenderbuffer * MGLContext_depth_renderbuffer(MGLContext * self, PyObject * ar
 	renderbuffer->renderbuffer_obj = 0;
 	gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
 	gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->renderbuffer_obj);
-	gl.RenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+
+	if (samples < 0) {
+		gl.RenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+	} else {
+		gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24, width, height);
+	}
 
 	renderbuffer->width = width;
 	renderbuffer->height = height;
@@ -1238,7 +1253,6 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"disable", (PyCFunction)MGLContext_disable, METH_VARARGS, 0},
 	{"finish", (PyCFunction)MGLContext_finish, METH_NOARGS, 0},
 	{"copy_buffer", (PyCFunction)MGLContext_copy_buffer, METH_VARARGS, 0},
-	{"read_pixels", (PyCFunction)MGLContext_read_pixels, METH_VARARGS, 0},
 
 	{"buffer", (PyCFunction)MGLContext_buffer, METH_VARARGS, 0},
 	{"texture", (PyCFunction)MGLContext_texture, METH_VARARGS, 0},
