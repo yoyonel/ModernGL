@@ -188,6 +188,13 @@ class Context(Object):
 
         self.mglo.copy_buffer(dst.mglo, src.mglo, size, read_offset, write_offset)
 
+    def copy_framebuffer(self, dst, src):
+        '''
+            Copy framebuffer content.
+        '''
+
+        self.mglo.copy_framebuffer(dst.mglo, src.mglo)
+
     def buffer(self, data=None, reserve=0, dynamic=False) -> Buffer:
         '''
             Create a Buffer.

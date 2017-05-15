@@ -209,53 +209,128 @@ PyObject * MGLContext_copy_buffer(MGLContext * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLContext_read_pixels(MGLContext * self, PyObject * args) {
-	int x;
-	int y;
-	int width;
-	int height;
-	int components;
-	int floats;
+PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
+	MGLFramebuffer * dst;
+	MGLFramebuffer * src;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"(IIII)Ip",
-		&x,
-		&y,
-		&width,
-		&height,
-		&components,
-		&floats
+		"O!O!",
+		&MGLFramebuffer_Type,
+		&dst,
+		&MGLFramebuffer_Type,
+		&src
 	);
 
 	if (!args_ok) {
 		return 0;
 	}
 
-	if (x < 0 || y < 0 || width <= 0 || height <= 0 || components < 1 || components > 4) {
-		MGLError * error = MGLError_New(TRACE, "range check error");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
-	}
+	// int read_x = 0;
+	// int read_y = 0;
+	// int read_width = src->width;
+	// int read_height = src->height;
 
-	int size = floats ? (width * height * 4) : (height * ((width * components + 3) & ~3));
-	int pixel_type = floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+	// int write_x = 0;
+	// int write_y = 0;
+	// int write_width = dst->width;
+	// int write_height = dst->height;
 
-	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-	int format = formats[components];
+	// if (read_viewport != Py_None) {
+	// 	if (PyTuple_GET_SIZE(read_viewport) != 4) {
+	// 		// TODO: error
+	// 	}
 
-	PyObject * bytes = PyBytes_FromStringAndSize(0, size);
-	char * data = PyBytes_AS_STRING(bytes);
-	memset(data, 0, size);
+	// 	read_x = PyLong_AsLong(PyTuple_GET_ITEM(read_viewport, 0));
+	// 	read_y = PyLong_AsLong(PyTuple_GET_ITEM(read_viewport, 1));
+	// 	read_width = PyLong_AsLong(PyTuple_GET_ITEM(read_viewport, 2));
+	// 	read_height = PyLong_AsLong(PyTuple_GET_ITEM(read_viewport, 3));
+	// }
+
+	// if (write_viewport != Py_None) {
+	// 	if (PyTuple_GET_SIZE(write_viewport) != 4) {
+	// 		// TODO: error
+	// 	}
+
+	// 	write_x = PyLong_AsLong(PyTuple_GET_ITEM(write_viewport, 0));
+	// 	write_y = PyLong_AsLong(PyTuple_GET_ITEM(write_viewport, 1));
+	// 	write_width = PyLong_AsLong(PyTuple_GET_ITEM(write_viewport, 2));
+	// 	write_height = PyLong_AsLong(PyTuple_GET_ITEM(write_viewport, 3));
+	// }
 
 	const GLMethods & gl = self->gl;
 
-	// gl.Finish();
-	// Sometimes glReadPixels does not change the content of data
-	gl.ReadPixels(x, y, width, height, format, pixel_type, data);
+	// If the sizes of the source and destination rectangles are not equal,
+	// filter specifies the interpolation method that will be applied to resize the source image,
+	// and must be GL_NEAREST or GL_LINEAR. GL_LINEAR is only a valid interpolation
+	// method for the color buffer. If filter is not GL_NEAREST and mask includes
+	// GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT, no data is transferred and a
+	// GL_INVALID_OPERATION error is generated.
 
-	return bytes;
+	int width = src->width < dst->width ? src->width : dst->width;
+	int height = src->height < dst->height ? src->height : dst->height;
+
+	gl.BindFramebuffer(GL_READ_FRAMEBUFFER, src->framebuffer_obj);
+	gl.BindFramebuffer(GL_DRAW_FRAMEBUFFER, dst->framebuffer_obj);
+	gl.BlitFramebuffer(
+		// read_x, read_y, read_x + read_width, read_y + read_height,
+		// write_x, write_y, write_x + write_width, write_y + write_height,
+		0, 0, width, height,
+		0, 0, width, height,
+		GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT,
+		GL_NEAREST
+	);
+
+	Py_RETURN_NONE;
 }
+
+// PyObject * MGLContext_read_pixels(MGLContext * self, PyObject * args) {
+// 	int x;
+// 	int y;
+// 	int width;
+// 	int height;
+// 	int components;
+// 	int floats;
+
+// 	int args_ok = PyArg_ParseTuple(
+// 		args,
+// 		"(IIII)Ip",
+// 		&x,
+// 		&y,
+// 		&width,
+// 		&height,
+// 		&components,
+// 		&floats
+// 	);
+
+// 	if (!args_ok) {
+// 		return 0;
+// 	}
+
+// 	if (x < 0 || y < 0 || width <= 0 || height <= 0 || components < 1 || components > 4) {
+// 		MGLError * error = MGLError_New(TRACE, "range check error");
+// 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+// 		return 0;
+// 	}
+
+// 	int size = floats ? (width * height * 4) : (height * ((width * components + 3) & ~3));
+// 	int pixel_type = floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+
+// 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
+// 	int format = formats[components];
+
+// 	PyObject * bytes = PyBytes_FromStringAndSize(0, size);
+// 	char * data = PyBytes_AS_STRING(bytes);
+// 	memset(data, 0, size);
+
+// 	const GLMethods & gl = self->gl;
+
+// 	// gl.Finish();
+// 	// Sometimes glReadPixels does not change the content of data
+// 	gl.ReadPixels(x, y, width, height, format, pixel_type, data);
+
+// 	return bytes;
+// }
 
 MGLBuffer * MGLContext_buffer(MGLContext * self, PyObject * args) {
 	PyObject * data;
@@ -866,6 +941,14 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
+	// If the attachment sizes are not all identical, rendering will be limited to the
+	// largest area that can fit in all of the attachments (an intersection of rectangles
+	// having a lower left of (0; 0) and an upper right of (width; height) for each
+	// attachment).
+
+	int width = 0;
+	int height = 0;
+
 	int color_attachments_len = (int)PyTuple_GET_SIZE(color_attachments);
 
 	if (!color_attachments_len) {
@@ -884,6 +967,15 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		}
 
 		MGLFramebufferAttachment * attachment = (MGLFramebufferAttachment *)item;
+
+		if (i == 0) {
+			width = attachment->width;
+			height = attachment->height;
+		} else {
+			if (attachment->width != width || attachment->height != height) {
+				// TODO: error
+			}
+		}
 
 		if (attachment->context != self) {
 			MGLError * error = MGLError_New(TRACE, "attachments[%d] belongs to a different context", i);
@@ -1019,6 +1111,9 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 
 	framebuffer->color_attachments = color_attachments;
 	framebuffer->depth_attachment = depth_attachment;
+
+	framebuffer->width = width;
+	framebuffer->height = height;
 
 	Py_INCREF(self);
 	framebuffer->context = self;
@@ -1253,6 +1348,7 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"disable", (PyCFunction)MGLContext_disable, METH_VARARGS, 0},
 	{"finish", (PyCFunction)MGLContext_finish, METH_NOARGS, 0},
 	{"copy_buffer", (PyCFunction)MGLContext_copy_buffer, METH_VARARGS, 0},
+	{"copy_framebuffer", (PyCFunction)MGLContext_copy_framebuffer, METH_VARARGS, 0},
 
 	{"buffer", (PyCFunction)MGLContext_buffer, METH_VARARGS, 0},
 	{"texture", (PyCFunction)MGLContext_texture, METH_VARARGS, 0},
