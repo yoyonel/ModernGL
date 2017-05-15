@@ -9,7 +9,6 @@
 #include "Framebuffer.hpp"
 #include "FramebufferAttachment.hpp"
 #include "InvalidObject.hpp"
-#include "MultisampleRenderbuffer.hpp"
 #include "MultisampleTexture.hpp"
 #include "Object.hpp"
 #include "Primitive.hpp"
@@ -213,17 +212,6 @@ bool MGL_InitializeModule(PyObject * module) {
 		Py_INCREF(&MGLInvalidObject_Type);
 
 		PyModule_AddObject(module, "InvalidObject", (PyObject *)&MGLInvalidObject_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLMultisampleRenderbuffer_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register MultisampleRenderbuffer in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return false;
-		}
-
-		Py_INCREF(&MGLMultisampleRenderbuffer_Type);
-
-		PyModule_AddObject(module, "MultisampleRenderbuffer", (PyObject *)&MGLMultisampleRenderbuffer_Type);
 	}
 
 	{
