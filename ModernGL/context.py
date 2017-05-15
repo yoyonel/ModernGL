@@ -4,7 +4,8 @@
 
 # pylint: disable=using-constant-test, too-many-public-methods
 
-from ModernGL import ModernGL as mgl
+# from ModernGL import ModernGL as mgl
+import importlib; _mgl = importlib.import_module('ModernGL', 'ModernGL')
 
 from .common import Object
 from .buffers import Buffer, detect_format
