@@ -1480,6 +1480,10 @@ PyObject * MGLContext_get_default_framebuffer(MGLContext * self) {
 		// NO INCREF
 		framebuffer->context = self;
 
+		// TODO:
+		// framebuffer->width = ...;
+		// framebuffer->height = ...;
+
 		self->default_framebuffer = (PyObject *)framebuffer;
 	}
 
