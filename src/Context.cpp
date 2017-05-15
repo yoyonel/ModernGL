@@ -1069,7 +1069,7 @@ MGLRenderbuffer * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 	gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
 	gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->renderbuffer_obj);
 
-	if (samples < 0) {
+	if (samples == 0) {
 		gl.RenderbufferStorage(GL_RENDERBUFFER, format, width, height);
 	} else {
 		gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, format, width, height);
@@ -1114,7 +1114,7 @@ MGLRenderbuffer * MGLContext_depth_renderbuffer(MGLContext * self, PyObject * ar
 	gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
 	gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->renderbuffer_obj);
 
-	if (samples < 0) {
+	if (samples == 0) {
 		gl.RenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
 	} else {
 		gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24, width, height);

@@ -376,7 +376,7 @@ class Context(Object):
 
         return Framebuffer.new(self.mglo.framebuffer(color_attachments, depth_attachment.mglo))
 
-    def renderbuffer(self, size, components=4, *, samples=-1, floats=True) -> Renderbuffer:
+    def renderbuffer(self, size, components=4, *, samples=0, floats=True) -> Renderbuffer:
         '''
             Create a Renderbuffer.
 
@@ -393,7 +393,7 @@ class Context(Object):
 
         return Renderbuffer.new(self.mglo.renderbuffer(size, components, samples, floats))
 
-    def depth_renderbuffer(self, size, *, samples=-1) -> Renderbuffer:
+    def depth_renderbuffer(self, size, *, samples=0) -> Renderbuffer:
         '''
             Create a Renderbuffer.
 
