@@ -8,7 +8,8 @@
 #include "Attribute.hpp"
 #include "VertexArrayAttribute.hpp"
 #include "VertexArrayListAttribute.hpp"
-#include "VertexArrayListAttribute.hpp"
+
+#include "ProgramStage.hpp"
 
 PyObject * MGLVertexArray_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLVertexArray * self = (MGLVertexArray *)type->tp_alloc(type, 0);
@@ -145,6 +146,15 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 
 	gl.Enable(GL_RASTERIZER_DISCARD);
 	gl.BeginTransformFeedback(mode->primitive);
+
+
+	// TODO: magic
+	if (self->program->vertex_shader->num_subroutine_uniform_locations) {
+		printf("YES: %04x %d %d\n", self->program->vertex_shader->shader->shader_type, self->program->vertex_shader->num_subroutine_uniform_locations, self->program->vertex_shader->subroutine_uniform_locations[0]);
+		gl.UniformSubroutinesuiv(self->program->vertex_shader->shader->shader_type, self->program->vertex_shader->num_subroutine_uniform_locations, self->program->vertex_shader->subroutine_uniform_locations);
+		printf("vao error: %d\n", gl.GetError());
+	}
+
 
 	if (self->index_buffer != (MGLBuffer *)Py_None) {
 		const void * ptr = (const void *)((GLintptr)first * 4);

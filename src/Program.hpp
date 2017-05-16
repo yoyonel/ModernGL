@@ -5,14 +5,16 @@
 #include "ContextMember.hpp"
 #include "Primitive.hpp"
 
+struct MGLProgramStage;
+
 struct MGLProgram : public MGLContextMember {
 	PyObject * shaders;
 
-	PyObject * vertex_shader;
-	PyObject * fragment_shader;
-	PyObject * geometry_shader;
-	PyObject * tess_evaluation_shader;
-	PyObject * tess_control_shader;
+	MGLProgramStage * vertex_shader;
+	MGLProgramStage * fragment_shader;
+	MGLProgramStage * geometry_shader;
+	MGLProgramStage * tess_evaluation_shader;
+	MGLProgramStage * tess_control_shader;
 
 	PyObject * uniforms;
 	PyObject * uniform_blocks;

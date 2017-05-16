@@ -6,6 +6,4 @@
 #include "ProgramStage.hpp"
 
 struct MGLProgramStageMember : public MGLObject {
-	int program_obj;
-	int shader_type;
 };

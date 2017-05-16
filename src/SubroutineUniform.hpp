@@ -6,9 +6,7 @@
 
 struct MGLSubroutineUniform : public MGLProgramStageMember {
 	PyObject * name;
-
-	int number;
-	int index;
+	int location;
 };
 
 extern PyTypeObject MGLSubroutineUniform_Type;

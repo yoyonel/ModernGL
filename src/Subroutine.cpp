@@ -44,13 +44,13 @@ PyObject * MGLSubroutine_get_name(MGLSubroutine * self, void * closure) {
 	return self->name;
 }
 
-PyObject * MGLSubroutine_get_location(MGLSubroutine * self, void * closure) {
-	return PyLong_FromLong(self->location);
+PyObject * MGLSubroutine_get_index(MGLSubroutine * self, void * closure) {
+	return PyLong_FromUnsignedLong(self->index);
 }
 
 PyGetSetDef MGLSubroutine_tp_getseters[] = {
 	{(char *)"name", (getter)MGLSubroutine_get_name, 0, 0, 0},
-	{(char *)"location", (getter)MGLSubroutine_get_location, 0, 0, 0},
+	{(char *)"index", (getter)MGLSubroutine_get_index, 0, 0, 0},
 	{0},
 };
 

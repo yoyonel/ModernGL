@@ -103,7 +103,7 @@ PyObject * MGLProgram_get_geometry_vertices(MGLProgram * self, void * closure) {
 PyObject * MGLProgram_get_vertex_shader(MGLProgram * self, void * closure) {
 	if (self->vertex_shader) {
 		Py_INCREF(self->vertex_shader);
-		return self->vertex_shader;
+		return (PyObject *)self->vertex_shader;
 	} else {
 		Py_RETURN_NONE;
 	}
@@ -112,7 +112,7 @@ PyObject * MGLProgram_get_vertex_shader(MGLProgram * self, void * closure) {
 PyObject * MGLProgram_get_fragment_shader(MGLProgram * self, void * closure) {
 	if (self->fragment_shader) {
 		Py_INCREF(self->fragment_shader);
-		return self->fragment_shader;
+		return (PyObject *)self->fragment_shader;
 	} else {
 		Py_RETURN_NONE;
 	}
@@ -121,7 +121,7 @@ PyObject * MGLProgram_get_fragment_shader(MGLProgram * self, void * closure) {
 PyObject * MGLProgram_get_geometry_shader(MGLProgram * self, void * closure) {
 	if (self->geometry_shader) {
 		Py_INCREF(self->geometry_shader);
-		return self->geometry_shader;
+		return (PyObject *)self->geometry_shader;
 	} else {
 		Py_RETURN_NONE;
 	}
@@ -130,7 +130,7 @@ PyObject * MGLProgram_get_geometry_shader(MGLProgram * self, void * closure) {
 PyObject * MGLProgram_get_tess_evaluation_shader(MGLProgram * self, void * closure) {
 	if (self->tess_evaluation_shader) {
 		Py_INCREF(self->tess_evaluation_shader);
-		return self->tess_evaluation_shader;
+		return (PyObject *)self->tess_evaluation_shader;
 	} else {
 		Py_RETURN_NONE;
 	}
@@ -139,7 +139,7 @@ PyObject * MGLProgram_get_tess_evaluation_shader(MGLProgram * self, void * closu
 PyObject * MGLProgram_get_tess_control_shader(MGLProgram * self, void * closure) {
 	if (self->tess_control_shader) {
 		Py_INCREF(self->tess_control_shader);
-		return self->tess_control_shader;
+		return (PyObject *)self->tess_control_shader;
 	} else {
 		Py_RETURN_NONE;
 	}
@@ -373,7 +373,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		program_stage->program_obj = program->program_obj;
 		program_stage->shader = shaders[VERTEX_SHADER_SLOT];
 		MGLProgramStage_Complete(program_stage, gl);
-		program->vertex_shader = (PyObject *)program_stage;
+		program->vertex_shader = program_stage;
 	} else {
 		program->vertex_shader = 0;
 	}
@@ -383,7 +383,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		program_stage->program_obj = program->program_obj;
 		program_stage->shader = shaders[FRAGMENT_SHADER_SLOT];
 		MGLProgramStage_Complete(program_stage, gl);
-		program->fragment_shader = (PyObject *)program_stage;
+		program->fragment_shader = program_stage;
 	} else {
 		program->fragment_shader = 0;
 	}
@@ -393,7 +393,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		program_stage->program_obj = program->program_obj;
 		program_stage->shader = shaders[GEOMETRY_SHADER_SLOT];
 		MGLProgramStage_Complete(program_stage, gl);
-		program->geometry_shader = (PyObject *)program_stage;
+		program->geometry_shader = program_stage;
 	} else {
 		program->geometry_shader = 0;
 	}
@@ -403,7 +403,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		program_stage->program_obj = program->program_obj;
 		program_stage->shader = shaders[TESS_EVALUATION_SHADER_SLOT];
 		MGLProgramStage_Complete(program_stage, gl);
-		program->tess_evaluation_shader = (PyObject *)program_stage;
+		program->tess_evaluation_shader = program_stage;
 	} else {
 		program->tess_evaluation_shader = 0;
 	}
@@ -413,7 +413,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		program_stage->program_obj = program->program_obj;
 		program_stage->shader = shaders[TESS_CONTROL_SHADER_SLOT];
 		MGLProgramStage_Complete(program_stage, gl);
-		program->tess_control_shader = (PyObject *)program_stage;
+		program->tess_control_shader = program_stage;
 	} else {
 		program->tess_control_shader = 0;
 	}

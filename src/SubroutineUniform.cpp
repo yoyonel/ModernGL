@@ -38,7 +38,18 @@ PyMethodDef MGLSubroutineUniform_tp_methods[] = {
 	{0},
 };
 
+PyObject * MGLSubroutineUniform_get_name(MGLSubroutineUniform * self, void * closure) {
+	Py_INCREF(self->name);
+	return self->name;
+}
+
+PyObject * MGLSubroutineUniform_get_location(MGLSubroutineUniform * self, void * closure) {
+	return PyLong_FromUnsignedLong(self->location);
+}
+
 PyGetSetDef MGLSubroutineUniform_tp_getseters[] = {
+	{(char *)"name", (getter)MGLSubroutineUniform_get_name, 0, 0, 0},
+	{(char *)"location", (getter)MGLSubroutineUniform_get_location, 0, 0, 0},
 	{0},
 };
 
