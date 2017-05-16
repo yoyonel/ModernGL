@@ -148,13 +148,72 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	gl.BeginTransformFeedback(mode->primitive);
 
 
-	// TODO: magic
-	if (self->program->vertex_shader->num_subroutine_uniform_locations) {
-		printf("YES: %04x %d %d\n", self->program->vertex_shader->shader->shader_type, self->program->vertex_shader->num_subroutine_uniform_locations, self->program->vertex_shader->subroutine_uniform_locations[0]);
-		gl.UniformSubroutinesuiv(self->program->vertex_shader->shader->shader_type, self->program->vertex_shader->num_subroutine_uniform_locations, self->program->vertex_shader->subroutine_uniform_locations);
-		printf("vao error: %d\n", gl.GetError());
-	}
+	// // TODO: magic
+	// if (self->program->vertex_shader->num_subroutine_uniform_locations) {
+	// 	printf("YES: %04x %d %d\n", self->program->vertex_shader->shader->shader_type, self->program->vertex_shader->num_subroutine_uniform_locations, self->program->vertex_shader->subroutine_uniform_locations[0]);
+	// 	gl.UniformSubroutinesuiv(self->program->vertex_shader->shader->shader_type, self->program->vertex_shader->num_subroutine_uniform_locations, self->program->vertex_shader->subroutine_uniform_locations);
+	// 	printf("vao error: %d\n", gl.GetError());
+	// }
 
+
+	if (self->subroutine_uniform_locations) {
+		printf("self->num_vertex_shader_subroutine_uniform_locations = %d\n", self->num_vertex_shader_subroutine_uniform_locations);
+		printf("self->num_fragment_shader_subroutine_uniform_locations = %d\n", self->num_fragment_shader_subroutine_uniform_locations);
+		printf("self->num_geometry_shader_subroutine_uniform_locations = %d\n", self->num_geometry_shader_subroutine_uniform_locations);
+		printf("self->num_tess_evaluation_shader_subroutine_uniform_locations = %d\n", self->num_tess_evaluation_shader_subroutine_uniform_locations);
+		printf("self->num_tess_control_shader_subroutine_uniform_locations = %d\n", self->num_tess_control_shader_subroutine_uniform_locations);
+
+		unsigned * subroutine_uniform_locations = self->subroutine_uniform_locations;
+
+		if (self->num_vertex_shader_subroutine_uniform_locations) {
+			printf("UniformSubroutinesuiv GL_VERTEX_SHADER: %d\n", self->num_vertex_shader_subroutine_uniform_locations);
+			gl.UniformSubroutinesuiv(
+				GL_VERTEX_SHADER,
+				self->num_vertex_shader_subroutine_uniform_locations,
+				subroutine_uniform_locations
+			);
+			subroutine_uniform_locations += self->num_vertex_shader_subroutine_uniform_locations;
+		}
+
+		if (self->num_fragment_shader_subroutine_uniform_locations) {
+			printf("UniformSubroutinesuiv GL_FRAGMENT_SHADER: %d\n", self->num_fragment_shader_subroutine_uniform_locations);
+			gl.UniformSubroutinesuiv(
+				GL_FRAGMENT_SHADER,
+				self->num_fragment_shader_subroutine_uniform_locations,
+				subroutine_uniform_locations
+			);
+			subroutine_uniform_locations += self->num_fragment_shader_subroutine_uniform_locations;
+		}
+
+		if (self->num_geometry_shader_subroutine_uniform_locations) {
+			printf("UniformSubroutinesuiv GL_GEOMETRY_SHADER: %d\n", self->num_geometry_shader_subroutine_uniform_locations);
+			gl.UniformSubroutinesuiv(
+				GL_GEOMETRY_SHADER,
+				self->num_geometry_shader_subroutine_uniform_locations,
+				subroutine_uniform_locations
+			);
+			subroutine_uniform_locations += self->num_geometry_shader_subroutine_uniform_locations;
+		}
+
+		if (self->num_tess_evaluation_shader_subroutine_uniform_locations) {
+			printf("UniformSubroutinesuiv GL_TESS_EVALUATION_SHADER: %d\n", self->num_tess_evaluation_shader_subroutine_uniform_locations);
+			gl.UniformSubroutinesuiv(
+				GL_TESS_EVALUATION_SHADER,
+				self->num_tess_evaluation_shader_subroutine_uniform_locations,
+				subroutine_uniform_locations
+			);
+			subroutine_uniform_locations += self->num_tess_evaluation_shader_subroutine_uniform_locations;
+		}
+
+		if (self->num_tess_control_shader_subroutine_uniform_locations) {
+			printf("UniformSubroutinesuiv GL_TESS_CONTROL_SHADER: %d\n", self->num_tess_control_shader_subroutine_uniform_locations);
+			gl.UniformSubroutinesuiv(
+				GL_TESS_CONTROL_SHADER,
+				self->num_tess_control_shader_subroutine_uniform_locations,
+				subroutine_uniform_locations
+			);
+		}
+	}
 
 	if (self->index_buffer != (MGLBuffer *)Py_None) {
 		const void * ptr = (const void *)((GLintptr)first * 4);
@@ -206,6 +265,20 @@ PyObject * MGLVertexArray_get_vertices(MGLVertexArray * self, void * closure) {
 	return PyLong_FromLong(self->num_vertices);
 }
 
+int MGLVertexArray_set_subroutines(MGLVertexArray * self, PyObject * value, void * closure) {
+	for (int i = 0; i < self->num_subroutine_uniform_locations; ++i) {
+		self->subroutine_uniform_locations[i] = PyLong_AsUnsignedLong(PyTuple_GET_ITEM(value, i));
+	}
+
+	printf("Subroutines: ");
+	for (int i = 0; i < self->num_subroutine_uniform_locations; ++i) {
+		printf("%d", self->subroutine_uniform_locations[i]);
+	}
+	printf("\n");
+
+	return 0;
+}
+
 MGLContext * MGLVertexArray_get_context(MGLVertexArray * self, void * closure) {
 	Py_INCREF(self->context);
 	return self->context;
@@ -213,10 +286,11 @@ MGLContext * MGLVertexArray_get_context(MGLVertexArray * self, void * closure) {
 
 PyGetSetDef MGLVertexArray_tp_getseters[] = {
 	{(char *)"program", (getter)MGLVertexArray_get_program, 0, 0, 0},
-	{(char *)"content", (getter)MGLVertexArray_get_content, 0, 0, 0},
+	{(char *)"content", (getter)MGLVertexArray_get_content, 0, 0, 0}, // TODO: remove
 	{(char *)"attributes", (getter)MGLVertexArray_get_attributes, 0, 0, 0},
-	{(char *)"index_buffer", (getter)MGLVertexArray_get_index_buffer, 0, 0, 0},
-	{(char *)"vertices", (getter)MGLVertexArray_get_vertices, 0, 0, 0},
+	{(char *)"index_buffer", (getter)MGLVertexArray_get_index_buffer, 0, 0, 0}, // TODO: setter
+	{(char *)"vertices", (getter)MGLVertexArray_get_vertices, 0, 0, 0}, // TODO: setter
+	{(char *)"subroutines", 0, (setter)MGLVertexArray_set_subroutines, 0, 0}, // TODO: setter
 	{(char *)"context", (getter)MGLVertexArray_get_context, 0, 0, 0},
 	{0},
 };
@@ -413,4 +487,54 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 	}
 
 	vertex_array->attributes = attributes;
+
+	// Subroutines
+
+	gl.GetProgramStageiv(
+		vertex_array->program->program_obj,
+		GL_VERTEX_SHADER,
+		GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
+		&vertex_array->num_vertex_shader_subroutine_uniform_locations
+	);
+
+	gl.GetProgramStageiv(
+		vertex_array->program->program_obj,
+		GL_FRAGMENT_SHADER,
+		GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
+		&vertex_array->num_fragment_shader_subroutine_uniform_locations
+	);
+
+	gl.GetProgramStageiv(
+		vertex_array->program->program_obj,
+		GL_GEOMETRY_SHADER,
+		GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
+		&vertex_array->num_geometry_shader_subroutine_uniform_locations
+	);
+
+	gl.GetProgramStageiv(
+		vertex_array->program->program_obj,
+		GL_TESS_EVALUATION_SHADER,
+		GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
+		&vertex_array->num_tess_evaluation_shader_subroutine_uniform_locations
+	);
+
+	gl.GetProgramStageiv(
+		vertex_array->program->program_obj,
+		GL_TESS_CONTROL_SHADER,
+		GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
+		&vertex_array->num_tess_control_shader_subroutine_uniform_locations
+	);
+
+	vertex_array->num_subroutine_uniform_locations = 0;
+	vertex_array->num_subroutine_uniform_locations += vertex_array->num_vertex_shader_subroutine_uniform_locations;
+	vertex_array->num_subroutine_uniform_locations += vertex_array->num_fragment_shader_subroutine_uniform_locations;
+	vertex_array->num_subroutine_uniform_locations += vertex_array->num_geometry_shader_subroutine_uniform_locations;
+	vertex_array->num_subroutine_uniform_locations += vertex_array->num_tess_evaluation_shader_subroutine_uniform_locations;
+	vertex_array->num_subroutine_uniform_locations += vertex_array->num_tess_control_shader_subroutine_uniform_locations;
+
+	if (vertex_array->num_subroutine_uniform_locations) {
+		vertex_array->subroutine_uniform_locations = new unsigned[vertex_array->num_subroutine_uniform_locations];
+	} else {
+		vertex_array->subroutine_uniform_locations = 0;
+	}
 }

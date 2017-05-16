@@ -15,6 +15,15 @@ struct MGLVertexArray : public MGLContextMember {
 
 	PyObject * attributes;
 
+	unsigned * subroutine_uniform_locations;
+	int num_subroutine_uniform_locations;
+
+	int num_vertex_shader_subroutine_uniform_locations;
+	int num_fragment_shader_subroutine_uniform_locations;
+	int num_geometry_shader_subroutine_uniform_locations;
+	int num_tess_evaluation_shader_subroutine_uniform_locations;
+	int num_tess_control_shader_subroutine_uniform_locations;
+
 	int vertex_array_obj;
 	int num_vertices;
 };

@@ -10,9 +10,6 @@ struct MGLProgramStage : public MGLProgramMember {
 
 	PyObject * subroutines;
 	PyObject * subroutine_uniforms;
-
-	unsigned * subroutine_uniform_locations;
-	int num_subroutine_uniform_locations;
 };
 
 extern PyTypeObject MGLProgramStage_Type;

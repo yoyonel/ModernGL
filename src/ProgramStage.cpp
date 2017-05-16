@@ -50,55 +50,55 @@ PyObject * MGLProgramStage_get_subroutine_uniforms(MGLProgramStage * self, void 
 	return self->subroutine_uniforms;
 }
 
-PyObject * MGLProgramStage_get_subroutine_locations(MGLProgramStage * self, void * closure) {
-	PyObject * locations = PyTuple_New(self->num_subroutine_uniform_locations);
+// PyObject * MGLProgramStage_get_subroutine_locations(MGLProgramStage * self, void * closure) {
+// 	PyObject * locations = PyTuple_New(self->num_subroutine_uniform_locations);
 
-	const GLMethods & gl = self->shader->context->gl;
+// 	const GLMethods & gl = self->shader->context->gl;
 
-	printf("A error: %d\n", gl.GetError());
+// 	printf("A error: %d\n", gl.GetError());
 
-	gl.UseProgram(self->program_obj);
+// 	gl.UseProgram(self->program_obj);
 
-	for (int i = 0; i < self->num_subroutine_uniform_locations; ++i) {
-		gl.GetUniformSubroutineuiv(self->shader->shader_type, i, &self->subroutine_uniform_locations[i]);
-		printf("B value: %04x %d %d\n", self->shader->shader_type, i, self->subroutine_uniform_locations[i]);
-		printf("B error: %d\n", gl.GetError());
+// 	for (int i = 0; i < self->num_subroutine_uniform_locations; ++i) {
+// 		gl.GetUniformSubroutineuiv(self->shader->shader_type, i, &self->subroutine_uniform_locations[i]);
+// 		printf("B value: %04x %d %d\n", self->shader->shader_type, i, self->subroutine_uniform_locations[i]);
+// 		printf("B error: %d\n", gl.GetError());
 
-		PyTuple_SET_ITEM(locations, i, PyLong_FromUnsignedLong(self->subroutine_uniform_locations[i]));
-	}
+// 		PyTuple_SET_ITEM(locations, i, PyLong_FromUnsignedLong(self->subroutine_uniform_locations[i]));
+// 	}
 
-	return locations;
-}
+// 	return locations;
+// }
 
-int MGLProgramStage_set_subroutine_locations(MGLProgramStage * self, PyObject * value, void * closure) {
-	const GLMethods & gl = self->shader->context->gl;
+// int MGLProgramStage_set_subroutine_locations(MGLProgramStage * self, PyObject * value, void * closure) {
+// 	const GLMethods & gl = self->shader->context->gl;
 
-	for (int i = 0; i < self->num_subroutine_uniform_locations; ++i) {
-		self->subroutine_uniform_locations[i] = PyLong_AsUnsignedLong(PyTuple_GET_ITEM(value, i));
-	}
+// 	for (int i = 0; i < self->num_subroutine_uniform_locations; ++i) {
+// 		self->subroutine_uniform_locations[i] = PyLong_AsUnsignedLong(PyTuple_GET_ITEM(value, i));
+// 	}
 
-	// Warning: The biggest difference between those state and the subroutine state is this:
-	// EVERY TIME you call glUseProgram, glBindProgramPipeline or glUseProgramStages,
-	// all of the current subroutine state is completely lost. This state is never preserved,
-	// so you must reset it every single time you change programs.
+// 	// Warning: The biggest difference between those state and the subroutine state is this:
+// 	// EVERY TIME you call glUseProgram, glBindProgramPipeline or glUseProgramStages,
+// 	// all of the current subroutine state is completely lost. This state is never preserved,
+// 	// so you must reset it every single time you change programs.
 
-	gl.UseProgram(self->program_obj);
-	printf("UseProgram: %d\n", self->program_obj);
+// 	gl.UseProgram(self->program_obj);
+// 	printf("UseProgram: %d\n", self->program_obj);
 
-	printf("C error: %d\n", gl.GetError());
-	printf("C task: %04x %d %d\n", self->shader->shader_type, self->num_subroutine_uniform_locations, self->subroutine_uniform_locations[0]);
-	// gl.UniformSubroutinesuiv(self->shader->shader_type, self->num_subroutine_uniform_locations, self->subroutine_uniform_locations);
-	// GLuint asdasd = 1;
-	// gl.UniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &asdasd);
-	printf("D error: %d\n", gl.GetError());
+// 	printf("C error: %d\n", gl.GetError());
+// 	printf("C task: %04x %d %d\n", self->shader->shader_type, self->num_subroutine_uniform_locations, self->subroutine_uniform_locations[0]);
+// 	// gl.UniformSubroutinesuiv(self->shader->shader_type, self->num_subroutine_uniform_locations, self->subroutine_uniform_locations);
+// 	// GLuint asdasd = 1;
+// 	// gl.UniformSubroutinesuiv(GL_VERTEX_SHADER, 1, &asdasd);
+// 	printf("D error: %d\n", gl.GetError());
 
-	return 0;
-}
+// 	return 0;
+// }
 
 PyGetSetDef MGLProgramStage_tp_getseters[] = {
 	{(char *)"subroutines", (getter)MGLProgramStage_get_subroutines, 0, 0, 0},
 	{(char *)"subroutine_uniforms", (getter)MGLProgramStage_get_subroutine_uniforms, 0, 0, 0},
-	{(char *)"subroutine_locations", (getter)MGLProgramStage_get_subroutine_locations, (setter)MGLProgramStage_set_subroutine_locations, 0, 0},
+	// {(char *)"subroutine_locations", (getter)MGLProgramStage_get_subroutine_locations, (setter)MGLProgramStage_set_subroutine_locations, 0, 0},
 	{0},
 };
 
@@ -163,8 +163,8 @@ void MGLProgramStage_Complete(MGLProgramStage * program_stage, const GLMethods &
 	int num_subroutine_uniform_locations = 0;
 	gl.GetProgramStageiv(program_stage->program_obj, shader_type, GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS, &num_subroutine_uniform_locations);
 
-	program_stage->num_subroutine_uniform_locations = num_subroutine_uniform_locations;
-	program_stage->subroutine_uniform_locations = new unsigned[num_subroutine_uniform_locations];
+	// program_stage->num_subroutine_uniform_locations = num_subroutine_uniform_locations;
+	// program_stage->subroutine_uniform_locations = new unsigned[num_subroutine_uniform_locations];
 
 	for (int i = 0; i < num_subroutines; ++i) {
 		MGLSubroutine * subroutine = MGLSubroutine_New();

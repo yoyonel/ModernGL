@@ -61,23 +61,26 @@ class TestCase(unittest.TestCase):
 
         # print(prog.mglo.vertex_shader.subroutine_locations)
 
-        prog.mglo.vertex_shader.subroutine_locations = (prog.mglo.vertex_shader.subroutines['ColorYellow'].index,)
+        # prog.mglo.vertex_shader.subroutine_locations = (prog.mglo.vertex_shader.subroutines['ColorYellow'].index,)
         # print(prog.mglo.vertex_shader.subroutine_locations)
 
+        vao.mglo.subroutines = (2,)
         vao.transform(vbo2)
         x, y, z, w = struct.unpack('4f', vbo2.read())
         print(x, y, z, w)
 
-        prog.mglo.vertex_shader.subroutine_locations = (prog.mglo.vertex_shader.subroutines['ColorBlue'].index,)
+        # prog.mglo.vertex_shader.subroutine_locations = (prog.mglo.vertex_shader.subroutines['ColorBlue'].index,)
         # print(prog.mglo.vertex_shader.subroutine_locations)
 
+        vao.mglo.subroutines = (1,)
         vao.transform(vbo2)
         x, y, z, w = struct.unpack('4f', vbo2.read())
         print(x, y, z, w)
 
-        prog.mglo.vertex_shader.subroutine_locations = (prog.mglo.vertex_shader.subroutines['ColorRed'].index,)
+        # prog.mglo.vertex_shader.subroutine_locations = (prog.mglo.vertex_shader.subroutines['ColorRed'].index,)
         # print(prog.mglo.vertex_shader.subroutine_locations)
 
+        vao.mglo.subroutines = (0,)
         vao.transform(vbo2)
         x, y, z, w = struct.unpack('4f', vbo2.read())
         print(x, y, z, w)
