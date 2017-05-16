@@ -196,12 +196,18 @@ PyObject * MGLVertexArray_get_vertices(MGLVertexArray * self, void * closure) {
 	return PyLong_FromLong(self->num_vertices);
 }
 
+MGLContext * MGLVertexArray_get_context(MGLVertexArray * self, void * closure) {
+	Py_INCREF(self->context);
+	return self->context;
+}
+
 PyGetSetDef MGLVertexArray_tp_getseters[] = {
 	{(char *)"program", (getter)MGLVertexArray_get_program, 0, 0, 0},
 	{(char *)"content", (getter)MGLVertexArray_get_content, 0, 0, 0},
 	{(char *)"attributes", (getter)MGLVertexArray_get_attributes, 0, 0, 0},
 	{(char *)"index_buffer", (getter)MGLVertexArray_get_index_buffer, 0, 0, 0},
 	{(char *)"vertices", (getter)MGLVertexArray_get_vertices, 0, 0, 0},
+	{(char *)"context", (getter)MGLVertexArray_get_context, 0, 0, 0},
 	{0},
 };
 
@@ -236,7 +242,7 @@ PyTypeObject MGLVertexArray_Type = {
 	MGLVertexArray_tp_methods,                              // tp_methods
 	0,                                                      // tp_members
 	MGLVertexArray_tp_getseters,                            // tp_getset
-	&MGLContextMember_Type,                                 // tp_base
+	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set

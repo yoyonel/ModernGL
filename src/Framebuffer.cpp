@@ -138,26 +138,24 @@ PyMethodDef MGLFramebuffer_tp_methods[] = {
 };
 
 PyObject * MGLFramebuffer_get_color_attachments(MGLFramebuffer * self, void * closure) {
-	if (self->color_attachments) {
-		Py_INCREF(self->color_attachments);
-		return self->color_attachments;
-	} else {
-		Py_RETURN_NONE;
-	}
+	Py_INCREF(self->color_attachments);
+	return self->color_attachments;
 }
 
 PyObject * MGLFramebuffer_get_depth_attachment(MGLFramebuffer * self, void * closure) {
-	if (self->depth_attachment) {
-		Py_INCREF(self->depth_attachment);
-		return self->depth_attachment;
-	} else {
-		Py_RETURN_NONE;
-	}
+	Py_INCREF(self->depth_attachment);
+	return self->depth_attachment;
+}
+
+MGLContext * MGLFramebuffer_get_context(MGLFramebuffer * self, void * closure) {
+	Py_INCREF(self->context);
+	return self->context;
 }
 
 PyGetSetDef MGLFramebuffer_tp_getseters[] = {
 	{(char *)"color_attachments", (getter)MGLFramebuffer_get_color_attachments, 0, 0, 0},
 	{(char *)"depth_attachment", (getter)MGLFramebuffer_get_depth_attachment, 0, 0, 0},
+	{(char *)"context", (getter)MGLFramebuffer_get_context, 0, 0, 0},
 	{0},
 };
 
@@ -192,7 +190,7 @@ PyTypeObject MGLFramebuffer_Type = {
 	MGLFramebuffer_tp_methods,                              // tp_methods
 	0,                                                      // tp_members
 	MGLFramebuffer_tp_getseters,                            // tp_getset
-	&MGLContextMember_Type,                                 // tp_base
+	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set

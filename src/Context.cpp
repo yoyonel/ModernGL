@@ -301,7 +301,9 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 
 	} else {
 
-		// TODO: error
+		MGLError * error = MGLError_New(TRACE, "dst must be a framebuffer or a texture");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
 
 	}
 
@@ -465,7 +467,9 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 	}
 
 	if (data != Py_None && samples) {
-		// TODO: error
+		MGLError * error = MGLError_New(TRACE, "cannot write data for a multisample texture");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
 	}
 
 	int expected_size = floats ? (width * height * components * 4) : (height * ((width * components + 3) & ~3));
@@ -519,8 +523,8 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 	texture->width = width;
 	texture->height = height;
 	texture->components = components;
-	texture->floats = floats ? true : false;
 	texture->samples = samples;
+	texture->floats = floats ? true : false;
 	texture->depth = false;
 
 	Py_INCREF(self);
@@ -552,7 +556,9 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	}
 
 	if (data != Py_None && samples) {
-		// TODO: error
+		MGLError * error = MGLError_New(TRACE, "cannot write data for a multisample texture");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
 	}
 
 	int expected_size = width * height * 4;
@@ -598,8 +604,8 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	texture->width = width;
 	texture->height = height;
 	texture->components = 1;
-	texture->floats = true;
 	texture->samples = samples;
+	texture->floats = true;
 	texture->depth = true;
 
 	Py_INCREF(self);
@@ -994,6 +1000,7 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 
 	int width = 0;
 	int height = 0;
+	int samples = 0;
 
 	int color_attachments_len = (int)PyTuple_GET_SIZE(color_attachments);
 
@@ -1006,8 +1013,8 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	for (int i = 0; i < color_attachments_len; ++i) {
 		PyObject * item = PyTuple_GET_ITEM(color_attachments, i);
 
-		if (!PyObject_IsSubclass((PyObject *)Py_TYPE(item), (PyObject *)&MGLFramebufferAttachment_Type)) {
-			MGLError * error = MGLError_New(TRACE, "attachments[%d] must be a ModernGL.FramebufferAttachment not %s", i, Py_TYPE(item)->tp_name);
+		if (Py_TYPE(item) != &MGLTexture_Type && Py_TYPE(item) != &MGLRenderbuffer_Type) {
+			MGLError * error = MGLError_New(TRACE, "color_attachments[%d] must be a Renderbuffer or Texture not %s", i, Py_TYPE(item)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -1017,22 +1024,28 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		if (i == 0) {
 			width = attachment->width;
 			height = attachment->height;
+			samples = attachment->samples;
 		} else {
-			if (attachment->width != width || attachment->height != height) {
-				// TODO: error
+			if (attachment->width != width || attachment->height != height || attachment->samples != samples) {
+				MGLError * error = MGLError_New(TRACE, "color_attachments have different size or samples");
+				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+				return 0;
 			}
 		}
 
 		if (attachment->context != self) {
-			MGLError * error = MGLError_New(TRACE, "attachments[%d] belongs to a different context", i);
+			MGLError * error = MGLError_New(TRACE, "color_attachments[%d] belongs to a different context", i);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 	}
 
+	const GLMethods & gl = self->gl;
+
 	if (depth_attachment != Py_None) {
-		if (!PyObject_IsSubclass((PyObject *)Py_TYPE(depth_attachment), (PyObject *)&MGLFramebufferAttachment_Type)) {
-			MGLError * error = MGLError_New(TRACE, "depth_attachment must be a ModernGL.FramebufferAttachment not %s", Py_TYPE(depth_attachment)->tp_name);
+
+		if (Py_TYPE(depth_attachment) != &MGLTexture_Type && Py_TYPE(depth_attachment) != &MGLRenderbuffer_Type) {
+			MGLError * error = MGLError_New(TRACE, "depth_attachment must be a Renderbuffer or Texture not %s", Py_TYPE(depth_attachment)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -1044,11 +1057,36 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
-	} else {
-		// TODO: create depth renderbuffer here
-	}
 
-	const GLMethods & gl = self->gl;
+	} else {
+
+		MGLRenderbuffer * renderbuffer = MGLRenderbuffer_New();
+
+		renderbuffer->renderbuffer_obj = 0;
+		gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
+		gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->renderbuffer_obj);
+
+		if (samples == 0) {
+			gl.RenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+		} else {
+			gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24, width, height);
+		}
+
+		renderbuffer->width = width;
+		renderbuffer->height = height;
+		renderbuffer->components = 1;
+		renderbuffer->samples = samples;
+		renderbuffer->floats = true;
+		renderbuffer->depth = true;
+
+		Py_INCREF(self);
+		renderbuffer->context = self;
+
+		// TODO: check incref
+		Py_INCREF(renderbuffer);
+		depth_attachment = (PyObject *)renderbuffer;
+
+	}
 
 	int draw_framebuffer = 0;
 	gl.GetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint *)&draw_framebuffer);
@@ -1219,6 +1257,7 @@ MGLRenderbuffer * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 	renderbuffer->width = width;
 	renderbuffer->height = height;
 	renderbuffer->components = components;
+	renderbuffer->samples = samples;
 	renderbuffer->floats = floats ? true : false;
 	renderbuffer->depth = false;
 
@@ -1264,6 +1303,7 @@ MGLRenderbuffer * MGLContext_depth_renderbuffer(MGLContext * self, PyObject * ar
 	renderbuffer->width = width;
 	renderbuffer->height = height;
 	renderbuffer->components = 1;
+	renderbuffer->samples = samples;
 	renderbuffer->floats = true;
 	renderbuffer->depth = true;
 
@@ -1619,7 +1659,7 @@ PyTypeObject MGLContext_Type = {
 	MGLContext_tp_methods,                                  // tp_methods
 	0,                                                      // tp_members
 	MGLContext_tp_getseters,                                // tp_getset
-	&MGLObject_Type,                                        // tp_base
+	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set

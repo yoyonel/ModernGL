@@ -145,6 +145,11 @@ PyObject * MGLProgram_get_tess_control_shader(MGLProgram * self, void * closure)
 	}
 }
 
+MGLContext * MGLProgram_get_context(MGLProgram * self, void * closure) {
+	Py_INCREF(self->context);
+	return self->context;
+}
+
 PyGetSetDef MGLProgram_tp_getseters[] = {
 	{(char *)"uniforms", (getter)MGLProgram_get_uniforms, 0, 0, 0},
 	{(char *)"uniform_blocks", (getter)MGLProgram_get_uniform_blocks, 0, 0, 0},
@@ -160,6 +165,7 @@ PyGetSetDef MGLProgram_tp_getseters[] = {
 	{(char *)"geometry_shader", (getter)MGLProgram_get_geometry_shader, 0, 0, 0},
 	{(char *)"tess_evaluation_shader", (getter)MGLProgram_get_tess_evaluation_shader, 0, 0, 0},
 	{(char *)"tess_control_shader", (getter)MGLProgram_get_tess_control_shader, 0, 0, 0},
+	{(char *)"context", (getter)MGLProgram_get_context, 0, 0, 0},
 	{0},
 };
 
@@ -206,7 +212,7 @@ PyTypeObject MGLProgram_Type = {
 	MGLProgram_tp_methods,                                  // tp_methods
 	0,                                                      // tp_members
 	MGLProgram_tp_getseters,                                // tp_getset
-	&MGLContextMember_Type,                                 // tp_base
+	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set

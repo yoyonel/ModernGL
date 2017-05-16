@@ -8,5 +8,3 @@
 struct MGLContextMember : public MGLObject {
 	MGLContext * context;
 };
-
-extern PyTypeObject MGLContextMember_Type;

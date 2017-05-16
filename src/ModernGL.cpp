@@ -3,7 +3,6 @@
 #include "BufferAccess.hpp"
 #include "ComputeShader.hpp"
 #include "Context.hpp"
-#include "ContextMember.hpp"
 #include "EnableFlag.hpp"
 #include "Error.hpp"
 #include "Framebuffer.hpp"
@@ -12,9 +11,7 @@
 #include "Object.hpp"
 #include "Primitive.hpp"
 #include "Program.hpp"
-#include "ProgramMember.hpp"
 #include "ProgramStage.hpp"
-#include "ProgramStageMember.hpp"
 #include "Renderbuffer.hpp"
 #include "Shader.hpp"
 #include "Subroutine.hpp"
@@ -27,7 +24,6 @@
 #include "VertexArrayAttribute.hpp"
 #include "VertexArrayListAttribute.hpp"
 #include "VertexArrayMatrixAttribute.hpp"
-#include "VertexArrayMember.hpp"
 
 #include "GLContext.hpp"
 
@@ -148,17 +144,6 @@ bool MGL_InitializeModule(PyObject * module) {
 	}
 
 	{
-		if (PyType_Ready(&MGLContextMember_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register ContextMember in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return false;
-		}
-
-		Py_INCREF(&MGLContextMember_Type);
-
-		PyModule_AddObject(module, "ContextMember", (PyObject *)&MGLContextMember_Type);
-	}
-
-	{
 		if (PyType_Ready(&MGLEnableFlag_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register EnableFlag in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return false;
@@ -189,17 +174,6 @@ bool MGL_InitializeModule(PyObject * module) {
 		Py_INCREF(&MGLFramebuffer_Type);
 
 		PyModule_AddObject(module, "Framebuffer", (PyObject *)&MGLFramebuffer_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLFramebufferAttachment_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register FramebufferAttachment in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return false;
-		}
-
-		Py_INCREF(&MGLFramebufferAttachment_Type);
-
-		PyModule_AddObject(module, "FramebufferAttachment", (PyObject *)&MGLFramebufferAttachment_Type);
 	}
 
 	{
@@ -247,17 +221,6 @@ bool MGL_InitializeModule(PyObject * module) {
 	}
 
 	{
-		if (PyType_Ready(&MGLProgramMember_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register ProgramMember in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return false;
-		}
-
-		Py_INCREF(&MGLProgramMember_Type);
-
-		PyModule_AddObject(module, "ProgramMember", (PyObject *)&MGLProgramMember_Type);
-	}
-
-	{
 		if (PyType_Ready(&MGLProgramStage_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register ProgramStage in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return false;
@@ -266,17 +229,6 @@ bool MGL_InitializeModule(PyObject * module) {
 		Py_INCREF(&MGLProgramStage_Type);
 
 		PyModule_AddObject(module, "ProgramStage", (PyObject *)&MGLProgramStage_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLProgramStageMember_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register ProgramStageMember in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return false;
-		}
-
-		Py_INCREF(&MGLProgramStageMember_Type);
-
-		PyModule_AddObject(module, "ProgramStageMember", (PyObject *)&MGLProgramStageMember_Type);
 	}
 
 	{
@@ -409,17 +361,6 @@ bool MGL_InitializeModule(PyObject * module) {
 		Py_INCREF(&MGLVertexArrayMatrixAttribute_Type);
 
 		PyModule_AddObject(module, "VertexArrayMatrixAttribute", (PyObject *)&MGLVertexArrayMatrixAttribute_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLVertexArrayMember_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register VertexArrayMember in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return false;
-		}
-
-		Py_INCREF(&MGLVertexArrayMember_Type);
-
-		PyModule_AddObject(module, "VertexArrayMember", (PyObject *)&MGLVertexArrayMember_Type);
 	}
 
 	{

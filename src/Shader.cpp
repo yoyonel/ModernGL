@@ -78,9 +78,15 @@ PyObject * MGLShader_get_typename(MGLShader * self, void * closure) {
 	return PyUnicode_FromFormat("%s", SHADER_NAME[self->shader_slot]);
 }
 
+MGLContext * MGLShader_get_context(MGLShader * self, void * closure) {
+	Py_INCREF(self->context);
+	return self->context;
+}
+
 PyGetSetDef MGLShader_tp_getseters[] = {
 	{(char *)"source", (getter)MGLShader_get_source, 0, 0, 0},
 	{(char *)"typename", (getter)MGLShader_get_typename, 0, 0, 0},
+	{(char *)"context", (getter)MGLShader_get_context, 0, 0, 0},
 	{0},
 };
 
@@ -115,7 +121,7 @@ PyTypeObject MGLShader_Type = {
 	MGLShader_tp_methods,                                   // tp_methods
 	0,                                                      // tp_members
 	MGLShader_tp_getseters,                                 // tp_getset
-	&MGLContextMember_Type,                                 // tp_base
+	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set

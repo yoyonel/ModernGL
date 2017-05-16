@@ -144,7 +144,7 @@ PyObject * MGLVertexArrayAttribute_get_stride(MGLVertexArrayAttribute * self, vo
 	const GLMethods & gl = self->vertex_array->context->gl;
 	gl.BindVertexArray(self->vertex_array->vertex_array_obj);
 	gl.GetVertexAttribiv(self->location, GL_VERTEX_ATTRIB_ARRAY_STRIDE, &stride);
-	return PyBool_FromLong(stride);
+	return PyLong_FromLong(stride);
 }
 
 PyGetSetDef MGLVertexArrayAttribute_tp_getseters[] = {
@@ -187,7 +187,7 @@ PyTypeObject MGLVertexArrayAttribute_Type = {
 	MGLVertexArrayAttribute_tp_methods,                     // tp_methods
 	0,                                                      // tp_members
 	MGLVertexArrayAttribute_tp_getseters,                   // tp_getset
-	&MGLVertexArrayMember_Type,                             // tp_base
+	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set

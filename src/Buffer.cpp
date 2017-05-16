@@ -311,7 +311,7 @@ PyTypeObject MGLBuffer_Type = {
 	MGLBuffer_tp_methods,                                   // tp_methods
 	0,                                                      // tp_members
 	MGLBuffer_tp_getseters,                                 // tp_getset
-	&MGLContextMember_Type,                                 // tp_base
+	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set

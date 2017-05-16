@@ -173,9 +173,24 @@ PyObject * MGLTexture_get_height(MGLTexture * self, void * closure) {
 	return PyLong_FromLong(self->height);
 }
 
+PyObject * MGLTexture_get_components(MGLTexture * self, void * closure) {
+	return PyLong_FromLong(self->components);
+}
+
+PyObject * MGLTexture_get_samples(MGLTexture * self, void * closure) {
+	return PyLong_FromLong(self->samples);
+}
+
+PyObject * MGLTexture_get_depth(MGLTexture * self, void * closure) {
+	return PyBool_FromLong(self->depth);
+}
+
 PyGetSetDef MGLTexture_tp_getseters[] = {
 	{(char *)"width", (getter)MGLTexture_get_width, 0, 0, 0},
 	{(char *)"height", (getter)MGLTexture_get_height, 0, 0, 0},
+	{(char *)"components", (getter)MGLTexture_get_components, 0, 0, 0},
+	{(char *)"samples", (getter)MGLTexture_get_samples, 0, 0, 0},
+	{(char *)"depth", (getter)MGLTexture_get_depth, 0, 0, 0},
 	{0},
 };
 
@@ -210,7 +225,7 @@ PyTypeObject MGLTexture_Type = {
 	MGLTexture_tp_methods,                                  // tp_methods
 	0,                                                      // tp_members
 	MGLTexture_tp_getseters,                                // tp_getset
-	&MGLFramebufferAttachment_Type,                         // tp_base
+	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set

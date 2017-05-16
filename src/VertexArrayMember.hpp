@@ -8,5 +8,3 @@
 struct MGLVertexArrayMember : public MGLObject {
 	MGLVertexArray * vertex_array;
 };
-
-extern PyTypeObject MGLVertexArrayMember_Type;

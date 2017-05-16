@@ -62,7 +62,13 @@ PyMethodDef MGLComputeShader_tp_methods[] = {
 	{0},
 };
 
+MGLContext * MGLComputeShader_get_context(MGLComputeShader * self, void * closure) {
+	Py_INCREF(self->context);
+	return self->context;
+}
+
 PyGetSetDef MGLComputeShader_tp_getseters[] = {
+	{(char *)"context", (getter)MGLComputeShader_get_context, 0, 0, 0},
 	{0},
 };
 
@@ -97,7 +103,7 @@ PyTypeObject MGLComputeShader_Type = {
 	MGLComputeShader_tp_methods,                            // tp_methods
 	0,                                                      // tp_members
 	MGLComputeShader_tp_getseters,                          // tp_getset
-	&MGLContextMember_Type,                                 // tp_base
+	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set

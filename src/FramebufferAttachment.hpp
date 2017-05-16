@@ -19,5 +19,3 @@ struct MGLFramebufferAttachment : public MGLContextMember {
 	bool floats;
 	bool depth;
 };
-
-extern PyTypeObject MGLFramebufferAttachment_Type;

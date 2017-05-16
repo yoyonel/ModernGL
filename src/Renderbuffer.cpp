@@ -45,7 +45,32 @@ PyMethodDef MGLRenderbuffer_tp_methods[] = {
 	{0},
 };
 
+PyObject * MGLRenderbuffer_get_width(MGLRenderbuffer * self, void * closure) {
+	return PyLong_FromLong(self->width);
+}
+
+PyObject * MGLRenderbuffer_get_height(MGLRenderbuffer * self, void * closure) {
+	return PyLong_FromLong(self->height);
+}
+
+PyObject * MGLRenderbuffer_get_components(MGLRenderbuffer * self, void * closure) {
+	return PyLong_FromLong(self->components);
+}
+
+PyObject * MGLRenderbuffer_get_samples(MGLRenderbuffer * self, void * closure) {
+	return PyLong_FromLong(self->samples);
+}
+
+PyObject * MGLRenderbuffer_get_depth(MGLRenderbuffer * self, void * closure) {
+	return PyBool_FromLong(self->depth);
+}
+
 PyGetSetDef MGLRenderbuffer_tp_getseters[] = {
+	{(char *)"width", (getter)MGLRenderbuffer_get_width, 0, 0, 0},
+	{(char *)"height", (getter)MGLRenderbuffer_get_height, 0, 0, 0},
+	{(char *)"components", (getter)MGLRenderbuffer_get_components, 0, 0, 0},
+	{(char *)"samples", (getter)MGLRenderbuffer_get_samples, 0, 0, 0},
+	{(char *)"depth", (getter)MGLRenderbuffer_get_depth, 0, 0, 0},
 	{0},
 };
 
@@ -80,7 +105,7 @@ PyTypeObject MGLRenderbuffer_Type = {
 	MGLRenderbuffer_tp_methods,                             // tp_methods
 	0,                                                      // tp_members
 	MGLRenderbuffer_tp_getseters,                           // tp_getset
-	&MGLFramebufferAttachment_Type,                         // tp_base
+	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
