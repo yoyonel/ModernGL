@@ -455,7 +455,7 @@ class Context:
         else:
             color_attachments = tuple(x.mglo for x in color_attachments)
 
-        return Framebuffer.new(self.mglo.Framebuffer(color_attachments, depth_attachment.mglo))
+        return Framebuffer.new(self.mglo.framebuffer(color_attachments, depth_attachment.mglo))
 
     def renderbuffer(self, size, components=4, *, samples=0, floats=True) -> Renderbuffer:
         '''
