@@ -8,7 +8,7 @@ ctx = ModernGL.create_standalone_context()
 size = (500, 500)
 color_rbo = ctx.renderbuffer(size)
 depth_rbo = ctx.depth_renderbuffer(size)
-fbo = ctx.framebuffer([color_rbo, depth_rbo])
+fbo = ctx.framebuffer(color_rbo, depth_rbo)
 fbo.use()
 
 prog = ctx.program([

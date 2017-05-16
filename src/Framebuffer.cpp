@@ -43,26 +43,64 @@ PyObject * MGLFramebuffer_release(MGLFramebuffer * self) {
 }
 
 PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
-	int x;
-	int y;
-	int width;
-	int height;
+	PyObject * viewport;
 	int components;
 	int floats;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"(IIII)Ip",
-		&x,
-		&y,
-		&width,
-		&height,
+		"OIp",
+		&viewport,
 		&components,
 		&floats
 	);
 
 	if (!args_ok) {
 		return 0;
+	}
+
+	int x;
+	int y;
+	int width;
+	int height;
+
+	if (viewport != Py_None) {
+		if (Py_TYPE(viewport) != &PyTuple_Type) {
+			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+
+		if (PyTuple_GET_SIZE(viewport) == 4) {
+
+			x = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
+			y = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
+			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 2));
+			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 3));
+
+		} else if (PyTuple_GET_SIZE(viewport) == 2) {
+
+			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
+			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
+
+		} else {
+
+			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+
+		}
+
+		if (PyErr_Occurred()) {
+			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+
+	} else {
+
+		x = 0;
+		y = 0;
+		width = self->width;
+		height = self->height;
+
 	}
 
 	int size = floats ? (width * height * components * 4) : (height * ((width * components + 3) & ~3));

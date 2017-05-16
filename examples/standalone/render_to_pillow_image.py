@@ -58,4 +58,4 @@ fbo2 = ctx.framebuffer(color_rbo2, depth_rbo2)
 ctx.copy_framebuffer(fbo2, fbo)
 
 img = Image.frombytes('RGB', size, fbo2.read(viewport)).transpose(Image.FLIP_TOP_BOTTOM)
-img.save('T:/Fractal.png')
+img.save('Fractal.png')
