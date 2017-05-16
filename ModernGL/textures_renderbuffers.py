@@ -80,14 +80,7 @@ class Texture:
 
         return self.mglo.depth
 
-    def read(self, viewport=None):
-        '''
-            read
-        '''
-
-        self.mglo.read(viewport)
-
-    def write(self, data, viewport):
+    def write(self, data, viewport=None):
         '''
             write
         '''

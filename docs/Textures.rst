@@ -12,8 +12,7 @@ Textures
 .. autoclass:: Texture
 	:members: width, height, size, samples, components, depth
 
-	.. automethod:: read()
-	.. automethod:: write()
+	.. automethod:: write(self, data, viewport=None)
 	.. automethod:: use(location=0)
 
 .. toctree::
