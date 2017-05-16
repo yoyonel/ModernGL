@@ -305,6 +305,7 @@ class Varying:
 
         return self.mglo.number
 
+
 class VaryingMap:
     '''
         VaryingMap

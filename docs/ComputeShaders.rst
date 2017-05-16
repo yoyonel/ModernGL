@@ -9,7 +9,7 @@ ComputeShaders
 .. autoclass:: ComputeShader
 	:members: source
 
-	.. automethod:: run(x=1, y=1, z=1)
+	.. automethod:: run(size_x=1, size_y=1, size_z=1)
 
 .. toctree::
 	:maxdepth: 4

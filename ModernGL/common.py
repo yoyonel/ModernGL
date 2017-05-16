@@ -163,7 +163,7 @@ class Version:
     def __init__(self, major, minor):
         self._major = major
         self._minor = minor
-    
+
     @property
     def major(self) -> int:
         '''

@@ -10,7 +10,8 @@ from .common import InvalidObject
 from .buffers import Buffer, detect_format
 from .programs import ComputeShader, Shader, Program
 from .vertex_arrays import VertexArray
-from .textures_renderbuffers import Texture, Renderbuffer
+from .textures import Texture
+from .renderbuffers import Renderbuffer
 from .framebuffers import Framebuffer
 
 
@@ -336,7 +337,7 @@ class Context:
             Create a :py:class:`VertexArray`.
 
             This is an alias for:
-            
+
                 format = detect_format(program, attributes)
                 vertex_array(program, [(buffer, format, attributes)])
 
@@ -542,9 +543,9 @@ def create_standalone_context(size=(256, 256), require=None) -> Context:
         This method will create a hidden window with the
         initial size given in the parameters. This will
         set the  initial viewport as well.
-        
+
         It is reccommanded to use a separate framebuffer when rendering.
-        
+
         The size is not really important for the default framebuffer.
         It is only useful to get a viewport with a visible size.
         Size ``(1, 1)`` is great to save memory, however makes harder to
