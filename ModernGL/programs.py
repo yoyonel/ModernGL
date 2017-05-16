@@ -6,14 +6,26 @@
 
 from typing import Dict
 
-from .common import Object, Primitive
+from .common import InvalidObject, Primitive
 from .program_members import Uniform, UniformBlock, UniformMap, Varying, Attribute
 
 
-class ComputeShader(Object):
+class ComputeShader:
     '''
         ComputeShader
     '''
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject
 
     @staticmethod
     def new(obj):
@@ -26,7 +38,7 @@ class ComputeShader(Object):
         return res
 
 
-class Shader(Object):
+class Shader:
     '''
         Create a :py:class:`~ModernGL.Shader` using:
 
@@ -36,6 +48,18 @@ class Shader(Object):
             - :py:meth:`~ModernGL.Context.TessEvaluationShader`
             - :py:meth:`~ModernGL.Context.TessControlShader`
     '''
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject
 
     @staticmethod
     def new(obj):
@@ -71,10 +95,22 @@ class Shader(Object):
         return self.mglo.typename
 
 
-class Program(Object):
+class Program:
     '''
         Program
     '''
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject
 
     @staticmethod
     def new(obj):

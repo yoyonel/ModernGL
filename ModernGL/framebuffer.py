@@ -2,13 +2,25 @@
     framebuffer
 '''
 
-from .common import Object
+from .common import InvalidObject
 
 
-class Framebuffer(Object):
+class Framebuffer:
     '''
         Framebuffer
     '''
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject
 
     @staticmethod
     def new(obj):

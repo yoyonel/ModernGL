@@ -6,16 +6,15 @@
 
 from ModernGL import ModernGL as mgl
 
-from .common import Object
+from .common import InvalidObject
 from .buffers import Buffer, detect_format
 from .programs import ComputeShader, Shader, Program
 from .vertex_arrays import VertexArray
-from .textures import Texture
-from .renderbuffers import Renderbuffer
+from .textures_renderbuffers import Texture, Renderbuffer
 from .framebuffer import Framebuffer
 
 
-class Context(Object):
+class Context:
     '''
         Create a :py:class:`Context` using:
 
@@ -35,6 +34,18 @@ class Context(Object):
             - :py:meth:`Context.Texture`
             - :py:meth:`Context.VertexArray`
     '''
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject
 
     @staticmethod
     def new(obj):
@@ -375,7 +386,7 @@ class Context(Object):
                 :py:class:`Framebuffer`
         '''
 
-        if type(color_attachments) is Texture or type(color_attachments) is Renderbuffer:
+        if isinstance(color_attachments, (Texture, Renderbuffer)):
             color_attachments = (color_attachments.mglo,)
 
         else:

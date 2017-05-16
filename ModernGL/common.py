@@ -2,9 +2,9 @@
     ModernGL Common
 '''
 
-from ModernGL import ModernGL as mgl
-
 # pylint: disable=too-few-public-methods, using-constant-test
+
+from ModernGL import ModernGL as mgl
 
 
 if False:
@@ -31,24 +31,6 @@ class InvalidObject:
         A ModernGL object turns into an InvalidObject
         once the release method is successfully called.
     '''
-
-
-class Object:
-    '''
-        Placeholder Object
-    '''
-
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError()
-
-    def release(self):
-        '''
-            Release the ModernGL object.
-        '''
-
-        self.mglo.release()
-        self.__class__ = InvalidObject
 
 
 class EnableFlag:

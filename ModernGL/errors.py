@@ -2,9 +2,10 @@
     ModernGL Errors
 '''
 
+# pylint: disable=using-constant-test
+
 from ModernGL import ModernGL as mgl
 
-# pylint: disable=using-constant-test
 
 if False:
     mgl.Error = Exception

@@ -4,15 +4,19 @@
 
 # pylint: disable=too-few-public-methods
 
-from .common import Object, TRIANGLES, POINTS
+from .common import InvalidObject, TRIANGLES, POINTS
 from .programs import Program
 from .buffers import Buffer
 
 
-class VertexArrayAttribute(Object):
+class VertexArrayAttribute:
     '''
         VertexArrayAttribute
     '''
+
+    def __init__(self):
+        self.mglo = {}
+        raise NotImplementedError('VertexArrayAttributeMap')
 
     @staticmethod
     def new(obj):
@@ -118,10 +122,22 @@ class VertexArrayAttributeMap:
         return len(self.mglo)
 
 
-class VertexArray(Object):
+class VertexArray:
     '''
         VertexArray
     '''
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject
 
     @staticmethod
     def new(obj):
