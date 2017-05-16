@@ -148,23 +148,15 @@ MGLProgramStage * MGLProgramStage_New() {
 	return self;
 }
 
-void MGLProgramStage_Complete(MGLProgramStage * program_stage, const GLMethods & gl) {
+void MGLProgramStage_Complete(MGLProgramStage * program_stage, int shader_type, int program_obj, const GLMethods & gl) {
 	PyObject * subroutines = PyDict_New();
 	PyObject * subroutine_uniforms = PyDict_New();
 
-	int shader_type = program_stage->shader->shader_type;
-
 	int num_subroutines = 0;
-	gl.GetProgramStageiv(program_stage->program_obj, shader_type, GL_ACTIVE_SUBROUTINES, &num_subroutines);
+	gl.GetProgramStageiv(program_obj, shader_type, GL_ACTIVE_SUBROUTINES, &num_subroutines);
 
 	int num_subroutine_uniforms = 0;
-	gl.GetProgramStageiv(program_stage->program_obj, shader_type, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_subroutine_uniforms);
-
-	int num_subroutine_uniform_locations = 0;
-	gl.GetProgramStageiv(program_stage->program_obj, shader_type, GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS, &num_subroutine_uniform_locations);
-
-	// program_stage->num_subroutine_uniform_locations = num_subroutine_uniform_locations;
-	// program_stage->subroutine_uniform_locations = new unsigned[num_subroutine_uniform_locations];
+	gl.GetProgramStageiv(program_obj, shader_type, GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_subroutine_uniforms);
 
 	for (int i = 0; i < num_subroutines; ++i) {
 		MGLSubroutine * subroutine = MGLSubroutine_New();
@@ -172,11 +164,9 @@ void MGLProgramStage_Complete(MGLProgramStage * program_stage, const GLMethods &
 		int name_len = 0;
 		char name[256];
 
-		gl.GetActiveSubroutineName(program_stage->program_obj, shader_type, i, 256, &name_len, name);
+		gl.GetActiveSubroutineName(program_obj, shader_type, i, 256, &name_len, name);
 
-		subroutine->index = gl.GetSubroutineIndex(program_stage->program_obj, shader_type, name);
-
-		// subroutine->program_obj = program_stage->program_obj;
+		subroutine->index = gl.GetSubroutineIndex(program_obj, shader_type, name);
 		subroutine->name = PyUnicode_FromStringAndSize(name, name_len);
 
 		MGLSubroutine_Complete(subroutine);
@@ -191,11 +181,9 @@ void MGLProgramStage_Complete(MGLProgramStage * program_stage, const GLMethods &
 		int name_len = 0;
 		char name[256];
 
-		gl.GetActiveSubroutineUniformName(program_stage->program_obj, shader_type, i, 256, &name_len, name);
+		gl.GetActiveSubroutineUniformName(program_obj, shader_type, i, 256, &name_len, name);
 
-		subroutine_uniform->location = gl.GetSubroutineUniformLocation(program_stage->program_obj, shader_type, name);
-
-		// subroutine_uniform->program_obj = program_stage->program_obj;
+		subroutine_uniform->location = gl.GetSubroutineUniformLocation(program_obj, shader_type, name);
 		subroutine_uniform->name = PyUnicode_FromStringAndSize(name, name_len);
 
 		MGLSubroutineUniform_Complete(subroutine_uniform);

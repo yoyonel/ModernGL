@@ -6,13 +6,12 @@
 #include "Shader.hpp"
 
 struct MGLProgramStage : public MGLProgramMember {
-	MGLShader * shader;
-
 	PyObject * subroutines;
 	PyObject * subroutine_uniforms;
+	int shader_type;
 };
 
 extern PyTypeObject MGLProgramStage_Type;
 
 MGLProgramStage * MGLProgramStage_New();
-void MGLProgramStage_Complete(MGLProgramStage * program_stage, const GLMethods & gl);
+void MGLProgramStage_Complete(MGLProgramStage * program_stage, int shader_type, int program_obj, const GLMethods & gl);
