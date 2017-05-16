@@ -1,5 +1,5 @@
 '''
-    ModernGL Vertex array members
+    ModernGL vertex arrays
 '''
 
 # pylint: disable=too-few-public-methods
@@ -71,21 +71,21 @@ class VertexArrayAttribute:
 
         return self.mglo.default
 
-    def bind(self, buffer, offset=0, stride=0, divisor=0):
+    def bind(self, buffer, offset=0, stride=0, divisor=0) -> None:
         '''
             bind
         '''
 
         self.mglo.bind(buffer.mglo, offset, stride, divisor)
 
-    def enable(self):
+    def enable(self) -> None:
         '''
             enable
         '''
 
         self.mglo.enable()
 
-    def disable(self):
+    def disable(self) -> None:
         '''
             disable
         '''
@@ -105,7 +105,7 @@ class VertexArrayAttributeMap:
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = VertexArrayAttributeMap.__new__(VertexArrayAttributeMap)
@@ -142,7 +142,7 @@ class VertexArray:
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = VertexArray.__new__(VertexArray)
@@ -208,9 +208,9 @@ class VertexArray:
                 instances: The number of instances.
         '''
 
-        self.mglo.render(mode, vertices, first, instances)
+        self.mglo.render(mode.mglo, vertices, first, instances)
 
-    def transform(self, buf, mode=POINTS, vertices=-1, *, first=0, instances=1):
+    def transform(self, buffer, mode=POINTS, vertices=-1, *, first=0, instances=1):
         '''
             Transform vertices.
             Stores the output in a single buffer.
@@ -218,7 +218,7 @@ class VertexArray:
             the input primitive of the GeometryShader.
 
             Args:
-                output: The buffer to store the output.
+                buffer: The buffer to store the output.
                 mode: By default `TRIANGLES` will be used.
                 vertices: The number of vertices to transform.
 
@@ -227,4 +227,4 @@ class VertexArray:
                 instances: The number of instances.
         '''
 
-        self.mglo.transform(buf.mglo, mode, vertices, first, instances)
+        self.mglo.transform(buffer.mglo, mode.mglo, vertices, first, instances)

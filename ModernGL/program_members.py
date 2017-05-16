@@ -1,5 +1,5 @@
 '''
-    ModernGL Program members
+    ModernGL program members
 '''
 
 # pylint: disable=too-few-public-methods
@@ -17,7 +17,7 @@ class Uniform:
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = Uniform.__new__(Uniform)
@@ -27,7 +27,11 @@ class Uniform:
     @property
     def name(self) -> str:
         '''
-            name
+            The name of the uniform.
+            The name does not contain leading `[0]`.
+            The name may contain `[ ]` when the uniform is part of a struct.
+
+            :type: str
         '''
 
         return self.mglo.name
@@ -35,7 +39,9 @@ class Uniform:
     @property
     def location(self) -> int:
         '''
-            location
+            The location of the uniform.
+
+            :type: int
         '''
 
         return self.mglo.location
@@ -43,7 +49,7 @@ class Uniform:
     @property
     def dimension(self) -> int:
         '''
-            The uniform dimension.
+            The dimension of the uniform.
 
             +-----------------+-----------+
             | GLSL type       | dimension |
@@ -130,6 +136,8 @@ class Uniform:
             +-----------------+-----------+
             | dmat4           | 16        |
             +-----------------+-----------+
+
+            :type: int
         '''
 
         return self.mglo.dimension
@@ -137,7 +145,10 @@ class Uniform:
     @property
     def array_length(self) -> int:
         '''
-            array_length
+            The length of the array of the uniform.
+            The array_length is `1` for non array uniforms.
+
+            :type: int
         '''
 
         return self.mglo.array_length
@@ -145,7 +156,11 @@ class Uniform:
     @property
     def value(self):
         '''
-            value
+            The value of the uniform.
+            Reading the value of the uniform may force the GPU to sync.
+
+            The value must be a tuple for non array uniforms.
+            The value must be a list of tuples for array uniforms.
         '''
 
         return self.mglo.value
@@ -153,6 +168,38 @@ class Uniform:
     @value.setter
     def value(self, value):
         self.mglo.value = value
+
+
+class UniformMap:
+    '''
+        UniformMap
+    '''
+
+    def __init__(self):
+        self.mglo = {}
+        raise NotImplementedError('UniformMap')
+
+    @staticmethod
+    def new(obj):
+        '''
+            For internal use only.
+        '''
+
+        res = UniformMap.__new__(UniformMap)
+        res.mglo = obj
+        return res
+
+    def __getitem__(self, key) -> Uniform:
+        '''
+        '''
+
+        return Uniform.new(self.mglo[key])
+
+    def __contains__(self, key):
+        return key in self.mglo
+
+    def __len__(self):
+        return len(self.mglo)
 
 
 class UniformBlock:
@@ -167,7 +214,7 @@ class UniformBlock:
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = UniformBlock.__new__(UniformBlock)
@@ -191,6 +238,38 @@ class UniformBlock:
         return self.mglo.location
 
 
+class UniformBlockMap:
+    '''
+        UniformBlockMap
+    '''
+
+    def __init__(self):
+        self.mglo = {}
+        raise NotImplementedError('UniformBlockMap')
+
+    @staticmethod
+    def new(obj):
+        '''
+            For internal use only.
+        '''
+
+        res = UniformBlockMap.__new__(UniformBlockMap)
+        res.mglo = obj
+        return res
+
+    def __getitem__(self, key) -> UniformBlock:
+        '''
+        '''
+
+        return UniformBlock.new(self.mglo[key])
+
+    def __contains__(self, key):
+        return key in self.mglo
+
+    def __len__(self):
+        return len(self.mglo)
+
+
 class Varying:
     '''
         Varying
@@ -203,7 +282,7 @@ class Varying:
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = Varying.__new__(Varying)
@@ -226,31 +305,30 @@ class Varying:
 
         return self.mglo.number
 
-
-class UniformMap:
+class VaryingMap:
     '''
-        UniformMap
+        VaryingMap
     '''
 
     def __init__(self):
         self.mglo = {}
-        raise NotImplementedError('UniformMap')
+        raise NotImplementedError('VaryingMap')
 
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
-        res = UniformMap.__new__(UniformMap)
+        res = VaryingMap.__new__(VaryingMap)
         res.mglo = obj
         return res
 
-    def __getitem__(self, key) -> Uniform:
+    def __getitem__(self, key) -> Varying:
         '''
         '''
 
-        return Uniform.new(self.mglo[key])
+        return Varying.new(self.mglo[key])
 
     def __contains__(self, key):
         return key in self.mglo
@@ -271,7 +349,7 @@ class Attribute:
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = Attribute.__new__(Attribute)
@@ -436,7 +514,7 @@ class AttributeMap:
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = AttributeMap.__new__(AttributeMap)
@@ -468,7 +546,7 @@ class Subroutine:
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = Subroutine.__new__(Subroutine)
@@ -488,7 +566,7 @@ class SubroutineUniform:
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = SubroutineUniform.__new__(SubroutineUniform)

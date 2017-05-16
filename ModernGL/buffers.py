@@ -7,7 +7,15 @@ from .common import InvalidObject
 
 class BufferAccess:
     '''
-        BufferAccess
+        :py:class:`BufferAccess` objects are designed to access
+        a :py:class:`Buffer`'s content inside a ``with`` statement.
+        The buffer is mapped and unmapped only once.
+
+        example::
+
+            with vbo.access(...) as access:
+                access.read(...)
+                access.write(...)
     '''
 
     def __init__(self):
@@ -24,23 +32,25 @@ class BufferAccess:
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = BufferAccess.__new__(BufferAccess)
         res.mglo = obj
         return res
 
-    def open(self):
+    def open(self) -> None:
         '''
             Map the buffer.
+            This method is called once ``__enter__`` is called.
         '''
 
         self.mglo.open()
 
-    def close(self):
+    def close(self) -> None:
         '''
             Unmap the buffer.
+            This method is called once ``__exit__`` is called.
         '''
 
         self.mglo.close()
@@ -61,7 +71,7 @@ class BufferAccess:
 
         return self.mglo.read(size, offset)
 
-    def write(self, data, offset=0):
+    def write(self, data, offset=0) -> None:
         '''
             Write the content.
 
@@ -101,7 +111,7 @@ class BufferAccess:
 
 class Buffer:
     '''
-        Create a `Buffer` using `Context.buffer`.
+        Create a :py:class:`Buffer` using :py:meth:`Context.buffer`.
     '''
 
     def __init__(self):
@@ -119,7 +129,7 @@ class Buffer:
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = Buffer.__new__(Buffer)
@@ -142,27 +152,27 @@ class Buffer:
 
         return self.mglo.dynamic
 
-    def access(self, size=-1, offset=0, readonly=False) -> BufferAccess:
+    def access(self, *, size=-1, offset=0, readonly=False) -> BufferAccess:
         '''
-            Create a buffer access object.
+            Create a :py:class:`BufferAccess` object.
 
             Keyword Args:
-                size: The size.
-                offset: The offset.
-                readonly: The readonly.
+                size (int): The size. Value `-1` means all.
+                offset (int): The offset.
+                readonly (bool): The readonly.
         '''
 
         return BufferAccess.new(self.mglo.access(size, offset, readonly))
 
-    def read(self, size=-1, offset=0) -> bytes:
+    def read(self, size=-1, *, offset=0) -> bytes:
         '''
             Read the content.
 
             Args:
-                size: The size. Value `-1` means all.
+                size (int): The size. Value ``-1`` means all.
 
             Keyword Args:
-                offset: The offset.
+                offset (int): The offset.
 
             Returns:
                 bytes: binary data.
@@ -170,7 +180,7 @@ class Buffer:
 
         return self.mglo.read(size, offset)
 
-    def write(self, data, offset=0):
+    def write(self, data, offset=0) -> None:
         '''
             Write the content.
 
@@ -183,14 +193,14 @@ class Buffer:
 
         self.mglo.write(data, offset)
 
-    def orphan(self):
+    def orphan(self) -> None:
         '''
             Orphan the buffer.
         '''
 
         self.mglo.orphan()
 
-    def bind_to_uniform_block(self, location=0):
+    def bind_to_uniform_block(self, location=0) -> None:
         '''
             Bind the buffer to a uniform block.
 
@@ -200,7 +210,7 @@ class Buffer:
 
         self.mglo.bind_to_uniform_block(location)
 
-    def bind_to_storage_buffer(self, location=0):
+    def bind_to_storage_buffer(self, location=0) -> None:
         '''
             Bind the buffer to a shader storage buffer.
 
@@ -213,12 +223,13 @@ class Buffer:
 
 def detect_format(program, attributes) -> str:
     '''
-        detect_format
+        Detect format for vertex attributes.
+        The format returned does not contain padding.
     '''
 
     def fmt(attr):
         '''
-            size and shape
+            For internal use only.
         '''
 
         return attr.array_length * attr.dimension, attr.shape

@@ -1,5 +1,5 @@
 '''
-    framebuffer
+    ModernGL framebuffers
 '''
 
 from .common import InvalidObject
@@ -7,7 +7,7 @@ from .common import InvalidObject
 
 class Framebuffer:
     '''
-        Framebuffer
+        Create a :py:class:`Framebuffer` using :py:meth:`Context.framebuffer`.
     '''
 
     def __init__(self):
@@ -32,14 +32,14 @@ class Framebuffer:
         res.mglo = obj
         return res
 
-    def read(self, viewport=None, components=3, floats=False) -> bytes:
+    def read(self, viewport=None, components=3, *, floats=False) -> bytes:
         '''
             Read the framebuffer content.
         '''
 
         return self.mglo.read(viewport, components, floats)
 
-    def use(self):
+    def use(self) -> None:
         '''
             Bind the framebuffer. Set the target for the
             `VertexArray.render` or `VertexArray.transform` methods.

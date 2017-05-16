@@ -74,8 +74,6 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	PyObject * result = PyBytes_FromStringAndSize(0, size);
 	char * data = PyBytes_AS_STRING(result);
 
-	// TODO: bind maybe (check)
-
 	const GLMethods & gl = self->context->gl;
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
@@ -96,7 +94,6 @@ glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT 
 
 PyMethodDef MGLFramebuffer_tp_methods[] = {
 	{"release", (PyCFunction)MGLFramebuffer_release, METH_NOARGS, 0},
-	// {"blit", (PyCFunction)MGLFramebuffer_blit, METH_VARARGS, 0},
 	{"read", (PyCFunction)MGLFramebuffer_read, METH_VARARGS, 0},
 	{"use", (PyCFunction)MGLFramebuffer_use, METH_NOARGS, 0},
 	{0},

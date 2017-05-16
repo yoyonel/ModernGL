@@ -1,5 +1,5 @@
 '''
-    Placeholder
+    ModernGL programs
 '''
 
 # pylint: disable=too-few-public-methods
@@ -37,16 +37,31 @@ class ComputeShader:
         res.mglo = obj
         return res
 
+    @property
+    def source(self) -> str:
+        '''
+            The source code of the compute shader.
+        '''
+
+        return self.mglo.source
+
+    def run(self, x=1, y=1, z=1) -> None:
+        '''
+            Run the compute shader.
+        '''
+
+        return self.mglo.run(x, y, z)
+
 
 class Shader:
     '''
-        Create a :py:class:`~ModernGL.Shader` using:
+        Create a :py:class:`Shader` using:
 
-            - :py:meth:`~ModernGL.Context.VertexShader`
-            - :py:meth:`~ModernGL.Context.FragmentShader`
-            - :py:meth:`~ModernGL.Context.GeometryShader`
-            - :py:meth:`~ModernGL.Context.TessEvaluationShader`
-            - :py:meth:`~ModernGL.Context.TessControlShader`
+            - :py:meth:`Context.vertex_shader`
+            - :py:meth:`Context.fragment_shader`
+            - :py:meth:`Context.geometry_shader`
+            - :py:meth:`Context.tess_evaluation_shader`
+            - :py:meth:`Context.tess_control_shader`
     '''
 
     def __init__(self):
@@ -64,7 +79,7 @@ class Shader:
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = Shader.__new__(Shader)
@@ -115,7 +130,7 @@ class Program:
     @staticmethod
     def new(obj):
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = Program.__new__(Program)

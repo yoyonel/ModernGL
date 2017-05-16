@@ -35,19 +35,13 @@ PyObject * MGLTexture_tp_str(MGLTexture * self) {
 	return PyUnicode_FromFormat("<ModernGL.Texture>");
 }
 
-PyObject * MGLTexture_update(MGLTexture * self, PyObject * args) {
-	PyObject * data;
-	PyObject * size;
-	PyObject * offset;
-
-	// TODO: accept viewport (0, 0, w, h) and size (w, h)
+PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
+	PyObject * viewport;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OOO",
-		&data,
-		&size,
-		&offset
+		"O",
+		&viewport
 	);
 
 	if (!args_ok) {
@@ -60,56 +54,115 @@ PyObject * MGLTexture_update(MGLTexture * self, PyObject * args) {
 
 	int x;
 	int y;
+	int width;
+	int height;
 
+	if (viewport != Py_None) {
+		if (Py_TYPE(viewport) != &PyTuple_Type) {
+			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+
+		if (PyTuple_GET_SIZE(viewport) == 4) {
+
+			x = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
+			y = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
+			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 2));
+			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 3));
+
+		} else if (PyTuple_GET_SIZE(viewport) == 2) {
+
+			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
+			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
+
+		} else {
+
+			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+
+		}
+
+		if (PyErr_Occurred()) {
+			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return 0;
+		}
+
+	} else {
+
+		x = 0;
+		y = 0;
+		width = self->width;
+		height = self->height;
+
+	}
+
+	PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+	return 0;
+}
+
+PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
+	PyObject * data;
+	PyObject * viewport;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"OO",
+		&data,
+		&viewport
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (self->samples) {
+		// TODO: error
+	}
+
+	int x;
+	int y;
 	int width;
 	int height;
 
 	Py_buffer buffer_view;
 
-	if (size != Py_None) {
-		if (Py_TYPE(size) != &PyTuple_Type) {
+	if (viewport != Py_None) {
+		if (Py_TYPE(viewport) != &PyTuple_Type) {
 			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return 0;
 		}
 
-		if (PyTuple_GET_SIZE(size) != 2) {
+		if (PyTuple_GET_SIZE(viewport) == 4) {
+
+			x = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
+			y = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
+			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 2));
+			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 3));
+
+		} else if (PyTuple_GET_SIZE(viewport) == 2) {
+
+			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
+			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
+
+		} else {
+
 			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return 0;
-		}
 
-		width = PyLong_AsLong(PyTuple_GET_ITEM(size, 0));
-		height = PyLong_AsLong(PyTuple_GET_ITEM(size, 1));
+		}
 
 		if (PyErr_Occurred()) {
 			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return 0;
 		}
+
 	} else {
-		width = self->width;
-		height = self->height;
-	}
 
-	if (offset != Py_None) {
-		if (Py_TYPE(offset) != &PyTuple_Type) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		if (PyTuple_GET_SIZE(offset) != 2) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-
-		x = PyLong_AsLong(PyTuple_GET_ITEM(offset, 0));
-		y = PyLong_AsLong(PyTuple_GET_ITEM(offset, 1));
-
-		if (PyErr_Occurred()) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return 0;
-		}
-	} else {
 		x = 0;
 		y = 0;
+		width = self->width;
+		height = self->height;
+
 	}
 
 	int expected_size = self->floats ? (width * height * self->components * 4) : (height * ((width * self->components + 3) & ~3));
@@ -171,7 +224,8 @@ PyObject * MGLTexture_release(MGLTexture * self) {
 }
 
 PyMethodDef MGLTexture_tp_methods[] = {
-	{"update", (PyCFunction)MGLTexture_update, METH_VARARGS, 0},
+	{"read", (PyCFunction)MGLTexture_read, METH_VARARGS, 0},
+	{"write", (PyCFunction)MGLTexture_write, METH_VARARGS, 0},
 	{"use", (PyCFunction)MGLTexture_use, METH_VARARGS, 0},
 	{"release", (PyCFunction)MGLTexture_release, METH_NOARGS, 0},
 	{0},

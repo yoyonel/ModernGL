@@ -4,8 +4,6 @@ ModernGL
 .. automodule:: ModernGL
 
 	.. currentmodule:: ModernGL
-	.. autofunction:: ModernGL.create_context
-	.. autofunction:: ModernGL.create_standalone_context
 
 .. toctree::
 	:maxdepth: 4
@@ -13,23 +11,16 @@ ModernGL
 
 	Context <Context.rst>
 
-	Program <Program.rst>
-	Shader <Shader.rst>
+	Shaders and Programs <ShadersAndPrograms.rst>
 
-	Buffer <Buffer.rst>
-	VertexArray <VertexArray.rst>
+	Buffers <Buffers.rst>
+	VertexArrays <VertexArrays.rst>
+	Textures <Textures.rst>
 
-	Framebuffer <Framebuffer.rst>
+	Framebuffers <Framebuffers.rst>
+	Renderbuffers <Renderbuffers.rst>
+	ComputeShaders <ComputeShaders.rst>
 
-	Texture <Texture.rst>
-	Renderbuffer <Renderbuffer.rst>
-
-	MultisampleTexture <MultisampleTexture.rst>
-	MultisampleRenderbuffer <MultisampleRenderbuffer.rst>
-
-	ComputeShader <ComputeShader.rst>
-
+	InvalidObjects <InvalidObjects.rst>
 	Constants <Constants.rst>
-	Error <Error.rst>
-
-	Others <Others.rst>
+	Errors <Errors.rst>

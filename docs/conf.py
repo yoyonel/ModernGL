@@ -159,6 +159,6 @@ texinfo_documents = [
 def setup(app):
     app.add_stylesheet('css/custom.css')
 
-# autodoc_member_order = 'bysource'
-autodoc_member_order = 'groupwise'
-# add_module_names = False
+autodoc_member_order = 'bysource'
+# autodoc_member_order = 'groupwise'
+add_module_names = False

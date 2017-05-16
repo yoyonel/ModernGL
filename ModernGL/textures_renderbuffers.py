@@ -1,5 +1,5 @@
 '''
-    Placeholder
+    ModernGL textures and renderbuffers
 '''
 
 from .common import InvalidObject
@@ -64,12 +64,35 @@ class Texture:
 
         return self.mglo.samples
 
-    def update(self, data, size=None, *, offset=(0, 0)):
+    @property
+    def components(self) -> int:
         '''
-            update
+            Texture components
         '''
 
-        self.mglo.update(data, size, offset)
+        return self.mglo.components
+
+    @property
+    def depth(self) -> bool:
+        '''
+            Texture depth
+        '''
+
+        return self.mglo.depth
+
+    def read(self, viewport=None):
+        '''
+            read
+        '''
+
+        self.mglo.read(viewport)
+
+    def write(self, data, viewport):
+        '''
+            write
+        '''
+
+        self.mglo.write(data, viewport)
 
     def use(self, location=0):
         '''
@@ -143,3 +166,19 @@ class Renderbuffer:
         '''
 
         return self.mglo.samples
+
+    @property
+    def components(self) -> bool:
+        '''
+            Renderbuffer components
+        '''
+
+        return self.mglo.components
+
+    @property
+    def depth(self) -> bool:
+        '''
+            Renderbuffer depth
+        '''
+
+        return self.mglo.depth

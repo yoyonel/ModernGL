@@ -1,5 +1,5 @@
 '''
-    ModernGL Common
+    ModernGL common
 '''
 
 # pylint: disable=too-few-public-methods, using-constant-test
@@ -33,8 +33,8 @@ Error = mgl.Error
 
 class InvalidObject:
     '''
-        A ModernGL object turns into an InvalidObject
-        once the release method is successfully called.
+        A ModernGL object turns into an `InvalidObject`
+        once the `release` method is successfully called.
     '''
 
 
@@ -48,9 +48,9 @@ class EnableFlag:
         raise NotImplementedError('EnableFlag')
 
     @staticmethod
-    def new(obj):
+    def new(obj) -> 'EnableFlag':
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = EnableFlag.__new__(EnableFlag)
@@ -58,22 +58,22 @@ class EnableFlag:
         return res
 
 
-BLEND = mgl.BLEND
+BLEND = EnableFlag.new(mgl.BLEND)
 '''
     GL_BLEND
 '''
 
-DEPTH_TEST = mgl.DEPTH_TEST
+DEPTH_TEST = EnableFlag.new(mgl.DEPTH_TEST)
 '''
     GL_DEPTH_TEST
 '''
 
-CULL_FACE = mgl.CULL_FACE
+CULL_FACE = EnableFlag.new(mgl.CULL_FACE)
 '''
     GL_CULL_FACE
 '''
 
-MULTISAMPLE = mgl.MULTISAMPLE
+MULTISAMPLE = EnableFlag.new(mgl.MULTISAMPLE)
 '''
     GL_MULTISAMPLE
 '''
@@ -89,9 +89,9 @@ class Primitive:
         raise NotImplementedError('Primitive')
 
     @staticmethod
-    def new(obj):
+    def new(obj) -> 'Primitive':
         '''
-            internal use only
+            For internal use only.
         '''
 
         res = Primitive.__new__(Primitive)
@@ -99,57 +99,57 @@ class Primitive:
         return res
 
 
-TRIANGLES = mgl.TRIANGLES
+TRIANGLES = Primitive.new(mgl.TRIANGLES)
 '''
     GL_TRIANGLES
 '''
 
-TRIANGLE_STRIP = mgl.TRIANGLE_STRIP
+TRIANGLE_STRIP = Primitive.new(mgl.TRIANGLE_STRIP)
 '''
     GL_TRIANGLE_STRIP
 '''
 
-TRIANGLE_FAN = mgl.TRIANGLE_FAN
+TRIANGLE_FAN = Primitive.new(mgl.TRIANGLE_FAN)
 '''
     GL_TRIANGLE_FAN
 '''
 
-LINES = mgl.LINES
+LINES = Primitive.new(mgl.LINES)
 '''
     GL_LINES
 '''
 
-LINE_STRIP = mgl.LINE_STRIP
+LINE_STRIP = Primitive.new(mgl.LINE_STRIP)
 '''
     GL_LINE_STRIP
 '''
 
-LINE_LOOP = mgl.LINE_LOOP
+LINE_LOOP = Primitive.new(mgl.LINE_LOOP)
 '''
     GL_LINE_LOOP
 '''
 
-POINTS = mgl.POINTS
+POINTS = Primitive.new(mgl.POINTS)
 '''
     GL_POINTS
 '''
 
-LINE_STRIP_ADJACENCY = mgl.LINE_STRIP_ADJACENCY
+LINE_STRIP_ADJACENCY = Primitive.new(mgl.LINE_STRIP_ADJACENCY)
 '''
     GL_LINE_STRIP_ADJACENCY
 '''
 
-LINES_ADJACENCY = mgl.LINES_ADJACENCY
+LINES_ADJACENCY = Primitive.new(mgl.LINES_ADJACENCY)
 '''
     GL_LINES_ADJACENCY
 '''
 
-TRIANGLE_STRIP_ADJACENCY = mgl.TRIANGLE_STRIP_ADJACENCY
+TRIANGLE_STRIP_ADJACENCY = Primitive.new(mgl.TRIANGLE_STRIP_ADJACENCY)
 '''
     GL_TRIANGLE_STRIP_ADJACENCY
 '''
 
-TRIANGLES_ADJACENCY = mgl.TRIANGLES_ADJACENCY
+TRIANGLES_ADJACENCY = Primitive.new(mgl.TRIANGLES_ADJACENCY)
 '''
     GL_TRIANGLES_ADJACENCY
 '''
@@ -161,8 +161,24 @@ class Version:
     '''
 
     def __init__(self, major, minor):
-        self.major = major
-        self.minor = minor
+        self._major = major
+        self._minor = minor
+    
+    @property
+    def major(self) -> int:
+        '''
+            major
+        '''
+
+        return self._major
+
+    @property
+    def minor(self) -> int:
+        '''
+            minor
+        '''
+
+        return self._minor
 
 
 CORE_330 = Version(3, 3)
