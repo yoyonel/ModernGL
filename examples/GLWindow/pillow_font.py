@@ -22,7 +22,7 @@ draw = ImageDraw.Draw(im)
 draw.text((1, 0), msg, font = font, fill = (0, 0, 0, 255))
 del draw
 
-tex = ctx.Texture(im.size, 4, im.tobytes())
+tex = ctx.texture(im.size, 4, im.tobytes())
 tex.use()
 
 # Shaders & Program
