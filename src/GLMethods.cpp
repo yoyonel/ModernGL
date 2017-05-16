@@ -748,6 +748,11 @@ bool GLMethods::load() {
 		this->GetProgramStageiv = FakeGetProgramStageiv;
 	}
 
+	// GetActiveSubroutineName
+	// GetActiveSubroutineUniformName
+	// GetSubroutineIndex
+	// GetSubroutineUniformLocation
+
 	// Must have
 
 	// TODO: remove some checks (double, subroutines, compute shader)
@@ -924,14 +929,6 @@ bool GLMethods::load() {
 		return false;
 	}
 
-	if (INVALID_METHOD(this->GetActiveSubroutineName)) {
-		return false;
-	}
-
-	if (INVALID_METHOD(this->GetActiveSubroutineUniformName)) {
-		return false;
-	}
-
 	if (INVALID_METHOD(this->GetActiveUniform)) {
 		return false;
 	}
@@ -973,14 +970,6 @@ bool GLMethods::load() {
 	}
 
 	if (INVALID_METHOD(this->GetString)) {
-		return false;
-	}
-
-	if (INVALID_METHOD(this->GetSubroutineIndex)) {
-		return false;
-	}
-
-	if (INVALID_METHOD(this->GetSubroutineUniformLocation)) {
 		return false;
 	}
 
