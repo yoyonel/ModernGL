@@ -50,7 +50,7 @@ PyGetSetDef MGLFramebufferAttachment_tp_getseters[] = {
 
 PyTypeObject MGLFramebufferAttachment_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.FramebufferAttachment",                       // tp_name
+	"mgl.FramebufferAttachment",                            // tp_name
 	sizeof(MGLFramebufferAttachment),                       // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLFramebufferAttachment_tp_dealloc,        // tp_dealloc

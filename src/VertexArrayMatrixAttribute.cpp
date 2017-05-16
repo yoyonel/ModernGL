@@ -74,7 +74,7 @@ PySequenceMethods MGLVertexArrayMatrixAttribute_tp_sequence = {
 
 PyTypeObject MGLVertexArrayMatrixAttribute_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.VertexArrayMatrixAttribute",                  // tp_name
+	"mgl.VertexArrayMatrixAttribute",                       // tp_name
 	sizeof(MGLVertexArrayMatrixAttribute),                  // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLVertexArrayMatrixAttribute_tp_dealloc,   // tp_dealloc

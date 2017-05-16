@@ -74,7 +74,7 @@ PySequenceMethods MGLVertexArrayListAttribute_tp_sequence = {
 
 PyTypeObject MGLVertexArrayListAttribute_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.VertexArrayListAttribute",                    // tp_name
+	"mgl.VertexArrayListAttribute",                         // tp_name
 	sizeof(MGLVertexArrayListAttribute),                    // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLVertexArrayListAttribute_tp_dealloc,     // tp_dealloc

@@ -35,7 +35,7 @@ PyGetSetDef MGLObject_tp_getseters[] = {
 
 PyTypeObject MGLObject_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.Object",                                      // tp_name
+	"mgl.Object",                                           // tp_name
 	sizeof(MGLObject),                                      // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLObject_tp_dealloc,                       // tp_dealloc

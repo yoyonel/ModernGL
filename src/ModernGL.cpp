@@ -530,7 +530,7 @@ bool MGL_InitializeModule(PyObject * module) {
 
 PyModuleDef MGL_moduledef = {
 	PyModuleDef_HEAD_INIT,
-	"ModernGL",
+	"mgl",
 	0,
 	-1,
 	MGL_module_methods,
@@ -540,7 +540,7 @@ PyModuleDef MGL_moduledef = {
 	0,
 };
 
-extern "C" PyObject * PyInit_ModernGL() {
+extern "C" PyObject * PyInit_mgl() {
 	PyObject * module = PyModule_Create(&MGL_moduledef);
 
 	if (!MGL_InitializeModule(module)) {
@@ -552,8 +552,8 @@ extern "C" PyObject * PyInit_ModernGL() {
 
 #else
 
-extern "C" PyObject * initModernGL() {
-	PyObject * module = Py_InitModule("ModernGL", MGL_module_methods);
+extern "C" PyObject * initmgl() {
+	PyObject * module = Py_InitModule("mgl", MGL_module_methods);
 
 	if (!MGL_InitializeModule(module)) {
 		return 0;

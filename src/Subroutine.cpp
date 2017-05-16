@@ -56,7 +56,7 @@ PyGetSetDef MGLSubroutine_tp_getseters[] = {
 
 PyTypeObject MGLSubroutine_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.Subroutine",                                  // tp_name
+	"mgl.Subroutine",                                       // tp_name
 	sizeof(MGLSubroutine),                                  // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLSubroutine_tp_dealloc,                   // tp_dealloc

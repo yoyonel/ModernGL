@@ -44,7 +44,7 @@ PyGetSetDef MGLPrimitive_tp_getseters[] = {
 
 PyTypeObject MGLPrimitive_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.Primitive",                                   // tp_name
+	"mgl.Primitive",                                        // tp_name
 	sizeof(MGLPrimitive),                                   // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLPrimitive_tp_dealloc,                    // tp_dealloc

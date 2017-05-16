@@ -51,7 +51,7 @@ PyGetSetDef MGLRenderbuffer_tp_getseters[] = {
 
 PyTypeObject MGLRenderbuffer_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.Renderbuffer",                                // tp_name
+	"mgl.Renderbuffer",                                     // tp_name
 	sizeof(MGLRenderbuffer),                                // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLRenderbuffer_tp_dealloc,                 // tp_dealloc

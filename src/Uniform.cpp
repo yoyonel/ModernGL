@@ -148,7 +148,7 @@ PyGetSetDef MGLUniform_tp_getseters[] = {
 
 PyTypeObject MGLUniform_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.Uniform",                                     // tp_name
+	"mgl.Uniform",                                          // tp_name
 	sizeof(MGLUniform),                                     // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLUniform_tp_dealloc,                      // tp_dealloc

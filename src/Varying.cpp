@@ -56,7 +56,7 @@ PyGetSetDef MGLVarying_tp_getseters[] = {
 
 PyTypeObject MGLVarying_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.Varying",                                     // tp_name
+	"mgl.Varying",                                          // tp_name
 	sizeof(MGLVarying),                                     // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLVarying_tp_dealloc,                      // tp_dealloc

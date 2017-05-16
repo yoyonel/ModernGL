@@ -282,7 +282,7 @@ PyBufferProcs MGLBuffer_tp_as_buffer = {
 
 PyTypeObject MGLBuffer_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.Buffer",                                      // tp_name
+	"mgl.Buffer",                                           // tp_name
 	sizeof(MGLBuffer),                                      // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLBuffer_tp_dealloc,                       // tp_dealloc

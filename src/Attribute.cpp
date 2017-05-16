@@ -71,7 +71,7 @@ PyGetSetDef MGLAttribute_tp_getseters[] = {
 
 PyTypeObject MGLAttribute_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.Attribute",                                   // tp_name
+	"mgl.Attribute",                                        // tp_name
 	sizeof(MGLAttribute),                                   // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLAttribute_tp_dealloc,                    // tp_dealloc

@@ -44,7 +44,7 @@ PyGetSetDef MGLEnableFlag_tp_getseters[] = {
 
 PyTypeObject MGLEnableFlag_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.EnableFlag",                                  // tp_name
+	"mgl.EnableFlag",                                       // tp_name
 	sizeof(MGLEnableFlag),                                  // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLEnableFlag_tp_dealloc,                   // tp_dealloc

@@ -41,7 +41,7 @@ PyGetSetDef MGLContextMember_tp_getseters[] = {
 
 PyTypeObject MGLContextMember_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.ContextMember",                               // tp_name
+	"mgl.ContextMember",                                    // tp_name
 	sizeof(MGLContextMember),                               // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLContextMember_tp_dealloc,                // tp_dealloc

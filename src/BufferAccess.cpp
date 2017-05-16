@@ -167,7 +167,7 @@ PyGetSetDef MGLBufferAccess_tp_getseters[] = {
 
 PyTypeObject MGLBufferAccess_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.BufferAccess",                                // tp_name
+	"mgl.BufferAccess",                                     // tp_name
 	sizeof(MGLBufferAccess),                                // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLBufferAccess_tp_dealloc,                 // tp_dealloc

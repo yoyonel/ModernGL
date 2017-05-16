@@ -59,7 +59,7 @@ PyGetSetDef MGLError_tp_getseters[] = {
 
 PyTypeObject MGLError_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.Error",                                       // tp_name
+	"mgl.Error",                                            // tp_name
 	sizeof(MGLError),                                       // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLError_tp_dealloc,                        // tp_dealloc

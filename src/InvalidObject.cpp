@@ -40,7 +40,7 @@ PyGetSetDef MGLInvalidObject_tp_getseters[] = {
 
 PyTypeObject MGLInvalidObject_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.InvalidObject",                               // tp_name
+	"mgl.InvalidObject",                                    // tp_name
 	sizeof(MGLInvalidObject),                               // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLInvalidObject_tp_dealloc,                // tp_dealloc

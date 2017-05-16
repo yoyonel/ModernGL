@@ -35,7 +35,7 @@ PyGetSetDef MGLProgramStageMember_tp_getseters[] = {
 
 PyTypeObject MGLProgramStageMember_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.ProgramStageMember",                          // tp_name
+	"mgl.ProgramStageMember",                               // tp_name
 	sizeof(MGLProgramStageMember),                          // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLProgramStageMember_tp_dealloc,           // tp_dealloc

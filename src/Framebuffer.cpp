@@ -125,7 +125,7 @@ PyGetSetDef MGLFramebuffer_tp_getseters[] = {
 
 PyTypeObject MGLFramebuffer_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.Framebuffer",                                 // tp_name
+	"mgl.Framebuffer",                                      // tp_name
 	sizeof(MGLFramebuffer),                                 // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLFramebuffer_tp_dealloc,                  // tp_dealloc

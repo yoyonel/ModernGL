@@ -1590,7 +1590,7 @@ PyGetSetDef MGLContext_tp_getseters[] = {
 
 PyTypeObject MGLContext_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.Context",                                     // tp_name
+	"mgl.Context",                                          // tp_name
 	sizeof(MGLContext),                                     // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLContext_tp_dealloc,                      // tp_dealloc

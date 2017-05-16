@@ -181,7 +181,7 @@ PyGetSetDef MGLTexture_tp_getseters[] = {
 
 PyTypeObject MGLTexture_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.Texture",                                     // tp_name
+	"mgl.Texture",                                          // tp_name
 	sizeof(MGLTexture),                                     // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLTexture_tp_dealloc,                      // tp_dealloc

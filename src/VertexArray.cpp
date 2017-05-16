@@ -207,7 +207,7 @@ PyGetSetDef MGLVertexArray_tp_getseters[] = {
 
 PyTypeObject MGLVertexArray_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.VertexArray",                                 // tp_name
+	"mgl.VertexArray",                                      // tp_name
 	sizeof(MGLVertexArray),                                 // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLVertexArray_tp_dealloc,                  // tp_dealloc

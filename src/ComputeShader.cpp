@@ -68,7 +68,7 @@ PyGetSetDef MGLComputeShader_tp_getseters[] = {
 
 PyTypeObject MGLComputeShader_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.ComputeShader",                               // tp_name
+	"mgl.ComputeShader",                                    // tp_name
 	sizeof(MGLComputeShader),                               // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLComputeShader_tp_dealloc,                // tp_dealloc

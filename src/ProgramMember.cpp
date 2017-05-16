@@ -41,7 +41,7 @@ PyGetSetDef MGLProgramMember_tp_getseters[] = {
 
 PyTypeObject MGLProgramMember_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.ProgramMember",                               // tp_name
+	"mgl.ProgramMember",                                    // tp_name
 	sizeof(MGLProgramMember),                               // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLProgramMember_tp_dealloc,                // tp_dealloc

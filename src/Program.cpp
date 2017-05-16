@@ -177,7 +177,7 @@ PyMappingMethods Program_map = {
 
 PyTypeObject MGLProgram_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
-	"ModernGL.Program",                                     // tp_name
+	"mgl.Program",                                          // tp_name
 	sizeof(MGLProgram),                                     // tp_basicsize
 	0,                                                      // tp_itemsize
 	(destructor)MGLProgram_tp_dealloc,                      // tp_dealloc
