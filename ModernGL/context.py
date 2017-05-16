@@ -293,7 +293,7 @@ class Context:
         content = [(buffer, detect_format(program, attributes), attributes)]
         return self.vertex_array(program, content, None)
 
-    def program(self, shaders, *, varyings=()) -> Program:
+    def program(self, shaders, varyings=()) -> Program:
         '''
             Create a Program.
 
