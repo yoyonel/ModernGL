@@ -40,6 +40,8 @@ PyObject * MGLTexture_update(MGLTexture * self, PyObject * args) {
 	PyObject * size;
 	PyObject * offset;
 
+	// TODO: accept viewport (0, 0, w, h) and size (w, h)
+
 	int args_ok = PyArg_ParseTuple(
 		args,
 		"OOO",
@@ -121,15 +123,16 @@ PyObject * MGLTexture_update(MGLTexture * self, PyObject * args) {
 
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
+	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	int pixel_type = self->floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
 	int format = formats[self->components];
 
 	const GLMethods & gl = self->context->gl;
 
 	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
-	gl.BindTexture(GL_TEXTURE_2D, self->texture_obj);
+	gl.BindTexture(texture_target, self->texture_obj);
 
-	gl.TexSubImage2D(GL_TEXTURE_2D, 0, x, y, width, height, format, pixel_type, buffer_view.buf);
+	gl.TexSubImage2D(texture_target, 0, x, y, width, height, format, pixel_type, buffer_view.buf);
 
 	PyBuffer_Release(&buffer_view);
 
@@ -149,9 +152,11 @@ PyObject * MGLTexture_use(MGLTexture * self, PyObject * args) {
 		return 0;
 	}
 
+	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+
 	const GLMethods & gl = self->context->gl;
 	gl.ActiveTexture(GL_TEXTURE0 + index);
-	gl.BindTexture(GL_TEXTURE_2D, self->texture_obj);
+	gl.BindTexture(texture_target, self->texture_obj);
 
 	Py_RETURN_NONE;
 }

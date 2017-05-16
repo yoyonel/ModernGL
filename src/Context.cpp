@@ -77,7 +77,7 @@ PyObject * MGLContext_clear(MGLContext * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLContext_clear_rect(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_clear_viewport(MGLContext * self, PyObject * args) {
 	int r;
 	int g;
 	int b;
@@ -416,15 +416,17 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 
 	PyObject * data;
 
+	int samples;
 	int floats;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"(II)IOp",
+		"(II)IOIp",
 		&width,
 		&height,
 		&components,
 		&data,
+		&samples,
 		&floats
 	);
 
@@ -436,6 +438,10 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 		MGLError * error = MGLError_New(TRACE, "components must be 1, 2, 3 or 4");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
+	}
+
+	if (data != Py_None && samples) {
+		// TODO: error
 	}
 
 	int expected_size = floats ? (width * height * components * 4) : (height * ((width * components + 3) & ~3));
@@ -460,6 +466,7 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
+	int texture_target = samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	int pixel_type = floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
 	int format = formats[components];
 
@@ -471,10 +478,10 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 
 	texture->texture_obj = 0;
 	gl.GenTextures(1, (GLuint *)&texture->texture_obj);
-	gl.BindTexture(GL_TEXTURE_2D, texture->texture_obj);
-	gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	gl.TexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, pixel_type, buffer_view.buf);
+	gl.BindTexture(texture_target, texture->texture_obj);
+	gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	gl.TexImage2D(texture_target, 0, format, width, height, 0, format, pixel_type, buffer_view.buf);
 
 	if (data != Py_None) {
 		PyBuffer_Release(&buffer_view);
@@ -484,6 +491,7 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 	texture->height = height;
 	texture->components = components;
 	texture->floats = floats ? true : false;
+	texture->samples = samples;
 	texture->depth = false;
 
 	Py_INCREF(self);
@@ -499,16 +507,23 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 
 	PyObject * data;
 
+	int samples;
+
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"(II)O",
+		"(II)OI",
 		&width,
 		&height,
-		&data
+		&data,
+		&samples
 	);
 
 	if (!args_ok) {
 		return 0;
+	}
+
+	if (data != Py_None && samples) {
+		// TODO: error
 	}
 
 	int expected_size = width * height * 4;
@@ -531,6 +546,7 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
+	int texture_target = samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	int pixel_type = GL_FLOAT;
 
 	const GLMethods & gl = self->gl;
@@ -541,10 +557,10 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 
 	texture->texture_obj = 0;
 	gl.GenTextures(1, (GLuint *)&texture->texture_obj);
-	gl.BindTexture(GL_TEXTURE_2D, texture->texture_obj);
-	gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	gl.TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	gl.TexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, pixel_type, buffer_view.buf);
+	gl.BindTexture(texture_target, texture->texture_obj);
+	gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	gl.TexImage2D(texture_target, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, pixel_type, buffer_view.buf);
 
 	if (data != Py_None) {
 		PyBuffer_Release(&buffer_view);
@@ -554,6 +570,7 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	texture->height = height;
 	texture->components = 1;
 	texture->floats = true;
+	texture->samples = samples;
 	texture->depth = true;
 
 	Py_INCREF(self);
@@ -1023,7 +1040,7 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 			gl.FramebufferTexture2D(
 				GL_FRAMEBUFFER,
 				GL_COLOR_ATTACHMENT0 + i,
-				GL_TEXTURE_2D,
+				texture->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D,
 				texture->texture_obj,
 				0
 			);
@@ -1047,7 +1064,7 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		gl.FramebufferTexture2D(
 			GL_FRAMEBUFFER,
 			GL_DEPTH_ATTACHMENT,
-			GL_TEXTURE_2D,
+			texture->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D,
 			texture->texture_obj,
 			0
 		);
@@ -1343,7 +1360,7 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"release", (PyCFunction)MGLContext_release, METH_NOARGS, 0},
 
 	{"clear", (PyCFunction)MGLContext_clear, METH_VARARGS, 0},
-	{"clear_rect", (PyCFunction)MGLContext_clear_rect, METH_VARARGS, 0},
+	{"clear_viewport", (PyCFunction)MGLContext_clear_viewport, METH_VARARGS, 0},
 	{"enable", (PyCFunction)MGLContext_enable, METH_VARARGS, 0},
 	{"disable", (PyCFunction)MGLContext_disable, METH_VARARGS, 0},
 	{"finish", (PyCFunction)MGLContext_finish, METH_NOARGS, 0},
