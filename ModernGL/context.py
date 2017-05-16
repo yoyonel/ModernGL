@@ -198,7 +198,7 @@ class Context(Object):
 
         self.mglo.copy_framebuffer(dst.mglo, src.mglo)
 
-    def buffer(self, data=None, reserve=0, dynamic=False) -> Buffer:
+    def buffer(self, data=None, *, reserve=0, dynamic=False) -> Buffer:
         '''
             Create a Buffer.
 
@@ -266,7 +266,7 @@ class Context(Object):
         content = tuple((a.mglo, b, tuple(c)) for a, b, c in content)
         return VertexArray.new(self.mglo.vertex_array(program.mglo, content, index_buffer))
 
-    def simple_vertex_array(self, program, buffer, attributes, index_buffer=None) -> VertexArray:
+    def simple_vertex_array(self, program, buffer, attributes) -> VertexArray:
         '''
             Create a SimpleVertexArray.
 
@@ -274,19 +274,15 @@ class Context(Object):
                 program: The program used by `render` and `transform`.
                 buffer: The buffer.
                 attributes: A list of attribute names.
-                optional index_buffer: An index buffer.
-
-            Keyword Args:
-                skip_errors: Ignore missing attributes.
 
             Returns:
                 :py:class:`VertexArray`
         '''
 
         content = [(buffer, detect_format(program, attributes), attributes)]
-        return self.vertex_array(program, content, index_buffer)
+        return self.vertex_array(program, content, None)
 
-    def program(self, shaders, varyings=()) -> Program:
+    def program(self, shaders, *, varyings=()) -> Program:
         '''
             Create a Program.
 
@@ -379,10 +375,11 @@ class Context(Object):
                 :py:class:`Framebuffer`
         '''
 
-        if isinstance(color_attachments, Object):
-            color_attachments = [color_attachments]
+        if type(color_attachments) is Texture or type(color_attachments) is Renderbuffer:
+            color_attachments = (color_attachments.mglo,)
 
-        color_attachments = tuple(x.mglo for x in color_attachments)
+        else:
+            color_attachments = tuple(x.mglo for x in color_attachments)
 
         return Framebuffer.new(self.mglo.framebuffer(color_attachments, depth_attachment.mglo))
 
