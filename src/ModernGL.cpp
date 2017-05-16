@@ -6,7 +6,6 @@
 #include "EnableFlag.hpp"
 #include "Error.hpp"
 #include "Framebuffer.hpp"
-#include "FramebufferAttachment.hpp"
 #include "InvalidObject.hpp"
 #include "Object.hpp"
 #include "Primitive.hpp"
@@ -23,7 +22,6 @@
 #include "VertexArray.hpp"
 #include "VertexArrayAttribute.hpp"
 #include "VertexArrayListAttribute.hpp"
-#include "VertexArrayMatrixAttribute.hpp"
 
 #include "GLContext.hpp"
 
@@ -350,17 +348,6 @@ bool MGL_InitializeModule(PyObject * module) {
 		Py_INCREF(&MGLVertexArrayListAttribute_Type);
 
 		PyModule_AddObject(module, "VertexArrayListAttribute", (PyObject *)&MGLVertexArrayListAttribute_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLVertexArrayMatrixAttribute_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register VertexArrayMatrixAttribute in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return false;
-		}
-
-		Py_INCREF(&MGLVertexArrayMatrixAttribute_Type);
-
-		PyModule_AddObject(module, "VertexArrayMatrixAttribute", (PyObject *)&MGLVertexArrayMatrixAttribute_Type);
 	}
 
 	{

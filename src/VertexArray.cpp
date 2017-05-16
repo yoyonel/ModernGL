@@ -8,7 +8,7 @@
 #include "Attribute.hpp"
 #include "VertexArrayAttribute.hpp"
 #include "VertexArrayListAttribute.hpp"
-#include "VertexArrayMatrixAttribute.hpp"
+#include "VertexArrayListAttribute.hpp"
 
 PyObject * MGLVertexArray_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLVertexArray * self = (MGLVertexArray *)type->tp_alloc(type, 0);
@@ -328,7 +328,7 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 				attrib_list->location = program_attribute->location;
 
 				for (int i = 0; i < program_attribute->array_length; ++i) {
-					MGLVertexArrayMatrixAttribute * matrix = MGLVertexArrayMatrixAttribute_New();
+					MGLVertexArrayListAttribute * matrix = MGLVertexArrayListAttribute_New();
 					matrix->vertex_array = vertex_array;
 					matrix->content = PyTuple_New(program_attribute->rows_length);
 					matrix->location = attrib_list->location + i * program_attribute->rows_length;
@@ -372,7 +372,7 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 		} else {
 
 			if (program_attribute->rows_length > 1) {
-				MGLVertexArrayMatrixAttribute * matrix = MGLVertexArrayMatrixAttribute_New();
+				MGLVertexArrayListAttribute * matrix = MGLVertexArrayListAttribute_New();
 				matrix->vertex_array = vertex_array;
 				matrix->content = PyTuple_New(program_attribute->rows_length);
 				matrix->location = program_attribute->location;
