@@ -215,7 +215,7 @@ class Context(Object):
 
         return Buffer.new(self.mglo.buffer(data, reserve, dynamic))
 
-    def texture(self, size, components, data=None, floats=False) -> Texture:
+    def texture(self, size, components, data=None, *, samples=0, floats=False) -> Texture:
         '''
             Create a Texture.
 
@@ -231,9 +231,9 @@ class Context(Object):
                 :py:class:`Texture`
         '''
 
-        return Texture.new(self.mglo.texture(size, components, data, floats))
+        return Texture.new(self.mglo.texture(size, components, data, samples, floats))
 
-    def depth_texture(self, size, data=None) -> Texture:
+    def depth_texture(self, size, data=None, *, samples=0) -> Texture:
         '''
             Create a DepthTexture.
 
@@ -245,7 +245,7 @@ class Context(Object):
                 :py:class:`Texture`
         '''
 
-        return Texture.new(self.mglo.depth_texture(size, data))
+        return Texture.new(self.mglo.depth_texture(size, data, samples))
 
     def vertex_array(self, program, content, index_buffer=None) -> VertexArray:
         '''

@@ -44,6 +44,14 @@ class Texture(Object):
 
         return (self.mglo.width, self.mglo.height)
 
+    @property
+    def samples(self) -> int:
+        '''
+            samples
+        '''
+
+        return self.mglo.samples
+
     def update(self, data, size=None, *, offset=(0, 0)):
         '''
             update
