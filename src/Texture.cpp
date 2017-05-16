@@ -54,6 +54,10 @@ PyObject * MGLTexture_update(MGLTexture * self, PyObject * args) {
 		return 0;
 	}
 
+	if (self->samples) {
+		// TODO: error
+	}
+
 	int x;
 	int y;
 

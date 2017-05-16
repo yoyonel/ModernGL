@@ -481,7 +481,12 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 	gl.BindTexture(texture_target, texture->texture_obj);
 	gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	gl.TexImage2D(texture_target, 0, format, width, height, 0, format, pixel_type, buffer_view.buf);
+
+	if (samples) {
+		gl.TexImage2DMultisample(texture_target, samples, format, width, height, true);
+	} else {
+		gl.TexImage2D(texture_target, 0, format, width, height, 0, format, pixel_type, buffer_view.buf);
+	}
 
 	if (data != Py_None) {
 		PyBuffer_Release(&buffer_view);

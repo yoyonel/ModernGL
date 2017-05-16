@@ -134,7 +134,7 @@ class Context(Object):
 
         return self.mglo.version
 
-    def clear(self, red=0, green=0, blue=0, alpha=0):
+    def clear(self, red=0, green=0, blue=0, alpha=0, *, viewport=None):
         '''
             Clear the framebuffer.
 
@@ -143,7 +143,10 @@ class Context(Object):
                 alpha: alpha component.
         '''
 
-        self.mglo.clear(red, green, blue, alpha)
+        if viewport is None:
+            self.mglo.clear(red, green, blue, alpha)
+        else:
+            self.mglo.clear_viewport(red, green, blue, alpha, tuple(viewport))
 
     def enable(self, flag):
         '''
