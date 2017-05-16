@@ -8,7 +8,6 @@ color_rbo = ctx.renderbuffer(size, samples=16)
 depth_rbo = ctx.depth_renderbuffer(size, samples=16)
 fbo = ctx.framebuffer(color_rbo, depth_rbo)
 
-# fbo = ctx.Framebuffer([color_rbo])
 fbo.use()
 
 prog = ctx.program([
