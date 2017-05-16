@@ -2,10 +2,8 @@
     ModernGL: PyOpenGL alternative
 '''
 
-from .errors import Error
-
 from .common import (
-    InvalidObject, Version, EnableFlag, Primitive,
+    InvalidObject, Version, EnableFlag, Primitive, Error,
     POINTS, LINES, LINE_STRIP, LINE_LOOP, TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN,
     LINES_ADJACENCY, LINE_STRIP_ADJACENCY, TRIANGLES_ADJACENCY, TRIANGLE_STRIP_ADJACENCY,
     CORE_330, CORE_400, CORE_410, CORE_420, CORE_430, CORE_440, CORE_450,

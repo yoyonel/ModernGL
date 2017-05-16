@@ -25,6 +25,11 @@ if False:
     mgl.TRIANGLE_STRIP_ADJACENCY = 'TRIANGLE_STRIP_ADJACENCY'
     mgl.TRIANGLES_ADJACENCY = 'TRIANGLES_ADJACENCY'
 
+    mgl.Error = Exception
+
+
+Error = mgl.Error
+
 
 class InvalidObject:
     '''

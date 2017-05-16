@@ -210,13 +210,12 @@ PyObject * MGLContext_copy_buffer(MGLContext * self, PyObject * args) {
 }
 
 PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
-	MGLFramebuffer * dst;
+	PyObject * dst;
 	MGLFramebuffer * src;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O!O!",
-		&MGLFramebuffer_Type,
+		"OO!",
 		&dst,
 		&MGLFramebuffer_Type,
 		&src
@@ -267,19 +266,44 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 	// GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT, no data is transferred and a
 	// GL_INVALID_OPERATION error is generated.
 
-	int width = src->width < dst->width ? src->width : dst->width;
-	int height = src->height < dst->height ? src->height : dst->height;
+	if (Py_TYPE(dst) == &MGLFramebuffer_Type) {
 
-	gl.BindFramebuffer(GL_READ_FRAMEBUFFER, src->framebuffer_obj);
-	gl.BindFramebuffer(GL_DRAW_FRAMEBUFFER, dst->framebuffer_obj);
-	gl.BlitFramebuffer(
-		// read_x, read_y, read_x + read_width, read_y + read_height,
-		// write_x, write_y, write_x + write_width, write_y + write_height,
-		0, 0, width, height,
-		0, 0, width, height,
-		GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT,
-		GL_NEAREST
-	);
+		MGLFramebuffer * dst_framebuffer = (MGLFramebuffer *)dst;
+
+		int width = src->width < dst_framebuffer->width ? src->width : dst_framebuffer->width;
+		int height = src->height < dst_framebuffer->height ? src->height : dst_framebuffer->height;
+
+		gl.BindFramebuffer(GL_READ_FRAMEBUFFER, src->framebuffer_obj);
+		gl.BindFramebuffer(GL_DRAW_FRAMEBUFFER, dst_framebuffer->framebuffer_obj);
+		gl.BlitFramebuffer(
+			// read_x, read_y, read_x + read_width, read_y + read_height,
+			// write_x, write_y, write_x + write_width, write_y + write_height,
+			0, 0, width, height,
+			0, 0, width, height,
+			GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT,
+			GL_NEAREST
+		);
+
+	} else if (Py_TYPE(dst) == &MGLFramebuffer_Type) {
+
+		MGLTexture * dst_texture = (MGLTexture *)dst;
+
+		int width = src->width < dst_texture->width ? src->width : dst_texture->width;
+		int height = src->height < dst_texture->height ? src->height : dst_texture->height;
+
+		gl.BindFramebuffer(GL_READ_FRAMEBUFFER, src->framebuffer_obj);
+
+		const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
+		int texture_target = dst_texture->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+		int format = formats[dst_texture->components];
+		
+		gl.CopyTexImage2D(texture_target, 0, format, 0, 0, width, height, 0);
+
+	} else {
+
+		// TODO: error
+
+	}
 
 	Py_RETURN_NONE;
 }
