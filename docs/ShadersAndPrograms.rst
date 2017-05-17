@@ -25,18 +25,14 @@ Shaders and Programs
 	:members: source
 
 .. autoclass:: Program
-	:members: vertex_shader, fragment_shader, geometry_shader, tess_evaluation_shader, tess_control_shader, geometry_input, geometry_output, geometry_vertices
-
-	.. automethod:: uniforms() -> Dict[str, Uniform]
-	.. automethod:: uniform_blocks() -> Dict[str, UniformBlock]
-	.. automethod:: attributes() -> Dict[str, Attribute]
-	.. automethod:: varyings() -> Dict[str, Varying]
+	:members: uniforms, uniform_blocks, attributes, varyings, vertex_shader, fragment_shader, geometry_shader, tess_evaluation_shader, tess_control_shader, geometry_input, geometry_output, geometry_vertices
 
 .. toctree::
 	:maxdepth: 4
 	:caption: Classes:
 
 	Uniforms <Uniforms.rst>
-	Attributes <Attributes.rst>
 	UniformBlocks <UniformBlocks.rst>
+	Attributes <Attributes.rst>
 	Varyings <Varyings.rst>
+	ProgramStages <ProgramStages.rst>

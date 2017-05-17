@@ -368,9 +368,12 @@ class Context:
         '''
 
         if isinstance(shaders, Shader):
-            shaders = [shaders]
+            shaders = (shaders.mglo,)
+        
+        else:
+            shaders = tuple(x.mglo for x in shaders)
 
-        return Program.new(self.mglo.program(tuple(x.mglo for x in shaders), tuple(varyings)))
+        return Program.new(self.mglo.program(shaders, tuple(varyings)))
 
     def vertex_shader(self, source) -> Shader:
         '''

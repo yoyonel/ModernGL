@@ -554,6 +554,54 @@ class Subroutine:
         res.mglo = obj
         return res
 
+    @property
+    def name(self):
+        '''
+            The name of the subroutine.
+        '''
+
+        return self.mglo.name
+
+    @property
+    def index(self):
+        '''
+            The index of the subroutine.
+        '''
+
+        return self.mglo.index
+
+
+class SubroutineMap:
+    '''
+        SubroutineMap
+    '''
+
+    def __init__(self):
+        self.mglo = {}
+        raise NotImplementedError('SubroutineMap')
+
+    @staticmethod
+    def new(obj):
+        '''
+            For internal use only.
+        '''
+
+        res = SubroutineMap.__new__(SubroutineMap)
+        res.mglo = obj
+        return res
+
+    def __getitem__(self, key) -> Subroutine:
+        '''
+        '''
+
+        return Subroutine.new(self.mglo[key])
+
+    def __contains__(self, key):
+        return key in self.mglo
+
+    def __len__(self):
+        return len(self.mglo)
+
 
 class SubroutineUniform:
     '''
@@ -573,3 +621,87 @@ class SubroutineUniform:
         res = SubroutineUniform.__new__(SubroutineUniform)
         res.mglo = obj
         return res
+
+    @property
+    def name(self):
+        '''
+            The name of the subroutine uniform.
+        '''
+
+        return self.mglo.name
+
+    @property
+    def location(self):
+        '''
+            The location of the subroutine uniform.
+        '''
+
+        return self.mglo.location
+
+
+class SubroutineUniformMap:
+    '''
+        SubroutineUniformMap
+    '''
+
+    def __init__(self):
+        self.mglo = {}
+        raise NotImplementedError('SubroutineUniformMap')
+
+    @staticmethod
+    def new(obj):
+        '''
+            For internal use only.
+        '''
+
+        res = SubroutineUniformMap.__new__(SubroutineUniformMap)
+        res.mglo = obj
+        return res
+
+    def __getitem__(self, key) -> SubroutineUniform:
+        '''
+        '''
+
+        return SubroutineUniform.new(self.mglo[key])
+
+    def __contains__(self, key):
+        return key in self.mglo
+
+    def __len__(self):
+        return len(self.mglo)
+
+
+class ProgramStage:
+    '''
+        ProgramStage
+    '''
+
+    def __init__(self):
+        self.mglo = {}
+        raise NotImplementedError('ProgramStage')
+
+    @staticmethod
+    def new(obj):
+        '''
+            For internal use only.
+        '''
+
+        res = ProgramStage.__new__(ProgramStage)
+        res.mglo = obj
+        return res
+
+    @property
+    def subroutines(self) -> SubroutineMap:
+        '''
+            The subroutines of the program_stage.
+        '''
+
+        return SubroutineMap.new(self.mglo.subroutines)
+
+    @property
+    def subroutine_uniforms(self) -> SubroutineUniformMap:
+        '''
+            The subroutine_uniforms of the program_stage.
+        '''
+
+        return SubroutineUniformMap.new(self.mglo.subroutine_uniforms)

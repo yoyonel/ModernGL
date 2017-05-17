@@ -368,10 +368,11 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 	program->program_obj = obj;
 
+	int location_base = 0;
+
 	if (shaders[VERTEX_SHADER_SLOT]) {
 		MGLProgramStage * program_stage = MGLProgramStage_New();
-		program_stage->program_obj = program->program_obj;
-		MGLProgramStage_Complete(program_stage, GL_VERTEX_SHADER, program->program_obj, gl);
+		MGLProgramStage_Complete(program_stage, GL_VERTEX_SHADER, obj, location_base, gl);
 		program->vertex_shader = program_stage;
 	} else {
 		program->vertex_shader = 0;
@@ -379,8 +380,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 	if (shaders[FRAGMENT_SHADER_SLOT]) {
 		MGLProgramStage * program_stage = MGLProgramStage_New();
-		program_stage->program_obj = program->program_obj;
-		MGLProgramStage_Complete(program_stage, GL_FRAGMENT_SHADER, program->program_obj, gl);
+		MGLProgramStage_Complete(program_stage, GL_FRAGMENT_SHADER, obj, location_base, gl);
 		program->fragment_shader = program_stage;
 	} else {
 		program->fragment_shader = 0;
@@ -388,8 +388,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 	if (shaders[GEOMETRY_SHADER_SLOT]) {
 		MGLProgramStage * program_stage = MGLProgramStage_New();
-		program_stage->program_obj = program->program_obj;
-		MGLProgramStage_Complete(program_stage, GL_GEOMETRY_SHADER, program->program_obj, gl);
+		MGLProgramStage_Complete(program_stage, GL_GEOMETRY_SHADER, obj, location_base, gl);
 		program->geometry_shader = program_stage;
 	} else {
 		program->geometry_shader = 0;
@@ -397,8 +396,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 	if (shaders[TESS_EVALUATION_SHADER_SLOT]) {
 		MGLProgramStage * program_stage = MGLProgramStage_New();
-		program_stage->program_obj = program->program_obj;
-		MGLProgramStage_Complete(program_stage, GL_TESS_EVALUATION_SHADER, program->program_obj, gl);
+		MGLProgramStage_Complete(program_stage, GL_TESS_EVALUATION_SHADER, obj, location_base, gl);
 		program->tess_evaluation_shader = program_stage;
 	} else {
 		program->tess_evaluation_shader = 0;
@@ -406,8 +404,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 	if (shaders[TESS_CONTROL_SHADER_SLOT]) {
 		MGLProgramStage * program_stage = MGLProgramStage_New();
-		program_stage->program_obj = program->program_obj;
-		MGLProgramStage_Complete(program_stage, GL_TESS_CONTROL_SHADER, program->program_obj, gl);
+		MGLProgramStage_Complete(program_stage, GL_TESS_CONTROL_SHADER, obj, location_base, gl);
 		program->tess_control_shader = program_stage;
 	} else {
 		program->tess_control_shader = 0;

@@ -13,7 +13,8 @@ from .common import (
 from .program_members import (
     Uniform, UniformMap, UniformBlock, UniformBlockMap,
     Varying, VaryingMap, Attribute, AttributeMap,
-    Subroutine, SubroutineUniform,
+    Subroutine, SubroutineMap, SubroutineUniform, SubroutineUniformMap,
+    ProgramStage,
 )
 
 from .vertex_arrays import (
@@ -35,7 +36,8 @@ __all__ = [
     'BLEND', 'DEPTH_TEST', 'CULL_FACE', 'MULTISAMPLE',
     'Uniform', 'UniformMap', 'UniformBlock', 'UniformBlockMap',
     'Varying', 'VaryingMap', 'Attribute', 'AttributeMap',
-    'Subroutine', 'SubroutineUniform',
+    'Subroutine', 'SubroutineMap', 'SubroutineUniform', 'SubroutineUniformMap',
+    'ProgramStage',
     'VertexArrayAttribute',
     'VERSION',
     'create_context',
