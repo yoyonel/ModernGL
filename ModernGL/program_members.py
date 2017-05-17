@@ -7,7 +7,10 @@
 
 class Uniform:
     '''
-        Uniform
+        A uniform is a global GLSL variable declared with the "uniform" storage qualifier.
+        These act as parameters that the user of a shader program can pass to that program.
+
+        In ModernGL, Uniforms can be accessed using :py:attr:`Program.uniforms`
     '''
 
     def __init__(self):

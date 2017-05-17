@@ -3,7 +3,7 @@
 
 .. figure:: images/05_perspective.png
 	:scale: 50 %
-	:alt: map to buried treasure
+	:alt: 05_perspective
 	:align: center
 	:figclass: align-center
 

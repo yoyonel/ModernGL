@@ -3,7 +3,7 @@
 
 .. figure:: images/02_uniforms_and_attributes.png
 	:scale: 50 %
-	:alt: map to buried treasure
+	:alt: 02_uniforms_and_attributes
 	:align: center
 	:figclass: align-center
 

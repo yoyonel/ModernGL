@@ -3,7 +3,7 @@
 
 .. figure:: images/04_texture.png
 	:scale: 50 %
-	:alt: map to buried treasure
+	:alt: 04_texture
 	:align: center
 	:figclass: align-center
 

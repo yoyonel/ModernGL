@@ -3,7 +3,7 @@ Julia Fractal
 
 .. figure:: images/julia_fractal.png
 	:scale: 50 %
-	:alt: map to buried treasure
+	:alt: julia_fractal
 	:align: center
 	:figclass: align-center
 

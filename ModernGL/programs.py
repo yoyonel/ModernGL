@@ -4,14 +4,8 @@
 
 # pylint: disable=too-few-public-methods
 
-from typing import Dict
-
 from .common import InvalidObject, Primitive, PRIMITIVES
-from .program_members import (
-    Uniform, UniformMap, UniformBlock, UniformBlockMap,
-    Varying, VaryingMap, Attribute, AttributeMap,
-    ProgramStage,
-)
+from .program_members import UniformMap, UniformBlockMap, VaryingMap, AttributeMap, ProgramStage
 
 
 class ComputeShader:
@@ -159,7 +153,7 @@ class Program:
         '''
             :py:class:`UniformMap`: The uniforms of the program.
             The return value is a dictinary like object.
-            It can be used to access uniforms by name.
+            It can be used to access :py:class:`Uniform` objects by name.
 
             Examples:
 
@@ -201,7 +195,7 @@ class Program:
         '''
             :py:class:`UniformBlockMap`: The uniform blocks of the program.
             The return value is a dictinary like object.
-            It can be used to access uniform blocks by name.
+            It can be used to access :py:class:`UniformBlock` objects by name.
 
             Examples:
 
@@ -222,7 +216,7 @@ class Program:
         '''
             :py:class:`AttributeMap`: The attributes of the program.
             The return value is a dictinary like object.
-            It can be used to access attributes by name.
+            It can be used to access :py:class:`Attribute` objects by name.
 
             Examples:
 
@@ -263,7 +257,10 @@ class Program:
         '''
             :py:class:`VaryingMap`: The varyings of the program.
             The return value is a dictinary like object.
-            It can be used to access varyings by name.
+            It can be used to access :py:class:`Varying` objects by name.
+
+            The only reason varyings were added to allow verifying
+            varyings programatically, they do not hold any other information.
 
             Examples:
 
