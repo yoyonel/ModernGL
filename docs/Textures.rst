@@ -3,10 +3,10 @@ Textures
 
 .. currentmodule:: ModernGL
 
-.. automethod:: Context.texture
+.. automethod:: Context.texture(size, components, data=None, samples=0, floats=False) -> Texture
 	:noindex:
 
-.. automethod:: Context.depth_texture
+.. automethod:: Context.depth_texture(size, data=None, samples=0) -> Texture
 	:noindex:
 
 .. autoclass:: Texture

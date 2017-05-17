@@ -30,11 +30,9 @@ class Uniform:
     @property
     def name(self) -> str:
         '''
-            The name of the uniform.
+            str: The name of the uniform.
             The name does not contain leading `[0]`.
             The name may contain `[ ]` when the uniform is part of a struct.
-
-            :type: str
         '''
 
         return self.mglo.name
@@ -42,9 +40,7 @@ class Uniform:
     @property
     def location(self) -> int:
         '''
-            The location of the uniform.
-
-            :type: int
+            int: The location of the uniform.
         '''
 
         return self.mglo.location
@@ -52,7 +48,7 @@ class Uniform:
     @property
     def dimension(self) -> int:
         '''
-            The dimension of the uniform.
+            int: The dimension of the uniform.
 
             +-----------------+-----------+
             | GLSL type       | dimension |
@@ -139,8 +135,6 @@ class Uniform:
             +-----------------+-----------+
             | dmat4           | 16        |
             +-----------------+-----------+
-
-            :type: int
         '''
 
         return self.mglo.dimension
@@ -148,10 +142,8 @@ class Uniform:
     @property
     def array_length(self) -> int:
         '''
-            The length of the array of the uniform.
+            int: The length of the array of the uniform.
             The array_length is `1` for non array uniforms.
-
-            :type: int
         '''
 
         return self.mglo.array_length
@@ -227,7 +219,7 @@ class UniformBlock:
     @property
     def name(self):
         '''
-            name
+            str: name
         '''
 
         return self.mglo.name
@@ -235,7 +227,7 @@ class UniformBlock:
     @property
     def location(self):
         '''
-            location
+            int: The location of the uniform block.
         '''
 
         return self.mglo.location
@@ -295,7 +287,7 @@ class Varying:
     @property
     def name(self):
         '''
-            name
+            str: The name of the varying.
         '''
 
         return self.mglo.name
@@ -303,7 +295,7 @@ class Varying:
     @property
     def number(self):
         '''
-            number
+            int: The number of the varying.
         '''
 
         return self.mglo.number
@@ -363,7 +355,7 @@ class Attribute:
     @property
     def name(self):
         '''
-            The attribute name.
+            str: The attribute name.
             The name will be filtered to have no array syntax on it's end.
             Attribute name without ``'[0]'`` ending if any.
         '''
@@ -373,7 +365,7 @@ class Attribute:
     @property
     def location(self):
         '''
-            The attribute location.
+            int: The location of the attribute.
             The result of the glGetAttribLocation.
         '''
 
@@ -382,7 +374,8 @@ class Attribute:
     @property
     def array_length(self):
         '''
-            If the attribute is an array the array_length is the length of the array otherwise `1`.
+            int: If the attribute is an array the array_length
+            is the length of the array otherwise `1`.
         '''
 
         return self.mglo.array_length
@@ -390,7 +383,7 @@ class Attribute:
     @property
     def dimension(self):
         '''
-            The attribute dimension.
+            int: The attribute dimension.
 
             +-----------+-----------+
             | GLSL type | dimension |
@@ -470,7 +463,7 @@ class Attribute:
     @property
     def shape(self):
         '''
-            The shape is a single character, representing the scalar type of the attriute.
+            str: The shape is a single character, representing the scalar type of the attriute.
 
             +---------+--------------------------+
             | shape   | GLSL types               |
@@ -560,7 +553,7 @@ class Subroutine:
     @property
     def name(self):
         '''
-            The name of the subroutine.
+            str: The name of the subroutine.
         '''
 
         return self.mglo.name
@@ -568,7 +561,7 @@ class Subroutine:
     @property
     def index(self):
         '''
-            The index of the subroutine.
+            int: The index of the subroutine.
         '''
 
         return self.mglo.index
@@ -628,7 +621,7 @@ class SubroutineUniform:
     @property
     def name(self):
         '''
-            The name of the subroutine uniform.
+            str: The name of the subroutine uniform.
         '''
 
         return self.mglo.name
@@ -636,7 +629,7 @@ class SubroutineUniform:
     @property
     def location(self):
         '''
-            The location of the subroutine uniform.
+            int: The location of the subroutine uniform.
         '''
 
         return self.mglo.location
@@ -696,7 +689,7 @@ class ProgramStage:
     @property
     def subroutines(self) -> SubroutineMap:
         '''
-            The subroutines of the program_stage.
+            SubroutineMap: The subroutines of the program stage.
         '''
 
         return SubroutineMap.new(self.mglo.subroutines)
@@ -704,7 +697,7 @@ class ProgramStage:
     @property
     def subroutine_uniforms(self) -> SubroutineUniformMap:
         '''
-            The subroutine_uniforms of the program_stage.
+            SubroutineUniformMap: The subroutine uniforms of the program stage.
         '''
 
         return SubroutineUniformMap.new(self.mglo.subroutine_uniforms)

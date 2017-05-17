@@ -55,7 +55,7 @@ class Shader:
     '''
         Shader objects represent compiled GLSL code for a single shader stage.
 
-        Shader object cannot be instantiated directly, it requires a context.
+        A Shader object cannot be instantiated directly, it requires a context.
         Use the following methods to create one:
 
             - :py:meth:`Context.vertex_shader`
@@ -122,7 +122,7 @@ class Program:
 
         Program objects has no method called ``use()``, VertexArrays encapsulate this mechanism.
 
-        Program object cannot be instantiated directly, it requires a context.
+        A Program object cannot be instantiated directly, it requires a context.
         Use :py:meth:`~Context.program` to create one.
     '''
 

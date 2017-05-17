@@ -124,7 +124,16 @@ class VertexArrayAttributeMap:
 
 class VertexArray:
     '''
-        VertexArray
+        A VertexArray object is an OpenGL object that stores all of the state
+        needed to supply vertex data. It stores the format of the vertex data
+        as well as the Buffer objects providing the vertex data arrays.
+
+        In ModernGL, the VertexArray object also stores a reference
+        for a :py:class:`Program` object, and some Subroutine information.
+
+        A VertexArray object cannot be instantiated directly, it requires a context.
+        Use :py:meth:`~Context.vertex_array` or :py:meth:`~Context.simple_vertex_array`
+        to create one.
     '''
 
     def __init__(self):

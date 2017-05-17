@@ -7,7 +7,10 @@ from .common import InvalidObject
 
 class Texture:
     '''
-        Texture
+        A Texture is an OpenGL object that contains one or more images that all
+        have the same image format. A texture can be used in two ways. It can
+        be the source of a texture access from a Shader, or it can be used
+        as a render target.
     '''
 
     def __init__(self):
@@ -35,7 +38,7 @@ class Texture:
     @property
     def width(self) -> int:
         '''
-            Texture width
+            int: The width of the texture.
         '''
 
         return self.mglo.width
@@ -43,7 +46,7 @@ class Texture:
     @property
     def height(self) -> int:
         '''
-            Texture height
+            int: The height of the texture.
         '''
 
         return self.mglo.height
@@ -51,7 +54,7 @@ class Texture:
     @property
     def size(self) -> tuple:
         '''
-            Texture size
+            tuple: The size of the texture.
         '''
 
         return (self.mglo.width, self.mglo.height)
@@ -59,7 +62,7 @@ class Texture:
     @property
     def samples(self) -> int:
         '''
-            Texture samples
+            int: The number of samples of the texture.
         '''
 
         return self.mglo.samples
@@ -67,7 +70,7 @@ class Texture:
     @property
     def components(self) -> int:
         '''
-            Texture components
+            int: The number of components of the texture.
         '''
 
         return self.mglo.components
@@ -75,19 +78,19 @@ class Texture:
     @property
     def depth(self) -> bool:
         '''
-            Texture depth
+            bool: Is the texture a depth texture?
         '''
 
         return self.mglo.depth
 
-    def write(self, data, viewport=None):
+    def write(self, data, viewport=None) -> None:
         '''
             write
         '''
 
         self.mglo.write(data, viewport)
 
-    def use(self, location=0):
+    def use(self, location=0) -> None:
         '''
             Bind the texture.
 
