@@ -10,6 +10,8 @@ from .program_members import UniformMap, UniformBlockMap, VaryingMap, AttributeM
 
 class ComputeShader:
     '''
+        ``NYI``
+
         ComputeShader
     '''
 
@@ -45,6 +47,8 @@ class ComputeShader:
 
     def run(self, size_x=1, size_y=1, size_z=1) -> None:
         '''
+            ``NYI``
+
             Run the compute shader.
         '''
 

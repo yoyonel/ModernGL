@@ -210,12 +210,51 @@ class Buffer:
     def orphan(self) -> None:
         '''
             Orphan the buffer.
+            
+            It is also called buffer re-specification.
+
+            Reallocate the buffer object before you start modifying it.
+
+            Since allocating storage is likely faster than the implicit synchronization,
+            you gain significant performance advantages over synchronization.
+
+            The old storage will still be used by the OpenGL commands that have been sent previously.
+            It is likely that the GL driver will not be doing any allocation at all,
+            but will just be pulling an old free block off the unused buffer queue and use it,
+            so it is likely to be very efficient.
+
+            Examples:
+
+                Simple orphaning example::
+
+                    # For simplicity the VertexArray creation is omitted
+
+                    >>> vbo = ctx.buffer(reserve=1024)
+
+                    # Fill the buffer
+
+                    >>> vbo.write(some_temorary_data)
+
+                    # Issue a render call that uses the vbo
+
+                    >>> vao.render(...)
+
+                    # Orphan the buffer
+
+                    >>> vbo.orphan()
+
+                    # Issue another render call without waiting for the previous one
+
+                    >>> vbo.write(some_temorary_data)
+                    >>> vao.render(...)
         '''
 
         self.mglo.orphan()
 
     def bind_to_uniform_block(self, location=0) -> None:
         '''
+            ``NYI``
+
             Bind the buffer to a uniform block.
 
             Args:
@@ -226,6 +265,8 @@ class Buffer:
 
     def bind_to_storage_buffer(self, location=0) -> None:
         '''
+            ``NYI``
+
             Bind the buffer to a shader storage buffer.
 
             Args:
