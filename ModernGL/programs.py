@@ -118,7 +118,7 @@ class Program:
 
         In ModernGL, a Program object can be assigned to :py:class:`VertexArray` objects.
         The VertexArray object  is capable of binding the Program object once the
-        :py:meth:`~VertexArray.render` or :py:meth:`~VertexArray.transform` is called.
+        :py:meth:`VertexArray.render` or :py:meth:`VertexArray.transform` is called.
 
         Program objects has no method called ``use()``, VertexArrays encapsulate this mechanism.
 

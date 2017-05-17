@@ -115,7 +115,7 @@ class Buffer:
         A Buffer object cannot be instantiated directly, it requires a context.
         Use :py:meth:`Context.buffer` to create one.
 
-        Copy buffer content using :py:meth:`~Context.copy_buffer`.
+        Copy buffer content using :py:meth:`Context.copy_buffer`.
     '''
 
     def __init__(self):
