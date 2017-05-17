@@ -11,6 +11,10 @@ class Texture:
         have the same image format. A texture can be used in two ways. It can
         be the source of a texture access from a Shader, or it can be used
         as a render target.
+
+        A Texture object cannot be instantiated directly, it requires a context.
+        Use :py:meth:`Context.texture` or :py:meth:`Context.depth_texture`
+        to create one.
     '''
 
     def __init__(self):
@@ -85,7 +89,7 @@ class Texture:
 
     def write(self, data, viewport=None) -> None:
         '''
-            write
+            Update the content of the texture.
         '''
 
         self.mglo.write(data, viewport)

@@ -8,14 +8,10 @@ from .common import InvalidObject
 class BufferAccess:
     '''
         :py:class:`BufferAccess` objects are designed to access
-        a :py:class:`Buffer`'s content inside a ``with`` statement.
+        a :py:class:`Buffer` object's content inside a ``with`` statement.
         The buffer is mapped and unmapped only once.
 
-        example::
-
-            with vbo.access(...) as access:
-                access.read(...)
-                access.write(...)
+        Use :py:meth:`Buffer.access` to get a BufferAccess object.
     '''
 
     def __init__(self):
@@ -42,7 +38,7 @@ class BufferAccess:
     def open(self) -> None:
         '''
             Map the buffer.
-            This method is called once ``__enter__`` is called.
+            This method is called by ``__enter__``.
         '''
 
         self.mglo.open()
@@ -50,7 +46,7 @@ class BufferAccess:
     def close(self) -> None:
         '''
             Unmap the buffer.
-            This method is called once ``__exit__`` is called.
+            This method is called by ``__exit__``.
         '''
 
         self.mglo.close()
@@ -87,7 +83,7 @@ class BufferAccess:
     @property
     def offset(self) -> int:
         '''
-            The offset.
+            int: The offset.
         '''
 
         return self.mglo.offset
@@ -95,7 +91,7 @@ class BufferAccess:
     @property
     def size(self) -> int:
         '''
-            The size.
+            int: The size.
         '''
 
         return self.mglo.size
@@ -103,7 +99,7 @@ class BufferAccess:
     @property
     def readonly(self) -> bool:
         '''
-            Is readonly.
+            bool: Is readonly.
         '''
 
         return self.mglo.readonly
@@ -111,7 +107,15 @@ class BufferAccess:
 
 class Buffer:
     '''
-        Create a :py:class:`Buffer` using :py:meth:`Context.buffer`.
+        Buffer Objects are OpenGL Objects that store an array of unformatted memory
+        allocated by the OpenGL context, (data allocated on the GPU).
+        These can be used to store vertex data, pixel data retrieved from images
+        or the framebuffer, and a variety of other things.
+
+        A Buffer object cannot be instantiated directly, it requires a context.
+        Use :py:meth:`Context.buffer` to create one.
+
+        Copy buffer content using :py:meth:`~Context.copy_buffer`.
     '''
 
     def __init__(self):
@@ -160,6 +164,16 @@ class Buffer:
                 size (int): The size. Value `-1` means all.
                 offset (int): The offset.
                 readonly (bool): The readonly.
+
+            Examples:
+
+                Simple with statement::
+
+                    # The buffer will be mapped once and accessed multiple times.
+
+                    >>> with buffer.access() as access:
+                    ...     access.read(...)
+                    ...     access.write(...)
         '''
 
         return BufferAccess.new(self.mglo.access(size, offset, readonly))
@@ -175,7 +189,7 @@ class Buffer:
                 offset (int): The offset.
 
             Returns:
-                bytes: binary data.
+                bytes: The content of the buffer.
         '''
 
         return self.mglo.read(size, offset)
@@ -225,6 +239,13 @@ def detect_format(program, attributes) -> str:
     '''
         Detect format for vertex attributes.
         The format returned does not contain padding.
+
+        Args:
+            program (Program): The program.
+            attributes (list): A list of attribute names.
+
+        Returns:
+            str: The tightly packed format for the attributes.
     '''
 
     def fmt(attr):

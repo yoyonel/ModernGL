@@ -123,7 +123,7 @@ class Program:
         Program objects has no method called ``use()``, VertexArrays encapsulate this mechanism.
 
         A Program object cannot be instantiated directly, it requires a context.
-        Use :py:meth:`~Context.program` to create one.
+        Use :py:meth:`Context.program` to create one.
     '''
 
     def __init__(self):

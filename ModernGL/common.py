@@ -33,8 +33,8 @@ Error = mgl.Error
 
 class InvalidObject:
     '''
-        A ModernGL object turns into an `InvalidObject`
-        once the `release` method is successfully called.
+        A ModernGL object turns into an InvalidObject
+        once the ``release()`` method is successfully called.
     '''
 
 

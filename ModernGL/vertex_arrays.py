@@ -132,7 +132,7 @@ class VertexArray:
         for a :py:class:`Program` object, and some Subroutine information.
 
         A VertexArray object cannot be instantiated directly, it requires a context.
-        Use :py:meth:`~Context.vertex_array` or :py:meth:`~Context.simple_vertex_array`
+        Use :py:meth:`Context.vertex_array` or :py:meth:`Context.simple_vertex_array`
         to create one.
     '''
 
@@ -161,25 +161,18 @@ class VertexArray:
     @property
     def program(self) -> Program:
         '''
-            The program assinged to the VertexArray.
+            Program: The program assinged to the VertexArray.
             The program used when rendering or transforming primitives.
         '''
 
         return self.mglo.program
 
     @property
-    def content(self) -> list:
-        '''
-            The content assinged to the VertexArray.
-        '''
-
-        return self.mglo.content
-
-    @property
     def attributes(self) -> VertexArrayAttributeMap:
         '''
-            Individual vertex attributes.
-            Use the bind() method to assign vertex attributes to buffers.
+            VertexArrayAttributeMap: Individual vertex attributes.
+            Use the :py:meth:`VertexArrayAttribute.bind` method
+            to assign vertex attributes to buffers.
         '''
 
         return VertexArrayAttributeMap.new(self.mglo.attributes)
@@ -187,7 +180,7 @@ class VertexArray:
     @property
     def index_buffer(self) -> Buffer:
         '''
-            The index buffer if the index_buffer is set otherwise ``None``.
+            Buffer: The index buffer if the index_buffer is set, otherwise ``None``.
         '''
 
         return self.mglo.index_buffer
@@ -195,7 +188,7 @@ class VertexArray:
     @property
     def vertices(self) -> int:
         '''
-            The number of vertices detected.
+            int: The number of vertices detected.
             This is the minimum of the number of vertices possible per Buffer.
             The size of the index_buffer determines the number of vertices.
             Per instance vertex attributes does not affect this number.
@@ -203,7 +196,7 @@ class VertexArray:
 
         return self.mglo.vertices
 
-    def render(self, mode=TRIANGLES, vertices=-1, first=0, instances=1):
+    def render(self, mode=TRIANGLES, vertices=-1, first=0, instances=1) -> None:
         '''
             The render primitive (mode) must be the same as
             the input primitive of the GeometryShader.
@@ -219,7 +212,7 @@ class VertexArray:
 
         self.mglo.render(mode.mglo, vertices, first, instances)
 
-    def transform(self, buffer, mode=POINTS, vertices=-1, *, first=0, instances=1):
+    def transform(self, buffer, mode=POINTS, vertices=-1, *, first=0, instances=1) -> None:
         '''
             Transform vertices.
             Stores the output in a single buffer.

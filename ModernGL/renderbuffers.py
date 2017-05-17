@@ -7,7 +7,16 @@ from .common import InvalidObject
 
 class Renderbuffer:
     '''
-        Renderbuffer
+        Renderbuffer objects are OpenGL objects that contain images.
+        They are created and used specifically with :py:class:`Framebuffer` objects.
+        They are optimized for use as render targets, while :py:class:`Texture` objects
+        may not be, and are the logical choice when you do not need to sample
+        from the produced image. If you need to resample, use Textures instead.
+        Renderbuffer objects also natively accommodate multisampling.
+
+        A Renderbuffer object cannot be instantiated directly, it requires a context.
+        Use :py:meth:`Context.renderbuffer` or :py:meth:`Context.depth_renderbuffer`
+        to create one.
     '''
 
     def __init__(self):
@@ -35,7 +44,7 @@ class Renderbuffer:
     @property
     def width(self) -> int:
         '''
-            Renderbuffer width
+            int: The width of the renderbuffer.
         '''
 
         return self.mglo.width
@@ -43,7 +52,7 @@ class Renderbuffer:
     @property
     def height(self) -> int:
         '''
-            Renderbuffer height
+            int: The height of the renderbuffer.
         '''
 
         return self.mglo.height
@@ -51,7 +60,7 @@ class Renderbuffer:
     @property
     def size(self) -> tuple:
         '''
-            Renderbuffer size
+            tuple: The size of the renderbuffer.
         '''
 
         return (self.mglo.width, self.mglo.height)
@@ -59,15 +68,15 @@ class Renderbuffer:
     @property
     def samples(self) -> int:
         '''
-            Renderbuffer samples
+            int: The samples of the renderbuffer.
         '''
 
         return self.mglo.samples
 
     @property
-    def components(self) -> bool:
+    def components(self) -> int:
         '''
-            Renderbuffer components
+            int: The components of the renderbuffer.
         '''
 
         return self.mglo.components
@@ -75,7 +84,7 @@ class Renderbuffer:
     @property
     def depth(self) -> bool:
         '''
-            Renderbuffer depth
+            bool: Is the renderbuffer a depth renderbuffer?
         '''
 
         return self.mglo.depth
