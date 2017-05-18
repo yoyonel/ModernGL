@@ -210,7 +210,7 @@ class Buffer:
     def orphan(self) -> None:
         '''
             Orphan the buffer.
-            
+
             It is also called buffer re-specification.
 
             Reallocate the buffer object before you start modifying it.

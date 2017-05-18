@@ -17,7 +17,7 @@ class TestCase(unittest.TestCase):
     def test_1(self):
         vbo1 = self.ctx.buffer(struct.pack('4f', 0.0, 0.0, 0.0, 0.0))
         vbo2 = self.ctx.buffer(struct.pack('4f', 0.0, 0.0, 0.0, 0.0))
-        
+
         vert = self.ctx.vertex_shader('''
             #version 400
 

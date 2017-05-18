@@ -17,7 +17,7 @@ GLContext LoadCurrentGLContext() {
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return context;
 	}
-	
+
 	HWND hwnd = WindowFromDC(hdc);
 
 	context.hwnd = (void *)hwnd;
@@ -90,7 +90,7 @@ void InitModernContext() {
 	if (initialized) {
 		return;
 	}
-	
+
 	initialized = true;
 
 	HMODULE hinst = GetModuleHandle(0);

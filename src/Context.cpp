@@ -296,7 +296,7 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 		const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 		int texture_target = dst_texture->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 		int format = formats[dst_texture->components];
-		
+
 		gl.CopyTexImage2D(texture_target, 0, format, 0, 0, width, height, 0);
 
 	} else {
