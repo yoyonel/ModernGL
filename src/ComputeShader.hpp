@@ -7,6 +7,11 @@
 struct MGLComputeShader : public MGLContextMember {
 	PyObject * source;
 
+	PyObject * uniforms;
+	PyObject * uniform_blocks;
+	PyObject * subroutines;
+	PyObject * subroutine_uniforms;
+
 	int program_obj;
 	int shader_obj;
 };

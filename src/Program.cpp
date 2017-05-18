@@ -413,7 +413,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	PyObject * uniforms = PyDict_New();
 
 	int num_uniforms = 0;
-	gl.GetProgramiv(program->program_obj, GL_ACTIVE_UNIFORMS, &num_uniforms);
+	gl.GetProgramiv(obj, GL_ACTIVE_UNIFORMS, &num_uniforms);
 
 	for (int i = 0; i < num_uniforms; ++i) {
 		MGLUniform * uniform = MGLUniform_New();
@@ -421,9 +421,9 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		int name_len = 0;
 		char name[256];
 
-		gl.GetActiveUniform(program->program_obj, i, 256, &name_len, &uniform->array_length, (GLenum *)&uniform->type, name);
+		gl.GetActiveUniform(obj, i, 256, &name_len, &uniform->array_length, (GLenum *)&uniform->type, name);
 
-		uniform->location = gl.GetUniformLocation(program->program_obj, name);
+		uniform->location = gl.GetUniformLocation(obj, name);
 
 		clean_program_member_name(name, name_len);
 
@@ -435,7 +435,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		}
 
 		uniform->number = i;
-		uniform->program_obj = program->program_obj;
+		uniform->program_obj = obj;
 		uniform->name = PyUnicode_FromStringAndSize(name, name_len);
 
 		MGLUniform_Complete(uniform, gl);
@@ -460,9 +460,9 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		int name_len = 0;
 		char name[256];
 
-		gl.GetActiveUniformBlockName(program->program_obj, i, 256, &name_len, name);
-		gl.GetActiveUniformBlockiv(program->program_obj, i, GL_UNIFORM_BLOCK_BINDING, &uniform_block->location);
-		gl.GetActiveUniformBlockiv(program->program_obj, i, GL_UNIFORM_BLOCK_DATA_SIZE, &uniform_block->array_length);
+		gl.GetActiveUniformBlockName(obj, i, 256, &name_len, name);
+		gl.GetActiveUniformBlockiv(obj, i, GL_UNIFORM_BLOCK_BINDING, &uniform_block->location);
+		gl.GetActiveUniformBlockiv(obj, i, GL_UNIFORM_BLOCK_DATA_SIZE, &uniform_block->array_length);
 
 		clean_program_member_name(name, name_len);
 
@@ -482,7 +482,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		// glBindBufferBase( GL_UNIFORM_BUFFER, blockIndex, uboHandle );
 
 		uniform_block->number = i;
-		uniform_block->program_obj = program->program_obj;
+		uniform_block->program_obj = obj;
 		uniform_block->name = PyUnicode_FromStringAndSize(name, name_len);
 
 		MGLUniformBlock_Complete(uniform_block, gl);
@@ -499,7 +499,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	PyObject * attributes = PyDict_New();
 
 	int num_attributes = 0;
-	gl.GetProgramiv(program->program_obj, GL_ACTIVE_ATTRIBUTES, &num_attributes);
+	gl.GetProgramiv(obj, GL_ACTIVE_ATTRIBUTES, &num_attributes);
 
 	for (int i = 0; i < num_attributes; ++i) {
 		MGLAttribute * attribute = MGLAttribute_New();
@@ -507,9 +507,9 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		int name_len = 0;
 		char name[256];
 
-		gl.GetActiveAttrib(program->program_obj, i, 256, &name_len, &attribute->array_length, (GLenum *)&attribute->type, name);
+		gl.GetActiveAttrib(obj, i, 256, &name_len, &attribute->array_length, (GLenum *)&attribute->type, name);
 
-		attribute->location = gl.GetAttribLocation(program->program_obj, name);
+		attribute->location = gl.GetAttribLocation(obj, name);
 
 		clean_program_member_name(name, name_len);
 
@@ -519,7 +519,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		// }
 
 		attribute->number = i;
-		attribute->program_obj = program->program_obj;
+		attribute->program_obj = obj;
 		attribute->name = PyUnicode_FromStringAndSize(name, name_len);
 
 		MGLAttribute_Complete(attribute, gl);
@@ -534,7 +534,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	PyObject * varyings = PyDict_New();
 
 	int num_varyings = 0;
-	gl.GetProgramiv(program->program_obj, GL_TRANSFORM_FEEDBACK_VARYINGS, &num_varyings);
+	gl.GetProgramiv(obj, GL_TRANSFORM_FEEDBACK_VARYINGS, &num_varyings);
 
 	for (int i = 0; i < num_varyings; ++i) {
 		MGLVarying * varying = MGLVarying_New();
@@ -542,10 +542,10 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		int name_len = 0;
 		char name[256];
 
-		gl.GetTransformFeedbackVarying(program->program_obj, i, 256, &name_len, &varying->array_length, (GLenum *)&varying->type, name);
+		gl.GetTransformFeedbackVarying(obj, i, 256, &name_len, &varying->array_length, (GLenum *)&varying->type, name);
 
 		varying->number = i;
-		varying->program_obj = program->program_obj;
+		varying->program_obj = obj;
 		varying->name = PyUnicode_FromStringAndSize(name, name_len);
 
 		MGLVarying_Complete(varying, gl);
