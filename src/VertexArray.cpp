@@ -227,11 +227,6 @@ MGLProgram * MGLVertexArray_get_program(MGLVertexArray * self, void * closure) {
 	return self->program;
 }
 
-PyObject * MGLVertexArray_get_content(MGLVertexArray * self, void * closure) {
-	Py_INCREF(self->content);
-	return self->content;
-}
-
 PyObject * MGLVertexArray_get_attributes(MGLVertexArray * self, void * closure) {
 	Py_INCREF(self->attributes);
 	return self->attributes;
@@ -263,7 +258,6 @@ MGLContext * MGLVertexArray_get_context(MGLVertexArray * self, void * closure) {
 
 PyGetSetDef MGLVertexArray_tp_getseters[] = {
 	{(char *)"program", (getter)MGLVertexArray_get_program, 0, 0, 0},
-	{(char *)"content", (getter)MGLVertexArray_get_content, 0, 0, 0}, // TODO: remove
 	{(char *)"attributes", (getter)MGLVertexArray_get_attributes, 0, 0, 0},
 	{(char *)"index_buffer", (getter)MGLVertexArray_get_index_buffer, 0, 0, 0}, // TODO: setter
 	{(char *)"vertices", (getter)MGLVertexArray_get_vertices, 0, 0, 0}, // TODO: setter
@@ -340,19 +334,6 @@ void MGLVertexArray_Invalidate(MGLVertexArray * array) {
 	}
 
 	Py_DECREF(array->program);
-
-	int content_len = (int)PyTuple_GET_SIZE(array->content);
-
-	for (int i = 0; i < content_len; ++i) {
-		PyObject * tuple = PyTuple_GET_ITEM(array->content, i);
-		MGLBuffer * buffer = (MGLBuffer *)PyTuple_GET_ITEM(tuple, 0);
-
-		if (Py_REFCNT(buffer) == 2) {
-			MGLBuffer_Invalidate(buffer);
-		}
-	}
-
-	Py_DECREF(array->content);
 
 	if (array->index_buffer != (MGLBuffer *)Py_None) {
 		if (Py_REFCNT(array->index_buffer) == 2) {

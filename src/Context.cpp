@@ -788,9 +788,6 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	gl.GenVertexArrays(1, (GLuint *)&array->vertex_array_obj);
 	gl.BindVertexArray(array->vertex_array_obj);
 
-	Py_INCREF(content);
-	array->content = content;
-
 	Py_INCREF(index_buffer);
 	array->index_buffer = index_buffer;
 

@@ -9,8 +9,6 @@
 struct MGLVertexArray : public MGLContextMember {
 	MGLProgram * program;
 
-	PyObject * content;
-
 	MGLBuffer * index_buffer;
 
 	PyObject * attributes;
