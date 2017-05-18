@@ -147,26 +147,11 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	gl.Enable(GL_RASTERIZER_DISCARD);
 	gl.BeginTransformFeedback(mode->primitive);
 
-
-	// // TODO: magic
-	// if (self->program->vertex_shader->num_subroutine_uniform_locations) {
-	// 	printf("YES: %04x %d %d\n", self->program->vertex_shader->shader->shader_type, self->program->vertex_shader->num_subroutine_uniform_locations, self->program->vertex_shader->subroutine_uniform_locations[0]);
-	// 	gl.UniformSubroutinesuiv(self->program->vertex_shader->shader->shader_type, self->program->vertex_shader->num_subroutine_uniform_locations, self->program->vertex_shader->subroutine_uniform_locations);
-	// 	printf("vao error: %d\n", gl.GetError());
-	// }
-
-
 	if (self->subroutine_uniform_locations) {
-		printf("self->num_vertex_shader_subroutine_uniform_locations = %d\n", self->num_vertex_shader_subroutine_uniform_locations);
-		printf("self->num_fragment_shader_subroutine_uniform_locations = %d\n", self->num_fragment_shader_subroutine_uniform_locations);
-		printf("self->num_geometry_shader_subroutine_uniform_locations = %d\n", self->num_geometry_shader_subroutine_uniform_locations);
-		printf("self->num_tess_evaluation_shader_subroutine_uniform_locations = %d\n", self->num_tess_evaluation_shader_subroutine_uniform_locations);
-		printf("self->num_tess_control_shader_subroutine_uniform_locations = %d\n", self->num_tess_control_shader_subroutine_uniform_locations);
 
 		unsigned * subroutine_uniform_locations = self->subroutine_uniform_locations;
 
 		if (self->num_vertex_shader_subroutine_uniform_locations) {
-			printf("UniformSubroutinesuiv GL_VERTEX_SHADER: %d\n", self->num_vertex_shader_subroutine_uniform_locations);
 			gl.UniformSubroutinesuiv(
 				GL_VERTEX_SHADER,
 				self->num_vertex_shader_subroutine_uniform_locations,
@@ -176,7 +161,6 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 		}
 
 		if (self->num_fragment_shader_subroutine_uniform_locations) {
-			printf("UniformSubroutinesuiv GL_FRAGMENT_SHADER: %d\n", self->num_fragment_shader_subroutine_uniform_locations);
 			gl.UniformSubroutinesuiv(
 				GL_FRAGMENT_SHADER,
 				self->num_fragment_shader_subroutine_uniform_locations,
@@ -186,7 +170,6 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 		}
 
 		if (self->num_geometry_shader_subroutine_uniform_locations) {
-			printf("UniformSubroutinesuiv GL_GEOMETRY_SHADER: %d\n", self->num_geometry_shader_subroutine_uniform_locations);
 			gl.UniformSubroutinesuiv(
 				GL_GEOMETRY_SHADER,
 				self->num_geometry_shader_subroutine_uniform_locations,
@@ -196,7 +179,6 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 		}
 
 		if (self->num_tess_evaluation_shader_subroutine_uniform_locations) {
-			printf("UniformSubroutinesuiv GL_TESS_EVALUATION_SHADER: %d\n", self->num_tess_evaluation_shader_subroutine_uniform_locations);
 			gl.UniformSubroutinesuiv(
 				GL_TESS_EVALUATION_SHADER,
 				self->num_tess_evaluation_shader_subroutine_uniform_locations,
@@ -206,7 +188,6 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 		}
 
 		if (self->num_tess_control_shader_subroutine_uniform_locations) {
-			printf("UniformSubroutinesuiv GL_TESS_CONTROL_SHADER: %d\n", self->num_tess_control_shader_subroutine_uniform_locations);
 			gl.UniformSubroutinesuiv(
 				GL_TESS_CONTROL_SHADER,
 				self->num_tess_control_shader_subroutine_uniform_locations,
@@ -266,15 +247,11 @@ PyObject * MGLVertexArray_get_vertices(MGLVertexArray * self, void * closure) {
 }
 
 int MGLVertexArray_set_subroutines(MGLVertexArray * self, PyObject * value, void * closure) {
+	// TODO: test length test content
+
 	for (int i = 0; i < self->num_subroutine_uniform_locations; ++i) {
 		self->subroutine_uniform_locations[i] = PyLong_AsUnsignedLong(PyTuple_GET_ITEM(value, i));
 	}
-
-	printf("Subroutines: ");
-	for (int i = 0; i < self->num_subroutine_uniform_locations; ++i) {
-		printf("%d", self->subroutine_uniform_locations[i]);
-	}
-	printf("\n");
 
 	return 0;
 }

@@ -603,7 +603,7 @@ def create_context(require=None) -> Context:
     '''
         Create a ModernGL context by loading OpenGL functions from an existing OpenGL context.
         An OpenGL context must exists. If rendering is done without a window please use the
-        `create_standalone_context` instead.
+        :py:func:`create_standalone_context` instead.
 
         Keyword Arguments:
             require (Version): OpenGL version.

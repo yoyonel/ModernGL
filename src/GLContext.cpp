@@ -28,8 +28,173 @@ GLContext LoadCurrentGLContext() {
 	return context;
 }
 
+const unsigned WGL_ACCELERATION             = 0x2003;
+const unsigned WGL_COLOR_BITS               = 0x2014;
+const unsigned WGL_CONTEXT_FLAGS            = 0x2094;
+const unsigned WGL_CONTEXT_MAJOR_VERSION    = 0x2091;
+const unsigned WGL_CONTEXT_MINOR_VERSION    = 0x2092;
+const unsigned WGL_DEPTH_BITS               = 0x2022;
+const unsigned WGL_DOUBLE_BUFFER            = 0x2011;
+const unsigned WGL_DRAW_TO_WINDOW           = 0x2001;
+const unsigned WGL_FULL_ACCELERATION        = 0x2027;
+const unsigned WGL_PIXEL_TYPE               = 0x2013;
+const unsigned WGL_SAMPLES                  = 0x2042;
+const unsigned WGL_STENCIL_BITS             = 0x2023;
+const unsigned WGL_SUPPORT_OPENGL           = 0x2010;
+const unsigned WGL_TYPE_RGBA                = 0x202B;
+const unsigned WGL_CONTEXT_PROFILE_MASK     = 0x9126;
+const unsigned WGL_CONTEXT_CORE_PROFILE_BIT = 0x0001;
+
+typedef int (WINAPI * mglChoosePixelFormatProc)(HDC hdc, const int * piAttribIList, const float * pfAttribFList, unsigned nMaxFormats, int * piFormats, unsigned * nNumFormats);
+typedef HGLRC (WINAPI * mglCreateContextAttribsProc)(HDC hdc, HGLRC hglrc, const int * attribList);
+
+mglChoosePixelFormatProc mglChoosePixelFormat;
+mglCreateContextAttribsProc mglCreateContextAttribs;
+
+PIXELFORMATDESCRIPTOR pfd = {
+	sizeof(PIXELFORMATDESCRIPTOR),	// nSize
+	1,								// nVersion
+	PFD_DRAW_TO_WINDOW |
+	PFD_SUPPORT_OPENGL |
+	PFD_GENERIC_ACCELERATED |
+	PFD_DOUBLEBUFFER,				// dwFlags
+	0,								// iPixelType
+	32,								// cColorBits
+	0,								// cRedBits
+	0,								// cRedShift
+	0,								// cGreenBits
+	0,								// cGreenShift
+	0,								// cBlueBits
+	0,								// cBlueShift
+	0,								// cAlphaBits
+	0,								// cAlphaShift
+	0,								// cAccumBits
+	0,								// cAccumRedBits
+	0,								// cAccumGreenBits
+	0,								// cAccumBlueBits
+	0,								// cAccumAlphaBits
+	24,								// cDepthBits
+	0,								// cStencilBits
+	0,								// cAuxBuffers
+	0,								// iLayerType
+	0,								// bReserved
+	0,								// dwLayerMask
+	0,								// dwVisibleMask
+	0,								// dwDamageMask
+};
+
+
+void InitModernContext() {
+	static bool initialized = false;
+
+	if (initialized) {
+		return;
+	}
+	
+	initialized = true;
+
+	HMODULE hinst = GetModuleHandle(0);
+
+	if (!hinst) {
+		return;
+	}
+
+	WNDCLASS extClass = {
+		CS_OWNDC,						// style
+		DefWindowProc,					// lpfnWndProc
+		0,								// cbClsExtra
+		0,								// cbWndExtra
+		hinst,							// hInstance
+		0,								// hIcon
+		0,								// hCursor
+		0,								// hbrBackground
+		0,								// lpszMenuName
+		"ContextLoader",				// lpszClassName
+	};
+
+	if (!RegisterClass(&extClass)) {
+		return;
+	}
+
+	HWND loader_hwnd = CreateWindow(
+		"ContextLoader",				// lpClassName
+		0,								// lpWindowName
+		0,								// dwStyle
+		0,								// x
+		0,								// y
+		0,								// nWidth
+		0,								// nHeight
+		0,								// hWndParent
+		0,								// hMenu
+		hinst,							// hInstance
+		0								// lpParam
+	);
+
+	if (!loader_hwnd) {
+		return;
+	}
+
+	HDC loader_hdc = GetDC(loader_hwnd);
+
+	if (!loader_hdc) {
+		return;
+	}
+
+	int loader_pixelformat = ChoosePixelFormat(loader_hdc, &pfd);
+
+	if (!loader_pixelformat) {
+		return;
+	}
+
+	if (!SetPixelFormat(loader_hdc, loader_pixelformat, &pfd)) {
+		return;
+	}
+
+	HGLRC loader_hglrc = wglCreateContext(loader_hdc);
+
+	if (!loader_hglrc) {
+		return;
+	}
+
+	if (!wglMakeCurrent(loader_hdc, loader_hglrc)) {
+		return;
+	}
+
+	mglCreateContextAttribs = (mglCreateContextAttribsProc)wglGetProcAddress("wglCreateContextAttribsARB");
+	if (!mglCreateContextAttribs) {
+		return;
+	}
+
+	mglChoosePixelFormat = (mglChoosePixelFormatProc)wglGetProcAddress("wglChoosePixelFormatARB");
+	if (!mglChoosePixelFormat) {
+		return;
+	}
+
+	if (!wglMakeCurrent(0, 0)) {
+		return;
+	}
+
+	if (!wglDeleteContext(loader_hglrc)) {
+		return;
+	}
+
+	if (!ReleaseDC(loader_hwnd, loader_hdc)) {
+		return;
+	}
+
+	if (!DestroyWindow(loader_hwnd)) {
+		return;
+	}
+
+	if (!UnregisterClass("ContextLoader", hinst)) {
+		return;
+	}
+}
+
 GLContext CreateGLContext(int width, int height) {
 	GLContext context = {};
+
+	InitModernContext();
 
 	HINSTANCE inst = GetModuleHandle(0);
 
@@ -52,7 +217,7 @@ GLContext CreateGLContext(int width, int height) {
 			0,                                   // hCursor
 			0,                                   // hbrBackground
 			0,                                   // lpszMenuName
-			"standalone_context_class",          // lpszClassName
+			"StandaloneContext",                 // lpszClassName
 		};
 
 		if (!RegisterClass(&wndClass)) {
@@ -66,7 +231,7 @@ GLContext CreateGLContext(int width, int height) {
 
 	HWND hwnd = CreateWindowEx(
 		0,                                   // exStyle
-		"standalone_context_class",          // lpClassName
+		"StandaloneContext",                 // lpClassName
 		0,                                   // lpWindowName
 		0,                                   // dwStyle
 		0,                                   // x
@@ -93,54 +258,70 @@ GLContext CreateGLContext(int width, int height) {
 		return context;
 	}
 
-	PIXELFORMATDESCRIPTOR pfd = {
-		sizeof(PIXELFORMATDESCRIPTOR),   // nSize
-		1,                               // nVersion
-		PFD_DRAW_TO_WINDOW |
-		PFD_GENERIC_ACCELERATED |
-		PFD_SUPPORT_OPENGL,              // dwFlags
-		PFD_TYPE_RGBA,                   // iPixelType
-		32,                              // cColorBits
-		0,                               // cRedBits
-		0,                               // cRedShift
-		0,                               // cGreenBits
-		0,                               // cGreenShift
-		0,                               // cBlueBits
-		0,                               // cBlueShift
-		0,                               // cAlphaBits
-		0,                               // cAlphaShift
-		0,                               // cAccumBits
-		0,                               // cAccumRedBits
-		0,                               // cAccumGreenBits
-		0,                               // cAccumBlueBits
-		0,                               // cAccumAlphaBits
-		24,                              // cDepthBits
-		0,                               // cStencilBits
-		0,                               // cAuxBuffers
-		0,                               // iLayerType
-		0,                               // bReserved
-		0,                               // dwLayerMask
-		0,                               // dwVisibleMask
-		0,                               // dwDamageMask
-	};
+	HGLRC hrc = 0;
 
-	int pf = ChoosePixelFormat(hdc, &pfd);
+	if (mglCreateContextAttribs && mglChoosePixelFormat) {
 
-	if (!pf) {
-		MGLError * error = MGLError_New(TRACE, "Cannot choose pixel format");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return context;
+		int pixelformat = 0;
+		unsigned num_formats = 0;
+
+		if (!mglChoosePixelFormat(hdc, 0, 0, 1, &pixelformat, &num_formats)) {
+			MGLError * error = MGLError_New(TRACE, "Cannot choose pixel format");
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return context;
+		}
+
+		if (!num_formats) {
+			MGLError * error = MGLError_New(TRACE, "No pixel formats available");
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return context;
+		}
+
+		if (!SetPixelFormat(hdc, pixelformat, &pfd)) {
+			MGLError * error = MGLError_New(TRACE, "Cannot set pixel format");
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return context;
+		}
+
+		int major[] = {4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 0};
+		int minor[] = {5, 4, 3, 2, 1, 0, 3, 2, 1, 0, 0};
+
+		for (int i = 0; i < 10; ++i) {
+			int attriblist[] = {
+				WGL_CONTEXT_PROFILE_MASK, WGL_CONTEXT_CORE_PROFILE_BIT,
+				WGL_CONTEXT_MAJOR_VERSION, major[i],
+				WGL_CONTEXT_MINOR_VERSION, minor[i],
+				0, 0,
+			};
+
+			hrc = mglCreateContextAttribs(hdc, 0, attriblist);
+
+			if (hrc) {
+				break;
+			}
+		}
+
+	} else {
+
+		int pf = ChoosePixelFormat(hdc, &pfd);
+
+		if (!pf) {
+			MGLError * error = MGLError_New(TRACE, "Cannot choose pixel format");
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return context;
+		}
+
+		int set_pixel_format = SetPixelFormat(hdc, pf, &pfd);
+
+		if (!set_pixel_format) {
+			MGLError * error = MGLError_New(TRACE, "Cannot set pixel format");
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return context;
+		}
+
+		hrc = wglCreateContext(hdc);
+
 	}
-
-	int set_pixel_format = SetPixelFormat(hdc, pf, &pfd);
-
-	if (!set_pixel_format) {
-		MGLError * error = MGLError_New(TRACE, "Cannot set pixel format");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return context;
-	}
-
-	HGLRC hrc = wglCreateContext(hdc);
 
 	if (!hrc) {
 		MGLError * error = MGLError_New(TRACE, "Cannot create OpenGL context");
@@ -155,6 +336,18 @@ GLContext CreateGLContext(int width, int height) {
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return context;
 	}
+
+	// if (!ReleaseDC(hwnd, hdc)) {
+	// 	MGLError * error = MGLError_New(TRACE, "Cannot release device content");
+	// 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	// 	return context;
+	// }
+
+	// if (!DestroyWindow(hwnd)) {
+	// 	MGLError * error = MGLError_New(TRACE, "Cannot destroy window");
+	// 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	// 	return context;
+	// }
 
 	context.hwnd = (void *)hwnd;
 	context.hrc = (void *)hrc;
