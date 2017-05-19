@@ -12,4 +12,6 @@ struct MGLError {
 
 extern PyTypeObject MGLError_Type;
 
+// TODO: rename MGLError_New to MGLError_FromFormat
 MGLError * MGLError_New(const char * filename, int line, const char * format, ...);
+MGLError * MGLError_FromMessage(const char * filename, int line, PyObject * message);

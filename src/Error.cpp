@@ -116,5 +116,16 @@ MGLError * MGLError_New(const char * filename, int line, const char * format, ..
 	return self;
 }
 
+MGLError * MGLError_FromMessage(const char * filename, int line, PyObject * message) {
+	MGLError * self = (MGLError *)MGLError_tp_new(&MGLError_Type, 0, 0);
+
+	self->args = PyTuple_New(1);
+	PyTuple_SET_ITEM(self->args, 0, message);
+
+	self->github = PyUnicode_FromFormat(GITHUB("/src/%s#L%d"), filename + 4, line);
+
+	return self;
+}
+
 // void MGLError_LinkSource(MGLError * error, const char * filename, int line) {
 // }
