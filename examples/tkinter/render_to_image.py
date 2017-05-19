@@ -65,9 +65,9 @@ def redraw(col, val):
 	panel.image = img2
 
 
-R = tk.Scale(root, from_ = 0, to = 255, orient = tk.HORIZONTAL, command = lambda x: redraw('R', int(x) / 255))
-G = tk.Scale(root, from_ = 0, to = 255, orient = tk.HORIZONTAL, command = lambda x: redraw('G', int(x) / 255))
-B = tk.Scale(root, from_ = 0, to = 255, orient = tk.HORIZONTAL, command = lambda x: redraw('B', int(x) / 255))
+R = tk.Scale(root, from_ = 0, to = 255, orient = tk.HORIZONTAL, command = lambda x: redraw('R', int(x) / 255), length=300)
+G = tk.Scale(root, from_ = 0, to = 255, orient = tk.HORIZONTAL, command = lambda x: redraw('G', int(x) / 255), length=300)
+B = tk.Scale(root, from_ = 0, to = 255, orient = tk.HORIZONTAL, command = lambda x: redraw('B', int(x) / 255), length=300)
 
 R.pack()
 G.pack()
