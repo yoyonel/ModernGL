@@ -615,7 +615,7 @@ def create_context(require=None) -> Context:
     ctx = Context.new(mgl.create_context())
 
     if require is not None and ctx.version < require:
-        raise Exception('TODO')
+        raise Exception('The version required is not provided')
 
     return ctx
 
@@ -645,7 +645,7 @@ def create_standalone_context(size=(256, 256), require=None) -> Context:
     ctx = Context.new(mgl.create_standalone_context(*size))
 
     if require is not None and ctx.version < require:
-        raise Exception('TODO')
+        raise Exception('The version required is not provided')
 
     return ctx
 
