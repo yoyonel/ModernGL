@@ -841,8 +841,8 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->matrix = false;
 			self->dimension = 1;
 			self->element_size = 4;
-			self->gl_value_reader_proc = 0;
-			self->gl_value_writer_proc = 0;
+			self->gl_value_reader_proc = (void *)gl.GetUniformiv;
+			self->gl_value_writer_proc = (void *)gl.ProgramUniform1iv;
 			self->value_getter = (void *)MGLUniform_invalid_getter;
 			self->value_setter = (void *)MGLUniform_invalid_setter;
 			break;
