@@ -26,7 +26,7 @@ void MGLAttribute_tp_dealloc(MGLAttribute * self) {
 }
 
 int MGLAttribute_tp_init(MGLAttribute * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Attribute manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Attribute manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
@@ -649,7 +649,7 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 			self->row_length = 1;
 			self->row_size = 4;
 
-			self->gl_attrib_ptr_proc = 0;
+			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 
 			self->normalizable = false;
 			self->shape = 0;

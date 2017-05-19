@@ -25,7 +25,7 @@ void MGLUniformBlock_tp_dealloc(MGLUniformBlock * self) {
 }
 
 int MGLUniformBlock_tp_init(MGLUniformBlock * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.UniformBlock manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.UniformBlock manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
@@ -100,5 +100,4 @@ MGLUniformBlock * MGLUniformBlock_New() {
 }
 
 void MGLUniformBlock_Complete(MGLUniformBlock * uniform_block, const GLMethods & gl) {
-	// TODO:
 }

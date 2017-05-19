@@ -26,7 +26,7 @@ void MGLUniform_tp_dealloc(MGLUniform * self) {
 }
 
 int MGLUniform_tp_init(MGLUniform * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Uniform manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Uniform manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
@@ -37,14 +37,6 @@ PyObject * MGLUniform_tp_str(MGLUniform * self) {
 
 PyObject * MGLUniform_read(MGLUniform * self) {
 	PyObject * result = PyBytes_FromStringAndSize(0, self->element_size);
-
-	// TODO: remove
-	if (!self->gl_value_reader_proc) {
-		MGLError * error = MGLError_New(TRACE, "gl_value_reader_proc is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
-	}
-
 	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location, PyBytes_AS_STRING(result));
 	return result;
 }
@@ -68,15 +60,8 @@ PyObject * MGLUniform_write(MGLUniform * self, PyObject * args) {
 		return 0;
 	}
 
-	// TODO: remove
-	if (!self->gl_value_writer_proc) {
-		MGLError * error = MGLError_New(TRACE, "gl_value_writer_proc is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
-	}
-
 	if (size != self->array_length * self->element_size) {
-		MGLError * error = MGLError_New(TRACE, "data size mismatch %d != %d", size, self->array_length * self->element_size);
+		MGLError * error = MGLError_FromFormat(TRACE, "data size mismatch %d != %d", size, self->array_length * self->element_size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -110,26 +95,10 @@ PyObject * MGLUniform_get_dimension(MGLUniform * self, void * closure) {
 }
 
 PyObject * MGLUniform_get_value(MGLUniform * self, void * closure) {
-
-	// TODO: remove
-	if (!self->value_getter) {
-		MGLError * error = MGLError_New(TRACE, "value_getter is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
-	}
-
 	return ((MGLUniform_Getter)self->value_getter)(self);
 }
 
 int MGLUniform_set_value(MGLUniform * self, PyObject * value, void * closure) {
-
-	// TODO: remove
-	if (!self->value_setter) {
-		MGLError * error = MGLError_New(TRACE, "value_setter is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return 0;
-	}
-
 	return ((MGLUniform_Setter)self->value_setter)(self, value);
 }
 
@@ -841,8 +810,8 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->matrix = false;
 			self->dimension = 1;
 			self->element_size = 4;
-			self->gl_value_reader_proc = (void *)gl.GetUniformiv;
-			self->gl_value_writer_proc = (void *)gl.ProgramUniform1iv;
+			self->gl_value_reader_proc = (void *)gl.GetUniformfv;
+			self->gl_value_writer_proc = (void *)gl.ProgramUniform1fv;
 			self->value_getter = (void *)MGLUniform_invalid_getter;
 			self->value_setter = (void *)MGLUniform_invalid_setter;
 			break;

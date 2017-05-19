@@ -34,7 +34,7 @@ void MGLVertexArray_tp_dealloc(MGLVertexArray * self) {
 }
 
 int MGLVertexArray_tp_init(MGLVertexArray * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.VertexArray manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.VertexArray manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
@@ -65,7 +65,7 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 
 	if (vertices < 0) {
 		if (self->num_vertices < 0) {
-			MGLError * error = MGLError_New(TRACE, "Cannot detect the number of vertices");
+			MGLError * error = MGLError_FromFormat(TRACE, "Cannot detect the number of vertices");
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -75,8 +75,8 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 
 	MGLPrimitive * gs_input = self->program->geometry_input;
 
-	if (gs_input && gs_input->primitive != mode->geometry_primitive) { // TODO: check
-		MGLError * error = MGLError_New(TRACE, "GeometryShader input is different from render mode");
+	if (gs_input && gs_input->primitive != mode->geometry_primitive) {
+		MGLError * error = MGLError_FromFormat(TRACE, "GeometryShader input is different from render mode");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -121,7 +121,7 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 
 	if (vertices < 0) {
 		if (self->num_vertices < 0) {
-			MGLError * error = MGLError_New(TRACE, "Cannot detect the number of vertices");
+			MGLError * error = MGLError_FromFormat(TRACE, "Cannot detect the number of vertices");
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -132,7 +132,7 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	MGLPrimitive * gs_input = self->program->geometry_input;
 
 	if (gs_input && gs_input->primitive != mode->geometry_primitive) {
-		MGLError * error = MGLError_New(TRACE, "GeometryShader input is different from transform mode");
+		MGLError * error = MGLError_FromFormat(TRACE, "GeometryShader input is different from transform mode");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -237,15 +237,54 @@ PyObject * MGLVertexArray_get_index_buffer(MGLVertexArray * self, void * closure
 	return (PyObject *)self->index_buffer;
 }
 
+int MGLVertexArray_set_index_buffer(MGLVertexArray * self, PyObject * value, void * closure) {
+	if (Py_TYPE(value) != &MGLBuffer_Type) {
+		MGLError * error = MGLError_FromFormat(TRACE, "index_buffer must be a Buffer not %s", Py_TYPE(value)->tp_name);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return -1;
+	}
+
+	Py_INCREF(value);
+	Py_DECREF(self->index_buffer);
+	self->index_buffer = (MGLBuffer *)value;
+	self->num_vertices = self->index_buffer->size / 4;
+
+	return 0;
+}
+
 PyObject * MGLVertexArray_get_vertices(MGLVertexArray * self, void * closure) {
 	return PyLong_FromLong(self->num_vertices);
 }
 
+int MGLVertexArray_set_vertices(MGLVertexArray * self, PyObject * value, void * closure) {
+	int vertices = PyLong_AsUnsignedLong(value);
+
+	if (PyErr_Occurred()) {
+		MGLError * error = MGLError_FromFormat(TRACE, "invalid value for vertices");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return -1;
+	}
+
+	self->num_vertices = vertices;
+
+	return 0;
+}
+
 int MGLVertexArray_set_subroutines(MGLVertexArray * self, PyObject * value, void * closure) {
-	// TODO: test length test content
+	if (PyTuple_GET_SIZE(value) != self->num_subroutine_uniform_locations) {
+		MGLError * error = MGLError_FromFormat(TRACE, "the number of subroutines is %d not %d", self->num_subroutine_uniform_locations, PyTuple_GET_SIZE(value));
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return -1;
+	}
 
 	for (int i = 0; i < self->num_subroutine_uniform_locations; ++i) {
 		self->subroutine_uniform_locations[i] = PyLong_AsUnsignedLong(PyTuple_GET_ITEM(value, i));
+	}
+
+	if (PyErr_Occurred()) {
+		MGLError * error = MGLError_FromFormat(TRACE, "unsupported values for uniforms");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return -1;
 	}
 
 	return 0;
@@ -259,9 +298,9 @@ MGLContext * MGLVertexArray_get_context(MGLVertexArray * self, void * closure) {
 PyGetSetDef MGLVertexArray_tp_getseters[] = {
 	{(char *)"program", (getter)MGLVertexArray_get_program, 0, 0, 0},
 	{(char *)"attributes", (getter)MGLVertexArray_get_attributes, 0, 0, 0},
-	{(char *)"index_buffer", (getter)MGLVertexArray_get_index_buffer, 0, 0, 0}, // TODO: setter
-	{(char *)"vertices", (getter)MGLVertexArray_get_vertices, 0, 0, 0}, // TODO: setter
-	{(char *)"subroutines", 0, (setter)MGLVertexArray_set_subroutines, 0, 0}, // TODO: setter
+	{(char *)"index_buffer", (getter)MGLVertexArray_get_index_buffer, (setter)MGLVertexArray_set_index_buffer, 0, 0},
+	{(char *)"vertices", (getter)MGLVertexArray_get_vertices, (setter)MGLVertexArray_set_vertices, 0, 0},
+	{(char *)"subroutines", 0, (setter)MGLVertexArray_set_subroutines, 0, 0},
 	{(char *)"context", (getter)MGLVertexArray_get_context, 0, 0, 0},
 	{0},
 };

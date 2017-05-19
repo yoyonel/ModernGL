@@ -25,7 +25,7 @@ void MGLVertexArrayListAttribute_tp_dealloc(MGLVertexArrayListAttribute * self) 
 }
 
 int MGLVertexArrayListAttribute_tp_init(MGLVertexArrayListAttribute * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.VertexArrayListAttribute manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.VertexArrayListAttribute manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }

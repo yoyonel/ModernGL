@@ -27,7 +27,7 @@ void MGLProgramStage_tp_dealloc(MGLProgramStage * self) {
 }
 
 int MGLProgramStage_tp_init(MGLProgramStage * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.ProgramStage manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.ProgramStage manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }

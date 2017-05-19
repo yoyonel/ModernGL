@@ -34,7 +34,7 @@ void MGLProgram_tp_dealloc(MGLProgram * self) {
 }
 
 int MGLProgram_tp_init(MGLProgram * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Program manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Program manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
@@ -359,7 +359,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		gl.DeleteProgram(obj);
 
-		MGLError * error = MGLError_New(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
+		MGLError * error = MGLError_FromFormat(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 
 		delete[] log;
@@ -440,8 +440,6 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		MGLUniform_Complete(uniform, gl);
 
-		// TODO: check shadow and sampler cube
-
 		PyDict_SetItem(uniforms, uniform->name, (PyObject *)uniform);
 		Py_DECREF(uniform);
 	}
@@ -486,8 +484,6 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		uniform_block->name = PyUnicode_FromStringAndSize(name, name_len);
 
 		MGLUniformBlock_Complete(uniform_block, gl);
-
-		// TODO: check shadow and sampler cube
 
 		PyDict_SetItem(uniform_blocks, uniform_block->name, (PyObject *)uniform_block);
 		Py_DECREF(uniform_block);

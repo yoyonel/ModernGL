@@ -50,7 +50,7 @@ void MGLShader_tp_dealloc(MGLShader * self) {
 }
 
 int MGLShader_tp_init(MGLShader * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Shader manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Shader manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
@@ -187,7 +187,7 @@ void MGLShader_Compile(MGLShader * shader) {
 
 		gl.DeleteShader(obj);
 
-		MGLError * error = MGLError_New(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
+		MGLError * error = MGLError_FromFormat(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 
 		delete[] log;

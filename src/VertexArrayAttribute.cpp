@@ -25,7 +25,7 @@ void MGLVertexArrayAttribute_tp_dealloc(MGLVertexArrayAttribute * self) {
 }
 
 int MGLVertexArrayAttribute_tp_init(MGLVertexArrayAttribute * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.VertexArrayAttribute manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.VertexArrayAttribute manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
@@ -55,7 +55,7 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 	}
 
 	if (self->vertex_array->context != buffer->context) {
-		MGLError * error = MGLError_New(TRACE, "buffer belongs to a different context");
+		MGLError * error = MGLError_FromFormat(TRACE, "buffer belongs to a different context");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -103,7 +103,7 @@ PyObject * MGLVertexArrayAttribute_get_location(MGLVertexArrayAttribute * self, 
 
 PyObject * MGLVertexArrayAttribute_get_default(MGLVertexArrayAttribute * self, void * closure) {
 	if (!self->gl_attrib_getter_proc) {
-		MGLError * error = MGLError_New(TRACE, "gl_attrib_getter_proc is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_FromFormat(TRACE, "gl_attrib_getter_proc is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -114,7 +114,7 @@ PyObject * MGLVertexArrayAttribute_get_default(MGLVertexArrayAttribute * self, v
 
 int MGLVertexArrayAttribute_set_default(MGLVertexArrayAttribute * self, PyObject * value, void * closure) {
 	if (!self->gl_attrib_setter_proc) {
-		MGLError * error = MGLError_New(TRACE, "gl_attrib_getter_proc is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+		MGLError * error = MGLError_FromFormat(TRACE, "gl_attrib_getter_proc is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}

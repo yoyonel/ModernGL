@@ -34,7 +34,7 @@ void MGLError_tp_dealloc(MGLError * self) {
 }
 
 int MGLError_tp_init(MGLError * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Error manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Error manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
@@ -101,7 +101,7 @@ PyTypeObject MGLError_Type = {
 #define GITHUB_URL "https://github.com/cprogrammer1994/ModernGL/blob/master"
 #define GITHUB(path) GITHUB_URL path
 
-MGLError * MGLError_New(const char * filename, int line, const char * format, ...) {
+MGLError * MGLError_FromFormat(const char * filename, int line, const char * format, ...) {
 	MGLError * self = (MGLError *)MGLError_tp_new(&MGLError_Type, 0, 0);
 
 	va_list va_args;

@@ -28,7 +28,7 @@ void MGLFramebuffer_tp_dealloc(MGLFramebuffer * self) {
 }
 
 int MGLFramebuffer_tp_init(MGLFramebuffer * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_New(TRACE, "Cannot create ModernGL.Framebuffer manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Framebuffer manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
@@ -66,7 +66,8 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 
 	if (viewport != Py_None) {
 		if (Py_TYPE(viewport) != &PyTuple_Type) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			MGLError * error = MGLError_FromFormat(TRACE, "the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
@@ -84,13 +85,15 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 
 		} else {
 
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			MGLError * error = MGLError_FromFormat(TRACE, "the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 
 		}
 
 		if (PyErr_Occurred()) {
-			PyErr_Format(PyExc_Exception, "Unknown error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			MGLError * error = MGLError_FromFormat(TRACE, "wrong values in the viewport");
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
@@ -123,12 +126,6 @@ PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
 	self->context->gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
 	Py_RETURN_NONE;
 }
-
-/* DOWNSAMPLE
-glBindFramebuffer(GL_READ_FRAMEBUFFER, sampleFramebuffer);
-glBindFramebuffer(GL_DRAW_FRAMEBUFFER, resultFramebuffer);
-glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-*/
 
 PyMethodDef MGLFramebuffer_tp_methods[] = {
 	{"release", (PyCFunction)MGLFramebuffer_release, METH_NOARGS, 0},

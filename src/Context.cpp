@@ -40,7 +40,7 @@ void MGLContext_tp_dealloc(MGLContext * self) {
 }
 
 int MGLContext_tp_init(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_New(TRACE, "Cannot create Context manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create Context manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
@@ -189,13 +189,13 @@ PyObject * MGLContext_copy_buffer(MGLContext * self, PyObject * args) {
 	}
 
 	if (read_offset < 0 || write_offset < 0) {
-		MGLError * error = MGLError_New(TRACE, "buffer underflow");
+		MGLError * error = MGLError_FromFormat(TRACE, "buffer underflow");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
 	if (read_offset + size > src->size || write_offset + size > dst->size) {
-		MGLError * error = MGLError_New(TRACE, "buffer overflow");
+		MGLError * error = MGLError_FromFormat(TRACE, "buffer overflow");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -225,38 +225,6 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	// int read_x = 0;
-	// int read_y = 0;
-	// int read_width = src->width;
-	// int read_height = src->height;
-
-	// int write_x = 0;
-	// int write_y = 0;
-	// int write_width = dst->width;
-	// int write_height = dst->height;
-
-	// if (read_viewport != Py_None) {
-	// 	if (PyTuple_GET_SIZE(read_viewport) != 4) {
-	// 		// TODO: error
-	// 	}
-
-	// 	read_x = PyLong_AsLong(PyTuple_GET_ITEM(read_viewport, 0));
-	// 	read_y = PyLong_AsLong(PyTuple_GET_ITEM(read_viewport, 1));
-	// 	read_width = PyLong_AsLong(PyTuple_GET_ITEM(read_viewport, 2));
-	// 	read_height = PyLong_AsLong(PyTuple_GET_ITEM(read_viewport, 3));
-	// }
-
-	// if (write_viewport != Py_None) {
-	// 	if (PyTuple_GET_SIZE(write_viewport) != 4) {
-	// 		// TODO: error
-	// 	}
-
-	// 	write_x = PyLong_AsLong(PyTuple_GET_ITEM(write_viewport, 0));
-	// 	write_y = PyLong_AsLong(PyTuple_GET_ITEM(write_viewport, 1));
-	// 	write_width = PyLong_AsLong(PyTuple_GET_ITEM(write_viewport, 2));
-	// 	write_height = PyLong_AsLong(PyTuple_GET_ITEM(write_viewport, 3));
-	// }
-
 	const GLMethods & gl = self->gl;
 
 	// If the sizes of the source and destination rectangles are not equal,
@@ -276,8 +244,6 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 		gl.BindFramebuffer(GL_READ_FRAMEBUFFER, src->framebuffer_obj);
 		gl.BindFramebuffer(GL_DRAW_FRAMEBUFFER, dst_framebuffer->framebuffer_obj);
 		gl.BlitFramebuffer(
-			// read_x, read_y, read_x + read_width, read_y + read_height,
-			// write_x, write_y, write_x + write_width, write_y + write_height,
 			0, 0, width, height,
 			0, 0, width, height,
 			GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT,
@@ -301,7 +267,7 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 
 	} else {
 
-		MGLError * error = MGLError_New(TRACE, "dst must be a framebuffer or a texture");
+		MGLError * error = MGLError_FromFormat(TRACE, "dst must be a framebuffer or a texture");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 
@@ -309,54 +275,6 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 
 	Py_RETURN_NONE;
 }
-
-// PyObject * MGLContext_read_pixels(MGLContext * self, PyObject * args) {
-// 	int x;
-// 	int y;
-// 	int width;
-// 	int height;
-// 	int components;
-// 	int floats;
-
-// 	int args_ok = PyArg_ParseTuple(
-// 		args,
-// 		"(IIII)Ip",
-// 		&x,
-// 		&y,
-// 		&width,
-// 		&height,
-// 		&components,
-// 		&floats
-// 	);
-
-// 	if (!args_ok) {
-// 		return 0;
-// 	}
-
-// 	if (x < 0 || y < 0 || width <= 0 || height <= 0 || components < 1 || components > 4) {
-// 		MGLError * error = MGLError_New(TRACE, "range check error");
-// 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-// 		return 0;
-// 	}
-
-// 	int size = floats ? (width * height * 4) : (height * ((width * components + 3) & ~3));
-// 	int pixel_type = floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
-
-// 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-// 	int format = formats[components];
-
-// 	PyObject * bytes = PyBytes_FromStringAndSize(0, size);
-// 	char * data = PyBytes_AS_STRING(bytes);
-// 	memset(data, 0, size);
-
-// 	const GLMethods & gl = self->gl;
-
-// 	// gl.Finish();
-// 	// Sometimes glReadPixels does not change the content of data
-// 	gl.ReadPixels(x, y, width, height, format, pixel_type, data);
-
-// 	return bytes;
-// }
 
 MGLBuffer * MGLContext_buffer(MGLContext * self, PyObject * args) {
 	PyObject * data;
@@ -376,7 +294,7 @@ MGLBuffer * MGLContext_buffer(MGLContext * self, PyObject * args) {
 	}
 
 	if ((data != Py_None && reserve) || (data == Py_None && !reserve)) {
-		MGLError * error = MGLError_New(TRACE, "data and reserve are mutually exclusive");
+		MGLError * error = MGLError_FromFormat(TRACE, "data and reserve are mutually exclusive");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -386,7 +304,7 @@ MGLBuffer * MGLContext_buffer(MGLContext * self, PyObject * args) {
 	if (data != Py_None) {
 		int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
 		if (get_buffer < 0) {
-			MGLError * error = MGLError_New(TRACE, "data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+			MGLError * error = MGLError_FromFormat(TRACE, "data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -396,7 +314,7 @@ MGLBuffer * MGLContext_buffer(MGLContext * self, PyObject * args) {
 	}
 
 	if (!buffer_view.len) {
-		MGLError * error = MGLError_New(TRACE, "buffer cannot be empty");
+		MGLError * error = MGLError_FromFormat(TRACE, "buffer cannot be empty");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		if (data != Py_None) {
 			PyBuffer_Release(&buffer_view);
@@ -415,7 +333,7 @@ MGLBuffer * MGLContext_buffer(MGLContext * self, PyObject * args) {
 	gl.GenBuffers(1, (GLuint *)&buffer->buffer_obj);
 
 	if (!buffer->buffer_obj) {
-		MGLError * error = MGLError_New(TRACE, "Cannot create buffer object.");
+		MGLError * error = MGLError_FromFormat(TRACE, "Cannot create buffer object.");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -461,13 +379,13 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 	}
 
 	if (components < 1 || components > 4) {
-		MGLError * error = MGLError_New(TRACE, "components must be 1, 2, 3 or 4");
+		MGLError * error = MGLError_FromFormat(TRACE, "components must be 1, 2, 3 or 4");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
 	if (data != Py_None && samples) {
-		MGLError * error = MGLError_New(TRACE, "cannot write data for a multisample texture");
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot write data for a multisample texture");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -484,7 +402,7 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 	}
 
 	if (buffer_view.len != expected_size) {
-		MGLError * error = MGLError_New(TRACE, "data size mismatch %d != %d", buffer_view.len, expected_size);
+		MGLError * error = MGLError_FromFormat(TRACE, "data size mismatch %d != %d", buffer_view.len, expected_size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		if (data != Py_None) {
 			PyBuffer_Release(&buffer_view);
@@ -556,7 +474,7 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	}
 
 	if (data != Py_None && samples) {
-		MGLError * error = MGLError_New(TRACE, "cannot write data for a multisample texture");
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot write data for a multisample texture");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -573,7 +491,7 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	}
 
 	if (buffer_view.len != expected_size) {
-		MGLError * error = MGLError_New(TRACE, "data size mismatch %d != %d", buffer_view.len, expected_size);
+		MGLError * error = MGLError_FromFormat(TRACE, "data size mismatch %d != %d", buffer_view.len, expected_size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		if (data != Py_None) {
 			PyBuffer_Release(&buffer_view);
@@ -619,7 +537,6 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	MGLProgram * program;
 	PyObject * content;
 	MGLBuffer * index_buffer;
-	int skip_errors = false;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
@@ -635,13 +552,13 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	}
 
 	if (program->context != self) {
-		MGLError * error = MGLError_New(TRACE, "program belongs to a different context");
+		MGLError * error = MGLError_FromFormat(TRACE, "program belongs to a different context");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
 
 	if (index_buffer != (MGLBuffer *)Py_None && index_buffer->context != self) {
-		MGLError * error = MGLError_New(TRACE, "index_buffer belongs to a different context");
+		MGLError * error = MGLError_FromFormat(TRACE, "index_buffer belongs to a different context");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -649,7 +566,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	int content_len = (int)PyTuple_GET_SIZE(content);
 
 	if (!content_len) {
-		MGLError * error = MGLError_New(TRACE, "content must not be emtpy");
+		MGLError * error = MGLError_FromFormat(TRACE, "content must not be emtpy");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -658,7 +575,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		PyObject * tuple = PyTuple_GET_ITEM(content, i);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_New(TRACE, "content[%d] must be a tuple not %s", i, Py_TYPE(tuple)->tp_name);
+			MGLError * error = MGLError_FromFormat(TRACE, "content[%d] must be a tuple not %s", i, Py_TYPE(tuple)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -666,7 +583,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		int size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (size != 3) {
-			MGLError * error = MGLError_New(TRACE, "content[%d] must be a tuple of size 3 not %d", i, size);
+			MGLError * error = MGLError_FromFormat(TRACE, "content[%d] must be a tuple of size 3 not %d", i, size);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -676,25 +593,25 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
 
 		if (Py_TYPE(buffer) != &MGLBuffer_Type) {
-			MGLError * error = MGLError_New(TRACE, "content[%d][0] must be a ModernGL.Buffer not %s", i, Py_TYPE(buffer)->tp_name);
+			MGLError * error = MGLError_FromFormat(TRACE, "content[%d][0] must be a ModernGL.Buffer not %s", i, Py_TYPE(buffer)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
 		if (Py_TYPE(format) != &PyUnicode_Type) {
-			MGLError * error = MGLError_New(TRACE, "content[%d][1] must be a str not %s", i, Py_TYPE(format)->tp_name);
+			MGLError * error = MGLError_FromFormat(TRACE, "content[%d][1] must be a str not %s", i, Py_TYPE(format)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
 		if (Py_TYPE(attributes) != &PyTuple_Type) {
-			MGLError * error = MGLError_New(TRACE, "content[%d][2] must be a list not %s", i, Py_TYPE(attributes)->tp_name);
+			MGLError * error = MGLError_FromFormat(TRACE, "content[%d][2] must be a list not %s", i, Py_TYPE(attributes)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
 		if (((MGLBuffer *)buffer)->context != self) {
-			MGLError * error = MGLError_New(TRACE, "content[%d][0] belongs to a different context", i);
+			MGLError * error = MGLError_FromFormat(TRACE, "content[%d][0] belongs to a different context", i);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -703,13 +620,13 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		FormatInfo format_info = it.info();
 
 		if (!format_info.valid) {
-			MGLError * error = MGLError_New(TRACE, "content[%d][1] is an invalid format", i);
+			MGLError * error = MGLError_FromFormat(TRACE, "content[%d][1] is an invalid format", i);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
 		if (i == 0 && format_info.per_instance) {
-			MGLError * error = MGLError_New(TRACE, "the first vertex attribute must not be a per instance attribute");
+			MGLError * error = MGLError_FromFormat(TRACE, "the first vertex attribute must not be a per instance attribute");
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -717,13 +634,13 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		int attributes_len = (int)PyTuple_GET_SIZE(attributes);
 
 		if (!attributes_len) {
-			MGLError * error = MGLError_New(TRACE, "content[%d][2] must not be empty", i);
+			MGLError * error = MGLError_FromFormat(TRACE, "content[%d][2] must not be empty", i);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
 
 		if (attributes_len != format_info.nodes) {
-			MGLError * error = MGLError_New(TRACE, "content[%d][1] and content[%d][2] size mismatch %d != %d", i, i, format_info.nodes, attributes_len);
+			MGLError * error = MGLError_FromFormat(TRACE, "content[%d][1] and content[%d][2] size mismatch %d != %d", i, i, format_info.nodes, attributes_len);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -732,12 +649,12 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 			PyObject * attribute = PyTuple_GET_ITEM(attributes, j);
 
 			if (Py_TYPE(attribute) != &PyUnicode_Type) {
-				MGLError * error = MGLError_New(TRACE, "content[%d][2][%d] must be a str not %s", i, j, Py_TYPE(attribute)->tp_name);
+				MGLError * error = MGLError_FromFormat(TRACE, "content[%d][2][%d] must be a str not %s", i, j, Py_TYPE(attribute)->tp_name);
 				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 				return 0;
 			}
 
-			if (!skip_errors) {
+			{
 				const char * name = PyUnicode_AsUTF8(attribute);
 
 				FormatNode * node = it.next();
@@ -749,7 +666,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 				MGLAttribute * attribute = (MGLAttribute *)PyDict_GetItemString(program->attributes, name);
 
 				if (!attribute) {
-					MGLError * error = MGLError_New(TRACE, "%s is not a valid attribute", name);
+					MGLError * error = MGLError_FromFormat(TRACE, "%s is not a valid attribute", name);
 					PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 					return 0;
 				}
@@ -757,13 +674,13 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 				int scalars = attribute->dimension * attribute->array_length;
 
 				if (scalars != node->count) {
-					MGLError * error = MGLError_New(TRACE, "%s size is %d not %d", name, scalars, node->count);
+					MGLError * error = MGLError_FromFormat(TRACE, "%s size is %d not %d", name, scalars, node->count);
 					PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 					return 0;
 				}
 
 				if (attribute->shape != node->shape) {
-					MGLError * error = MGLError_New(TRACE, "%s shape is '%c' not '%c'", name, attribute->shape, node->shape);
+					MGLError * error = MGLError_FromFormat(TRACE, "%s shape is '%c' not '%c'", name, attribute->shape, node->shape);
 					PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 					return 0;
 				}
@@ -772,7 +689,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	}
 
 	if (index_buffer != (MGLBuffer *)Py_None && Py_TYPE(index_buffer) != &MGLBuffer_Type) {
-		MGLError * error = MGLError_New(TRACE, "index_buffer must be a ModernGL.Buffer not %s", Py_TYPE(index_buffer)->tp_name);
+		MGLError * error = MGLError_FromFormat(TRACE, "index_buffer must be a ModernGL.Buffer not %s", Py_TYPE(index_buffer)->tp_name);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -879,7 +796,7 @@ MGLProgram * MGLContext_program(MGLContext * self, PyObject * args) {
 	for (int i = 0; i < num_varyings; ++i) {
 		PyObject * item = PyTuple_GET_ITEM(varyings, i);
 		if (Py_TYPE(item) != &PyUnicode_Type) {
-			MGLError * error = MGLError_New(TRACE, "varyings[%d] must be a str not %s", i, Py_TYPE(item)->tp_name);
+			MGLError * error = MGLError_FromFormat(TRACE, "varyings[%d] must be a str not %s", i, Py_TYPE(item)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -892,7 +809,7 @@ MGLProgram * MGLContext_program(MGLContext * self, PyObject * args) {
 	for (int i = 0; i < num_shaders; ++i) {
 		PyObject * item = PyTuple_GET_ITEM(shaders, i);
 		if (Py_TYPE(item) != &MGLShader_Type) {
-			MGLError * error = MGLError_New(TRACE, "shaders[%d] must be a ModernGL.Shader not %s", i, Py_TYPE(item)->tp_name);
+			MGLError * error = MGLError_FromFormat(TRACE, "shaders[%d] must be a ModernGL.Shader not %s", i, Py_TYPE(item)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -900,7 +817,7 @@ MGLProgram * MGLContext_program(MGLContext * self, PyObject * args) {
 		MGLShader * shader = (MGLShader *)item;
 
 		if (shader->context != self) {
-			MGLError * error = MGLError_New(TRACE, "shaders[%d] belongs to a different context", i);
+			MGLError * error = MGLError_FromFormat(TRACE, "shaders[%d] belongs to a different context", i);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -908,7 +825,7 @@ MGLProgram * MGLContext_program(MGLContext * self, PyObject * args) {
 		counter[shader->shader_slot] += 1;
 
 		if (counter[shader->shader_slot] > 1) {
-			MGLError * error = MGLError_New(TRACE, "shaders has duplicate %s", SHADER_NAME[shader->shader_slot]);
+			MGLError * error = MGLError_FromFormat(TRACE, "shaders has duplicate %s", SHADER_NAME[shader->shader_slot]);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -948,7 +865,7 @@ MGLShader * MGLContext_shader(MGLContext * self, PyObject * args) {
 	}
 
 	if (!PyUnicode_Check(source)) {
-		MGLError * error = MGLError_New(TRACE, "source must be a str not %s", Py_TYPE(source)->tp_name);
+		MGLError * error = MGLError_FromFormat(TRACE, "source must be a str not %s", Py_TYPE(source)->tp_name);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -1002,7 +919,7 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	int color_attachments_len = (int)PyTuple_GET_SIZE(color_attachments);
 
 	if (!color_attachments_len) {
-		MGLError * error = MGLError_New(TRACE, "color_attachments must not be empty");
+		MGLError * error = MGLError_FromFormat(TRACE, "color_attachments must not be empty");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -1011,7 +928,7 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		PyObject * item = PyTuple_GET_ITEM(color_attachments, i);
 
 		if (Py_TYPE(item) != &MGLTexture_Type && Py_TYPE(item) != &MGLRenderbuffer_Type) {
-			MGLError * error = MGLError_New(TRACE, "color_attachments[%d] must be a Renderbuffer or Texture not %s", i, Py_TYPE(item)->tp_name);
+			MGLError * error = MGLError_FromFormat(TRACE, "color_attachments[%d] must be a Renderbuffer or Texture not %s", i, Py_TYPE(item)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -1024,14 +941,14 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 			samples = attachment->samples;
 		} else {
 			if (attachment->width != width || attachment->height != height || attachment->samples != samples) {
-				MGLError * error = MGLError_New(TRACE, "color_attachments have different size or samples");
+				MGLError * error = MGLError_FromFormat(TRACE, "color_attachments have different size or samples");
 				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 				return 0;
 			}
 		}
 
 		if (attachment->context != self) {
-			MGLError * error = MGLError_New(TRACE, "color_attachments[%d] belongs to a different context", i);
+			MGLError * error = MGLError_FromFormat(TRACE, "color_attachments[%d] belongs to a different context", i);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -1042,7 +959,7 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	if (depth_attachment != Py_None) {
 
 		if (Py_TYPE(depth_attachment) != &MGLTexture_Type && Py_TYPE(depth_attachment) != &MGLRenderbuffer_Type) {
-			MGLError * error = MGLError_New(TRACE, "depth_attachment must be a Renderbuffer or Texture not %s", Py_TYPE(depth_attachment)->tp_name);
+			MGLError * error = MGLError_FromFormat(TRACE, "depth_attachment must be a Renderbuffer or Texture not %s", Py_TYPE(depth_attachment)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -1050,7 +967,7 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		MGLFramebufferAttachment * attachment = (MGLFramebufferAttachment *)depth_attachment;
 
 		if (attachment->context != self) {
-			MGLError * error = MGLError_New(TRACE, "depth_attachment belongs to a different context");
+			MGLError * error = MGLError_FromFormat(TRACE, "depth_attachment belongs to a different context");
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -1079,7 +996,6 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		Py_INCREF(self);
 		renderbuffer->context = self;
 
-		// TODO: check incref
 		Py_INCREF(renderbuffer);
 		depth_attachment = (PyObject *)renderbuffer;
 
@@ -1185,7 +1101,7 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 				break;
 		}
 
-		MGLError * error = MGLError_New(TRACE, message);
+		MGLError * error = MGLError_FromFormat(TRACE, message);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -1227,7 +1143,7 @@ MGLRenderbuffer * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 	}
 
 	if (components < 1 || components > 4) {
-		MGLError * error = MGLError_New(TRACE, "components must be 1, 2, 3 or 4");
+		MGLError * error = MGLError_FromFormat(TRACE, "components must be 1, 2, 3 or 4");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -1325,7 +1241,7 @@ MGLComputeShader * MGLContext_compute_shader(MGLContext * self, PyObject * args)
 	}
 
 	if (!PyUnicode_Check(source)) {
-		MGLError * error = MGLError_New(TRACE, "source must be a str not %s", Py_TYPE(source)->tp_name);
+		MGLError * error = MGLError_FromFormat(TRACE, "source must be a str not %s", Py_TYPE(source)->tp_name);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -1345,7 +1261,7 @@ MGLComputeShader * MGLContext_compute_shader(MGLContext * self, PyObject * args)
 	int shader_obj = gl.CreateShader(GL_COMPUTE_SHADER);
 
 	if (!shader_obj) {
-		MGLError * error = MGLError_New(TRACE, "cannot create shader object");
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create shader object");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -1369,7 +1285,7 @@ MGLComputeShader * MGLContext_compute_shader(MGLContext * self, PyObject * args)
 
 		gl.DeleteShader(shader_obj);
 
-		MGLError * error = MGLError_New(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
+		MGLError * error = MGLError_FromFormat(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 
 		delete[] log;
@@ -1381,7 +1297,7 @@ MGLComputeShader * MGLContext_compute_shader(MGLContext * self, PyObject * args)
 	int program_obj = gl.CreateProgram();
 
 	if (!program_obj) {
-		MGLError * error = MGLError_New(TRACE, "cannot create program object");
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create program object");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -1405,7 +1321,7 @@ MGLComputeShader * MGLContext_compute_shader(MGLContext * self, PyObject * args)
 
 		gl.DeleteProgram(program_obj);
 
-		MGLError * error = MGLError_New(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
+		MGLError * error = MGLError_FromFormat(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 
 		delete[] log;
@@ -1512,7 +1428,7 @@ int MGLContext_set_viewport(MGLContext * self, PyObject * value) {
 	}
 
 	if (size != 4) {
-		MGLError * error = MGLError_New(TRACE, "viewport must be a tuple of size 4 not %d", size);
+		MGLError * error = MGLError_FromFormat(TRACE, "viewport must be a tuple of size 4 not %d", size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}
@@ -1563,9 +1479,8 @@ PyObject * MGLContext_get_default_framebuffer(MGLContext * self) {
 		// NO INCREF
 		framebuffer->context = self;
 
-		// TODO:
-		// framebuffer->width = ...;
-		// framebuffer->height = ...;
+		framebuffer->width = 0;
+		framebuffer->height = 0;
 
 		self->default_framebuffer = (PyObject *)framebuffer;
 	}
@@ -1578,7 +1493,7 @@ PyObject * MGLContext_get_vendor(MGLContext * self, void * closure) {
 	const char * vendor = (const char *)self->gl.GetString(GL_VENDOR);
 
 	if (!vendor) {
-		MGLError * error = MGLError_New(TRACE, "Missing vendor information");
+		MGLError * error = MGLError_FromFormat(TRACE, "Missing vendor information");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -1591,7 +1506,7 @@ PyObject * MGLContext_get_renderer(MGLContext * self, void * closure) {
 	const char * renderer = (const char *)self->gl.GetString(GL_RENDERER);
 
 	if (!renderer) {
-		MGLError * error = MGLError_New(TRACE, "Missing renderer information");
+		MGLError * error = MGLError_FromFormat(TRACE, "Missing renderer information");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -1603,7 +1518,7 @@ PyObject * MGLContext_get_version(MGLContext * self, void * closure) {
 	const char * version = (const char *)self->gl.GetString(GL_VERSION);
 
 	if (!version) {
-		MGLError * error = MGLError_New(TRACE, "Missing version information");
+		MGLError * error = MGLError_FromFormat(TRACE, "Missing version information");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}

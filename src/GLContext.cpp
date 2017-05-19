@@ -6,28 +6,6 @@
 
 #include <Windows.h>
 
-GLContext LoadCurrentGLContext() {
-	GLContext context = {};
-
-	HGLRC hrc = wglGetCurrentContext();
-	HDC hdc = wglGetCurrentDC();
-
-	if (!hrc || !hdc) {
-		MGLError * error = MGLError_New(TRACE, "Cannot detect current context.");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-		return context;
-	}
-
-	HWND hwnd = WindowFromDC(hdc);
-
-	context.hwnd = (void *)hwnd;
-	context.hdc = (void *)hdc;
-	context.hrc = (void *)hrc;
-	context.standalone = false;
-
-	return context;
-}
-
 const unsigned WGL_ACCELERATION             = 0x2003;
 const unsigned WGL_COLOR_BITS               = 0x2014;
 const unsigned WGL_CONTEXT_FLAGS            = 0x2094;
@@ -83,6 +61,27 @@ PIXELFORMATDESCRIPTOR pfd = {
 	0,								// dwDamageMask
 };
 
+GLContext LoadCurrentGLContext() {
+	GLContext context = {};
+
+	HGLRC hrc = wglGetCurrentContext();
+	HDC hdc = wglGetCurrentDC();
+
+	if (!hrc || !hdc) {
+		MGLError * error = MGLError_FromFormat(TRACE, "Cannot detect current context.");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return context;
+	}
+
+	HWND hwnd = WindowFromDC(hdc);
+
+	context.hwnd = (void *)hwnd;
+	context.hdc = (void *)hdc;
+	context.hrc = (void *)hrc;
+	context.standalone = false;
+
+	return context;
+}
 
 void InitModernContext() {
 	static bool initialized = false;
@@ -199,7 +198,7 @@ GLContext CreateGLContext(int width, int height) {
 	HINSTANCE inst = GetModuleHandle(0);
 
 	if (!inst) {
-		MGLError * error = MGLError_New(TRACE, "Module handle is null");
+		MGLError * error = MGLError_FromFormat(TRACE, "Module handle is null");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return context;
 	}
@@ -221,7 +220,7 @@ GLContext CreateGLContext(int width, int height) {
 		};
 
 		if (!RegisterClass(&wndClass)) {
-			MGLError * error = MGLError_New(TRACE, "Cannot register window class");
+			MGLError * error = MGLError_FromFormat(TRACE, "Cannot register window class");
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return context;
 		}
@@ -245,7 +244,7 @@ GLContext CreateGLContext(int width, int height) {
 	);
 
 	if (!hwnd) {
-		MGLError * error = MGLError_New(TRACE, "Cannot create window");
+		MGLError * error = MGLError_FromFormat(TRACE, "Cannot create window");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return context;
 	}
@@ -253,7 +252,7 @@ GLContext CreateGLContext(int width, int height) {
 	HDC hdc = GetDC(hwnd);
 
 	if (!hdc) {
-		MGLError * error = MGLError_New(TRACE, "Cannot create device content");
+		MGLError * error = MGLError_FromFormat(TRACE, "Cannot create device content");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return context;
 	}
@@ -266,19 +265,19 @@ GLContext CreateGLContext(int width, int height) {
 		unsigned num_formats = 0;
 
 		if (!mglChoosePixelFormat(hdc, 0, 0, 1, &pixelformat, &num_formats)) {
-			MGLError * error = MGLError_New(TRACE, "Cannot choose pixel format");
+			MGLError * error = MGLError_FromFormat(TRACE, "Cannot choose pixel format");
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return context;
 		}
 
 		if (!num_formats) {
-			MGLError * error = MGLError_New(TRACE, "No pixel formats available");
+			MGLError * error = MGLError_FromFormat(TRACE, "No pixel formats available");
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return context;
 		}
 
 		if (!SetPixelFormat(hdc, pixelformat, &pfd)) {
-			MGLError * error = MGLError_New(TRACE, "Cannot set pixel format");
+			MGLError * error = MGLError_FromFormat(TRACE, "Cannot set pixel format");
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return context;
 		}
@@ -287,14 +286,14 @@ GLContext CreateGLContext(int width, int height) {
 		int minor[] = {5, 4, 3, 2, 1, 0, 3, 2, 1, 0, 0};
 
 		for (int i = 0; i < 10; ++i) {
-			int attriblist[] = {
+			int attribs[] = {
 				WGL_CONTEXT_PROFILE_MASK, WGL_CONTEXT_CORE_PROFILE_BIT,
 				WGL_CONTEXT_MAJOR_VERSION, major[i],
 				WGL_CONTEXT_MINOR_VERSION, minor[i],
 				0, 0,
 			};
 
-			hrc = mglCreateContextAttribs(hdc, 0, attriblist);
+			hrc = mglCreateContextAttribs(hdc, 0, attribs);
 
 			if (hrc) {
 				break;
@@ -306,7 +305,7 @@ GLContext CreateGLContext(int width, int height) {
 		int pf = ChoosePixelFormat(hdc, &pfd);
 
 		if (!pf) {
-			MGLError * error = MGLError_New(TRACE, "Cannot choose pixel format");
+			MGLError * error = MGLError_FromFormat(TRACE, "Cannot choose pixel format");
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return context;
 		}
@@ -314,7 +313,7 @@ GLContext CreateGLContext(int width, int height) {
 		int set_pixel_format = SetPixelFormat(hdc, pf, &pfd);
 
 		if (!set_pixel_format) {
-			MGLError * error = MGLError_New(TRACE, "Cannot set pixel format");
+			MGLError * error = MGLError_FromFormat(TRACE, "Cannot set pixel format");
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return context;
 		}
@@ -324,7 +323,7 @@ GLContext CreateGLContext(int width, int height) {
 	}
 
 	if (!hrc) {
-		MGLError * error = MGLError_New(TRACE, "Cannot create OpenGL context");
+		MGLError * error = MGLError_FromFormat(TRACE, "Cannot create OpenGL context");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return context;
 	}
@@ -332,22 +331,10 @@ GLContext CreateGLContext(int width, int height) {
 	int make_current = wglMakeCurrent(hdc, hrc);
 
 	if (!make_current) {
-		MGLError * error = MGLError_New(TRACE, "Cannot select OpenGL context");
+		MGLError * error = MGLError_FromFormat(TRACE, "Cannot select OpenGL context");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return context;
 	}
-
-	// if (!ReleaseDC(hwnd, hdc)) {
-	// 	MGLError * error = MGLError_New(TRACE, "Cannot release device content");
-	// 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-	// 	return context;
-	// }
-
-	// if (!DestroyWindow(hwnd)) {
-	// 	MGLError * error = MGLError_New(TRACE, "Cannot destroy window");
-	// 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-	// 	return context;
-	// }
 
 	context.hwnd = (void *)hwnd;
 	context.hrc = (void *)hrc;
@@ -420,23 +407,34 @@ GLContext CreateGLContext(int width, int height) {
 	swa.border_pixel = 0;
 	swa.event_mask = StructureNotifyMask;
 	Window win = XCreateWindow(dpy, RootWindow(dpy, vi->screen), 0, 0, 100, 100, 0, vi->depth, InputOutput, vi->visual, CWBorderPixel | CWColormap | CWEventMask, &swa);
-	// XMapWindow(dpy, win);
 
-	// TODO: keep this as a plan B
-	// oldstyle context:
-	// GLXContext ctx = glXCreateContext(dpy, vi, 0, GL_TRUE);
+	// XMapWindow(dpy, win);
 
 	GLXCREATECONTEXTATTRIBSARBPROC glXCreateContextAttribsARB = (GLXCREATECONTEXTATTRIBSARBPROC)glXGetProcAddress((const GLubyte *)"glXCreateContextAttribsARB");
 
-	// TODO: 4.5 -> 3.0 or old context
+	int major[] = {4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 0};
+	int minor[] = {5, 4, 3, 2, 1, 0, 3, 2, 1, 0, 0};
 
-	int attribs[] = {
-		GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
-		GLX_CONTEXT_MINOR_VERSION_ARB, 3,
-		0,
-	};
+	GLXContext ctx = 0;
 
-	GLXContext ctx = glXCreateContextAttribsARB(dpy, *fbc, 0, true, attribs);
+	for (int i = 0; i < 10; ++i) {
+		int attribs[] = {
+			GLX_CONTEXT_MAJOR_VERSION_ARB, major[i],
+			GLX_CONTEXT_MINOR_VERSION_ARB, minor[i],
+			0, 0,
+		};
+
+		ctx = glXCreateContextAttribsARB(dpy, *fbc, 0, true, attribs);
+
+		if (ctx) {
+			break;
+		}
+	}
+
+	if (!ctx) {
+		ctx = glXCreateContext(dpy, vi, 0, GL_TRUE);
+	}
+
 	glXMakeCurrent(dpy, win, ctx);
 
 	context.display = (void *)dpy;

@@ -765,8 +765,6 @@ bool GLMethods::load() {
 
 	// Must have
 
-	// TODO: remove some checks (double, subroutines, compute shader)
-
 	PyObject * loading_log = PyUnicode_FromStringAndSize(0, 0);
 
 	if (INVALID_METHOD(this->ActiveTexture)) {
