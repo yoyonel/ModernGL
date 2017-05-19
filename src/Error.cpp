@@ -126,6 +126,3 @@ MGLError * MGLError_FromMessage(const char * filename, int line, PyObject * mess
 
 	return self;
 }
-
-// void MGLError_LinkSource(MGLError * error, const char * filename, int line) {
-// }

@@ -169,18 +169,6 @@ PyGetSetDef MGLProgram_tp_getseters[] = {
 	{0},
 };
 
-// PyObject * Program_get_item(Program * self, PyObject * key) {
-// }
-
-// int Program_set_item(Program * self, PyObject * key, PyObject * value) {
-// }
-
-PyMappingMethods Program_map = {
-	0,
-	// (binaryfunc)Program_get_item,
-	// (objobjargproc)Program_set_item,
-};
-
 PyTypeObject MGLProgram_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
 	"mgl.Program",                                          // tp_name
@@ -194,7 +182,7 @@ PyTypeObject MGLProgram_Type = {
 	(reprfunc)MGLProgram_tp_str,                            // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
-	&Program_map,                                           // tp_as_mapping
+	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call
 	(reprfunc)MGLProgram_tp_str,                            // tp_str
