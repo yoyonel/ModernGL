@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Full linting support
+- Restructure docs
+- Examples in docs
 - pep8 style
 - VSCode snippets
 - Changelog
