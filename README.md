@@ -34,17 +34,19 @@ pip install ModernGL
 
 ```py
 
+# Create a window first
+
 ctx = ModernGL.create_context()
 
-prog = ctx.Program([
-	ctx.VertexShader('''
+prog = ctx.rrogram([
+	ctx.vertex_shader('''
 		#version 330
 		in vec2 vert;
 		void main() {
 			gl_Position = vec4(vert, 0.0, 1.0);
 		}
 	'''),
-	ctx.FragmentShader('''
+	ctx.fragment_shader('''
 		#version 330
 		out vec4 color;
 		void main() {
@@ -53,8 +55,10 @@ prog = ctx.Program([
 	'''),
 ])
 
-vbo = ctx.Buffer(struct.pack('6f', 0, 0, 1, 0, 0, 1))
-vao = ctx.SimpleVertexArray(prog, vbo, '2f', ['vert'])
+vbo = ctx.buffer(struct.pack('6f', 0, 0, 1, 0, 0, 1))
+vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
+
+# Render
 
 vao.render(ModernGL.TRIANGLES)
 
