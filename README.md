@@ -38,7 +38,7 @@ pip install ModernGL
 
 ctx = ModernGL.create_context()
 
-prog = ctx.rrogram([
+prog = ctx.program([
 	ctx.vertex_shader('''
 		#version 330
 		in vec2 vert;
