@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [4.0.0] - 2017-05-20
 ### Added
 - Full linting support
 - Restructure docs
@@ -44,7 +46,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.x.x - 2016-03-03
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/tree/dev
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.0.0...master
+[4.0.0]: https://github.com/cprogrammer1994/ModernGL/tree/4.0.0
 [3.1.5]: https://github.com/cprogrammer1994/ModernGL/compare/3.1.0...3.1.5
 [3.1.0]: https://github.com/cprogrammer1994/ModernGL/tree/3.1.0
 [2.4.1]: https://github.com/cprogrammer1994/ModernGL/tree/2.4.1
