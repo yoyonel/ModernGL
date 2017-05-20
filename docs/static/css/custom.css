@@ -15,3 +15,9 @@
 .toctree-l1 a, .toctree-l2 a, .toctree-l3 a {
 	min-height: 32px;
 }
+
+/* Temporary fix for https://github.com/rtfd/sphinx_rtd_theme/issues/417 */
+
+.rst-content .highlight>pre {
+    line-height: 18px;
+}
