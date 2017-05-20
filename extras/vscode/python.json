@@ -1,0 +1,214 @@
+{
+	"ModernGL Test": {
+		"prefix": "test_ModernGL",
+		"body": [
+			"import struct",
+			"import unittest",
+			"",
+			"import ModernGL",
+			"",
+			"",
+			"class TestCase(unittest.TestCase):",
+			"",
+			"\t@classmethod",
+			"\tdef setUpClass(self):",
+			"\t\tself.ctx = ModernGL.create_standalone_context()",
+			"",
+			"\t@classmethod",
+			"\tdef tearDownClass(self):",
+			"\t\tself.ctx.release()",
+			"",
+			"\tdef test_1(self):",
+			"\t\tctx = self.ctx",
+			"\t\t$0",
+			"",
+			"",
+			"if __name__ == '__main__':",
+			"\tunittest.main()",
+			""
+		]
+	},
+	"ModernGL Context": {
+		"prefix": "mgl_context",
+		"body": [
+			"ctx = ModernGL.create_context()"
+		]
+	},
+	"ModernGL Standalone Context": {
+		"prefix": "mgl_standalone_context",
+		"body": [
+			"ctx = ModernGL.create_standalone_context()"
+		]
+	},
+	"ModernGL Program": {
+		"prefix": "mgl_program",
+		"body": [
+			"prog = ctx.program([",
+			"\tctx.vertex_shader('''",
+			"\t\t#version 330",
+			"",
+			"\t\tin vec2 vert;",
+			"",
+			"\t\tvoid main() {",
+			"\t\t\tgl_Position = vec4(vert, 0.0, 1.0);",
+			"\t\t}",
+			"\t'''),",
+			"\tctx.fragment_shader('''",
+			"\t\t#version 330",
+			"",
+			"\t\tout vec4 color;",
+			"",
+			"\t\tvoid main() {",
+			"\t\t\tcolor = vec4(0.3, 0.5, 1.0, 1.0);",
+			"\t}",
+			"\t'''),",
+			"])",
+			""
+		]
+	},
+	"ModernGL VertexBuffer": {
+		"prefix": "mgl_vertex_buffer_object",
+		"body": [
+			"${1:vbo} = ctx.buffer(${2:struct.pack('3f', 0.0, 0.0, 0.0)})",
+			""
+		]
+	},
+	"ModernGL IndexBuffer": {
+		"prefix": "mgl_index_buffer_object",
+		"body": [
+			"${1:ibo} = ctx.buffer(${2:struct.pack('3i', 0, 1, 2)})",
+			""
+		]
+	},
+	"ModernGL Simple VertexArray": {
+		"prefix": "mgl_simple_vertex_array_object",
+		"body": [
+			"${1:vao} = ctx.simple_vertex_array(${2:prog}, ${3:vbo}, ['${4:vert}'])",
+			""
+		]
+	},
+	"ModernGL VertexArray": {
+		"prefix": "mgl_vertex_array_object",
+		"body": [
+			"${6:${1:vao}_content} = [",
+			"\t(${2:vbo}, ${3:vertex_format}, ['${4:vert}']),",
+			"]",
+			"",
+			"${1:vao} = ctx.vertex_array(${5:prog}, ${6:${1:vao}_content}${8:, index_buffer=${7:None}})",
+			""
+		]
+	},
+	"ModernGL Render": {
+		"prefix": "mgl_render",
+		"body": [
+			"${1:vao}.render(ModernGL.${2:TRIANGLES}, ${3:number_of_vertices})",
+			""
+		]
+	},
+	"ModernGL Render Instanced": {
+		"prefix": "mgl_render_instanced",
+		"body": [
+			"${1:vao}.render(ModernGL.${2:TRIANGLES}, ${3:number_of_vertices}, instances = ${4:1})",
+			""
+		]
+	},
+	"ModernGL Transform": {
+		"prefix": "mgl_transform",
+		"body": [
+			"${1:vao}.transform(ModernGL.${2:POINTS}, ${3:vbo}, ${4:number_of_vertices})",
+			""
+		]
+	},
+	"ModernGL Uniform": {
+		"prefix": "mgl_uniform",
+		"body": [
+			"${1:prog}.uniforms['${2:uniform}'].value = ${3:value}",
+			""
+		]
+	},
+	"ModernGL Enable": {
+		"prefix": "mgl_enable",
+		"body": [
+			"ctx.enable(${1:ModernGL.DEPTH_TEST})",
+			""
+		]
+	},
+	"ModernGL Disable": {
+		"prefix": "mgl_disable",
+		"body": [
+			"ctx.disable(${1:ModernGL.DEPTH_TEST})",
+			""
+		]
+	},
+	"ModernGL Clear": {
+		"prefix": "mgl_clear",
+		"body": [
+			"ctx.clear(${1:240}, ${2:240}, ${3:240})",
+			""
+		]
+	},
+	"ModernGL Clear Viewport": {
+		"prefix": "mgl_clear_viewport",
+		"body": [
+			"ctx.clear(${1:240}, ${2:240}, ${3:240}, viewport=${8:(${4:0}, ${5:0}, ${6:width}, ${7:height})})",
+			""
+		]
+	},
+	"ModernGL Viewport": {
+		"prefix": "mgl_viewport",
+		"body": [
+			"ctx.viewport = (${1:0}, ${2:0}, ${3:width}, ${4:height})",
+			""
+		]
+	},
+	"ModernGL Line Width": {
+		"prefix": "mgl_point_and_line",
+		"body": [
+			"ctx.point_size = ${1:7.0}",
+			"ctx.line_width = ${2:3.0}",
+			""
+		]
+	},
+	"ModernGL Point Size": {
+		"prefix": "mgl_enable",
+		"body": [
+			"ctx.enable(${1:ModernGL.DEPTH_TEST})",
+			""
+		]
+	},
+	"ModernGL Use Default Framebuffer": {
+		"prefix": "mgl_use_default_framebuffer_object",
+		"body": [
+			"ctx.default_framebuffer.use()",
+			""
+		]
+	},
+	"ModernGL Framebuffer": {
+		"prefix": "mgl_framebuffer_object",
+		"body": [
+			"${5:color_attachments} = [",
+			"\t${3:ctx.renderbuffer(${2:size}),}",
+			"]",
+			"",
+			"${6:depth_attachment} = ${4:ctx.depth_renderbuffer(${2:size})}",
+			"",
+			"${1:fbo} = ctx.framebuffer(${5:color_attachments}, ${6:depth_attachment})",
+			"${7:${1:fbo}.use()}",
+			""
+		]
+	},
+	"ModernGL Framebuffer with Texture": {
+		"prefix": "mgl_framebuffer_object_with_texture",
+		"body": [
+			"${5:color_attachments} = [",
+			"\t${3:ctx.texture(${2:size}, components=4, floats=True),}",
+			"]",
+			"",
+			"${6:depth_attachment} = ${4:ctx.depth_texture(${2:size})}",
+			"",
+			"${1:fbo} = ctx.framebuffer(${5:color_attachments}, ${6:depth_attachment})",
+			"${7:${1:fbo}.use()}",
+			""
+		]
+	}
+}
