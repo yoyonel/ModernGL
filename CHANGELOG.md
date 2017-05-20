@@ -1,0 +1,48 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/)
+and this project adheres to [Semantic Versioning](http://semver.org/).
+
+## [Unreleased]
+### Added
+- Full linting support
+- pep8 style
+- VSCode snippets
+- Changelog
+
+### Changed
+- Wrap the C/C++ module with a pure python module
+- Rename internal module to avoid ambiguosity
+- Rename class like members from the Context class
+
+## [3.1.5] - 2017-05-07
+### Added
+- Standalone ModernGL context
+- Sphinx generated docs
+- Linting with pylint mock file
+- Mac OSX support
+
+## [3.1.0] - 2017-03-01
+### Added
+- Wrapping OpenGL objects with python types
+
+### Changed
+- Improved Linux support
+
+### Removed
+- Direct access to OpenGL objects
+
+## [2.4.1] - 2016-08-30
+### Added
+- setup.py and PyPI compatible packaging
+- Direct access to OpenGL objects
+- Linux support
+
+## 1.x.x - 2016-03-03
+- It was a tool for me to develop games in python
+
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/tree/dev
+[3.1.5]: https://github.com/cprogrammer1994/ModernGL/compare/3.1.0...3.1.5
+[3.1.0]: https://github.com/cprogrammer1994/ModernGL/tree/3.1.0
+[2.4.1]: https://github.com/cprogrammer1994/ModernGL/tree/2.4.1
