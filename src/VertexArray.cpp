@@ -119,6 +119,8 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 		return 0;
 	}
 
+	// TODO: self->program->no_varyings check to save debug time
+
 	if (vertices < 0) {
 		if (self->num_vertices < 0) {
 			MGLError * error = MGLError_FromFormat(TRACE, "Cannot detect the number of vertices");
