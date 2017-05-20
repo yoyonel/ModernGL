@@ -1,9 +1,12 @@
 # ModernGL
-:boom: modern OpenGL binding for Python
 
-## [Docs](https://moderngl.github.io) and [Examples](https://moderngl.github.io/Examples.html)
+:fire: modern OpenGL binding for Python (alternative to PyOpenGL)
 
-## Description
+- [ModernGL on PyPI](https://pypi.python.org/pypi/ModernGL)
+- [Documentation](https://moderngl.github.io)
+- [Examples](https://moderngl.github.io/Examples.html)
+
+## ModernGL and OpenGL
 
 OpenGL is a great environment for developing portable, platform independent,
 interactive 2D and 3D graphics applications. The API implementation in Python
@@ -15,7 +18,19 @@ requires a steep learning curve. In contrast, ModernGL is easy to learn and
 use, moreover it is capable of rendering with the same performance and
 quality, with less code written.
 
-## Sample
+# Installation
+
+Using pip:
+
+```
+pip install ModernGL
+```
+
+## An example with [source](https://moderngl.github.io/Examples/julia_fractal.html)
+
+![Julia Fractal](https://moderngl.github.io/_images/julia_fractal.png)
+
+## A short sample
 
 ```py
 
@@ -47,13 +62,7 @@ vao.render(ModernGL.TRIANGLES)
 
 ## How to install
 
-```
-pip install ModernGL
-```
-
------
-
-for **Ubuntu**:
+Installing on **Ubuntu** from source:
 ```
 apt-get install python3-dev libgl1-mesa-dev libx11-dev
 pip3 install ModernGL
