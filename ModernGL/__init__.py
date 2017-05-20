@@ -55,7 +55,7 @@ __all__ = [
     'detect_format',
 ]
 
-VERSION = '3.1.5'
+VERSION = '4.0.0'
 '''
     ModernGL version
 '''
