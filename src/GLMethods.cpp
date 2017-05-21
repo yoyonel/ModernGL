@@ -2,9 +2,6 @@
 
 #include "Error.hpp"
 
-#include <cstdio>
-#include <cstdlib>
-
 void AddToLog(PyObject ** pstr, const char * function) {
 	PyObject * name = PyUnicode_FromFormat("- %s\n", function);
 	PyUnicode_Append(pstr, name);
