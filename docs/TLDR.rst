@@ -1,11 +1,11 @@
-Examples
-********
+TL;DR
+*****
 
 .. currentmodule:: ModernGL
 
 .. toctree::
 	:maxdepth: 4
-	:caption: Examples:
+	:caption: Classes:
 
 	01_hello_world <Examples/01_hello_world.rst>
 	02_uniforms_and_attributes <Examples/02_uniforms_and_attributes.rst>
