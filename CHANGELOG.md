@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Exception handling when importing the implementation.
 
+### Removed
+- Required `-std=c++11` for linux and mac.
+
 ## [4.0.0] - 2017-05-20
 ### Added
 - Full linting support
