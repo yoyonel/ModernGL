@@ -793,8 +793,8 @@ PyObject * MGLUniform_float_matrix_2x2_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(4);
 
-		for (int i = 0; i < 4; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 4; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -814,8 +814,8 @@ PyObject * MGLUniform_float_matrix_2x3_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(6);
 
-		for (int i = 0; i < 6; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 6; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -835,8 +835,8 @@ PyObject * MGLUniform_float_matrix_2x4_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(8);
 
-		for (int i = 0; i < 8; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 8; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -856,8 +856,8 @@ PyObject * MGLUniform_float_matrix_3x2_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(6);
 
-		for (int i = 0; i < 6; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 6; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -877,8 +877,8 @@ PyObject * MGLUniform_float_matrix_3x3_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(9);
 
-		for (int i = 0; i < 9; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 9; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -898,8 +898,8 @@ PyObject * MGLUniform_float_matrix_3x4_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(12);
 
-		for (int i = 0; i < 12; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 12; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -919,8 +919,8 @@ PyObject * MGLUniform_float_matrix_4x2_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(8);
 
-		for (int i = 0; i < 8; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 8; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -940,8 +940,8 @@ PyObject * MGLUniform_float_matrix_4x3_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(12);
 
-		for (int i = 0; i < 12; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 12; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -961,8 +961,8 @@ PyObject * MGLUniform_float_matrix_4x4_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(16);
 
-		for (int i = 0; i < 16; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 16; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -982,8 +982,8 @@ PyObject * MGLUniform_double_matrix_2x2_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(4);
 
-		for (int i = 0; i < 4; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 4; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -1003,8 +1003,8 @@ PyObject * MGLUniform_double_matrix_2x3_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(6);
 
-		for (int i = 0; i < 6; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 6; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -1024,8 +1024,8 @@ PyObject * MGLUniform_double_matrix_2x4_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(8);
 
-		for (int i = 0; i < 8; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 8; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -1045,8 +1045,8 @@ PyObject * MGLUniform_double_matrix_3x2_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(6);
 
-		for (int i = 0; i < 6; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 6; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -1066,8 +1066,8 @@ PyObject * MGLUniform_double_matrix_3x3_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(9);
 
-		for (int i = 0; i < 9; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 9; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -1087,8 +1087,8 @@ PyObject * MGLUniform_double_matrix_3x4_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(12);
 
-		for (int i = 0; i < 12; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 12; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -1108,8 +1108,8 @@ PyObject * MGLUniform_double_matrix_4x2_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(8);
 
-		for (int i = 0; i < 8; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 8; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -1129,8 +1129,8 @@ PyObject * MGLUniform_double_matrix_4x3_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(12);
 
-		for (int i = 0; i < 12; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 12; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
@@ -1150,8 +1150,8 @@ PyObject * MGLUniform_double_matrix_4x4_array_value_getter(MGLUniform * self) {
 
 		PyObject * tuple = PyTuple_New(16);
 
-		for (int i = 0; i < 16; ++i) {
-			PyTuple_SET_ITEM(tuple, i, PyFloat_FromDouble(values[i]));
+		for (int j = 0; j < 16; ++j) {
+			PyTuple_SET_ITEM(tuple, j, PyFloat_FromDouble(values[j]));
 		}
 
 		PyList_SET_ITEM(lst, i, tuple);
