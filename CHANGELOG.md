@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Exception handling when importing the implementation.
 
 ## [4.0.0] - 2017-05-20
 ### Added
