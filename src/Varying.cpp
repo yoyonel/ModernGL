@@ -26,13 +26,13 @@ void MGLVarying_tp_dealloc(MGLVarying * self) {
 }
 
 int MGLVarying_tp_init(MGLVarying * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Varying manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.Varying manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
 PyObject * MGLVarying_tp_str(MGLVarying * self) {
-	return PyUnicode_FromFormat("<ModernGL.Varying>");
+	return PyUnicode_FromFormat("<mgl.Varying>");
 }
 
 PyMethodDef MGLVarying_tp_methods[] = {

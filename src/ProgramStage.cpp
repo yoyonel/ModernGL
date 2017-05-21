@@ -27,13 +27,13 @@ void MGLProgramStage_tp_dealloc(MGLProgramStage * self) {
 }
 
 int MGLProgramStage_tp_init(MGLProgramStage * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.ProgramStage manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.ProgramStage manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
 PyObject * MGLProgramStage_tp_str(MGLProgramStage * self) {
-	return PyUnicode_FromFormat("<ModernGL.ProgramStage>");
+	return PyUnicode_FromFormat("<mgl.ProgramStage>");
 }
 
 PyMethodDef MGLProgramStage_tp_methods[] = {

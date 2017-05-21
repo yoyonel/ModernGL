@@ -26,13 +26,13 @@ void MGLAttribute_tp_dealloc(MGLAttribute * self) {
 }
 
 int MGLAttribute_tp_init(MGLAttribute * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Attribute manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.Attribute manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
 PyObject * MGLAttribute_tp_str(MGLAttribute * self) {
-	return PyUnicode_FromFormat("<ModernGL.Attribute>");
+	return PyUnicode_FromFormat("<mgl.Attribute>");
 }
 
 PyMethodDef MGLAttribute_tp_methods[] = {

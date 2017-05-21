@@ -34,13 +34,13 @@ void MGLProgram_tp_dealloc(MGLProgram * self) {
 }
 
 int MGLProgram_tp_init(MGLProgram * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Program manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.Program manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
 PyObject * MGLProgram_tp_str(MGLProgram * self) {
-	return PyUnicode_FromFormat("<ModernGL.Program>");
+	return PyUnicode_FromFormat("<mgl.Program>");
 }
 
 PyObject * MGLProgram_release(MGLProgram * self) {

@@ -16,13 +16,13 @@ void MGLObject_tp_dealloc(MGLObject * self) {
 }
 
 int MGLObject_tp_init(MGLObject * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Object manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.Object manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
 PyObject * MGLObject_tp_str(MGLObject * self) {
-	return PyUnicode_FromFormat("<ModernGL.Object>");
+	return PyUnicode_FromFormat("<mgl.Object>");
 }
 
 PyMethodDef MGLObject_tp_methods[] = {

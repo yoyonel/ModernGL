@@ -25,13 +25,13 @@ void MGLComputeShader_tp_dealloc(MGLComputeShader * self) {
 }
 
 int MGLComputeShader_tp_init(MGLComputeShader * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.ComputeShader manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.ComputeShader manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
 PyObject * MGLComputeShader_tp_str(MGLComputeShader * self) {
-	return PyUnicode_FromFormat("<ModernGL.ComputeShader>");
+	return PyUnicode_FromFormat("<mgl.ComputeShader>");
 }
 
 PyObject * MGLComputeShader_run(MGLComputeShader * self, PyObject * args) {

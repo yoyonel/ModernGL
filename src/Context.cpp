@@ -46,7 +46,7 @@ int MGLContext_tp_init(MGLContext * self, PyObject * args, PyObject * kwargs) {
 }
 
 PyObject * MGLContext_tp_str(MGLContext * self) {
-	return PyUnicode_FromFormat("<ModernGL.Context");
+	return PyUnicode_FromFormat("<mgl.Context");
 }
 
 PyObject * MGLContext_clear(MGLContext * self, PyObject * args) {
@@ -593,7 +593,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
 
 		if (Py_TYPE(buffer) != &MGLBuffer_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "content[%d][0] must be a ModernGL.Buffer not %s", i, Py_TYPE(buffer)->tp_name);
+			MGLError * error = MGLError_FromFormat(TRACE, "content[%d][0] must be a mgl.Buffer not %s", i, Py_TYPE(buffer)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -689,7 +689,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	}
 
 	if (index_buffer != (MGLBuffer *)Py_None && Py_TYPE(index_buffer) != &MGLBuffer_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "index_buffer must be a ModernGL.Buffer not %s", Py_TYPE(index_buffer)->tp_name);
+		MGLError * error = MGLError_FromFormat(TRACE, "index_buffer must be a mgl.Buffer not %s", Py_TYPE(index_buffer)->tp_name);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -809,7 +809,7 @@ MGLProgram * MGLContext_program(MGLContext * self, PyObject * args) {
 	for (int i = 0; i < num_shaders; ++i) {
 		PyObject * item = PyTuple_GET_ITEM(shaders, i);
 		if (Py_TYPE(item) != &MGLShader_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "shaders[%d] must be a ModernGL.Shader not %s", i, Py_TYPE(item)->tp_name);
+			MGLError * error = MGLError_FromFormat(TRACE, "shaders[%d] must be a mgl.Shader not %s", i, Py_TYPE(item)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}

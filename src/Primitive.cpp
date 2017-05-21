@@ -25,7 +25,7 @@ void MGLPrimitive_tp_dealloc(MGLPrimitive * self) {
 }
 
 int MGLPrimitive_tp_init(MGLPrimitive * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Primitive manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.Primitive manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }

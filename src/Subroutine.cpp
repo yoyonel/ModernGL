@@ -26,13 +26,13 @@ void MGLSubroutine_tp_dealloc(MGLSubroutine * self) {
 }
 
 int MGLSubroutine_tp_init(MGLSubroutine * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Subroutine manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.Subroutine manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
 PyObject * MGLSubroutine_tp_str(MGLSubroutine * self) {
-	return PyUnicode_FromFormat("<ModernGL.Subroutine>");
+	return PyUnicode_FromFormat("<mgl.Subroutine>");
 }
 
 PyMethodDef MGLSubroutine_tp_methods[] = {

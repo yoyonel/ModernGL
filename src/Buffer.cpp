@@ -29,13 +29,13 @@ void MGLBuffer_tp_dealloc(MGLBuffer * self) {
 }
 
 int MGLBuffer_tp_init(MGLBuffer * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Buffer manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.Buffer manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
 PyObject * MGLBuffer_tp_str(MGLBuffer * self) {
-	return PyUnicode_FromFormat("<ModernGL.Buffer>");
+	return PyUnicode_FromFormat("<mgl.Buffer>");
 }
 
 MGLBufferAccess * MGLBuffer_access(MGLBuffer * self, PyObject * args) {

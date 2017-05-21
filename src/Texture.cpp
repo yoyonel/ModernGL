@@ -26,13 +26,13 @@ void MGLTexture_tp_dealloc(MGLTexture * self) {
 }
 
 int MGLTexture_tp_init(MGLTexture * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Texture manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.Texture manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
 PyObject * MGLTexture_tp_str(MGLTexture * self) {
-	return PyUnicode_FromFormat("<ModernGL.Texture>");
+	return PyUnicode_FromFormat("<mgl.Texture>");
 }
 
 PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {

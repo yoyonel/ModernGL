@@ -28,13 +28,13 @@ void MGLFramebuffer_tp_dealloc(MGLFramebuffer * self) {
 }
 
 int MGLFramebuffer_tp_init(MGLFramebuffer * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Framebuffer manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.Framebuffer manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
 PyObject * MGLFramebuffer_tp_str(MGLFramebuffer * self) {
-	return PyUnicode_FromFormat("<ModernGL.Framebuffer>");
+	return PyUnicode_FromFormat("<mgl.Framebuffer>");
 }
 
 PyObject * MGLFramebuffer_release(MGLFramebuffer * self) {

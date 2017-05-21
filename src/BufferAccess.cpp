@@ -25,13 +25,13 @@ void MGLBufferAccess_tp_dealloc(MGLBufferAccess * self) {
 }
 
 int MGLBufferAccess_tp_init(MGLBufferAccess * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.BufferAccess manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.BufferAccess manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
 PyObject * MGLBufferAccess_tp_str(MGLBufferAccess * self) {
-	return PyUnicode_FromFormat("<ModernGL.BufferAccess>");
+	return PyUnicode_FromFormat("<mgl.BufferAccess>");
 }
 
 PyObject * MGLBufferAccess_open(MGLBufferAccess * self) {

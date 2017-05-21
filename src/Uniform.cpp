@@ -26,13 +26,13 @@ void MGLUniform_tp_dealloc(MGLUniform * self) {
 }
 
 int MGLUniform_tp_init(MGLUniform * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.Uniform manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.Uniform manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
 PyObject * MGLUniform_tp_str(MGLUniform * self) {
-	return PyUnicode_FromFormat("<ModernGL.Uniform>");
+	return PyUnicode_FromFormat("<mgl.Uniform>");
 }
 
 PyObject * MGLUniform_read(MGLUniform * self) {

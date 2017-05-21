@@ -25,13 +25,13 @@ void MGLEnableFlag_tp_dealloc(MGLEnableFlag * self) {
 }
 
 int MGLEnableFlag_tp_init(MGLEnableFlag * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.EnableFlag manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.EnableFlag manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
 PyObject * MGLEnableFlag_tp_str(MGLEnableFlag * self) {
-	return PyUnicode_FromFormat("<ModernGL.EnableFlag>");
+	return PyUnicode_FromFormat("<mgl.EnableFlag>");
 }
 
 PyMethodDef MGLEnableFlag_tp_methods[] = {

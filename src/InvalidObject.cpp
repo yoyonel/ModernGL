@@ -21,13 +21,13 @@ void MGLInvalidObject_tp_dealloc(MGLInvalidObject * self) {
 }
 
 int MGLInvalidObject_tp_init(MGLInvalidObject * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.InvalidObject manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.InvalidObject manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
 PyObject * MGLInvalidObject_tp_str(MGLInvalidObject * self) {
-	return PyUnicode_FromFormat("<ModernGL.InvalidObject>");
+	return PyUnicode_FromFormat("<mgl.InvalidObject>");
 }
 
 PyMethodDef MGLInvalidObject_tp_methods[] = {

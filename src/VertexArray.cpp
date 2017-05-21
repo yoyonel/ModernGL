@@ -34,13 +34,13 @@ void MGLVertexArray_tp_dealloc(MGLVertexArray * self) {
 }
 
 int MGLVertexArray_tp_init(MGLVertexArray * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create ModernGL.VertexArray manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.VertexArray manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
 
 PyObject * MGLVertexArray_tp_str(MGLVertexArray * self) {
-	return PyUnicode_FromFormat("<ModernGL.VertexArray>");
+	return PyUnicode_FromFormat("<mgl.VertexArray>");
 }
 
 PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
