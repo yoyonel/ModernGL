@@ -4,7 +4,10 @@
 
 # pylint: disable=using-constant-test, too-many-public-methods
 
-from ModernGL import mgl
+try:
+    from ModernGL import mgl
+except ImportError:
+    pass
 
 from .common import InvalidObject
 from .buffers import Buffer, detect_format

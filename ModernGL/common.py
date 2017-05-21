@@ -4,7 +4,10 @@
 
 # pylint: disable=too-few-public-methods, using-constant-test
 
-from ModernGL import mgl
+try:
+    from ModernGL import mgl
+except ImportError:
+    pass
 
 
 if False:
