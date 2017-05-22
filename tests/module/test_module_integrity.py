@@ -21,15 +21,15 @@ class TestCase(unittest.TestCase):
         init = readfile(os.path.join(repo, 'ModernGL', '__init__.py'))
         docs = readfile(os.path.join(repo, 'docs', 'conf.py'))
 
-        match0 = re.search(r'\'version\': \'(\d+\.\d+\.\d+)\'', setup, flags = re.M)
+        match0 = re.search(r'\'version\': \'(\d+\.\d+\.\d+)\'', setup, flags=re.M)
 
-        match1 = re.search(r'VERSION = \'(\d+\.\d+\.\d+)\'', init, flags = re.M)
-        match2 = re.search(r'version = \'(\d+\.\d+\.\d+)\'', docs, flags = re.M)
-        match3 = re.search(r'release = \'(\d+\.\d+\.\d+)\'', docs, flags = re.M)
+        match1 = re.search(r'VERSION = \'(\d+\.\d+\.\d+)\'', init, flags=re.M)
+        match2 = re.search(r'version = \'(\d+\.\d+\.\d+)\'', docs, flags=re.M)
+        match3 = re.search(r'release = \'(\d+\.\d+\.\d+)\'', docs, flags=re.M)
 
-        self.assertEqual(match0.group(1), match1.group(1), msg = 'Version error: ModernGL/__init__.py')
-        self.assertEqual(match0.group(1), match2.group(1), msg = 'Version error: docs/conf.py')
-        self.assertEqual(match0.group(1), match3.group(1), msg = 'Version error: docs/conf.py')
+        self.assertEqual(match0.group(1), match1.group(1), msg='Version error: ModernGL/__init__.py')
+        self.assertEqual(match0.group(1), match2.group(1), msg='Version error: docs/conf.py')
+        self.assertEqual(match0.group(1), match3.group(1), msg='Version error: docs/conf.py')
 
 
 if __name__ == '__main__':

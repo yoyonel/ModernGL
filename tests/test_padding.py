@@ -39,7 +39,7 @@ class TestCase(unittest.TestCase):
 
     def test_padding_1(self):
         buf = self.ctx.buffer(struct.pack('=ixi12xii', 1, 2, 3, 4))
-        res = self.ctx.buffer(reserve = 16)
+        res = self.ctx.buffer(reserve=16)
 
         vao = self.ctx.vertex_array(self.prog, [
             (buf, 'ixi12xii', ['a_in', 'b_in', 'c_in', 'd_in']),
@@ -55,7 +55,7 @@ class TestCase(unittest.TestCase):
 
     def test_padding_2(self):
         buf = self.ctx.buffer(struct.pack('=i8xi8xi8xi8x', 1, 2, 3, 4))
-        res = self.ctx.buffer(reserve = 64)
+        res = self.ctx.buffer(reserve=64)
 
         vao = self.ctx.vertex_array(self.prog, [
             (buf, 'i8x', ['a_in']),
@@ -74,7 +74,7 @@ class TestCase(unittest.TestCase):
 
     def test_padding_3(self):
         buf = self.ctx.buffer(struct.pack('=1024xiiii', 1, 2, 3, 4))
-        res = self.ctx.buffer(reserve = 16)
+        res = self.ctx.buffer(reserve=16)
 
         vao = self.ctx.vertex_array(self.prog, [
             (buf, '1024xiiii', ['a_in', 'b_in', 'c_in', 'd_in']),

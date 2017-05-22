@@ -34,7 +34,7 @@ class TestBuffer(unittest.TestCase):
     def test_1(self):
         buf_m = self.ctx.buffer(struct.pack('4f', 1, 1, 1, 2))
         buf_v = self.ctx.buffer(struct.pack('2f', 4, 7))
-        res = self.ctx.buffer(reserve = buf_v.size)
+        res = self.ctx.buffer(reserve=buf_v.size)
 
         vao = self.ctx.vertex_array(self.prog, [
             (buf_m, '4f', ['in_m']),
@@ -42,19 +42,19 @@ class TestBuffer(unittest.TestCase):
         ])
 
         self.prog.uniforms['mult'].value = 0.0
-        vao.transform(res, ModernGL.POINTS);
+        vao.transform(res, ModernGL.POINTS)
         x, y = struct.unpack('2f', res.read())
         self.assertAlmostEqual(x, 0.0)
         self.assertAlmostEqual(y, 0.0)
 
         self.prog.uniforms['mult'].value = 1.0
-        vao.transform(res, ModernGL.POINTS);
+        vao.transform(res, ModernGL.POINTS)
         x, y = struct.unpack('2f', res.read())
         self.assertAlmostEqual(x, 11.0)
         self.assertAlmostEqual(y, 18.0)
 
         self.prog.uniforms['mult'].value = 2.0
-        vao.transform(res, ModernGL.POINTS);
+        vao.transform(res, ModernGL.POINTS)
         x, y = struct.unpack('2f', res.read())
         self.assertAlmostEqual(x, 22.0)
         self.assertAlmostEqual(y, 36.0)

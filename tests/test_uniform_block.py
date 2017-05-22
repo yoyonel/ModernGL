@@ -37,8 +37,8 @@ class TestCase(unittest.TestCase):
         buf_m = self.ctx.buffer(struct.pack('4f', 1, 1, 1, 2))
         buf_v = self.ctx.buffer(struct.pack('2f', 4, 7))
         buf_u = self.ctx.buffer(struct.pack('f', 123))
-        buf_r = self.ctx.buffer(reserve = buf_v.size)
-        res = self.ctx.buffer(reserve = buf_v.size)
+        buf_r = self.ctx.buffer(reserve=buf_v.size)
+        res = self.ctx.buffer(reserve=buf_v.size)
 
         vao = self.ctx.vertex_array(self.prog, [
             (buf_m, '4f', ['in_m']),
