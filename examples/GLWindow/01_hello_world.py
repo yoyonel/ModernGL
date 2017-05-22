@@ -33,7 +33,8 @@ prog = ctx.program([
 
 # Buffer
 
-vbo = ctx.buffer(struct.pack('6f',
+vbo = ctx.buffer(struct.pack(
+    '6f',
     0.0, 0.8,
     -0.6, -0.8,
     0.6, -0.8,

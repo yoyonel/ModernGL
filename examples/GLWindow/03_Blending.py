@@ -24,8 +24,10 @@ prog = ctx.program([
 
         void main() {
             frag_color = vert_color;
-            float r = rotation * (0.5 + gl_InstanceID * 0.05);
-            mat2 rot = mat2(cos(r), sin(r), -sin(r), cos(r));
+            mat2 rot = mat2(
+                cos(rotation), sin(rotation),
+                -sin(rotation), cos(rotation)
+            );
             gl_Position = vec4((rot * vert) * scale, 0.0, 1.0);
         }
     '''),
@@ -51,7 +53,9 @@ scale.value = (height / width * 0.75, 0.75)
 
 # Buffer
 
-vbo = ctx.buffer(struct.pack('18f',
+vbo = ctx.buffer(struct.pack(
+    '18f',
+
     1.0, 0.0,
     1.0, 0.0, 0.0, 0.5,
 
@@ -73,4 +77,4 @@ while wnd.update():
     ctx.clear(240, 240, 240)
     ctx.enable(ModernGL.BLEND)
     rotation.value = wnd.time
-    vao.render(instances = 10)
+    vao.render(instances=10)

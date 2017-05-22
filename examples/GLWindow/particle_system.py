@@ -51,14 +51,16 @@ prog = ctx.program([vert, frag])
 
 transform = ctx.program(tvert, ['out_pos', 'out_prev'])
 
+
 def particle():
     a = random.uniform(0.0, math.pi * 2.0)
     r = random.uniform(0.0, 0.001)
 
     return struct.pack('2f2f', 0.0, 0.0, math.cos(a) * r - 0.003, math.sin(a) * r - 0.008)
 
+
 vbo1 = ctx.buffer(b''.join(particle() for i in range(1024)))
-vbo2 = ctx.buffer(reserve = vbo1.size)
+vbo2 = ctx.buffer(reserve=vbo1.size)
 
 vao1 = ctx.simple_vertex_array(transform, vbo1, ['in_pos', 'in_prev'])
 vao2 = ctx.simple_vertex_array(transform, vbo2, ['in_pos', 'in_prev'])
@@ -78,7 +80,7 @@ while wnd.update():
     ctx.clear(240, 240, 240)
 
     for i in range(8):
-        vbo1.write(particle(), offset = idx * struct.calcsize('2f2f'))
+        vbo1.write(particle(), offset=idx * struct.calcsize('2f2f'))
         idx = (idx + 1) % 1024
 
     render_vao.render(ModernGL.POINTS, 1024)

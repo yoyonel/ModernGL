@@ -1,5 +1,4 @@
 import glob
-import os
 import platform
 
 from setuptools import Extension, setup
@@ -29,13 +28,13 @@ extra_linker_args = {
 }
 
 ModernGL = Extension(
-    name = 'ModernGL.mgl',
-    include_dirs = ['src'],
-    # define_macros = [('MGL_VERBOSE', '1')],
-    libraries = libraries[target],
-    extra_compile_args = extra_compile_args[target],
-    extra_link_args = extra_linker_args[target],
-    sources = glob.glob('src/*.cpp'),
+    name='ModernGL.mgl',
+    include_dirs=['src'],
+    # define_macros=[('MGL_VERBOSE', '1')],
+    libraries=libraries[target],
+    extra_compile_args=extra_compile_args[target],
+    extra_link_args=extra_linker_args[target],
+    sources=glob.glob('src/*.cpp'),
 )
 
 short_description = 'ModernGL: PyOpenGL alternative'

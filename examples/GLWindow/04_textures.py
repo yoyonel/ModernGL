@@ -24,7 +24,8 @@ prog = ctx.program([
         uniform float rotation;
 
         void main() {
-            mat2 rot = mat2(cos(rotation), sin(rotation), -sin(rotation), cos(rotation));
+            float r = rotation * (0.5 + gl_InstanceID * 0.05);
+            mat2 rot = mat2(cos(r), sin(r), -sin(r), cos(r));
             gl_Position = vec4((rot * vert) * scale, 0.0, 1.0);
             tex_coord = vert;
         }
@@ -53,7 +54,8 @@ scale.value = (height / width * 0.75, 0.75)
 
 # Buffer
 
-vbo = ctx.buffer(struct.pack('6f',
+vbo = ctx.buffer(struct.pack(
+    '6f',
     1.0, 0.0,
     -0.5, 0.86,
     -0.5, -0.86,

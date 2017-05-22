@@ -53,7 +53,9 @@ scale.value = (height / width * 0.75, 0.75)
 
 # Buffer
 
-vbo = ctx.buffer(struct.pack('15f',
+vbo = ctx.buffer(struct.pack(
+    '15f',
+
     1.0, 0.0,
     1.0, 0.0, 0.0,
 

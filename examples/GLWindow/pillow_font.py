@@ -20,7 +20,7 @@ msg_size = font.getsize(msg)
 im = Image.new('RGBA', msg_size, (0, 0, 0, 0))
 
 draw = ImageDraw.Draw(im)
-draw.text((1, 0), msg, font = font, fill = (0, 0, 0, 255))
+draw.text((1, 0), msg, font=font, fill=(0, 0, 0, 255))
 del draw
 
 tex = ctx.texture(im.size, 4, im.tobytes())
@@ -62,18 +62,12 @@ prog.uniforms['Screen'].value = wnd.size
 
 # Buffer
 
-vbo = ctx.buffer(struct.pack('16f',
-    0, 0,
-    0, 0,
-
-    0, msg_size[1],
-    0, -1,
-
-    msg_size[0], 0,
-    1, 0,
-
-    msg_size[0], msg_size[1],
-    1, -1,
+vbo = ctx.buffer(struct.pack(
+    '16f',
+    0, 0, 0, 0,
+    0, msg_size[1], 0, -1,
+    msg_size[0], 0, 1, 0,
+    msg_size[0], msg_size[1], 1, -1,
 ))
 
 # Put everything together

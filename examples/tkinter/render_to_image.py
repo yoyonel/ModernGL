@@ -38,7 +38,8 @@ prog = ctx.program([
     '''),
 ])
 
-vbo = ctx.buffer(struct.pack('6f',
+vbo = ctx.buffer(struct.pack(
+    '6f',
     0.0, 0.8,
     -0.6, -0.8,
     0.6, -0.8,
@@ -52,9 +53,11 @@ vao.render()
 
 root = tk.Tk()
 
-img = ImageTk.PhotoImage(Image.frombytes('RGB', size, fbo.read(size, components = 3)).transpose(Image.FLIP_TOP_BOTTOM))
-panel = tk.Label(root, image = img)
+pimg = Image.frombytes('RGB', size, fbo.read(size, components=3))
+img = ImageTk.PhotoImage(pimg.transpose(Image.FLIP_TOP_BOTTOM))
+panel = tk.Label(root, image=img)
 panel.pack()
+
 
 def redraw(col, val):
     prog.uniforms[col].value = val
@@ -62,14 +65,15 @@ def redraw(col, val):
     ctx.clear(240, 240, 240)
     vao.render()
 
-    img2 = ImageTk.PhotoImage(Image.frombytes('RGB', size, fbo.read(size, components = 3)).transpose(Image.FLIP_TOP_BOTTOM))
-    panel.configure(image = img2)
+    pimg = Image.frombytes('RGB', size, fbo.read(size, components=3))
+    img2 = ImageTk.PhotoImage(pimg.transpose(Image.FLIP_TOP_BOTTOM))
+    panel.configure(image=img2)
     panel.image = img2
 
 
-R = tk.Scale(root, from_ = 0, to = 255, orient = tk.HORIZONTAL, command = lambda x: redraw('R', int(x) / 255), length=300)
-G = tk.Scale(root, from_ = 0, to = 255, orient = tk.HORIZONTAL, command = lambda x: redraw('G', int(x) / 255), length=300)
-B = tk.Scale(root, from_ = 0, to = 255, orient = tk.HORIZONTAL, command = lambda x: redraw('B', int(x) / 255), length=300)
+R = tk.Scale(root, from_=0, to=255, orient=tk.HORIZONTAL, command=lambda x: redraw('R', int(x) / 255), length=300)
+G = tk.Scale(root, from_=0, to=255, orient=tk.HORIZONTAL, command=lambda x: redraw('G', int(x) / 255), length=300)
+B = tk.Scale(root, from_=0, to=255, orient=tk.HORIZONTAL, command=lambda x: redraw('B', int(x) / 255), length=300)
 
 R.pack()
 G.pack()
