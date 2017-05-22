@@ -2,9 +2,9 @@ import os
 import struct
 
 import GLWindow
-from PIL import Image
-
 import ModernGL
+
+from PIL import Image
 
 # Window & Context
 
@@ -14,33 +14,33 @@ ctx = ModernGL.create_context()
 # Shaders & Program
 
 prog = ctx.program([
-	ctx.vertex_shader('''
-		#version 330
+    ctx.vertex_shader('''
+        #version 330
 
-		in vec2 vert;
-		out vec2 tex_coord;
+        in vec2 vert;
+        out vec2 tex_coord;
 
-		uniform vec2 scale;
-		uniform float rotation;
+        uniform vec2 scale;
+        uniform float rotation;
 
-		void main() {
-			mat2 rot = mat2(cos(rotation), sin(rotation), -sin(rotation), cos(rotation));
-			gl_Position = vec4((rot * vert) * scale, 0.0, 1.0);
-			tex_coord = vert;
-		}
-	'''),
-	ctx.fragment_shader('''
-		#version 330
+        void main() {
+            mat2 rot = mat2(cos(rotation), sin(rotation), -sin(rotation), cos(rotation));
+            gl_Position = vec4((rot * vert) * scale, 0.0, 1.0);
+            tex_coord = vert;
+        }
+    '''),
+    ctx.fragment_shader('''
+        #version 330
 
-		uniform sampler2D texture;
+        uniform sampler2D texture;
 
-		in vec2 tex_coord;
-		out vec4 color;
+        in vec2 tex_coord;
+        out vec4 color;
 
-		void main() {
-			color = vec4(texture2D(texture, tex_coord).rgb, 1.0);
-		}
-	'''),
+        void main() {
+            color = vec4(texture2D(texture, tex_coord).rgb, 1.0);
+        }
+    '''),
 ])
 
 # Uniforms
@@ -54,9 +54,9 @@ scale.value = (height / width * 0.75, 0.75)
 # Buffer
 
 vbo = ctx.buffer(struct.pack('6f',
-	1.0, 0.0,
-	-0.5, 0.86,
-	-0.5, -0.86,
+    1.0, 0.0,
+    -0.5, 0.86,
+    -0.5, -0.86,
 ))
 
 # Put everything together
@@ -72,7 +72,7 @@ texture.use()
 # Main loop
 
 while wnd.update():
-	ctx.viewport = wnd.viewport
-	ctx.clear(240, 240, 240)
-	rotation.value = wnd.time
-	vao.render()
+    ctx.viewport = wnd.viewport
+    ctx.clear(240, 240, 240)
+    rotation.value = wnd.time
+    vao.render()

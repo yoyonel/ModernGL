@@ -2,6 +2,7 @@ import struct
 
 import GLWindow
 import ModernGL
+
 from PIL import Image, ImageDraw, ImageFont
 
 # Window & Context
@@ -28,33 +29,33 @@ tex.use()
 # Shaders & Program
 
 prog = ctx.program([
-	ctx.vertex_shader('''
-		#version 330
+    ctx.vertex_shader('''
+        #version 330
 
-		uniform vec2 Screen;
+        uniform vec2 Screen;
 
-		in vec2 vert;
-		in vec2 texcoord;
+        in vec2 vert;
+        in vec2 texcoord;
 
-		out vec2 v_texcoord;
+        out vec2 v_texcoord;
 
-		void main() {
-			gl_Position = vec4(vert / Screen * 2.0 - 1.0, 0.0, 1.0);
-			v_texcoord = texcoord;
-		}
-	'''),
-	ctx.fragment_shader('''
-		#version 330
+        void main() {
+            gl_Position = vec4(vert / Screen * 2.0 - 1.0, 0.0, 1.0);
+            v_texcoord = texcoord;
+        }
+    '''),
+    ctx.fragment_shader('''
+        #version 330
 
-		uniform sampler2D Texture;
+        uniform sampler2D Texture;
 
-		in vec2 v_texcoord;
-		out vec4 color;
+        in vec2 v_texcoord;
+        out vec4 color;
 
-		void main() {
-			color = texture(Texture, v_texcoord);
-		}
-	'''),
+        void main() {
+            color = texture(Texture, v_texcoord);
+        }
+    '''),
 ])
 
 prog.uniforms['Screen'].value = wnd.size
@@ -62,17 +63,17 @@ prog.uniforms['Screen'].value = wnd.size
 # Buffer
 
 vbo = ctx.buffer(struct.pack('16f',
-	0, 0,
-	0, 0,
+    0, 0,
+    0, 0,
 
-	0, msg_size[1],
-	0, -1,
+    0, msg_size[1],
+    0, -1,
 
-	msg_size[0], 0,
-	1, 0,
+    msg_size[0], 0,
+    1, 0,
 
-	msg_size[0], msg_size[1],
-	1, -1,
+    msg_size[0], msg_size[1],
+    1, -1,
 ))
 
 # Put everything together
@@ -82,7 +83,7 @@ vao = ctx.simple_vertex_array(prog, vbo, ['vert', 'texcoord'])
 # Main loop
 
 while wnd.update():
-	ctx.viewport = wnd.viewport
-	ctx.clear(240, 240, 240)
-	ctx.enable(ModernGL.BLEND)
-	vao.render(ModernGL.TRIANGLE_STRIP)
+    ctx.viewport = wnd.viewport
+    ctx.clear(240, 240, 240)
+    ctx.enable(ModernGL.BLEND)
+    vao.render(ModernGL.TRIANGLE_STRIP)

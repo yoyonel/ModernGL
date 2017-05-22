@@ -1,5 +1,8 @@
+import struct
+
+import ModernGL
+import pygame
 from pygame.locals import *
-import ModernGL, struct, pygame
 
 pygame.init()
 pygame.display.set_mode((800, 600), DOUBLEBUF | OPENGL)
@@ -7,19 +10,19 @@ pygame.display.set_mode((800, 600), DOUBLEBUF | OPENGL)
 ctx = ModernGL.create_context()
 
 vert = ctx.vertex_shader('''
-	#version 330
-	in vec2 vert;
-	void main() {
-		gl_Position = vec4(vert, 0.0, 1.0);
-	}
+    #version 330
+    in vec2 vert;
+    void main() {
+        gl_Position = vec4(vert, 0.0, 1.0);
+    }
 ''')
 
 frag = ctx.fragment_shader('''
-	#version 330
-	out vec4 color;
-	void main() {
-		color = vec4(0.30, 0.50, 1.00, 1.0);
-	}
+    #version 330
+    out vec4 color;
+    void main() {
+        color = vec4(0.30, 0.50, 1.00, 1.0);
+    }
 ''')
 
 prog = ctx.program([vert, frag])
@@ -29,12 +32,12 @@ vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
 
 running = True
 while running:
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			running = False
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
-	ctx.clear(240, 240, 240)
-	vao.render()
+    ctx.clear(240, 240, 240)
+    vao.render()
 
-	pygame.display.flip()
-	pygame.time.wait(10)
+    pygame.display.flip()
+    pygame.time.wait(10)

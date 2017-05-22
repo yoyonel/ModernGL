@@ -1,5 +1,6 @@
 import struct
-import unittest, time
+import time
+import unittest
 
 import ModernGL
 
