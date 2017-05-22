@@ -7,7 +7,7 @@
 	:align: center
 	:figclass: align-center
 
-	Hello World!
+	Hello World
 
 .. literalinclude:: ../../examples/GLWindow/01_hello_world.py
 	:linenos:

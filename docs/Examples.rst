@@ -7,10 +7,10 @@ Examples
 	:maxdepth: 4
 	:caption: Examples:
 
-	01_hello_world <Examples/01_hello_world.rst>
-	02_uniforms_and_attributes <Examples/02_uniforms_and_attributes.rst>
-	03_blending <Examples/03_blending.rst>
-	04_texture <Examples/04_texture.rst>
-	05_perspective <Examples/05_perspective.rst>
-	julia_fractal <Examples/julia_fractal.rst>
-	particle_system <Examples/particle_system.rst>
+	01. Hello World <Examples/01_hello_world.rst>
+	02. Uniforms and Attributes <Examples/02_uniforms_and_attributes.rst>
+	03. Alpha Blending <Examples/03_alpha_blending.rst>
+	04. Textures <Examples/04_textures.rst>
+	05. Perspective Projection <Examples/05_perspective_projection.rst>
+	Julia Fractal <Examples/julia_fractal.rst>
+	Particle System <Examples/particle_system.rst>
