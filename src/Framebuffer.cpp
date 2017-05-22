@@ -59,10 +59,10 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 		return 0;
 	}
 
-	int x;
-	int y;
-	int width;
-	int height;
+	int x = 0;
+	int y = 0;
+	int width = self->width;
+	int height = self->height;
 
 	if (viewport != Py_None) {
 		if (Py_TYPE(viewport) != &PyTuple_Type) {
@@ -96,13 +96,6 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
-
-	} else {
-
-		x = 0;
-		y = 0;
-		width = self->width;
-		height = self->height;
 
 	}
 
