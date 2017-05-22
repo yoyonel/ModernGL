@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 - Required `-std=c++11` for linux and mac.
 
+## Fixed
+- `Framebuffer` and `Texture` can have uninitialized x, y values.
+
 ## [4.0.0] - 2017-05-20
 ### Added
 - Full linting support
