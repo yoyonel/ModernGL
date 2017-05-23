@@ -55,6 +55,9 @@ class Framebuffer:
                 viewport (tuple): The viewport.
         '''
 
+        if viewport is not None:
+            viewport = tuple(viewport)
+
         self.mglo.clear(r, g, b, a, viewport)
 
     def use(self) -> None:
