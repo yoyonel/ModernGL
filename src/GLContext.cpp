@@ -386,20 +386,97 @@ void DestroyGLContext(const GLContext & context) {
 
 #elif defined(__APPLE__)
 
-#include <OpenGL/gl.h>
+#include <OpenGL/OpenGL.h>
+#include <ApplicationServices/ApplicationServices.h>
 
 GLContext LoadCurrentGLContext() {
 	GLContext context = {};
+
+	CGLContextObj cgl_context = CGLGetCurrentContext();
+
+	if (!cgl_context) {
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot detect context");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return context;
+	}
+
+	context.context = (void *)cgl_context;
+
 	return context;
 }
 
 GLContext CreateGLContext(int width, int height) {
 	GLContext context = {};
+
+	// CGDirectDisplayID display = CGMainDisplayID();
+	// CGOpenGLDisplayMask cglDisplayMask = CGDisplayIDToOpenGLDisplayMask(display);
+	// CGLContextObj curr_ctx = CGLGetCurrentContext();
+
+	GLint num_pixelformats = 0;
+	CGLPixelFormatObj pixelformat = 0;
+
+	// kCGLPFAAccelerated
+	CGLPixelFormatAttribute attribs[] = {
+		kCGLPFAOpenGLProfile,
+		(CGLPixelFormatAttribute)kCGLOGLPVersion_GL4_Core,
+		(CGLPixelFormatAttribute)0,
+	};
+
+	CGLChoosePixelFormat(attribs, &pixelformat, &num_pixelformats);
+
+	if (!pixelformat) {
+
+		CGLPixelFormatAttribute attribs[] = {
+			kCGLPFAOpenGLProfile,
+			(CGLPixelFormatAttribute)kCGLOGLPVersion_GL3_Core,
+			(CGLPixelFormatAttribute)0,
+		};
+
+		CGLChoosePixelFormat(attribs, &pixelformat, &num_pixelformats);
+
+		if (!pixelformat) {
+			CGLPixelFormatAttribute attribs[] = {
+				(CGLPixelFormatAttribute)0,
+			};
+
+			CGLChoosePixelFormat(attribs, &pixelformat, &num_pixelformats);
+		}
+	}
+
+	if (!pixelformat) {
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot choose pixel format");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return context;
+	}
+
+	CGLContextObj cgl_context = 0;
+
+	CGLCreateContext(pixelformat, 0, &cgl_context);
+	CGLDestroyPixelFormat(pixelformat);
+
+	if (!cgl_context) {
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create context");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return context;
+	}
+
+	CGLSetCurrentContext(cgl_context);
+
+	context.context = (void *)cgl_context;
+	context.standalone = true;
+
 	return context;
 }
 
 void DestroyGLContext(const GLContext & context) {
-	// TODO:
+	if (!context.standalone) {
+		return;
+	}
+
+	if (context.context) {
+		CGLDestroyContext((CGLContextObj)context.context);
+		// context.context = 0;
+	}
 }
 
 #else

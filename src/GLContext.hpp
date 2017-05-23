@@ -12,6 +12,7 @@ struct GLContext {
 #elif defined(__APPLE__)
 
 struct GLContext {
+	void * context;
 	bool standalone;
 };
 

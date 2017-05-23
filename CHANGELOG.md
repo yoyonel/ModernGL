@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Exception handling when importing the implementation.
-- Standalone context on linux with fallback mechanism.
+- Standalone context on linux and osx with fallback mechanism.
 - Require version at context creation.
 - Context `version_code` property.
 - Framebuffer `clear()` method.
