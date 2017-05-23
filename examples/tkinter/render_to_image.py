@@ -62,7 +62,7 @@ panel.pack()
 def redraw(col, val):
     prog.uniforms[col].value = val
     ctx.viewport = (0, 0, size[0], size[1])
-    ctx.clear(240, 240, 240)
+    ctx.clear(1.0, 1.0, 1.0)
     vao.render()
 
     pimg = Image.frombytes('RGB', size, fbo.read(size, components=3))

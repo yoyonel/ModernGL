@@ -109,10 +109,11 @@ PyObject * MGLContext_clear(MGLContext * self, PyObject * args) {
 
 	const GLMethods & gl = self->gl;
 
+	gl.ClearColor(r, g, b, a);
+
 	if (viewport != Py_None) {
 		gl.Enable(GL_SCISSOR_TEST);
 		gl.Scissor(x, y, width, height);
-		gl.ClearColor(r, g, b, a);
 		gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 		gl.Disable(GL_SCISSOR_TEST);
 	} else {
