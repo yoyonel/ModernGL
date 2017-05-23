@@ -28,6 +28,8 @@ from .textures import Texture
 from .renderbuffers import Renderbuffer
 from .framebuffers import Framebuffer
 
+__version__ = '4.0.0'
+
 __all__ = [
     'InvalidObject', 'Version', 'EnableFlag', 'Primitive', 'Error',
     'POINTS', 'LINES', 'LINE_STRIP', 'LINE_LOOP', 'TRIANGLES', 'TRIANGLE_STRIP', 'TRIANGLE_FAN',
@@ -39,7 +41,6 @@ __all__ = [
     'Subroutine', 'SubroutineMap', 'SubroutineUniform', 'SubroutineUniformMap',
     'ProgramStage',
     'VertexArrayAttribute',
-    'VERSION',
     'create_context',
     'create_standalone_context',
     'BufferAccess',
@@ -54,8 +55,3 @@ __all__ = [
     'Context',
     'detect_format',
 ]
-
-VERSION = '4.0.0'
-'''
-    ModernGL version
-'''

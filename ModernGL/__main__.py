@@ -17,14 +17,14 @@ def main():
     parser.add_argument(
         '-v', '--version',
         action='version',
-        version='ModernGL %s' % ModernGL.VERSION
+        version='ModernGL %s' % ModernGL.__version__
     )
 
     parser.parse_args()
 
     ctx = ModernGL.create_standalone_context()
 
-    print('ModernGL:', ModernGL.VERSION)
+    print('ModernGL:', ModernGL.__version__)
     print('Vendor:', ctx.vendor)
     print('Renderer:', ctx.renderer)
     print('Version:', ctx.version)

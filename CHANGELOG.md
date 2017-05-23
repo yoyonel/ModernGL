@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Removed
 - Required `-std=c++11` for linux and mac.
+- ModernGL `VERSION` constant.
 
 ## Fixed
 - `Framebuffer` and `Texture` can have uninitialized x, y values.
