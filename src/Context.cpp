@@ -1506,7 +1506,6 @@ PyObject * MGLContext_get_vendor(MGLContext * self, void * closure) {
 	}
 
 	return PyUnicode_FromFormat("%s", vendor);
-
 }
 
 PyObject * MGLContext_get_renderer(MGLContext * self, void * closure) {
