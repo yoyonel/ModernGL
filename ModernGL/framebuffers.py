@@ -32,7 +32,7 @@ class Framebuffer:
         res.mglo = obj
         return res
 
-    def clear(self, r=0.0, g=0.0, b=0.0, a=0.0, *, viewport=None) -> None:
+    def clear(self, red=0, green=0, blue=0, alpha=0, *, viewport=None) -> None:
         '''
             Clear the framebuffer.
 
@@ -58,7 +58,7 @@ class Framebuffer:
         if viewport is not None:
             viewport = tuple(viewport)
 
-        self.mglo.clear(r, g, b, a, viewport)
+        self.mglo.clear(red, green, blue, alpha, viewport)
 
     def use(self) -> None:
         '''
