@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Exception handling when importing the implementation.
+- Standalone context on linux with fallback mechanism.
 - Framebuffer `clear()` method.
 
 ### Changed
@@ -17,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Fixed
 - `Framebuffer` and `Texture` can have uninitialized x, y values.
+- Uniform setters
 
 ## [4.0.0] - 2017-05-20
 ### Added
