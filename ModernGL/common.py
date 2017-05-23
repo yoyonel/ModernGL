@@ -201,6 +201,14 @@ class Version:
 
         return self._minor
 
+    @property
+    def code(self) -> int:
+        '''
+            code
+        '''
+
+        return self._major * 100 + self._minor * 10
+
 
 CORE_330 = Version(3, 3)
 '''

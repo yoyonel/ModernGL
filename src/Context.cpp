@@ -1533,6 +1533,17 @@ PyObject * MGLContext_get_version(MGLContext * self, void * closure) {
 	return PyUnicode_FromFormat("%s", version);
 }
 
+PyObject * MGLContext_get_version_code(MGLContext * self, void * closure) {
+	int major = 0;
+	int minor = 0;
+
+	const GLMethods & gl = self->gl;
+	gl.GetIntegerv(GL_MAJOR_VERSION, &major);
+	gl.GetIntegerv(GL_MINOR_VERSION, &minor);
+
+	return PyLong_FromLong(major * 100 + minor * 10);
+}
+
 PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"line_width", (getter)MGLContext_get_line_width, (setter)MGLContext_set_line_width, 0, 0},
 	{(char *)"point_size", (getter)MGLContext_get_point_size, (setter)MGLContext_set_point_size, 0, 0},
@@ -1544,6 +1555,7 @@ PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"vendor", (getter)MGLContext_get_vendor, 0, 0, 0},
 	{(char *)"renderer", (getter)MGLContext_get_renderer, 0, 0, 0},
 	{(char *)"version", (getter)MGLContext_get_version, 0, 0, 0},
+	{(char *)"version_code", (getter)MGLContext_get_version_code, 0, 0, 0},
 	{0},
 };
 

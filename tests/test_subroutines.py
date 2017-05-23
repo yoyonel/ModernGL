@@ -16,6 +16,9 @@ class TestCase(unittest.TestCase):
         self.ctx.release()
 
     def test_1(self):
+        if self.ctx.version_code < 400:
+            return
+
         vbo1 = self.ctx.buffer(struct.pack('4f', 0.0, 0.0, 0.0, 0.0))
         vbo2 = self.ctx.buffer(struct.pack('4f', 0.0, 0.0, 0.0, 0.0))
 

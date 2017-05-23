@@ -4,6 +4,8 @@
 
 # pylint: disable=using-constant-test, too-many-public-methods
 
+from typing import Tuple
+
 try:
     from ModernGL import mgl
 except ImportError:
@@ -72,7 +74,7 @@ class Context:
     @property
     def line_width(self) -> float:
         '''
-            Set the default line width.
+            float: Set the default line width.
         '''
 
         return self.mglo.line_width
@@ -84,7 +86,7 @@ class Context:
     @property
     def point_size(self) -> float:
         '''
-            Set the default point size.
+            float: Set the default point size.
         '''
 
         return self.mglo.point_size
@@ -94,9 +96,9 @@ class Context:
         self.mglo.point_size = value
 
     @property
-    def viewport(self) -> tuple:
+    def viewport(self) -> Tuple[int, int, int, int]:
         '''
-            The viewport.
+            tuple: The viewport.
 
             Reading this property may force the GPU to sync.
             Use this property to set the viewport only.
@@ -111,7 +113,7 @@ class Context:
     @property
     def default_texture_unit(self) -> int:
         '''
-            The default texture unit.
+            int: The default texture unit.
         '''
 
         return self.mglo.default_texture_unit
@@ -123,7 +125,7 @@ class Context:
     @property
     def max_texture_units(self) -> int:
         '''
-            The max texture units.
+            int: The max texture units.
         '''
 
         return self.mglo.max_texture_units
@@ -131,7 +133,7 @@ class Context:
     @property
     def default_framebuffer(self) -> Framebuffer:
         '''
-            The default framebuffer.
+            Framebuffer: The default framebuffer.
         '''
 
         return self.mglo.default_framebuffer
@@ -139,9 +141,7 @@ class Context:
     @property
     def vendor(self) -> str:
         '''
-            The vendor.
-
-            :type: str
+            str: The vendor.
         '''
 
         return self.mglo.vendor
@@ -149,9 +149,7 @@ class Context:
     @property
     def renderer(self) -> str:
         '''
-            The renderer.
-
-            :type: str
+            str: The renderer.
         '''
 
         return self.mglo.renderer
@@ -159,12 +157,18 @@ class Context:
     @property
     def version(self) -> str:
         '''
-            The OpenGL version.
-
-            :type: str
+            str: The OpenGL version.
         '''
 
         return self.mglo.version
+
+    @property
+    def version_code(self) -> int:
+        '''
+            int: The OpenGL version.
+        '''
+
+        return self.mglo.version_code
 
     def clear(self, red=0, green=0, blue=0, alpha=0, *, viewport=None) -> None:
         '''
@@ -617,7 +621,7 @@ def create_context(require=None) -> Context:
 
     ctx = Context.new(mgl.create_context())
 
-    if require is not None and ctx.version < require:
+    if require is not None and ctx.version_code < require.code:
         raise Exception('The version required is not provided')
 
     return ctx
@@ -647,7 +651,7 @@ def create_standalone_context(size=(256, 256), require=None) -> Context:
 
     ctx = Context.new(mgl.create_standalone_context(*size))
 
-    if require is not None and ctx.version < require:
+    if require is not None and ctx.version_code < require.code:
         raise Exception('The version required is not provided')
 
     return ctx
