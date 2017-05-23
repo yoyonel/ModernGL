@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Exception handling when importing the implementation.
+- Framebuffer `clear()` method.
 
 ### Removed
 - Required `-std=c++11` for linux and mac.

@@ -42,6 +42,86 @@ PyObject * MGLFramebuffer_release(MGLFramebuffer * self) {
 	Py_RETURN_NONE;
 }
 
+PyObject * MGLFramebuffer_clear(MGLFramebuffer * self, PyObject * args) {
+	float r, g, b, a;
+	PyObject * viewport;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"ffffO",
+		&r,
+		&g,
+		&b,
+		&a,
+		&viewport
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+	
+	int x = 0;
+	int y = 0;
+	int width = self->width;
+	int height = self->height;
+
+	if (viewport != Py_None) {
+		if (Py_TYPE(viewport) != &PyTuple_Type) {
+			MGLError * error = MGLError_FromFormat(TRACE, "the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return 0;
+		}
+
+		if (PyTuple_GET_SIZE(viewport) == 4) {
+
+			x = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
+			y = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
+			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 2));
+			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 3));
+
+		} else if (PyTuple_GET_SIZE(viewport) == 2) {
+
+			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
+			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
+
+		} else {
+
+			MGLError * error = MGLError_FromFormat(TRACE, "the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return 0;
+
+		}
+
+		if (PyErr_Occurred()) {
+			MGLError * error = MGLError_FromFormat(TRACE, "wrong values in the viewport");
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return 0;
+		}
+
+	}
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
+
+	if (viewport != Py_None) {
+		gl.Enable(GL_SCISSOR_TEST);
+		gl.Scissor(x, y, width, height);
+		gl.ClearColor(r, g, b, a);
+		gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		gl.Disable(GL_SCISSOR_TEST);
+	} else {
+		gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	}
+
+	Py_RETURN_NONE;
+}
+
+PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
+	self->context->gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
+	Py_RETURN_NONE;
+}
+
 PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	PyObject * viewport;
 	int components;
@@ -115,15 +195,11 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	return result;
 }
 
-PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
-	self->context->gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
-	Py_RETURN_NONE;
-}
-
 PyMethodDef MGLFramebuffer_tp_methods[] = {
-	{"release", (PyCFunction)MGLFramebuffer_release, METH_NOARGS, 0},
-	{"read", (PyCFunction)MGLFramebuffer_read, METH_VARARGS, 0},
+	{"clear", (PyCFunction)MGLFramebuffer_clear, METH_NOARGS, 0},
 	{"use", (PyCFunction)MGLFramebuffer_use, METH_NOARGS, 0},
+	{"read", (PyCFunction)MGLFramebuffer_read, METH_VARARGS, 0},
+	{"release", (PyCFunction)MGLFramebuffer_release, METH_NOARGS, 0},
 	{0},
 };
 
