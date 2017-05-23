@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Exception handling when importing the implementation.
 - Framebuffer `clear()` method.
 
+### Changed
+- Context `clear()` method accepts floats.
+
 ### Removed
 - Required `-std=c++11` for linux and mac.
 
