@@ -66,7 +66,7 @@ wnd.grab_mouse(True)
 
 while wnd.update():
     ctx.viewport = wnd.viewport
-    ctx.clear(240, 240, 240)
+    ctx.clear(0.9, 0.9, 0.9)
     mx, my = wnd.mouse_delta
     x -= mx / 100
     y -= my / 100

@@ -77,7 +77,7 @@ ctx.point_size = 5.0
 
 while wnd.update():
     ctx.viewport = wnd.viewport
-    ctx.clear(240, 240, 240)
+    ctx.clear(0.9, 0.9, 0.9)
 
     for i in range(8):
         vbo1.write(particle(), offset=idx * struct.calcsize('2f2f'))

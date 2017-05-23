@@ -75,6 +75,6 @@ texture.use()
 
 while wnd.update():
     ctx.viewport = wnd.viewport
-    ctx.clear(240, 240, 240)
+    ctx.clear(0.9, 0.9, 0.9)
     rotation.value = wnd.time
     vao.render()

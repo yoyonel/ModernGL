@@ -48,7 +48,7 @@ vbo = ctx.buffer(struct.pack(
 vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
 
 ctx.viewport = (0, 0, size[0], size[1])
-ctx.clear(240, 240, 240)
+ctx.clear(0.9, 0.9, 0.9)
 vao.render()
 
 root = tk.Tk()

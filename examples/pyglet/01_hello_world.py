@@ -31,7 +31,7 @@ vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
 
 @window.event
 def on_draw():
-    ctx.clear(240, 240, 240)
+    ctx.clear(0.9, 0.9, 0.9)
     vao.render()
 
 

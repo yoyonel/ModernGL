@@ -36,7 +36,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    ctx.clear(240, 240, 240)
+    ctx.clear(0.9, 0.9, 0.9)
     vao.render()
 
     pygame.display.flip()

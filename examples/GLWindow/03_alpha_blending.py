@@ -74,7 +74,7 @@ vao = ctx.simple_vertex_array(prog, vbo, ['vert', 'vert_color'])
 
 while wnd.update():
     ctx.viewport = wnd.viewport
-    ctx.clear(240, 240, 240)
+    ctx.clear(0.9, 0.9, 0.9)
     ctx.enable(ModernGL.BLEND)
     rotation.value = wnd.time
     vao.render(instances=10)

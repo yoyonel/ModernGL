@@ -41,7 +41,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 
     def paintGL(self):
         self.ctx.viewport = (0, 0, self.width(), self.height())
-        self.ctx.clear(240, 240, 240)
+        self.ctx.clear(0.9, 0.9, 0.9)
         self.vao.render()
         self.ctx.finish()
 
