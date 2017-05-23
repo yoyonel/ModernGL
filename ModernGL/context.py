@@ -189,10 +189,10 @@ class Context:
                 viewport (tuple): The viewport.
         '''
 
-        if viewport is None:
-            self.mglo.clear(red, green, blue, alpha)
-        else:
-            self.mglo.clear_viewport(red, green, blue, alpha, tuple(viewport))
+        if viewport is not None:
+            viewport = tuple(viewport)
+
+        self.mglo.clear(red, green, blue, alpha, viewport)
 
     def enable(self, flag) -> None:
         '''

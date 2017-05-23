@@ -50,69 +50,74 @@ PyObject * MGLContext_tp_str(MGLContext * self) {
 }
 
 PyObject * MGLContext_clear(MGLContext * self, PyObject * args) {
-	int r;
-	int g;
-	int b;
-	int a;
+	float r, g, b, a;
+	PyObject * viewport;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"IIII",
-		&r,
-		&g,
-		&b,
-		&a
-	);
-
-	if (!args_ok) {
-		return 0;
-	}
-
-	const float c = 1.0f / 255.0f;
-
-	const GLMethods & gl = self->gl;
-	gl.ClearColor(r * c, g * c, b * c, a * c);
-	gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
-	Py_RETURN_NONE;
-}
-
-PyObject * MGLContext_clear_viewport(MGLContext * self, PyObject * args) {
-	int r;
-	int g;
-	int b;
-	int a;
-
-	int x;
-	int y;
-	int width;
-	int height;
-
-	int args_ok = PyArg_ParseTuple(
-		args,
-		"IIII(IIII)",
+		"ffffO",
 		&r,
 		&g,
 		&b,
 		&a,
-		&x,
-		&y,
-		&width,
-		&height
+		&viewport
 	);
 
 	if (!args_ok) {
 		return 0;
 	}
+	
+	int x = 0;
+	int y = 0;
+	int width = 0;
+	int height = 0;
 
-	const float c = 1.0f / 255.0f;
+	if (viewport != Py_None) {
+		if (Py_TYPE(viewport) != &PyTuple_Type) {
+			MGLError * error = MGLError_FromFormat(TRACE, "the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return 0;
+		}
+
+		if (PyTuple_GET_SIZE(viewport) == 4) {
+
+			x = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
+			y = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
+			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 2));
+			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 3));
+
+		} else if (PyTuple_GET_SIZE(viewport) == 2) {
+
+			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
+			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
+
+		} else {
+
+			MGLError * error = MGLError_FromFormat(TRACE, "the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return 0;
+
+		}
+
+		if (PyErr_Occurred()) {
+			MGLError * error = MGLError_FromFormat(TRACE, "wrong values in the viewport");
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			return 0;
+		}
+
+	}
 
 	const GLMethods & gl = self->gl;
-	gl.Enable(GL_SCISSOR_TEST);
-	gl.Scissor(x, y, width, height);
-	gl.ClearColor(r * c, g * c, b * c, a * c);
-	gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	gl.Disable(GL_SCISSOR_TEST);
+
+	if (viewport != Py_None) {
+		gl.Enable(GL_SCISSOR_TEST);
+		gl.Scissor(x, y, width, height);
+		gl.ClearColor(r, g, b, a);
+		gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		gl.Disable(GL_SCISSOR_TEST);
+	} else {
+		gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	}
 
 	Py_RETURN_NONE;
 }
@@ -1341,10 +1346,7 @@ PyObject * MGLContext_release(MGLContext * self) {
 }
 
 PyMethodDef MGLContext_tp_methods[] = {
-	{"release", (PyCFunction)MGLContext_release, METH_NOARGS, 0},
-
 	{"clear", (PyCFunction)MGLContext_clear, METH_VARARGS, 0},
-	{"clear_viewport", (PyCFunction)MGLContext_clear_viewport, METH_VARARGS, 0},
 	{"enable", (PyCFunction)MGLContext_enable, METH_VARARGS, 0},
 	{"disable", (PyCFunction)MGLContext_disable, METH_VARARGS, 0},
 	{"finish", (PyCFunction)MGLContext_finish, METH_NOARGS, 0},
@@ -1365,6 +1367,8 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"renderbuffer", (PyCFunction)MGLContext_renderbuffer, METH_VARARGS, 0},
 	{"depth_renderbuffer", (PyCFunction)MGLContext_depth_renderbuffer, METH_VARARGS, 0},
 	{"compute_shader", (PyCFunction)MGLContext_compute_shader, METH_VARARGS, 0},
+
+	{"release", (PyCFunction)MGLContext_release, METH_NOARGS, 0},
 
 	{0},
 };
