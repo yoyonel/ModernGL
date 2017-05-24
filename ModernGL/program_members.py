@@ -194,7 +194,7 @@ class UniformMap:
         return key in self.mglo
 
     def __iter__(self):
-        yield from self.mglo
+        yield from self.mglo.items()
 
     def __len__(self):
         return len(self.mglo)
@@ -268,7 +268,7 @@ class UniformBlockMap:
         return key in self.mglo
 
     def __iter__(self):
-        yield from self.mglo
+        yield from self.mglo.items()
 
     def __len__(self):
         return len(self.mglo)
@@ -342,7 +342,7 @@ class VaryingMap:
         return key in self.mglo
 
     def __iter__(self):
-        yield from self.mglo
+        yield from self.mglo.items()
 
     def __len__(self):
         return len(self.mglo)
@@ -546,7 +546,7 @@ class AttributeMap:
         return key in self.mglo
 
     def __iter__(self):
-        yield from self.mglo
+        yield from self.mglo.items()
 
     def __len__(self):
         return len(self.mglo)
@@ -620,7 +620,7 @@ class SubroutineMap:
         return key in self.mglo
 
     def __iter__(self):
-        yield from self.mglo
+        yield from self.mglo.items()
 
     def __len__(self):
         return len(self.mglo)
@@ -694,7 +694,7 @@ class SubroutineUniformMap:
         return key in self.mglo
 
     def __iter__(self):
-        yield from self.mglo
+        yield from self.mglo.items()
 
     def __len__(self):
         return len(self.mglo)
