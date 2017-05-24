@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - `repr()` and `str()` for program members.
 - `\_\_iter\_\_` for program members.
 
+## Fixed
+- Broken RTD docs.
+
 ## [4.1.0] - 2017-05-24
 ### Added
 - Exception handling when importing the implementation.
