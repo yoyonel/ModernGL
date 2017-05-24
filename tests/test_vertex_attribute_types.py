@@ -1,5 +1,6 @@
 import struct
 import unittest
+import warnings
 
 import ModernGL
 
@@ -235,11 +236,13 @@ class TestCase(unittest.TestCase):
 
         for vtype in vtypes:
             if self.ctx.version_code < vtype['version']:
+                warnings.warn('skipping version %s' % vtype['version'])
                 continue
 
             prog = self.ctx.program(self.ctx.vertex_shader(vert_src % vtype), ['v_out'])
 
             if 'v_in' not in prog.attributes:
+                warnings.warn('skipping %s' % vtype['type'])
                 continue
 
             fmt = ModernGL.detect_format(prog, ['v_in'])
@@ -266,11 +269,13 @@ class TestCase(unittest.TestCase):
 
         for vtype in vtypes:
             if self.ctx.version_code < vtype['version']:
+                warnings.warn('skipping version %s' % vtype['version'])
                 continue
 
             prog = self.ctx.program(self.ctx.vertex_shader(vert_src % vtype), ['v_out'])
 
             if 'v_in' not in prog.attributes:
+                warnings.warn('skipping %s' % vtype['type'])
                 continue
 
             fmt = ModernGL.detect_format(prog, ['v_in'])
