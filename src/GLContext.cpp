@@ -389,6 +389,9 @@ void DestroyGLContext(const GLContext & context) {
 #include <OpenGL/OpenGL.h>
 #include <ApplicationServices/ApplicationServices.h>
 
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+
 GLContext LoadCurrentGLContext() {
 	GLContext context = {};
 
@@ -461,6 +464,75 @@ GLContext CreateGLContext(int width, int height) {
 	}
 
 	CGLSetCurrentContext(cgl_context);
+
+	int fbo = 0;
+	int color_rbo = 0;
+	int depth_rbo = 0;
+
+	glGenFramebuffers(1, (GLuint *)&fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+	glGenRenderbuffers(1, (GLuint *)&color_rbo);
+	glBindRenderbuffer(GL_RENDERBUFFER, color_rbo);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, width, height);
+
+	glGenRenderbuffers(1, (GLuint *)&depth_rbo);
+	glBindRenderbuffer(GL_RENDERBUFFER, depth_rbo);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+
+	glFramebufferRenderbuffer(
+		GL_FRAMEBUFFER,
+		GL_COLOR_ATTACHMENT0,
+		GL_RENDERBUFFER,
+		color_rbo
+	);
+
+	glFramebufferRenderbuffer(
+		GL_FRAMEBUFFER,
+		GL_DEPTH_ATTACHMENT,
+		GL_RENDERBUFFER,
+		depth_rbo
+	);
+
+	int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+	if (status != GL_FRAMEBUFFER_COMPLETE) {
+		const char * message = "framebuffer is not complete";
+
+		switch (status) {
+			case GL_FRAMEBUFFER_UNDEFINED:
+				message = "framebuffer is not complete (UNDEFINED)";
+				break;
+
+			case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+				message = "framebuffer is not complete (INCOMPLETE_ATTACHMENT)";
+				break;
+
+			case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+				message = "framebuffer is not complete (INCOMPLETE_MISSING_ATTACHMENT)";
+				break;
+
+			case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+				message = "framebuffer is not complete (INCOMPLETE_DRAW_BUFFER)";
+				break;
+
+			case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+				message = "framebuffer is not complete (INCOMPLETE_READ_BUFFER)";
+				break;
+
+			case GL_FRAMEBUFFER_UNSUPPORTED:
+				message = "framebuffer is not complete (UNSUPPORTED)";
+				break;
+
+			case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+				message = "framebuffer is not complete (INCOMPLETE_MULTISAMPLE)";
+				break;
+		}
+
+		MGLError * error = MGLError_FromFormat(TRACE, message);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return context;
+	}
 
 	context.context = (void *)cgl_context;
 	context.standalone = true;
