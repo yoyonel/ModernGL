@@ -13,27 +13,36 @@ class Error(Exception):
     '''
 
 
+class MockObject:
+    '''
+        MockObject
+    '''
+
+    wrapper = None
+    mglo = None
+
+
 class Implementation:
     '''
         Implementation
     '''
 
-    BLEND = 'BLEND'
-    DEPTH_TEST = 'DEPTH_TEST'
-    CULL_FACE = 'CULL_FACE'
-    MULTISAMPLE = 'MULTISAMPLE'
+    BLEND = MockObject()
+    DEPTH_TEST = MockObject()
+    CULL_FACE = MockObject()
+    MULTISAMPLE = MockObject()
 
-    TRIANGLES = 'TRIANGLES'
-    TRIANGLE_STRIP = 'TRIANGLE_STRIP'
-    TRIANGLE_FAN = 'TRIANGLE_FAN'
-    LINES = 'LINES'
-    LINE_STRIP = 'LINE_STRIP'
-    LINE_LOOP = 'LINE_LOOP'
-    POINTS = 'POINTS'
-    LINE_STRIP_ADJACENCY = 'LINE_STRIP_ADJACENCY'
-    LINES_ADJACENCY = 'LINES_ADJACENCY'
-    TRIANGLE_STRIP_ADJACENCY = 'TRIANGLE_STRIP_ADJACENCY'
-    TRIANGLES_ADJACENCY = 'TRIANGLES_ADJACENCY'
+    TRIANGLES = MockObject()
+    TRIANGLE_STRIP = MockObject()
+    TRIANGLE_FAN = MockObject()
+    LINES = MockObject()
+    LINE_STRIP = MockObject()
+    LINE_LOOP = MockObject()
+    POINTS = MockObject()
+    LINE_STRIP_ADJACENCY = MockObject()
+    LINES_ADJACENCY = MockObject()
+    TRIANGLE_STRIP_ADJACENCY = MockObject()
+    TRIANGLES_ADJACENCY = MockObject()
 
     def create_context(self) -> 'Context':
         '''
