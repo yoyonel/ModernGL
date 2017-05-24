@@ -9,7 +9,7 @@ __all__ = ['mgl', 'Error']
 
 class Error(Exception):
     '''
-        Error
+        ModernGL Error
     '''
 
 
@@ -35,13 +35,12 @@ class Implementation:
     TRIANGLE_STRIP_ADJACENCY = 'TRIANGLE_STRIP_ADJACENCY'
     TRIANGLES_ADJACENCY = 'TRIANGLES_ADJACENCY'
 
-
-    def create_context() -> 'Context':
+    def create_context(self) -> 'Context':
         '''
             create_context
         '''
 
-    def create_standalone_context(*args) -> 'Context':
+    def create_standalone_context(self, *args) -> 'Context':
         '''
             create_standalone_context
         '''

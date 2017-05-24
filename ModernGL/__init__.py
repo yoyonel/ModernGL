@@ -2,18 +2,24 @@
     ModernGL: PyOpenGL alternative
 '''
 
+import os
+
 try:
     from ModernGL.mgl import Error
 
 except ImportError:
 
-    _IMPORT_ERROR = '\n'.join([
-        'No implementation found for ModernGL',
-        'Are you sure the source code is compiled properly?',
-        'Hint: python3 setup.py build_ext -b .',
-    ])
+    if os.environ.get('READTHEDOCS') == 'True':
+        from ModernGL.mock import Error
 
-    raise ImportError(_IMPORT_ERROR) from None
+    else:
+        _IMPORT_ERROR = '\n'.join([
+            'No implementation found for ModernGL',
+            'Are you sure the source code is compiled properly?',
+            'Hint: python3 setup.py build_ext -b .',
+        ])
+
+        raise ImportError(_IMPORT_ERROR) from None
 
 
 from ModernGL.common import (
