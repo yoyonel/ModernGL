@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Exception handling when importing the implementation.
-- Standalone context on linux and osx with fallback mechanism.
+- Standalone context on **linux** and **mac** with fallback mechanism.
 - Require version at context creation.
 - Context `version_code` property.
 - Framebuffer `clear()` method.
@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Context `clear()` method accepts floats.
 
 ### Removed
-- Required `-std=c++11` for linux and mac.
+- Required `-std=c++11` for **linux** and **mac**.
 - ModernGL `VERSION` constant.
 
 ## Fixed
