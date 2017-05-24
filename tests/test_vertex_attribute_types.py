@@ -239,6 +239,9 @@ class TestCase(unittest.TestCase):
 
             prog = self.ctx.program(self.ctx.vertex_shader(vert_src % vtype), ['v_out'])
 
+            if 'v_in' not in prog.attributes:
+                continue
+
             fmt = ModernGL.detect_format(prog, ['v_in'])
             vbo1 = self.ctx.buffer(struct.pack(fmt, *vtype['input']))
             vbo2 = self.ctx.buffer(b'\xAA' * struct.calcsize(fmt))
@@ -266,6 +269,9 @@ class TestCase(unittest.TestCase):
                 continue
 
             prog = self.ctx.program(self.ctx.vertex_shader(vert_src % vtype), ['v_out'])
+
+            if 'v_in' not in prog.attributes:
+                continue
 
             fmt = ModernGL.detect_format(prog, ['v_in'])
             vbo1 = self.ctx.buffer(struct.pack(fmt, *(vtype['input'] * 2)))
