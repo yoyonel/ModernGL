@@ -13,13 +13,7 @@ def main():
     '''
 
     parser = argparse.ArgumentParser(prog='ModernGL')
-
-    parser.add_argument(
-        '-v', '--version',
-        action='version',
-        version='ModernGL %s' % ModernGL.__version__
-    )
-
+    parser.add_argument('-v', '--version', action='version', version='ModernGL %s' % ModernGL.__version__)
     parser.parse_args()
 
     ctx = ModernGL.create_standalone_context()
