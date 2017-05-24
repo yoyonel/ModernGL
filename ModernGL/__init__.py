@@ -28,7 +28,7 @@ from .textures import Texture
 from .renderbuffers import Renderbuffer
 from .framebuffers import Framebuffer
 
-__version__ = '4.0.0'
+__version__ = '4.1.0'
 
 __all__ = [
     'InvalidObject', 'Version', 'EnableFlag', 'Primitive', 'Error',

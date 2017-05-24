@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [4.1.0] - 2017-05-24
 ### Added
 - Exception handling when importing the implementation.
 - Standalone context on **linux** and **mac** with fallback mechanism.
@@ -63,7 +65,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.x.x - 2016-03-03
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.0.0...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.0...master
+[4.1.0]: https://github.com/cprogrammer1994/ModernGL/compare/4.0.0...4.1.0
 [4.0.0]: https://github.com/cprogrammer1994/ModernGL/tree/4.0.0
 [3.1.5]: https://github.com/cprogrammer1994/ModernGL/compare/3.1.0...3.1.5
 [3.1.0]: https://github.com/cprogrammer1994/ModernGL/tree/3.1.0
