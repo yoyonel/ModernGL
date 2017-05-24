@@ -4,9 +4,9 @@
 
 # pylint: disable=too-few-public-methods
 
-from .common import InvalidObject, TRIANGLES, POINTS
-from .programs import Program
-from .buffers import Buffer
+from ModernGL.common import InvalidObject, TRIANGLES, POINTS
+from ModernGL.programs import Program
+from ModernGL.buffers import Buffer
 
 
 class VertexArrayAttribute:

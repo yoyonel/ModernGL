@@ -2,7 +2,7 @@
     ModernGL textures
 '''
 
-from .common import InvalidObject
+from ModernGL.common import InvalidObject
 
 
 class Texture:
