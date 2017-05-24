@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- `repr()` and `str()` for program members.
+- `\_\_iter\_\_` for program members.
 
 ## [4.1.0] - 2017-05-24
 ### Added

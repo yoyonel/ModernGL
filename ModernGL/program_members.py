@@ -193,8 +193,14 @@ class UniformMap:
     def __contains__(self, key):
         return key in self.mglo
 
+    def __iter__(self):
+        yield from self.mglo
+
     def __len__(self):
         return len(self.mglo)
+
+    def __repr__(self):
+        return repr(self.mglo)
 
 
 class UniformBlock:
@@ -261,8 +267,14 @@ class UniformBlockMap:
     def __contains__(self, key):
         return key in self.mglo
 
+    def __iter__(self):
+        yield from self.mglo
+
     def __len__(self):
         return len(self.mglo)
+
+    def __repr__(self):
+        return repr(self.mglo)
 
 
 class Varying:
@@ -329,8 +341,14 @@ class VaryingMap:
     def __contains__(self, key):
         return key in self.mglo
 
+    def __iter__(self):
+        yield from self.mglo
+
     def __len__(self):
         return len(self.mglo)
+
+    def __repr__(self):
+        return repr(self.mglo)
 
 
 class Attribute:
@@ -527,8 +545,14 @@ class AttributeMap:
     def __contains__(self, key):
         return key in self.mglo
 
+    def __iter__(self):
+        yield from self.mglo
+
     def __len__(self):
         return len(self.mglo)
+
+    def __repr__(self):
+        return repr(self.mglo)
 
 
 class Subroutine:
@@ -595,8 +619,14 @@ class SubroutineMap:
     def __contains__(self, key):
         return key in self.mglo
 
+    def __iter__(self):
+        yield from self.mglo
+
     def __len__(self):
         return len(self.mglo)
+
+    def __repr__(self):
+        return repr(self.mglo)
 
 
 class SubroutineUniform:
@@ -663,8 +693,14 @@ class SubroutineUniformMap:
     def __contains__(self, key):
         return key in self.mglo
 
+    def __iter__(self):
+        yield from self.mglo
+
     def __len__(self):
         return len(self.mglo)
+
+    def __repr__(self):
+        return repr(self.mglo)
 
 
 class ProgramStage:
