@@ -2,8 +2,8 @@
 
 :fire: modern OpenGL binding for Python (alternative to PyOpenGL)
 
-- [ModernGL on PyPI](https://pypi.python.org/pypi/ModernGL)
-- [Documentation](https://moderngl.github.io)
+- [ModernGL on PyPI](https://pypi.python.org/pypi/ModernGL/)
+- [Documentation](https://moderngl.readthedocs.io/en/latest/)
 - [Examples](https://moderngl.github.io/Examples.html)
 
 ## ModernGL and OpenGL
@@ -69,7 +69,7 @@ vao.render(ModernGL.TRIANGLES)
 Installing on **Ubuntu** from source:
 ```
 apt-get install python3-dev libgl1-mesa-dev libx11-dev
-pip3 install ModernGL
+python3 setup.py install
 ```
 
 ...
