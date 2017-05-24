@@ -17,7 +17,6 @@ Versions
 .. currentmodule:: ModernGL
 
 .. autoclass:: Version
-	:members: major, minor
 
 .. autodata:: CORE_330
 .. autodata:: CORE_400
