@@ -79,21 +79,13 @@ PyObject * MGLProgram_get_attributes(MGLProgram * self, void * closure) {
 }
 
 PyObject * MGLProgram_get_geometry_input(MGLProgram * self, void * closure) {
-	if (self->geometry_input) {
-		Py_INCREF(self->geometry_input);
-		return (PyObject *)self->geometry_input;
-	} else {
-		Py_RETURN_NONE;
-	}
+	Py_INCREF(self->geometry_input->wrapper);
+	return (PyObject *)self->geometry_input->wrapper;
 }
 
 PyObject * MGLProgram_get_geometry_output(MGLProgram * self, void * closure) {
-	if (self->geometry_output) {
-		Py_INCREF(self->geometry_output);
-		return (PyObject *)self->geometry_output;
-	} else {
-		Py_RETURN_NONE;
-	}
+	Py_INCREF(self->geometry_output->wrapper);
+	return (PyObject *)self->geometry_output->wrapper;
 }
 
 PyObject * MGLProgram_get_geometry_vertices(MGLProgram * self, void * closure) {
@@ -600,7 +592,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 				break;
 
 			default:
-				program->geometry_input = 0;
+				program->geometry_input = MGL_NO_PRIMITIVE;
 				break;
 		}
 
@@ -650,17 +642,12 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 				break;
 
 			default:
-				program->geometry_output = 0;
+				program->geometry_output = MGL_NO_PRIMITIVE;
 				break;
 		}
 
-		if (program->geometry_input) {
-			Py_INCREF(program->geometry_input);
-		}
-
-		if (program->geometry_output) {
-			Py_INCREF(program->geometry_output);
-		}
+		Py_INCREF(program->geometry_input);
+		Py_INCREF(program->geometry_output);
 
 	} else {
 

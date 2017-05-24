@@ -2,31 +2,45 @@
     ModernGL: PyOpenGL alternative
 '''
 
-from .common import (
-    InvalidObject, Version, EnableFlag, Primitive, Error,
+try:
+    from ModernGL.mgl import Error
+
+except ImportError:
+
+    _IMPORT_ERROR = '\n'.join([
+        'No implementation found for ModernGL',
+        'Are you sure the source code is compiled properly?',
+        'Hint: python3 setup.py build_ext -b .',
+    ])
+
+    raise ImportError(_IMPORT_ERROR) from None
+
+
+from ModernGL.common import (
+    InvalidObject, Version, EnableFlag, Primitive,
     POINTS, LINES, LINE_STRIP, LINE_LOOP, TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN,
     LINES_ADJACENCY, LINE_STRIP_ADJACENCY, TRIANGLES_ADJACENCY, TRIANGLE_STRIP_ADJACENCY,
     CORE_330, CORE_400, CORE_410, CORE_420, CORE_430, CORE_440, CORE_450,
     BLEND, DEPTH_TEST, CULL_FACE, MULTISAMPLE,
 )
 
-from .program_members import (
+from ModernGL.program_members import (
     Uniform, UniformMap, UniformBlock, UniformBlockMap,
     Varying, VaryingMap, Attribute, AttributeMap,
     Subroutine, SubroutineMap, SubroutineUniform, SubroutineUniformMap,
     ProgramStage,
 )
 
-from .vertex_arrays import (
+from ModernGL.vertex_arrays import (
     VertexArrayAttribute, VertexArray
 )
 
-from .context import Context, create_context, create_standalone_context
-from .buffers import Buffer, BufferAccess, detect_format
-from .programs import ComputeShader, Shader, Program
-from .textures import Texture
-from .renderbuffers import Renderbuffer
-from .framebuffers import Framebuffer
+from ModernGL.context import Context, create_context, create_standalone_context
+from ModernGL.buffers import Buffer, BufferAccess, detect_format
+from ModernGL.programs import ComputeShader, Shader, Program
+from ModernGL.textures import Texture
+from ModernGL.renderbuffers import Renderbuffer
+from ModernGL.framebuffers import Framebuffer
 
 __version__ = '4.1.0'
 

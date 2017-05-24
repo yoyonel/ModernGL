@@ -5,7 +5,7 @@
 #include "Object.hpp"
 
 struct MGLPrimitive : public MGLObject {
-	const char * name;
+	PyObject * wrapper;
 
 	int primitive;
 	int geometry_primitive;
@@ -27,3 +27,4 @@ extern MGLPrimitive * MGL_LINE_STRIP_ADJACENCY;
 extern MGLPrimitive * MGL_LINES_ADJACENCY;
 extern MGLPrimitive * MGL_TRIANGLE_STRIP_ADJACENCY;
 extern MGLPrimitive * MGL_TRIANGLES_ADJACENCY;
+extern MGLPrimitive * MGL_NO_PRIMITIVE;

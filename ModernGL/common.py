@@ -2,36 +2,12 @@
     ModernGL common
 '''
 
-# pylint: disable=too-few-public-methods, using-constant-test
+# pylint: disable=too-few-public-methods
 
 try:
     from ModernGL import mgl
 except ImportError:
-    pass
-
-
-if False:
-    mgl.BLEND = 'BLEND'
-    mgl.DEPTH_TEST = 'DEPTH_TEST'
-    mgl.CULL_FACE = 'CULL_FACE'
-    mgl.MULTISAMPLE = 'MULTISAMPLE'
-
-    mgl.TRIANGLES = 'TRIANGLES'
-    mgl.TRIANGLE_STRIP = 'TRIANGLE_STRIP'
-    mgl.TRIANGLE_FAN = 'TRIANGLE_FAN'
-    mgl.LINES = 'LINES'
-    mgl.LINE_STRIP = 'LINE_STRIP'
-    mgl.LINE_LOOP = 'LINE_LOOP'
-    mgl.POINTS = 'POINTS'
-    mgl.LINE_STRIP_ADJACENCY = 'LINE_STRIP_ADJACENCY'
-    mgl.LINES_ADJACENCY = 'LINES_ADJACENCY'
-    mgl.TRIANGLE_STRIP_ADJACENCY = 'TRIANGLE_STRIP_ADJACENCY'
-    mgl.TRIANGLES_ADJACENCY = 'TRIANGLES_ADJACENCY'
-
-    mgl.Error = Exception
-
-
-Error = mgl.Error
+    from ModernGL.mock import mgl
 
 
 class InvalidObject:
@@ -47,36 +23,41 @@ class EnableFlag:
     '''
 
     def __init__(self):
+        self.name = None
         self.mglo = None
         raise NotImplementedError('EnableFlag')
 
+    def __repr__(self):
+        return 'ModernGL.%s' % self.name
+
     @staticmethod
-    def new(obj) -> 'EnableFlag':
+    def new(obj, name) -> 'EnableFlag':
         '''
             For internal use only.
         '''
 
         res = EnableFlag.__new__(EnableFlag)
+        res.name = name
         res.mglo = obj
         return res
 
 
-BLEND = EnableFlag.new(mgl.BLEND)
+BLEND = EnableFlag.new(mgl.BLEND, 'BLEND')
 '''
     GL_BLEND
 '''
 
-DEPTH_TEST = EnableFlag.new(mgl.DEPTH_TEST)
+DEPTH_TEST = EnableFlag.new(mgl.DEPTH_TEST, 'DEPTH_TEST')
 '''
     GL_DEPTH_TEST
 '''
 
-CULL_FACE = EnableFlag.new(mgl.CULL_FACE)
+CULL_FACE = EnableFlag.new(mgl.CULL_FACE, 'CULL_FACE')
 '''
     GL_CULL_FACE
 '''
 
-MULTISAMPLE = EnableFlag.new(mgl.MULTISAMPLE)
+MULTISAMPLE = EnableFlag.new(mgl.MULTISAMPLE, 'MULTISAMPLE')
 '''
     GL_MULTISAMPLE
 '''
@@ -88,91 +69,79 @@ class Primitive:
     '''
 
     def __init__(self):
+        self.name = None
         self.mglo = None
         raise NotImplementedError('Primitive')
 
+    def __repr__(self):
+        return 'ModernGL.%s' % self.name
+
     @staticmethod
-    def new(obj) -> 'Primitive':
+    def new(obj, name) -> 'Primitive':
         '''
             For internal use only.
         '''
 
         res = Primitive.__new__(Primitive)
+        obj.wrapper = res
+        res.name = name
         res.mglo = obj
         return res
 
 
-TRIANGLES = Primitive.new(mgl.TRIANGLES)
+TRIANGLES = Primitive.new(mgl.TRIANGLES, 'TRIANGLES')
 '''
     GL_TRIANGLES
 '''
 
-TRIANGLE_STRIP = Primitive.new(mgl.TRIANGLE_STRIP)
+TRIANGLE_STRIP = Primitive.new(mgl.TRIANGLE_STRIP, 'TRIANGLE_STRIP')
 '''
     GL_TRIANGLE_STRIP
 '''
 
-TRIANGLE_FAN = Primitive.new(mgl.TRIANGLE_FAN)
+TRIANGLE_FAN = Primitive.new(mgl.TRIANGLE_FAN, 'TRIANGLE_FAN')
 '''
     GL_TRIANGLE_FAN
 '''
 
-LINES = Primitive.new(mgl.LINES)
+LINES = Primitive.new(mgl.LINES, 'LINES')
 '''
     GL_LINES
 '''
 
-LINE_STRIP = Primitive.new(mgl.LINE_STRIP)
+LINE_STRIP = Primitive.new(mgl.LINE_STRIP, 'LINE_STRIP')
 '''
     GL_LINE_STRIP
 '''
 
-LINE_LOOP = Primitive.new(mgl.LINE_LOOP)
+LINE_LOOP = Primitive.new(mgl.LINE_LOOP, 'LINE_LOOP')
 '''
     GL_LINE_LOOP
 '''
 
-POINTS = Primitive.new(mgl.POINTS)
+POINTS = Primitive.new(mgl.POINTS, 'POINTS')
 '''
     GL_POINTS
 '''
 
-LINE_STRIP_ADJACENCY = Primitive.new(mgl.LINE_STRIP_ADJACENCY)
+LINE_STRIP_ADJACENCY = Primitive.new(mgl.LINE_STRIP_ADJACENCY, 'LINE_STRIP_ADJACENCY')
 '''
     GL_LINE_STRIP_ADJACENCY
 '''
 
-LINES_ADJACENCY = Primitive.new(mgl.LINES_ADJACENCY)
+LINES_ADJACENCY = Primitive.new(mgl.LINES_ADJACENCY, 'LINES_ADJACENCY')
 '''
     GL_LINES_ADJACENCY
 '''
 
-TRIANGLE_STRIP_ADJACENCY = Primitive.new(mgl.TRIANGLE_STRIP_ADJACENCY)
+TRIANGLE_STRIP_ADJACENCY = Primitive.new(mgl.TRIANGLE_STRIP_ADJACENCY, 'TRIANGLE_STRIP_ADJACENCY')
 '''
     GL_TRIANGLE_STRIP_ADJACENCY
 '''
 
-TRIANGLES_ADJACENCY = Primitive.new(mgl.TRIANGLES_ADJACENCY)
+TRIANGLES_ADJACENCY = Primitive.new(mgl.TRIANGLES_ADJACENCY, 'TRIANGLES_ADJACENCY')
 '''
     GL_TRIANGLES_ADJACENCY
-'''
-
-PRIMITIVES = {
-    mgl.TRIANGLES: TRIANGLES,
-    mgl.TRIANGLE_STRIP: TRIANGLE_STRIP,
-    mgl.TRIANGLE_FAN: TRIANGLE_FAN,
-    mgl.LINES: LINES,
-    mgl.LINE_STRIP: LINE_STRIP,
-    mgl.LINE_LOOP: LINE_LOOP,
-    mgl.POINTS: POINTS,
-    mgl.LINE_STRIP_ADJACENCY: LINE_STRIP_ADJACENCY,
-    mgl.LINES_ADJACENCY: LINES_ADJACENCY,
-    mgl.TRIANGLE_STRIP_ADJACENCY: TRIANGLE_STRIP_ADJACENCY,
-    mgl.TRIANGLES_ADJACENCY: TRIANGLES_ADJACENCY,
-    None: None,
-}
-'''
-    PRIMITIVES
 '''
 
 
@@ -184,6 +153,9 @@ class Version:
     def __init__(self, major, minor):
         self._major = major
         self._minor = minor
+
+    def __repr__(self):
+        return 'ModernGL.CORE_%d' % self.code
 
     @property
     def major(self) -> int:

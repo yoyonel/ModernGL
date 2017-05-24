@@ -30,15 +30,24 @@ int MGLPrimitive_tp_init(MGLPrimitive * self, PyObject * args, PyObject * kwargs
 	return -1;
 }
 
-PyObject * MGLPrimitive_tp_str(MGLPrimitive * self) {
-	return PyUnicode_FromFormat("<Primitive: %s>", self->name);
-}
-
 PyMethodDef MGLPrimitive_tp_methods[] = {
 	{0},
 };
 
+int MGLPrimitive_set_wrapper(MGLPrimitive * self, PyObject * value, void * closure) {
+	// if (self->wrapper) {
+	// 	MGLError * error = MGLError_FromFormat(TRACE, "wrapper already set");
+	// 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	// 	return -1;
+	// }
+
+	// Missing Py_INCREF is on purpose.
+	self->wrapper = value;
+	return 0;
+}
+
 PyGetSetDef MGLPrimitive_tp_getseters[] = {
+	{(char *)"wrapper", 0, (setter)MGLPrimitive_set_wrapper, 0, 0},
 	{0},
 };
 
@@ -52,7 +61,7 @@ PyTypeObject MGLPrimitive_Type = {
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLPrimitive_tp_str,                          // tp_repr
+	0,                                                      // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping
@@ -99,3 +108,4 @@ MGLPrimitive * MGL_LINE_STRIP_ADJACENCY;
 MGLPrimitive * MGL_LINES_ADJACENCY;
 MGLPrimitive * MGL_TRIANGLE_STRIP_ADJACENCY;
 MGLPrimitive * MGL_TRIANGLES_ADJACENCY;
+MGLPrimitive * MGL_NO_PRIMITIVE;

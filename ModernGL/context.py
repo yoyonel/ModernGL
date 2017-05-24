@@ -2,14 +2,14 @@
     ModernGL context
 '''
 
-# pylint: disable=using-constant-test, too-many-public-methods
+# pylint: disable=too-many-public-methods
 
 from typing import Tuple
 
 try:
     from ModernGL import mgl
 except ImportError:
-    pass
+    from ModernGL.mock import mgl
 
 from .common import InvalidObject
 from .buffers import Buffer, detect_format
@@ -593,17 +593,6 @@ class Context:
         '''
 
         return ComputeShader.new(self.mglo.compute_shader(source))
-
-
-if False:
-    def _create_context() -> Context:
-        return Context()
-
-    def _create_standalone_context(*args) -> Context:
-        return Context(*args)
-
-    mgl.create_context = _create_context
-    mgl.create_standalone_context = _create_standalone_context
 
 
 def create_context(require=None) -> Context:

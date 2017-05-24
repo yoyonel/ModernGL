@@ -4,7 +4,7 @@
 
 # pylint: disable=too-few-public-methods
 
-from .common import InvalidObject, Primitive, PRIMITIVES
+from .common import InvalidObject, Primitive
 from .program_members import UniformMap, UniformBlockMap, VaryingMap, AttributeMap, ProgramStage
 
 
@@ -284,7 +284,7 @@ class Program:
             The geometry input primitive will be used for validation.
         '''
 
-        return PRIMITIVES[self.mglo.geometry_input]
+        return self.mglo.geometry_input
 
     @property
     def geometry_output(self) -> Primitive:
@@ -293,7 +293,7 @@ class Program:
             The GeometryShader's output primitive if the GeometryShader exists.
         '''
 
-        return PRIMITIVES[self.mglo.geometry_output]
+        return self.mglo.geometry_output
 
     @property
     def geometry_vertices(self) -> int:
