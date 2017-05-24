@@ -24,7 +24,7 @@ from ModernGL.common import (
     BLEND, DEPTH_TEST, CULL_FACE, MULTISAMPLE,
 )
 
-from ModernGL.program_members import (
+from ModernGL.members import (
     Uniform, UniformMap, UniformBlock, UniformBlockMap,
     Varying, VaryingMap, Attribute, AttributeMap,
     Subroutine, SubroutineMap, SubroutineUniform, SubroutineUniformMap,

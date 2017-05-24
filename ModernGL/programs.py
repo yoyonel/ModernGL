@@ -5,7 +5,7 @@
 # pylint: disable=too-few-public-methods
 
 from ModernGL.common import InvalidObject, Primitive
-from ModernGL.program_members import UniformMap, UniformBlockMap, VaryingMap, AttributeMap, ProgramStage
+from ModernGL.members import UniformMap, UniformBlockMap, VaryingMap, AttributeMap, ProgramStage
 
 
 class ComputeShader:
