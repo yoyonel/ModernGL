@@ -7,7 +7,6 @@
 #include "Error.hpp"
 #include "Framebuffer.hpp"
 #include "InvalidObject.hpp"
-#include "Object.hpp"
 #include "Primitive.hpp"
 #include "Program.hpp"
 #include "ProgramStage.hpp"
@@ -183,17 +182,6 @@ bool MGL_InitializeModule(PyObject * module) {
 		Py_INCREF(&MGLInvalidObject_Type);
 
 		PyModule_AddObject(module, "InvalidObject", (PyObject *)&MGLInvalidObject_Type);
-	}
-
-	{
-		if (PyType_Ready(&MGLObject_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register Object in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return false;
-		}
-
-		Py_INCREF(&MGLObject_Type);
-
-		PyModule_AddObject(module, "Object", (PyObject *)&MGLObject_Type);
 	}
 
 	{
