@@ -153,8 +153,6 @@ PyObject * MGLBuffer_orphan(MGLBuffer * self) {
 }
 
 PyObject * MGLBuffer_bind_to_uniform_block(MGLBuffer * self, PyObject * args) {
-	// TODO: fix
-
 	PyObject * location;
 
 	int args_ok = PyArg_ParseTuple(
@@ -167,20 +165,12 @@ PyObject * MGLBuffer_bind_to_uniform_block(MGLBuffer * self, PyObject * args) {
 		return 0;
 	}
 
-	int block = 0;
+	int block = PyLong_AsUnsignedLong(location);
 
-	if (location) {
-		if (Py_TYPE(location) == &MGLUniformBlock_Type) {
-			block = ((MGLUniformBlock *)location)->location;
-		}
-	} else {
-		block = PyLong_AsLong(location);
-
-		if (PyErr_Occurred()) {
-			MGLError * error = MGLError_FromFormat(TRACE, "the location must be a UniformBlock or int not %s", Py_TYPE(location));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
-			return 0;
-		}
+	if (PyErr_Occurred()) {
+		MGLError * error = MGLError_FromFormat(TRACE, "the location is invalid");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
 	}
 
 	const GLMethods & gl = self->context->gl;
