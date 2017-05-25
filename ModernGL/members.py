@@ -223,10 +223,10 @@ class UniformBlock:
         raise NotImplementedError('UniformBlock')
 
     def __repr__(self):
-        return '<UniformBlock: %d>' % self.location
+        return '<UniformBlock: %d>' % self.index
 
     @property
-    def name(self):
+    def name(self) -> str:
         '''
             str: name
         '''
@@ -234,13 +234,32 @@ class UniformBlock:
         return self.mglo.name
 
     @property
-    def location(self):
+    def index(self) -> int:
         '''
-            int: The location of the uniform block.
+            int: The index of the uniform block.
         '''
 
-        return self.mglo.location
+        return self.mglo.index
 
+    @property
+    def size(self) -> int:
+        '''
+            int: The size of the uniform block.
+        '''
+
+        return self.mglo.size
+
+    @property
+    def binding(self) -> int:
+        '''
+            int: The binding of the uniform block.
+        '''
+
+        return self.mglo.binding
+
+    @binding.setter
+    def binding(self, value):
+        self.mglo.binding = value
 
 class UniformBlockMap:
     '''
@@ -300,7 +319,7 @@ class Varying:
         return '<Varying: %d>' % self.number
 
     @property
-    def name(self):
+    def name(self) -> str:
         '''
             str: The name of the varying.
         '''
@@ -308,7 +327,7 @@ class Varying:
         return self.mglo.name
 
     @property
-    def number(self):
+    def number(self) -> int:
         '''
             int: The number of the varying.
         '''
@@ -374,7 +393,7 @@ class Attribute:
         return '<Attribute: %d>' % self.location
 
     @property
-    def name(self):
+    def name(self) -> str:
         '''
             str: The attribute name.
             The name will be filtered to have no array syntax on it's end.
@@ -384,7 +403,7 @@ class Attribute:
         return self.mglo.name
 
     @property
-    def location(self):
+    def location(self) -> int:
         '''
             int: The location of the attribute.
             The result of the glGetAttribLocation.
@@ -393,7 +412,7 @@ class Attribute:
         return self.mglo.location
 
     @property
-    def array_length(self):
+    def array_length(self) -> int:
         '''
             int: If the attribute is an array the array_length
             is the length of the array otherwise `1`.
@@ -402,7 +421,7 @@ class Attribute:
         return self.mglo.array_length
 
     @property
-    def dimension(self):
+    def dimension(self) -> int:
         '''
             int: The attribute dimension.
 
@@ -482,7 +501,7 @@ class Attribute:
         return self.mglo.dimension
 
     @property
-    def shape(self):
+    def shape(self) -> str:
         '''
             str: The shape is a single character, representing the scalar type of the attriute.
 
@@ -581,7 +600,7 @@ class Subroutine:
         return '<Subroutine: %d>' % self.index
 
     @property
-    def name(self):
+    def name(self) -> str:
         '''
             str: The name of the subroutine.
         '''
@@ -589,7 +608,7 @@ class Subroutine:
         return self.mglo.name
 
     @property
-    def index(self):
+    def index(self) -> int:
         '''
             int: The index of the subroutine.
         '''
@@ -655,7 +674,7 @@ class SubroutineUniform:
         return '<SubroutineUniform: %d>' % self.location
 
     @property
-    def name(self):
+    def name(self) -> str:
         '''
             str: The name of the subroutine uniform.
         '''
@@ -663,7 +682,7 @@ class SubroutineUniform:
         return self.mglo.name
 
     @property
-    def location(self):
+    def location(self) -> int:
         '''
             int: The location of the subroutine uniform.
         '''
