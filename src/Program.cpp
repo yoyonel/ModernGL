@@ -39,10 +39,6 @@ int MGLProgram_tp_init(MGLProgram * self, PyObject * args, PyObject * kwargs) {
 	return -1;
 }
 
-PyObject * MGLProgram_tp_str(MGLProgram * self) {
-	return PyUnicode_FromFormat("<mgl.Program>");
-}
-
 PyObject * MGLProgram_release(MGLProgram * self) {
 	MGLProgram_Invalidate(self);
 	Py_RETURN_NONE;
@@ -171,13 +167,13 @@ PyTypeObject MGLProgram_Type = {
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLProgram_tp_str,                            // tp_repr
+	0,                                                      // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call
-	(reprfunc)MGLProgram_tp_str,                            // tp_str
+	0,                                                      // tp_str
 	0,                                                      // tp_getattro
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer

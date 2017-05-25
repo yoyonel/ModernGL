@@ -30,10 +30,6 @@ int MGLVertexArrayListAttribute_tp_init(MGLVertexArrayListAttribute * self, PyOb
 	return -1;
 }
 
-PyObject * MGLVertexArrayListAttribute_tp_str(MGLVertexArrayListAttribute * self) {
-	return PyUnicode_FromFormat("<mgl.VertexArrayListAttribute: location = %d>", self->location);
-}
-
 PyMethodDef MGLVertexArrayListAttribute_tp_methods[] = {
 	{0},
 };
@@ -82,13 +78,13 @@ PyTypeObject MGLVertexArrayListAttribute_Type = {
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLVertexArrayListAttribute_tp_str,           // tp_repr
+	0,                                                      // tp_repr
 	0,                                                      // tp_as_number
 	&MGLVertexArrayListAttribute_tp_sequence,               // tp_as_sequence
 	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call
-	(reprfunc)MGLVertexArrayListAttribute_tp_str,           // tp_str
+	0,                                                      // tp_str
 	0,                                                      // tp_getattro
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer

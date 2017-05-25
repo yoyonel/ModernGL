@@ -30,10 +30,6 @@ int MGLComputeShader_tp_init(MGLComputeShader * self, PyObject * args, PyObject 
 	return -1;
 }
 
-PyObject * MGLComputeShader_tp_str(MGLComputeShader * self) {
-	return PyUnicode_FromFormat("<mgl.ComputeShader>");
-}
-
 PyObject * MGLComputeShader_run(MGLComputeShader * self, PyObject * args) {
 	int x;
 	int y;
@@ -106,13 +102,13 @@ PyTypeObject MGLComputeShader_Type = {
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLComputeShader_tp_str,                      // tp_repr
+	0,                                                      // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call
-	(reprfunc)MGLComputeShader_tp_str,                      // tp_str
+	0,                                                      // tp_str
 	0,                                                      // tp_getattro
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer

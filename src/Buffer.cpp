@@ -34,10 +34,6 @@ int MGLBuffer_tp_init(MGLBuffer * self, PyObject * args, PyObject * kwargs) {
 	return -1;
 }
 
-PyObject * MGLBuffer_tp_str(MGLBuffer * self) {
-	return PyUnicode_FromFormat("<mgl.Buffer>");
-}
-
 MGLBufferAccess * MGLBuffer_access(MGLBuffer * self, PyObject * args) {
 	int size;
 	int offset;
@@ -290,13 +286,13 @@ PyTypeObject MGLBuffer_Type = {
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLBuffer_tp_str,                             // tp_repr
+	0,                                                      // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call
-	(reprfunc)MGLBuffer_tp_str,                             // tp_str
+	0,                                                      // tp_str
 	0,                                                      // tp_getattro
 	0,                                                      // tp_setattro
 	&MGLBuffer_tp_as_buffer,                                // tp_as_buffer

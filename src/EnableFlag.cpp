@@ -30,10 +30,6 @@ int MGLEnableFlag_tp_init(MGLEnableFlag * self, PyObject * args, PyObject * kwar
 	return -1;
 }
 
-PyObject * MGLEnableFlag_tp_str(MGLEnableFlag * self) {
-	return PyUnicode_FromFormat("<mgl.EnableFlag>");
-}
-
 PyMethodDef MGLEnableFlag_tp_methods[] = {
 	{0},
 };
@@ -52,7 +48,7 @@ PyTypeObject MGLEnableFlag_Type = {
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLEnableFlag_tp_str,                         // tp_repr
+	0,                                                      // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping

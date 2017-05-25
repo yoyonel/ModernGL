@@ -26,10 +26,6 @@ int MGLInvalidObject_tp_init(MGLInvalidObject * self, PyObject * args, PyObject 
 	return -1;
 }
 
-PyObject * MGLInvalidObject_tp_str(MGLInvalidObject * self) {
-	return PyUnicode_FromFormat("<mgl.InvalidObject>");
-}
-
 PyMethodDef MGLInvalidObject_tp_methods[] = {
 	{0},
 };
@@ -48,13 +44,13 @@ PyTypeObject MGLInvalidObject_Type = {
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLInvalidObject_tp_str,                      // tp_repr
+	0,                                                      // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call
-	(reprfunc)MGLInvalidObject_tp_str,                      // tp_str
+	0,                                                      // tp_str
 	0,                                                      // tp_getattro
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer

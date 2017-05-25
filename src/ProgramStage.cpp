@@ -32,10 +32,6 @@ int MGLProgramStage_tp_init(MGLProgramStage * self, PyObject * args, PyObject * 
 	return -1;
 }
 
-PyObject * MGLProgramStage_tp_str(MGLProgramStage * self) {
-	return PyUnicode_FromFormat("<mgl.ProgramStage>");
-}
-
 PyMethodDef MGLProgramStage_tp_methods[] = {
 	{0},
 };
@@ -66,13 +62,13 @@ PyTypeObject MGLProgramStage_Type = {
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLProgramStage_tp_str,                       // tp_repr
+	0,                                                      // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call
-	(reprfunc)MGLProgramStage_tp_str,                       // tp_str
+	0,                                                      // tp_str
 	0,                                                      // tp_getattro
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer

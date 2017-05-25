@@ -45,10 +45,6 @@ int MGLContext_tp_init(MGLContext * self, PyObject * args, PyObject * kwargs) {
 	return -1;
 }
 
-PyObject * MGLContext_tp_str(MGLContext * self) {
-	return PyUnicode_FromFormat("<mgl.Context");
-}
-
 PyObject * MGLContext_clear(MGLContext * self, PyObject * args) {
 	float r, g, b, a;
 	PyObject * viewport;
@@ -1568,13 +1564,13 @@ PyTypeObject MGLContext_Type = {
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLContext_tp_str,                            // tp_repr
+	0,                                                      // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call
-	(reprfunc)MGLContext_tp_str,                            // tp_str
+	0,                                                      // tp_str
 	0,                                                      // tp_getattro
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer

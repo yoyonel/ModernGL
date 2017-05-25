@@ -30,10 +30,6 @@ int MGLBufferAccess_tp_init(MGLBufferAccess * self, PyObject * args, PyObject * 
 	return -1;
 }
 
-PyObject * MGLBufferAccess_tp_str(MGLBufferAccess * self) {
-	return PyUnicode_FromFormat("<mgl.BufferAccess>");
-}
-
 PyObject * MGLBufferAccess_open(MGLBufferAccess * self) {
 	if (self->ptr) {
 		MGLError * error = MGLError_FromFormat(TRACE, "BufferAccess.open: Already open");
@@ -175,7 +171,7 @@ PyTypeObject MGLBufferAccess_Type = {
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLBufferAccess_tp_str,                       // tp_repr
+	0,                                                      // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping

@@ -39,10 +39,6 @@ int MGLVertexArray_tp_init(MGLVertexArray * self, PyObject * args, PyObject * kw
 	return -1;
 }
 
-PyObject * MGLVertexArray_tp_str(MGLVertexArray * self) {
-	return PyUnicode_FromFormat("<mgl.VertexArray>");
-}
-
 PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 	MGLPrimitive * mode;
 	int vertices;
@@ -317,13 +313,13 @@ PyTypeObject MGLVertexArray_Type = {
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLVertexArray_tp_str,                        // tp_repr
+	0,                                                      // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call
-	(reprfunc)MGLVertexArray_tp_str,                        // tp_str
+	0,                                                      // tp_str
 	0,                                                      // tp_getattro
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer

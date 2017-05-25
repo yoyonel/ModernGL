@@ -55,10 +55,6 @@ int MGLShader_tp_init(MGLShader * self, PyObject * args, PyObject * kwargs) {
 	return -1;
 }
 
-PyObject * MGLShader_tp_str(MGLShader * self) {
-	return PyUnicode_FromFormat("<mgl.Shader>");
-}
-
 PyObject * MGLShader_release(MGLShader * self) {
 	MGLShader_Invalidate(self);
 	Py_RETURN_NONE;
@@ -100,13 +96,13 @@ PyTypeObject MGLShader_Type = {
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLShader_tp_str,                             // tp_repr
+	0,                                                      // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call
-	(reprfunc)MGLShader_tp_str,                             // tp_str
+	0,                                                      // tp_str
 	0,                                                      // tp_getattro
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer

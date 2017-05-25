@@ -21,10 +21,6 @@ int MGLObject_tp_init(MGLObject * self, PyObject * args, PyObject * kwargs) {
 	return -1;
 }
 
-PyObject * MGLObject_tp_str(MGLObject * self) {
-	return PyUnicode_FromFormat("<mgl.Object>");
-}
-
 PyMethodDef MGLObject_tp_methods[] = {
 	{0},
 };
@@ -43,7 +39,7 @@ PyTypeObject MGLObject_Type = {
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLObject_tp_str,                             // tp_repr
+	0,                                                      // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping

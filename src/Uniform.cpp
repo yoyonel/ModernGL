@@ -31,10 +31,6 @@ int MGLUniform_tp_init(MGLUniform * self, PyObject * args, PyObject * kwargs) {
 	return -1;
 }
 
-PyObject * MGLUniform_tp_str(MGLUniform * self) {
-	return PyUnicode_FromFormat("<mgl.Uniform>");
-}
-
 PyObject * MGLUniform_read(MGLUniform * self) {
 	PyObject * result = PyBytes_FromStringAndSize(0, self->element_size);
 	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location, PyBytes_AS_STRING(result));
@@ -126,13 +122,13 @@ PyTypeObject MGLUniform_Type = {
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLUniform_tp_str,                            // tp_repr
+	0,                                                      // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call
-	(reprfunc)MGLUniform_tp_str,                            // tp_str
+	0,                                                      // tp_str
 	0,                                                      // tp_getattro
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer

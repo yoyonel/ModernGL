@@ -31,10 +31,6 @@ int MGLRenderbuffer_tp_init(MGLRenderbuffer * self, PyObject * args, PyObject * 
 	return -1;
 }
 
-PyObject * MGLRenderbuffer_tp_str(MGLRenderbuffer * self) {
-	return PyUnicode_FromFormat("<mgl.Renderbuffer>");
-}
-
 PyObject * MGLRenderbuffer_release(MGLRenderbuffer * self) {
 	MGLRenderbuffer_Invalidate(self);
 	Py_RETURN_NONE;
@@ -84,13 +80,13 @@ PyTypeObject MGLRenderbuffer_Type = {
 	0,                                                      // tp_getattr
 	0,                                                      // tp_setattr
 	0,                                                      // tp_reserved
-	(reprfunc)MGLRenderbuffer_tp_str,                       // tp_repr
+	0,                                                      // tp_repr
 	0,                                                      // tp_as_number
 	0,                                                      // tp_as_sequence
 	0,                                                      // tp_as_mapping
 	0,                                                      // tp_hash
 	0,                                                      // tp_call
-	(reprfunc)MGLRenderbuffer_tp_str,                       // tp_str
+	0,                                                      // tp_str
 	0,                                                      // tp_getattro
 	0,                                                      // tp_setattro
 	0,                                                      // tp_as_buffer
