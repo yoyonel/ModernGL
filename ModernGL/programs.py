@@ -49,14 +49,12 @@ class ComputeShader:
 
         return self.mglo.source
 
-    def run(self, size_x=1, size_y=1, size_z=1) -> None:
+    def run(self, x=1, y=1, z=1) -> None:
         '''
-            ``NYI``
-
             Run the compute shader.
         '''
 
-        return self.mglo.run(size_x, size_y, size_z)
+        return self.mglo.run(x, y, z)
 
     def release(self):
         '''

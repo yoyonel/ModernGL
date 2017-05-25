@@ -31,13 +31,13 @@ int MGLComputeShader_tp_init(MGLComputeShader * self, PyObject * args, PyObject 
 }
 
 PyObject * MGLComputeShader_run(MGLComputeShader * self, PyObject * args) {
-	int x;
-	int y;
-	int z;
+	unsigned x;
+	unsigned y;
+	unsigned z;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"iii",
+		"III",
 		&x,
 		&y,
 		&z
@@ -47,10 +47,12 @@ PyObject * MGLComputeShader_run(MGLComputeShader * self, PyObject * args) {
 		return 0;
 	}
 
-	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	return 0;
+	const GLMethods & gl = self->context->gl;
 
-	// Py_RETURN_NONE;
+	gl.UseProgram(self->program_obj);
+	gl.DispatchCompute(x, y, z);
+
+	Py_RETURN_NONE;
 }
 
 PyMethodDef MGLComputeShader_tp_methods[] = {
