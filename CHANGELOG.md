@@ -12,10 +12,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - `__repr__` for program members.
 - UniformBlock `binding` attribute.
 - UniformBlock `size` attribute.
+- Missing `release()` methods.
 - Subroutines.
 
 ### Removed
 - UniformBlock `array_size` attribute.
+- UniformBlock `location` attribute.
 
 ## Fixed
 - Binding buffer to a UniformBlock.
