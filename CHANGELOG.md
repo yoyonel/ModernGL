@@ -6,13 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-- `error` attribute for the Context.
+- Context `error` attribute.
 - Exposing the OpenGL objects as `glo` attributes.
 - `__iter__` for program member maps.
 - `__repr__` for program members.
 
 ## Fixed
 - Broken RTD docs.
+- Subroutines.
 
 ## [4.1.0] - 2017-05-24
 ### Added
