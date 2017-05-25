@@ -43,12 +43,6 @@ class TestCase(unittest.TestCase):
 
         program = self.ctx.program([vertex_shader, fragment_shader])
 
-        print(program.vertex_shader)
-        print(program.fragment_shader)
-        print(program.geometry_shader)
-        print(program.tess_evaluation_shader)
-        print(program.tess_control_shader)
-
         self.assertIsNot(program.vertex_shader, None)
         self.assertIsNot(program.fragment_shader, None)
         self.assertIs(program.geometry_shader, None)
