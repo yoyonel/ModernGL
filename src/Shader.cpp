@@ -50,7 +50,7 @@ void MGLShader_tp_dealloc(MGLShader * self) {
 }
 
 int MGLShader_tp_init(MGLShader * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.Shader manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.Shader manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }

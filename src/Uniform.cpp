@@ -26,7 +26,7 @@ void MGLUniform_tp_dealloc(MGLUniform * self) {
 }
 
 int MGLUniform_tp_init(MGLUniform * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.Uniform manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.Uniform manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }

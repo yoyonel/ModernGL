@@ -25,7 +25,7 @@ void MGLVertexArrayAttribute_tp_dealloc(MGLVertexArrayAttribute * self) {
 }
 
 int MGLVertexArrayAttribute_tp_init(MGLVertexArrayAttribute * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.VertexArrayAttribute manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.VertexArrayAttribute manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
@@ -51,7 +51,7 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 	}
 
 	if (self->vertex_array->context != buffer->context) {
-		MGLError * error = MGLError_FromFormat(TRACE, "buffer belongs to a different context");
+		MGLError * error = MGLError_FromFormat(TRACE, "the buffer belongs to a different context");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}

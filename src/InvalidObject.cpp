@@ -21,7 +21,7 @@ void MGLInvalidObject_tp_dealloc(MGLInvalidObject * self) {
 }
 
 int MGLInvalidObject_tp_init(MGLInvalidObject * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.InvalidObject manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.InvalidObject manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }

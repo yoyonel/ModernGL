@@ -29,7 +29,7 @@ void MGLBuffer_tp_dealloc(MGLBuffer * self) {
 }
 
 int MGLBuffer_tp_init(MGLBuffer * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.Buffer manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.Buffer manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
@@ -56,7 +56,7 @@ MGLBufferAccess * MGLBuffer_access(MGLBuffer * self, PyObject * args) {
 	}
 
 	if (offset < 0 || size > self->size - offset) {
-		MGLError * error = MGLError_FromFormat(TRACE, "offset = %d or size = %d out of range", offset, size);
+		MGLError * error = MGLError_FromFormat(TRACE, "out of range offset = %d or size = %d", offset, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -93,7 +93,7 @@ PyObject * MGLBuffer_read(MGLBuffer * self, PyObject * args) {
 	}
 
 	if (offset < 0 || size < 0 || size + offset > self->size) {
-		MGLError * error = MGLError_FromFormat(TRACE, "offset = %d or size = %d out of range", offset, size);
+		MGLError * error = MGLError_FromFormat(TRACE, "out of rangeoffset = %d or size = %d", offset, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -104,7 +104,7 @@ PyObject * MGLBuffer_read(MGLBuffer * self, PyObject * args) {
 	void * map = gl.MapBufferRange(GL_ARRAY_BUFFER, offset, size, GL_MAP_READ_BIT);
 
 	if (!map) {
-		MGLError * error = MGLError_FromFormat(TRACE, "Cannot map buffer");
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot map the buffer");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -134,7 +134,7 @@ PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args) {
 	}
 
 	if (offset < 0 || size + offset > self->size) {
-		MGLError * error = MGLError_FromFormat(TRACE, "offset = %d or size = %d out of range", offset, size);
+		MGLError * error = MGLError_FromFormat(TRACE, "out of range offset = %d or size = %d", offset, size);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -177,7 +177,7 @@ PyObject * MGLBuffer_bind_to_uniform_block(MGLBuffer * self, PyObject * args) {
 		block = PyLong_AsLong(location);
 
 		if (PyErr_Occurred()) {
-			MGLError * error = MGLError_FromFormat(TRACE, "location must be either UniformBlock or int not %s", Py_TYPE(location));
+			MGLError * error = MGLError_FromFormat(TRACE, "the location must be a UniformBlock or int not %s", Py_TYPE(location));
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}

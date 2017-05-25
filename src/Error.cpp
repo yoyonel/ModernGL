@@ -34,7 +34,7 @@ void MGLError_tp_dealloc(MGLError * self) {
 }
 
 int MGLError_tp_init(MGLError * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.Error manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.Error manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }

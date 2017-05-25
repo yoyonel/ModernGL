@@ -26,7 +26,7 @@ void MGLTexture_tp_dealloc(MGLTexture * self) {
 }
 
 int MGLTexture_tp_init(MGLTexture * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.Texture manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.Texture manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
@@ -47,7 +47,7 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 	}
 
 	if (self->samples) {
-		MGLError * error = MGLError_FromFormat(TRACE, "multisample textures cannot be written");
+		MGLError * error = MGLError_FromFormat(TRACE, "multisample textures cannot be written directly");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}

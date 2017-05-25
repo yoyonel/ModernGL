@@ -398,7 +398,7 @@ GLContext LoadCurrentGLContext() {
 	CGLContextObj cgl_context = CGLGetCurrentContext();
 
 	if (!cgl_context) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot detect context");
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot detect OpenGL context");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return context;
 	}
@@ -458,7 +458,7 @@ GLContext CreateGLContext(int width, int height) {
 	CGLDestroyPixelFormat(pixelformat);
 
 	if (!cgl_context) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot create context");
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create OpenGL context");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return context;
 	}
@@ -497,35 +497,35 @@ GLContext CreateGLContext(int width, int height) {
 	int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
 	if (status != GL_FRAMEBUFFER_COMPLETE) {
-		const char * message = "framebuffer is not complete";
+		const char * message = "the framebuffer is not complete";
 
 		switch (status) {
 			case GL_FRAMEBUFFER_UNDEFINED:
-				message = "framebuffer is not complete (UNDEFINED)";
+				message = "the framebuffer is not complete (UNDEFINED)";
 				break;
 
 			case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-				message = "framebuffer is not complete (INCOMPLETE_ATTACHMENT)";
+				message = "the framebuffer is not complete (INCOMPLETE_ATTACHMENT)";
 				break;
 
 			case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-				message = "framebuffer is not complete (INCOMPLETE_MISSING_ATTACHMENT)";
+				message = "the framebuffer is not complete (INCOMPLETE_MISSING_ATTACHMENT)";
 				break;
 
 			case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
-				message = "framebuffer is not complete (INCOMPLETE_DRAW_BUFFER)";
+				message = "the framebuffer is not complete (INCOMPLETE_DRAW_BUFFER)";
 				break;
 
 			case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
-				message = "framebuffer is not complete (INCOMPLETE_READ_BUFFER)";
+				message = "the framebuffer is not complete (INCOMPLETE_READ_BUFFER)";
 				break;
 
 			case GL_FRAMEBUFFER_UNSUPPORTED:
-				message = "framebuffer is not complete (UNSUPPORTED)";
+				message = "the framebuffer is not complete (UNSUPPORTED)";
 				break;
 
 			case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
-				message = "framebuffer is not complete (INCOMPLETE_MULTISAMPLE)";
+				message = "the framebuffer is not complete (INCOMPLETE_MULTISAMPLE)";
 				break;
 		}
 
@@ -585,7 +585,7 @@ GLContext LoadCurrentGLContext() {
 	GLXContext ctx = glXGetCurrentContext();
 
 	if (!ctx) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot detect context");
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot detect OpenGL context");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return context;
 	}
@@ -647,7 +647,7 @@ GLContext CreateGLContext(int width, int height) {
 	if (!win) {
 		XCloseDisplay(dpy);
 
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot create window");
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create a window");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return context;
 	}

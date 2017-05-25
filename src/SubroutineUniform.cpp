@@ -25,7 +25,7 @@ void MGLSubroutineUniform_tp_dealloc(MGLSubroutineUniform * self) {
 }
 
 int MGLSubroutineUniform_tp_init(MGLSubroutineUniform * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.SubroutineUniform manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.SubroutineUniform manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }

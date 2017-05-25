@@ -3,7 +3,7 @@
 #include "Error.hpp"
 
 PyObject * MGLUniform_invalid_getter(MGLUniform * self) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot detect uniform type");
+	MGLError * error = MGLError_FromFormat(TRACE, "cannot detect uniform type");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return 0;
 }

@@ -25,7 +25,7 @@ void MGLUniformBlock_tp_dealloc(MGLUniformBlock * self) {
 }
 
 int MGLUniformBlock_tp_init(MGLUniformBlock * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "Cannot create mgl.UniformBlock manually");
+	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.UniformBlock manually");
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 	return -1;
 }
