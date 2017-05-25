@@ -95,7 +95,6 @@ PyObject * MGLUniform_get_value(MGLUniform * self, void * closure) {
 }
 
 int MGLUniform_set_value(MGLUniform * self, PyObject * value, void * closure) {
-	self->context->gl.UseProgram(self->program_obj);
 	return ((MGLUniform_Setter)self->value_setter)(self, value);
 }
 

@@ -13,9 +13,6 @@ struct MGLUniform : public MGLProgramMember {
 	void * gl_value_reader_proc;
 	void * gl_value_writer_proc;
 
-	// TODO:
-	MGLContext * context;	
-
 	int number;
 	int location;
 	int type;
