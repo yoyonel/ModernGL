@@ -446,28 +446,13 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		char name[256];
 
 		gl.GetActiveUniformBlockName(obj, i, 256, &name_len, name);
-		gl.GetActiveUniformBlockiv(obj, i, GL_UNIFORM_BLOCK_BINDING, &uniform_block->location);
-		gl.GetActiveUniformBlockiv(obj, i, GL_UNIFORM_BLOCK_DATA_SIZE, &uniform_block->array_length);
+		uniform_block->index = gl.GetUniformBlockIndex(obj, name);
+
+		gl.GetActiveUniformBlockiv(obj, uniform_block->index, GL_UNIFORM_BLOCK_DATA_SIZE, &uniform_block->size);
 
 		clean_program_member_name(name, name_len);
 
-		// if (uniform_block->location < 0) {
-		// 	Py_DECREF((PyObject *)uniform_block);
-		// 	continue;
-		// }
-
-		// gl.GetUniformBlockIndex
-		// GLuint indices[4];
-		// glGetUniformIndices(programHandle, 4, names, indices);
-
-		// GLint offset[4];
-		// glGetActiveUniformsiv(programHandle, 4, indices,
-		// GL_UNIFORM_OFFSET, offset);
-
-		// glBindBufferBase( GL_UNIFORM_BUFFER, blockIndex, uboHandle );
-
-		uniform_block->number = i;
-		uniform_block->program_obj = obj;
+		uniform_block->program = program;
 		uniform_block->name = PyUnicode_FromStringAndSize(name, name_len);
 
 		MGLUniformBlock_Complete(uniform_block, gl);
@@ -495,11 +480,6 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		attribute->location = gl.GetAttribLocation(obj, name);
 
 		clean_program_member_name(name, name_len);
-
-		// if (attribute->location < 0) {
-		// 	Py_DECREF(attribute);
-		// 	continue;
-		// }
 
 		attribute->number = i;
 		attribute->program_obj = obj;

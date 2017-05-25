@@ -39,13 +39,38 @@ PyObject * MGLUniformBlock_get_name(MGLUniformBlock * self, void * closure) {
 	return self->name;
 }
 
-PyObject * MGLUniformBlock_get_location(MGLUniformBlock * self, void * closure) {
-	return PyLong_FromLong(self->location);
+PyObject * MGLUniformBlock_get_index(MGLUniformBlock * self, void * closure) {
+	return PyLong_FromLong(self->index);
+}
+
+PyObject * MGLUniformBlock_get_size(MGLUniformBlock * self, void * closure) {
+	return PyLong_FromLong(self->size);
+}
+
+PyObject * MGLUniformBlock_get_binding(MGLUniformBlock * self, void * closure) {
+	int binding = 0;
+	self->program->context->gl.GetActiveUniformBlockiv(self->program->program_obj, self->index, GL_UNIFORM_BLOCK_BINDING, &binding);
+	return PyLong_FromLong(binding);
+}
+
+int MGLUniformBlock_set_binding(MGLUniformBlock * self, PyObject * value, void * closure) {
+	int binding = PyLong_AsUnsignedLong(value);
+
+	if (PyErr_Occurred()) {
+		MGLError * error = MGLError_FromFormat(TRACE, "invalid value for binding");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return -1;
+	}
+
+	self->program->context->gl.UniformBlockBinding(self->program->program_obj, self->index, binding);
+	return 0;
 }
 
 PyGetSetDef MGLUniformBlock_tp_getseters[] = {
 	{(char *)"name", (getter)MGLUniformBlock_get_name, 0, 0, 0},
-	{(char *)"location", (getter)MGLUniformBlock_get_location, 0, 0, 0},
+	{(char *)"index", (getter)MGLUniformBlock_get_index, 0, 0, 0},
+	{(char *)"size", (getter)MGLUniformBlock_get_size, 0, 0, 0},
+	{(char *)"binding", (getter)MGLUniformBlock_get_binding, (setter)MGLUniformBlock_set_binding, 0, 0},
 	{0},
 };
 

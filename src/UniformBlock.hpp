@@ -2,15 +2,14 @@
 
 #include "Python.hpp"
 
-#include "ProgramMember.hpp"
+#include "Program.hpp"
 
-struct MGLUniformBlock : public MGLProgramMember {
+struct MGLUniformBlock : public MGLObject {
+	MGLProgram * program;
 	PyObject * name;
 
-	int number;
-	int location;
-
-	int array_length;
+	int index;
+	int size;
 };
 
 extern PyTypeObject MGLUniformBlock_Type;
