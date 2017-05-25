@@ -2,7 +2,7 @@
     ModernGL framebuffers
 '''
 
-from ModernGL.common import InvalidObject
+from .common import InvalidObject
 
 
 class Framebuffer:

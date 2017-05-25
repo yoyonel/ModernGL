@@ -7,17 +7,17 @@
 from typing import Tuple
 
 try:
-    from ModernGL import mgl
+    from . import mgl
 except ImportError:
-    from ModernGL.mock import mgl
+    from .mock import mgl
 
-from ModernGL.common import InvalidObject
-from ModernGL.buffers import Buffer, detect_format
-from ModernGL.programs import ComputeShader, Shader, Program
-from ModernGL.vertex_arrays import VertexArray
-from ModernGL.textures import Texture
-from ModernGL.renderbuffers import Renderbuffer
-from ModernGL.framebuffers import Framebuffer
+from .common import InvalidObject
+from .buffers import Buffer, detect_format
+from .programs import ComputeShader, Shader, Program
+from .vertex_arrays import VertexArray
+from .textures import Texture
+from .renderbuffers import Renderbuffer
+from .framebuffers import Framebuffer
 
 
 class Context:

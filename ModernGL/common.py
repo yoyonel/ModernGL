@@ -5,9 +5,9 @@
 # pylint: disable=too-few-public-methods
 
 try:
-    from ModernGL import mgl
+    from . import mgl
 except ImportError:
-    from ModernGL.mock import mgl
+    from .mock import mgl
 
 
 class InvalidObject:

@@ -5,12 +5,12 @@
 import os
 
 try:
-    from ModernGL.mgl import Error
+    from .mgl import Error
 
 except ImportError:
 
     if os.environ.get('READTHEDOCS') == 'True':
-        from ModernGL.mock import Error
+        from .mock import Error
 
     else:
         _IMPORT_ERROR = '\n'.join([
@@ -22,7 +22,7 @@ except ImportError:
         raise ImportError(_IMPORT_ERROR) from None
 
 
-from ModernGL.common import (
+from .common import (
     InvalidObject, Version, EnableFlag, Primitive,
     POINTS, LINES, LINE_STRIP, LINE_LOOP, TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN,
     LINES_ADJACENCY, LINE_STRIP_ADJACENCY, TRIANGLES_ADJACENCY, TRIANGLE_STRIP_ADJACENCY,
@@ -30,23 +30,23 @@ from ModernGL.common import (
     BLEND, DEPTH_TEST, CULL_FACE, MULTISAMPLE,
 )
 
-from ModernGL.members import (
+from .members import (
     Uniform, UniformMap, UniformBlock, UniformBlockMap,
     Varying, VaryingMap, Attribute, AttributeMap,
     Subroutine, SubroutineMap, SubroutineUniform, SubroutineUniformMap,
     ProgramStage,
 )
 
-from ModernGL.vertex_arrays import (
+from .vertex_arrays import (
     VertexArrayAttribute, VertexArray
 )
 
-from ModernGL.context import Context, create_context, create_standalone_context
-from ModernGL.buffers import Buffer, BufferAccess, detect_format
-from ModernGL.programs import ComputeShader, Shader, Program
-from ModernGL.textures import Texture
-from ModernGL.renderbuffers import Renderbuffer
-from ModernGL.framebuffers import Framebuffer
+from .context import Context, create_context, create_standalone_context
+from .buffers import Buffer, BufferAccess, detect_format
+from .programs import ComputeShader, Shader, Program
+from .textures import Texture
+from .renderbuffers import Renderbuffer
+from .framebuffers import Framebuffer
 
 __version__ = '4.1.0'
 

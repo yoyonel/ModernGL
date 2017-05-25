@@ -2,7 +2,7 @@
     ModernGL buffers
 '''
 
-from ModernGL.common import InvalidObject
+from .common import InvalidObject
 
 
 class BufferAccess:

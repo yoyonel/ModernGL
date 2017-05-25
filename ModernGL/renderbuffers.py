@@ -2,7 +2,7 @@
     ModernGL renderbuffers
 '''
 
-from ModernGL.common import InvalidObject
+from .common import InvalidObject
 
 
 class Renderbuffer:
