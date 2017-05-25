@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - `repr()` and `str()` for program members.
-- `\_\_iter\_\_` for program members.
+- `__iter__` for program members.
 
 ## Fixed
 - Broken RTD docs.
