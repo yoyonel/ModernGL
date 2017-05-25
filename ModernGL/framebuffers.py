@@ -10,18 +10,6 @@ class Framebuffer:
         Create a :py:class:`Framebuffer` using :py:meth:`Context.framebuffer`.
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError()
-
-    def release(self):
-        '''
-            Release the ModernGL object.
-        '''
-
-        self.mglo.release()
-        self.__class__ = InvalidObject
-
     @staticmethod
     def new(obj):
         '''
@@ -31,6 +19,22 @@ class Framebuffer:
         res = Framebuffer.__new__(Framebuffer)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def __repr__(self):
+        return '<Framebuffer: %d>' % self.glo
+
+    @property
+    def glo(self) -> int:
+        '''
+            int: The internal OpenGL object.
+            This values is provided for debug purposes only.
+        '''
+
+        return self.mglo.glo
 
     def clear(self, red=0, green=0, blue=0, alpha=0, *, viewport=None) -> None:
         '''
@@ -74,3 +78,11 @@ class Framebuffer:
         '''
 
         return self.mglo.read(viewport, components, floats)
+
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject

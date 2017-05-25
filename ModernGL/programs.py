@@ -15,18 +15,6 @@ class ComputeShader:
         ComputeShader
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError()
-
-    def release(self):
-        '''
-            Release the ModernGL object.
-        '''
-
-        self.mglo.release()
-        self.__class__ = InvalidObject
-
     @staticmethod
     def new(obj):
         '''
@@ -36,6 +24,22 @@ class ComputeShader:
         res = ComputeShader.__new__(ComputeShader)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def __repr__(self):
+        return '<ComputeShader: %d>' % self.glo
+
+    @property
+    def glo(self) -> int:
+        '''
+            int: The internal OpenGL object.
+            This values is provided for debug purposes only.
+        '''
+
+        return self.mglo.glo
 
     @property
     def source(self) -> str:
@@ -54,6 +58,14 @@ class ComputeShader:
 
         return self.mglo.run(size_x, size_y, size_z)
 
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject
+
 
 class Shader:
     '''
@@ -69,18 +81,6 @@ class Shader:
             - :py:meth:`Context.tess_control_shader`
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError()
-
-    def release(self):
-        '''
-            Release the ModernGL object.
-        '''
-
-        self.mglo.release()
-        self.__class__ = InvalidObject
-
     @staticmethod
     def new(obj):
         '''
@@ -90,6 +90,13 @@ class Shader:
         res = Shader.__new__(Shader)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def __repr__(self):
+        return '<Shader: %d>' % self.glo
 
     @property
     def source(self) -> str:
@@ -114,6 +121,23 @@ class Shader:
 
         return self.mglo.typename
 
+    @property
+    def glo(self) -> int:
+        '''
+            int: The internal OpenGL object.
+            This values is provided for debug purposes only.
+        '''
+
+        return self.mglo.glo
+
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject
+
 
 class Program:
     '''
@@ -130,18 +154,6 @@ class Program:
         Use :py:meth:`Context.program` to create one.
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError()
-
-    def release(self):
-        '''
-            Release the ModernGL object.
-        '''
-
-        self.mglo.release()
-        self.__class__ = InvalidObject
-
     @staticmethod
     def new(obj):
         '''
@@ -151,6 +163,13 @@ class Program:
         res = Program.__new__(Program)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def __repr__(self):
+        return '<Program: %d>' % self.glo
 
     @property
     def uniforms(self) -> UniformMap:
@@ -378,3 +397,20 @@ class Program:
             stage = ProgramStage.new(stage)
 
         return stage
+
+    @property
+    def glo(self) -> int:
+        '''
+            int: The internal OpenGL object.
+            This values is provided for debug purposes only.
+        '''
+
+        return self.mglo.glo
+
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject

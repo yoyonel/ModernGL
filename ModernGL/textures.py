@@ -17,18 +17,6 @@ class Texture:
         to create one.
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError()
-
-    def release(self):
-        '''
-            Release the ModernGL object.
-        '''
-
-        self.mglo.release()
-        self.__class__ = InvalidObject
-
     @staticmethod
     def new(obj):
         '''
@@ -38,6 +26,13 @@ class Texture:
         res = Texture.__new__(Texture)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def __repr__(self):
+        return '<Texture: %d>' % self.glo
 
     @property
     def width(self) -> int:
@@ -87,6 +82,15 @@ class Texture:
 
         return self.mglo.depth
 
+    @property
+    def glo(self) -> int:
+        '''
+            int: The internal OpenGL object.
+            This values is provided for debug purposes only.
+        '''
+
+        return self.mglo.glo
+
     def write(self, data, viewport=None) -> None:
         '''
             Update the content of the texture.
@@ -106,3 +110,11 @@ class Texture:
         '''
 
         self.mglo.use(location)
+
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject

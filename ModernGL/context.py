@@ -49,18 +49,6 @@ class Context:
             - :py:meth:`Context.framebuffer`
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError()
-
-    def release(self):
-        '''
-            Release the ModernGL object.
-        '''
-
-        self.mglo.release()
-        self.__class__ = InvalidObject
-
     @staticmethod
     def new(obj):
         '''
@@ -70,6 +58,10 @@ class Context:
         res = Context.__new__(Context)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
 
     @property
     def line_width(self) -> float:
@@ -593,6 +585,14 @@ class Context:
         '''
 
         return ComputeShader.new(self.mglo.compute_shader(source))
+
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject
 
 
 def create_context(require=None) -> Context:

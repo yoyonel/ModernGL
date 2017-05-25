@@ -19,18 +19,6 @@ class Renderbuffer:
         to create one.
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError()
-
-    def release(self):
-        '''
-            Release the ModernGL object.
-        '''
-
-        self.mglo.release()
-        self.__class__ = InvalidObject
-
     @staticmethod
     def new(obj):
         '''
@@ -40,6 +28,13 @@ class Renderbuffer:
         res = Renderbuffer.__new__(Renderbuffer)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def __repr__(self):
+        return '<Renderbuffer: %d>' % self.glo
 
     @property
     def width(self) -> int:
@@ -88,3 +83,20 @@ class Renderbuffer:
         '''
 
         return self.mglo.depth
+
+    @property
+    def glo(self) -> int:
+        '''
+            int: The internal OpenGL object.
+            This values is provided for debug purposes only.
+        '''
+
+        return self.mglo.glo
+
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject

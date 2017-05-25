@@ -14,10 +14,6 @@ class VertexArrayAttribute:
         VertexArrayAttribute
     '''
 
-    def __init__(self):
-        self.mglo = {}
-        raise NotImplementedError('VertexArrayAttributeMap')
-
     @staticmethod
     def new(obj):
         '''
@@ -27,6 +23,10 @@ class VertexArrayAttribute:
         res = VertexArrayAttribute.__new__(VertexArrayAttribute)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = {}
+        raise NotImplementedError('VertexArrayAttributeMap')
 
     def __getitem__(self, key) -> 'VertexArrayAttribute':
         return VertexArrayAttribute.new(self.mglo[key])
@@ -102,6 +102,21 @@ class VertexArrayAttributeMap:
         self.mglo = {}
         raise NotImplementedError('VertexArrayAttributeMap')
 
+    def __getitem__(self, key) -> VertexArrayAttribute:
+        return VertexArrayAttribute.new(self.mglo[key])
+
+    def __contains__(self, key):
+        return key in self.mglo
+
+    def __iter__(self):
+        yield from self.mglo.items()
+
+    def __len__(self):
+        return len(self.mglo)
+
+    def __repr__(self):
+        return repr(self.mglo)
+
     @staticmethod
     def new(obj):
         '''
@@ -111,15 +126,6 @@ class VertexArrayAttributeMap:
         res = VertexArrayAttributeMap.__new__(VertexArrayAttributeMap)
         res.mglo = obj
         return res
-
-    def __getitem__(self, key) -> VertexArrayAttribute:
-        return VertexArrayAttribute.new(self.mglo[key])
-
-    def __contains__(self, key):
-        return key in self.mglo
-
-    def __len__(self):
-        return len(self.mglo)
 
 
 class VertexArray:
@@ -136,18 +142,6 @@ class VertexArray:
         to create one.
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError()
-
-    def release(self):
-        '''
-            Release the ModernGL object.
-        '''
-
-        self.mglo.release()
-        self.__class__ = InvalidObject
-
     @staticmethod
     def new(obj):
         '''
@@ -157,6 +151,13 @@ class VertexArray:
         res = VertexArray.__new__(VertexArray)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def __repr__(self):
+        return '<VertexArray: %d>' % self.glo
 
     @property
     def program(self) -> Program:
@@ -196,6 +197,13 @@ class VertexArray:
 
         return self.mglo.vertices
 
+    @property
+    def glo(self) -> int:
+        '''
+            int: The internal OpenGL object.
+            This values is provided for debug purposes only.
+        '''
+
     def render(self, mode=TRIANGLES, vertices=-1, first=0, instances=1) -> None:
         '''
             The render primitive (mode) must be the same as
@@ -230,3 +238,11 @@ class VertexArray:
         '''
 
         self.mglo.transform(buffer.mglo, mode.mglo, vertices, first, instances)
+
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject

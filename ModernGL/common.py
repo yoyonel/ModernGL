@@ -22,14 +22,6 @@ class EnableFlag:
         EnableFlag
     '''
 
-    def __init__(self):
-        self.name = None
-        self.mglo = None
-        raise NotImplementedError('EnableFlag')
-
-    def __repr__(self):
-        return 'ModernGL.%s' % self.name
-
     @staticmethod
     def new(obj, name) -> 'EnableFlag':
         '''
@@ -40,6 +32,14 @@ class EnableFlag:
         res.name = name
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.name = None
+        self.mglo = None
+        raise NotImplementedError('EnableFlag')
+
+    def __repr__(self):
+        return 'ModernGL.%s' % self.name
 
 
 BLEND = EnableFlag.new(mgl.BLEND, 'BLEND')
@@ -68,14 +68,6 @@ class Primitive:
         Primitive
     '''
 
-    def __init__(self):
-        self.name = None
-        self.mglo = None
-        raise NotImplementedError('Primitive')
-
-    def __repr__(self):
-        return 'ModernGL.%s' % self.name
-
     @staticmethod
     def new(obj, name) -> 'Primitive':
         '''
@@ -87,6 +79,14 @@ class Primitive:
         res.name = name
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.name = None
+        self.mglo = None
+        raise NotImplementedError('Primitive')
+
+    def __repr__(self):
+        return 'ModernGL.%s' % self.name
 
 
 TRIANGLES = Primitive.new(mgl.TRIANGLES, 'TRIANGLES')

@@ -13,10 +13,6 @@ class Uniform:
         In ModernGL, Uniforms can be accessed using :py:attr:`Program.uniforms`
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('Uniform')
-
     @staticmethod
     def new(obj):
         '''
@@ -26,6 +22,13 @@ class Uniform:
         res = Uniform.__new__(Uniform)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError('Uniform')
+
+    def __repr__(self):
+        return '<Uniform: %d>' % self.location
 
     @property
     def name(self) -> str:
@@ -170,10 +173,6 @@ class UniformMap:
         UniformMap
     '''
 
-    def __init__(self):
-        self.mglo = {}
-        raise NotImplementedError('UniformMap')
-
     @staticmethod
     def new(obj):
         '''
@@ -184,10 +183,11 @@ class UniformMap:
         res.mglo = obj
         return res
 
-    def __getitem__(self, key) -> Uniform:
-        '''
-        '''
+    def __init__(self):
+        self.mglo = {}
+        raise NotImplementedError('UniformMap')
 
+    def __getitem__(self, key) -> Uniform:
         return Uniform.new(self.mglo[key])
 
     def __contains__(self, key):
@@ -208,10 +208,6 @@ class UniformBlock:
         UniformBlock
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('UniformBlock')
-
     @staticmethod
     def new(obj):
         '''
@@ -221,6 +217,13 @@ class UniformBlock:
         res = UniformBlock.__new__(UniformBlock)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError('UniformBlock')
+
+    def __repr__(self):
+        return '<UniformBlock: %d>' % self.location
 
     @property
     def name(self):
@@ -244,10 +247,6 @@ class UniformBlockMap:
         UniformBlockMap
     '''
 
-    def __init__(self):
-        self.mglo = {}
-        raise NotImplementedError('UniformBlockMap')
-
     @staticmethod
     def new(obj):
         '''
@@ -258,10 +257,11 @@ class UniformBlockMap:
         res.mglo = obj
         return res
 
-    def __getitem__(self, key) -> UniformBlock:
-        '''
-        '''
+    def __init__(self):
+        self.mglo = {}
+        raise NotImplementedError('UniformBlockMap')
 
+    def __getitem__(self, key) -> UniformBlock:
         return UniformBlock.new(self.mglo[key])
 
     def __contains__(self, key):
@@ -282,10 +282,6 @@ class Varying:
         Varying
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('Varying')
-
     @staticmethod
     def new(obj):
         '''
@@ -295,6 +291,13 @@ class Varying:
         res = Varying.__new__(Varying)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError('Varying')
+
+    def __repr__(self):
+        return '<Varying: %d>' % self.number
 
     @property
     def name(self):
@@ -318,10 +321,6 @@ class VaryingMap:
         VaryingMap
     '''
 
-    def __init__(self):
-        self.mglo = {}
-        raise NotImplementedError('VaryingMap')
-
     @staticmethod
     def new(obj):
         '''
@@ -332,10 +331,11 @@ class VaryingMap:
         res.mglo = obj
         return res
 
-    def __getitem__(self, key) -> Varying:
-        '''
-        '''
+    def __init__(self):
+        self.mglo = {}
+        raise NotImplementedError('VaryingMap')
 
+    def __getitem__(self, key) -> Varying:
         return Varying.new(self.mglo[key])
 
     def __contains__(self, key):
@@ -356,10 +356,6 @@ class Attribute:
         Attribute
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('Attribute')
-
     @staticmethod
     def new(obj):
         '''
@@ -369,6 +365,13 @@ class Attribute:
         res = Attribute.__new__(Attribute)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError('Attribute')
+
+    def __repr__(self):
+        return '<Attribute: %d>' % self.location
 
     @property
     def name(self):
@@ -522,10 +525,6 @@ class AttributeMap:
         AttributeMap
     '''
 
-    def __init__(self):
-        self.mglo = {}
-        raise NotImplementedError('AttributeMap')
-
     @staticmethod
     def new(obj):
         '''
@@ -536,10 +535,11 @@ class AttributeMap:
         res.mglo = obj
         return res
 
-    def __getitem__(self, key) -> Attribute:
-        '''
-        '''
+    def __init__(self):
+        self.mglo = {}
+        raise NotImplementedError('AttributeMap')
 
+    def __getitem__(self, key) -> Attribute:
         return Attribute.new(self.mglo[key])
 
     def __contains__(self, key):
@@ -560,10 +560,6 @@ class Subroutine:
         Subroutine
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('Subroutine')
-
     @staticmethod
     def new(obj):
         '''
@@ -573,6 +569,13 @@ class Subroutine:
         res = Subroutine.__new__(Subroutine)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError('Subroutine')
+
+    def __repr__(self):
+        return '<Subroutine: %d>' % self.index
 
     @property
     def name(self):
@@ -596,10 +599,6 @@ class SubroutineMap:
         SubroutineMap
     '''
 
-    def __init__(self):
-        self.mglo = {}
-        raise NotImplementedError('SubroutineMap')
-
     @staticmethod
     def new(obj):
         '''
@@ -610,10 +609,11 @@ class SubroutineMap:
         res.mglo = obj
         return res
 
-    def __getitem__(self, key) -> Subroutine:
-        '''
-        '''
+    def __init__(self):
+        self.mglo = {}
+        raise NotImplementedError('SubroutineMap')
 
+    def __getitem__(self, key) -> Subroutine:
         return Subroutine.new(self.mglo[key])
 
     def __contains__(self, key):
@@ -634,10 +634,6 @@ class SubroutineUniform:
         SubroutineUniform
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('SubroutineUniform')
-
     @staticmethod
     def new(obj):
         '''
@@ -647,6 +643,13 @@ class SubroutineUniform:
         res = SubroutineUniform.__new__(SubroutineUniform)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError('SubroutineUniform')
+
+    def __repr__(self):
+        return '<SubroutineUniform: %d>' % self.location
 
     @property
     def name(self):
@@ -670,10 +673,6 @@ class SubroutineUniformMap:
         SubroutineUniformMap
     '''
 
-    def __init__(self):
-        self.mglo = {}
-        raise NotImplementedError('SubroutineUniformMap')
-
     @staticmethod
     def new(obj):
         '''
@@ -684,10 +683,11 @@ class SubroutineUniformMap:
         res.mglo = obj
         return res
 
-    def __getitem__(self, key) -> SubroutineUniform:
-        '''
-        '''
+    def __init__(self):
+        self.mglo = {}
+        raise NotImplementedError('SubroutineUniformMap')
 
+    def __getitem__(self, key) -> SubroutineUniform:
         return SubroutineUniform.new(self.mglo[key])
 
     def __contains__(self, key):
@@ -708,10 +708,6 @@ class ProgramStage:
         ProgramStage
     '''
 
-    def __init__(self):
-        self.mglo = {}
-        raise NotImplementedError('ProgramStage')
-
     @staticmethod
     def new(obj):
         '''
@@ -721,6 +717,13 @@ class ProgramStage:
         res = ProgramStage.__new__(ProgramStage)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError('ProgramStage')
+
+    def __repr__(self):
+        return '<ProgramStage>'
 
     @property
     def subroutines(self) -> SubroutineMap:

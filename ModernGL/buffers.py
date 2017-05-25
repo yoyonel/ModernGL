@@ -14,17 +14,6 @@ class BufferAccess:
         Use :py:meth:`Buffer.access` to get a BufferAccess object.
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError('BufferAccess')
-
-    def __enter__(self):
-        self.mglo.open()
-        return self
-
-    def __exit__(self, *args):
-        self.mglo.close()
-
     @staticmethod
     def new(obj):
         '''
@@ -34,6 +23,20 @@ class BufferAccess:
         res = BufferAccess.__new__(BufferAccess)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError('BufferAccess')
+
+    def __repr__(self):
+        return '<BufferAccess>'
+
+    def __enter__(self):
+        self.mglo.open()
+        return self
+
+    def __exit__(self, *args):
+        self.mglo.close()
 
     def open(self) -> None:
         '''
@@ -118,18 +121,6 @@ class Buffer:
         Copy buffer content using :py:meth:`Context.copy_buffer`.
     '''
 
-    def __init__(self):
-        self.mglo = None
-        raise NotImplementedError()
-
-    def release(self):
-        '''
-            Release the ModernGL object.
-        '''
-
-        self.mglo.release()
-        self.__class__ = InvalidObject
-
     @staticmethod
     def new(obj):
         '''
@@ -139,6 +130,13 @@ class Buffer:
         res = Buffer.__new__(Buffer)
         res.mglo = obj
         return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def __repr__(self):
+        return '<Buffer: %d>' % self.glo
 
     @property
     def size(self) -> int:
@@ -155,6 +153,15 @@ class Buffer:
         '''
 
         return self.mglo.dynamic
+
+    @property
+    def glo(self) -> int:
+        '''
+            int: The internal OpenGL object.
+            This values is provided for debug purposes only.
+        '''
+
+        return self.mglo.glo
 
     def access(self, *, size=-1, offset=0, readonly=False) -> BufferAccess:
         '''
@@ -274,6 +281,14 @@ class Buffer:
         '''
 
         self.mglo.bind_to_storage_buffer(location)
+
+    def release(self):
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject
 
 
 def detect_format(program, attributes) -> str:
