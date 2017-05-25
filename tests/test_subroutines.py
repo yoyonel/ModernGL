@@ -37,7 +37,7 @@ class TestCase(unittest.TestCase):
 
             subroutine(color_t)
             vec4 ColorBlue() {
-                return vec4(0, 0.4, 1, 1);
+                return vec4(0, 0.5, 1, 1);
             }
 
             subroutine(color_t)
@@ -55,39 +55,32 @@ class TestCase(unittest.TestCase):
         prog = self.ctx.program(vert, ['color'])
         vao = self.ctx.simple_vertex_array(prog, vbo1, ['vert'])
 
-        print(prog.mglo.vertex_shader.subroutines)
-        for k, v in prog.mglo.vertex_shader.subroutines.items():
-            print(k, v, v.name, v.index)
-
-        print(prog.mglo.vertex_shader.subroutine_uniforms)
-        for k, v in prog.mglo.vertex_shader.subroutine_uniforms.items():
-            print(k, v, v.name, v.location)
-
-        # print(prog.mglo.vertex_shader.subroutine_locations)
-
-        # prog.mglo.vertex_shader.subroutine_locations = (prog.mglo.vertex_shader.subroutines['ColorYellow'].index,)
-        # print(prog.mglo.vertex_shader.subroutine_locations)
-
-        vao.mglo.subroutines = (2,)
+        vao.subroutines = (prog.vertex_shader.subroutines['ColorRed'],)
         vao.transform(vbo2)
+
         x, y, z, w = struct.unpack('4f', vbo2.read())
-        print(x, y, z, w)
+        self.assertAlmostEqual(x, 1.0)
+        self.assertAlmostEqual(y, 0.0)
+        self.assertAlmostEqual(z, 0.0)
+        self.assertAlmostEqual(w, 1.0)
 
-        # prog.mglo.vertex_shader.subroutine_locations = (prog.mglo.vertex_shader.subroutines['ColorBlue'].index,)
-        # print(prog.mglo.vertex_shader.subroutine_locations)
-
-        vao.mglo.subroutines = (1,)
+        vao.subroutines = [prog.vertex_shader.subroutines['ColorBlue']]
         vao.transform(vbo2)
+
         x, y, z, w = struct.unpack('4f', vbo2.read())
-        print(x, y, z, w)
+        self.assertAlmostEqual(x, 0.0)
+        self.assertAlmostEqual(y, 0.5)
+        self.assertAlmostEqual(z, 1.0)
+        self.assertAlmostEqual(w, 1.0)
 
-        # prog.mglo.vertex_shader.subroutine_locations = (prog.mglo.vertex_shader.subroutines['ColorRed'].index,)
-        # print(prog.mglo.vertex_shader.subroutine_locations)
-
-        vao.mglo.subroutines = (0,)
+        vao.subroutines = [prog.vertex_shader.subroutines['ColorYellow'].index]
         vao.transform(vbo2)
+
         x, y, z, w = struct.unpack('4f', vbo2.read())
-        print(x, y, z, w)
+        self.assertAlmostEqual(x, 1.0)
+        self.assertAlmostEqual(y, 1.0)
+        self.assertAlmostEqual(z, 0.0)
+        self.assertAlmostEqual(w, 1.0)
 
 
 if __name__ == '__main__':

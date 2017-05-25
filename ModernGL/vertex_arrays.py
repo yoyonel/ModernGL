@@ -4,6 +4,8 @@
 
 # pylint: disable=too-few-public-methods
 
+from typing import Tuple
+
 from .common import InvalidObject, TRIANGLES, POINTS
 from .programs import Program
 from .buffers import Buffer
@@ -196,6 +198,19 @@ class VertexArray:
         '''
 
         return self.mglo.vertices
+
+    @property
+    def subroutines(self) -> Tuple[int]:
+        '''
+            tuple: The subroutines assinged to the VertexArray.
+            The subroutines used when rendering or transforming primitives.
+        '''
+
+        return self.mglo.subroutines
+
+    @subroutines.setter
+    def subroutines(self, value):
+        self.mglo.subroutines = tuple(value)
 
     @property
     def glo(self) -> int:

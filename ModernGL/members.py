@@ -574,6 +574,9 @@ class Subroutine:
         self.mglo = None
         raise NotImplementedError('Subroutine')
 
+    def __int__(self):
+        return self.index
+
     def __repr__(self):
         return '<Subroutine: %d>' % self.index
 

@@ -10,6 +10,7 @@
 #include "VertexArrayListAttribute.hpp"
 
 #include "ProgramStage.hpp"
+#include "Subroutine.hpp"
 
 PyObject * MGLVertexArray_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLVertexArray * self = (MGLVertexArray *)type->tp_alloc(type, 0);
@@ -280,7 +281,19 @@ int MGLVertexArray_set_subroutines(MGLVertexArray * self, PyObject * value, void
 	}
 
 	for (int i = 0; i < self->num_subroutine_uniform_locations; ++i) {
-		self->subroutine_uniform_locations[i] = PyLong_AsUnsignedLong(PyTuple_GET_ITEM(value, i));
+		PyObject * obj = PyTuple_GET_ITEM(value, i);
+		if (Py_TYPE(obj) == &PyLong_Type) {
+			self->subroutine_uniform_locations[i] = PyLong_AsUnsignedLong(obj);
+		} else {
+			PyObject * int_cast = PyNumber_Long(obj);
+			if (!int_cast) {
+				MGLError * error = MGLError_FromFormat(TRACE, "invalid values in subroutines");
+				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+				return -1;
+			}
+			self->subroutine_uniform_locations[i] = PyLong_AsUnsignedLong(int_cast);
+			Py_DECREF(int_cast);
+		}
 	}
 
 	if (PyErr_Occurred()) {
