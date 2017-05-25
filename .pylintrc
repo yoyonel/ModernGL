@@ -1,5 +1,5 @@
 [SIMILARITIES]
-min-similarity-lines=20
+min-similarity-lines=40
 
 [FORMAT]
 max-line-length=120
