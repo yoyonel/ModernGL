@@ -61,12 +61,23 @@ PyObject * MGLRenderbuffer_get_depth(MGLRenderbuffer * self, void * closure) {
 	return PyBool_FromLong(self->depth);
 }
 
+MGLContext * MGLRenderbuffer_get_context(MGLRenderbuffer * self, void * closure) {
+	Py_INCREF(self->context);
+	return self->context;
+}
+
+PyObject * MGLRenderbuffer_get_glo(MGLRenderbuffer * self, void * closure) {
+	return PyLong_FromLong(self->renderbuffer_obj);
+}
+
 PyGetSetDef MGLRenderbuffer_tp_getseters[] = {
 	{(char *)"width", (getter)MGLRenderbuffer_get_width, 0, 0, 0},
 	{(char *)"height", (getter)MGLRenderbuffer_get_height, 0, 0, 0},
 	{(char *)"components", (getter)MGLRenderbuffer_get_components, 0, 0, 0},
 	{(char *)"samples", (getter)MGLRenderbuffer_get_samples, 0, 0, 0},
 	{(char *)"depth", (getter)MGLRenderbuffer_get_depth, 0, 0, 0},
+	{(char *)"context", (getter)MGLRenderbuffer_get_context, 0, 0, 0},
+	{(char *)"glo", (getter)MGLRenderbuffer_get_glo, 0, 0, 0},
 	{0},
 };
 

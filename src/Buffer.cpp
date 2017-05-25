@@ -230,9 +230,20 @@ PyObject * MGLBuffer_get_dynamic(MGLBuffer * self, void * closure) {
 	return PyBool_FromLong(self->dynamic);
 }
 
+MGLContext * MGLBuffer_get_context(MGLBuffer * self, void * closure) {
+	Py_INCREF(self->context);
+	return self->context;
+}
+
+PyObject * MGLBuffer_get_glo(MGLBuffer * self, void * closure) {
+	return PyLong_FromLong(self->buffer_obj);
+}
+
 PyGetSetDef MGLBuffer_tp_getseters[] = {
 	{(char *)"size", (getter)MGLBuffer_get_size, 0, 0, 0},
 	{(char *)"dynamic", (getter)MGLBuffer_get_dynamic, 0, 0, 0},
+	{(char *)"context", (getter)MGLBuffer_get_context, 0, 0, 0},
+	{(char *)"glo", (getter)MGLBuffer_get_glo, 0, 0, 0},
 	{0},
 };
 

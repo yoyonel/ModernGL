@@ -79,10 +79,15 @@ MGLContext * MGLShader_get_context(MGLShader * self, void * closure) {
 	return self->context;
 }
 
+PyObject * MGLShader_get_glo(MGLShader * self, void * closure) {
+	return PyLong_FromLong(self->shader_obj);
+}
+
 PyGetSetDef MGLShader_tp_getseters[] = {
 	{(char *)"source", (getter)MGLShader_get_source, 0, 0, 0},
 	{(char *)"typename", (getter)MGLShader_get_typename, 0, 0, 0},
 	{(char *)"context", (getter)MGLShader_get_context, 0, 0, 0},
+	{(char *)"glo", (getter)MGLShader_get_glo, 0, 0, 0},
 	{0},
 };
 

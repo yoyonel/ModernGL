@@ -293,6 +293,10 @@ MGLContext * MGLVertexArray_get_context(MGLVertexArray * self, void * closure) {
 	return self->context;
 }
 
+PyObject * MGLVertexArray_get_glo(MGLVertexArray * self, void * closure) {
+	return PyLong_FromLong(self->vertex_array_obj);
+}
+
 PyGetSetDef MGLVertexArray_tp_getseters[] = {
 	{(char *)"program", (getter)MGLVertexArray_get_program, 0, 0, 0},
 	{(char *)"attributes", (getter)MGLVertexArray_get_attributes, 0, 0, 0},
@@ -300,6 +304,7 @@ PyGetSetDef MGLVertexArray_tp_getseters[] = {
 	{(char *)"vertices", (getter)MGLVertexArray_get_vertices, (setter)MGLVertexArray_set_vertices, 0, 0},
 	{(char *)"subroutines", 0, (setter)MGLVertexArray_set_subroutines, 0, 0},
 	{(char *)"context", (getter)MGLVertexArray_get_context, 0, 0, 0},
+	{(char *)"glo", (getter)MGLVertexArray_get_glo, 0, 0, 0},
 	{0},
 };
 

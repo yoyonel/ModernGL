@@ -138,6 +138,10 @@ MGLContext * MGLProgram_get_context(MGLProgram * self, void * closure) {
 	return self->context;
 }
 
+PyObject * MGLProgram_get_glo(MGLProgram * self, void * closure) {
+	return PyLong_FromLong(self->program_obj);
+}
+
 PyGetSetDef MGLProgram_tp_getseters[] = {
 	{(char *)"uniforms", (getter)MGLProgram_get_uniforms, 0, 0, 0},
 	{(char *)"uniform_blocks", (getter)MGLProgram_get_uniform_blocks, 0, 0, 0},
@@ -154,6 +158,7 @@ PyGetSetDef MGLProgram_tp_getseters[] = {
 	{(char *)"tess_evaluation_shader", (getter)MGLProgram_get_tess_evaluation_shader, 0, 0, 0},
 	{(char *)"tess_control_shader", (getter)MGLProgram_get_tess_control_shader, 0, 0, 0},
 	{(char *)"context", (getter)MGLProgram_get_context, 0, 0, 0},
+	{(char *)"glo", (getter)MGLProgram_get_glo, 0, 0, 0},
 	{0},
 };
 

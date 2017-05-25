@@ -215,10 +215,15 @@ MGLContext * MGLFramebuffer_get_context(MGLFramebuffer * self, void * closure) {
 	return self->context;
 }
 
+PyObject * MGLFramebuffer_get_glo(MGLFramebuffer * self, void * closure) {
+	return PyLong_FromLong(self->framebuffer_obj);
+}
+
 PyGetSetDef MGLFramebuffer_tp_getseters[] = {
 	{(char *)"color_attachments", (getter)MGLFramebuffer_get_color_attachments, 0, 0, 0},
 	{(char *)"depth_attachment", (getter)MGLFramebuffer_get_depth_attachment, 0, 0, 0},
 	{(char *)"context", (getter)MGLFramebuffer_get_context, 0, 0, 0},
+	{(char *)"glo", (getter)MGLFramebuffer_get_glo, 0, 0, 0},
 	{0},
 };
 

@@ -179,12 +179,23 @@ PyObject * MGLTexture_get_depth(MGLTexture * self, void * closure) {
 	return PyBool_FromLong(self->depth);
 }
 
+MGLContext * MGLTexture_get_context(MGLTexture * self, void * closure) {
+	Py_INCREF(self->context);
+	return self->context;
+}
+
+PyObject * MGLTexture_get_glo(MGLTexture * self, void * closure) {
+	return PyLong_FromLong(self->texture_obj);
+}
+
 PyGetSetDef MGLTexture_tp_getseters[] = {
 	{(char *)"width", (getter)MGLTexture_get_width, 0, 0, 0},
 	{(char *)"height", (getter)MGLTexture_get_height, 0, 0, 0},
 	{(char *)"components", (getter)MGLTexture_get_components, 0, 0, 0},
 	{(char *)"samples", (getter)MGLTexture_get_samples, 0, 0, 0},
 	{(char *)"depth", (getter)MGLTexture_get_depth, 0, 0, 0},
+	{(char *)"context", (getter)MGLTexture_get_context, 0, 0, 0},
+	{(char *)"glo", (getter)MGLTexture_get_glo, 0, 0, 0},
 	{0},
 };
 
