@@ -115,7 +115,11 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 		return 0;
 	}
 
-	// TODO: self->program->no_varyings check to save debug time
+	if (!self->program->num_varyings) {
+		MGLError * error = MGLError_FromFormat(TRACE, "program has no varyings");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return 0;
+	}
 
 	if (vertices < 0) {
 		if (self->num_vertices < 0) {

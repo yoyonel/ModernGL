@@ -510,10 +510,9 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 	PyObject * varyings = PyDict_New();
 
-	int num_varyings = 0;
-	gl.GetProgramiv(obj, GL_TRANSFORM_FEEDBACK_VARYINGS, &num_varyings);
+	gl.GetProgramiv(obj, GL_TRANSFORM_FEEDBACK_VARYINGS, &program->num_varyings);
 
-	for (int i = 0; i < num_varyings; ++i) {
+	for (int i = 0; i < program->num_varyings; ++i) {
 		MGLVarying * varying = MGLVarying_New();
 
 		int name_len = 0;

@@ -24,9 +24,10 @@ struct MGLProgram : public MGLContextMember {
 	MGLPrimitive * geometry_input;
 	MGLPrimitive * geometry_output;
 
-	int geometry_vertices;
-
 	int program_obj;
+
+	int geometry_vertices;
+	int num_varyings;
 };
 
 extern PyTypeObject MGLProgram_Type;
