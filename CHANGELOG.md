@@ -10,9 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Exposing the OpenGL objects as `glo` attributes.
 - `__iter__` for program member maps.
 - `__repr__` for program members.
+- UniformBlock `binding` attribute.
+- UniformBlock `size` attribute.
 - Subroutines.
 
+### Removed
+- UniformBlock `array_size` attribute.
+
 ## Fixed
+- Binding buffer to a UniformBlock.
 - Broken RTD docs.
 
 ## [4.1.0] - 2017-05-24
