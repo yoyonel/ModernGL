@@ -284,7 +284,7 @@ int MGLVertexArray_set_subroutines(MGLVertexArray * self, PyObject * value, void
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "invalid values for uniforms");
+		MGLError * error = MGLError_FromFormat(TRACE, "invalid values in subroutines");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return -1;
 	}

@@ -169,6 +169,12 @@ void MGLShader_Compile(MGLShader * shader) {
 
 	int obj = gl.CreateShader(shader->shader_type);
 
+	if (!obj) {
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create shader");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return;
+	}
+
 	gl.ShaderSource(obj, 1, &source, 0);
 	gl.CompileShader(obj);
 

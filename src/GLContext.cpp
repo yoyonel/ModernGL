@@ -647,7 +647,7 @@ GLContext CreateGLContext(int width, int height) {
 	if (!win) {
 		XCloseDisplay(dpy);
 
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot create a window");
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create window");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return context;
 	}

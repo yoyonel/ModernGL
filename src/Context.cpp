@@ -62,7 +62,7 @@ PyObject * MGLContext_clear(MGLContext * self, PyObject * args) {
 	if (!args_ok) {
 		return 0;
 	}
-	
+
 	int x = 0;
 	int y = 0;
 	int width = 0;
@@ -335,8 +335,9 @@ MGLBuffer * MGLContext_buffer(MGLContext * self, PyObject * args) {
 	gl.GenBuffers(1, (GLuint *)&buffer->buffer_obj);
 
 	if (!buffer->buffer_obj) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot create a Buffer");
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create buffer");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		Py_DECREF(buffer);
 		return 0;
 	}
 
@@ -426,6 +427,14 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 
 	texture->texture_obj = 0;
 	gl.GenTextures(1, (GLuint *)&texture->texture_obj);
+
+	if (!texture->texture_obj) {
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create texture");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		Py_DECREF(texture);
+		return 0;
+	}
+
 	gl.BindTexture(texture_target, texture->texture_obj);
 	gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -512,10 +521,24 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 
 	texture->texture_obj = 0;
 	gl.GenTextures(1, (GLuint *)&texture->texture_obj);
+
+	if (!texture->texture_obj) {
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create texture");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		Py_DECREF(texture);
+		return 0;
+	}
+
 	gl.BindTexture(texture_target, texture->texture_obj);
 	gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	gl.TexImage2D(texture_target, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, pixel_type, buffer_view.buf);
+
+	if (samples) {
+		gl.TexImage2DMultisample(texture_target, samples, GL_DEPTH_COMPONENT24, width, height, true);
+	} else {
+		gl.TexImage2D(texture_target, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, pixel_type, buffer_view.buf);
+	}
+
 
 	if (data != Py_None) {
 		PyBuffer_Release(&buffer_view);
@@ -601,7 +624,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		}
 
 		if (Py_TYPE(format) != &PyUnicode_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "content[%d][1] must be an str not %s", i, Py_TYPE(format)->tp_name);
+			MGLError * error = MGLError_FromFormat(TRACE, "content[%d][1] must be a string not %s", i, Py_TYPE(format)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -651,7 +674,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 			PyObject * attribute = PyTuple_GET_ITEM(attributes, j);
 
 			if (Py_TYPE(attribute) != &PyUnicode_Type) {
-				MGLError * error = MGLError_FromFormat(TRACE, "content[%d][2][%d] must be a str not %s", i, j, Py_TYPE(attribute)->tp_name);
+				MGLError * error = MGLError_FromFormat(TRACE, "content[%d][2][%d] must be a string not %s", i, j, Py_TYPE(attribute)->tp_name);
 				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 				return 0;
 			}
@@ -705,8 +728,15 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 	array->vertex_array_obj = 0;
 	gl.GenVertexArrays(1, (GLuint *)&array->vertex_array_obj);
-	gl.BindVertexArray(array->vertex_array_obj);
 
+	if (!array->vertex_array_obj) {
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create vertex array");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		Py_DECREF(array);
+		return 0;
+	}
+
+	gl.BindVertexArray(array->vertex_array_obj);
 	gl.UseProgram(program->program_obj);
 
 	Py_INCREF(index_buffer);
@@ -800,7 +830,7 @@ MGLProgram * MGLContext_program(MGLContext * self, PyObject * args) {
 	for (int i = 0; i < num_varyings; ++i) {
 		PyObject * item = PyTuple_GET_ITEM(varyings, i);
 		if (Py_TYPE(item) != &PyUnicode_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "varyings[%d] must be a str not %s", i, Py_TYPE(item)->tp_name);
+			MGLError * error = MGLError_FromFormat(TRACE, "varyings[%d] must be a string not %s", i, Py_TYPE(item)->tp_name);
 			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 			return 0;
 		}
@@ -982,6 +1012,14 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 
 		renderbuffer->renderbuffer_obj = 0;
 		gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
+
+		if (!renderbuffer->renderbuffer_obj) {
+			MGLError * error = MGLError_FromFormat(TRACE, "cannot create renderbuffer");
+			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			Py_DECREF(renderbuffer);
+			return 0;
+		}
+
 		gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->renderbuffer_obj);
 
 		if (samples == 0) {
@@ -1012,6 +1050,14 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 
 	framebuffer->framebuffer_obj = 0;
 	gl.GenFramebuffers(1, (GLuint *)&framebuffer->framebuffer_obj);
+
+	if (!framebuffer->framebuffer_obj) {
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create framebuffer");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		Py_DECREF(framebuffer);
+		return 0;
+	}
+
 	gl.BindFramebuffer(GL_FRAMEBUFFER, framebuffer->framebuffer_obj);
 
 	for (int i = 0; i < color_attachments_len; ++i) {
@@ -1147,7 +1193,7 @@ MGLRenderbuffer * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 	}
 
 	if (components < 1 || components > 4) {
-		MGLError * error = MGLError_FromFormat(TRACE, "components must be 1, 2, 3 or 4");
+		MGLError * error = MGLError_FromFormat(TRACE, "the components must be 1, 2, 3 or 4");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -1163,6 +1209,14 @@ MGLRenderbuffer * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 
 	renderbuffer->renderbuffer_obj = 0;
 	gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
+
+	if (!renderbuffer->renderbuffer_obj) {
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create renderbuffer");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		Py_DECREF(renderbuffer);
+		return 0;
+	}
+
 	gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->renderbuffer_obj);
 
 	if (samples == 0) {
@@ -1209,6 +1263,14 @@ MGLRenderbuffer * MGLContext_depth_renderbuffer(MGLContext * self, PyObject * ar
 
 	renderbuffer->renderbuffer_obj = 0;
 	gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
+
+	if (!renderbuffer->renderbuffer_obj) {
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create renderbuffer");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		Py_DECREF(renderbuffer);
+		return 0;
+	}
+
 	gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->renderbuffer_obj);
 
 	if (samples == 0) {
@@ -1245,7 +1307,7 @@ MGLComputeShader * MGLContext_compute_shader(MGLContext * self, PyObject * args)
 	}
 
 	if (!PyUnicode_Check(source)) {
-		MGLError * error = MGLError_FromFormat(TRACE, "source must be a string not %s", Py_TYPE(source)->tp_name);
+		MGLError * error = MGLError_FromFormat(TRACE, "the source must be a string not %s", Py_TYPE(source)->tp_name);
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}
@@ -1301,7 +1363,7 @@ MGLComputeShader * MGLContext_compute_shader(MGLContext * self, PyObject * args)
 	int program_obj = gl.CreateProgram();
 
 	if (!program_obj) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot create a Program");
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create program");
 		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 		return 0;
 	}

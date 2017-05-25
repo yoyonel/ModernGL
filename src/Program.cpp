@@ -297,6 +297,12 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 	int obj = gl.CreateProgram();
 
+	if (!obj) {
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create program");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return;
+	}
+
 	MGLShader * shaders[NUM_SHADER_SLOTS] = {};
 
 	int num_shaders = (int)PyTuple_GET_SIZE(program->shaders);
