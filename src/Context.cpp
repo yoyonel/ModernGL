@@ -1492,6 +1492,28 @@ PyObject * MGLContext_get_default_framebuffer(MGLContext * self) {
 	return self->default_framebuffer;
 }
 
+PyObject * MGLContext_get_error(MGLContext * self, void * closure) {
+	switch (self->gl.GetError()) {
+		case GL_NO_ERROR:
+			return PyUnicode_FromFormat("GL_NO_ERROR");
+		case GL_INVALID_ENUM:
+			return PyUnicode_FromFormat("GL_INVALID_ENUM");
+		case GL_INVALID_VALUE:
+			return PyUnicode_FromFormat("GL_INVALID_VALUE");
+		case GL_INVALID_OPERATION:
+			return PyUnicode_FromFormat("GL_INVALID_OPERATION");
+		case GL_INVALID_FRAMEBUFFER_OPERATION:
+			return PyUnicode_FromFormat("GL_INVALID_FRAMEBUFFER_OPERATION");
+		case GL_OUT_OF_MEMORY:
+			return PyUnicode_FromFormat("GL_OUT_OF_MEMORY");
+		case GL_STACK_UNDERFLOW:
+			return PyUnicode_FromFormat("GL_STACK_UNDERFLOW");
+		case GL_STACK_OVERFLOW:
+			return PyUnicode_FromFormat("GL_STACK_OVERFLOW");
+	}
+	return PyUnicode_FromFormat("GL_UNKNOWN_ERROR");
+}
+
 PyObject * MGLContext_get_vendor(MGLContext * self, void * closure) {
 	const char * vendor = (const char *)self->gl.GetString(GL_VENDOR);
 
@@ -1547,6 +1569,7 @@ PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"max_texture_units", (getter)MGLContext_get_max_texture_units, 0, 0, 0},
 	{(char *)"default_framebuffer", (getter)MGLContext_get_default_framebuffer, 0, 0, 0},
 
+	{(char *)"error", (getter)MGLContext_get_error, 0, 0, 0},
 	{(char *)"vendor", (getter)MGLContext_get_vendor, 0, 0, 0},
 	{(char *)"renderer", (getter)MGLContext_get_renderer, 0, 0, 0},
 	{(char *)"version", (getter)MGLContext_get_version, 0, 0, 0},

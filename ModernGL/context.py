@@ -131,6 +131,15 @@ class Context:
         return self.mglo.default_framebuffer
 
     @property
+    def error(self) -> str:
+        '''
+            str: The result of glGetError() but human readable.
+            This values is provided for debug purposes only.
+        '''
+
+        return self.mglo.error
+
+    @property
     def vendor(self) -> str:
         '''
             str: The vendor.

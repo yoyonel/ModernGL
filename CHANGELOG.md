@@ -6,8 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-- `repr()` and `str()` for program members.
-- `__iter__` for program members.
+- `error` attribute for the Context.
+- Exposing the OpenGL objects as `glo` attributes.
+- `__iter__` for program member maps.
+- `__repr__` for program members.
 
 ## Fixed
 - Broken RTD docs.
