@@ -651,8 +651,8 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 	} else {
 
-		program->geometry_input = 0;
-		program->geometry_output = 0;
+		program->geometry_input = MGL_NO_PRIMITIVE;
+		program->geometry_output = MGL_NO_PRIMITIVE;
 		program->geometry_vertices = 0;
 	}
 }
