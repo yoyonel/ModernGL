@@ -7,10 +7,8 @@
 
 struct MGLVertexArrayAttribute : public MGLObject {
 	const GLMethods * gl;
-
+	
 	void * gl_attrib_ptr_proc;
-	void * gl_attrib_getter_proc;
-	void * gl_attrib_setter_proc;
 
 	int vertex_array_obj;
 	int location;

@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 - UniformBlock `array_size` attribute.
 - UniformBlock `location` attribute.
+- VertexArrayAttribute `default` attribute.
 
 ## Fixed
 - Binding buffer to a UniformBlock.

@@ -88,33 +88,6 @@ PyObject * MGLVertexArrayAttribute_get_location(MGLVertexArrayAttribute * self, 
 	return PyLong_FromLong(self->location);
 }
 
-PyObject * MGLVertexArrayAttribute_get_default(MGLVertexArrayAttribute * self, void * closure) {
-	if (!self->gl_attrib_getter_proc) {
-		MGLError_Set("gl_attrib_getter_proc is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-		return 0;
-	}
-
-	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	return 0;
-}
-
-int MGLVertexArrayAttribute_set_default(MGLVertexArrayAttribute * self, PyObject * value, void * closure) {
-	if (!self->gl_attrib_setter_proc) {
-		MGLError_Set("gl_attrib_getter_proc is null in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-		return 0;
-	}
-
-	PyErr_Format(PyExc_NotImplementedError, "Not implemented: %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-	return -1;
-}
-
-PyObject * MGLVertexArrayAttribute_get_enabled(MGLVertexArrayAttribute * self, void * closure) {
-	int enabled = 0;
-	self->gl->BindVertexArray(self->vertex_array_obj);
-	self->gl->GetVertexAttribiv(self->location, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &enabled);
-	return PyBool_FromLong(enabled);
-}
-
 PyObject * MGLVertexArrayAttribute_get_divisor(MGLVertexArrayAttribute * self, void * closure) {
 	int divisor = 0;
 	self->gl->BindVertexArray(self->vertex_array_obj);
@@ -129,12 +102,32 @@ PyObject * MGLVertexArrayAttribute_get_stride(MGLVertexArrayAttribute * self, vo
 	return PyLong_FromLong(stride);
 }
 
+PyObject * MGLVertexArrayAttribute_get_enabled(MGLVertexArrayAttribute * self, void * closure) {
+	int enabled = 0;
+	self->gl->BindVertexArray(self->vertex_array_obj);
+	self->gl->GetVertexAttribiv(self->location, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &enabled);
+	return PyBool_FromLong(enabled);
+}
+
+int MGLVertexArrayAttribute_set_enabled(MGLVertexArrayAttribute * self, PyObject * value, void * closure) {
+	if (value == Py_True) {
+		self->gl->BindVertexArray(self->vertex_array_obj);
+		self->gl->EnableVertexAttribArray(self->location);
+	} else if (value == Py_False) {
+		self->gl->BindVertexArray(self->vertex_array_obj);
+		self->gl->DisableVertexAttribArray(self->location);
+	} else {
+		MGLError_Set("invalid value for enabled");
+		return -1;
+	}
+	return 0;
+}
+
 PyGetSetDef MGLVertexArrayAttribute_tp_getseters[] = {
 	{(char *)"location", (getter)MGLVertexArrayAttribute_get_location, 0, 0, 0},
 	{(char *)"divisor", (getter)MGLVertexArrayAttribute_get_divisor, 0, 0, 0},
 	{(char *)"stride", (getter)MGLVertexArrayAttribute_get_stride, 0, 0, 0},
 	{(char *)"enabled", (getter)MGLVertexArrayAttribute_get_enabled, 0, 0, 0},
-	{(char *)"default", (getter)MGLVertexArrayAttribute_get_default, (setter)MGLVertexArrayAttribute_set_default, 0, 0},
 	{0},
 };
 
@@ -192,8 +185,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_INT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_INT_VEC2:
@@ -202,8 +193,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_INT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_INT_VEC3:
@@ -212,8 +201,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_INT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_INT_VEC4:
@@ -222,8 +209,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_INT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_UNSIGNED_INT:
@@ -232,8 +217,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_UNSIGNED_INT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_UNSIGNED_INT_VEC2:
@@ -242,8 +225,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_UNSIGNED_INT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_UNSIGNED_INT_VEC3:
@@ -252,8 +233,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_UNSIGNED_INT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_UNSIGNED_INT_VEC4:
@@ -262,8 +241,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_UNSIGNED_INT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT:
@@ -272,8 +249,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_FLOAT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_VEC2:
@@ -282,8 +257,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_FLOAT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_VEC3:
@@ -292,8 +265,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_FLOAT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_VEC4:
@@ -302,8 +273,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_FLOAT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE:
@@ -312,8 +281,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_DOUBLE;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_VEC2:
@@ -322,8 +289,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_DOUBLE;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_VEC3:
@@ -332,8 +297,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_DOUBLE;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_VEC4:
@@ -342,8 +305,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_DOUBLE;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT2:
@@ -352,8 +313,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_FLOAT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT2x3:
@@ -362,8 +321,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_FLOAT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT2x4:
@@ -372,8 +329,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_FLOAT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT3x2:
@@ -382,8 +337,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_FLOAT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT3:
@@ -392,8 +345,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_FLOAT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT3x4:
@@ -402,8 +353,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_FLOAT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT4x2:
@@ -412,8 +361,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_FLOAT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT4x3:
@@ -422,8 +369,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_FLOAT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_FLOAT_MAT4:
@@ -432,8 +377,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_FLOAT;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT2:
@@ -442,8 +385,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_DOUBLE;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT2x3:
@@ -452,8 +393,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_DOUBLE;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT2x4:
@@ -462,8 +401,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_DOUBLE;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT3x2:
@@ -472,8 +409,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_DOUBLE;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT3:
@@ -482,8 +417,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_DOUBLE;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT3x4:
@@ -492,8 +425,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_DOUBLE;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT4x2:
@@ -502,8 +433,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_DOUBLE;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT4x3:
@@ -512,8 +441,6 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_DOUBLE;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		case GL_DOUBLE_MAT4:
@@ -522,18 +449,14 @@ void MGLVertexArrayAttribute_Complete(MGLVertexArrayAttribute * attribute, const
 			attribute->scalar_type = GL_DOUBLE;
 
 			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
 			break;
 
 		default:
 			attribute->normalizable = false;
 			attribute->row_length = 1;
-			attribute->scalar_type = 0;
+			attribute->scalar_type = GL_FLOAT;
 
-			attribute->gl_attrib_ptr_proc = 0;
-			attribute->gl_attrib_getter_proc = 0;
-			attribute->gl_attrib_setter_proc = 0;
+			attribute->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 			break;
 	}
 }
