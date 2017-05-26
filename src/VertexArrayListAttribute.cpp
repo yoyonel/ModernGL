@@ -25,8 +25,7 @@ void MGLVertexArrayListAttribute_tp_dealloc(MGLVertexArrayListAttribute * self) 
 }
 
 int MGLVertexArrayListAttribute_tp_init(MGLVertexArrayListAttribute * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.VertexArrayListAttribute manually");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot create mgl.VertexArrayListAttribute manually");
 	return -1;
 }
 

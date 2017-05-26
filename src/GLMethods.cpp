@@ -1225,8 +1225,7 @@ bool GLMethods::load() {
 		PyUnicode_Append(&message, loading_log);
 		Py_DECREF(loading_log);
 
-		MGLError * error = MGLError_FromMessage(TRACE, message);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set(message);
 		return false;
 	}
 

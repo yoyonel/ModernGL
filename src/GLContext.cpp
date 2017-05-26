@@ -77,24 +77,21 @@ GLContext LoadCurrentGLContext() {
 	HGLRC hrc = wglGetCurrentContext();
 
 	if (!hrc) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot detect context");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot detect context");
 		return context;
 	}
 
 	HDC hdc = wglGetCurrentDC();
 
 	if (!hdc) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot detect device content");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot detect device content");
 		return context;
 	}
 
 	HWND hwnd = WindowFromDC(hdc);
 
 	if (!hwnd) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot detect window");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot detect window");
 		return context;
 	}
 
@@ -224,8 +221,7 @@ GLContext CreateGLContext(int width, int height) {
 	HINSTANCE inst = GetModuleHandle(0);
 
 	if (!inst) {
-		MGLError * error = MGLError_FromFormat(TRACE, "module handle is null");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("module handle is null");
 		return context;
 	}
 
@@ -246,8 +242,7 @@ GLContext CreateGLContext(int width, int height) {
 		};
 
 		if (!RegisterClass(&wndClass)) {
-			MGLError * error = MGLError_FromFormat(TRACE, "cannot register window class");
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("cannot register window class");
 			return context;
 		}
 
@@ -270,16 +265,14 @@ GLContext CreateGLContext(int width, int height) {
 	);
 
 	if (!hwnd) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot create window");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot create window");
 		return context;
 	}
 
 	HDC hdc = GetDC(hwnd);
 
 	if (!hdc) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot create device content");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot create device content");
 		return context;
 	}
 
@@ -293,20 +286,17 @@ GLContext CreateGLContext(int width, int height) {
 		// WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB
 
 		if (!mglChoosePixelFormat(hdc, 0, 0, 1, &pixelformat, &num_formats)) {
-			MGLError * error = MGLError_FromFormat(TRACE, "cannot choose pixel format");
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("cannot choose pixel format");
 			return context;
 		}
 
 		if (!num_formats) {
-			MGLError * error = MGLError_FromFormat(TRACE, "no pixel formats available");
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("no pixel formats available");
 			return context;
 		}
 
 		if (!SetPixelFormat(hdc, pixelformat, &pfd)) {
-			MGLError * error = MGLError_FromFormat(TRACE, "cannot set pixel format");
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("cannot set pixel format");
 			return context;
 		}
 
@@ -330,16 +320,14 @@ GLContext CreateGLContext(int width, int height) {
 		int pf = ChoosePixelFormat(hdc, &pfd);
 
 		if (!pf) {
-			MGLError * error = MGLError_FromFormat(TRACE, "cannot choose pixel format");
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("cannot choose pixel format");
 			return context;
 		}
 
 		int set_pixel_format = SetPixelFormat(hdc, pf, &pfd);
 
 		if (!set_pixel_format) {
-			MGLError * error = MGLError_FromFormat(TRACE, "cannot set pixel format");
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("cannot set pixel format");
 			return context;
 		}
 
@@ -348,16 +336,14 @@ GLContext CreateGLContext(int width, int height) {
 	}
 
 	if (!hrc) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot create OpenGL context");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot create OpenGL context");
 		return context;
 	}
 
 	int make_current = wglMakeCurrent(hdc, hrc);
 
 	if (!make_current) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot select OpenGL context");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot select OpenGL context");
 		return context;
 	}
 
@@ -398,8 +384,7 @@ GLContext LoadCurrentGLContext() {
 	CGLContextObj cgl_context = CGLGetCurrentContext();
 
 	if (!cgl_context) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot detect OpenGL context");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot detect OpenGL context");
 		return context;
 	}
 
@@ -447,8 +432,7 @@ GLContext CreateGLContext(int width, int height) {
 	}
 
 	if (!pixelformat) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot choose pixel format");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot choose pixel format");
 		return context;
 	}
 
@@ -458,8 +442,7 @@ GLContext CreateGLContext(int width, int height) {
 	CGLDestroyPixelFormat(pixelformat);
 
 	if (!cgl_context) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot create OpenGL context");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot create OpenGL context");
 		return context;
 	}
 
@@ -529,8 +512,7 @@ GLContext CreateGLContext(int width, int height) {
 				break;
 		}
 
-		MGLError * error = MGLError_FromFormat(TRACE, message);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set(message);
 		return context;
 	}
 
@@ -569,24 +551,21 @@ GLContext LoadCurrentGLContext() {
 	Display * dpy = glXGetCurrentDisplay();
 
 	if (!dpy) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot detect display");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot detect display");
 		return context;
 	}
 
 	Window win = glXGetCurrentDrawable();
 
 	if (!win) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot detect window");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot detect window");
 		return context;
 	}
 
 	GLXContext ctx = glXGetCurrentContext();
 
 	if (!ctx) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot detect OpenGL context");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot detect OpenGL context");
 		return context;
 	}
 
@@ -609,8 +588,7 @@ GLContext CreateGLContext(int width, int height) {
 	Display * dpy = XOpenDisplay(0);
 
 	if (!dpy) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot detect the display");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot detect the display");
 		return context;
 	}
 
@@ -619,8 +597,7 @@ GLContext CreateGLContext(int width, int height) {
 	GLXFBConfig * fbc = glXChooseFBConfig(dpy, DefaultScreen(dpy), 0, &nelements);
 
 	if (!fbc) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot read the display configuration");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot read the display configuration");
 		XCloseDisplay(dpy);
 		return context;
 	}
@@ -632,8 +609,7 @@ GLContext CreateGLContext(int width, int height) {
 	if (!vi) {
 		XCloseDisplay(dpy);
 
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot choose a visual info");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot choose a visual info");
 		return context;
 	}
 
@@ -647,8 +623,7 @@ GLContext CreateGLContext(int width, int height) {
 	if (!win) {
 		XCloseDisplay(dpy);
 
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot create window");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot create window");
 		return context;
 	}
 
@@ -685,8 +660,7 @@ GLContext CreateGLContext(int width, int height) {
 		XDestroyWindow(dpy, win);
 		XCloseDisplay(dpy);
 
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot create OpenGL context");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot create OpenGL context");
 		return context;
 	}
 
@@ -699,8 +673,7 @@ GLContext CreateGLContext(int width, int height) {
 		XDestroyWindow(dpy, win);
 		XCloseDisplay(dpy);
 
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot select OpenGL context");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot select OpenGL context");
 		return context;
 	}
 

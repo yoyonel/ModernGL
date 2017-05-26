@@ -27,8 +27,7 @@ void MGLProgramStage_tp_dealloc(MGLProgramStage * self) {
 }
 
 int MGLProgramStage_tp_init(MGLProgramStage * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.ProgramStage manually");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot create mgl.ProgramStage manually");
 	return -1;
 }
 

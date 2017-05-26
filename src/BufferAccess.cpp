@@ -25,15 +25,13 @@ void MGLBufferAccess_tp_dealloc(MGLBufferAccess * self) {
 }
 
 int MGLBufferAccess_tp_init(MGLBufferAccess * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.BufferAccess manually");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot create mgl.BufferAccess manually");
 	return -1;
 }
 
 PyObject * MGLBufferAccess_open(MGLBufferAccess * self) {
 	if (self->ptr) {
-		MGLError * error = MGLError_FromFormat(TRACE, "already open");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("already open");
 		return 0;
 	}
 
@@ -42,8 +40,7 @@ PyObject * MGLBufferAccess_open(MGLBufferAccess * self) {
 	self->ptr = gl.MapBufferRange(GL_ARRAY_BUFFER, self->offset, self->size, self->access);
 
 	if (!self->ptr) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot map the buffer");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot map the buffer");
 		return 0;
 	}
 
@@ -79,14 +76,12 @@ PyObject * MGLBufferAccess_read(MGLBufferAccess * self, PyObject * args) {
 	}
 
 	if (offset < 0 || size < 0 || size + offset > self->size) {
-		MGLError * error = MGLError_FromFormat(TRACE, "out of range offset = %d or size = %d", offset, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("out of range offset = %d or size = %d", offset, size);
 		return 0;
 	}
 
 	if (!self->ptr) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the access object is not open");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the access object is not open");
 		return 0;
 	}
 
@@ -111,14 +106,12 @@ PyObject * MGLBufferAccess_write(MGLBufferAccess * self, PyObject * args) {
 	}
 
 	if (offset < 0 || size + offset > self->size) {
-		MGLError * error = MGLError_FromFormat(TRACE, "out of range offset = %d or size = %d", offset, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("out of range offset = %d or size = %d", offset, size);
 		return 0;
 	}
 
 	if (!self->ptr) {
-		MGLError * error = MGLError_FromFormat(TRACE, "access objet is not open");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("access objet is not open");
 		return 0;
 	}
 

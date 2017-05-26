@@ -35,8 +35,7 @@ void MGLVertexArray_tp_dealloc(MGLVertexArray * self) {
 }
 
 int MGLVertexArray_tp_init(MGLVertexArray * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.VertexArray manually");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot create mgl.VertexArray manually");
 	return -1;
 }
 
@@ -62,8 +61,7 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 
 	if (vertices < 0) {
 		if (self->num_vertices < 0) {
-			MGLError * error = MGLError_FromFormat(TRACE, "cannot detect the number of vertices");
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("cannot detect the number of vertices");
 			return 0;
 		}
 
@@ -73,8 +71,7 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 	MGLPrimitive * gs_input = self->program->geometry_input;
 
 	if (gs_input && gs_input->primitive != mode->geometry_primitive) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the render mode is not compatible with the geometry_input");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the render mode is not compatible with the geometry_input");
 		return 0;
 	}
 
@@ -117,15 +114,13 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	}
 
 	if (!self->program->num_varyings) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the program has no varyings");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the program has no varyings");
 		return 0;
 	}
 
 	if (vertices < 0) {
 		if (self->num_vertices < 0) {
-			MGLError * error = MGLError_FromFormat(TRACE, "cannot detect the number of vertices");
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("cannot detect the number of vertices");
 			return 0;
 		}
 
@@ -135,8 +130,7 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	MGLPrimitive * gs_input = self->program->geometry_input;
 
 	if (gs_input && gs_input->primitive != mode->geometry_primitive) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the render mode is not compatible with the geometry_input");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the render mode is not compatible with the geometry_input");
 		return 0;
 	}
 
@@ -242,8 +236,7 @@ PyObject * MGLVertexArray_get_index_buffer(MGLVertexArray * self, void * closure
 
 int MGLVertexArray_set_index_buffer(MGLVertexArray * self, PyObject * value, void * closure) {
 	if (Py_TYPE(value) != &MGLBuffer_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the index_buffer must be a Buffer not %s", Py_TYPE(value)->tp_name);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the index_buffer must be a Buffer not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -263,8 +256,7 @@ int MGLVertexArray_set_vertices(MGLVertexArray * self, PyObject * value, void * 
 	int vertices = PyLong_AsUnsignedLong(value);
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "invalid value for vertices");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("invalid value for vertices");
 		return -1;
 	}
 
@@ -275,8 +267,7 @@ int MGLVertexArray_set_vertices(MGLVertexArray * self, PyObject * value, void * 
 
 int MGLVertexArray_set_subroutines(MGLVertexArray * self, PyObject * value, void * closure) {
 	if (PyTuple_GET_SIZE(value) != self->num_subroutine_uniform_locations) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the number of subroutines is %d not %d", self->num_subroutine_uniform_locations, PyTuple_GET_SIZE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the number of subroutines is %d not %d", self->num_subroutine_uniform_locations, PyTuple_GET_SIZE(value));
 		return -1;
 	}
 
@@ -287,8 +278,7 @@ int MGLVertexArray_set_subroutines(MGLVertexArray * self, PyObject * value, void
 		} else {
 			PyObject * int_cast = PyNumber_Long(obj);
 			if (!int_cast) {
-				MGLError * error = MGLError_FromFormat(TRACE, "invalid values in subroutines");
-				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+				MGLError_Set("invalid values in subroutines");
 				return -1;
 			}
 			self->subroutine_uniform_locations[i] = PyLong_AsUnsignedLong(int_cast);
@@ -297,8 +287,7 @@ int MGLVertexArray_set_subroutines(MGLVertexArray * self, PyObject * value, void
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "invalid values in subroutines");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("invalid values in subroutines");
 		return -1;
 	}
 

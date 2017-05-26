@@ -26,8 +26,7 @@ void MGLTexture_tp_dealloc(MGLTexture * self) {
 }
 
 int MGLTexture_tp_init(MGLTexture * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.Texture manually");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot create mgl.Texture manually");
 	return -1;
 }
 
@@ -47,8 +46,7 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 	}
 
 	if (self->samples) {
-		MGLError * error = MGLError_FromFormat(TRACE, "multisample textures cannot be written directly");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("multisample textures cannot be written directly");
 		return 0;
 	}
 
@@ -61,8 +59,7 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 
 	if (viewport != Py_None) {
 		if (Py_TYPE(viewport) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
 			return 0;
 		}
 
@@ -80,15 +77,13 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 
 		} else {
 
-			MGLError * error = MGLError_FromFormat(TRACE, "the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
 			return 0;
 
 		}
 
 		if (PyErr_Occurred()) {
-			MGLError * error = MGLError_FromFormat(TRACE, "wrong values in the viewport");
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("wrong values in the viewport");
 			return 0;
 		}
 
@@ -99,8 +94,7 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 	PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
 
 	if (buffer_view.len != expected_size) {
-		MGLError * error = MGLError_FromFormat(TRACE, "data size mismatch %d != %d", buffer_view.len, expected_size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("data size mismatch %d != %d", buffer_view.len, expected_size);
 		if (data != Py_None) {
 			PyBuffer_Release(&buffer_view);
 		}

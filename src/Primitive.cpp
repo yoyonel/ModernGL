@@ -25,8 +25,7 @@ void MGLPrimitive_tp_dealloc(MGLPrimitive * self) {
 }
 
 int MGLPrimitive_tp_init(MGLPrimitive * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.Primitive manually");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot create mgl.Primitive manually");
 	return -1;
 }
 
@@ -36,8 +35,7 @@ PyMethodDef MGLPrimitive_tp_methods[] = {
 
 int MGLPrimitive_set_wrapper(MGLPrimitive * self, PyObject * value, void * closure) {
 	// if (self->wrapper) {
-	// 	MGLError * error = MGLError_FromFormat(TRACE, "wrapper already set");
-	// 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	// 	MGLError_Set("wrapper already set");
 	// 	return -1;
 	// }
 

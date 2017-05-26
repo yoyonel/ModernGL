@@ -34,8 +34,7 @@ void MGLProgram_tp_dealloc(MGLProgram * self) {
 }
 
 int MGLProgram_tp_init(MGLProgram * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.Program manually");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot create mgl.Program manually");
 	return -1;
 }
 
@@ -298,8 +297,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	int obj = gl.CreateProgram();
 
 	if (!obj) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot create program");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot create program");
 		return;
 	}
 
@@ -346,8 +344,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		gl.DeleteProgram(obj);
 
-		MGLError * error = MGLError_FromFormat(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("%s\n\n%s\n%s\n%s\n", message, title, underline, log);
 
 		delete[] log;
 		return;

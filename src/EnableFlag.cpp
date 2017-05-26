@@ -25,8 +25,7 @@ void MGLEnableFlag_tp_dealloc(MGLEnableFlag * self) {
 }
 
 int MGLEnableFlag_tp_init(MGLEnableFlag * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.EnableFlag manually");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot create mgl.EnableFlag manually");
 	return -1;
 }
 

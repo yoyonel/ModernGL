@@ -35,8 +35,7 @@ void MGLError_tp_dealloc(MGLError * self) {
 }
 
 int MGLError_tp_init(MGLError * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.Error manually");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot create mgl.Error manually");
 	return -1;
 }
 
@@ -113,13 +112,13 @@ PyTypeObject MGLError_Type = {
 };
 
 void MGLError_SetTrace(const char * filename, const char * function, int line, const char * format, ...) {
-	MGLError * self = (MGLError *)MGLError_tp_new(&MGLError_Type, 0, 0);
+	MGLError * error = (MGLError *)MGLError_tp_new(&MGLError_Type, 0, 0);
 
 	va_list va_args;
 	va_start(va_args, format);
-	self->args = PyTuple_New(1);
+	error->args = PyTuple_New(1);
 	PyObject * message = PyUnicode_FromFormatV(format, va_args);
-	PyTuple_SET_ITEM(self->args, 0, message);
+	PyTuple_SET_ITEM(error->args, 0, message);
 	va_end(va_args);
 
 	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);

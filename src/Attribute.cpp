@@ -26,8 +26,7 @@ void MGLAttribute_tp_dealloc(MGLAttribute * self) {
 }
 
 int MGLAttribute_tp_init(MGLAttribute * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.Attribute manually");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot create mgl.Attribute manually");
 	return -1;
 }
 

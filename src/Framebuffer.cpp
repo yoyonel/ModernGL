@@ -28,8 +28,7 @@ void MGLFramebuffer_tp_dealloc(MGLFramebuffer * self) {
 }
 
 int MGLFramebuffer_tp_init(MGLFramebuffer * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.Framebuffer manually");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot create mgl.Framebuffer manually");
 	return -1;
 }
 
@@ -63,8 +62,7 @@ PyObject * MGLFramebuffer_clear(MGLFramebuffer * self, PyObject * args) {
 
 	if (viewport != Py_None) {
 		if (Py_TYPE(viewport) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
 			return 0;
 		}
 
@@ -82,15 +80,13 @@ PyObject * MGLFramebuffer_clear(MGLFramebuffer * self, PyObject * args) {
 
 		} else {
 
-			MGLError * error = MGLError_FromFormat(TRACE, "the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
 			return 0;
 
 		}
 
 		if (PyErr_Occurred()) {
-			MGLError * error = MGLError_FromFormat(TRACE, "wrong values in the viewport");
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("wrong values in the viewport");
 			return 0;
 		}
 
@@ -143,8 +139,7 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 
 	if (viewport != Py_None) {
 		if (Py_TYPE(viewport) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
 			return 0;
 		}
 
@@ -162,15 +157,13 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 
 		} else {
 
-			MGLError * error = MGLError_FromFormat(TRACE, "the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
 			return 0;
 
 		}
 
 		if (PyErr_Occurred()) {
-			MGLError * error = MGLError_FromFormat(TRACE, "wrong values in the viewport");
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("wrong values in the viewport");
 			return 0;
 		}
 

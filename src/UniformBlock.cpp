@@ -25,8 +25,7 @@ void MGLUniformBlock_tp_dealloc(MGLUniformBlock * self) {
 }
 
 int MGLUniformBlock_tp_init(MGLUniformBlock * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.UniformBlock manually");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot create mgl.UniformBlock manually");
 	return -1;
 }
 
@@ -57,8 +56,7 @@ int MGLUniformBlock_set_binding(MGLUniformBlock * self, PyObject * value, void *
 	int binding = PyLong_AsUnsignedLong(value);
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "invalid value for binding");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("invalid value for binding");
 		return -1;
 	}
 

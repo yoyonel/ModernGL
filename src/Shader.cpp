@@ -50,8 +50,7 @@ void MGLShader_tp_dealloc(MGLShader * self) {
 }
 
 int MGLShader_tp_init(MGLShader * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.Shader manually");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot create mgl.Shader manually");
 	return -1;
 }
 
@@ -170,8 +169,7 @@ void MGLShader_Compile(MGLShader * shader) {
 	int obj = gl.CreateShader(shader->shader_type);
 
 	if (!obj) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot create shader");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot create shader");
 		return;
 	}
 
@@ -194,8 +192,7 @@ void MGLShader_Compile(MGLShader * shader) {
 
 		gl.DeleteShader(obj);
 
-		MGLError * error = MGLError_FromFormat(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("%s\n\n%s\n%s\n%s\n", message, title, underline, log);
 
 		delete[] log;
 		return;

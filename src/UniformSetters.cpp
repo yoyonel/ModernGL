@@ -3,8 +3,7 @@
 #include "Error.hpp"
 
 int MGLUniform_invalid_setter(MGLUniform * self, PyObject * value) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot detect uniform type");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot detect uniform type");
 	return -1;
 }
 
@@ -16,8 +15,7 @@ int MGLUniform_bool_value_setter(MGLUniform * self, PyObject * value) {
 	} else if (value == Py_False) {
 		c_value = 0;
 	} else {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a bool not %s", Py_TYPE(value)->tp_name);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a bool not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -30,16 +28,14 @@ int MGLUniform_bvec2_value_setter(MGLUniform * self, PyObject * value) {
 	int c_values[2];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 2) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 2 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 2 not %d", size);
 		return -1;
 	}
 
@@ -51,8 +47,7 @@ int MGLUniform_bvec2_value_setter(MGLUniform * self, PyObject * value) {
 		} else if (v == Py_False) {
 			c_values[i] = 0;
 		} else {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a bool not %s", i, Py_TYPE(value)->tp_name);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a bool not %s", i, Py_TYPE(value)->tp_name);
 			return -1;
 		}
 	}
@@ -66,16 +61,14 @@ int MGLUniform_bvec3_value_setter(MGLUniform * self, PyObject * value) {
 	int c_values[3];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 3) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 3 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 3 not %d", size);
 		return -1;
 	}
 
@@ -87,8 +80,7 @@ int MGLUniform_bvec3_value_setter(MGLUniform * self, PyObject * value) {
 		} else if (v == Py_False) {
 			c_values[i] = 0;
 		} else {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a bool not %s", i, Py_TYPE(value)->tp_name);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a bool not %s", i, Py_TYPE(value)->tp_name);
 			return -1;
 		}
 	}
@@ -102,16 +94,14 @@ int MGLUniform_bvec4_value_setter(MGLUniform * self, PyObject * value) {
 	int c_values[4];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 4 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 4 not %d", size);
 		return -1;
 	}
 
@@ -123,8 +113,7 @@ int MGLUniform_bvec4_value_setter(MGLUniform * self, PyObject * value) {
 		} else if (v == Py_False) {
 			c_values[i] = 0;
 		} else {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a bool not %s", i, Py_TYPE(value)->tp_name);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a bool not %s", i, Py_TYPE(value)->tp_name);
 			return -1;
 		}
 	}
@@ -138,8 +127,7 @@ int MGLUniform_int_value_setter(MGLUniform * self, PyObject * value) {
 	int c_value = PyLong_AsLong(value);
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to int");
 		return -1;
 	}
 
@@ -152,16 +140,14 @@ int MGLUniform_ivec2_value_setter(MGLUniform * self, PyObject * value) {
 	int c_values[2];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 2) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 2 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 2 not %d", size);
 		return -1;
 	}
 
@@ -170,8 +156,7 @@ int MGLUniform_ivec2_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to int");
 		return -1;
 	}
 
@@ -184,16 +169,14 @@ int MGLUniform_ivec3_value_setter(MGLUniform * self, PyObject * value) {
 	int c_values[3];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 3) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 3 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 3 not %d", size);
 		return -1;
 	}
 
@@ -202,8 +185,7 @@ int MGLUniform_ivec3_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to int");
 		return -1;
 	}
 
@@ -216,16 +198,14 @@ int MGLUniform_ivec4_value_setter(MGLUniform * self, PyObject * value) {
 	int c_values[4];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 4 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 4 not %d", size);
 		return -1;
 	}
 
@@ -234,8 +214,7 @@ int MGLUniform_ivec4_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to int");
 		return -1;
 	}
 
@@ -248,8 +227,7 @@ int MGLUniform_uint_value_setter(MGLUniform * self, PyObject * value) {
 	unsigned c_value = PyLong_AsUnsignedLong(value);
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be an unsigned int not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be an unsigned int not %s", Py_TYPE(value));
 		return -1;
 	}
 
@@ -262,16 +240,14 @@ int MGLUniform_uvec2_value_setter(MGLUniform * self, PyObject * value) {
 	unsigned c_values[2];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 2) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 2 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 2 not %d", size);
 		return -1;
 	}
 
@@ -280,8 +256,7 @@ int MGLUniform_uvec2_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to unsigned int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to unsigned int");
 		return -1;
 	}
 
@@ -294,16 +269,14 @@ int MGLUniform_uvec3_value_setter(MGLUniform * self, PyObject * value) {
 	unsigned c_values[3];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 3) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 3 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 3 not %d", size);
 		return -1;
 	}
 
@@ -312,8 +285,7 @@ int MGLUniform_uvec3_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to unsigned int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to unsigned int");
 		return -1;
 	}
 
@@ -326,16 +298,14 @@ int MGLUniform_uvec4_value_setter(MGLUniform * self, PyObject * value) {
 	unsigned c_values[4];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 4 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 4 not %d", size);
 		return -1;
 	}
 
@@ -344,8 +314,7 @@ int MGLUniform_uvec4_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to unsigned int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to unsigned int");
 		return -1;
 	}
 
@@ -358,8 +327,7 @@ int MGLUniform_float_value_setter(MGLUniform * self, PyObject * value) {
 	float c_value = (float)PyFloat_AsDouble(value);
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		return -1;
 	}
 
@@ -372,16 +340,14 @@ int MGLUniform_vec2_value_setter(MGLUniform * self, PyObject * value) {
 	float c_values[2];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 2) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 2 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 2 not %d", size);
 		return -1;
 	}
 
@@ -390,8 +356,7 @@ int MGLUniform_vec2_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		return -1;
 	}
 
@@ -404,16 +369,14 @@ int MGLUniform_vec3_value_setter(MGLUniform * self, PyObject * value) {
 	float c_values[3];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 3) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 3 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 3 not %d", size);
 		return -1;
 	}
 
@@ -422,8 +385,7 @@ int MGLUniform_vec3_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		return -1;
 	}
 
@@ -436,16 +398,14 @@ int MGLUniform_vec4_value_setter(MGLUniform * self, PyObject * value) {
 	float c_values[4];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 4 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 4 not %d", size);
 		return -1;
 	}
 
@@ -454,8 +414,7 @@ int MGLUniform_vec4_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		return -1;
 	}
 
@@ -468,8 +427,7 @@ int MGLUniform_double_value_setter(MGLUniform * self, PyObject * value) {
 	double c_value = PyFloat_AsDouble(value);
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		return -1;
 	}
 
@@ -482,16 +440,14 @@ int MGLUniform_dvec2_value_setter(MGLUniform * self, PyObject * value) {
 	double c_values[2];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 2) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 2 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 2 not %d", size);
 		return -1;
 	}
 
@@ -500,8 +456,7 @@ int MGLUniform_dvec2_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		return -1;
 	}
 
@@ -514,16 +469,14 @@ int MGLUniform_dvec3_value_setter(MGLUniform * self, PyObject * value) {
 	double c_values[3];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 3) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 3 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 3 not %d", size);
 		return -1;
 	}
 
@@ -532,8 +485,7 @@ int MGLUniform_dvec3_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		return -1;
 	}
 
@@ -546,16 +498,14 @@ int MGLUniform_dvec4_value_setter(MGLUniform * self, PyObject * value) {
 	double c_values[4];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 4 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 4 not %d", size);
 		return -1;
 	}
 
@@ -564,8 +514,7 @@ int MGLUniform_dvec4_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		return -1;
 	}
 
@@ -578,8 +527,7 @@ int MGLUniform_sampler_value_setter(MGLUniform * self, PyObject * value) {
 	int c_value = PyLong_AsLong(value);
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to int");
 		return -1;
 	}
 
@@ -592,16 +540,14 @@ int MGLUniform_float_matrix_2x2_value_setter(MGLUniform * self, PyObject * value
 	float c_values[4];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 4 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 4 not %d", size);
 		return -1;
 	}
 
@@ -610,8 +556,7 @@ int MGLUniform_float_matrix_2x2_value_setter(MGLUniform * self, PyObject * value
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		return -1;
 	}
 
@@ -624,16 +569,14 @@ int MGLUniform_float_matrix_2x3_value_setter(MGLUniform * self, PyObject * value
 	float c_values[6];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 6) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 6 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 6 not %d", size);
 		return -1;
 	}
 
@@ -642,8 +585,7 @@ int MGLUniform_float_matrix_2x3_value_setter(MGLUniform * self, PyObject * value
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		return -1;
 	}
 
@@ -656,16 +598,14 @@ int MGLUniform_float_matrix_2x4_value_setter(MGLUniform * self, PyObject * value
 	float c_values[8];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 8) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 8 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 8 not %d", size);
 		return -1;
 	}
 
@@ -674,8 +614,7 @@ int MGLUniform_float_matrix_2x4_value_setter(MGLUniform * self, PyObject * value
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		return -1;
 	}
 
@@ -688,16 +627,14 @@ int MGLUniform_float_matrix_3x2_value_setter(MGLUniform * self, PyObject * value
 	float c_values[6];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 6) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 6 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 6 not %d", size);
 		return -1;
 	}
 
@@ -706,8 +643,7 @@ int MGLUniform_float_matrix_3x2_value_setter(MGLUniform * self, PyObject * value
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		return -1;
 	}
 
@@ -720,16 +656,14 @@ int MGLUniform_float_matrix_3x3_value_setter(MGLUniform * self, PyObject * value
 	float c_values[9];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 9) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 9 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 9 not %d", size);
 		return -1;
 	}
 
@@ -738,8 +672,7 @@ int MGLUniform_float_matrix_3x3_value_setter(MGLUniform * self, PyObject * value
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		return -1;
 	}
 
@@ -752,16 +685,14 @@ int MGLUniform_float_matrix_3x4_value_setter(MGLUniform * self, PyObject * value
 	float c_values[12];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 12) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 12 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 12 not %d", size);
 		return -1;
 	}
 
@@ -770,8 +701,7 @@ int MGLUniform_float_matrix_3x4_value_setter(MGLUniform * self, PyObject * value
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		return -1;
 	}
 
@@ -784,16 +714,14 @@ int MGLUniform_float_matrix_4x2_value_setter(MGLUniform * self, PyObject * value
 	float c_values[8];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 8) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 8 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 8 not %d", size);
 		return -1;
 	}
 
@@ -802,8 +730,7 @@ int MGLUniform_float_matrix_4x2_value_setter(MGLUniform * self, PyObject * value
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		return -1;
 	}
 
@@ -816,16 +743,14 @@ int MGLUniform_float_matrix_4x3_value_setter(MGLUniform * self, PyObject * value
 	float c_values[12];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 12) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 12 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 12 not %d", size);
 		return -1;
 	}
 
@@ -834,8 +759,7 @@ int MGLUniform_float_matrix_4x3_value_setter(MGLUniform * self, PyObject * value
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		return -1;
 	}
 
@@ -848,16 +772,14 @@ int MGLUniform_float_matrix_4x4_value_setter(MGLUniform * self, PyObject * value
 	float c_values[16];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 16) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 16 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 16 not %d", size);
 		return -1;
 	}
 
@@ -866,8 +788,7 @@ int MGLUniform_float_matrix_4x4_value_setter(MGLUniform * self, PyObject * value
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		return -1;
 	}
 
@@ -880,16 +801,14 @@ int MGLUniform_double_matrix_2x2_value_setter(MGLUniform * self, PyObject * valu
 	double c_values[4];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 4) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 4 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 4 not %d", size);
 		return -1;
 	}
 
@@ -898,8 +817,7 @@ int MGLUniform_double_matrix_2x2_value_setter(MGLUniform * self, PyObject * valu
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		return -1;
 	}
 
@@ -912,16 +830,14 @@ int MGLUniform_double_matrix_2x3_value_setter(MGLUniform * self, PyObject * valu
 	double c_values[6];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 6) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 6 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 6 not %d", size);
 		return -1;
 	}
 
@@ -930,8 +846,7 @@ int MGLUniform_double_matrix_2x3_value_setter(MGLUniform * self, PyObject * valu
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		return -1;
 	}
 
@@ -944,16 +859,14 @@ int MGLUniform_double_matrix_2x4_value_setter(MGLUniform * self, PyObject * valu
 	double c_values[8];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 8) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 8 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 8 not %d", size);
 		return -1;
 	}
 
@@ -962,8 +875,7 @@ int MGLUniform_double_matrix_2x4_value_setter(MGLUniform * self, PyObject * valu
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		return -1;
 	}
 
@@ -976,16 +888,14 @@ int MGLUniform_double_matrix_3x2_value_setter(MGLUniform * self, PyObject * valu
 	double c_values[6];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 6) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 6 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 6 not %d", size);
 		return -1;
 	}
 
@@ -994,8 +904,7 @@ int MGLUniform_double_matrix_3x2_value_setter(MGLUniform * self, PyObject * valu
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		return -1;
 	}
 
@@ -1008,16 +917,14 @@ int MGLUniform_double_matrix_3x3_value_setter(MGLUniform * self, PyObject * valu
 	double c_values[9];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 9) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 9 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 9 not %d", size);
 		return -1;
 	}
 
@@ -1026,8 +933,7 @@ int MGLUniform_double_matrix_3x3_value_setter(MGLUniform * self, PyObject * valu
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		return -1;
 	}
 
@@ -1040,16 +946,14 @@ int MGLUniform_double_matrix_3x4_value_setter(MGLUniform * self, PyObject * valu
 	double c_values[12];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 12) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 12 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 12 not %d", size);
 		return -1;
 	}
 
@@ -1058,8 +962,7 @@ int MGLUniform_double_matrix_3x4_value_setter(MGLUniform * self, PyObject * valu
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		return -1;
 	}
 
@@ -1072,16 +975,14 @@ int MGLUniform_double_matrix_4x2_value_setter(MGLUniform * self, PyObject * valu
 	double c_values[8];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 8) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 8 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 8 not %d", size);
 		return -1;
 	}
 
@@ -1090,8 +991,7 @@ int MGLUniform_double_matrix_4x2_value_setter(MGLUniform * self, PyObject * valu
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		return -1;
 	}
 
@@ -1104,16 +1004,14 @@ int MGLUniform_double_matrix_4x3_value_setter(MGLUniform * self, PyObject * valu
 	double c_values[12];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 12) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 12 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 12 not %d", size);
 		return -1;
 	}
 
@@ -1122,8 +1020,7 @@ int MGLUniform_double_matrix_4x3_value_setter(MGLUniform * self, PyObject * valu
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		return -1;
 	}
 
@@ -1136,16 +1033,14 @@ int MGLUniform_double_matrix_4x4_value_setter(MGLUniform * self, PyObject * valu
 	double c_values[16];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
 	if (size != 16) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a tuple of size 16 not %d", size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a tuple of size 16 not %d", size);
 		return -1;
 	}
 
@@ -1154,8 +1049,7 @@ int MGLUniform_double_matrix_4x4_value_setter(MGLUniform * self, PyObject * valu
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		return -1;
 	}
 
@@ -1167,16 +1061,14 @@ int MGLUniform_double_matrix_4x4_value_setter(MGLUniform * self, PyObject * valu
 int MGLUniform_bool_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1190,8 +1082,7 @@ int MGLUniform_bool_array_value_setter(MGLUniform * self, PyObject * value) {
 		} else if (v == Py_False) {
 			c_values[k] = 0;
 		} else {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a bool not %s", k, Py_TYPE(value)->tp_name);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a bool not %s", k, Py_TYPE(value)->tp_name);
 			delete[] c_values;
 			return -1;
 		}
@@ -1206,16 +1097,14 @@ int MGLUniform_bool_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_bvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1226,8 +1115,7 @@ int MGLUniform_bvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -1235,8 +1123,7 @@ int MGLUniform_bvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 2) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 2 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 2 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -1249,8 +1136,7 @@ int MGLUniform_bvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 			} else if (v == Py_False) {
 				c_values[cnt++] = 0;
 			} else {
-				MGLError * error = MGLError_FromFormat(TRACE, "value[%d][%d] must be a bool not %s", k, i, Py_TYPE(value)->tp_name);
-				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+				MGLError_Set("value[%d][%d] must be a bool not %s", k, i, Py_TYPE(value)->tp_name);
 				delete[] c_values;
 				return -1;
 			}
@@ -1266,16 +1152,14 @@ int MGLUniform_bvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_bvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1286,8 +1170,7 @@ int MGLUniform_bvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -1295,8 +1178,7 @@ int MGLUniform_bvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 3) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 3 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 3 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -1309,8 +1191,7 @@ int MGLUniform_bvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 			} else if (v == Py_False) {
 				c_values[cnt++] = 0;
 			} else {
-				MGLError * error = MGLError_FromFormat(TRACE, "value[%d][%d] must be a bool not %s", k, i, Py_TYPE(value)->tp_name);
-				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+				MGLError_Set("value[%d][%d] must be a bool not %s", k, i, Py_TYPE(value)->tp_name);
 				delete[] c_values;
 				return -1;
 			}
@@ -1326,16 +1207,14 @@ int MGLUniform_bvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_bvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1346,8 +1225,7 @@ int MGLUniform_bvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -1355,8 +1233,7 @@ int MGLUniform_bvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 4) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 4 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 4 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -1369,8 +1246,7 @@ int MGLUniform_bvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 			} else if (v == Py_False) {
 				c_values[cnt++] = 0;
 			} else {
-				MGLError * error = MGLError_FromFormat(TRACE, "value[%d][%d] must be a bool not %s", k, i, Py_TYPE(value)->tp_name);
-				PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+				MGLError_Set("value[%d][%d] must be a bool not %s", k, i, Py_TYPE(value)->tp_name);
 				delete[] c_values;
 				return -1;
 			}
@@ -1386,16 +1262,14 @@ int MGLUniform_bvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_int_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1406,8 +1280,7 @@ int MGLUniform_int_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to int");
 		delete[] c_values;
 		return -1;
 	}
@@ -1421,16 +1294,14 @@ int MGLUniform_int_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_ivec2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1441,8 +1312,7 @@ int MGLUniform_ivec2_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -1450,8 +1320,7 @@ int MGLUniform_ivec2_array_value_setter(MGLUniform * self, PyObject * value) {
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 2) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 2 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 2 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -1462,8 +1331,7 @@ int MGLUniform_ivec2_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to int");
 		delete[] c_values;
 		return -1;
 	}
@@ -1477,16 +1345,14 @@ int MGLUniform_ivec2_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_ivec3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1497,8 +1363,7 @@ int MGLUniform_ivec3_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -1506,8 +1371,7 @@ int MGLUniform_ivec3_array_value_setter(MGLUniform * self, PyObject * value) {
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 3) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 3 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 3 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -1518,8 +1382,7 @@ int MGLUniform_ivec3_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to int");
 		delete[] c_values;
 		return -1;
 	}
@@ -1533,16 +1396,14 @@ int MGLUniform_ivec3_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_ivec4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1553,8 +1414,7 @@ int MGLUniform_ivec4_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -1562,8 +1422,7 @@ int MGLUniform_ivec4_array_value_setter(MGLUniform * self, PyObject * value) {
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 4) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 4 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 4 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -1574,8 +1433,7 @@ int MGLUniform_ivec4_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to int");
 		delete[] c_values;
 		return -1;
 	}
@@ -1589,16 +1447,14 @@ int MGLUniform_ivec4_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_uint_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1609,8 +1465,7 @@ int MGLUniform_uint_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to unsigned int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to unsigned int");
 		delete[] c_values;
 		return -1;
 	}
@@ -1624,16 +1479,14 @@ int MGLUniform_uint_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_uvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1644,8 +1497,7 @@ int MGLUniform_uvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -1653,8 +1505,7 @@ int MGLUniform_uvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 2) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 2 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 2 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -1665,8 +1516,7 @@ int MGLUniform_uvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to unsigned int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to unsigned int");
 		delete[] c_values;
 		return -1;
 	}
@@ -1680,16 +1530,14 @@ int MGLUniform_uvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_uvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1700,8 +1548,7 @@ int MGLUniform_uvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -1709,8 +1556,7 @@ int MGLUniform_uvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 3) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 3 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 3 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -1721,8 +1567,7 @@ int MGLUniform_uvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to unsigned int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to unsigned int");
 		delete[] c_values;
 		return -1;
 	}
@@ -1736,16 +1581,14 @@ int MGLUniform_uvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_uvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1756,8 +1599,7 @@ int MGLUniform_uvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -1765,8 +1607,7 @@ int MGLUniform_uvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 4) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 4 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 4 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -1777,8 +1618,7 @@ int MGLUniform_uvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to unsigned int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to unsigned int");
 		delete[] c_values;
 		return -1;
 	}
@@ -1792,16 +1632,14 @@ int MGLUniform_uvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_float_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1812,8 +1650,7 @@ int MGLUniform_float_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		delete[] c_values;
 		return -1;
 	}
@@ -1827,16 +1664,14 @@ int MGLUniform_float_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_vec2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1847,8 +1682,7 @@ int MGLUniform_vec2_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -1856,8 +1690,7 @@ int MGLUniform_vec2_array_value_setter(MGLUniform * self, PyObject * value) {
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 2) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 2 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 2 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -1868,8 +1701,7 @@ int MGLUniform_vec2_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		delete[] c_values;
 		return -1;
 	}
@@ -1883,16 +1715,14 @@ int MGLUniform_vec2_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_vec3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1903,8 +1733,7 @@ int MGLUniform_vec3_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -1912,8 +1741,7 @@ int MGLUniform_vec3_array_value_setter(MGLUniform * self, PyObject * value) {
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 3) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 3 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 3 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -1924,8 +1752,7 @@ int MGLUniform_vec3_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		delete[] c_values;
 		return -1;
 	}
@@ -1939,16 +1766,14 @@ int MGLUniform_vec3_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_vec4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -1959,8 +1784,7 @@ int MGLUniform_vec4_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -1968,8 +1792,7 @@ int MGLUniform_vec4_array_value_setter(MGLUniform * self, PyObject * value) {
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 4) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 4 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 4 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -1980,8 +1803,7 @@ int MGLUniform_vec4_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		delete[] c_values;
 		return -1;
 	}
@@ -1995,16 +1817,14 @@ int MGLUniform_vec4_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_double_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2015,8 +1835,7 @@ int MGLUniform_double_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		delete[] c_values;
 		return -1;
 	}
@@ -2030,16 +1849,14 @@ int MGLUniform_double_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_dvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2050,8 +1867,7 @@ int MGLUniform_dvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2059,8 +1875,7 @@ int MGLUniform_dvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 2) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 2 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 2 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2071,8 +1886,7 @@ int MGLUniform_dvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		delete[] c_values;
 		return -1;
 	}
@@ -2086,16 +1900,14 @@ int MGLUniform_dvec2_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_dvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2106,8 +1918,7 @@ int MGLUniform_dvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2115,8 +1926,7 @@ int MGLUniform_dvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 3) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 3 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 3 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2127,8 +1937,7 @@ int MGLUniform_dvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		delete[] c_values;
 		return -1;
 	}
@@ -2142,16 +1951,14 @@ int MGLUniform_dvec3_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_dvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2162,8 +1969,7 @@ int MGLUniform_dvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2171,8 +1977,7 @@ int MGLUniform_dvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 4) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 4 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 4 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2183,8 +1988,7 @@ int MGLUniform_dvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		delete[] c_values;
 		return -1;
 	}
@@ -2198,16 +2002,14 @@ int MGLUniform_dvec4_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_sampler_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2218,8 +2020,7 @@ int MGLUniform_sampler_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to int");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to int");
 		delete[] c_values;
 		return -1;
 	}
@@ -2233,16 +2034,14 @@ int MGLUniform_sampler_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_float_matrix_2x2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2253,8 +2052,7 @@ int MGLUniform_float_matrix_2x2_array_value_setter(MGLUniform * self, PyObject *
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2262,8 +2060,7 @@ int MGLUniform_float_matrix_2x2_array_value_setter(MGLUniform * self, PyObject *
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 4) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 4 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 4 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2274,8 +2071,7 @@ int MGLUniform_float_matrix_2x2_array_value_setter(MGLUniform * self, PyObject *
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		delete[] c_values;
 		return -1;
 	}
@@ -2289,16 +2085,14 @@ int MGLUniform_float_matrix_2x2_array_value_setter(MGLUniform * self, PyObject *
 int MGLUniform_float_matrix_2x3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2309,8 +2103,7 @@ int MGLUniform_float_matrix_2x3_array_value_setter(MGLUniform * self, PyObject *
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2318,8 +2111,7 @@ int MGLUniform_float_matrix_2x3_array_value_setter(MGLUniform * self, PyObject *
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 6) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 6 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 6 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2330,8 +2122,7 @@ int MGLUniform_float_matrix_2x3_array_value_setter(MGLUniform * self, PyObject *
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		delete[] c_values;
 		return -1;
 	}
@@ -2345,16 +2136,14 @@ int MGLUniform_float_matrix_2x3_array_value_setter(MGLUniform * self, PyObject *
 int MGLUniform_float_matrix_2x4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2365,8 +2154,7 @@ int MGLUniform_float_matrix_2x4_array_value_setter(MGLUniform * self, PyObject *
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2374,8 +2162,7 @@ int MGLUniform_float_matrix_2x4_array_value_setter(MGLUniform * self, PyObject *
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 8) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 8 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 8 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2386,8 +2173,7 @@ int MGLUniform_float_matrix_2x4_array_value_setter(MGLUniform * self, PyObject *
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		delete[] c_values;
 		return -1;
 	}
@@ -2401,16 +2187,14 @@ int MGLUniform_float_matrix_2x4_array_value_setter(MGLUniform * self, PyObject *
 int MGLUniform_float_matrix_3x2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2421,8 +2205,7 @@ int MGLUniform_float_matrix_3x2_array_value_setter(MGLUniform * self, PyObject *
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2430,8 +2213,7 @@ int MGLUniform_float_matrix_3x2_array_value_setter(MGLUniform * self, PyObject *
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 6) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 6 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 6 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2442,8 +2224,7 @@ int MGLUniform_float_matrix_3x2_array_value_setter(MGLUniform * self, PyObject *
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		delete[] c_values;
 		return -1;
 	}
@@ -2457,16 +2238,14 @@ int MGLUniform_float_matrix_3x2_array_value_setter(MGLUniform * self, PyObject *
 int MGLUniform_float_matrix_3x3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2477,8 +2256,7 @@ int MGLUniform_float_matrix_3x3_array_value_setter(MGLUniform * self, PyObject *
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2486,8 +2264,7 @@ int MGLUniform_float_matrix_3x3_array_value_setter(MGLUniform * self, PyObject *
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 9) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 9 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 9 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2498,8 +2275,7 @@ int MGLUniform_float_matrix_3x3_array_value_setter(MGLUniform * self, PyObject *
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		delete[] c_values;
 		return -1;
 	}
@@ -2513,16 +2289,14 @@ int MGLUniform_float_matrix_3x3_array_value_setter(MGLUniform * self, PyObject *
 int MGLUniform_float_matrix_3x4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2533,8 +2307,7 @@ int MGLUniform_float_matrix_3x4_array_value_setter(MGLUniform * self, PyObject *
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2542,8 +2315,7 @@ int MGLUniform_float_matrix_3x4_array_value_setter(MGLUniform * self, PyObject *
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 12) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 12 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 12 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2554,8 +2326,7 @@ int MGLUniform_float_matrix_3x4_array_value_setter(MGLUniform * self, PyObject *
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		delete[] c_values;
 		return -1;
 	}
@@ -2569,16 +2340,14 @@ int MGLUniform_float_matrix_3x4_array_value_setter(MGLUniform * self, PyObject *
 int MGLUniform_float_matrix_4x2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2589,8 +2358,7 @@ int MGLUniform_float_matrix_4x2_array_value_setter(MGLUniform * self, PyObject *
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2598,8 +2366,7 @@ int MGLUniform_float_matrix_4x2_array_value_setter(MGLUniform * self, PyObject *
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 8) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 8 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 8 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2610,8 +2377,7 @@ int MGLUniform_float_matrix_4x2_array_value_setter(MGLUniform * self, PyObject *
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		delete[] c_values;
 		return -1;
 	}
@@ -2625,16 +2391,14 @@ int MGLUniform_float_matrix_4x2_array_value_setter(MGLUniform * self, PyObject *
 int MGLUniform_float_matrix_4x3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2645,8 +2409,7 @@ int MGLUniform_float_matrix_4x3_array_value_setter(MGLUniform * self, PyObject *
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2654,8 +2417,7 @@ int MGLUniform_float_matrix_4x3_array_value_setter(MGLUniform * self, PyObject *
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 12) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 12 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 12 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2666,8 +2428,7 @@ int MGLUniform_float_matrix_4x3_array_value_setter(MGLUniform * self, PyObject *
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		delete[] c_values;
 		return -1;
 	}
@@ -2681,16 +2442,14 @@ int MGLUniform_float_matrix_4x3_array_value_setter(MGLUniform * self, PyObject *
 int MGLUniform_float_matrix_4x4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2701,8 +2460,7 @@ int MGLUniform_float_matrix_4x4_array_value_setter(MGLUniform * self, PyObject *
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2710,8 +2468,7 @@ int MGLUniform_float_matrix_4x4_array_value_setter(MGLUniform * self, PyObject *
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 16) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 16 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 16 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2722,8 +2479,7 @@ int MGLUniform_float_matrix_4x4_array_value_setter(MGLUniform * self, PyObject *
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to float");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to float");
 		delete[] c_values;
 		return -1;
 	}
@@ -2737,16 +2493,14 @@ int MGLUniform_float_matrix_4x4_array_value_setter(MGLUniform * self, PyObject *
 int MGLUniform_double_matrix_2x2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2757,8 +2511,7 @@ int MGLUniform_double_matrix_2x2_array_value_setter(MGLUniform * self, PyObject 
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2766,8 +2519,7 @@ int MGLUniform_double_matrix_2x2_array_value_setter(MGLUniform * self, PyObject 
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 4) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 4 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 4 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2778,8 +2530,7 @@ int MGLUniform_double_matrix_2x2_array_value_setter(MGLUniform * self, PyObject 
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		delete[] c_values;
 		return -1;
 	}
@@ -2793,16 +2544,14 @@ int MGLUniform_double_matrix_2x2_array_value_setter(MGLUniform * self, PyObject 
 int MGLUniform_double_matrix_2x3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2813,8 +2562,7 @@ int MGLUniform_double_matrix_2x3_array_value_setter(MGLUniform * self, PyObject 
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2822,8 +2570,7 @@ int MGLUniform_double_matrix_2x3_array_value_setter(MGLUniform * self, PyObject 
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 6) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 6 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 6 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2834,8 +2581,7 @@ int MGLUniform_double_matrix_2x3_array_value_setter(MGLUniform * self, PyObject 
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		delete[] c_values;
 		return -1;
 	}
@@ -2849,16 +2595,14 @@ int MGLUniform_double_matrix_2x3_array_value_setter(MGLUniform * self, PyObject 
 int MGLUniform_double_matrix_2x4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2869,8 +2613,7 @@ int MGLUniform_double_matrix_2x4_array_value_setter(MGLUniform * self, PyObject 
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2878,8 +2621,7 @@ int MGLUniform_double_matrix_2x4_array_value_setter(MGLUniform * self, PyObject 
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 8) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 8 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 8 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2890,8 +2632,7 @@ int MGLUniform_double_matrix_2x4_array_value_setter(MGLUniform * self, PyObject 
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		delete[] c_values;
 		return -1;
 	}
@@ -2905,16 +2646,14 @@ int MGLUniform_double_matrix_2x4_array_value_setter(MGLUniform * self, PyObject 
 int MGLUniform_double_matrix_3x2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2925,8 +2664,7 @@ int MGLUniform_double_matrix_3x2_array_value_setter(MGLUniform * self, PyObject 
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2934,8 +2672,7 @@ int MGLUniform_double_matrix_3x2_array_value_setter(MGLUniform * self, PyObject 
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 6) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 6 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 6 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -2946,8 +2683,7 @@ int MGLUniform_double_matrix_3x2_array_value_setter(MGLUniform * self, PyObject 
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		delete[] c_values;
 		return -1;
 	}
@@ -2961,16 +2697,14 @@ int MGLUniform_double_matrix_3x2_array_value_setter(MGLUniform * self, PyObject 
 int MGLUniform_double_matrix_3x3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -2981,8 +2715,7 @@ int MGLUniform_double_matrix_3x3_array_value_setter(MGLUniform * self, PyObject 
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -2990,8 +2723,7 @@ int MGLUniform_double_matrix_3x3_array_value_setter(MGLUniform * self, PyObject 
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 9) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 9 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 9 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -3002,8 +2734,7 @@ int MGLUniform_double_matrix_3x3_array_value_setter(MGLUniform * self, PyObject 
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		delete[] c_values;
 		return -1;
 	}
@@ -3017,16 +2748,14 @@ int MGLUniform_double_matrix_3x3_array_value_setter(MGLUniform * self, PyObject 
 int MGLUniform_double_matrix_3x4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -3037,8 +2766,7 @@ int MGLUniform_double_matrix_3x4_array_value_setter(MGLUniform * self, PyObject 
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -3046,8 +2774,7 @@ int MGLUniform_double_matrix_3x4_array_value_setter(MGLUniform * self, PyObject 
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 12) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 12 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 12 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -3058,8 +2785,7 @@ int MGLUniform_double_matrix_3x4_array_value_setter(MGLUniform * self, PyObject 
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		delete[] c_values;
 		return -1;
 	}
@@ -3073,16 +2799,14 @@ int MGLUniform_double_matrix_3x4_array_value_setter(MGLUniform * self, PyObject 
 int MGLUniform_double_matrix_4x2_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -3093,8 +2817,7 @@ int MGLUniform_double_matrix_4x2_array_value_setter(MGLUniform * self, PyObject 
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -3102,8 +2825,7 @@ int MGLUniform_double_matrix_4x2_array_value_setter(MGLUniform * self, PyObject 
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 8) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 8 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 8 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -3114,8 +2836,7 @@ int MGLUniform_double_matrix_4x2_array_value_setter(MGLUniform * self, PyObject 
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		delete[] c_values;
 		return -1;
 	}
@@ -3129,16 +2850,14 @@ int MGLUniform_double_matrix_4x2_array_value_setter(MGLUniform * self, PyObject 
 int MGLUniform_double_matrix_4x3_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -3149,8 +2868,7 @@ int MGLUniform_double_matrix_4x3_array_value_setter(MGLUniform * self, PyObject 
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -3158,8 +2876,7 @@ int MGLUniform_double_matrix_4x3_array_value_setter(MGLUniform * self, PyObject 
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 12) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 12 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 12 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -3170,8 +2887,7 @@ int MGLUniform_double_matrix_4x3_array_value_setter(MGLUniform * self, PyObject 
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		delete[] c_values;
 		return -1;
 	}
@@ -3185,16 +2901,14 @@ int MGLUniform_double_matrix_4x3_array_value_setter(MGLUniform * self, PyObject 
 int MGLUniform_double_matrix_4x4_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list not %s", Py_TYPE(value));
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
 		return -1;
 	}
 
 	int size = (int)PyList_GET_SIZE(value);
 
 	if (size != self->array_length) {
-		MGLError * error = MGLError_FromFormat(TRACE, "the value must be a list of size %d not %d", self->array_length, size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("the value must be a list of size %d not %d", self->array_length, size);
 		return -1;
 	}
 
@@ -3205,8 +2919,7 @@ int MGLUniform_double_matrix_4x4_array_value_setter(MGLUniform * self, PyObject 
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple not %s", k, Py_TYPE(value));
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
 			delete[] c_values;
 			return -1;
 		}
@@ -3214,8 +2927,7 @@ int MGLUniform_double_matrix_4x4_array_value_setter(MGLUniform * self, PyObject 
 		int tuple_size = (int)PyTuple_GET_SIZE(tuple);
 
 		if (tuple_size != 16) {
-			MGLError * error = MGLError_FromFormat(TRACE, "value[%d] must be a tuple of size 16 not %d", k, tuple_size);
-			PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+			MGLError_Set("value[%d] must be a tuple of size 16 not %d", k, tuple_size);
 			delete[] c_values;
 			return -1;
 		}
@@ -3226,8 +2938,7 @@ int MGLUniform_double_matrix_4x4_array_value_setter(MGLUniform * self, PyObject 
 	}
 
 	if (PyErr_Occurred()) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot convert value to double");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot convert value to double");
 		delete[] c_values;
 		return -1;
 	}

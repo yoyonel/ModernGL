@@ -28,8 +28,7 @@ void MGLComputeShader_tp_dealloc(MGLComputeShader * self) {
 }
 
 int MGLComputeShader_tp_init(MGLComputeShader * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.ComputeShader manually");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot create mgl.ComputeShader manually");
 	return -1;
 }
 
@@ -166,8 +165,7 @@ void MGLComputeShader_Compile(MGLComputeShader * compute_shader) {
 	int shader_obj = gl.CreateShader(GL_COMPUTE_SHADER);
 
 	if (!shader_obj) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot create the shader object");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot create the shader object");
 		return;
 	}
 
@@ -190,8 +188,7 @@ void MGLComputeShader_Compile(MGLComputeShader * compute_shader) {
 
 		gl.DeleteShader(shader_obj);
 
-		MGLError * error = MGLError_FromFormat(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("%s\n\n%s\n%s\n%s\n", message, title, underline, log);
 
 		delete[] log;
 		return;
@@ -202,8 +199,7 @@ void MGLComputeShader_Compile(MGLComputeShader * compute_shader) {
 	int program_obj = gl.CreateProgram();
 
 	if (!program_obj) {
-		MGLError * error = MGLError_FromFormat(TRACE, "cannot create program");
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("cannot create program");
 		return;
 	}
 
@@ -226,8 +222,7 @@ void MGLComputeShader_Compile(MGLComputeShader * compute_shader) {
 
 		gl.DeleteProgram(program_obj);
 
-		MGLError * error = MGLError_FromFormat(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("%s\n\n%s\n%s\n%s\n", message, title, underline, log);
 
 		delete[] log;
 		return;

@@ -26,8 +26,7 @@ void MGLUniform_tp_dealloc(MGLUniform * self) {
 }
 
 int MGLUniform_tp_init(MGLUniform * self, PyObject * args, PyObject * kwargs) {
-	MGLError * error = MGLError_FromFormat(TRACE, "cannot create mgl.Uniform manually");
-	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+	MGLError_Set("cannot create mgl.Uniform manually");
 	return -1;
 }
 
@@ -57,8 +56,7 @@ PyObject * MGLUniform_write(MGLUniform * self, PyObject * args) {
 	}
 
 	if (size != self->array_length * self->element_size) {
-		MGLError * error = MGLError_FromFormat(TRACE, "data size mismatch %d != %d", size, self->array_length * self->element_size);
-		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		MGLError_Set("data size mismatch %d != %d", size, self->array_length * self->element_size);
 		return 0;
 	}
 
