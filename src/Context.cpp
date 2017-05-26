@@ -577,19 +577,6 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 	for (int i = 0; i < content_len; ++i) {
 		PyObject * tuple = PyTuple_GET_ITEM(content, i);
-
-		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError_Set("content[%d] must be a tuple not %s", i, Py_TYPE(tuple)->tp_name);
-			return 0;
-		}
-
-		int size = (int)PyTuple_GET_SIZE(tuple);
-
-		if (size != 3) {
-			MGLError_Set("content[%d] must be a tuple of size 3 not %d", i, size);
-			return 0;
-		}
-
 		PyObject * buffer = PyTuple_GET_ITEM(tuple, 0);
 		PyObject * format = PyTuple_GET_ITEM(tuple, 1);
 		PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
@@ -601,11 +588,6 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 		if (Py_TYPE(format) != &PyUnicode_Type) {
 			MGLError_Set("content[%d][1] must be a string not %s", i, Py_TYPE(format)->tp_name);
-			return 0;
-		}
-
-		if (Py_TYPE(attributes) != &PyTuple_Type) {
-			MGLError_Set("content[%d][2] must be a list not %s", i, Py_TYPE(attributes)->tp_name);
 			return 0;
 		}
 
