@@ -16,6 +16,9 @@ PyObject * MGLError_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwar
 		self->context = 0;
 		self->cause = 0;
 		self->suppress_context = 0;
+
+		self->filename = 0;
+		self->function = 0;
 	}
 
 	return (PyObject *)self;
@@ -26,8 +29,6 @@ void MGLError_tp_dealloc(MGLError * self) {
 	#ifdef MGL_VERBOSE
 	printf("MGLError_tp_dealloc %p\n", self);
 	#endif
-
-	Py_XDECREF(self->github);
 
 	PyTypeObject * super = Py_TYPE(self)->tp_base;
 	return super->tp_dealloc((PyObject *)self);
@@ -43,17 +44,30 @@ PyMethodDef MGLError_tp_methods[] = {
 	{0},
 };
 
-PyObject * MGLError_get_github(MGLError * self) {
-	if (self->github) {
-		Py_INCREF(self->github);
-		return self->github;
+PyObject * MGLError_get_filename(MGLError * self) {
+	if (self->filename) {
+		return PyUnicode_FromFormat("%s", self->filename);
 	} else {
 		Py_RETURN_NONE;
 	}
 }
 
+PyObject * MGLError_get_function(MGLError * self) {
+	if (self->function) {
+		return PyUnicode_FromFormat("%s", self->function);
+	} else {
+		Py_RETURN_NONE;
+	}
+}
+
+PyObject * MGLError_get_line(MGLError * self) {
+	return PyLong_FromLong(self->line);
+}
+
 PyGetSetDef MGLError_tp_getseters[] = {
-	{(char *)"github", (getter)MGLError_get_github, 0, 0, 0},
+	{(char *)"filename", (getter)MGLError_get_filename, 0, 0, 0},
+	{(char *)"function", (getter)MGLError_get_function, 0, 0, 0},
+	{(char *)"line", (getter)MGLError_get_line, 0, 0, 0},
 	{0},
 };
 
@@ -98,10 +112,7 @@ PyTypeObject MGLError_Type = {
 	MGLError_tp_new,                                        // tp_new
 };
 
-#define GITHUB_URL "https://github.com/cprogrammer1994/ModernGL/blob/master"
-#define GITHUB(path) GITHUB_URL path
-
-MGLError * MGLError_FromFormat(const char * filename, int line, const char * format, ...) {
+void MGLError_SetTrace(const char * filename, const char * function, int line, const char * format, ...) {
 	MGLError * self = (MGLError *)MGLError_tp_new(&MGLError_Type, 0, 0);
 
 	va_list va_args;
@@ -111,18 +122,18 @@ MGLError * MGLError_FromFormat(const char * filename, int line, const char * for
 	PyTuple_SET_ITEM(self->args, 0, message);
 	va_end(va_args);
 
-	self->github = PyUnicode_FromFormat(GITHUB("/src/%s#L%d"), filename + 4, line);
-
-	return self;
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 }
 
-MGLError * MGLError_FromMessage(const char * filename, int line, PyObject * message) {
-	MGLError * self = (MGLError *)MGLError_tp_new(&MGLError_Type, 0, 0);
+void MGLError_SetTrace(const char * filename, const char * function, int line, PyObject * message) {
+	MGLError * error = (MGLError *)MGLError_tp_new(&MGLError_Type, 0, 0);
 
-	self->args = PyTuple_New(1);
-	PyTuple_SET_ITEM(self->args, 0, message);
+	error->filename = filename;
+	error->function = function;
+	error->line = line;
 
-	self->github = PyUnicode_FromFormat(GITHUB("/src/%s#L%d"), filename + 4, line);
+	error->args = PyTuple_New(1);
+	PyTuple_SET_ITEM(error->args, 0, message);
 
-	return self;
+	PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
 }

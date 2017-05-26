@@ -2,15 +2,17 @@
 
 #include "Python.hpp"
 
-#define TRACE __FILE__, __LINE__
-
 struct MGLError {
 	PyException_HEAD
 
-	PyObject * github;
+	const char * filename;
+	const char * function;
+	int line;
 };
 
 extern PyTypeObject MGLError_Type;
 
-MGLError * MGLError_FromFormat(const char * filename, int line, const char * format, ...);
-MGLError * MGLError_FromMessage(const char * filename, int line, PyObject * message);
+void MGLError_SetTrace(const char * filename, const char * function, int line, const char * format, ...);
+void MGLError_SetTrace(const char * filename, const char * function, int line, PyObject * message);
+
+#define MGLError_Set(...) MGLError_SetTrace(__FILE__, __FUNCTION__, __LINE__, __VA_ARGS__)
