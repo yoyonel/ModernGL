@@ -5,19 +5,15 @@
 #include "Object.hpp"
 #include "GLMethods.hpp"
 
+#include "Attribute.hpp"
+
 struct MGLVertexArrayAttribute : public MGLObject {
 	const GLMethods * gl;
 	
-	void * gl_attrib_ptr_proc;
+	MGLAttribute * attribute;
 
 	int vertex_array_obj;
 	int location;
-	int type;
-
-	int scalar_type;
-	int row_length;
-
-	bool normalizable;
 };
 
 extern PyTypeObject MGLVertexArrayAttribute_Type;
