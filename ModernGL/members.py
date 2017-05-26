@@ -261,6 +261,7 @@ class UniformBlock:
     def binding(self, value):
         self.mglo.binding = value
 
+
 class UniformBlockMap:
     '''
         UniformBlockMap

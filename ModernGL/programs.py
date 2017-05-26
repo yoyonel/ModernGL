@@ -112,12 +112,12 @@ class ComputeShader:
 
         return self.mglo.glo
 
-    def run(self, x=1, y=1, z=1) -> None:
+    def run(self, group_x=1, group_y=1, group_z=1) -> None:
         '''
             Run the compute shader.
         '''
 
-        return self.mglo.run(x, y, z)
+        return self.mglo.run(group_x, group_y, group_z)
 
     def release(self):
         '''
