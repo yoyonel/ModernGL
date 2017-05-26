@@ -10,14 +10,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Exposing the OpenGL objects as `glo` attributes.
 - `__iter__` for program member maps.
 - `__repr__` for program members.
-- UniformBlock `binding` attribute.
-- UniformBlock `size` attribute.
+- UniformBlock `binding` and `size` attribute.
+- Framebuffer `width`, `height` and `samples` attribute.
 - Missing `release()` methods.
 - Subroutines.
 
 ### Removed
-- UniformBlock `array_size` attribute.
-- UniformBlock `location` attribute.
+- UniformBlock `array_size` and `location` attribute.
 - VertexArrayAttribute `default` attribute.
 
 ## Fixed

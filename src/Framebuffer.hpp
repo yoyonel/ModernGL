@@ -12,7 +12,7 @@ struct MGLFramebuffer : public MGLContextMember {
 
 	int width;
 	int height;
-	int samples; // TODO:
+	int samples;
 };
 
 extern PyTypeObject MGLFramebuffer_Type;

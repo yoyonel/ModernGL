@@ -193,6 +193,18 @@ PyMethodDef MGLFramebuffer_tp_methods[] = {
 	{0},
 };
 
+PyObject * MGLFramebuffer_get_width(MGLFramebuffer * self, void * closure) {
+	return PyLong_FromLong(self->width);
+}
+
+PyObject * MGLFramebuffer_get_height(MGLFramebuffer * self, void * closure) {
+	return PyLong_FromLong(self->height);
+}
+
+PyObject * MGLFramebuffer_get_samples(MGLFramebuffer * self, void * closure) {
+	return PyLong_FromLong(self->samples);
+}
+
 PyObject * MGLFramebuffer_get_color_attachments(MGLFramebuffer * self, void * closure) {
 	Py_INCREF(self->color_attachments);
 	return self->color_attachments;
@@ -213,6 +225,9 @@ PyObject * MGLFramebuffer_get_glo(MGLFramebuffer * self, void * closure) {
 }
 
 PyGetSetDef MGLFramebuffer_tp_getseters[] = {
+	{(char *)"width", (getter)MGLFramebuffer_get_width, 0, 0, 0},
+	{(char *)"height", (getter)MGLFramebuffer_get_height, 0, 0, 0},
+	{(char *)"samples", (getter)MGLFramebuffer_get_samples, 0, 0, 0},
 	{(char *)"color_attachments", (getter)MGLFramebuffer_get_color_attachments, 0, 0, 0},
 	{(char *)"depth_attachment", (getter)MGLFramebuffer_get_depth_attachment, 0, 0, 0},
 	{(char *)"context", (getter)MGLFramebuffer_get_context, 0, 0, 0},

@@ -28,6 +28,30 @@ class Framebuffer:
         return '<Framebuffer: %d>' % self.glo
 
     @property
+    def width(self) -> int:
+        '''
+            int: The width of the Framebuffer.
+        '''
+
+        return self.mglo.width
+
+    @property
+    def height(self) -> int:
+        '''
+            int: The height of the Framebuffer.
+        '''
+
+        return self.mglo.height
+
+    @property
+    def samples(self) -> int:
+        '''
+            int: The samples of the Framebuffer.
+        '''
+
+        return self.mglo.samples
+
+    @property
     def glo(self) -> int:
         '''
             int: The internal OpenGL object.

@@ -1090,6 +1090,7 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 
 	framebuffer->width = width;
 	framebuffer->height = height;
+	framebuffer->samples = samples;
 
 	Py_INCREF(self);
 	framebuffer->context = self;
