@@ -604,7 +604,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 			return 0;
 		}
 
-		if (i == 0 && format_info.per_instance) {
+		if (i == 0 && format_info.divisor) {
 			MGLError_Set("the first vertex attribute must not be a per instance attribute");
 			return 0;
 		}
@@ -706,7 +706,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 		int buf_vertices = buffer->size / format_info.size;
 
-		if (!format_info.per_instance && array->index_buffer == (MGLBuffer *)Py_None && (!i || array->num_vertices > buf_vertices)) {
+		if (!format_info.divisor && array->index_buffer == (MGLBuffer *)Py_None && (!i || array->num_vertices > buf_vertices)) {
 			array->num_vertices = buf_vertices;
 		}
 
@@ -735,9 +735,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 					((gl_attribute_ptr_proc)attribute->gl_attrib_ptr_proc)(location, attribute->row_length, attribute->scalar_type, format_info.size, ptr);
 				}
 
-				if (format_info.per_instance) {
-					gl.VertexAttribDivisor(location, 1);
-				}
+				gl.VertexAttribDivisor(location, format_info.divisor);
 
 				gl.EnableVertexAttribArray(location);
 

@@ -9,8 +9,8 @@ struct FormatNode {
 struct FormatInfo {
 	int nodes;
 	int size;
+	int divisor;
 	bool valid;
-	bool per_instance;
 };
 
 struct FormatIterator {

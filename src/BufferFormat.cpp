@@ -10,7 +10,7 @@ FormatInfo FormatIterator::info() {
 	info.nodes = 0;
 	info.size = 0;
 	info.valid = true;
-	info.per_instance = false;
+	info.divisor = 0;
 
 	FormatIterator it = FormatIterator(ptr);
 	while (FormatNode * node = it.next()) {
@@ -31,7 +31,11 @@ FormatInfo FormatIterator::info() {
 
 		switch (per_type) {
 			case 'i':
-				info.per_instance = true;
+				info.divisor = 1;
+				break;
+
+			case 'r':
+				info.divisor = 0x7fffffff; // TODO: check
 				break;
 
 			case 'v':
