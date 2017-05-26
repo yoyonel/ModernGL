@@ -35,7 +35,7 @@ FormatInfo FormatIterator::info() {
 				break;
 
 			case 'r':
-				info.divisor = 0x7fffffff; // TODO: check
+				info.divisor = 0x7fffffff;
 				break;
 
 			case 'v':
