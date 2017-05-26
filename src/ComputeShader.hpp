@@ -20,3 +20,4 @@ extern PyTypeObject MGLComputeShader_Type;
 
 MGLComputeShader * MGLComputeShader_New();
 void MGLComputeShader_Invalidate(MGLComputeShader * program);
+void MGLComputeShader_Compile(MGLComputeShader * compute_shader);

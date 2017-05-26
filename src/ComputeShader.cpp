@@ -2,6 +2,9 @@
 
 #include "Error.hpp"
 
+#include "Uniform.hpp"
+#include "UniformBlock.hpp"
+
 PyObject * MGLComputeShader_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLComputeShader * self = (MGLComputeShader *)type->tp_alloc(type, 0);
 
@@ -143,4 +146,161 @@ PyTypeObject MGLComputeShader_Type = {
 MGLComputeShader * MGLComputeShader_New() {
 	MGLComputeShader * self = (MGLComputeShader *)MGLComputeShader_tp_new(&MGLComputeShader_Type, 0, 0);
 	return self;
+}
+
+void clean_program_member_name(char * name, int & name_len) {
+	if (name_len && name[name_len - 1] == ']') {
+		name_len -= 1;
+		while (name_len && name[name_len] != '[') {
+			name_len -= 1;
+		}
+	}
+	name[name_len] = 0;
+}
+
+void MGLComputeShader_Compile(MGLComputeShader * compute_shader) {
+	const char * source_str = PyUnicode_AsUTF8(compute_shader->source);
+
+	const GLMethods & gl = compute_shader->context->gl;
+
+	int shader_obj = gl.CreateShader(GL_COMPUTE_SHADER);
+
+	if (!shader_obj) {
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create the shader object");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return;
+	}
+
+	gl.ShaderSource(shader_obj, 1, &source_str, 0);
+	gl.CompileShader(shader_obj);
+
+	int compiled = GL_FALSE;
+	gl.GetShaderiv(shader_obj, GL_COMPILE_STATUS, &compiled);
+
+	if (!compiled) {
+		const char * message = "GLSL Compiler failed";
+		const char * title = "ComputeShader";
+		const char * underline = "=============";
+
+		int log_len = 0;
+		gl.GetShaderiv(shader_obj, GL_INFO_LOG_LENGTH, &log_len);
+
+		char * log = new char[log_len];
+		gl.GetShaderInfoLog(shader_obj, log_len, &log_len, log);
+
+		gl.DeleteShader(shader_obj);
+
+		MGLError * error = MGLError_FromFormat(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+
+		delete[] log;
+		return;
+	}
+
+	compute_shader->shader_obj = shader_obj;
+
+	int program_obj = gl.CreateProgram();
+
+	if (!program_obj) {
+		MGLError * error = MGLError_FromFormat(TRACE, "cannot create program");
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+		return;
+	}
+
+	gl.AttachShader(program_obj, shader_obj);
+	gl.LinkProgram(program_obj);
+
+	int linked = GL_FALSE;
+	gl.GetProgramiv(program_obj, GL_LINK_STATUS, &linked);
+
+	if (!linked) {
+		const char * message = "GLSL Linker failed";
+		const char * title = "ComputeShader";
+		const char * underline = "=============";
+
+		int log_len = 0;
+		gl.GetProgramiv(program_obj, GL_INFO_LOG_LENGTH, &log_len);
+
+		char * log = new char[log_len];
+		gl.GetProgramInfoLog(program_obj, log_len, &log_len, log);
+
+		gl.DeleteProgram(program_obj);
+
+		MGLError * error = MGLError_FromFormat(TRACE, "%s\n\n%s\n%s\n%s\n", message, title, underline, log);
+		PyErr_SetObject((PyObject *)&MGLError_Type, (PyObject *)error);
+
+		delete[] log;
+		return;
+	}
+
+	compute_shader->program_obj = program_obj;
+
+	// Fill
+
+	PyObject * uniforms = PyDict_New();
+
+	int num_uniforms = 0;
+	gl.GetProgramiv(program_obj, GL_ACTIVE_UNIFORMS, &num_uniforms);
+
+	for (int i = 0; i < num_uniforms; ++i) {
+		MGLUniform * uniform = MGLUniform_New();
+
+		int name_len = 0;
+		char name[256];
+
+		gl.GetActiveUniform(program_obj, i, 256, &name_len, &uniform->array_length, (GLenum *)&uniform->type, name);
+
+		uniform->location = gl.GetUniformLocation(program_obj, name);
+
+		clean_program_member_name(name, name_len);
+
+		// Skip uniforms from uniform buffers
+
+		if (uniform->location < 0) {
+			Py_DECREF((PyObject *)uniform);
+			continue;
+		}
+
+		uniform->number = i;
+		uniform->program_obj = program_obj;
+		uniform->name = PyUnicode_FromStringAndSize(name, name_len);
+
+		MGLUniform_Complete(uniform, gl);
+
+		PyDict_SetItem(uniforms, uniform->name, (PyObject *)uniform);
+		Py_DECREF(uniform);
+	}
+
+	compute_shader->uniforms = uniforms;
+	Py_INCREF(uniforms);
+
+	PyObject * uniform_blocks = PyDict_New();
+
+	int num_uniform_blocks = 0;
+	gl.GetProgramiv(program_obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
+
+	for (int i = 0; i < num_uniform_blocks; ++i) {
+		MGLUniformBlock * uniform_block = MGLUniformBlock_New();
+
+		int name_len = 0;
+		char name[256];
+
+		gl.GetActiveUniformBlockName(program_obj, i, 256, &name_len, name);
+		uniform_block->index = gl.GetUniformBlockIndex(program_obj, name);
+
+		gl.GetActiveUniformBlockiv(program_obj, uniform_block->index, GL_UNIFORM_BLOCK_DATA_SIZE, &uniform_block->size);
+
+		clean_program_member_name(name, name_len);
+
+		uniform_block->program = program_obj;
+		uniform_block->name = PyUnicode_FromStringAndSize(name, name_len);
+
+		MGLUniformBlock_Complete(uniform_block, gl);
+
+		PyDict_SetItem(uniform_blocks, uniform_block->name, (PyObject *)uniform_block);
+		Py_DECREF(uniform_block);
+	}
+
+	compute_shader->uniform_blocks = uniform_blocks;
+	Py_INCREF(uniform_blocks);
 }

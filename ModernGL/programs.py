@@ -33,6 +33,77 @@ class ComputeShader:
         return '<ComputeShader: %d>' % self.glo
 
     @property
+    def source(self) -> str:
+        '''
+            The source code of the compute shader.
+        '''
+
+        return self.mglo.source
+
+    @property
+    def uniforms(self) -> UniformMap:
+        '''
+            :py:class:`UniformMap`: The uniforms of the program.
+            The return value is a dictinary like object.
+            It can be used to access :py:class:`Uniform` objects by name.
+
+            Examples:
+
+                Set the value of the uniforms::
+
+                    # uniform vec3 eye_pos;
+                    >>> program.uniforms['eye_pos'].value = (10.0, 20.0, 0.0)
+
+                    # uniform sampler2D my_textures[3];
+                    >>> program.uniforms['my_texture'].value = [0, 3, 2]
+
+                    # The values of `my_textures` will be:
+                    my_textures[0] = GL_TEXTURE0             # GL_TEXTURE0
+                    my_textures[1] = GL_TEXTURE0 + 3         # GL_TEXTURE3
+                    my_textures[2] = GL_TEXTURE0 + 2         # GL_TEXTURE2
+
+                Get information about the uniforms::
+
+                    >>> program.uniforms['eye_pos'].location
+                    0
+
+                    >>> program.uniforms['eye_pos'].dimension
+                    3
+
+                    >>> program.uniforms['eye_pos'].value
+                    (10.0, 20.0, 0.0)
+
+                    >>> program.uniforms['my_textures'].dimension
+                    1
+
+                    >>> program.uniforms['my_textures'].array_length
+                    3
+        '''
+
+        return UniformMap.new(self.mglo.uniforms)
+
+    @property
+    def uniform_blocks(self) -> UniformBlockMap:
+        '''
+            :py:class:`UniformBlockMap`: The uniform blocks of the program.
+            The return value is a dictinary like object.
+            It can be used to access :py:class:`UniformBlock` objects by name.
+
+            Examples:
+
+                Get the location of the uniform block::
+
+                    # uniform custom_material {
+                    #     ...
+                    # };
+
+                    >>> program.uniform_blocks['custom_material'].location
+                    16
+        '''
+
+        return UniformBlockMap.new(self.mglo.uniform_blocks)
+
+    @property
     def glo(self) -> int:
         '''
             int: The internal OpenGL object.
@@ -40,14 +111,6 @@ class ComputeShader:
         '''
 
         return self.mglo.glo
-
-    @property
-    def source(self) -> str:
-        '''
-            The source code of the compute shader.
-        '''
-
-        return self.mglo.source
 
     def run(self, x=1, y=1, z=1) -> None:
         '''
