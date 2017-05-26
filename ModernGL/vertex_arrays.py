@@ -72,6 +72,10 @@ class VertexArrayAttribute:
         '''
 
         return self.mglo.default
+    
+    @default.setter
+    def default(self, value):
+        self.mglo.default = value
 
     def bind(self, buffer, offset=0, stride=0, divisor=0) -> None:
         '''
