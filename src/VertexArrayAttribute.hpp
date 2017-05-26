@@ -2,16 +2,19 @@
 
 #include "Python.hpp"
 
-#include "VertexArrayMember.hpp"
+#include "Object.hpp"
+#include "GLMethods.hpp"
 
-struct MGLVertexArrayAttribute : public MGLVertexArrayMember {
-	int location;
-
-	int type;
+struct MGLVertexArrayAttribute : public MGLObject {
+	const GLMethods * gl;
 
 	void * gl_attrib_ptr_proc;
 	void * gl_attrib_getter_proc;
 	void * gl_attrib_setter_proc;
+
+	int vertex_array_obj;
+	int location;
+	int type;
 
 	int scalar_type;
 	int row_length;

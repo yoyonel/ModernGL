@@ -5,7 +5,6 @@
 #include "Object.hpp"
 
 struct MGLEnableFlag : public MGLObject {
-	const char * name;
 	int flag;
 };
 

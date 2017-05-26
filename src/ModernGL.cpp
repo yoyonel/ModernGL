@@ -429,22 +429,18 @@ bool MGL_InitializeModule(PyObject * module) {
 
 	{
 		MGL_BLEND = MGLEnableFlag_New();
-		MGL_BLEND->name = "BLEND";
 		MGL_BLEND->flag = GL_BLEND;
 		PyModule_AddObject(module, "BLEND", (PyObject *)MGL_BLEND);
 
 		MGL_DEPTH_TEST = MGLEnableFlag_New();
-		MGL_DEPTH_TEST->name = "DEPTH_TEST";
 		MGL_DEPTH_TEST->flag = GL_DEPTH_TEST;
 		PyModule_AddObject(module, "DEPTH_TEST", (PyObject *)MGL_DEPTH_TEST);
 
 		MGL_CULL_FACE = MGLEnableFlag_New();
-		MGL_CULL_FACE->name = "CULL_FACE";
 		MGL_CULL_FACE->flag = GL_CULL_FACE;
 		PyModule_AddObject(module, "CULL_FACE", (PyObject *)MGL_CULL_FACE);
 
 		MGL_MULTISAMPLE = MGLEnableFlag_New();
-		MGL_MULTISAMPLE->name = "MULTISAMPLE";
 		MGL_MULTISAMPLE->flag = GL_MULTISAMPLE;
 		PyModule_AddObject(module, "MULTISAMPLE", (PyObject *)MGL_MULTISAMPLE);
 	}

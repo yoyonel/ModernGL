@@ -2,11 +2,15 @@
 
 #include "Python.hpp"
 
-#include "Program.hpp"
+#include "Object.hpp"
+#include "GLMethods.hpp"
 
 struct MGLUniformBlock : public MGLObject {
-	MGLProgram * program;
+	const GLMethods * gl;
+
 	PyObject * name;
+
+	int program_obj;
 
 	int index;
 	int size;

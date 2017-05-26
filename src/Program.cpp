@@ -11,6 +11,8 @@
 #include "ProgramStage.hpp"
 #include "Varying.hpp"
 
+#include "InlineMethods.hpp"
+
 PyObject * MGLProgram_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLProgram * self = (MGLProgram *)type->tp_alloc(type, 0);
 
@@ -281,16 +283,6 @@ void MGLProgram_Invalidate(MGLProgram * program) {
 	Py_DECREF(program);
 }
 
-void clean_program_member_name(char * name, int & name_len) {
-	if (name_len && name[name_len - 1] == ']') {
-		name_len -= 1;
-		while (name_len && name[name_len] != '[') {
-			name_len -= 1;
-		}
-	}
-	name[name_len] = 0;
-}
-
 void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	const GLMethods & gl = program->context->gl;
 
@@ -409,7 +401,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		uniform->location = gl.GetUniformLocation(obj, name);
 
-		clean_program_member_name(name, name_len);
+		clean_glsl_name(name, name_len);
 
 		// Skip uniforms from uniform buffers
 
@@ -447,9 +439,10 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		gl.GetActiveUniformBlockiv(obj, uniform_block->index, GL_UNIFORM_BLOCK_DATA_SIZE, &uniform_block->size);
 
-		clean_program_member_name(name, name_len);
+		clean_glsl_name(name, name_len);
 
-		uniform_block->program = program;
+		uniform_block->gl = &gl;
+		uniform_block->program_obj = obj;
 		uniform_block->name = PyUnicode_FromStringAndSize(name, name_len);
 
 		MGLUniformBlock_Complete(uniform_block, gl);
@@ -476,7 +469,7 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 
 		attribute->location = gl.GetAttribLocation(obj, name);
 
-		clean_program_member_name(name, name_len);
+		clean_glsl_name(name, name_len);
 
 		attribute->number = i;
 		attribute->program_obj = obj;
@@ -504,7 +497,6 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		gl.GetTransformFeedbackVarying(obj, i, 256, &name_len, &varying->array_length, (GLenum *)&varying->type, name);
 
 		varying->number = i;
-		varying->program_obj = obj;
 		varying->name = PyUnicode_FromStringAndSize(name, name_len);
 
 		MGLVarying_Complete(varying, gl);

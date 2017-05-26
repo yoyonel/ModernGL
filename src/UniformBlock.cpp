@@ -48,7 +48,7 @@ PyObject * MGLUniformBlock_get_size(MGLUniformBlock * self, void * closure) {
 
 PyObject * MGLUniformBlock_get_binding(MGLUniformBlock * self, void * closure) {
 	int binding = 0;
-	self->program->context->gl.GetActiveUniformBlockiv(self->program->program_obj, self->index, GL_UNIFORM_BLOCK_BINDING, &binding);
+	self->gl->GetActiveUniformBlockiv(self->program_obj, self->index, GL_UNIFORM_BLOCK_BINDING, &binding);
 	return PyLong_FromLong(binding);
 }
 
@@ -60,7 +60,7 @@ int MGLUniformBlock_set_binding(MGLUniformBlock * self, PyObject * value, void *
 		return -1;
 	}
 
-	self->program->context->gl.UniformBlockBinding(self->program->program_obj, self->index, binding);
+	self->gl->UniformBlockBinding(self->program_obj, self->index, binding);
 	return 0;
 }
 

@@ -5,6 +5,8 @@
 #include "Uniform.hpp"
 #include "UniformBlock.hpp"
 
+#include "InlineMethods.hpp"
+
 PyObject * MGLComputeShader_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLComputeShader * self = (MGLComputeShader *)type->tp_alloc(type, 0);
 
@@ -147,16 +149,6 @@ MGLComputeShader * MGLComputeShader_New() {
 	return self;
 }
 
-// void clean_program_member_name(char * name, int & name_len) {
-// 	if (name_len && name[name_len - 1] == ']') {
-// 		name_len -= 1;
-// 		while (name_len && name[name_len] != '[') {
-// 			name_len -= 1;
-// 		}
-// 	}
-// 	name[name_len] = 0;
-// }
-
 void MGLComputeShader_Compile(MGLComputeShader * compute_shader) {
 	const char * source_str = PyUnicode_AsUTF8(compute_shader->source);
 
@@ -232,70 +224,71 @@ void MGLComputeShader_Compile(MGLComputeShader * compute_shader) {
 
 	// Fill
 
-	// PyObject * uniforms = PyDict_New();
+	PyObject * uniforms = PyDict_New();
 
-	// int num_uniforms = 0;
-	// gl.GetProgramiv(program_obj, GL_ACTIVE_UNIFORMS, &num_uniforms);
+	int num_uniforms = 0;
+	gl.GetProgramiv(program_obj, GL_ACTIVE_UNIFORMS, &num_uniforms);
 
-	// for (int i = 0; i < num_uniforms; ++i) {
-	// 	MGLUniform * uniform = MGLUniform_New();
+	for (int i = 0; i < num_uniforms; ++i) {
+		MGLUniform * uniform = MGLUniform_New();
 
-	// 	int name_len = 0;
-	// 	char name[256];
+		int name_len = 0;
+		char name[256];
 
-	// 	gl.GetActiveUniform(program_obj, i, 256, &name_len, &uniform->array_length, (GLenum *)&uniform->type, name);
+		gl.GetActiveUniform(program_obj, i, 256, &name_len, &uniform->array_length, (GLenum *)&uniform->type, name);
 
-	// 	uniform->location = gl.GetUniformLocation(program_obj, name);
+		uniform->location = gl.GetUniformLocation(program_obj, name);
 
-	// 	clean_program_member_name(name, name_len);
+		clean_glsl_name(name, name_len);
 
-	// 	// Skip uniforms from uniform buffers
+		// Skip uniforms from uniform buffers
 
-	// 	if (uniform->location < 0) {
-	// 		Py_DECREF((PyObject *)uniform);
-	// 		continue;
-	// 	}
+		if (uniform->location < 0) {
+			Py_DECREF((PyObject *)uniform);
+			continue;
+		}
 
-	// 	uniform->number = i;
-	// 	uniform->program_obj = program_obj;
-	// 	uniform->name = PyUnicode_FromStringAndSize(name, name_len);
+		uniform->number = i;
+		uniform->program_obj = program_obj;
+		uniform->name = PyUnicode_FromStringAndSize(name, name_len);
 
-	// 	MGLUniform_Complete(uniform, gl);
+		MGLUniform_Complete(uniform, gl);
 
-	// 	PyDict_SetItem(uniforms, uniform->name, (PyObject *)uniform);
-	// 	Py_DECREF(uniform);
-	// }
+		PyDict_SetItem(uniforms, uniform->name, (PyObject *)uniform);
+		Py_DECREF(uniform);
+	}
 
-	// compute_shader->uniforms = uniforms;
-	// Py_INCREF(uniforms);
+	compute_shader->uniforms = uniforms;
+	Py_INCREF(uniforms);
 
-	// PyObject * uniform_blocks = PyDict_New();
+	PyObject * uniform_blocks = PyDict_New();
 
-	// int num_uniform_blocks = 0;
-	// gl.GetProgramiv(program_obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
+	int num_uniform_blocks = 0;
+	gl.GetProgramiv(program_obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
 
-	// for (int i = 0; i < num_uniform_blocks; ++i) {
-	// 	MGLUniformBlock * uniform_block = MGLUniformBlock_New();
+	for (int i = 0; i < num_uniform_blocks; ++i) {
+		MGLUniformBlock * uniform_block = MGLUniformBlock_New();
 
-	// 	int name_len = 0;
-	// 	char name[256];
+		int name_len = 0;
+		char name[256];
 
-	// 	gl.GetActiveUniformBlockName(program_obj, i, 256, &name_len, name);
-	// 	uniform_block->index = gl.GetUniformBlockIndex(program_obj, name);
+		gl.GetActiveUniformBlockName(program_obj, i, 256, &name_len, name);
+		uniform_block->index = gl.GetUniformBlockIndex(program_obj, name);
 
-	// 	gl.GetActiveUniformBlockiv(program_obj, uniform_block->index, GL_UNIFORM_BLOCK_DATA_SIZE, &uniform_block->size);
+		gl.GetActiveUniformBlockiv(program_obj, uniform_block->index, GL_UNIFORM_BLOCK_DATA_SIZE, &uniform_block->size);
 
-	// 	clean_program_member_name(name, name_len);
+		clean_glsl_name(name, name_len);
 
-	// 	uniform_block->program = program_obj;
-	// 	uniform_block->name = PyUnicode_FromStringAndSize(name, name_len);
+		uniform_block->gl = &gl;
+		uniform_block->program_obj = program_obj;
+		uniform_block->name = PyUnicode_FromStringAndSize(name, name_len);
 
-	// 	MGLUniformBlock_Complete(uniform_block, gl);
+		MGLUniformBlock_Complete(uniform_block, gl);
 
-	// 	PyDict_SetItem(uniform_blocks, uniform_block->name, (PyObject *)uniform_block);
-	// 	Py_DECREF(uniform_block);
-	// }
+		PyDict_SetItem(uniform_blocks, uniform_block->name, (PyObject *)uniform_block);
+		Py_DECREF(uniform_block);
+	}
 
-	// compute_shader->uniform_blocks = uniform_blocks;
-	// Py_INCREF(uniform_blocks);
+	compute_shader->uniform_blocks = uniform_blocks;
+	Py_INCREF(uniform_blocks);
 }

@@ -2,13 +2,15 @@
 
 #include "Python.hpp"
 
-#include "ProgramMember.hpp"
-#include "Program.hpp"
+#include "Object.hpp"
+#include "GLMethods.hpp"
 
-struct MGLAttribute : public MGLProgramMember {
+struct MGLAttribute : public MGLObject {
 	PyObject * name;
 
 	void * gl_attrib_ptr_proc;
+
+	int program_obj;
 
 	int number;
 	int location;

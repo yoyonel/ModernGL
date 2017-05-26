@@ -2,8 +2,8 @@
 
 #include "Python.hpp"
 
-#include "ProgramMember.hpp"
-#include "Shader.hpp"
+#include "Object.hpp"
+#include "GLMethods.hpp"
 
 struct MGLProgramStage : public MGLObject {
 	PyObject * subroutines;

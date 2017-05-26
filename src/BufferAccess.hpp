@@ -2,10 +2,11 @@
 
 #include "Python.hpp"
 
-#include "Buffer.hpp"
+#include "Object.hpp"
+#include "GLMethods.hpp"
 
 struct MGLBufferAccess : public MGLObject {
-	MGLBuffer * buffer;
+	GLMethods * gl;
 
 	void * ptr;
 

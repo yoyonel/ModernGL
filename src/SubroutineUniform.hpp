@@ -2,9 +2,9 @@
 
 #include "Python.hpp"
 
-#include "ProgramStageMember.hpp"
+#include "Object.hpp"
 
-struct MGLSubroutineUniform : public MGLProgramStageMember {
+struct MGLSubroutineUniform : public MGLObject {
 	PyObject * name;
 	int location;
 };

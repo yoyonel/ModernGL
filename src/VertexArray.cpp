@@ -144,51 +144,51 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	gl.Enable(GL_RASTERIZER_DISCARD);
 	gl.BeginTransformFeedback(mode->primitive);
 
-	if (self->subroutine_uniform_locations) {
+	if (self->subroutines) {
 
-		unsigned * subroutine_uniform_locations = self->subroutine_uniform_locations;
+		unsigned * subroutines = self->subroutines;
 
-		if (self->num_vertex_shader_subroutine_uniform_locations) {
+		if (self->num_vertex_shader_subroutines) {
 			gl.UniformSubroutinesuiv(
 				GL_VERTEX_SHADER,
-				self->num_vertex_shader_subroutine_uniform_locations,
-				subroutine_uniform_locations
+				self->num_vertex_shader_subroutines,
+				subroutines
 			);
-			subroutine_uniform_locations += self->num_vertex_shader_subroutine_uniform_locations;
+			subroutines += self->num_vertex_shader_subroutines;
 		}
 
-		if (self->num_fragment_shader_subroutine_uniform_locations) {
+		if (self->num_fragment_shader_subroutines) {
 			gl.UniformSubroutinesuiv(
 				GL_FRAGMENT_SHADER,
-				self->num_fragment_shader_subroutine_uniform_locations,
-				subroutine_uniform_locations
+				self->num_fragment_shader_subroutines,
+				subroutines
 			);
-			subroutine_uniform_locations += self->num_fragment_shader_subroutine_uniform_locations;
+			subroutines += self->num_fragment_shader_subroutines;
 		}
 
-		if (self->num_geometry_shader_subroutine_uniform_locations) {
+		if (self->num_geometry_shader_subroutines) {
 			gl.UniformSubroutinesuiv(
 				GL_GEOMETRY_SHADER,
-				self->num_geometry_shader_subroutine_uniform_locations,
-				subroutine_uniform_locations
+				self->num_geometry_shader_subroutines,
+				subroutines
 			);
-			subroutine_uniform_locations += self->num_geometry_shader_subroutine_uniform_locations;
+			subroutines += self->num_geometry_shader_subroutines;
 		}
 
-		if (self->num_tess_evaluation_shader_subroutine_uniform_locations) {
+		if (self->num_tess_evaluation_shader_subroutines) {
 			gl.UniformSubroutinesuiv(
 				GL_TESS_EVALUATION_SHADER,
-				self->num_tess_evaluation_shader_subroutine_uniform_locations,
-				subroutine_uniform_locations
+				self->num_tess_evaluation_shader_subroutines,
+				subroutines
 			);
-			subroutine_uniform_locations += self->num_tess_evaluation_shader_subroutine_uniform_locations;
+			subroutines += self->num_tess_evaluation_shader_subroutines;
 		}
 
-		if (self->num_tess_control_shader_subroutine_uniform_locations) {
+		if (self->num_tess_control_shader_subroutines) {
 			gl.UniformSubroutinesuiv(
 				GL_TESS_CONTROL_SHADER,
-				self->num_tess_control_shader_subroutine_uniform_locations,
-				subroutine_uniform_locations
+				self->num_tess_control_shader_subroutines,
+				subroutines
 			);
 		}
 	}
@@ -266,22 +266,22 @@ int MGLVertexArray_set_vertices(MGLVertexArray * self, PyObject * value, void * 
 }
 
 int MGLVertexArray_set_subroutines(MGLVertexArray * self, PyObject * value, void * closure) {
-	if (PyTuple_GET_SIZE(value) != self->num_subroutine_uniform_locations) {
-		MGLError_Set("the number of subroutines is %d not %d", self->num_subroutine_uniform_locations, PyTuple_GET_SIZE(value));
+	if (PyTuple_GET_SIZE(value) != self->num_subroutines) {
+		MGLError_Set("the number of subroutines is %d not %d", self->num_subroutines, PyTuple_GET_SIZE(value));
 		return -1;
 	}
 
-	for (int i = 0; i < self->num_subroutine_uniform_locations; ++i) {
+	for (int i = 0; i < self->num_subroutines; ++i) {
 		PyObject * obj = PyTuple_GET_ITEM(value, i);
 		if (Py_TYPE(obj) == &PyLong_Type) {
-			self->subroutine_uniform_locations[i] = PyLong_AsUnsignedLong(obj);
+			self->subroutines[i] = PyLong_AsUnsignedLong(obj);
 		} else {
 			PyObject * int_cast = PyNumber_Long(obj);
 			if (!int_cast) {
 				MGLError_Set("invalid values in subroutines");
 				return -1;
 			}
-			self->subroutine_uniform_locations[i] = PyLong_AsUnsignedLong(int_cast);
+			self->subroutines[i] = PyLong_AsUnsignedLong(int_cast);
 			Py_DECREF(int_cast);
 		}
 	}
@@ -413,19 +413,18 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 			if (program_attribute->rows_length > 1) {
 
 				MGLVertexArrayListAttribute * attrib_list = MGLVertexArrayListAttribute_New();
-				attrib_list->vertex_array = vertex_array;
 				attrib_list->content = PyTuple_New(program_attribute->array_length);
 				attrib_list->location = program_attribute->location;
 
 				for (int i = 0; i < program_attribute->array_length; ++i) {
 					MGLVertexArrayListAttribute * matrix = MGLVertexArrayListAttribute_New();
-					matrix->vertex_array = vertex_array;
 					matrix->content = PyTuple_New(program_attribute->rows_length);
 					matrix->location = attrib_list->location + i * program_attribute->rows_length;
 
 					for (int j = 0; j < program_attribute->rows_length; ++j) {
 						MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
-						attrib->vertex_array = vertex_array;
+						attrib->gl = &gl;
+						attrib->vertex_array_obj = vertex_array->vertex_array_obj;
 						attrib->location = matrix->location + j;
 						attrib->type = program_attribute->type;
 						MGLVertexArrayAttribute_Complete(attrib, gl);
@@ -441,13 +440,13 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 			} else {
 
 				MGLVertexArrayListAttribute * attrib_list = MGLVertexArrayListAttribute_New();
-				attrib_list->vertex_array = vertex_array;
 				attrib_list->content = PyTuple_New(program_attribute->array_length);
 				attrib_list->location = program_attribute->location;
 
 				for (int i = 0; i < program_attribute->array_length; ++i) {
 					MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
-					attrib->vertex_array = vertex_array;
+					attrib->gl = &gl;
+					attrib->vertex_array_obj = vertex_array->vertex_array_obj;
 					attrib->location = attrib_list->location + i;
 					attrib->type = program_attribute->type;
 					MGLVertexArrayAttribute_Complete(attrib, gl);
@@ -463,13 +462,13 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 
 			if (program_attribute->rows_length > 1) {
 				MGLVertexArrayListAttribute * matrix = MGLVertexArrayListAttribute_New();
-				matrix->vertex_array = vertex_array;
 				matrix->content = PyTuple_New(program_attribute->rows_length);
 				matrix->location = program_attribute->location;
 
 				for (int j = 0; j < program_attribute->rows_length; ++j) {
 					MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
-					attrib->vertex_array = vertex_array;
+					attrib->gl = &gl;
+					attrib->vertex_array_obj = vertex_array->vertex_array_obj;
 					attrib->location = matrix->location + j;
 					attrib->type = program_attribute->type;
 					MGLVertexArrayAttribute_Complete(attrib, gl);
@@ -482,7 +481,8 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 			} else {
 
 				MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
-				attrib->vertex_array = vertex_array;
+				attrib->gl = &gl;
+				attrib->vertex_array_obj = vertex_array->vertex_array_obj;
 				attrib->location = program_attribute->location;
 				attrib->type = program_attribute->type;
 				MGLVertexArrayAttribute_Complete(attrib, gl);
@@ -500,47 +500,47 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 		vertex_array->program->program_obj,
 		GL_VERTEX_SHADER,
 		GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
-		&vertex_array->num_vertex_shader_subroutine_uniform_locations
+		&vertex_array->num_vertex_shader_subroutines
 	);
 
 	gl.GetProgramStageiv(
 		vertex_array->program->program_obj,
 		GL_FRAGMENT_SHADER,
 		GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
-		&vertex_array->num_fragment_shader_subroutine_uniform_locations
+		&vertex_array->num_fragment_shader_subroutines
 	);
 
 	gl.GetProgramStageiv(
 		vertex_array->program->program_obj,
 		GL_GEOMETRY_SHADER,
 		GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
-		&vertex_array->num_geometry_shader_subroutine_uniform_locations
+		&vertex_array->num_geometry_shader_subroutines
 	);
 
 	gl.GetProgramStageiv(
 		vertex_array->program->program_obj,
 		GL_TESS_EVALUATION_SHADER,
 		GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
-		&vertex_array->num_tess_evaluation_shader_subroutine_uniform_locations
+		&vertex_array->num_tess_evaluation_shader_subroutines
 	);
 
 	gl.GetProgramStageiv(
 		vertex_array->program->program_obj,
 		GL_TESS_CONTROL_SHADER,
 		GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
-		&vertex_array->num_tess_control_shader_subroutine_uniform_locations
+		&vertex_array->num_tess_control_shader_subroutines
 	);
 
-	vertex_array->num_subroutine_uniform_locations = 0;
-	vertex_array->num_subroutine_uniform_locations += vertex_array->num_vertex_shader_subroutine_uniform_locations;
-	vertex_array->num_subroutine_uniform_locations += vertex_array->num_fragment_shader_subroutine_uniform_locations;
-	vertex_array->num_subroutine_uniform_locations += vertex_array->num_geometry_shader_subroutine_uniform_locations;
-	vertex_array->num_subroutine_uniform_locations += vertex_array->num_tess_evaluation_shader_subroutine_uniform_locations;
-	vertex_array->num_subroutine_uniform_locations += vertex_array->num_tess_control_shader_subroutine_uniform_locations;
+	vertex_array->num_subroutines = 0;
+	vertex_array->num_subroutines += vertex_array->num_vertex_shader_subroutines;
+	vertex_array->num_subroutines += vertex_array->num_fragment_shader_subroutines;
+	vertex_array->num_subroutines += vertex_array->num_geometry_shader_subroutines;
+	vertex_array->num_subroutines += vertex_array->num_tess_evaluation_shader_subroutines;
+	vertex_array->num_subroutines += vertex_array->num_tess_control_shader_subroutines;
 
-	if (vertex_array->num_subroutine_uniform_locations) {
-		vertex_array->subroutine_uniform_locations = new unsigned[vertex_array->num_subroutine_uniform_locations];
+	if (vertex_array->num_subroutines) {
+		vertex_array->subroutines = new unsigned[vertex_array->num_subroutines];
 	} else {
-		vertex_array->subroutine_uniform_locations = 0;
+		vertex_array->subroutines = 0;
 	}
 }

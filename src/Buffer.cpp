@@ -61,12 +61,13 @@ MGLBufferAccess * MGLBuffer_access(MGLBuffer * self, PyObject * args) {
 
 	MGLBufferAccess * access = MGLBufferAccess_New();
 
-	access->buffer = self;
+	access->gl = &self->context->gl;
+	access->ptr = 0;
+
 	access->buffer_obj = self->buffer_obj;
 	access->offset = offset;
 	access->size = size;
 	access->access = readonly ? GL_MAP_READ_BIT : (GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
-	access->ptr = 0;
 
 	return access;
 }

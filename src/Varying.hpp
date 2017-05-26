@@ -2,10 +2,10 @@
 
 #include "Python.hpp"
 
-#include "ProgramMember.hpp"
-#include "Program.hpp"
+#include "Object.hpp"
+#include "GLMethods.hpp"
 
-struct MGLVarying : public MGLProgramMember {
+struct MGLVarying : public MGLObject {
 	PyObject * name;
 
 	int number;

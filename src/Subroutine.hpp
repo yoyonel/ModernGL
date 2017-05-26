@@ -2,9 +2,9 @@
 
 #include "Python.hpp"
 
-#include "ProgramStageMember.hpp"
+#include "Object.hpp"
 
-struct MGLSubroutine : public MGLProgramStageMember {
+struct MGLSubroutine : public MGLObject {
 	PyObject * name;
 	unsigned index;
 };

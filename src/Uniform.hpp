@@ -2,16 +2,18 @@
 
 #include "Python.hpp"
 
-#include "ProgramMember.hpp"
+#include "Object.hpp"
 #include "Program.hpp"
 
-struct MGLUniform : public MGLProgramMember {
+struct MGLUniform : public MGLObject {
 	PyObject * name;
 
 	void * value_getter;
 	void * value_setter;
 	void * gl_value_reader_proc;
 	void * gl_value_writer_proc;
+
+	int program_obj;
 
 	int number;
 	int location;

@@ -47,16 +47,16 @@ class TestCase(unittest.TestCase):
         buf1.bind_to_storage_buffer(1)
         buf2.bind_to_storage_buffer(2)
 
-        compute_shader.uniforms['add'] = (10.5, 20.0, 30.5, 40.0)
-        compute_shader.uniforms['mul'] = 100.0
+        compute_shader.uniforms['add'].value = (10.5, 20.0, 30.5, 40.0)
+        compute_shader.uniforms['mul'].value = 100.0
         compute_shader.run()
 
         a, b, c, d = struct.unpack('4f', buf2.read())
 
-        self.assertAlmostEqual(a, 4.0)
-        self.assertAlmostEqual(b, 3.0)
-        self.assertAlmostEqual(c, 2.0)
-        self.assertAlmostEqual(d, 1.0)
+        self.assertAlmostEqual(a, 410.5)
+        self.assertAlmostEqual(b, 320.0)
+        self.assertAlmostEqual(c, 230.5)
+        self.assertAlmostEqual(d, 140.0)
 
 
 if __name__ == '__main__':
