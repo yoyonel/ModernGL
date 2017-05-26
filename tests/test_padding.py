@@ -73,11 +73,11 @@ class TestCase(unittest.TestCase):
         self.assertEqual(a4, 8)
 
     def test_padding_3(self):
-        buf = self.ctx.buffer(struct.pack('=1024xiiii', 1, 2, 3, 4))
+        buf = self.ctx.buffer(struct.pack('=128xiiii', 1, 2, 3, 4))
         res = self.ctx.buffer(reserve=16)
 
         vao = self.ctx.vertex_array(self.prog, [
-            (buf, '1024xiiii', ['a_in', 'b_in', 'c_in', 'd_in']),
+            (buf, '128xiiii', ['a_in', 'b_in', 'c_in', 'd_in']),
         ])
 
         vao.transform(res, ModernGL.POINTS)
