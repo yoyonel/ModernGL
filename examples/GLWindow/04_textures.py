@@ -18,7 +18,8 @@ prog = ctx.program([
         #version 330
 
         in vec2 vert;
-        out vec2 tex_coord;
+        in vec2 tex_coord;
+        out vec2 v_tex_coord;
 
         uniform vec2 scale;
         uniform float rotation;
@@ -27,7 +28,7 @@ prog = ctx.program([
             float r = rotation * (0.5 + gl_InstanceID * 0.05);
             mat2 rot = mat2(cos(r), sin(r), -sin(r), cos(r));
             gl_Position = vec4((rot * vert) * scale, 0.0, 1.0);
-            tex_coord = vert;
+            v_tex_coord = tex_coord;
         }
     '''),
     ctx.fragment_shader('''
@@ -35,11 +36,11 @@ prog = ctx.program([
 
         uniform sampler2D texture;
 
-        in vec2 tex_coord;
+        in vec2 v_tex_coord;
         out vec4 color;
 
         void main() {
-            color = vec4(texture2D(texture, tex_coord).rgb, 1.0);
+            color = vec4(texture2D(texture, v_tex_coord).rgb, 1.0);
         }
     '''),
 ])
@@ -55,20 +56,20 @@ scale.value = (height / width * 0.75, 0.75)
 # Buffer
 
 vbo = ctx.buffer(struct.pack(
-    '6f',
-    1.0, 0.0,
-    -0.5, 0.86,
-    -0.5, -0.86,
+    '12f',
+    1.0, 0.0, 0.5, 1.0,
+    -0.5, 0.86, 1.0, 0.0,
+    -0.5, -0.86, 0.0, 0.0,
 ))
 
 # Put everything together
 
-vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
+vao = ctx.simple_vertex_array(prog, vbo, ['vert', 'tex_coord'])
 
 # Texture
 
 img = Image.open(os.path.join(os.path.dirname(__file__), '..', 'data', 'noise.jpg'))
-texture = ctx.texture(img.size, 3, img.tobytes())
+texture = ctx.texture(img.size, 3, img.tobytes(), alignment=4)
 texture.use()
 
 # Main loop

@@ -308,19 +308,20 @@ class Context:
 
         return Texture.new(self.mglo.texture(size, components, data, samples, alignment, floats))
 
-    def depth_texture(self, size, data=None, *, samples=0) -> Texture:
+    def depth_texture(self, size, data=None, *, samples=0, alignment=4) -> Texture:
         '''
             Create a :py:class:`Texture`.
 
             Args:
-                size: The width and height.
-                optional data: The pixels.
+                size (tuple): Width, height.
+                alignment (int): The byte alignment 1, 2, 4 or 8.
+                data (bytes): Content of the image.
 
             Returns:
                 Texture: depth texture
         '''
 
-        return Texture.new(self.mglo.depth_texture(size, data, samples))
+        return Texture.new(self.mglo.depth_texture(size, data, samples, alignment))
 
     def vertex_array(self, program, content, index_buffer=None) -> VertexArray:
         '''

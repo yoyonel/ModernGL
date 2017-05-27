@@ -392,7 +392,9 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	int expected_size = floats ? (width * height * components * 4) : (height * ((width * components + 3) & ~3));
+	int expected_size = width * components * (floats ?  4 : 1);
+	expected_size = (expected_size + alignment - 1) / alignment * alignment;
+	expected_size = expected_size * height;
 
 	Py_buffer buffer_view;
 
@@ -468,6 +470,7 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	PyObject * data;
 
 	int samples;
+	int alignment;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
@@ -475,7 +478,8 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 		&width,
 		&height,
 		&data,
-		&samples
+		&samples,
+		&alignment
 	);
 
 	if (!args_ok) {
@@ -492,7 +496,9 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	int expected_size = width * height * 4;
+	int expected_size = width * 4;
+	expected_size = (expected_size + alignment - 1) / alignment * alignment;
+	expected_size = expected_size * height;
 
 	Py_buffer buffer_view;
 

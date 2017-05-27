@@ -106,7 +106,9 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 
 	}
 
-	int expected_size = self->floats ? (width * height * self->components * 4) : (height * ((width * self->components + 3) & ~3));
+	int expected_size = width * self->components * (self->floats ?  4 : 1);
+	expected_size = (expected_size + alignment - 1) / alignment * alignment;
+	expected_size = expected_size * height;
 
 	PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
 
