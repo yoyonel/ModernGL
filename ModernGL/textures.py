@@ -91,6 +91,13 @@ class Texture:
 
         return self.mglo.glo
 
+    def swizzle(self, swizzle) -> None:
+        '''
+            Swizzle the texture color channels.
+        '''
+
+        self.mglo.swizzle(swizzle)
+
     def write(self, data, viewport=None) -> None:
         '''
             Update the content of the texture.

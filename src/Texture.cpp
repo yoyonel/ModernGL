@@ -3,6 +3,8 @@
 #include "Error.hpp"
 #include "InvalidObject.hpp"
 
+#include "InlineMethods.hpp"
+
 PyObject * MGLTexture_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLTexture * self = (MGLTexture *)type->tp_alloc(type, 0);
 
@@ -158,16 +160,58 @@ PyObject * MGLTexture_use(MGLTexture * self, PyObject * args) {
 }
 
 PyObject * MGLTexture_swizzle(MGLTexture * self, PyObject * args) {
+	const char * swizzle;
 
-	// TODO:
-	// GL_TEXTURE_SWIZZLE_R
-	// GL_TEXTURE_SWIZZLE_G
-	// GL_TEXTURE_SWIZZLE_B
-	// GL_TEXTURE_SWIZZLE_A
-	// GL_TEXTURE_SWIZZLE_RGBA
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"s",
+		&swizzle
+	);
 
-	PyErr_Format(PyExc_NotImplementedError, "NYI");
-	return 0;
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (!swizzle[0]) {
+		MGLError_Set("the swizzle is empty");
+		return 0;
+	}
+
+	int tex_swizzle[4] = {-1, -1, -1, -1};
+
+	for (int i = 0; swizzle[i]; ++i) {
+		if (i > 3) {
+			MGLError_Set("the swizzle is too long");
+			return 0;
+		}
+
+		tex_swizzle[i] = swizzle_from_char(swizzle[i]);
+
+		if (tex_swizzle[i] == -1) {
+			MGLError_Set("'%c' is not a valid swizzle parameter", swizzle[i]);
+			return 0;
+		}
+	}
+
+	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+	gl.BindTexture(texture_target, self->texture_obj);
+
+	gl.TexParameteri(texture_target, GL_TEXTURE_SWIZZLE_R, tex_swizzle[0]);
+	if (tex_swizzle[1] != -1) {
+		gl.TexParameteri(texture_target, GL_TEXTURE_SWIZZLE_G, tex_swizzle[1]);
+		if (tex_swizzle[2] != -1) {
+			gl.TexParameteri(texture_target, GL_TEXTURE_SWIZZLE_B, tex_swizzle[2]);
+			if (tex_swizzle[3] != -1) {
+				gl.TexParameteri(texture_target, GL_TEXTURE_SWIZZLE_A, tex_swizzle[3]);
+			}
+		}
+	}
+
+	Py_RETURN_NONE;
 }
 
 PyObject * MGLTexture_generate_mipmaps(MGLTexture * self, PyObject * args) {

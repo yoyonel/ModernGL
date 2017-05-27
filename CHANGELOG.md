@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - `__repr__` for program members.
 - UniformBlock `binding` and `size` attribute.
 - Framebuffer `width`, `height` and `samples` attribute.
+- Texture `swizzle()` method.
 - Missing `release()` methods.
 - Subroutines.
 
