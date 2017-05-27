@@ -35,7 +35,7 @@ class ComputeShader:
     @property
     def source(self) -> str:
         '''
-            The source code of the compute shader.
+            str: The source code of the compute shader.
         '''
 
         return self.mglo.source
@@ -162,7 +162,7 @@ class Shader:
     @property
     def source(self) -> str:
         '''
-            The source code of the shader.
+            str: The source code of the shader.
         '''
 
         return self.mglo.source
@@ -170,14 +170,14 @@ class Shader:
     @property
     def typename(self) -> str:
         '''
-            The type of the shader.
+            str: The type of the shader.
             The return value is a string.
 
-            - ``'VertexShader'``
-            - ``'FragmentShader'``
-            - ``'GeometryShader'``
-            - ``'TessEvaluationShader'``
-            - ``'TessControlShader'``
+            - ``'vertex_shader'``
+            - ``'fragment_shader'``
+            - ``'geometry_shader'``
+            - ``'tess_evaluation_shader'``
+            - ``'tess_control_shader'``
         '''
 
         return self.mglo.typename

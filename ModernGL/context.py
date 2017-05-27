@@ -532,7 +532,7 @@ class Context:
 
         return Shader.new(self.mglo.tess_control_shader(source))
 
-    def framebuffer(self, color_attachments, depth_attachment) -> Framebuffer:
+    def framebuffer(self, color_attachments, depth_attachment=None) -> Framebuffer:
         '''
             Create a :py:class:`Framebuffer`.
 
@@ -550,7 +550,10 @@ class Context:
         else:
             color_attachments = tuple(x.mglo for x in color_attachments)
 
-        return Framebuffer.new(self.mglo.framebuffer(color_attachments, depth_attachment.mglo))
+        if depth_attachment is not None:
+            depth_attachment = depth_attachment.mglo
+
+        return Framebuffer.new(self.mglo.framebuffer(color_attachments, depth_attachment))
 
     def renderbuffer(self, size, components=4, *, samples=0, floats=True) -> Renderbuffer:
         '''

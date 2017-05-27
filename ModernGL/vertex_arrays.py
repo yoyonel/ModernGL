@@ -65,13 +65,10 @@ class VertexArrayAttribute:
 
         return self.mglo.enabled
 
-    @property
-    def default(self):
-        '''
-            default
-        '''
+    @enabled.setter
+    def enabled(self, value):
+        self.mglo.enabled = value
 
-        return self.mglo.default
 
     def bind(self, buffer, offset=0, stride=0, divisor=0) -> None:
         '''
