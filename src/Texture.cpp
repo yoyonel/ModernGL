@@ -33,11 +33,89 @@ int MGLTexture_tp_init(MGLTexture * self, PyObject * args, PyObject * kwargs) {
 }
 
 PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
+	PyObject * viewport;
+	int alignment;
 
-	// TODO: glGetTexImage
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"OI",
+		&viewport,
+		&alignment
+	);
 
-	PyErr_Format(PyExc_NotImplementedError, "NYI");
-	return 0;
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8) {
+		MGLError_Set("the alignment must be 1, 2, 4 or 8");
+		return 0;
+	}
+
+	if (self->samples) {
+		MGLError_Set("multisample textures cannot be read directly");
+		return 0;
+	}
+
+	int x = 0;
+	int y = 0;
+	int width = self->width;
+	int height = self->height;
+
+	if (viewport != Py_None) {
+		if (Py_TYPE(viewport) != &PyTuple_Type) {
+			MGLError_Set("the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
+			return 0;
+		}
+
+		if (PyTuple_GET_SIZE(viewport) == 4) {
+
+			x = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
+			y = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
+			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 2));
+			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 3));
+
+		} else if (PyTuple_GET_SIZE(viewport) == 2) {
+
+			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
+			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
+
+		} else {
+
+			MGLError_Set("the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
+			return 0;
+
+		}
+
+		if (PyErr_Occurred()) {
+			MGLError_Set("wrong values in the viewport");
+			return 0;
+		}
+
+	}
+
+	int expected_size = width * self->components * (self->floats ?  4 : 1);
+	expected_size = (expected_size + alignment - 1) / alignment * alignment;
+	expected_size = expected_size * height;
+
+	PyObject * result = PyBytes_FromStringAndSize(0, expected_size);
+	char * data = PyBytes_AS_STRING(result);
+
+	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
+
+	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+	int pixel_type = self->floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+	int format = formats[self->components];
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+	gl.BindTexture(texture_target, self->texture_obj);
+
+	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+	gl.GetTexImage(texture_target, 0, format, pixel_type, data);
+
+	return result;
 }
 
 PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
