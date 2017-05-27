@@ -141,6 +141,14 @@ PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
+PyObject * MGLBuffer_clear(MGLBuffer * self, PyObject * args) {
+
+	// TODO:
+
+	PyErr_Format(PyExc_NotImplementedError, "NYI");
+	return 0;
+}
+
 PyObject * MGLBuffer_orphan(MGLBuffer * self) {
 	const GLMethods & gl = self->context->gl;
 	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
@@ -200,6 +208,7 @@ PyMethodDef MGLBuffer_tp_methods[] = {
 	{"access", (PyCFunction)MGLBuffer_access, METH_VARARGS, 0},
 	{"read", (PyCFunction)MGLBuffer_read, METH_VARARGS, 0},
 	{"write", (PyCFunction)MGLBuffer_write, METH_VARARGS, 0},
+	{"clear", (PyCFunction)MGLBuffer_clear, METH_VARARGS, 0},
 	{"orphan", (PyCFunction)MGLBuffer_orphan, METH_NOARGS, 0},
 	{"bind_to_uniform_block", (PyCFunction)MGLBuffer_bind_to_uniform_block, METH_VARARGS, 0},
 	{"bind_to_storage_buffer", (PyCFunction)MGLBuffer_bind_to_storage_buffer, METH_VARARGS, 0},
