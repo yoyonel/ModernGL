@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Framebuffer `width`, `height` and `samples` attribute.
 - Texture `swizzle()` method.
 - Missing `release()` methods.
+- Pixel pack and unpack alignments.
 - Subroutines.
 
 ### Removed
