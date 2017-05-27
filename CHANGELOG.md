@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [4.2.0] - 2017-05-27
 ### Added
 - UniformBlock `binding` and `size` attribute.
 - Framebuffer `width`, `height` and `samples` attribute.
@@ -83,10 +85,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Direct access to OpenGL objects
 - Linux support
 
-## 1.x.x - 2016-03-03
+## 1.0.0 - 2016-03-03
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.0...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.1...master
+[4.1.1]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.0...4.1.1
 [4.1.0]: https://github.com/cprogrammer1994/ModernGL/compare/4.0.0...4.1.0
 [4.0.0]: https://github.com/cprogrammer1994/ModernGL/tree/4.0.0
 [3.1.5]: https://github.com/cprogrammer1994/ModernGL/compare/3.1.0...3.1.5
