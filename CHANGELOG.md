@@ -6,15 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-- Context `error` attribute.
-- Exposing the OpenGL objects as `glo` attributes.
-- `__iter__` for program member maps.
-- `__repr__` for program members.
 - UniformBlock `binding` and `size` attribute.
 - Framebuffer `width`, `height` and `samples` attribute.
+- Texture `swizzle` attribute.
+- Context `error` attribute.
+- OpenGL objects as `glo` attributes.
 - Buffer `clear()` method.
-- Texture `swizzle()` method.
 - Missing `release()` methods.
+- Iterable program member maps.
+- Human readable program members.
 - Pixel pack and unpack alignments.
 - Subroutines.
 
@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - VertexArrayAttribute `default` attribute.
 
 ## Fixed
-- BufferAccess unused offset parameter.
+- BufferAccess unused `offset` parameter.
 - Binding buffer to a UniformBlock.
 - Broken RTD docs.
 
