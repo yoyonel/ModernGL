@@ -28,7 +28,7 @@ Most of the calls only require **OpenGL 3.3** but Subroutines and Compute Shader
 
 ## Is my old PC supported?
 
-OpenGL 3.3 came out in February 2010. With **up to date drivers** you will be able to use the most of the ModernGL functions, even on integrated graphics cards. _(No compute shaders won't work)_
+OpenGL 3.3 came out in February 2010. With **up to date drivers** you will be able to use the most of the ModernGL functions, even on integrated graphics cards. _(No, Compute Shaders won't work)_
 
 ## How can I install ModernGL?
 
@@ -42,7 +42,7 @@ Take a look at the [examples](https://https://github.com/cprogrammer1994/ModernG
 
 ## Where can I use ModernGL?
 
-**Anywhere** where OpenGL is supported. ModernGL is capable of rendering using a [standalone_context]() as well. Rendering to a window only requires a valid OpenGL context.
+**Anywhere where OpenGL is supported.** ModernGL is capable of rendering using a [standalone_context]() as well. Rendering to a window only requires a valid OpenGL context.
 
 ## Can ModernGL createa a Window?
 
@@ -52,17 +52,15 @@ Take a look at the [examples](https://https://github.com/cprogrammer1994/ModernG
 
 All the neccessary calls are (or can be) implemented in ModernGL. However you can interract with the ModernGL objects from PyOpenGL if you want to. If something is missing write an [issue]() or raise a [PR]().
 
-## An example with [source](https://moderngl.github.io/Examples/julia_fractal.html)
-
-![Julia Fractal](https://moderngl.github.io/_images/julia_fractal.png)
-
 ## Supported platforms?
 
 - [x] Windows
 - [x] Linux
 - [x] Mac
 
-## A short sample
+# Examples
+
+## The Hello World triangle
 
 ```py
 
@@ -96,12 +94,36 @@ vao.render(ModernGL.TRIANGLES)
 
 ```
 
-## How to install
+## Installing from source
 
 Installing on **Ubuntu** from source:
-```
+
+```sh
 apt-get install python3-dev libgl1-mesa-dev libx11-dev
 python3 setup.py install
 ```
 
-...
+Installing on **Ubuntu** from source:
+
+```sh
+python3 setup.py install
+```
+
+## Building the shinx documentation
+
+```sh
+python3 -m pip install -r docs/requirements.txt
+```
+
+## Running tests
+
+Some of the tests may be skipped when the supported OpenGL version is below the requirements of the given test. 
+
+```sh
+python3 -m pip pytest
+```
+
+## Code quality
+
+Code is tested with [pep8], [flake8], [prospector] and [pylint]
+Examples are tested with [pep8] only
