@@ -16,7 +16,7 @@ If you prefer **GPU accelerated high quality graphics** then you should develop 
 
 ## Why is it simpler?
 
-With the original OpenGL API you have to write a couple of lines to achieve a simple task like compiling a shader or running a computation on the GPU. With ModernGL you will need just a few lines to achieve the same result.
+With the original OpenGL API you have to write a couple of lines to achieve a **simple task** like compiling a shader or running a computation on the GPU. With ModernGL you will need just a **few lines** to achieve the same result.
 
 ## Is ModernGL faster then PyOpenGL?
 
@@ -24,7 +24,7 @@ In some cases **yes**, the core functions of ModernGL are written in C++, OpenGL
 
 ## What version of OpenGL is used?
 
-Most of the calls only require OpenGL 3.3 but Subroutines and Compute Shaders require OpenGL 4.0 and 4.3
+Most of the calls only require **OpenGL 3.3** but Subroutines and Compute Shaders require **OpenGL 4.0** and **OpenGL 4.3**
 
 ## Is my old PC supports this?
 
@@ -38,15 +38,29 @@ pip install ModernGL
 
 ## How can I start using ModernGL?
 
-Take a look at the [examples](https://https://github.com/cprogrammer1994/ModernGL/examples) and [docs](https://moderngl.readthedocs.io/)
+Take a look at the [examples](https://https://github.com/cprogrammer1994/ModernGL/examples) and [docs](https://moderngl.readthedocs.io/).
 
 ## Where can I use ModernGL?
 
-Anywhere where OpenGL is supported. ModernGL is capable of rendering using a [standalone_context](). Rendering to a window only requires a valid OpenGL context.
+**Anywhere** where OpenGL is supported. ModernGL is capable of rendering using a [standalone_context]() as well. Rendering to a window only requires a valid OpenGL context.
+
+## Can ModernGL createa a Window?
+
+**NO** Window creation is up to you. You can choose from a large variety of modules that can create a window: [PyQt5](), [GLUT](), [pygame]() and many others.
+
+## Limitations using ModernGL over PyOpenGL?
+
+All the neccessary calls are (or can be) implemented in ModernGL. However you can interract with the ModernGL objects from PyOpenGL if you want to. If something is missing write an [issue]() or raise a [PR]().
 
 ## An example with [source](https://moderngl.github.io/Examples/julia_fractal.html)
 
 ![Julia Fractal](https://moderngl.github.io/_images/julia_fractal.png)
+
+## Supported platforms?
+
+- [x] Windows
+- [x] Linux
+- [x] Mac
 
 ## A short sample
 
