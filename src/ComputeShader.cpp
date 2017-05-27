@@ -84,6 +84,11 @@ PyObject * MGLComputeShader_get_subroutine_uniforms(MGLComputeShader * self, voi
 	return self->subroutine_uniforms;
 }
 
+PyObject * MGLComputeShader_get_source(MGLComputeShader * self, void * closure) {
+	Py_INCREF(self->source);
+	return self->source;
+}
+
 MGLContext * MGLComputeShader_get_context(MGLComputeShader * self, void * closure) {
 	Py_INCREF(self->context);
 	return self->context;
@@ -98,6 +103,7 @@ PyGetSetDef MGLComputeShader_tp_getseters[] = {
 	{(char *)"uniform_blocks", (getter)MGLComputeShader_get_uniform_blocks, 0, 0, 0},
 	{(char *)"subroutines", (getter)MGLComputeShader_get_subroutines, 0, 0, 0},
 	{(char *)"subroutine_uniforms", (getter)MGLComputeShader_get_subroutine_uniforms, 0, 0, 0},
+	{(char *)"source", (getter)MGLComputeShader_get_source, 0, 0, 0},
 	{(char *)"context", (getter)MGLComputeShader_get_context, 0, 0, 0},
 	{(char *)"glo", (getter)MGLComputeShader_get_glo, 0, 0, 0},
 	{0},
