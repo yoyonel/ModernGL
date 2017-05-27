@@ -131,6 +131,18 @@ class Context:
         return self.mglo.default_framebuffer
 
     @property
+    def wireframe(self) -> bool:
+        '''
+            bool: The default framebuffer.
+        '''
+
+        return self.mglo.wireframe
+
+    @wireframe.setter
+    def wireframe(self, value):
+        self.mglo.wireframe = value
+
+    @property
     def error(self) -> str:
         '''
             str: The result of glGetError() but human readable.
