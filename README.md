@@ -103,16 +103,11 @@ apt-get install python3-dev libgl1-mesa-dev libx11-dev
 python3 setup.py install
 ```
 
-Installing on **Ubuntu** from source:
-
-```sh
-python3 setup.py install
-```
-
 ## Building the shinx documentation
 
 ```sh
-python3 -m pip install -r docs/requirements.txt
+pip install -r docs/requirements.txt
+python setup.py build_sphinx
 ```
 
 ## Running tests
@@ -120,10 +115,9 @@ python3 -m pip install -r docs/requirements.txt
 Some of the tests may be skipped when the supported OpenGL version is below the requirements of the given test. 
 
 ```sh
-python3 -m pip pytest
+pytest
 ```
 
 ## Code quality
 
-Code is tested with [pep8], [flake8], [prospector] and [pylint]
-Examples are tested with [pep8] only
+Code is tested with [pep8](https://www.python.org/dev/peps/pep-0008/), [flake8](http://flake8.pycqa.org/en/latest/), [prospector](https://prospector.landscape.io/en/master/) and [pylint](https://www.pylint.org/)
