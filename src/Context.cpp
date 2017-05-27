@@ -375,6 +375,11 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
+	if (samples & (samples - 1)) {
+		MGLError_Set("the number of samples is invalid");
+		return 0;
+	}
+
 	if (data != Py_None && samples) {
 		MGLError_Set("multisample textures are not writable directly");
 		return 0;
@@ -466,6 +471,11 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	);
 
 	if (!args_ok) {
+		return 0;
+	}
+
+	if (samples & (samples - 1)) {
+		MGLError_Set("the number of samples is invalid");
 		return 0;
 	}
 
@@ -938,6 +948,11 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 			return 0;
 		}
 
+		if (attachment->width != width || attachment->height != height || attachment->samples != samples) {
+			MGLError_Set("the depth_attachment have different sizes or samples");
+			return 0;
+		}
+
 	} else {
 
 		MGLRenderbuffer * renderbuffer = MGLRenderbuffer_New();
@@ -1127,6 +1142,11 @@ MGLRenderbuffer * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
+	if (samples & (samples - 1)) {
+		MGLError_Set("the number of samples is invalid");
+		return 0;
+	}
+
 	const int int_formats[] = {0, GL_R8UI, GL_RG8UI, GL_RGB8UI, GL_RGBA8UI};
 	const int float_formats[] = {0, GL_R32F, GL_RG32F, GL_RGB32F, GL_RGBA32F};
 
@@ -1182,6 +1202,11 @@ MGLRenderbuffer * MGLContext_depth_renderbuffer(MGLContext * self, PyObject * ar
 	);
 
 	if (!args_ok) {
+		return 0;
+	}
+
+	if (samples & (samples - 1)) {
+		MGLError_Set("the number of samples is invalid");
 		return 0;
 	}
 
@@ -1361,10 +1386,47 @@ int MGLContext_set_viewport(MGLContext * self, PyObject * value) {
 	int height = PyLong_AsLong(PyTuple_GET_ITEM(value, 3));
 
 	if (PyErr_Occurred()) {
+		MGLError_Set("invalid values in the viewport");
 		return -1;
 	}
 
 	self->gl.Viewport(x, y, width, height);
+
+	return 0;
+}
+
+PyObject * MGLContext_get_pixel_alignment(MGLContext * self) {
+	int pixel_pack = 0;
+	int pixel_unpack = 0;
+
+    // TODO: self->gl.GetIntegerv(..., &pixel_pack);
+    // TODO: self->gl.GetIntegerv(..., &pixel_unpack);
+
+	return PyTuple_Pack(
+		2,
+		PyLong_FromLong(pixel_pack),
+		PyLong_FromLong(pixel_unpack)
+	);
+}
+
+int MGLContext_set_pixel_alignment(MGLContext * self, PyObject * value) {
+	int size = (int)PyTuple_GET_SIZE(value);
+
+	if (size != 2) {
+		MGLError_Set("the pixel alignment must be a tuple of size 2 not %d", size);
+		return -1;
+	}
+
+	int pixel_pack = PyLong_AsLong(PyTuple_GET_ITEM(value, 0));
+	int pixel_unpack = PyLong_AsLong(PyTuple_GET_ITEM(value, 1));
+
+	if (PyErr_Occurred()) {
+		MGLError_Set("invalid values for the");
+		return -1;
+	}
+
+    // TODO: self->gl.PixelStorei(..., pixel_pack);
+    // TODO: self->gl.PixelStorei(..., pixel_unpack);
 
 	return 0;
 }
@@ -1409,6 +1471,16 @@ PyObject * MGLContext_get_default_framebuffer(MGLContext * self) {
 
 	Py_INCREF(self->default_framebuffer);
 	return self->default_framebuffer;
+}
+
+PyObject * MGLContext_get_wireframe(MGLContext * self) {
+	PyErr_Format(PyExc_NotImplementedError, "NYI");
+	return 0;
+}
+
+int MGLContext_set_wireframe(MGLContext * self, PyObject * value) {
+	PyErr_Format(PyExc_NotImplementedError, "NYI");
+	return -1;
 }
 
 PyObject * MGLContext_get_error(MGLContext * self, void * closure) {
@@ -1481,9 +1553,13 @@ PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"line_width", (getter)MGLContext_get_line_width, (setter)MGLContext_set_line_width, 0, 0},
 	{(char *)"point_size", (getter)MGLContext_get_point_size, (setter)MGLContext_set_point_size, 0, 0},
 	{(char *)"viewport", (getter)MGLContext_get_viewport, (setter)MGLContext_set_viewport, 0, 0},
+	{(char *)"pixel_alignment", (getter)MGLContext_get_pixel_alignment, (setter)MGLContext_set_pixel_alignment, 0, 0},
+
 	{(char *)"default_texture_unit", (getter)MGLContext_get_default_texture_unit, (setter)MGLContext_set_default_texture_unit, 0, 0},
 	{(char *)"max_texture_units", (getter)MGLContext_get_max_texture_units, 0, 0, 0},
 	{(char *)"default_framebuffer", (getter)MGLContext_get_default_framebuffer, 0, 0, 0},
+
+	{(char *)"wireframe", (getter)MGLContext_get_wireframe, (setter)MGLContext_set_wireframe, 0, 0}, // TODO: glPolygonMode
 
 	{(char *)"error", (getter)MGLContext_get_error, 0, 0, 0},
 	{(char *)"vendor", (getter)MGLContext_get_vendor, 0, 0, 0},
