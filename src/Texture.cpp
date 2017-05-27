@@ -131,7 +131,7 @@ PyObject * MGLTexture_clear(MGLTexture * self, PyObject * args) {
 
 	// TODO:
 
-	Py_RETURN_NONE	PyErr_Format(PyExc_NotImplementedError, "NYI");
+	PyErr_Format(PyExc_NotImplementedError, "NYI");
 	return 0;
 }
 
