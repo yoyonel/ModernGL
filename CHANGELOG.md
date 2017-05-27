@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - VertexArrayAttribute `default` attribute.
 
 ## Fixed
+- BufferAccess unused offset parameter.
 - Binding buffer to a UniformBlock.
 - Broken RTD docs.
 

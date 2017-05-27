@@ -8,7 +8,7 @@
 struct MGLBufferAccess : public MGLObject {
 	GLMethods * gl;
 
-	void * ptr;
+	char * ptr;
 
 	int buffer_obj;
 	int offset;

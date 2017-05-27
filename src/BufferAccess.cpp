@@ -36,7 +36,7 @@ PyObject * MGLBufferAccess_open(MGLBufferAccess * self) {
 	}
 
 	self->gl->BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
-	self->ptr = self->gl->MapBufferRange(GL_ARRAY_BUFFER, self->offset, self->size, self->access);
+	self->ptr = (char *)self->gl->MapBufferRange(GL_ARRAY_BUFFER, self->offset, self->size, self->access);
 
 	if (!self->ptr) {
 		MGLError_Set("cannot map the buffer");
@@ -83,7 +83,7 @@ PyObject * MGLBufferAccess_read(MGLBufferAccess * self, PyObject * args) {
 		return 0;
 	}
 
-	return PyBytes_FromStringAndSize((const char *)self->ptr, size);
+	return PyBytes_FromStringAndSize(self->ptr + offset, size);
 }
 
 PyObject * MGLBufferAccess_write(MGLBufferAccess * self, PyObject * args) {
@@ -113,7 +113,7 @@ PyObject * MGLBufferAccess_write(MGLBufferAccess * self, PyObject * args) {
 		return 0;
 	}
 
-	memcpy(self->ptr, data, size);
+	memcpy(self->ptr + offset, data, size);
 
 	Py_RETURN_NONE;
 }
@@ -136,7 +136,7 @@ PyObject * MGLBufferAccess_get_size(MGLBufferAccess * self) {
 }
 
 PyObject * MGLBufferAccess_get_readonly(MGLBufferAccess * self) {
-	return PyBool_FromLong(self->access & GL_MAP_WRITE_BIT);
+	return PyBool_FromLong(!(self->access & GL_MAP_WRITE_BIT));
 }
 
 PyGetSetDef MGLBufferAccess_tp_getseters[] = {
