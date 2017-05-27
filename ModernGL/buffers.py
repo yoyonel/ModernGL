@@ -282,7 +282,7 @@ class Buffer:
 
         self.mglo.bind_to_storage_buffer(location)
 
-    def release(self):
+    def release(self) -> None:
         '''
             Release the ModernGL object.
         '''

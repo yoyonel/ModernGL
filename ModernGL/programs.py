@@ -119,7 +119,7 @@ class ComputeShader:
 
         return self.mglo.run(group_x, group_y, group_z)
 
-    def release(self):
+    def release(self) -> None:
         '''
             Release the ModernGL object.
         '''
@@ -191,7 +191,7 @@ class Shader:
 
         return self.mglo.glo
 
-    def release(self):
+    def release(self) -> None:
         '''
             Release the ModernGL object.
         '''
@@ -468,7 +468,7 @@ class Program:
 
         return self.mglo.glo
 
-    def release(self):
+    def release(self) -> None:
         '''
             Release the ModernGL object.
         '''

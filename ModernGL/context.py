@@ -604,7 +604,7 @@ class Context:
 
         return ComputeShader.new(self.mglo.compute_shader(source))
 
-    def release(self):
+    def release(self) -> None:
         '''
             Release the ModernGL object.
         '''

@@ -103,7 +103,7 @@ class Framebuffer:
 
         return self.mglo.read(viewport, components, floats)
 
-    def release(self):
+    def release(self) -> None:
         '''
             Release the ModernGL object.
         '''

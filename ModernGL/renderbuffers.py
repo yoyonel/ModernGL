@@ -93,7 +93,7 @@ class Renderbuffer:
 
         return self.mglo.glo
 
-    def release(self):
+    def release(self) -> None:
         '''
             Release the ModernGL object.
         '''

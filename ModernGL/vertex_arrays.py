@@ -250,7 +250,7 @@ class VertexArray:
 
         self.mglo.transform(buffer.mglo, mode.mglo, vertices, first, instances)
 
-    def release(self):
+    def release(self) -> None:
         '''
             Release the ModernGL object.
         '''
