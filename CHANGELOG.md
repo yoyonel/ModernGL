@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [4.2.0] - 2017-05-27
+## [4.1.1] - 2017-05-27
 ### Added
 - UniformBlock `binding` and `size` attribute.
 - Framebuffer `width`, `height` and `samples` attribute.
