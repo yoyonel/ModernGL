@@ -60,7 +60,7 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 			self->attribute->scalar_type,
 			false,
 			stride,
-			(void *)(long long)offset // TODO:
+			(void *)(Py_ssize_t)offset
 		);
 	} else {
 		((gl_attribute_ptr_proc)self->attribute->gl_attrib_ptr_proc)(
@@ -68,7 +68,7 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 			self->attribute->row_length,
 			self->attribute->scalar_type,
 			stride,
-			(void *)(long long)offset // TODO:
+			(void *)(Py_ssize_t)offset
 		);
 	}
 
