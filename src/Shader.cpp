@@ -12,19 +12,19 @@ const int SHADER_TYPE[] = {
 };
 
 const char * SHADER_NAME[] = {
-	"VertexShader",
-	"FragmentShader",
-	"GeometryShader",
-	"TessEvaluationShader",
-	"TessControlShader",
+	"vertex_shader",
+	"fragment_shader",
+	"geometry_shader",
+	"tess_evaluation_shader",
+	"tess_control_shader",
 };
 
 const char * SHADER_NAME_UNDERLINE[] = {
-	"============",
-	"==============",
-	"==============",
-	"====================",
-	"=================",
+	"=============",
+	"===============",
+	"===============",
+	"======================",
+	"===================",
 };
 
 PyObject * MGLShader_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
