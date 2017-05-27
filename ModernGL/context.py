@@ -49,6 +49,8 @@ class Context:
             - :py:meth:`Context.framebuffer`
     '''
 
+    __slots__ = ['mglo']
+
     @staticmethod
     def new(obj):
         '''

@@ -140,6 +140,8 @@ class VertexArray:
         to create one.
     '''
 
+    __slots__ = ['mglo']
+
     @staticmethod
     def new(obj):
         '''

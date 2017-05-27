@@ -15,6 +15,8 @@ class ComputeShader:
         ComputeShader
     '''
 
+    __slots__ = ['mglo']
+
     @staticmethod
     def new(obj):
         '''
@@ -142,6 +144,8 @@ class Shader:
             - :py:meth:`Context.tess_control_shader`
     '''
 
+    __slots__ = ['mglo']
+
     @staticmethod
     def new(obj):
         '''
@@ -214,6 +218,8 @@ class Program:
         A Program object cannot be instantiated directly, it requires a context.
         Use :py:meth:`Context.program` to create one.
     '''
+
+    __slots__ = ['mglo']
 
     @staticmethod
     def new(obj):

@@ -10,6 +10,8 @@ class Framebuffer:
         Create a :py:class:`Framebuffer` using :py:meth:`Context.framebuffer`.
     '''
 
+    __slots__ = ['mglo']
+
     @staticmethod
     def new(obj):
         '''

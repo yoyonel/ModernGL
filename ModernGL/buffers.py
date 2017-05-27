@@ -121,6 +121,8 @@ class Buffer:
         Copy buffer content using :py:meth:`Context.copy_buffer`.
     '''
 
+    __slots__ = ['mglo']
+
     @staticmethod
     def new(obj):
         '''

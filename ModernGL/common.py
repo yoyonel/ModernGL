@@ -16,6 +16,8 @@ class InvalidObject:
         once the ``release()`` method is successfully called.
     '''
 
+    __slots__ = ['mglo']
+
 
 class EnableFlag:
     '''
