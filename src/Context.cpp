@@ -1409,42 +1409,6 @@ int MGLContext_set_viewport(MGLContext * self, PyObject * value) {
 	return 0;
 }
 
-PyObject * MGLContext_get_pixel_alignment(MGLContext * self) {
-	int pixel_pack = 0;
-	int pixel_unpack = 0;
-
-    // TODO: self->gl.GetIntegerv(..., &pixel_pack);
-    // TODO: self->gl.GetIntegerv(..., &pixel_unpack);
-
-	return PyTuple_Pack(
-		2,
-		PyLong_FromLong(pixel_pack),
-		PyLong_FromLong(pixel_unpack)
-	);
-}
-
-int MGLContext_set_pixel_alignment(MGLContext * self, PyObject * value) {
-	int size = (int)PyTuple_GET_SIZE(value);
-
-	if (size != 2) {
-		MGLError_Set("the pixel alignment must be a tuple of size 2 not %d", size);
-		return -1;
-	}
-
-	int pixel_pack = PyLong_AsLong(PyTuple_GET_ITEM(value, 0));
-	int pixel_unpack = PyLong_AsLong(PyTuple_GET_ITEM(value, 1));
-
-	if (PyErr_Occurred()) {
-		MGLError_Set("invalid values for the");
-		return -1;
-	}
-
-    // TODO: self->gl.PixelStorei(..., pixel_pack);
-    // TODO: self->gl.PixelStorei(..., pixel_unpack);
-
-	return 0;
-}
-
 PyObject * MGLContext_get_default_texture_unit(MGLContext * self) {
 	return PyLong_FromLong(self->default_texture_unit);
 }
@@ -1567,7 +1531,6 @@ PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"line_width", (getter)MGLContext_get_line_width, (setter)MGLContext_set_line_width, 0, 0},
 	{(char *)"point_size", (getter)MGLContext_get_point_size, (setter)MGLContext_set_point_size, 0, 0},
 	{(char *)"viewport", (getter)MGLContext_get_viewport, (setter)MGLContext_set_viewport, 0, 0},
-	{(char *)"pixel_alignment", (getter)MGLContext_get_pixel_alignment, (setter)MGLContext_set_pixel_alignment, 0, 0},
 
 	{(char *)"default_texture_unit", (getter)MGLContext_get_default_texture_unit, (setter)MGLContext_set_default_texture_unit, 0, 0},
 	{(char *)"max_texture_units", (getter)MGLContext_get_max_texture_units, 0, 0, 0},
