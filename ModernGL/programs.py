@@ -10,8 +10,6 @@ from .members import UniformMap, UniformBlockMap, VaryingMap, AttributeMap, Prog
 
 class ComputeShader:
     '''
-        ``NYI``
-
         ComputeShader
     '''
 

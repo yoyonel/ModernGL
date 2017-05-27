@@ -607,8 +607,6 @@ class Context:
 
     def compute_shader(self, source) -> ComputeShader:
         '''
-            ``NYI``
-
             Create a :py:class:`ComputeShader`.
 
             Args:

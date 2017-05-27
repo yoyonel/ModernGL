@@ -278,8 +278,6 @@ class Buffer:
 
     def bind_to_uniform_block(self, location=0) -> None:
         '''
-            ``NYI``
-
             Bind the buffer to a uniform block.
 
             Args:
@@ -290,8 +288,6 @@ class Buffer:
 
     def bind_to_storage_buffer(self, location=0) -> None:
         '''
-            ``NYI``
-
             Bind the buffer to a shader storage buffer.
 
             Args:
