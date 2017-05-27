@@ -70,7 +70,7 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 
 	MGLPrimitive * gs_input = self->program->geometry_input;
 
-	if (gs_input && gs_input->primitive != mode->geometry_primitive) {
+	if (gs_input != MGL_NO_PRIMITIVE && gs_input->primitive != mode->geometry_primitive) {
 		MGLError_Set("the render mode is not compatible with the geometry_input");
 		return 0;
 	}
@@ -129,7 +129,7 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 
 	MGLPrimitive * gs_input = self->program->geometry_input;
 
-	if (gs_input && gs_input->primitive != mode->geometry_primitive) {
+	if (gs_input != MGL_NO_PRIMITIVE && gs_input->primitive != mode->geometry_primitive) {
 		MGLError_Set("the render mode is not compatible with the geometry_input");
 		return 0;
 	}
