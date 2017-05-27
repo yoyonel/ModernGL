@@ -6,6 +6,8 @@
 - [Documentation](https://moderngl.readthedocs.io/)
 - [Examples](https://moderngl.github.io/Examples.html)
 
+![sample](https://github.com/cprogrammer1994/ModernGL/raw/master/docs/Examples/images/sample.gif)
+
 ## What is ModernGL?
 
 ModernGL is a python3 module that encapsulates **OpenGL** in a **pythonic** way.
