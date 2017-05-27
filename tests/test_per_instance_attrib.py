@@ -52,7 +52,7 @@ class TestCase(unittest.TestCase):
         self.ctx.release()
 
     def test_vertex_attrib_per_instance_1(self):
-        self.vao1.transform(self.res, ModernGL.POINTS, vertices = 4, instances = 1)
+        self.vao1.transform(self.res, ModernGL.POINTS, vertices=4, instances=1)
 
         a, b, c, d = struct.unpack('4f', self.res.read(16))
 
@@ -62,7 +62,7 @@ class TestCase(unittest.TestCase):
         self.assertAlmostEqual(d, 14.0)
 
     def test_vertex_attrib_per_instance_2(self):
-        self.vao1.transform(self.res, ModernGL.POINTS, vertices = 2, instances = 2)
+        self.vao1.transform(self.res, ModernGL.POINTS, vertices=2, instances=2)
 
         a, b, c, d = struct.unpack('4f', self.res.read(16))
 
@@ -72,7 +72,7 @@ class TestCase(unittest.TestCase):
         self.assertAlmostEqual(d, 22.0)
 
     def test_vertex_attrib_per_instance_3(self):
-        self.vao1.transform(self.res, ModernGL.POINTS, vertices = 1, instances = 4)
+        self.vao1.transform(self.res, ModernGL.POINTS, vertices=1, instances=4)
 
         a, b, c, d = struct.unpack('4f', self.res.read(16))
 
@@ -82,7 +82,7 @@ class TestCase(unittest.TestCase):
         self.assertAlmostEqual(d, 41.0)
 
     def test_vertex_attrib_per_render_1(self):
-        self.vao2.transform(self.res, ModernGL.POINTS, vertices = 4, instances = 1)
+        self.vao2.transform(self.res, ModernGL.POINTS, vertices=4, instances=1)
 
         a, b, c, d = struct.unpack('4f', self.res.read(16))
 
@@ -92,7 +92,7 @@ class TestCase(unittest.TestCase):
         self.assertAlmostEqual(d, 114.0)
 
     def test_vertex_attrib_per_render_2(self):
-        self.vao2.transform(self.res, ModernGL.POINTS, vertices = 2, instances = 2)
+        self.vao2.transform(self.res, ModernGL.POINTS, vertices=2, instances=2)
 
         a, b, c, d = struct.unpack('4f', self.res.read(16))
 
@@ -102,7 +102,7 @@ class TestCase(unittest.TestCase):
         self.assertAlmostEqual(d, 122.0)
 
     def test_vertex_attrib_per_render_3(self):
-        self.vao2.transform(self.res, ModernGL.POINTS, vertices = 1, instances = 4)
+        self.vao2.transform(self.res, ModernGL.POINTS, vertices=1, instances=4)
 
         a, b, c, d = struct.unpack('4f', self.res.read(16))
 

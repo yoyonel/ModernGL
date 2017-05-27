@@ -40,7 +40,7 @@ class TestCase(unittest.TestCase):
                 v2[3] = v1[0] * mul + add.w;
             }
         ''')
-    
+
         buf1 = ctx.buffer(struct.pack('4f', 1.0, 2.0, 3.0, 4.0))
         buf2 = ctx.buffer(struct.pack('4f', 0.0, 0.0, 0.0, 0.0))
 

@@ -69,7 +69,6 @@ class VertexArrayAttribute:
     def enabled(self, value):
         self.mglo.enabled = value
 
-
     def bind(self, buffer, offset=0, stride=0, divisor=0) -> None:
         '''
             bind
