@@ -42,6 +42,7 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args) {
 	MGLContext * ctx = MGLContext_New();
 
 	ctx->gl_context = CreateGLContext(width, height);
+	ctx->wireframe = false;
 
 	if (PyErr_Occurred()) {
 		return 0;
@@ -62,6 +63,7 @@ MGLContext * create_context(PyObject * self) {
 	MGLContext * ctx = MGLContext_New();
 
 	ctx->gl_context = LoadCurrentGLContext();
+	ctx->wireframe = false;
 
 	if (PyErr_Occurred()) {
 		return 0;
