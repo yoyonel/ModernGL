@@ -142,11 +142,73 @@ PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args) {
 }
 
 PyObject * MGLBuffer_clear(MGLBuffer * self, PyObject * args) {
+	int size;
+	int offset;
+	PyObject * chunk;
 
-	// TODO:
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"iiO",
+		&size,
+		&offset,
+		&chunk
+	);
 
-	PyErr_Format(PyExc_NotImplementedError, "NYI");
-	return 0;
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (size < 0) {
+		size = self->size - offset;
+	}
+
+	Py_buffer buffer_view;
+
+	if (chunk != Py_None) {
+		int get_buffer = PyObject_GetBuffer(chunk, &buffer_view, PyBUF_SIMPLE);
+		if (get_buffer < 0) {
+			MGLError_Set("the chunk (%s) does not support buffer interface", Py_TYPE(chunk)->tp_name);
+			return 0;
+		}
+
+		if (size % buffer_view.len != 0) {
+			MGLError_Set("the chunk does not fit the size");
+			PyBuffer_Release(&buffer_view);
+			return 0;
+		}
+	} else {
+		buffer_view.len = 0;
+		buffer_view.buf = 0;
+	}
+
+	const GLMethods & gl = self->context->gl;
+	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
+
+	char * map = (char *)gl.MapBufferRange(GL_ARRAY_BUFFER, offset, size, GL_MAP_WRITE_BIT);
+
+	if (!map) {
+		MGLError_Set("cannot map the buffer");
+		return 0;
+	}
+
+	if (buffer_view.len) {
+		char * src = (char *)buffer_view.buf;
+		int divisor = buffer_view.len;
+
+		for (int i = 0; i < size; ++i) {
+			map[i] = src[i % divisor];
+		}
+	} else {
+		memset(map + offset, 0, size);
+	}
+
+	gl.UnmapBuffer(GL_ARRAY_BUFFER);
+
+	if (chunk != Py_None) {
+		PyBuffer_Release(&buffer_view);
+	}
+
+	Py_RETURN_NONE;
 }
 
 PyObject * MGLBuffer_orphan(MGLBuffer * self) {
@@ -271,7 +333,6 @@ int MGLBuffer_tp_as_buffer_get_view(MGLBuffer * self, Py_buffer * view, int flag
 
 void MGLBuffer_tp_as_buffer_release_view(MGLBuffer * self, Py_buffer * view) {
 	const GLMethods & gl = self->context->gl;
-	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
 	gl.UnmapBuffer(GL_ARRAY_BUFFER);
 }
 

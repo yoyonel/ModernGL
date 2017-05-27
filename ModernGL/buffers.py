@@ -214,6 +214,20 @@ class Buffer:
 
         self.mglo.write(data, offset)
 
+    def clear(self, size=-1, *, offset=0, chunk=None) -> bytes:
+        '''
+            Clear the content.
+
+            Args:
+                size (int): The size. Value ``-1`` means all.
+
+            Keyword Args:
+                offset (int): The offset.
+                chunk (bytes): The chunk to use repeatedly.
+        '''
+
+        return self.mglo.clear(size, offset, chunk)
+
     def orphan(self) -> None:
         '''
             Orphan the buffer.

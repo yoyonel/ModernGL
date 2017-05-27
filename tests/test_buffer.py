@@ -13,6 +13,16 @@ class TestBuffer(unittest.TestCase):
     def tearDownClass(cls):
         cls.ctx.release()
 
+    def test_buffer_clear_1(self):
+        buf = self.ctx.buffer(data=b'\xAA\x55' * 10)
+        buf.clear(chunk=b'AB')
+        self.assertEqual(buf.read(), b'AB' * 10)
+
+    def test_buffer_clear_2(self):
+        buf = self.ctx.buffer(data=b'\xAA\x55' * 10)
+        buf.clear(offset=1, size=18, chunk=b'AB')
+        self.assertEqual(buf.read(), b'\xAAABABABABABABABABAB\x55')
+
     def test_buffer_create(self):
         buf = self.ctx.buffer(data=b'\xAA\x55' * 10)
         self.assertEqual(buf.read(), b'\xAA\x55' * 10)
