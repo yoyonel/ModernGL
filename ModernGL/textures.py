@@ -103,7 +103,7 @@ class Texture:
 
         return self.mglo.glo
 
-    def write(self, data, viewport=None, *, alignment=4) -> None:
+    def write(self, data, viewport=None, *, alignment=1) -> None:
         '''
             Update the content of the texture.
         '''

@@ -289,7 +289,7 @@ class Context:
 
         return Buffer.new(self.mglo.buffer(data, reserve, dynamic))
 
-    def texture(self, size, components, data=None, *, samples=0, alignment=4, floats=False) -> Texture:
+    def texture(self, size, components, data=None, *, samples=0, alignment=1, floats=False) -> Texture:
         '''
             Create a :py:class:`Texture`.
 
