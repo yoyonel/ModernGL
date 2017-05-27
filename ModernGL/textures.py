@@ -35,6 +35,18 @@ class Texture:
         return '<Texture: %d>' % self.glo
 
     @property
+    def swizzle(self) -> str:
+        '''
+            str: The swizzle of the texture.
+        '''
+
+        return self.mglo.swizzle
+
+    @swizzle.setter
+    def swizzle(self, value):
+        self.mglo.swizzle = value
+
+    @property
     def width(self) -> int:
         '''
             int: The width of the texture.
@@ -90,13 +102,6 @@ class Texture:
         '''
 
         return self.mglo.glo
-
-    def swizzle(self, swizzle) -> None:
-        '''
-            Swizzle the texture color channels.
-        '''
-
-        self.mglo.swizzle(swizzle)
 
     def write(self, data, viewport=None) -> None:
         '''

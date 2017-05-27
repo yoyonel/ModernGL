@@ -159,22 +159,50 @@ PyObject * MGLTexture_use(MGLTexture * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLTexture_swizzle(MGLTexture * self, PyObject * args) {
-	const char * swizzle;
+PyObject * MGLTexture_generate_mipmaps(MGLTexture * self, PyObject * args) {
 
-	int args_ok = PyArg_ParseTuple(
-		args,
-		"s",
-		&swizzle
-	);
+	// TODO:
 
-	if (!args_ok) {
-		return 0;
-	}
+	PyErr_Format(PyExc_NotImplementedError, "NYI");
+	return 0;
+}
+
+PyObject * MGLTexture_release(MGLTexture * self) {
+	MGLTexture_Invalidate(self);
+	Py_RETURN_NONE;
+}
+
+PyMethodDef MGLTexture_tp_methods[] = {
+	{"read", (PyCFunction)MGLTexture_read, METH_VARARGS, 0},
+	{"write", (PyCFunction)MGLTexture_write, METH_VARARGS, 0},
+	{"clear", (PyCFunction)MGLTexture_clear, METH_VARARGS, 0},
+	{"use", (PyCFunction)MGLTexture_use, METH_VARARGS, 0},
+	{"generate_mipmaps", (PyCFunction)MGLTexture_generate_mipmaps, METH_VARARGS, 0},
+	{"release", (PyCFunction)MGLTexture_release, METH_NOARGS, 0},
+	{0},
+};
+
+PyObject * MGLTexture_get_filter(MGLTexture * self) {
+	PyErr_Format(PyExc_NotImplementedError, "NYI");
+	return 0;
+}
+
+int MGLTexture_set_filter(MGLTexture * self, PyObject * value) {
+	PyErr_Format(PyExc_NotImplementedError, "NYI");
+	return -1;
+}
+
+PyObject * MGLTexture_get_swizzle(MGLTexture * self, void * closure) {
+	PyErr_Format(PyExc_NotImplementedError, "NYI");
+	return 0;
+}
+
+int MGLTexture_set_swizzle(MGLTexture * self, PyObject * value, void * closure) {
+	const char * swizzle = PyUnicode_AsUTF8(value);
 
 	if (!swizzle[0]) {
 		MGLError_Set("the swizzle is empty");
-		return 0;
+		return -1;
 	}
 
 	int tex_swizzle[4] = {-1, -1, -1, -1};
@@ -182,14 +210,14 @@ PyObject * MGLTexture_swizzle(MGLTexture * self, PyObject * args) {
 	for (int i = 0; swizzle[i]; ++i) {
 		if (i > 3) {
 			MGLError_Set("the swizzle is too long");
-			return 0;
+			return -1;
 		}
 
 		tex_swizzle[i] = swizzle_from_char(swizzle[i]);
 
 		if (tex_swizzle[i] == -1) {
 			MGLError_Set("'%c' is not a valid swizzle parameter", swizzle[i]);
-			return 0;
+			return -1;
 		}
 	}
 
@@ -211,41 +239,7 @@ PyObject * MGLTexture_swizzle(MGLTexture * self, PyObject * args) {
 		}
 	}
 
-	Py_RETURN_NONE;
-}
-
-PyObject * MGLTexture_generate_mipmaps(MGLTexture * self, PyObject * args) {
-
-	// TODO:
-
-	PyErr_Format(PyExc_NotImplementedError, "NYI");
 	return 0;
-}
-
-PyObject * MGLTexture_release(MGLTexture * self) {
-	MGLTexture_Invalidate(self);
-	Py_RETURN_NONE;
-}
-
-PyMethodDef MGLTexture_tp_methods[] = {
-	{"read", (PyCFunction)MGLTexture_read, METH_VARARGS, 0},
-	{"write", (PyCFunction)MGLTexture_write, METH_VARARGS, 0},
-	{"clear", (PyCFunction)MGLTexture_clear, METH_VARARGS, 0},
-	{"use", (PyCFunction)MGLTexture_use, METH_VARARGS, 0},
-	{"swizzle", (PyCFunction)MGLTexture_swizzle, METH_VARARGS, 0},
-	{"generate_mipmaps", (PyCFunction)MGLTexture_generate_mipmaps, METH_VARARGS, 0},
-	{"release", (PyCFunction)MGLTexture_release, METH_NOARGS, 0},
-	{0},
-};
-
-PyObject * MGLTexture_get_filter(MGLTexture * self) {
-	PyErr_Format(PyExc_NotImplementedError, "NYI");
-	return 0;
-}
-
-int MGLTexture_set_filter(MGLTexture * self, PyObject * value) {
-	PyErr_Format(PyExc_NotImplementedError, "NYI");
-	return -1;
 }
 
 PyObject * MGLTexture_get_width(MGLTexture * self, void * closure) {
@@ -278,7 +272,8 @@ PyObject * MGLTexture_get_glo(MGLTexture * self, void * closure) {
 }
 
 PyGetSetDef MGLTexture_tp_getseters[] = {
-	{(char *)"filter", (getter)MGLTexture_get_filter, (setter)MGLTexture_set_filter, 0, 0}, // TODO:
+	{(char *)"filter", (getter)MGLTexture_get_filter, (setter)MGLTexture_set_filter, 0, 0},
+	{(char *)"swizzle", (getter)MGLTexture_get_swizzle, (setter)MGLTexture_set_swizzle, 0, 0},
 
 	{(char *)"width", (getter)MGLTexture_get_width, 0, 0, 0},
 	{(char *)"height", (getter)MGLTexture_get_height, 0, 0, 0},
