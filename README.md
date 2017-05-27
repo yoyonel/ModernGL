@@ -44,13 +44,13 @@ Take a look at the [examples](https://https://github.com/cprogrammer1994/ModernG
 
 **Anywhere where OpenGL is supported.** ModernGL is capable of rendering using a [standalone_context]() as well. Rendering to a window only requires a valid OpenGL context.
 
-## Can ModernGL createa a Window?
+## Can ModernGL create a Window?
 
-**NO** Window creation is up to you. You can choose from a large variety of modules that can create a window: [PyQt5](), [GLUT](), [pygame]() and many others.
+**NO**, Window creation is up to you. You can choose from a large variety of modules that can create a window: [PyQt5](https://pypi.python.org/pypi/PyQt5/), [pyglet](https://bitbucket.org/pyglet/pyglet/wiki/Home), [pygame](https://www.pygame.org/news), [GLUT](https://wiki.python.org/moin/PyOpenGL) and many others.
 
 ## Limitations using ModernGL over PyOpenGL?
 
-All the neccessary calls are (or can be) implemented in ModernGL. However you can interract with the ModernGL objects from PyOpenGL if you want to. If something is missing write an [issue]() or raise a [PR]().
+All the neccessary calls are (or can be) implemented in ModernGL. However you can interract with the ModernGL objects from PyOpenGL if you want to. If something is missing write an [issue](https://github.com/cprogrammer1994/ModernGL/issues) or raise a [PR](https://github.com/cprogrammer1994/ModernGL/pulls).
 
 ## Supported platforms?
 
