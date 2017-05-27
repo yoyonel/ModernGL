@@ -13,6 +13,8 @@ class Uniform:
         In ModernGL, Uniforms can be accessed using :py:attr:`Program.uniforms`
     '''
 
+    __slots__ = ['mglo']
+
     @staticmethod
     def new(obj):
         '''
@@ -173,6 +175,8 @@ class UniformMap:
         UniformMap
     '''
 
+    __slots__ = ['mglo']
+
     @staticmethod
     def new(obj):
         '''
@@ -207,6 +211,8 @@ class UniformBlock:
     '''
         UniformBlock
     '''
+
+    __slots__ = ['mglo']
 
     @staticmethod
     def new(obj):
@@ -267,6 +273,8 @@ class UniformBlockMap:
         UniformBlockMap
     '''
 
+    __slots__ = ['mglo']
+
     @staticmethod
     def new(obj):
         '''
@@ -301,6 +309,8 @@ class Varying:
     '''
         Varying
     '''
+
+    __slots__ = ['mglo']
 
     @staticmethod
     def new(obj):
@@ -341,6 +351,8 @@ class VaryingMap:
         VaryingMap
     '''
 
+    __slots__ = ['mglo']
+
     @staticmethod
     def new(obj):
         '''
@@ -375,6 +387,8 @@ class Attribute:
     '''
         Attribute
     '''
+
+    __slots__ = ['mglo']
 
     @staticmethod
     def new(obj):
@@ -545,6 +559,8 @@ class AttributeMap:
         AttributeMap
     '''
 
+    __slots__ = ['mglo']
+
     @staticmethod
     def new(obj):
         '''
@@ -579,6 +595,8 @@ class Subroutine:
     '''
         Subroutine
     '''
+
+    __slots__ = ['mglo']
 
     @staticmethod
     def new(obj):
@@ -622,6 +640,8 @@ class SubroutineMap:
         SubroutineMap
     '''
 
+    __slots__ = ['mglo']
+
     @staticmethod
     def new(obj):
         '''
@@ -656,6 +676,8 @@ class SubroutineUniform:
     '''
         SubroutineUniform
     '''
+
+    __slots__ = ['mglo']
 
     @staticmethod
     def new(obj):
@@ -696,6 +718,8 @@ class SubroutineUniformMap:
         SubroutineUniformMap
     '''
 
+    __slots__ = ['mglo']
+
     @staticmethod
     def new(obj):
         '''
@@ -730,6 +754,8 @@ class ProgramStage:
     '''
         ProgramStage
     '''
+
+    __slots__ = ['mglo']
 
     @staticmethod
     def new(obj):

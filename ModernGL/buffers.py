@@ -14,6 +14,8 @@ class BufferAccess:
         Use :py:meth:`Buffer.access` to get a BufferAccess object.
     '''
 
+    __slots__ = ['mglo']
+
     @staticmethod
     def new(obj):
         '''

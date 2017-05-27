@@ -24,6 +24,8 @@ class EnableFlag:
         EnableFlag
     '''
 
+    __slots__ = ['mglo', 'name']
+
     @staticmethod
     def new(obj, name) -> 'EnableFlag':
         '''
@@ -69,6 +71,8 @@ class Primitive:
     '''
         Primitive
     '''
+
+    __slots__ = ['mglo', 'name']
 
     @staticmethod
     def new(obj, name) -> 'Primitive':
@@ -151,6 +155,8 @@ class Version:
     '''
         Version
     '''
+
+    __slots__ = ['_major', '_minor']
 
     def __init__(self, major, minor):
         self._major = major

@@ -16,6 +16,8 @@ class VertexArrayAttribute:
         VertexArrayAttribute
     '''
 
+    __slots__ = ['mglo']
+
     @staticmethod
     def new(obj):
         '''
@@ -95,6 +97,8 @@ class VertexArrayAttributeMap:
     '''
         VertexArrayAttributeMap
     '''
+
+    __slots__ = ['mglo']
 
     def __init__(self):
         self.mglo = {}
