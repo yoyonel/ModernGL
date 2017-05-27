@@ -43,15 +43,22 @@ PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
 PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 	PyObject * data;
 	PyObject * viewport;
+	int alignment;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OO",
+		"OOI",
 		&data,
-		&viewport
+		&viewport,
+		&alignment
 	);
 
 	if (!args_ok) {
+		return 0;
+	}
+
+	if (alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8) {
+		MGLError_Set("the alignment must be 1, 2, 4 or 8");
 		return 0;
 	}
 
@@ -122,6 +129,7 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 	gl.BindTexture(texture_target, self->texture_obj);
 
+	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 	gl.TexSubImage2D(texture_target, 0, x, y, width, height, format, pixel_type, buffer_view.buf);
 
 	PyBuffer_Release(&buffer_view);

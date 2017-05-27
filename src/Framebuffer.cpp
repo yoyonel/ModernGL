@@ -54,7 +54,7 @@ PyObject * MGLFramebuffer_clear(MGLFramebuffer * self, PyObject * args) {
 	if (!args_ok) {
 		return 0;
 	}
-	
+
 	int x = 0;
 	int y = 0;
 	int width = self->width;
@@ -118,17 +118,24 @@ PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
 PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	PyObject * viewport;
 	int components;
+	int alignment;
 	int floats;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OIp",
+		"OIIp",
 		&viewport,
 		&components,
+		&alignment,
 		&floats
 	);
 
 	if (!args_ok) {
+		return 0;
+	}
+
+	if (alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8) {
+		MGLError_Set("the alignment must be 1, 2, 4 or 8");
 		return 0;
 	}
 
@@ -181,7 +188,10 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	const GLMethods & gl = self->context->gl;
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
+
+	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 	gl.ReadPixels(x, y, width, height, format, type, data);
+
 	return result;
 }
 

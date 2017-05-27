@@ -289,13 +289,14 @@ class Context:
 
         return Buffer.new(self.mglo.buffer(data, reserve, dynamic))
 
-    def texture(self, size, components, data=None, *, samples=0, floats=False) -> Texture:
+    def texture(self, size, components, data=None, *, samples=0, alignment=4, floats=False) -> Texture:
         '''
             Create a :py:class:`Texture`.
 
             Args:
                 size (tuple): Width, height.
                 components (int): The number of components 1, 2, 3 or 4.
+                alignment (int): The byte alignment 1, 2, 4 or 8.
                 data (bytes): Content of the image.
 
             Keyword Args:
@@ -305,7 +306,7 @@ class Context:
                 Texture: texture
         '''
 
-        return Texture.new(self.mglo.texture(size, components, data, samples, floats))
+        return Texture.new(self.mglo.texture(size, components, data, samples, alignment, floats))
 
     def depth_texture(self, size, data=None, *, samples=0) -> Texture:
         '''

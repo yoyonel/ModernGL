@@ -96,12 +96,12 @@ class Framebuffer:
 
         self.mglo.use()
 
-    def read(self, viewport=None, components=3, *, floats=False) -> bytes:
+    def read(self, viewport=None, components=3, *, alignment=4, floats=False) -> bytes:
         '''
             Read the framebuffer content.
         '''
 
-        return self.mglo.read(viewport, components, floats)
+        return self.mglo.read(viewport, components, alignment, floats)
 
     def release(self) -> None:
         '''

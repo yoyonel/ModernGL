@@ -353,16 +353,18 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 	PyObject * data;
 
 	int samples;
+	int alignment;
 	int floats;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"(II)IOIp",
+		"(II)IOIIp",
 		&width,
 		&height,
 		&components,
 		&data,
 		&samples,
+		&alignment,
 		&floats
 	);
 
@@ -377,6 +379,11 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 
 	if (samples & (samples - 1)) {
 		MGLError_Set("the number of samples is invalid");
+		return 0;
+	}
+
+	if (alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8) {
+		MGLError_Set("the alignment must be 1, 2, 4 or 8");
 		return 0;
 	}
 
@@ -432,6 +439,7 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 	if (samples) {
 		gl.TexImage2DMultisample(texture_target, samples, format, width, height, true);
 	} else {
+		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.TexImage2D(texture_target, 0, format, width, height, 0, format, pixel_type, buffer_view.buf);
 	}
 
