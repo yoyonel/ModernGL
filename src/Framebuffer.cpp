@@ -176,13 +176,16 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 
 	}
 
-	int size = floats ? (width * height * components * 4) : (height * ((width * components + 3) & ~3));
+	int expected_size = width * components * (floats ?  4 : 1);
+	expected_size = (expected_size + alignment - 1) / alignment * alignment;
+	expected_size = expected_size * height;
+
 	int type = floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
 
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 	int format = formats[components];
 
-	PyObject * result = PyBytes_FromStringAndSize(0, size);
+	PyObject * result = PyBytes_FromStringAndSize(0, expected_size);
 	char * data = PyBytes_AS_STRING(result);
 
 	const GLMethods & gl = self->context->gl;
