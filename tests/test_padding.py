@@ -7,10 +7,10 @@ import ModernGL
 class TestCase(unittest.TestCase):
 
     @classmethod
-    def setUpClass(self):
-        self.ctx = ModernGL.create_standalone_context()
+    def setUpClass(cls):
+        cls.ctx = ModernGL.create_standalone_context()
 
-        self.vert = self.ctx.vertex_shader('''
+        cls.vert = cls.ctx.vertex_shader('''
             #version 330
 
             in int a_in;
@@ -31,11 +31,11 @@ class TestCase(unittest.TestCase):
             }
         ''')
 
-        self.prog = self.ctx.program(self.vert, ['a_out', 'b_out', 'c_out', 'd_out'])
+        cls.prog = cls.ctx.program(cls.vert, ['a_out', 'b_out', 'c_out', 'd_out'])
 
     @classmethod
-    def tearDownClass(self):
-        self.ctx.release()
+    def tearDownClass(cls):
+        cls.ctx.release()
 
     def test_padding_1(self):
         buf = self.ctx.buffer(struct.pack('=ixi12xii', 1, 2, 3, 4))

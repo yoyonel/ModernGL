@@ -7,10 +7,10 @@ import ModernGL
 class TestCase(unittest.TestCase):
 
     @classmethod
-    def setUpClass(self):
-        self.ctx = ModernGL.create_standalone_context()
+    def setUpClass(cls):
+        cls.ctx = ModernGL.create_standalone_context()
 
-        self.vert = self.ctx.vertex_shader('''
+        cls.vert = cls.ctx.vertex_shader('''
             #version 330
 
             in vec2 in_v;
@@ -33,11 +33,11 @@ class TestCase(unittest.TestCase):
             }
         ''')
 
-        self.prog = self.ctx.program(self.vert, ['out_v'])
+        cls.prog = cls.ctx.program(cls.vert, ['out_v'])
 
     @classmethod
-    def tearDownClass(self):
-        self.ctx.release()
+    def tearDownClass(cls):
+        cls.ctx.release()
 
     def test_1(self):
         buf_v = self.ctx.buffer(struct.pack('2f', 100.0, 1000.0))

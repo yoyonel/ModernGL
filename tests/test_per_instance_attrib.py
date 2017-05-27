@@ -7,12 +7,11 @@ import ModernGL
 class TestCase(unittest.TestCase):
 
     @classmethod
-    def setUpClass(self):
-        self.ctx = ModernGL.create_standalone_context()
-        ctx = self.ctx
+    def setUpClass(cls):
+        cls.ctx = ModernGL.create_standalone_context()
 
-        prog = ctx.program([
-            ctx.vertex_shader('''
+        prog = cls.ctx.program([
+            cls.ctx.vertex_shader('''
                 #version 330
 
                 in float v_in_1;
@@ -26,16 +25,16 @@ class TestCase(unittest.TestCase):
             '''),
         ], varyings=['v_out'])
 
-        vbo1 = ctx.buffer(struct.pack('4f', 1.0, 2.0, 3.0, 4.0))
-        vbo2 = ctx.buffer(struct.pack('4f', 10.0, 20.0, 30.0, 40.0))
-        vbo3 = ctx.buffer(struct.pack('4f', 100.0, 200.0, 300.0, 400.0))
+        vbo1 = cls.ctx.buffer(struct.pack('4f', 1.0, 2.0, 3.0, 4.0))
+        vbo2 = cls.ctx.buffer(struct.pack('4f', 10.0, 20.0, 30.0, 40.0))
+        vbo3 = cls.ctx.buffer(struct.pack('4f', 100.0, 200.0, 300.0, 400.0))
 
         vao1_content = [
             (vbo1, 'f', ['v_in_1']),
             (vbo2, 'f/i', ['v_in_2']),
         ]
 
-        self.vao1 = ctx.vertex_array(prog, vao1_content)
+        cls.vao1 = cls.ctx.vertex_array(prog, vao1_content)
 
         vao2_content = [
             (vbo1, 'f', ['v_in_1']),
@@ -43,13 +42,13 @@ class TestCase(unittest.TestCase):
             (vbo3, 'f/r', ['v_in_3']),
         ]
 
-        self.vao2 = ctx.vertex_array(prog, vao2_content)
+        cls.vao2 = cls.ctx.vertex_array(prog, vao2_content)
 
-        self.res = ctx.buffer(reserve=1024)
+        cls.res = cls.ctx.buffer(reserve=1024)
 
     @classmethod
-    def tearDownClass(self):
-        self.ctx.release()
+    def tearDownClass(cls):
+        cls.ctx.release()
 
     def test_vertex_attrib_per_instance_1(self):
         self.vao1.transform(self.res, ModernGL.POINTS, vertices=4, instances=1)

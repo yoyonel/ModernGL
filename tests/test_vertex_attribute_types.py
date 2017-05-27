@@ -215,12 +215,12 @@ vtypes = [
 class TestCase(unittest.TestCase):
 
     @classmethod
-    def setUpClass(self):
-        self.ctx = ModernGL.create_standalone_context()
+    def setUpClass(cls):
+        cls.ctx = ModernGL.create_standalone_context()
 
     @classmethod
-    def tearDownClass(self):
-        self.ctx.release()
+    def tearDownClass(cls):
+        cls.ctx.release()
 
     def test_simple(self):
         vert_src = '''

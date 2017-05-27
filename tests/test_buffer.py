@@ -6,12 +6,12 @@ import ModernGL
 class TestBuffer(unittest.TestCase):
 
     @classmethod
-    def setUpClass(self):
-        self.ctx = ModernGL.create_standalone_context()
+    def setUpClass(cls):
+        cls.ctx = ModernGL.create_standalone_context()
 
     @classmethod
-    def tearDownClass(self):
-        self.ctx.release()
+    def tearDownClass(cls):
+        cls.ctx.release()
 
     def test_buffer_create(self):
         buf = self.ctx.buffer(data=b'\xAA\x55' * 10)
@@ -47,7 +47,7 @@ class TestBuffer(unittest.TestCase):
 
     def test_buffer_reentrant_access(self):
         buf = self.ctx.buffer(reserve=1024)
-        with buf.access() as a:
+        with buf.access():
             with self.assertRaises(ModernGL.Error):
                 buf.read()
 

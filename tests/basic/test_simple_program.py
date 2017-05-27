@@ -1,4 +1,3 @@
-import struct
 import unittest
 
 import ModernGL
@@ -7,10 +6,10 @@ import ModernGL
 class TestCase(unittest.TestCase):
 
     @classmethod
-    def setUpClass(self):
-        self.ctx = ModernGL.create_standalone_context()
+    def setUpClass(cls):
+        cls.ctx = ModernGL.create_standalone_context()
 
-        self.vertex_shader = self.ctx.vertex_shader('''
+        cls.vertex_shader = cls.ctx.vertex_shader('''
             #version 330
             uniform mat4 Mvp;
             in vec4 vertex;
@@ -22,7 +21,7 @@ class TestCase(unittest.TestCase):
             }
         ''')
 
-        self.geometry_shader = self.ctx.geometry_shader('''
+        cls.geometry_shader = cls.ctx.geometry_shader('''
             #version 330
             layout(points) in;
             uniform vec4 Position;
@@ -37,7 +36,7 @@ class TestCase(unittest.TestCase):
             }
         ''')
 
-        self.fragment_shader = self.ctx.fragment_shader('''
+        cls.fragment_shader = cls.ctx.fragment_shader('''
             #version 330
             uniform vec4 Color;
             uniform Lights {
@@ -50,8 +49,8 @@ class TestCase(unittest.TestCase):
         ''')
 
     @classmethod
-    def tearDownClass(self):
-        self.ctx.release()
+    def tearDownClass(cls):
+        cls.ctx.release()
 
     def test_program_uniforms_1(self):
         program = self.ctx.program(self.vertex_shader)
@@ -93,11 +92,11 @@ class TestCase(unittest.TestCase):
 
     def test_program_duplicate_shader_1(self):
         with self.assertRaisesRegex(ModernGL.Error, 'duplicate'):
-            program = self.ctx.program([self.vertex_shader, self.vertex_shader])
+            self.ctx.program([self.vertex_shader, self.vertex_shader])
 
     def test_program_duplicate_shader_2(self):
         with self.assertRaisesRegex(ModernGL.Error, 'duplicate'):
-            program = self.ctx.program([self.vertex_shader, self.fragment_shader, self.fragment_shader])
+            self.ctx.program([self.vertex_shader, self.fragment_shader, self.fragment_shader])
 
 
 if __name__ == '__main__':

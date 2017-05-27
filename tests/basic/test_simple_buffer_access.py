@@ -1,4 +1,3 @@
-import struct
 import unittest
 
 import ModernGL
@@ -7,12 +6,12 @@ import ModernGL
 class TestCase(unittest.TestCase):
 
     @classmethod
-    def setUpClass(self):
-        self.ctx = ModernGL.create_standalone_context()
+    def setUpClass(cls):
+        cls.ctx = ModernGL.create_standalone_context()
 
     @classmethod
-    def tearDownClass(self):
-        self.ctx.release()
+    def tearDownClass(cls):
+        cls.ctx.release()
 
     def test_buffer_readonly_access(self):
         buf = self.ctx.buffer(b'Hello World!')
