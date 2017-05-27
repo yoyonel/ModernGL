@@ -474,7 +474,7 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"(II)OI",
+		"(II)OII",
 		&width,
 		&height,
 		&data,
