@@ -112,6 +112,13 @@ class Texture:
 
         return self.mglo.read(viewport, alignment)
 
+    def read_into(self, buffer, viewport=None, *, alignment=1) -> None:
+        '''
+            Read the content of the texture.
+        '''
+
+        return self.mglo.read(buffer, viewport, alignment)
+
     def write(self, data, viewport=None, *, alignment=1) -> None:
         '''
             Update the content of the texture.

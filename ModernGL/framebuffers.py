@@ -105,6 +105,13 @@ class Framebuffer:
 
         return self.mglo.read(viewport, components, alignment, floats)
 
+    def read_into(self, buffer, viewport=None, components=3, *, alignment=1, floats=False) -> None:
+        '''
+            Read the framebuffer content.
+        '''
+
+        return self.mglo.read_into(buffer, viewport, components, alignment, floats)
+
     def release(self) -> None:
         '''
             Release the ModernGL object.
