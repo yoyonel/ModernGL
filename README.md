@@ -1,36 +1,68 @@
 # ModernGL
 
-:fire: modern OpenGL binding for Python (alternative to PyOpenGL)
+:fire: Modern OpenGL binding for Python (PyOpenGL replacement)
 
 - [ModernGL on PyPI](https://pypi.python.org/pypi/ModernGL/)
-- [Documentation](https://moderngl.readthedocs.io/en/latest/)
+- [Documentation](https://moderngl.readthedocs.io/)
 - [Examples](https://moderngl.github.io/Examples.html)
 
-## ModernGL and OpenGL
+![sample](https://github.com/cprogrammer1994/ModernGL/raw/master/docs/Examples/images/sample.gif)
 
-OpenGL is a great environment for developing portable, platform independent,
-interactive 2D and 3D graphics applications. The API implementation in Python
-is cumbersome, resulting in applications with high latency. To solve this
-problem we have developed ModernGL, a wrapper over OpenGL that simplifies the
-creation of simple graphics applications like scientific simulations, small
-games or user interfaces. Usually, acquiring in-depth knowledge of OpenGL
-requires a steep learning curve. In contrast, ModernGL is easy to learn and
-use, moreover it is capable of rendering with the same performance and
-quality, with less code written.
+## What is ModernGL?
 
-# Installation
+ModernGL is a python3 module that encapsulates **OpenGL** in a **pythonic** way.
 
-Using pip:
+## Why should I use ModernGL?
+
+If you prefer **GPU accelerated high quality graphics** then you should develop your applications using ModernGL. It is much simpler then PyOpenGL and capable of rendering with the same quality and performace.
+
+## Why is it simpler?
+
+With the original OpenGL API you have to write a couple of lines to achieve a **simple task** like compiling a shader or running a computation on the GPU. With ModernGL you will need just a **few lines** to achieve the same result.
+
+## Is ModernGL faster then PyOpenGL?
+
+In some cases **yes**, the core functions of ModernGL are written in C++, OpenGL functions are called in quick succession so these calls together count as a single python function call.
+
+## What version of OpenGL is used?
+
+Most of the calls only require **OpenGL 3.3** but Subroutines and Compute Shaders require **OpenGL 4.0** and **OpenGL 4.3**
+
+## Is my old PC supported?
+
+OpenGL 3.3 came out in February 2010. With **up to date drivers** you will be able to use the most of the ModernGL functions, even on integrated graphics cards. _(No, Compute Shaders won't work)_
+
+## How can I install ModernGL?
 
 ```
 pip install ModernGL
 ```
 
-## An example with [source](https://moderngl.github.io/Examples/julia_fractal.html)
+## How can I start using ModernGL?
 
-![Julia Fractal](https://moderngl.github.io/_images/julia_fractal.png)
+Take a look at the [examples](https://https://github.com/cprogrammer1994/ModernGL/examples) and [docs](https://moderngl.readthedocs.io/).
 
-## A short sample
+## Where can I use ModernGL?
+
+**Anywhere where OpenGL is supported.** ModernGL is capable of rendering using a [standalone_context]() as well. Rendering to a window only requires a valid OpenGL context.
+
+## Can ModernGL create a Window?
+
+**NO**, Window creation is up to you. You can choose from a large variety of modules that can create a window: [PyQt5](https://pypi.python.org/pypi/PyQt5/), [pyglet](https://bitbucket.org/pyglet/pyglet/wiki/Home), [pygame](https://www.pygame.org/news), [GLUT](https://wiki.python.org/moin/PyOpenGL) and many others.
+
+## Limitations using ModernGL over PyOpenGL?
+
+All the neccessary calls are (or can be) implemented in ModernGL. However you can interract with the ModernGL objects from PyOpenGL if you want to. If something is missing write an [issue](https://github.com/cprogrammer1994/ModernGL/issues) or raise a [PR](https://github.com/cprogrammer1994/ModernGL/pulls).
+
+## Supported platforms?
+
+- [x] Windows
+- [x] Linux
+- [x] Mac
+
+# Examples
+
+## The Hello World triangle
 
 ```py
 
@@ -64,12 +96,30 @@ vao.render(ModernGL.TRIANGLES)
 
 ```
 
-## How to install
+## Installing from source
 
 Installing on **Ubuntu** from source:
-```
+
+```sh
 apt-get install python3-dev libgl1-mesa-dev libx11-dev
 python3 setup.py install
 ```
 
-...
+## Building the shinx documentation
+
+```sh
+pip install -r docs/requirements.txt
+python setup.py build_sphinx
+```
+
+## Running tests
+
+Some of the tests may be skipped when the supported OpenGL version is below the requirements of the given test. 
+
+```sh
+pytest
+```
+
+## Code quality
+
+Code is tested with [pep8](https://www.python.org/dev/peps/pep-0008/), [flake8](http://flake8.pycqa.org/en/latest/), [prospector](https://prospector.landscape.io/en/master/) and [pylint](https://www.pylint.org/)
