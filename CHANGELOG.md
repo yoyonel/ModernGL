@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## Fixed
+- Multiple render target.
 
 ## [4.1.1] - 2017-05-27
 ### Added
