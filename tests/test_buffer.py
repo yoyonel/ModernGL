@@ -37,6 +37,21 @@ class TestBuffer(unittest.TestCase):
         self.assertEqual(buf.read(), b'abcabcabcd')
         self.assertEqual(buf.read(offset=3), b'abcabcd')
 
+    def test_buffer_read_into(self):
+        data = b'Hello World!'
+        buf = self.ctx.buffer(data)
+        res = bytearray(buf.size)
+        buf.read_into(res)
+        self.assertEqual(data, bytes(res))
+
+    def test_buffer_access_read_into(self):
+        data = b'Hello World!'
+        buf = self.ctx.buffer(data)
+        res = bytearray(buf.size)
+        with buf.access() as access:
+            access.read_into(res)
+        self.assertEqual(data, bytes(res))
+
     def test_buffer_orphan(self):
         buf = self.ctx.buffer(reserve=1024)
         buf.orphan()

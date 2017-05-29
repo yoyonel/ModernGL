@@ -86,6 +86,57 @@ PyObject * MGLBufferAccess_read(MGLBufferAccess * self, PyObject * args) {
 	return PyBytes_FromStringAndSize(self->ptr + offset, size);
 }
 
+PyObject * MGLBufferAccess_read_into(MGLBufferAccess * self, PyObject * args) {
+	PyObject * data;
+	int size;
+	int offset;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"OII",
+		&data,
+		&size,
+		&offset
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (size == -1) {
+		size = self->size - offset;
+	}
+
+	if (offset < 0 || size < 0 || size + offset > self->size) {
+		MGLError_Set("out of range offset = %d or size = %d", offset, size);
+		return 0;
+	}
+
+	if (!self->ptr) {
+		MGLError_Set("the access object is not open");
+		return 0;
+	}
+
+	Py_buffer buffer_view;
+
+	int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_WRITABLE);
+	if (get_buffer < 0) {
+		MGLError_Set("the buffer (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+		return 0;
+	}
+
+	if (buffer_view.len < size) {
+		MGLError_Set("the buffer is too small %d < %d", buffer_view.len, size);
+		PyBuffer_Release(&buffer_view);
+		return 0;
+	}
+
+	memcpy(buffer_view.buf, self->ptr + offset, size);
+
+	PyBuffer_Release(&buffer_view);
+	Py_RETURN_NONE;
+}
+
 PyObject * MGLBufferAccess_write(MGLBufferAccess * self, PyObject * args) {
 	const char * data;
 	int size;
@@ -121,8 +172,8 @@ PyObject * MGLBufferAccess_write(MGLBufferAccess * self, PyObject * args) {
 PyMethodDef MGLBufferAccess_tp_methods[] = {
 	{"open", (PyCFunction)MGLBufferAccess_open, METH_NOARGS, 0},
 	{"close", (PyCFunction)MGLBufferAccess_close, METH_VARARGS, 0},
-
 	{"read", (PyCFunction)MGLBufferAccess_read, METH_VARARGS, 0},
+	{"read_into", (PyCFunction)MGLBufferAccess_read_into, METH_VARARGS, 0},
 	{"write", (PyCFunction)MGLBufferAccess_write, METH_VARARGS, 0},
 	{0},
 };
