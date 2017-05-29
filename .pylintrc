@@ -1,3 +1,6 @@
+[MESSAGES CONTROL]
+disable=assigning-non-slot
+
 [SIMILARITIES]
 min-similarity-lines=40
 
