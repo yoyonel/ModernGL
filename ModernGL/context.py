@@ -571,7 +571,7 @@ class Context:
 
         return Framebuffer.new(self.mglo.framebuffer(color_attachments, depth_attachment))
 
-    def renderbuffer(self, size, components=4, *, samples=0, floats=True) -> Renderbuffer:
+    def renderbuffer(self, size, components=4, *, samples=0, floats=False) -> Renderbuffer:
         '''
             Create a :py:class:`Renderbuffer`.
 
