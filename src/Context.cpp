@@ -1168,7 +1168,7 @@ MGLRenderbuffer * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	const int int_formats[] = {0, GL_R8UI, GL_RG8UI, GL_RGB8UI, GL_RGBA8UI};
+	const int int_formats[] = {0, GL_R8, GL_RG8, GL_RGB8, GL_RGBA8};
 	const int float_formats[] = {0, GL_R32F, GL_RG32F, GL_RGB32F, GL_RGBA32F};
 
 	int format = floats ? float_formats[components] : int_formats[components];

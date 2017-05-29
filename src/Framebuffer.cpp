@@ -95,6 +95,7 @@ PyObject * MGLFramebuffer_clear(MGLFramebuffer * self, PyObject * args) {
 	const GLMethods & gl = self->context->gl;
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
+	gl.DrawBuffers(self->draw_buffers_len, self->draw_buffers);
 
 	gl.ClearColor(r, g, b, a);
 
@@ -193,6 +194,7 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	const GLMethods & gl = self->context->gl;
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
+	gl.ReadBuffer(GL_COLOR_ATTACHMENT0);
 
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 	gl.ReadPixels(x, y, width, height, format, type, data);
