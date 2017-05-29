@@ -1,9 +1,10 @@
+import struct
+
 import ModernGL
 import ModernGL.tk
-import tkinter, struct
+import tkinter
 
 ctx = ModernGL.create_standalone_context()
-
 
 prog = ctx.program([
     ctx.vertex_shader('''
@@ -85,6 +86,7 @@ R.pack()
 
 k = 1
 
+
 def task():
     global k
     k += 0.02
@@ -99,7 +101,6 @@ def task():
 
     root.after(1, task)
 
+
 root.after(1, task)
-
 tkinter.mainloop()
-

@@ -1,3 +1,9 @@
+'''
+    The tkinter ModernGL connector
+'''
+
+# pylint: disable=too-many-ancestors
+
 import struct
 
 import ctypes
