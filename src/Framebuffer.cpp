@@ -299,7 +299,7 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 }
 
 PyMethodDef MGLFramebuffer_tp_methods[] = {
-	{"clear", (PyCFunction)MGLFramebuffer_clear, METH_NOARGS, 0},
+	{"clear", (PyCFunction)MGLFramebuffer_clear, METH_VARARGS, 0},
 	{"use", (PyCFunction)MGLFramebuffer_use, METH_NOARGS, 0},
 	{"read", (PyCFunction)MGLFramebuffer_read, METH_VARARGS, 0},
 	{"read_into", (PyCFunction)MGLFramebuffer_read_into, METH_VARARGS, 0},
