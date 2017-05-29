@@ -118,6 +118,106 @@ PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
 	return result;
 }
 
+PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
+	PyObject * data;
+	PyObject * viewport;
+	int alignment;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"OOI",
+		&data,
+		&viewport,
+		&alignment
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8) {
+		MGLError_Set("the alignment must be 1, 2, 4 or 8");
+		return 0;
+	}
+
+	if (self->samples) {
+		MGLError_Set("multisample textures cannot be read directly");
+		return 0;
+	}
+
+	int x = 0;
+	int y = 0;
+	int width = self->width;
+	int height = self->height;
+
+	if (viewport != Py_None) {
+		if (Py_TYPE(viewport) != &PyTuple_Type) {
+			MGLError_Set("the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
+			return 0;
+		}
+
+		if (PyTuple_GET_SIZE(viewport) == 4) {
+
+			x = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
+			y = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
+			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 2));
+			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 3));
+
+		} else if (PyTuple_GET_SIZE(viewport) == 2) {
+
+			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
+			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
+
+		} else {
+
+			MGLError_Set("the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
+			return 0;
+
+		}
+
+		if (PyErr_Occurred()) {
+			MGLError_Set("wrong values in the viewport");
+			return 0;
+		}
+
+	}
+
+	int expected_size = width * self->components * (self->floats ?  4 : 1);
+	expected_size = (expected_size + alignment - 1) / alignment * alignment;
+	expected_size = expected_size * height;
+
+	Py_buffer buffer_view;
+
+	int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_WRITABLE);
+	if (get_buffer < 0) {
+		MGLError_Set("the buffer (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+		return 0;
+	}
+
+	if (buffer_view.len < expected_size) {
+		MGLError_Set("the buffer is too small %d < %d", buffer_view.len, expected_size);
+		PyBuffer_Release(&buffer_view);
+		return 0;
+	}
+
+	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
+
+	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+	int pixel_type = self->floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+	int format = formats[self->components];
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+	gl.BindTexture(texture_target, self->texture_obj);
+
+	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+	gl.GetTexImage(texture_target, 0, format, pixel_type, buffer_view.buf);
+
+	PyBuffer_Release(&buffer_view);
+	Py_RETURN_NONE;
+}
+
 PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 	PyObject * data;
 	PyObject * viewport;
@@ -262,6 +362,7 @@ PyObject * MGLTexture_release(MGLTexture * self) {
 
 PyMethodDef MGLTexture_tp_methods[] = {
 	{"read", (PyCFunction)MGLTexture_read, METH_VARARGS, 0},
+	{"read_into", (PyCFunction)MGLTexture_read_into, METH_VARARGS, 0},
 	{"write", (PyCFunction)MGLTexture_write, METH_VARARGS, 0},
 	{"clear", (PyCFunction)MGLTexture_clear, METH_VARARGS, 0},
 	{"use", (PyCFunction)MGLTexture_use, METH_VARARGS, 0},
