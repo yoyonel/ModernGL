@@ -25,11 +25,11 @@ pip install ModernGL
 
 If you prefer **GPU accelerated high quality graphics** then you should develop your applications using ModernGL. It is much simpler then PyOpenGL and capable of rendering with the same quality and performace.
 
-- Full linting support - (using [vscode]() and [pylint]())
+- Full linting support - (using [vscode](https://code.visualstudio.com/) and [pylint](https://www.pylint.org/))
 - Create GLSL shaders with only a few lines of code
 - Create framebuffers and validate them with a single call
 - Access cool OpenGL features by writing clean and self-explaining code
-- [vscode snippets]() for fast prototyping
+- [vscode snippets](https://github.com/cprogrammer1994/ModernGL/blob/master/extras/vscode/python.json) for fast prototyping
 - Render to pillow image - (no window required)
 
 ## Why is it simpler?
@@ -113,7 +113,7 @@ Image.frombytes('RGB', size, fbo1.read(components=3))
 
 ## Render to pillow image (larger then screen)
 
-Just change size to `(4096, 4096)`<br>
+Just change the size to `(4096, 4096)`<br>
 
 > This will require much more video ram.
 
