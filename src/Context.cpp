@@ -1114,6 +1114,13 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
+	framebuffer->draw_buffers = new unsigned[color_attachments_len];
+	framebuffer->draw_buffers_len = color_attachments_len;
+
+	for (int i = 0; i < color_attachments_len; ++i) {
+		framebuffer->draw_buffers[i] = GL_COLOR_ATTACHMENT0 + i;
+	}
+
 	framebuffer->color_attachments = color_attachments;
 	framebuffer->depth_attachment = depth_attachment;
 
@@ -1437,6 +1444,10 @@ PyObject * MGLContext_get_default_framebuffer(MGLContext * self) {
 
 		framebuffer->color_attachments = 0;
 		framebuffer->depth_attachment = 0;
+
+		framebuffer->draw_buffers_len = 1;
+		framebuffer->draw_buffers = new unsigned[1];
+		framebuffer->draw_buffers[0] = GL_COLOR_ATTACHMENT0;
 
 		// NO INCREF
 		framebuffer->context = self;

@@ -111,7 +111,9 @@ PyObject * MGLFramebuffer_clear(MGLFramebuffer * self, PyObject * args) {
 }
 
 PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
-	self->context->gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
+	const GLMethods & gl = self->context->gl;
+	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
+	gl.DrawBuffers(self->draw_buffers_len, self->draw_buffers);
 	Py_RETURN_NONE;
 }
 
