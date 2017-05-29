@@ -7,7 +7,7 @@ Context
 .. autofunction:: ModernGL.create_standalone_context(size=(256, 256), require=None) -> Context
 
 .. autoclass:: Context
-	:members: line_width, point_size, viewport, default_texture_unit, max_texture_units, default_framebuffer, vendor, renderer, version
+	:members: line_width, point_size, viewport, default_texture_unit, max_texture_units, default_framebuffer, wireframe, error, vendor, renderer, version, version_code
 
 	.. automethod:: clear(red=0, green=0, blue=0, alpha=0, viewport=None)
 	.. automethod:: enable(flag)
