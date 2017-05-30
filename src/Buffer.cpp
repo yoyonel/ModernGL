@@ -272,11 +272,11 @@ PyObject * MGLBuffer_orphan(MGLBuffer * self) {
 }
 
 PyObject * MGLBuffer_bind_to_uniform_block(MGLBuffer * self, PyObject * args) {
-	PyObject * binding;
+	int binding;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O",
+		"I",
 		&binding
 	);
 
@@ -284,15 +284,8 @@ PyObject * MGLBuffer_bind_to_uniform_block(MGLBuffer * self, PyObject * args) {
 		return 0;
 	}
 
-	int block = PyLong_AsUnsignedLong(binding);
-
-	if (PyErr_Occurred()) {
-		MGLError_Set("the binding is invalid");
-		return 0;
-	}
-
 	const GLMethods & gl = self->context->gl;
-	gl.BindBufferBase(GL_UNIFORM_BUFFER, block, self->buffer_obj);
+	gl.BindBufferBase(GL_UNIFORM_BUFFER, binding, self->buffer_obj);
 	Py_RETURN_NONE;
 }
 
@@ -301,7 +294,7 @@ PyObject * MGLBuffer_bind_to_storage_buffer(MGLBuffer * self, PyObject * args) {
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"i",
+		"I",
 		&binding
 	);
 
