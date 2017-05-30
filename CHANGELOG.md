@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Read any color attachemnts from the Framebuffer.
+- Framebuffer, Buffer and Texture `read_into` methods.
 
 ### Fixed
 - Multiple render target.
