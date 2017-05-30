@@ -62,7 +62,7 @@ class Framebuffer:
 
         return self.mglo.glo
 
-    def clear(self, red=0, green=0, blue=0, alpha=0, *, viewport=None) -> None:
+    def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, *, viewport=None) -> None:
         '''
             Clear the framebuffer.
 
@@ -76,10 +76,10 @@ class Framebuffer:
             If the `viewport` is a 4-tuple it will clear the given viewport.
 
             Args:
-                red (int): color component.
-                green (int): color component.
-                blue (int): color component.
-                alpha (int): alpha component.
+                red (float): color component.
+                green (float): color component.
+                blue (float): color component.
+                alpha (float): alpha component.
 
             Keyword Args:
                 viewport (tuple): The viewport.

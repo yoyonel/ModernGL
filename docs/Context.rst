@@ -9,12 +9,13 @@ Context
 .. autoclass:: Context
 	:members: line_width, point_size, viewport, default_texture_unit, max_texture_units, default_framebuffer, wireframe, error, vendor, renderer, version, version_code
 
-	.. automethod:: clear(red=0, green=0, blue=0, alpha=0, viewport=None)
+	.. automethod:: clear(red=0.0, green=0.0, blue=0.0, alpha=0.0, viewport=None)
 	.. automethod:: enable(flag)
 	.. automethod:: disable(flag)
 	.. automethod:: finish()
 	.. automethod:: copy_buffer(dst, src, size=-1, read_offset=0, write_offset=0)
 	.. automethod:: copy_framebuffer(dst, src)
+
 	.. automethod:: buffer(data=None, reserve=0, dynamic=False) -> Buffer
 	.. automethod:: texture(size, components, data=None, samples=0, floats=False) -> Texture
 	.. automethod:: depth_texture(size, data=None, samples=0) -> Texture
