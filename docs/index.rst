@@ -1,6 +1,12 @@
 Welcome to ModernGL's documentation!
 ====================================
 
+.. figure:: Examples/images/02_uniforms_and_attributes.png
+	:scale: 50 %
+	:alt: 02_uniforms_and_attributes
+	:align: center
+	:figclass: align-center
+
 Start `here <ModernGL.html>`_.
 
 .. toctree::

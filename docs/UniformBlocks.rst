@@ -4,7 +4,7 @@ Uniform Blocks
 .. currentmodule:: ModernGL
 
 .. autoclass:: UniformBlock
-	:members: name, location
+	:members: name, index, size, binding
 
 .. autoclass:: UniformBlockMap
 
