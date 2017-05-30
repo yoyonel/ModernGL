@@ -12,9 +12,9 @@ Textures
 .. autoclass:: Texture
 	:members: width, height, size, samples, components, depth
 
-	.. automethod:: read(self, viewport=None, alignment=1) -> bytes
-	.. automethod:: read_into(self, buffer, viewport=None, alignment=1)
-	.. automethod:: write(self, data, viewport=None)
+	.. automethod:: read(viewport=None, alignment=1) -> bytes
+	.. automethod:: read_into(buffer, viewport=None, alignment=1)
+	.. automethod:: write(data, viewport=None)
 	.. automethod:: use(location=0)
 
 .. toctree::
