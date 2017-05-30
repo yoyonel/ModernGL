@@ -272,22 +272,22 @@ PyObject * MGLBuffer_orphan(MGLBuffer * self) {
 }
 
 PyObject * MGLBuffer_bind_to_uniform_block(MGLBuffer * self, PyObject * args) {
-	PyObject * location;
+	PyObject * binding;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
 		"O",
-		&location
+		&binding
 	);
 
 	if (!args_ok) {
 		return 0;
 	}
 
-	int block = PyLong_AsUnsignedLong(location);
+	int block = PyLong_AsUnsignedLong(binding);
 
 	if (PyErr_Occurred()) {
-		MGLError_Set("the location is invalid");
+		MGLError_Set("the binding is invalid");
 		return 0;
 	}
 
@@ -297,12 +297,12 @@ PyObject * MGLBuffer_bind_to_uniform_block(MGLBuffer * self, PyObject * args) {
 }
 
 PyObject * MGLBuffer_bind_to_storage_buffer(MGLBuffer * self, PyObject * args) {
-	int location;
+	int binding;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
 		"i",
-		&location
+		&binding
 	);
 
 	if (!args_ok) {
@@ -310,7 +310,7 @@ PyObject * MGLBuffer_bind_to_storage_buffer(MGLBuffer * self, PyObject * args) {
 	}
 
 	const GLMethods & gl = self->context->gl;
-	gl.BindBufferBase(GL_SHADER_STORAGE_BUFFER, location, self->buffer_obj);
+	gl.BindBufferBase(GL_SHADER_STORAGE_BUFFER, binding, self->buffer_obj);
 	Py_RETURN_NONE;
 }
 

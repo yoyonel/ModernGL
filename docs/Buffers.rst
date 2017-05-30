@@ -12,8 +12,8 @@ Buffers
 	.. automethod:: read(size=-1, offset=0) -> bytes
 	.. automethod:: write(data, offset=0)
 	.. automethod:: orphan()
-	.. automethod:: bind_to_uniform_block(location=0)
-	.. automethod:: bind_to_storage_buffer(location=0)
+	.. automethod:: bind_to_uniform_block(binding=0)
+	.. automethod:: bind_to_storage_buffer(binding=0)
 
 .. autoclass:: ModernGL.BufferAccess
 

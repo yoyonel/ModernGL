@@ -308,25 +308,25 @@ class Buffer:
 
         self.mglo.orphan()
 
-    def bind_to_uniform_block(self, location=0) -> None:
+    def bind_to_uniform_block(self, binding=0) -> None:
         '''
             Bind the buffer to a uniform block.
 
             Args:
-                location: The uniform block location.
+                binding: The uniform block binding.
         '''
 
-        self.mglo.bind_to_uniform_block(location)
+        self.mglo.bind_to_uniform_block(binding)
 
-    def bind_to_storage_buffer(self, location=0) -> None:
+    def bind_to_storage_buffer(self, binding=0) -> None:
         '''
             Bind the buffer to a shader storage buffer.
 
             Args:
-                location: The shader storage location.
+                binding: The shader storage binding.
         '''
 
-        self.mglo.bind_to_storage_buffer(location)
+        self.mglo.bind_to_storage_buffer(binding)
 
     def release(self) -> None:
         '''
