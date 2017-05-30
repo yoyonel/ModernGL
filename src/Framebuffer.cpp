@@ -122,13 +122,15 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	PyObject * viewport;
 	int components;
 	int alignment;
+	int attachment;
 	int floats;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OIIp",
+		"OIIIp",
 		&viewport,
 		&components,
+		&attachment,
 		&alignment,
 		&floats
 	);
@@ -194,7 +196,7 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	const GLMethods & gl = self->context->gl;
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
-	gl.ReadBuffer(GL_COLOR_ATTACHMENT0);
+	gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
 
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 	gl.ReadPixels(x, y, width, height, format, type, data);
@@ -206,15 +208,17 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 	PyObject * data;
 	PyObject * viewport;
 	int components;
+	int attachment;
 	int alignment;
 	int floats;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OOIIp",
+		"OOIIIp",
 		&data,
 		&viewport,
 		&components,
+		&attachment,
 		&alignment,
 		&floats
 	);
@@ -291,6 +295,7 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 	const GLMethods & gl = self->context->gl;
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
+	gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
 
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 	gl.ReadPixels(x, y, width, height, format, type, buffer_view.buf);

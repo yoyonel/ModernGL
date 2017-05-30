@@ -98,19 +98,19 @@ class Framebuffer:
 
         self.mglo.use()
 
-    def read(self, viewport=None, components=3, *, alignment=1, floats=False) -> bytes:
+    def read(self, viewport=None, components=3, *, attachment=0, alignment=1, floats=False) -> bytes:
         '''
             Read the framebuffer content.
         '''
 
-        return self.mglo.read(viewport, components, alignment, floats)
+        return self.mglo.read(viewport, components, attachment, alignment, floats)
 
-    def read_into(self, buffer, viewport=None, components=3, *, alignment=1, floats=False) -> None:
+    def read_into(self, buffer, viewport=None, components=3, *, attachment=0, alignment=1, floats=False) -> None:
         '''
             Read the framebuffer content.
         '''
 
-        return self.mglo.read_into(buffer, viewport, components, alignment, floats)
+        return self.mglo.read_into(buffer, viewport, components, attachment, alignment, floats)
 
     def release(self) -> None:
         '''

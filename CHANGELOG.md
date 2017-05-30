@@ -5,7 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-## Fixed
+### Added
+- Read any color attachemnts from the Framebuffer.
+
+### Fixed
 - Multiple render target.
 - Non-float renderbuffers are not readable.
 
@@ -27,7 +30,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - UniformBlock `array_size` and `location` attribute.
 - VertexArrayAttribute `default` attribute.
 
-## Fixed
+### Fixed
 - BufferAccess unused `offset` parameter.
 - Binding buffer to a UniformBlock.
 - Broken RTD docs.
