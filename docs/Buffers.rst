@@ -10,6 +10,7 @@ Buffers
 
 	.. automethod:: access(size=-1, offset=0, readonly=False) -> BufferAccess
 	.. automethod:: read(size=-1, offset=0) -> bytes
+	.. automethod:: read_into(buffer, size=-1, offset=0)
 	.. automethod:: write(data, offset=0)
 	.. automethod:: orphan()
 	.. automethod:: bind_to_uniform_block(binding=0)
@@ -20,6 +21,7 @@ Buffers
 	.. automethod:: open()
 	.. automethod:: close()
 	.. automethod:: read(size=-1, offset=0) -> bytes
+	.. automethod:: read_into(buffer, size=-1, offset=0)
 	.. automethod:: write(data, offset=0)
 
 .. toctree::

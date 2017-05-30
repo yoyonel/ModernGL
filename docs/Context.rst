@@ -27,8 +27,8 @@ Context
 	.. automethod:: geometry_shader(source) -> Shader
 	.. automethod:: tess_evaluation_shader(source) -> Shader
 	.. automethod:: tess_control_shader(source) -> Shader
-	.. automethod:: framebuffer(color_attachments, depth_attachment) -> Framebuffer
-	.. automethod:: renderbuffer(size, components=4, samples=0, floats=True) -> Renderbuffer
+	.. automethod:: framebuffer(color_attachments, depth_attachment=None) -> Framebuffer
+	.. automethod:: renderbuffer(size, components=4, samples=0, floats=False) -> Renderbuffer
 	.. automethod:: depth_renderbuffer(size, samples=0) -> Renderbuffer
 	.. automethod:: compute_shader(source) -> ComputeShader
 

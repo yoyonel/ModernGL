@@ -7,9 +7,9 @@ ComputeShaders
 	:noindex:
 
 .. autoclass:: ComputeShader
-	:members: source
+	:members: source, uniforms, uniform_blocks
 
-	.. automethod:: run(size_x=1, size_y=1, size_z=1)
+	.. automethod:: run(group_x=1, group_y=1, group_z=1)
 
 .. toctree::
 	:maxdepth: 4
