@@ -2,6 +2,7 @@
 
 [![docs](https://readthedocs.org/projects/moderngl/badge/?version=stable)](https://moderngl.readthedocs.io/)
 [![build](https://travis-ci.org/cprogrammer1994/ModernGL.svg?branch=master)](https://travis-ci.org/cprogrammer1994/ModernGL/)
+[![Code Health](https://landscape.io/github/cprogrammer1994/ModernGL/master/landscape.svg?style=flat)](https://landscape.io/github/cprogrammer1994/ModernGL/master)
 [![pypi](https://img.shields.io/pypi/v/ModernGL.svg)](https://pypi.python.org/pypi/ModernGL/)
 [![license](https://img.shields.io/github/license/cprogrammer1994/ModernGL.svg)](https://github.com/cprogrammer1994/ModernGL/blob/master/LICENSE)
 [![platforms](https://img.shields.io/badge/platforms-windows%2C%20mac%2C%20linux-blue.svg)](#)
