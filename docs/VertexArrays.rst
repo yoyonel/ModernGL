@@ -3,10 +3,10 @@ VertexArray
 
 .. currentmodule:: ModernGL
 
-.. automethod:: Context.simple_vertex_array
+.. automethod:: Context.simple_vertex_array(program, buffer, attributes) -> VertexArray
 	:noindex:
 
-.. automethod:: Context.vertex_array
+.. automethod:: Context.vertex_array(program, content, index_buffer=None) -> VertexArray
 	:noindex:
 
 .. autoclass:: VertexArray
