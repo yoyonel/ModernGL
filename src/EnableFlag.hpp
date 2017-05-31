@@ -5,6 +5,8 @@
 #include "Object.hpp"
 
 struct MGLEnableFlag : public MGLObject {
+	PyObject * wrapper;
+
 	int flag;
 };
 

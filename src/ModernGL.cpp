@@ -455,34 +455,41 @@ bool MGL_InitializeModule(PyObject * module) {
 
 	{
 		MGL_BLEND = MGLEnableFlag_New();
+		MGL_BLEND->wrapper = 0;
 		MGL_BLEND->flag = GL_BLEND;
 		PyModule_AddObject(module, "BLEND", (PyObject *)MGL_BLEND);
 
 		MGL_DEPTH_TEST = MGLEnableFlag_New();
+		MGL_DEPTH_TEST->wrapper = 0;
 		MGL_DEPTH_TEST->flag = GL_DEPTH_TEST;
 		PyModule_AddObject(module, "DEPTH_TEST", (PyObject *)MGL_DEPTH_TEST);
 
 		MGL_CULL_FACE = MGLEnableFlag_New();
+		MGL_CULL_FACE->wrapper = 0;
 		MGL_CULL_FACE->flag = GL_CULL_FACE;
 		PyModule_AddObject(module, "CULL_FACE", (PyObject *)MGL_CULL_FACE);
 
 		MGL_MULTISAMPLE = MGLEnableFlag_New();
+		MGL_MULTISAMPLE->wrapper = 0;
 		MGL_MULTISAMPLE->flag = GL_MULTISAMPLE;
 		PyModule_AddObject(module, "MULTISAMPLE", (PyObject *)MGL_MULTISAMPLE);
 	}
 
 	{
 		MGL_LINEAR = MGLTextureFilter_New();
+		MGL_LINEAR->wrapper = 0;
 		MGL_LINEAR->min_filter = GL_LINEAR;
 		MGL_LINEAR->mag_filter = GL_LINEAR;
 		PyModule_AddObject(module, "LINEAR", (PyObject *)MGL_LINEAR);
 
 		MGL_NEAREST = MGLTextureFilter_New();
+		MGL_NEAREST->wrapper = 0;
 		MGL_NEAREST->min_filter = GL_NEAREST;
 		MGL_NEAREST->mag_filter = GL_NEAREST;
 		PyModule_AddObject(module, "NEAREST", (PyObject *)MGL_NEAREST);
 
 		MGL_MIPMAP = MGLTextureFilter_New();
+		MGL_MIPMAP->wrapper = 0;
 		MGL_MIPMAP->min_filter = GL_LINEAR_MIPMAP_LINEAR;
 		MGL_MIPMAP->mag_filter = GL_LINEAR;
 		PyModule_AddObject(module, "MIPMAP", (PyObject *)MGL_MIPMAP);

@@ -5,6 +5,8 @@
 #include "Object.hpp"
 
 struct MGLTextureFilter : public MGLObject {
+	PyObject * wrapper;
+
 	int min_filter;
 	int mag_filter;
 };

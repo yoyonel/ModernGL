@@ -5,6 +5,8 @@
 #include "Object.hpp"
 
 struct MGLTextureWrap : public MGLObject {
+	PyObject * wrapper;
+
 	int wrap;
 };
 
