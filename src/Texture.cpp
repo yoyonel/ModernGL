@@ -347,12 +347,39 @@ PyObject * MGLTexture_use(MGLTexture * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLTexture_generate_mipmaps(MGLTexture * self, PyObject * args) {
+PyObject * MGLTexture_build_mipmaps(MGLTexture * self, PyObject * args) {
+	int base = 0;
+	int max = 1000;
 
-	// TODO:
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"II",
+		&base,
+		&max
+	);
 
-	PyErr_Format(PyExc_NotImplementedError, "NYI");
-	return 0;
+	if (!args_ok) {
+		return 0;
+	}
+
+	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+	gl.BindTexture(texture_target, self->texture_obj);
+
+	gl.TexParameteri(texture_target, GL_TEXTURE_BASE_LEVEL, base);
+	gl.TexParameteri(texture_target, GL_TEXTURE_MAX_LEVEL, max);
+
+	gl.GenerateMipmap(texture_target);
+
+	gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// TODO: filter attrib
+
+	Py_RETURN_NONE;
 }
 
 PyObject * MGLTexture_release(MGLTexture * self) {
@@ -366,7 +393,7 @@ PyMethodDef MGLTexture_tp_methods[] = {
 	{"write", (PyCFunction)MGLTexture_write, METH_VARARGS, 0},
 	{"clear", (PyCFunction)MGLTexture_clear, METH_VARARGS, 0},
 	{"use", (PyCFunction)MGLTexture_use, METH_VARARGS, 0},
-	{"generate_mipmaps", (PyCFunction)MGLTexture_generate_mipmaps, METH_VARARGS, 0},
+	{"build_mipmaps", (PyCFunction)MGLTexture_build_mipmaps, METH_VARARGS, 0},
 	{"release", (PyCFunction)MGLTexture_release, METH_NOARGS, 0},
 	{0},
 };

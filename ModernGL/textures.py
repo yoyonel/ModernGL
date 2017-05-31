@@ -152,6 +152,13 @@ class Texture:
 
         self.mglo.write(data, viewport, alignment)
 
+    def build_mipmaps(self, base=0, max_level=1000) -> None:
+        '''
+            Generate mipmaps.
+        '''
+
+        self.mglo.build_mipmaps(base, max_level)
+
     def use(self, location=0) -> None:
         '''
             Bind the texture.

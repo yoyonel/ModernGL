@@ -15,6 +15,7 @@ Textures
 	.. automethod:: read(viewport=None, alignment=1) -> bytes
 	.. automethod:: read_into(buffer, viewport=None, alignment=1)
 	.. automethod:: write(data, viewport=None)
+	.. automethod:: build_mipmaps(base=0, max_level=1000)
 	.. automethod:: use(location=0)
 
 .. toctree::
