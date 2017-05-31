@@ -456,6 +456,15 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 	texture->floats = floats ? true : false;
 	texture->depth = false;
 
+	Py_INCREF(MGL_LINEAR);
+	texture->filter = MGL_LINEAR;
+
+	Py_INCREF(MGL_REPEAT);
+	texture->wrap_x = MGL_REPEAT;
+
+	Py_INCREF(MGL_REPEAT);
+	texture->wrap_y = MGL_REPEAT;
+
 	Py_INCREF(self);
 	texture->context = self;
 
@@ -556,6 +565,15 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	texture->samples = samples;
 	texture->floats = true;
 	texture->depth = true;
+
+	Py_INCREF(MGL_LINEAR);
+	texture->filter = MGL_LINEAR;
+
+	Py_INCREF(MGL_REPEAT);
+	texture->wrap_x = MGL_REPEAT;
+
+	Py_INCREF(MGL_REPEAT);
+	texture->wrap_y = MGL_REPEAT;
 
 	Py_INCREF(self);
 	texture->context = self;
