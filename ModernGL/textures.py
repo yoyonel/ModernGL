@@ -48,7 +48,7 @@ class Texture:
 
     @filter.setter
     def filter(self, value):
-        self.mglo.filter = value
+        self.mglo.filter = value.mglo
 
     @property
     def wrap(self) -> Tuple[TextureWrap, TextureWrap]:
@@ -56,7 +56,7 @@ class Texture:
             tuple: The wrap of the texture.
         '''
 
-        return self.mglo.wrap
+        return self.mglo.wrap.mglo
 
     @wrap.setter
     def wrap(self, value):

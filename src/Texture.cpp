@@ -399,9 +399,9 @@ PyMethodDef MGLTexture_tp_methods[] = {
 };
 
 PyObject * MGLTexture_get_wrap(MGLTexture * self) {
-	Py_INCREF(self->wrap_x);
-	Py_INCREF(self->wrap_y);
-	return PyTuple_Pack(2, self->wrap_x, self->wrap_y);
+	Py_INCREF(self->wrap_x->wrapper);
+	Py_INCREF(self->wrap_y->wrapper);
+	return PyTuple_Pack(2, self->wrap_x->wrapper, self->wrap_y->wrapper);
 }
 
 int MGLTexture_set_wrap(MGLTexture * self, PyObject * value) {
@@ -443,9 +443,9 @@ int MGLTexture_set_wrap(MGLTexture * self, PyObject * value) {
 	return 0;
 }
 
-MGLTextureFilter * MGLTexture_get_filter(MGLTexture * self) {
-	Py_INCREF(self->filter);
-	return self->filter;
+PyObject * MGLTexture_get_filter(MGLTexture * self) {
+	Py_INCREF(self->filter->wrapper);
+	return self->filter->wrapper;
 }
 
 int MGLTexture_set_filter(MGLTexture * self, PyObject * value) {
