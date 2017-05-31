@@ -2,7 +2,9 @@
     ModernGL textures
 '''
 
-from .common import InvalidObject
+from typing import Tuple
+
+from .common import InvalidObject, TextureFilter, TextureWrap
 
 
 class Texture:
@@ -35,6 +37,30 @@ class Texture:
 
     def __repr__(self):
         return '<Texture: %d>' % self.glo
+
+    @property
+    def filter(self) -> TextureFilter:
+        '''
+            TextureFilter: The filter of the texture.
+        '''
+
+        return self.mglo.filter
+
+    @filter.setter
+    def filter(self, value):
+        self.mglo.filter = value
+
+    @property
+    def wrap(self) -> Tuple[TextureWrap, TextureWrap]:
+        '''
+            tuple: The wrap of the texture.
+        '''
+
+        return self.mglo.wrap
+
+    @wrap.setter
+    def wrap(self, value):
+        self.mglo.wrap = value
 
     @property
     def swizzle(self) -> str:
