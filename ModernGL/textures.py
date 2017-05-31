@@ -56,7 +56,7 @@ class Texture:
             tuple: The wrap of the texture.
         '''
 
-        return self.mglo.wrap.mglo
+        return self.mglo.wrap
 
     @wrap.setter
     def wrap(self, value):
