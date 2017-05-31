@@ -45,3 +45,27 @@ inline int swizzle_from_char(char c) {
 
 	return -1;
 }
+
+inline int char_from_swizzle(int c) {
+	switch (c) {
+		case GL_RED:
+			return 'R';
+
+		case GL_GREEN:
+			return 'G';
+
+		case GL_BLUE:
+			return 'B';
+
+		case GL_ALPHA:
+			return 'A';
+
+		case GL_ZERO:
+			return '0';
+
+		case GL_ONE:
+			return '1';
+	}
+
+	return '?';
+}

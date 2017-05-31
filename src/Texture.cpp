@@ -371,9 +371,52 @@ PyMethodDef MGLTexture_tp_methods[] = {
 	{0},
 };
 
-PyObject * MGLTexture_get_filter(MGLTexture * self) {
-	PyErr_Format(PyExc_NotImplementedError, "NYI");
+PyObject * MGLTexture_get_wrap(MGLTexture * self) {
+	Py_INCREF(self->wrap_x);
+	Py_INCREF(self->wrap_y);
+	return PyTuple_Pack(2, self->wrap_x, self->wrap_y);
+}
+
+int MGLTexture_set_wrap(MGLTexture * self, PyObject * value) {
+	if (PyTuple_GET_SIZE(value) != 2) {
+		MGLError_Set("the value must be a 2-tuple not %d-tuple", PyTuple_GET_SIZE(value));
+		return -1;
+	}
+
+	MGLTextureWrap * wrap_x = (MGLTextureWrap *)PyTuple_GET_ITEM(value, 0);
+	MGLTextureWrap * wrap_y = (MGLTextureWrap *)PyTuple_GET_ITEM(value, 1);
+
+	if (Py_TYPE(wrap_x) != &MGLTextureWrap_Type) {
+		MGLError_Set("value[0] must be a TextureWrap not %s", Py_TYPE(wrap_x)->tp_name);
+		return -1;
+	}
+
+	if (Py_TYPE(wrap_y) != &MGLTextureWrap_Type) {
+		MGLError_Set("value[1] must be a TextureWrap not %s", Py_TYPE(wrap_y)->tp_name);
+		return -1;
+	}
+
+	Py_INCREF(wrap_x);
+	self->wrap_x = wrap_x;
+
+	Py_INCREF(wrap_y);
+	self->wrap_y = wrap_y;
+
+	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+	gl.BindTexture(texture_target, self->texture_obj);
+	gl.TexParameteri(texture_target, GL_TEXTURE_WRAP_S, wrap_x->wrap);
+	gl.TexParameteri(texture_target, GL_TEXTURE_WRAP_T, wrap_y->wrap);
+
 	return 0;
+}
+
+MGLTextureFilter * MGLTexture_get_filter(MGLTexture * self) {
+	Py_INCREF(self->filter);
+	return self->filter;
 }
 
 int MGLTexture_set_filter(MGLTexture * self, PyObject * value) {
@@ -400,12 +443,47 @@ int MGLTexture_set_filter(MGLTexture * self, PyObject * value) {
 }
 
 PyObject * MGLTexture_get_swizzle(MGLTexture * self, void * closure) {
-	PyErr_Format(PyExc_NotImplementedError, "NYI");
-	return 0;
+
+	if (self->depth) {
+		MGLError_Set("cannot get swizzle of depth textures");
+		return 0;
+	}
+
+	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+	gl.BindTexture(texture_target, self->texture_obj);
+
+	int swizzle_r = 0;
+	int swizzle_g = 0;
+	int swizzle_b = 0;
+	int swizzle_a = 0;
+
+	gl.GetTexParameteriv(texture_target, GL_TEXTURE_SWIZZLE_R, &swizzle_r);
+	gl.GetTexParameteriv(texture_target, GL_TEXTURE_SWIZZLE_G, &swizzle_g);
+	gl.GetTexParameteriv(texture_target, GL_TEXTURE_SWIZZLE_B, &swizzle_b);
+	gl.GetTexParameteriv(texture_target, GL_TEXTURE_SWIZZLE_A, &swizzle_a);
+
+	char swizzle[5] = {
+		char_from_swizzle(swizzle_r),
+		char_from_swizzle(swizzle_g),
+		char_from_swizzle(swizzle_b),
+		char_from_swizzle(swizzle_a),
+		0,
+	};
+
+	return PyUnicode_FromStringAndSize(swizzle, 4);
 }
 
 int MGLTexture_set_swizzle(MGLTexture * self, PyObject * value, void * closure) {
 	const char * swizzle = PyUnicode_AsUTF8(value);
+
+	if (self->depth) {
+		MGLError_Set("cannot set swizzle for depth textures");
+		return -1;
+	}
 
 	if (!swizzle[0]) {
 		MGLError_Set("the swizzle is empty");
@@ -479,6 +557,7 @@ PyObject * MGLTexture_get_glo(MGLTexture * self, void * closure) {
 }
 
 PyGetSetDef MGLTexture_tp_getseters[] = {
+	{(char *)"wrap", (getter)MGLTexture_get_wrap, (setter)MGLTexture_set_wrap, 0, 0},
 	{(char *)"filter", (getter)MGLTexture_get_filter, (setter)MGLTexture_set_filter, 0, 0},
 	{(char *)"swizzle", (getter)MGLTexture_get_swizzle, (setter)MGLTexture_set_swizzle, 0, 0},
 
