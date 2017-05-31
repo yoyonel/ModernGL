@@ -377,8 +377,26 @@ PyObject * MGLTexture_get_filter(MGLTexture * self) {
 }
 
 int MGLTexture_set_filter(MGLTexture * self, PyObject * value) {
-	PyErr_Format(PyExc_NotImplementedError, "NYI");
-	return -1;
+	if (Py_TYPE(value) != &MGLTextureFilter_Type) {
+		MGLError_Set("the value must be a TextureFilter not %s", Py_TYPE(value)->tp_name);
+		return -1;
+	}
+
+	MGLTextureFilter * filter = (MGLTextureFilter *)value;
+
+	Py_INCREF(filter);
+	self->filter = filter;
+
+	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+	gl.BindTexture(texture_target, self->texture_obj);
+	gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, filter->min_filter);
+	gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, filter->mag_filter);
+
+	return 0;
 }
 
 PyObject * MGLTexture_get_swizzle(MGLTexture * self, void * closure) {
