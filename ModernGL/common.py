@@ -224,3 +224,85 @@ CORE_450 = Version(4, 5)
 '''
     OpenGL 4.5
 '''
+
+
+class TextureFilter:
+    '''
+        TextureFilter
+    '''
+
+    __slots__ = ['mglo', 'name']
+
+    @staticmethod
+    def new(obj, name) -> 'TextureFilter':
+        '''
+            For internal use only.
+        '''
+
+        res = TextureFilter.__new__(TextureFilter)
+        obj.wrapper = res
+        res.name = name
+        res.mglo = obj
+        return res
+
+    def __init__(self):
+        self.name = None
+        self.mglo = None
+        raise NotImplementedError('TextureFilter')
+
+    def __repr__(self):
+        return 'ModernGL.%s' % self.name
+
+
+LINEAR = TextureFilter.new(mgl.LINEAR, 'LINEAR')
+'''
+    (GL_LINEAR, GL_LINEAR)
+'''
+
+NEAREST = TextureFilter.new(mgl.NEAREST, 'NEAREST')
+'''
+    (GL_NEAREST, GL_NEAREST)
+'''
+
+MIPMAP = TextureFilter.new(mgl.MIPMAP, 'MIPMAP')
+'''
+    (GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR)
+'''
+
+class TextureWrap:
+    '''
+        TextureWrap
+    '''
+
+    __slots__ = ['mglo', 'name']
+
+    @staticmethod
+    def new(obj, name) -> 'TextureWrap':
+        '''
+            For internal use only.
+        '''
+
+        res = TextureWrap.__new__(TextureWrap)
+        obj.wrapper = res
+        res.name = name
+        res.mglo = obj
+        return res
+
+    def __init__(self):
+        self.name = None
+        self.mglo = None
+        raise NotImplementedError('TextureWrap')
+
+    def __repr__(self):
+        return 'ModernGL.%s' % self.name
+
+
+REPEAT = TextureWrap.new(mgl.REPEAT, 'REPEAT')
+'''
+    GL_REPEAT
+'''
+
+CLAMP_TO_EDGE = TextureWrap.new(mgl.CLAMP_TO_EDGE, 'CLAMP_TO_EDGE')
+'''
+    GL_CLAMP_TO_EDGE
+'''
