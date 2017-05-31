@@ -1,4 +1,3 @@
-import struct
 import unittest
 
 import ModernGL
@@ -7,12 +6,12 @@ import ModernGL
 class TestCase(unittest.TestCase):
 
     @classmethod
-    def setUpClass(self):
-        self.ctx = ModernGL.create_standalone_context()
+    def setUpClass(cls):
+        cls.ctx = ModernGL.create_standalone_context()
 
     @classmethod
-    def tearDownClass(self):
-        self.ctx.release()
+    def tearDownClass(cls):
+        cls.ctx.release()
 
     def test_1(self):
         size = (4, 4)
@@ -29,10 +28,10 @@ class TestCase(unittest.TestCase):
         pixels1 = fbo1.read(components=4, floats=False)
         self.assertEqual(pixels1, b'\x00\x99\xb2\xff' * 16)
 
-        pixels2 = fbo1.read(components=4, floats=False)
+        pixels2 = fbo2.read(components=4, floats=False)
         self.assertEqual(pixels2, b'\x00\x99\xb2\xff' * 16)
 
-        pixels3 = fbo1.read(components=4, floats=False)
+        pixels3 = fbo3.read(components=4, floats=False)
         self.assertEqual(pixels3, b'\x00\x99\xb2\xff' * 16)
 
     def test_2(self):
