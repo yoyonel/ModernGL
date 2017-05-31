@@ -269,6 +269,7 @@ MIPMAP = TextureFilter.new(mgl.MIPMAP, 'MIPMAP')
     (GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR)
 '''
 
+
 class TextureWrap:
     '''
         TextureWrap
