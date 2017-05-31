@@ -23,11 +23,13 @@ except ImportError:
 
 
 from .common import (
-    InvalidObject, Version, EnableFlag, Primitive,
+    InvalidObject, Version, EnableFlag, Primitive, TextureFilter, TextureWrap,
     POINTS, LINES, LINE_STRIP, LINE_LOOP, TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN,
     LINES_ADJACENCY, LINE_STRIP_ADJACENCY, TRIANGLES_ADJACENCY, TRIANGLE_STRIP_ADJACENCY,
     CORE_330, CORE_400, CORE_410, CORE_420, CORE_430, CORE_440, CORE_450,
     BLEND, DEPTH_TEST, CULL_FACE, MULTISAMPLE,
+    LINEAR, NEAREST, MIPMAP,
+    REPEAT, CLAMP_TO_EDGE,
 )
 
 from .members import (
@@ -51,11 +53,13 @@ from .framebuffers import Framebuffer
 __version__ = '4.1.2'
 
 __all__ = [
-    'InvalidObject', 'Version', 'EnableFlag', 'Primitive', 'Error',
+    'InvalidObject', 'Version', 'EnableFlag', 'Primitive', 'Error', 'TextureFilter', 'TextureWrap',
     'POINTS', 'LINES', 'LINE_STRIP', 'LINE_LOOP', 'TRIANGLES', 'TRIANGLE_STRIP', 'TRIANGLE_FAN',
     'LINES_ADJACENCY', 'LINE_STRIP_ADJACENCY', 'TRIANGLES_ADJACENCY', 'TRIANGLE_STRIP_ADJACENCY',
     'CORE_330', 'CORE_400', 'CORE_410', 'CORE_420', 'CORE_430', 'CORE_440', 'CORE_450',
     'BLEND', 'DEPTH_TEST', 'CULL_FACE', 'MULTISAMPLE',
+    'LINEAR', 'NEAREST', 'MIPMAP',
+    'REPEAT', 'CLAMP_TO_EDGE',
     'Subroutine', 'SubroutineMap', 'SubroutineUniform', 'SubroutineUniformMap',
     'Uniform', 'UniformMap', 'UniformBlock', 'UniformBlockMap',
     'Varying', 'VaryingMap', 'Attribute', 'AttributeMap',
