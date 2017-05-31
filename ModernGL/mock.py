@@ -32,6 +32,13 @@ class Implementation:
     CULL_FACE = MockObject()
     MULTISAMPLE = MockObject()
 
+    LINEAR = MockObject()
+    NEAREST = MockObject()
+    MIPMAP = MockObject()
+
+    REPEAT = MockObject()
+    CLAMP_TO_EDGE = MockObject()
+
     TRIANGLES = MockObject()
     TRIANGLE_STRIP = MockObject()
     TRIANGLE_FAN = MockObject()
