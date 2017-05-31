@@ -5,54 +5,65 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [4.1.2] - 2017-05-31
 ### Added
-- Read any color attachemnts from the Framebuffer.
-- Framebuffer, Buffer and Texture `read_into` methods.
+- Read any color attachemnts of the Framebuffer
+-  Framebuffer, Buffer, BufferAccess and Texture `read_into` method
+- `__slots__` for ModernGL classes
+- Framebuffer read different color attachments
+- Tkinter connector for windows using ctypes
 
 ### Fixed
-- Multiple render target.
-- Non-float renderbuffers are not readable.
+- Multiple render targets
+- Non-float renderbuffers are not readable
+- Buffer `read` keyword only `offset` argument
+
+### Changes
+- `Context.renderbuffer` will use `floats=False` by default
+- `bind_to_uniform_block` `location` parameter was renamed to `binding`
+- `bind_to_storage_buffer` `location` parameter was renamed to `binding`
 
 ## [4.1.1] - 2017-05-27
 ### Added
-- UniformBlock `binding` and `size` attribute.
-- Framebuffer `width`, `height` and `samples` attribute.
-- Texture `swizzle` attribute.
-- Context `error` attribute.
-- OpenGL objects as `glo` attributes.
-- Buffer `clear()` method.
-- Missing `release()` methods.
-- Iterable program member maps.
-- Human readable program members.
-- Pixel pack and unpack alignments.
-- Subroutines.
+- UniformBlock `binding` and `size` attribute
+- Framebuffer `width`, `height` and `samples` attribute
+- Texture `swizzle` attribute
+- Context `error` attribute
+- OpenGL objects as `glo` attributes
+- Buffer `clear()` method
+- Missing `release()` methods
+- Iterable program member maps
+- Human readable program members
+- Pixel pack and unpack alignments
+- Subroutines
 
 ### Removed
-- UniformBlock `array_size` and `location` attribute.
-- VertexArrayAttribute `default` attribute.
+- UniformBlock `array_size` and `location` attribute
+- VertexArrayAttribute `default` attribute
 
 ### Fixed
-- BufferAccess unused `offset` parameter.
-- Binding buffer to a UniformBlock.
-- Broken RTD docs.
+- BufferAccess unused `offset` parameter
+- Binding buffer to a UniformBlock
+- Broken RTD docs
 
 ## [4.1.0] - 2017-05-24
 ### Added
-- Exception handling when importing the implementation.
-- Standalone context on **linux** and **mac** with fallback mechanism.
-- Require version at context creation.
-- Context `version_code` property.
-- Framebuffer `clear()` method.
+- Exception handling when importing the implementation
+- Standalone context on **linux** and **mac** with fallback mechanism
+- Require version at context creation
+- Context `version_code` property
+- Framebuffer `clear()` method
 
 ### Changed
-- Context `clear()` method accepts floats.
+- Context `clear()` method accepts floats
 
 ### Removed
-- Required `-std=c++11` for **linux** and **mac**.
-- ModernGL `VERSION` constant.
+- Required `-std=c++11` for **linux** and **mac**
+- ModernGL `VERSION` constant
 
 ## Fixed
-- `Framebuffer` and `Texture` can have uninitialized x, y values.
+- `Framebuffer` and `Texture` can have uninitialized x, y values
 - Uniform setters
 
 ## [4.0.0] - 2017-05-20
@@ -95,7 +106,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.0.0 - 2016-03-03
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.1...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.2...master
+[4.1.2]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.1...4.1.2
 [4.1.1]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.0...4.1.1
 [4.1.0]: https://github.com/cprogrammer1994/ModernGL/compare/4.0.0...4.1.0
 [4.0.0]: https://github.com/cprogrammer1994/ModernGL/tree/4.0.0
