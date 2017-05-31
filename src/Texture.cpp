@@ -424,9 +424,11 @@ int MGLTexture_set_wrap(MGLTexture * self, PyObject * value) {
 	}
 
 	Py_INCREF(wrap_x);
+	Py_DECREF(self->wrap_x);
 	self->wrap_x = wrap_x;
 
 	Py_INCREF(wrap_y);
+	Py_DECREF(self->wrap_y);
 	self->wrap_y = wrap_y;
 
 	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
@@ -455,6 +457,7 @@ int MGLTexture_set_filter(MGLTexture * self, PyObject * value) {
 	MGLTextureFilter * filter = (MGLTextureFilter *)value;
 
 	Py_INCREF(filter);
+	Py_DECREF(self->filter);
 	self->filter = filter;
 
 	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
