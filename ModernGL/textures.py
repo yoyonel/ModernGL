@@ -61,7 +61,7 @@ class Texture:
     @wrap.setter
     def wrap(self, value):
         wrap_s, wrap_t = value
-        self.mglo.filter = (wrap_s.mglo, wrap_t.mglo)
+        self.mglo.wrap = (wrap_s.mglo, wrap_t.mglo)
 
     @property
     def swizzle(self) -> str:
