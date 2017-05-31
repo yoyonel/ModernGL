@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [4.1.2] - 2017-05-31
 ### Added
-- Read any color attachemnts of the Framebuffer
+- Read any color attachments of the Framebuffer
 -  Framebuffer, Buffer, BufferAccess and Texture `read_into` method
 - `__slots__` for ModernGL classes
 - Framebuffer read different color attachments
