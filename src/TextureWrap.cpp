@@ -33,7 +33,19 @@ PyMethodDef MGLTextureWrap_tp_methods[] = {
 	{0},
 };
 
+int MGLTextureWrap_set_wrapper(MGLTextureWrap * self, PyObject * value, void * closure) {
+	// if (self->wrapper) {
+	// 	MGLError_Set("wrapper already set");
+	// 	return -1;
+	// }
+
+	// Missing Py_INCREF is on purpose.
+	self->wrapper = value;
+	return 0;
+}
+
 PyGetSetDef MGLTextureWrap_tp_getseters[] = {
+	{(char *)"wrapper", 0, (setter)MGLTextureWrap_set_wrapper, 0, 0},
 	{0},
 };
 
