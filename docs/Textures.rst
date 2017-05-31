@@ -10,7 +10,7 @@ Textures
 	:noindex:
 
 .. autoclass:: Texture
-	:members: width, height, size, samples, components, depth
+	:members: width, height, size, samples, components, depth, filter, wrap, swizzle
 
 	.. automethod:: read(viewport=None, alignment=1) -> bytes
 	.. automethod:: read_into(buffer, viewport=None, alignment=1)
