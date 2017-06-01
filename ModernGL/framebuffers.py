@@ -46,6 +46,14 @@ class Framebuffer:
         return self.mglo.height
 
     @property
+    def size(self) -> tuple:
+        '''
+            tuple: The size of the texture.
+        '''
+
+        return (self.mglo.width, self.mglo.height)
+
+    @property
     def samples(self) -> int:
         '''
             int: The samples of the Framebuffer.
