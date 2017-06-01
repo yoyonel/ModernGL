@@ -5,7 +5,6 @@
 #include "FramebufferAttachment.hpp"
 
 #include "TextureFilter.hpp"
-#include "TextureWrap.hpp"
 
 struct MGLTexture : public MGLFramebufferAttachment {
 	MGLTextureFilter * filter;

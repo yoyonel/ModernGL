@@ -16,7 +16,6 @@
 #include "SubroutineUniform.hpp"
 #include "Texture.hpp"
 #include "TextureFilter.hpp"
-#include "TextureWrap.hpp"
 #include "Uniform.hpp"
 #include "UniformBlock.hpp"
 #include "Varying.hpp"
@@ -288,17 +287,6 @@ bool MGL_InitializeModule(PyObject * module) {
 	}
 
 	{
-		if (PyType_Ready(&MGLTextureWrap_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register TextureWrap in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return false;
-		}
-
-		Py_INCREF(&MGLTextureWrap_Type);
-
-		PyModule_AddObject(module, "TextureWrap", (PyObject *)&MGLTextureWrap_Type);
-	}
-
-	{
 		if (PyType_Ready(&MGLUniform_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Uniform in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return false;
@@ -493,16 +481,6 @@ bool MGL_InitializeModule(PyObject * module) {
 		MGL_MIPMAP->min_filter = GL_LINEAR_MIPMAP_LINEAR;
 		MGL_MIPMAP->mag_filter = GL_LINEAR;
 		PyModule_AddObject(module, "MIPMAP", (PyObject *)MGL_MIPMAP);
-	}
-
-	{
-		MGL_CLAMP_TO_EDGE = MGLTextureWrap_New();
-		MGL_CLAMP_TO_EDGE->wrap = GL_CLAMP_TO_EDGE;
-		PyModule_AddObject(module, "CLAMP_TO_EDGE", (PyObject *)MGL_CLAMP_TO_EDGE);
-
-		MGL_REPEAT = MGLTextureWrap_New();
-		MGL_REPEAT->wrap = GL_REPEAT;
-		PyModule_AddObject(module, "REPEAT", (PyObject *)MGL_REPEAT);
 	}
 
 	return true;
