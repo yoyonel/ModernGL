@@ -2,7 +2,7 @@
     ModernGL textures
 '''
 
-from .common import InvalidObject, TextureFilter, TextureWrap
+from .common import InvalidObject, TextureFilter
 
 
 class Texture:
