@@ -36,9 +36,6 @@ class Implementation:
     NEAREST = MockObject()
     MIPMAP = MockObject()
 
-    REPEAT = MockObject()
-    CLAMP_TO_EDGE = MockObject()
-
     TRIANGLES = MockObject()
     TRIANGLE_STRIP = MockObject()
     TRIANGLE_FAN = MockObject()
