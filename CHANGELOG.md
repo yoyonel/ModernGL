@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - TextureFilter and TextureWrap classes and constants
 - Texture `build_mipmaps` method
-- Texture `filter` and `wrap` attributes
+- Texture `repeat_x`, `repeat_y` and `filter` attributes
 - Texture `swizzle` getter
 
 ## [4.1.2] - 2017-05-31
