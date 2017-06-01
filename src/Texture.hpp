@@ -9,8 +9,8 @@
 
 struct MGLTexture : public MGLFramebufferAttachment {
 	MGLTextureFilter * filter;
-	MGLTextureWrap * wrap_x;
-	MGLTextureWrap * wrap_y;
+	bool repeat_x;
+	bool repeat_y;
 };
 
 extern PyTypeObject MGLTexture_Type;

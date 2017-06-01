@@ -459,11 +459,8 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 	Py_INCREF(MGL_LINEAR);
 	texture->filter = MGL_LINEAR;
 
-	Py_INCREF(MGL_REPEAT);
-	texture->wrap_x = MGL_REPEAT;
-
-	Py_INCREF(MGL_REPEAT);
-	texture->wrap_y = MGL_REPEAT;
+	texture->repeat_x = true;
+	texture->repeat_y = true;
 
 	Py_INCREF(self);
 	texture->context = self;
@@ -547,13 +544,14 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	gl.BindTexture(texture_target, texture->texture_obj);
 	gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	gl.TexParameteri(texture_target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	gl.TexParameteri(texture_target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	if (samples) {
 		gl.TexImage2DMultisample(texture_target, samples, GL_DEPTH_COMPONENT24, width, height, true);
 	} else {
 		gl.TexImage2D(texture_target, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, pixel_type, buffer_view.buf);
 	}
-
 
 	if (data != Py_None) {
 		PyBuffer_Release(&buffer_view);
@@ -569,11 +567,8 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	Py_INCREF(MGL_LINEAR);
 	texture->filter = MGL_LINEAR;
 
-	Py_INCREF(MGL_REPEAT);
-	texture->wrap_x = MGL_REPEAT;
-
-	Py_INCREF(MGL_REPEAT);
-	texture->wrap_y = MGL_REPEAT;
+	texture->repeat_x = false;
+	texture->repeat_y = false;
 
 	Py_INCREF(self);
 	texture->context = self;

@@ -2,8 +2,6 @@
     ModernGL textures
 '''
 
-from typing import Tuple
-
 from .common import InvalidObject, TextureFilter, TextureWrap
 
 
@@ -39,6 +37,30 @@ class Texture:
         return '<Texture: %d>' % self.glo
 
     @property
+    def repeat_x(self) -> bool:
+        '''
+            tuple: The repeat_x of the texture.
+        '''
+
+        return self.mglo.repeat_x
+
+    @repeat_x.setter
+    def repeat_x(self, value):
+        self.mglo.repeat_x = value
+
+    @property
+    def repeat_y(self) -> bool:
+        '''
+            tuple: The repeat_y of the texture.
+        '''
+
+        return self.mglo.repeat_y
+
+    @repeat_y.setter
+    def repeat_y(self, value):
+        self.mglo.repeat_y = value
+
+    @property
     def filter(self) -> TextureFilter:
         '''
             TextureFilter: The filter of the texture.
@@ -49,19 +71,6 @@ class Texture:
     @filter.setter
     def filter(self, value):
         self.mglo.filter = value.mglo
-
-    @property
-    def wrap(self) -> Tuple[TextureWrap, TextureWrap]:
-        '''
-            tuple: The wrap of the texture.
-        '''
-
-        return self.mglo.wrap
-
-    @wrap.setter
-    def wrap(self, value):
-        wrap_s, wrap_t = value
-        self.mglo.wrap = (wrap_s.mglo, wrap_t.mglo)
 
     @property
     def swizzle(self) -> str:
