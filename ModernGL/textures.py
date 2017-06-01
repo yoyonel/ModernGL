@@ -39,7 +39,7 @@ class Texture:
     @property
     def repeat_x(self) -> bool:
         '''
-            tuple: The repeat_x of the texture.
+            bool: The repeat_x of the texture.
         '''
 
         return self.mglo.repeat_x
@@ -51,7 +51,7 @@ class Texture:
     @property
     def repeat_y(self) -> bool:
         '''
-            tuple: The repeat_y of the texture.
+            bool: The repeat_y of the texture.
         '''
 
         return self.mglo.repeat_y
