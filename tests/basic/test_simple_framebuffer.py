@@ -59,6 +59,14 @@ class TestCase(unittest.TestCase):
         with self.assertRaisesRegex(ModernGL.Error, 'empty'):
             self.ctx.framebuffer([])
 
+    def test_framebuffer_having_depth_in_colors(self):
+        with self.assertRaisesRegex(ModernGL.Error, r'(color|depth)'):
+            self.ctx.framebuffer(self.ctx.depth_renderbuffer((64, 64)))
+
+    def test_framebuffer_having_color_in_depth(self):
+        with self.assertRaisesRegex(ModernGL.Error, r'(color|depth)'):
+            self.ctx.framebuffer(self.ctx.renderbuffer((64, 64)), self.ctx.renderbuffer((64, 64)))
+
 
 if __name__ == '__main__':
     unittest.main()

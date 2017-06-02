@@ -942,6 +942,11 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 
 		MGLFramebufferAttachment * attachment = (MGLFramebufferAttachment *)item;
 
+		if (attachment->depth) {
+			MGLError_Set("color_attachments[%d] is a depth attachment", i);
+			return 0;
+		}
+
 		if (i == 0) {
 			width = attachment->width;
 			height = attachment->height;
@@ -969,6 +974,11 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		}
 
 		MGLFramebufferAttachment * attachment = (MGLFramebufferAttachment *)depth_attachment;
+
+		if (!attachment->depth) {
+			MGLError_Set("the depth_attachment is a color attachment");
+			return 0;
+		}
 
 		if (attachment->context != self) {
 			MGLError_Set("the depth_attachment belongs to a different context");
