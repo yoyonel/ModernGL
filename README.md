@@ -152,7 +152,7 @@ Just change the size to `(4096, 4096)`<br>
 
 ## How can I start using ModernGL?
 
-Take a look at the [examples](https://https://github.com/cprogrammer1994/ModernGL/examples) and [docs](https://moderngl.readthedocs.io/).
+Take a look at the [examples](https://github.com/cprogrammer1994/ModernGL/tree/master/examples) and [docs](https://moderngl.readthedocs.io/).
 
 ## Where can I use ModernGL?
 
