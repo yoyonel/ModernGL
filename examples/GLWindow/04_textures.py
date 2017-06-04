@@ -25,8 +25,10 @@ prog = ctx.program([
         uniform float rotation;
 
         void main() {
-            float r = rotation * (0.5 + gl_InstanceID * 0.05);
-            mat2 rot = mat2(cos(r), sin(r), -sin(r), cos(r));
+            mat2 rot = mat2(
+                cos(rotation), sin(rotation),
+                -sin(rotation), cos(rotation)
+            );
             gl_Position = vec4((rot * vert) * scale, 0.0, 1.0);
             v_tex_coord = tex_coord;
         }
@@ -69,7 +71,7 @@ vao = ctx.simple_vertex_array(prog, vbo, ['vert', 'tex_coord'])
 # Texture
 
 img = Image.open(os.path.join(os.path.dirname(__file__), '..', 'data', 'noise.jpg'))
-texture = ctx.texture(img.size, 3, img.tobytes(), alignment=4)
+texture = ctx.texture(img.size, 3, img.tobytes())
 texture.use()
 
 # Main loop
