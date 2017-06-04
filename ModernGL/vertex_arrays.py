@@ -221,18 +221,18 @@ class VertexArray:
             This values is provided for debug purposes only.
         '''
 
-    def render(self, mode=TRIANGLES, vertices=-1, first=0, instances=1) -> None:
+    def render(self, mode=TRIANGLES, vertices=-1, *, first=0, instances=1) -> None:
         '''
             The render primitive (mode) must be the same as
             the input primitive of the GeometryShader.
 
             Args:
-                mode: By default `TRIANGLES` will be used.
-                vertices: The number of vertices to transform.
+                mode (Primitive): By default `TRIANGLES` will be used.
+                vertices (int): The number of vertices to transform.
 
             Keyword Args:
-                first: The index of the first vertex to start with.
-                instances: The number of instances.
+                first (int): The index of the first vertex to start with.
+                instances (int): The number of instances.
         '''
 
         self.mglo.render(mode.mglo, vertices, first, instances)
@@ -245,13 +245,13 @@ class VertexArray:
             the input primitive of the GeometryShader.
 
             Args:
-                buffer: The buffer to store the output.
-                mode: By default `TRIANGLES` will be used.
-                vertices: The number of vertices to transform.
+                buffer (Buffer): The buffer to store the output.
+                mode (Primitive): By default `TRIANGLES` will be used.
+                vertices (int): The number of vertices to transform.
 
             Keyword Args:
-                first: The index of the first vertex to start with.
-                instances: The number of instances.
+                first (int): The index of the first vertex to start with.
+                instances (int): The number of instances.
         '''
 
         self.mglo.transform(buffer.mglo, mode.mglo, vertices, first, instances)

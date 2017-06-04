@@ -7,6 +7,9 @@ from .common import InvalidObject
 
 class Framebuffer:
     '''
+        A :py:class:`Framebuffer` is a collection of buffers that can be used as the destination for rendering.
+        The buffers for Framebuffer objects reference images from either Textures or Renderbuffers.
+
         Create a :py:class:`Framebuffer` using :py:meth:`Context.framebuffer`.
     '''
 
@@ -32,7 +35,7 @@ class Framebuffer:
     @property
     def width(self) -> int:
         '''
-            int: The width of the Framebuffer.
+            int: The width of the framebuffer.
         '''
 
         return self.mglo.width
@@ -40,7 +43,7 @@ class Framebuffer:
     @property
     def height(self) -> int:
         '''
-            int: The height of the Framebuffer.
+            int: The height of the framebuffer.
         '''
 
         return self.mglo.height
@@ -48,7 +51,7 @@ class Framebuffer:
     @property
     def size(self) -> tuple:
         '''
-            tuple: The size of the texture.
+            tuple: The size of the framebuffer.
         '''
 
         return (self.mglo.width, self.mglo.height)
@@ -56,7 +59,7 @@ class Framebuffer:
     @property
     def samples(self) -> int:
         '''
-            int: The samples of the Framebuffer.
+            int: The samples of the framebuffer.
         '''
 
         return self.mglo.samples
@@ -108,14 +111,36 @@ class Framebuffer:
 
     def read(self, viewport=None, components=3, *, attachment=0, alignment=1, floats=False) -> bytes:
         '''
-            Read the framebuffer content.
+            Read the content of the framebuffer.
+
+            Args:
+                viewport (tuple): The viewport.
+                components (int): The number of components to read.
+
+            Keyword Args:
+                attachment (int): The color attachment.
+                alignment (int): The byte alignment of the pixels.
+                floats (bool): The precision of the pixels.
+
+            Returns:
+                bytes: the pixels
         '''
 
         return self.mglo.read(viewport, components, attachment, alignment, floats)
 
     def read_into(self, buffer, viewport=None, components=3, *, attachment=0, alignment=1, floats=False) -> None:
         '''
-            Read the framebuffer content.
+            Read the content of the framebuffer into a buffer.
+
+            Args:
+                buffer (bytearray): The buffer that will receive the pixels.
+                viewport (tuple): The viewport.
+                components (int): The number of components to read.
+
+            Keyword Args:
+                attachment (int): The color attachment.
+                alignment (int): The byte alignment of the pixels.
+                floats (bool): The precision of the pixels.
         '''
 
         return self.mglo.read_into(buffer, viewport, components, attachment, alignment, floats)

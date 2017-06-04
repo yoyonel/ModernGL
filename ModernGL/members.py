@@ -172,7 +172,7 @@ class Uniform:
 
 class UniformMap:
     '''
-        UniformMap
+        UniformMap is a dictionary like object.
     '''
 
     __slots__ = ['mglo']
@@ -270,7 +270,7 @@ class UniformBlock:
 
 class UniformBlockMap:
     '''
-        UniformBlockMap
+        UniformBlockMap is a dictionary like object.
     '''
 
     __slots__ = ['mglo']
@@ -348,7 +348,7 @@ class Varying:
 
 class VaryingMap:
     '''
-        VaryingMap
+        VaryingMap is a dictionary like object.
     '''
 
     __slots__ = ['mglo']
@@ -556,7 +556,7 @@ class Attribute:
 
 class AttributeMap:
     '''
-        AttributeMap
+        AttributeMap is a dictionary like object.
     '''
 
     __slots__ = ['mglo']
@@ -637,7 +637,7 @@ class Subroutine:
 
 class SubroutineMap:
     '''
-        SubroutineMap
+        SubroutineMap is a dictionary like object.
     '''
 
     __slots__ = ['mglo']
@@ -715,7 +715,7 @@ class SubroutineUniform:
 
 class SubroutineUniformMap:
     '''
-        SubroutineUniformMap
+        SubroutineUniformMap is a dictionary like object.
     '''
 
     __slots__ = ['mglo']

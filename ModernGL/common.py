@@ -168,7 +168,7 @@ class Version:
     @property
     def major(self) -> int:
         '''
-            major
+            int: major
         '''
 
         return self._major
@@ -176,7 +176,7 @@ class Version:
     @property
     def minor(self) -> int:
         '''
-            minor
+            int: minor
         '''
 
         return self._minor
@@ -184,7 +184,11 @@ class Version:
     @property
     def code(self) -> int:
         '''
-            code
+            int: The version code.
+
+            The version code is similar to the GLSL version specification.
+            This value is always equal to `major * 100 + minor * 10`.
+            The purpose of this proeprty is to quickly compare the versions.
         '''
 
         return self._major * 100 + self._minor * 10

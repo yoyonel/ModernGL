@@ -225,7 +225,7 @@ class Context:
                 - :py:data:`ModernGL.MULTISAMPLE`
 
             Args:
-                flag: The flag to enable.
+                flag (EnableFlag): The flag to enable.
         '''
 
         self.mglo.enable(flag.mglo)
@@ -242,7 +242,7 @@ class Context:
                 - :py:data:`ModernGL.MULTISAMPLE`
 
             Args:
-                flag: The flag to disable.
+                flag (EnableFlag): The flag to disable.
         '''
 
         self.mglo.disable(flag.mglo)
@@ -273,11 +273,13 @@ class Context:
     def copy_framebuffer(self, dst, src) -> None:
         '''
             Copy framebuffer content.
-            Use this method to blit framebuffers.
-            Use this method to copy framebuffer content into a texture.
-            Use this method to downsample framebuffers, it will allow
-            to read the framebuffer's content.
-            Use this method to downsample a framebuffer directly to a texture.
+
+            Use this method to:
+
+                - blit framebuffers.
+                - copy framebuffer content into a texture.
+                - downsample framebuffers. (it will allow to read the framebuffer's content)
+                - downsample a framebuffer directly to a texture.
 
             Args:
                 dst (Framebuffer or Texture): Destination framebuffer or texture.
@@ -308,12 +310,13 @@ class Context:
             Create a :py:class:`Texture`.
 
             Args:
-                size (tuple): Width, height.
+                size (tuple): The width and height of the texture.
                 components (int): The number of components 1, 2, 3 or 4.
-                alignment (int): The byte alignment 1, 2, 4 or 8.
-                data (bytes): Content of the image.
+                data (bytes): Content of the texture.
 
             Keyword Args:
+                samples (int): The number of samples. Value `0` means no multisample format.
+                alignment (int): The byte alignment 1, 2, 4 or 8.
                 floats (bool): Use floating point precision.
 
             Returns:
@@ -327,9 +330,12 @@ class Context:
             Create a :py:class:`Texture`.
 
             Args:
-                size (tuple): Width, height.
+                size (tuple): The width and height of the texture.
+                data (bytes): Content of the texture.
+
+            Keyword Args:
+                samples (int): The number of samples. Value `0` means no multisample format.
                 alignment (int): The byte alignment 1, 2, 4 or 8.
-                data (bytes): Content of the image.
 
             Returns:
                 Texture: depth texture
@@ -342,7 +348,8 @@ class Context:
             Create a :py:class:`VertexArray`.
 
             Args:
-                program (Program): The program used by `render` and `transform`.
+                program (Program): The program used by :py:meth:`~VertexArray.render` and
+                                   :py:meth:`~VertexArray.transform`.
                 content (list): A list of (buffer, format, attributes).
                 index_buffer (Buffer): An index buffer.
 
@@ -360,13 +367,14 @@ class Context:
         '''
             Create a :py:class:`VertexArray`.
 
-            This is an alias for:
+            This is an alias for::
 
                 format = detect_format(program, attributes)
                 vertex_array(program, [(buffer, format, attributes)])
 
             Args:
-                program (Program): The program used by `render` and `transform`.
+                program (Program): The program used by :py:meth:`~VertexArray.render` and
+                                   :py:meth:`~VertexArray.transform`.
                 buffer (Buffer): The buffer.
                 attributes (list): A list of attribute names.
 
@@ -380,6 +388,7 @@ class Context:
     def program(self, shaders, varyings=()) -> Program:
         '''
             Create a :py:class:`Program` object.
+
             Only linked programs will be returned.
 
             For more information please see: :py:class:`Program` and :py:class:`Shader`
@@ -388,7 +397,7 @@ class Context:
             The varyings are only used when a transform program is created.
 
             Args:
-                shaders (list): A list of `Shader` objects.
+                shaders (list): A list of :py:class:`Shader` objects.
                 varyings (list): A list of varying names.
 
             Returns:
@@ -451,7 +460,7 @@ class Context:
 
     def vertex_shader(self, source) -> Shader:
         '''
-            The Vertex Shader is the programmable Shader stage in the rendering pipeline
+            The Vertex Shader is a programmable Shader stage in the rendering pipeline
             that handles the processing of individual vertices.
 
             Vertex shaders are fed Vertex Attribute data, as specified from a vertex array
@@ -511,7 +520,11 @@ class Context:
 
     def geometry_shader(self, source) -> Shader:
         '''
-            Create a :py:class:`Shader`.
+            A Geometry Shader is a Shader program written in GLSL that governs the processing of Primitives.
+            Geometry shaders reside between the Vertex Shaders (or the optional Tessellation stage) and the
+            fixed-function Vertex Post-Processing stage.
+
+            A geometry shader is optional and does not have to be used.
 
             Args:
                 source (str): The source code in GLSL.
@@ -524,7 +537,11 @@ class Context:
 
     def tess_evaluation_shader(self, source) -> Shader:
         '''
-            Create a :py:class:`Shader`.
+            Tessellation is the Vertex Processing stage in the OpenGL rendering pipeline where
+            patches of vertex data are subdivided into smaller Primitives.
+
+            The Tessellation Evaluation Shader takes the tessellated patch and computes
+            the vertex values for each generated vertex.
 
             Args:
                 source (str): The source code in GLSL.
@@ -537,7 +554,9 @@ class Context:
 
     def tess_control_shader(self, source) -> Shader:
         '''
-            Create a :py:class:`Shader`.
+            The Tessellation Control Shader (TCS) determines how much tessellation to do.
+            It can also adjust the actual patch data, as well as feed additional patch data to later stages.
+            The Tessellation Control Shader is optional.
 
             Args:
                 source (str): The source code in GLSL.
@@ -550,7 +569,8 @@ class Context:
 
     def framebuffer(self, color_attachments, depth_attachment=None) -> Framebuffer:
         '''
-            Create a :py:class:`Framebuffer`.
+            A :py:class:`Framebuffer` is a collection of buffers that can be used as the destination for rendering.
+            The buffers for Framebuffer objects reference images from either Textures or Renderbuffers.
 
             Args:
                 color_attachments (list): A list of `Texture` or `Renderbuffer` objects.
@@ -573,15 +593,16 @@ class Context:
 
     def renderbuffer(self, size, components=4, *, samples=0, floats=False) -> Renderbuffer:
         '''
-            Create a :py:class:`Renderbuffer`.
+            :py:class:`Renderbuffer` objects are OpenGL objects that contain images.
+            They are created and used specifically with :py:class:`Framebuffer` objects.
 
             Args:
-                size (tuple): The width and height.
+                size (tuple): The width and height of the renderbuffer.
                 components (int): The number of components 1, 2, 3 or 4.
 
             Keyword Args:
-                samples: The number of samples. Value `0` means no multisample format.
-                floats: Use floating point precision.
+                samples (int): The number of samples. Value `0` means no multisample format.
+                floats (bool): Use floating point precision.
 
             Returns:
                 Renderbuffer: renderbuffer
@@ -591,13 +612,14 @@ class Context:
 
     def depth_renderbuffer(self, size, *, samples=0) -> Renderbuffer:
         '''
-            Create a :py:class:`Renderbuffer`.
+            :py:class:`Renderbuffer` objects are OpenGL objects that contain images.
+            They are created and used specifically with :py:class:`Framebuffer` objects.
 
             Args:
-                size (tuple): The width and height.
+                size (tuple): The width and height of the renderbuffer.
 
             Keyword Args:
-                samples: The number of samples. Value `0` means no multisample format.
+                samples (int): The number of samples. Value `0` means no multisample format.
 
             Returns:
                 Renderbuffer: depth renderbuffer
@@ -607,7 +629,8 @@ class Context:
 
     def compute_shader(self, source) -> ComputeShader:
         '''
-            Create a :py:class:`ComputeShader`.
+            A :py:class:`ComputeShader` is a Shader Stage that is used entirely for computing arbitrary information.
+            While it can do rendering, it is generally used for tasks not directly related to drawing.
 
             Args:
                 source (str): The source of the compute shader.
@@ -676,53 +699,3 @@ def create_standalone_context(size=(256, 256), require=None) -> Context:
         raise Exception('The version required is not provided')
 
     return ctx
-
-
-class ContextManager:
-    '''
-        ContextManager
-    '''
-
-    cache = {}
-
-    @staticmethod
-    def create_context(name='primary', standalone=False) -> Context:
-        '''
-            Create a named OpenGL context.
-
-            This is only useful to solve the problem of importing
-            ModernGL from submodules, that has access to the same context.
-
-            The name `primary` is the default name.
-
-            Returns:
-                Context: context
-        '''
-
-        ctx = ContextManager.cache.get(name)
-
-        if not ctx:
-            if standalone:
-                ctx = create_standalone_context()
-            else:
-                ctx = create_context()
-
-        ContextManager.cache[name] = ctx
-
-        return ctx
-
-    @staticmethod
-    def release_context(name) -> None:
-        '''
-            Release a named context.
-            Fails silently.
-        '''
-
-        ctx = ContextManager.cache.get(name)
-
-        if not ctx:
-            return
-
-        ctx.release()
-
-        del ContextManager.cache[name]

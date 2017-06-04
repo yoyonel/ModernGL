@@ -7,7 +7,7 @@ from .common import InvalidObject
 
 class BufferAccess:
     '''
-        :py:class:`BufferAccess` objects are designed to access
+        BufferAccess objects are designed to access
         a :py:class:`Buffer` object's content inside a ``with`` statement.
         The buffer is mapped and unmapped only once.
 
@@ -61,10 +61,10 @@ class BufferAccess:
             Read the content.
 
             Args:
-                size: The size. Value `-1` means all.
+                size (int): The size. Value `-1` means all.
 
             Keyword Args:
-                offset: The offset.
+                offset (int): The offset.
 
             Returns:
                 bytes: binary data
@@ -77,10 +77,11 @@ class BufferAccess:
             Read the content.
 
             Args:
-                size: The size. Value `-1` means all.
+                buffer (bytarray): The buffer that will receive the content.
+                size (int): The size. Value `-1` means all.
 
             Keyword Args:
-                offset: The offset.
+                offset (int): The offset.
 
             Returns:
                 bytes: binary data
@@ -88,15 +89,15 @@ class BufferAccess:
 
         return self.mglo.read_into(buffer, size, offset)
 
-    def write(self, data, offset=0) -> None:
+    def write(self, data, *, offset=0) -> None:
         '''
             Write the content.
 
             Args:
-                size: The data.
+                size (int): The data.
 
             Keyword Args:
-                offset: The offset.
+                offset (int): The offset.
         '''
 
         self.mglo.write(data, offset)
@@ -128,7 +129,7 @@ class BufferAccess:
 
 class Buffer:
     '''
-        Buffer Objects are OpenGL Objects that store an array of unformatted memory
+        Buffer objects are OpenGL objects that store an array of unformatted memory
         allocated by the OpenGL context, (data allocated on the GPU).
         These can be used to store vertex data, pixel data retrieved from images
         or the framebuffer, and a variety of other things.
@@ -161,7 +162,7 @@ class Buffer:
     @property
     def size(self) -> int:
         '''
-            The size of the buffer.
+            int: The size of the buffer.
         '''
 
         return self.mglo.size
@@ -169,7 +170,7 @@ class Buffer:
     @property
     def dynamic(self) -> bool:
         '''
-            Is the buffer created with the dynamic flag?
+            bool: Is the buffer created with the dynamic flag?
         '''
 
         return self.mglo.dynamic
@@ -194,7 +195,7 @@ class Buffer:
 
             Examples:
 
-                Simple with statement::
+                Simple ``with`` statement::
 
                     # The buffer will be mapped once and accessed multiple times.
 
@@ -223,9 +224,10 @@ class Buffer:
 
     def read_into(self, buffer, size=-1, *, offset=0) -> None:
         '''
-            Read the content.
+            Read the content into a buffer.
 
             Args:
+                buffer (bytarray): The buffer that will receive the content.
                 size (int): The size. Value ``-1`` means all.
 
             Keyword Args:
@@ -237,15 +239,15 @@ class Buffer:
 
         return self.mglo.read_into(buffer, size, offset)
 
-    def write(self, data, offset=0) -> None:
+    def write(self, data, *, offset=0) -> None:
         '''
             Write the content.
 
             Args:
-                data: The data.
+                data (bytes): The data.
 
             Keyword Args:
-                offset: The offset.
+                offset (int): The offset.
         '''
 
         self.mglo.write(data, offset)
@@ -313,7 +315,7 @@ class Buffer:
             Bind the buffer to a uniform block.
 
             Args:
-                binding: The uniform block binding.
+                binding (int): The uniform block binding.
         '''
 
         self.mglo.bind_to_uniform_block(binding)
@@ -323,7 +325,7 @@ class Buffer:
             Bind the buffer to a shader storage buffer.
 
             Args:
-                binding: The shader storage binding.
+                binding (int): The shader storage binding.
         '''
 
         self.mglo.bind_to_storage_buffer(binding)

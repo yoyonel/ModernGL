@@ -10,7 +10,8 @@ from .members import UniformMap, UniformBlockMap, VaryingMap, AttributeMap, Prog
 
 class ComputeShader:
     '''
-        ComputeShader
+        A Compute Shader is a Shader Stage that is used entirely for computing arbitrary information.
+        While it can do rendering, it is generally used for tasks not directly related to drawing.
     '''
 
     __slots__ = ['mglo']
@@ -115,6 +116,11 @@ class ComputeShader:
     def run(self, group_x=1, group_y=1, group_z=1) -> None:
         '''
             Run the compute shader.
+
+            Args:
+                group_x (int): The number of work groups to be launched in the X dimension.
+                group_y (int): The number of work groups to be launched in the Y dimension.
+                group_z (int): The number of work groups to be launched in the Z dimension.
         '''
 
         return self.mglo.run(group_x, group_y, group_z)

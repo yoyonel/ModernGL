@@ -143,14 +143,31 @@ class Texture:
 
     def read(self, viewport=None, *, alignment=1) -> bytes:
         '''
-            Read the content of the texture.
+            Read the content of the texture into a buffer.
+
+            Args:
+                buffer (bytearray): The buffer that will receive the pixels.
+                viewport (tuple): The viewport.
+
+            Keyword Args:
+                alignment (int): The byte alignment of the pixels.
+
+            Returns:
+                bytes: the pixels
         '''
 
         return self.mglo.read(viewport, alignment)
 
     def read_into(self, buffer, viewport=None, *, alignment=1) -> None:
         '''
-            Read the content of the texture.
+            Read the content of the texture into a buffer.
+
+            Args:
+                buffer (bytearray): The buffer that will receive the pixels.
+                viewport (tuple): The viewport.
+
+            Keyword Args:
+                alignment (int): The byte alignment of the pixels.
         '''
 
         return self.mglo.read(buffer, viewport, alignment)
