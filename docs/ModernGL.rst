@@ -5,8 +5,7 @@ ModernGL on `Github <https://github.com/cprogrammer1994/ModernGL>`_
 
 If you have less time to read docs go to the `TL;DR <TLDR.html>`_ section.
 
-ModernGL and OpenGL
-^^^^^^^^^^^^^^^^^^^
+.. rubric:: ModernGL and OpenGL
 
 OpenGL is a great environment for developing portable, platform independent,
 interactive 2D and 3D graphics applications. The API implementation in Python is cumbersome,
@@ -16,13 +15,11 @@ scientific simulations, small games or user interfaces. Usually, acquiring in-de
 of OpenGL requires a steep learning curve. In contrast, ModernGL is easy to learn and use,
 moreover it is capable of rendering with the same performance and quality, with less code written.
 
-How to install?
-^^^^^^^^^^^^^^^
+.. rubric:: How to install?
 
 ``pip install ModernGL``
 
-How to create a window?
-^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: How to create a window?
 
 ModernGL encapsulates the use of the OpenGL API, a separate module must be used for creating a window.
 ModernGL can be integrated easily in GLWindow_, PyQt5_, pyglet_, pygame_, GLUT_ and many more.
@@ -33,14 +30,10 @@ ModernGL can be integrated easily in GLWindow_, PyQt5_, pyglet_, pygame_, GLUT_ 
 .. _GLUT: https://github.com/cprogrammer1994/ModernGL/tree/master/examples/PyOpenGL
 .. _GLWindow: https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow
 
-How to create a context?
-^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: How to create a context?
 
 - Create a window
 - Call :py:func:`ModernGL.create_context`
-
-ModernGL
-^^^^^^^^
 
 .. automodule:: ModernGL
 
@@ -48,7 +41,7 @@ ModernGL
 
 .. toctree::
 	:maxdepth: 4
-	:caption: Classes:
+	:caption: API Documentation:
 
 	Context <Context.rst>
 

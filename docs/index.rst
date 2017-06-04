@@ -15,7 +15,9 @@ Start `here <ModernGL.html>`_.
 
    ModernGL <ModernGL.rst>
    Examples <Examples.rst>
+   Tutorials <Tutorials.rst>
    Contributing <Contributing.rst>
+
    TL;DR <TLDR.rst>
 
 
