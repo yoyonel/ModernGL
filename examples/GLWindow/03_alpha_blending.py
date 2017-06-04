@@ -24,10 +24,8 @@ prog = ctx.program([
 
         void main() {
             frag_color = vert_color;
-            mat2 rot = mat2(
-                cos(rotation), sin(rotation),
-                -sin(rotation), cos(rotation)
-            );
+            float r = rotation * (0.5 + gl_InstanceID * 0.05);
+            mat2 rot = mat2(cos(r), sin(r), -sin(r), cos(r));
             gl_Position = vec4((rot * vert) * scale, 0.0, 1.0);
         }
     '''),
