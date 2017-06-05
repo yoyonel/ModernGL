@@ -221,6 +221,8 @@ class VertexArray:
             This values is provided for debug purposes only.
         '''
 
+        return self.mglo.glo
+
     def render(self, mode=TRIANGLES, vertices=-1, *, first=0, instances=1) -> None:
         '''
             The render primitive (mode) must be the same as
