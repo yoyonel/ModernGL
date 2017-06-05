@@ -82,5 +82,6 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 
 app = QtWidgets.QApplication([])
 window = QGLControllerWidget()
+window.move(QtWidgets.QDesktopWidget().rect().center() - window.rect().center())
 window.show()
 app.exec_()
