@@ -1465,30 +1465,8 @@ PyObject * MGLContext_get_default_framebuffer(MGLContext * self) {
 
 		framebuffer->framebuffer_obj = 0;
 
-		MGLRenderbuffer * fake_color_rbo = MGLRenderbuffer_New();
-
-		fake_color_rbo->renderbuffer_obj = 0;
-		fake_color_rbo->width = 0;
-		fake_color_rbo->height = 0;
-		fake_color_rbo->components = 0;
-		fake_color_rbo->samples = 0;
-		fake_color_rbo->floats = false;
-		fake_color_rbo->depth = false;
-		fake_color_rbo->context = 0;
-
-		MGLRenderbuffer * fake_depth_rbo = MGLRenderbuffer_New();
-
-		fake_depth_rbo->renderbuffer_obj = 0;
-		fake_depth_rbo->width = 0;
-		fake_depth_rbo->height = 0;
-		fake_depth_rbo->components = 0;
-		fake_depth_rbo->samples = 0;
-		fake_depth_rbo->floats = false;
-		fake_depth_rbo->depth = true;
-		fake_depth_rbo->context = 0;
-
-		framebuffer->color_attachments = PyTuple_Pack(1, fake_color_rbo);
-		framebuffer->depth_attachment = (PyObject *)fake_depth_rbo;
+		framebuffer->color_attachments = 0;
+		framebuffer->depth_attachment = 0;
 
 		framebuffer->draw_buffers_len = 1;
 		framebuffer->draw_buffers = new unsigned[1];

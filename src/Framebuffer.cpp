@@ -330,11 +330,19 @@ PyObject * MGLFramebuffer_get_samples(MGLFramebuffer * self, void * closure) {
 }
 
 PyObject * MGLFramebuffer_get_color_attachments(MGLFramebuffer * self, void * closure) {
+	if (!self->color_attachments) {
+		MGLError_Set("missing color_attachments");
+		return 0;
+	}
 	Py_INCREF(self->color_attachments);
 	return self->color_attachments;
 }
 
 PyObject * MGLFramebuffer_get_depth_attachment(MGLFramebuffer * self, void * closure) {
+	if (!self->depth_attachment) {
+		MGLError_Set("missing depth_attachment");
+		return 0;
+	}
 	Py_INCREF(self->depth_attachment);
 	return self->depth_attachment;
 }
