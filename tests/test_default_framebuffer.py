@@ -13,6 +13,15 @@ class TestCase(unittest.TestCase):
     def tearDownClass(cls):
         cls.ctx.release()
 
+    def test_size(self):
+        width, height = self.ctx.default_framebuffer.size
+        self.assertEqual(width, 0)
+        self.assertEqual(height, 0)
+
+    def test_samples(self):
+        samples = self.ctx.default_framebuffer.samples
+        self.assertEqual(samples, 0)
+
     def test_having_color_attachments(self):
         with self.assertRaisesRegex(ModernGL.Error, 'attachment'):
             self.ctx.default_framebuffer.color_attachments
