@@ -25,5 +25,6 @@ class TestCase(unittest.TestCase):
         self.assertEqual(fbo.read(components=3), b'ABC' * 16)
         self.assertEqual(fbo.read(components=4), b'ABCD' * 16)
 
+
 if __name__ == '__main__':
     unittest.main()
