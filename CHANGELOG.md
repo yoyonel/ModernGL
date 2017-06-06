@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Fixed
-- `__repr__` for VertexArray
+- Failing `__repr__` in VertexArrays
 
 ## [4.1.3] - 2017-06-04
 ### Added
