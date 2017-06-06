@@ -234,8 +234,19 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 
 		MGLFramebuffer * dst_framebuffer = (MGLFramebuffer *)dst;
 
-		int width = src->width < dst_framebuffer->width ? src->width : dst_framebuffer->width;
-		int height = src->height < dst_framebuffer->height ? src->height : dst_framebuffer->height;
+		int width = 0;
+		int height = 0;
+
+		if (!dst_framebuffer->framebuffer_obj) {
+			width = src->width;
+			height = src->height;
+		} else if (!src->framebuffer_obj) {
+			width = dst_framebuffer->width;
+			height = dst_framebuffer->height;
+		} else {
+			width = src->width < dst_framebuffer->width ? src->width : dst_framebuffer->width;
+			height = src->height < dst_framebuffer->height ? src->height : dst_framebuffer->height;
+		}
 
 		gl.BindFramebuffer(GL_READ_FRAMEBUFFER, src->framebuffer_obj);
 		gl.BindFramebuffer(GL_DRAW_FRAMEBUFFER, dst_framebuffer->framebuffer_obj);
@@ -252,6 +263,14 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 
 		int width = src->width < dst_texture->width ? src->width : dst_texture->width;
 		int height = src->height < dst_texture->height ? src->height : dst_texture->height;
+
+		if (!src->framebuffer_obj) {
+			width = dst_texture->width;
+			height = dst_texture->height;
+		} else {
+			width = src->width < dst_texture->width ? src->width : dst_texture->width;
+			height = src->height < dst_texture->height ? src->height : dst_texture->height;
+		}
 
 		gl.BindFramebuffer(GL_READ_FRAMEBUFFER, src->framebuffer_obj);
 

@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Fixed
+- `copy_framebuffer` using `default_framebuffer`
 - Failing `__repr__` in VertexArrays
 
 ## [4.1.3] - 2017-06-04
