@@ -115,6 +115,9 @@ PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
 	const GLMethods & gl = self->context->gl;
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
 	gl.DrawBuffers(self->draw_buffers_len, self->draw_buffers);
+	if (self->framebuffer_obj) {
+		gl.Viewport(0, 0, self->width, self->height);
+	}
 	Py_RETURN_NONE;
 }
 
