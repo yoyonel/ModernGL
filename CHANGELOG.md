@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Framebuffer `viewport` attribute
+
 ### Fixed
 - `copy_framebuffer` using `default_framebuffer`
 - Failing `__repr__` in VertexArrays
