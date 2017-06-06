@@ -166,7 +166,7 @@
 		"prefix": "mgl_framebuffer",
 		"body": [
 			"${1:fbo} = ${2:ctx}.framebuffer([",
-			"\t${3:${2:ctx}.renderbuffer(${4:size})}),",
+			"\t${3:${2:ctx}.renderbuffer(${4:size})},",
 			"])"
 		]
 	},
@@ -174,7 +174,7 @@
 		"prefix": "mgl_framebuffer_with_texture",
 		"body": [
 			"${1:fbo} = ${2:ctx}.framebuffer([",
-			"\t${3:${2:ctx}.texture(${4:size}, ${4:components})}),",
+			"\t${3:${2:ctx}.texture(${4:size}, ${4:components})},",
 			"])"
 		]
 	},
