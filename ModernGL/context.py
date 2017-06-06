@@ -130,7 +130,7 @@ class Context:
             Framebuffer: The default framebuffer.
         '''
 
-        return self.mglo.default_framebuffer
+        return Framebuffer.new(self.mglo.default_framebuffer)
 
     @property
     def wireframe(self) -> bool:

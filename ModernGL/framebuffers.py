@@ -2,7 +2,10 @@
     ModernGL framebuffers
 '''
 
+from typing import Tuple
+
 from .common import InvalidObject
+from .renderbuffers import Renderbuffer
 
 
 class Framebuffer:
@@ -31,6 +34,22 @@ class Framebuffer:
 
     def __repr__(self):
         return '<Framebuffer: %d>' % self.glo
+
+    @property
+    def color_attachments(self) -> Tuple[Renderbuffer]:
+        '''
+            tuple: The color attachments of the framebuffer.
+        '''
+
+        return tuple(Renderbuffer.new(x) for x in self.mglo.color_attachments)
+
+    @property
+    def depth_attachment(self) -> Renderbuffer:
+        '''
+            Renderbuffer: The depth attachment of the framebuffer.
+        '''
+
+        return Renderbuffer.new(self.mglo.depth_attachment)
 
     @property
     def width(self) -> int:
