@@ -116,7 +116,12 @@ PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
 	gl.DrawBuffers(self->draw_buffers_len, self->draw_buffers);
 	if (self->framebuffer_obj) {
-		gl.Viewport(0, 0, self->width, self->height);
+		gl.Viewport(
+			self->viewport_x,
+			self->viewport_y,
+			self->viewport_width,
+			self->viewport_height
+		);
 	}
 	Py_RETURN_NONE;
 }
@@ -317,6 +322,38 @@ PyMethodDef MGLFramebuffer_tp_methods[] = {
 	{0},
 };
 
+PyObject * MGLFramebuffer_get_viewport(MGLFramebuffer * self, void * closure) {
+	PyObject * x = PyLong_FromLong(self->viewport_x);
+	PyObject * y = PyLong_FromLong(self->viewport_y);
+	PyObject * width = PyLong_FromLong(self->viewport_width);
+	PyObject * height = PyLong_FromLong(self->viewport_height);
+	return PyTuple_Pack(4, x, y, width, height);
+}
+
+int MGLFramebuffer_set_viewport(MGLFramebuffer * self, PyObject * value, void * closure) {
+	if (PyTuple_GET_SIZE(value) != 4) {
+		MGLError_Set("the viewport must be a 4-tuple not %d-tuple", PyTuple_GET_SIZE(value));
+		return -1;
+	}
+
+	int viewport_x = PyLong_AsLong(PyTuple_GET_ITEM(value, 0));
+	int viewport_y = PyLong_AsLong(PyTuple_GET_ITEM(value, 1));
+	int viewport_width = PyLong_AsLong(PyTuple_GET_ITEM(value, 2));
+	int viewport_height = PyLong_AsLong(PyTuple_GET_ITEM(value, 3));
+
+	if (PyErr_Occurred()) {
+		MGLError_Set("the viewport is invalid");
+		return -1;
+	}
+
+	self->viewport_x = viewport_x;
+	self->viewport_y = viewport_y;
+	self->viewport_width = viewport_width;
+	self->viewport_height = viewport_height;
+
+	return 0;
+}
+
 PyObject * MGLFramebuffer_get_width(MGLFramebuffer * self, void * closure) {
 	return PyLong_FromLong(self->width);
 }
@@ -357,6 +394,8 @@ PyObject * MGLFramebuffer_get_glo(MGLFramebuffer * self, void * closure) {
 }
 
 PyGetSetDef MGLFramebuffer_tp_getseters[] = {
+	{(char *)"viewport", (getter)MGLFramebuffer_get_viewport, (setter)MGLFramebuffer_set_viewport, 0, 0},
+
 	{(char *)"width", (getter)MGLFramebuffer_get_width, 0, 0, 0},
 	{(char *)"height", (getter)MGLFramebuffer_get_height, 0, 0, 0},
 	{(char *)"samples", (getter)MGLFramebuffer_get_samples, 0, 0, 0},

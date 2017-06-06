@@ -36,20 +36,16 @@ class Framebuffer:
         return '<Framebuffer: %d>' % self.glo
 
     @property
-    def color_attachments(self) -> Tuple[Renderbuffer]:
+    def viewport(self) -> Tuple[int, int, int, int]:
         '''
-            tuple: The color attachments of the framebuffer.
-        '''
-
-        return tuple(Renderbuffer.new(x) for x in self.mglo.color_attachments)
-
-    @property
-    def depth_attachment(self) -> Renderbuffer:
-        '''
-            Renderbuffer: The depth attachment of the framebuffer.
+            tuple: The viewport of the framebuffer.
         '''
 
-        return Renderbuffer.new(self.mglo.depth_attachment)
+        return self.mglo.viewport
+
+    @viewport.setter
+    def viewport(self, value):
+        self.mglo.viewport = value
 
     @property
     def width(self) -> int:
@@ -82,6 +78,22 @@ class Framebuffer:
         '''
 
         return self.mglo.samples
+
+    @property
+    def color_attachments(self) -> Tuple[Renderbuffer]:
+        '''
+            tuple: The color attachments of the framebuffer.
+        '''
+
+        return tuple(Renderbuffer.new(x) for x in self.mglo.color_attachments)
+
+    @property
+    def depth_attachment(self) -> Renderbuffer:
+        '''
+            Renderbuffer: The depth attachment of the framebuffer.
+        '''
+
+        return Renderbuffer.new(self.mglo.depth_attachment)
 
     @property
     def glo(self) -> int:

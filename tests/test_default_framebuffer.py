@@ -13,6 +13,13 @@ class TestCase(unittest.TestCase):
     def tearDownClass(cls):
         cls.ctx.release()
 
+    def test_viewport(self):
+        x, y, width, height = self.ctx.default_framebuffer.viewport
+        self.assertEqual(x, 0)
+        self.assertEqual(y, 0)
+        self.assertEqual(width, 0)
+        self.assertEqual(height, 0)
+
     def test_size(self):
         width, height = self.ctx.default_framebuffer.size
         self.assertEqual(width, 0)

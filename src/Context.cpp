@@ -1166,6 +1166,11 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	framebuffer->color_attachments = color_attachments;
 	framebuffer->depth_attachment = depth_attachment;
 
+	framebuffer->viewport_x = 0;
+	framebuffer->viewport_y = 0;
+	framebuffer->viewport_width = width;
+	framebuffer->viewport_height = height;
+
 	framebuffer->width = width;
 	framebuffer->height = height;
 	framebuffer->samples = samples;
@@ -1493,6 +1498,11 @@ PyObject * MGLContext_get_default_framebuffer(MGLContext * self) {
 
 		// NO INCREF
 		framebuffer->context = self;
+
+		framebuffer->viewport_x = 0;
+		framebuffer->viewport_y = 0;
+		framebuffer->viewport_width = 0;
+		framebuffer->viewport_height = 0;
 
 		framebuffer->width = 0;
 		framebuffer->height = 0;

@@ -13,6 +13,11 @@ struct MGLFramebuffer : public MGLContextMember {
 
 	int framebuffer_obj;
 
+	int viewport_x;
+	int viewport_y;
+	int viewport_width;
+	int viewport_height;
+
 	int width;
 	int height;
 	int samples;
