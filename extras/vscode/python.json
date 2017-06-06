@@ -41,7 +41,7 @@
 		"body": [
 			"${1:prog} = ${2:ctx}.program([",
 			"\t${2:ctx}.vertex_shader(${3:open('${4:vertex_shader.vert}').read()}),",
-			"\t${2:ctx}.fragment_shader(${5:open('${6:vertex_shader.frag}').read()}),",
+			"\t${2:ctx}.fragment_shader(${5:open('${6:fragment_shader.frag}').read()}),",
 			"])"
 		]
 	},
