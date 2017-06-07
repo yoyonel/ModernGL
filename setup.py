@@ -129,7 +129,7 @@ args = {
     'license': 'MIT',
     'classifiers': classifiers,
     'keywords': keywords,
-    'packages': ['ModernGL'],
+    'packages': ['ModernGL', 'ModernGL.ext', 'ModernGL.tk'],
     'ext_modules': [ModernGL],
     'platforms': ['any'],
 }
