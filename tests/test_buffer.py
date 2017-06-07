@@ -16,6 +16,9 @@ class TestBuffer(unittest.TestCase):
     def tearDown(self):
         self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
 
+    def tearDown(self):
+        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
+
     def test_buffer_clear_1(self):
         buf = self.ctx.buffer(data=b'\xAA\x55' * 10)
         buf.clear(chunk=b'AB')

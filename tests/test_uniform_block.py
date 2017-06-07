@@ -39,6 +39,9 @@ class TestCase(unittest.TestCase):
     def tearDownClass(cls):
         cls.ctx.release()
 
+    def tearDown(self):
+        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
+
     def test_1(self):
         buf_v = self.ctx.buffer(struct.pack('2f', 100.0, 1000.0))
         buf_u1 = self.ctx.buffer(struct.pack('f', 9.5))

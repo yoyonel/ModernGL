@@ -13,6 +13,9 @@ class TestCase(unittest.TestCase):
     def tearDownClass(cls):
         cls.ctx.release()
 
+    def tearDown(self):
+        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
+
     def test_framebuffer_color_attachment(self):
         rbo = self.ctx.renderbuffer((64, 64))
         self.ctx.framebuffer(rbo)

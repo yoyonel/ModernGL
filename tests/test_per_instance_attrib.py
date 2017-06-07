@@ -50,6 +50,9 @@ class TestCase(unittest.TestCase):
     def tearDownClass(cls):
         cls.ctx.release()
 
+    def tearDown(self):
+        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
+
     def test_vertex_attrib_per_instance_1(self):
         self.vao1.transform(self.res, ModernGL.POINTS, vertices=4, instances=1)
 

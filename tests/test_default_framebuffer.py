@@ -13,6 +13,9 @@ class TestCase(unittest.TestCase):
     def tearDownClass(cls):
         cls.ctx.release()
 
+    def tearDown(self):
+        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
+
     def test_viewport(self):
         x, y, width, height = self.ctx.default_framebuffer.viewport
         self.assertEqual(x, 0)

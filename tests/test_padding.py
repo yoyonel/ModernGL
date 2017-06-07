@@ -37,6 +37,9 @@ class TestCase(unittest.TestCase):
     def tearDownClass(cls):
         cls.ctx.release()
 
+    def tearDown(self):
+        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
+
     def test_padding_1(self):
         buf = self.ctx.buffer(struct.pack('=ixi12xii', 1, 2, 3, 4))
         res = self.ctx.buffer(reserve=16)
