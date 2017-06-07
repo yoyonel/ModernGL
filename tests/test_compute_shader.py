@@ -21,9 +21,7 @@ class TestCase(unittest.TestCase):
         if self.ctx.version_code < 430:
             self.skipTest('OpenGL 4.3 is not supported')
 
-        ctx = self.ctx
-
-        compute_shader = ctx.compute_shader('''
+        compute_shader = self.ctx.compute_shader('''
             #version 430
 
             layout (local_size_x = 1, local_size_y = 1) in;
@@ -44,8 +42,8 @@ class TestCase(unittest.TestCase):
             }
         ''')
 
-        buf1 = ctx.buffer(struct.pack('4f', 1.0, 2.0, 3.0, 4.0))
-        buf2 = ctx.buffer(struct.pack('4f', 0.0, 0.0, 0.0, 0.0))
+        buf1 = self.ctx.buffer(struct.pack('4f', 1.0, 2.0, 3.0, 4.0))
+        buf2 = self.ctx.buffer(struct.pack('4f', 0.0, 0.0, 0.0, 0.0))
 
         buf1.bind_to_storage_buffer(1)
         buf2.bind_to_storage_buffer(2)
