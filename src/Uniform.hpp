@@ -88,9 +88,6 @@ PyObject * MGLUniform_vec_value_getter(MGLUniform * self);
 template <int N>
 PyObject * MGLUniform_dvec_value_getter(MGLUniform * self);
 
-template <typename T, int N, int M>
-PyObject * MGLUniform_matrix_value_getter(MGLUniform * self);
-
 template <int N>
 PyObject * MGLUniform_bvec_array_value_getter(MGLUniform * self);
 
@@ -105,9 +102,6 @@ PyObject * MGLUniform_vec_array_value_getter(MGLUniform * self);
 
 template <int N>
 PyObject * MGLUniform_dvec_array_value_getter(MGLUniform * self);
-
-template <typename T, int N, int M>
-PyObject * MGLUniform_matrix_array_value_getter(MGLUniform * self);
 
 template <int N>
 int MGLUniform_bvec_value_setter(MGLUniform * self, PyObject * value);
@@ -124,9 +118,6 @@ int MGLUniform_vec_value_setter(MGLUniform * self, PyObject * value);
 template <int N>
 int MGLUniform_dvec_value_setter(MGLUniform * self, PyObject * value);
 
-template <typename T, int N, int M>
-int MGLUniform_matrix_value_setter(MGLUniform * self, PyObject * value);
-
 template <int N>
 int MGLUniform_bvec_array_value_setter(MGLUniform * self, PyObject * value);
 
@@ -141,6 +132,15 @@ int MGLUniform_vec_array_value_setter(MGLUniform * self, PyObject * value);
 
 template <int N>
 int MGLUniform_dvec_array_value_setter(MGLUniform * self, PyObject * value);
+
+template <typename T, int N, int M>
+PyObject * MGLUniform_matrix_value_getter(MGLUniform * self);
+
+template <typename T, int N, int M>
+PyObject * MGLUniform_matrix_array_value_getter(MGLUniform * self);
+
+template <typename T, int N, int M>
+int MGLUniform_matrix_value_setter(MGLUniform * self, PyObject * value);
 
 template <typename T, int N, int M>
 int MGLUniform_matrix_array_value_setter(MGLUniform * self, PyObject * value);
