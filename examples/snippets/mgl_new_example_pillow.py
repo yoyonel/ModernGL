@@ -28,7 +28,7 @@ vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
 fbo = ctx.framebuffer(ctx.renderbuffer((512, 512)))
 
 fbo.use()
-ctx.clear(0.9, 0.9, 0.9)
+fbo.clear(0.9, 0.9, 0.9)
 vao.render()
 
 pixels = fbo.read(components=3, alignment=1)
