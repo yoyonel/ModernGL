@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [4.1.4] - 2017-06-07
 ### Added
 - Framebuffer `color_mask` attribute
 - Framebuffer `depth_mask` attribute
@@ -128,7 +130,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.0.0 - 2016-03-03
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.3...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.4...master
+[4.1.4]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.3...4.1.4
 [4.1.3]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.2...4.1.3
 [4.1.2]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.1...4.1.2
 [4.1.1]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.0...4.1.1
