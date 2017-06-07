@@ -1162,6 +1162,17 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		framebuffer->draw_buffers[i] = GL_COLOR_ATTACHMENT0 + i;
 	}
 
+	framebuffer->color_mask = new bool[color_attachments_len * 4 + 1];
+
+	for (int i = 0; i < color_attachments_len; ++i) {
+		framebuffer->color_mask[i * 4 + 0] = true;
+		framebuffer->color_mask[i * 4 + 1] = true;
+		framebuffer->color_mask[i * 4 + 2] = true;
+		framebuffer->color_mask[i * 4 + 3] = true;
+	}
+
+	framebuffer->depth_mask = true;
+
 	framebuffer->color_attachments = color_attachments;
 	framebuffer->depth_attachment = depth_attachment;
 
@@ -1686,6 +1697,14 @@ void MGLContext_Initialize(MGLContext * self) {
 		framebuffer->draw_buffers_len = 1;
 		framebuffer->draw_buffers = new unsigned[1];
 		framebuffer->draw_buffers[0] = GL_COLOR_ATTACHMENT0;
+
+		framebuffer->color_mask = new bool[4];
+		framebuffer->color_mask[0] = true;
+		framebuffer->color_mask[1] = true;
+		framebuffer->color_mask[2] = true;
+		framebuffer->color_mask[3] = true;
+
+		framebuffer->depth_mask = true;
 
 		// NO INCREF
 		framebuffer->context = self;

@@ -8,6 +8,8 @@ struct MGLFramebuffer : public MGLContextMember {
 	PyObject * color_attachments;
 	PyObject * depth_attachment;
 
+	bool * color_mask;
+
 	unsigned * draw_buffers;
 	int draw_buffers_len;
 
@@ -21,6 +23,8 @@ struct MGLFramebuffer : public MGLContextMember {
 	int width;
 	int height;
 	int samples;
+
+	bool depth_mask;
 };
 
 extern PyTypeObject MGLFramebuffer_Type;

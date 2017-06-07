@@ -127,6 +127,18 @@ PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
 		);
 	}
 
+	for (int i = 0; i < self->draw_buffers_len; ++i) {
+		gl.ColorMaski(
+			GL_DRAW_BUFFER0 + i,
+			self->color_mask[i * 4 + 0],
+			self->color_mask[i * 4 + 1],
+			self->color_mask[i * 4 + 2],
+			self->color_mask[i * 4 + 3]
+		);
+	}
+
+	gl.DepthMask(self->depth_mask);
+
 	Py_INCREF(self);
 	Py_INCREF(self->context->bound_framebuffer);
 	self->context->bound_framebuffer = self;
@@ -362,6 +374,26 @@ int MGLFramebuffer_set_viewport(MGLFramebuffer * self, PyObject * value, void * 
 	return 0;
 }
 
+PyObject * MGLFramebuffer_get_color_mask(MGLFramebuffer * self, void * closure) {
+	PyErr_SetString(PyExc_NotImplementedError, "NYI");
+	return 0;
+}
+
+int MGLFramebuffer_set_color_mask(MGLFramebuffer * self, PyObject * value, void * closure) {
+	PyErr_SetString(PyExc_NotImplementedError, "NYI");
+	return -1;
+}
+
+PyObject * MGLFramebuffer_get_depth_mask(MGLFramebuffer * self, void * closure) {
+	PyErr_SetString(PyExc_NotImplementedError, "NYI");
+	return 0;
+}
+
+int MGLFramebuffer_set_depth_mask(MGLFramebuffer * self, PyObject * value, void * closure) {
+	PyErr_SetString(PyExc_NotImplementedError, "NYI");
+	return -1;
+}
+
 PyObject * MGLFramebuffer_get_width(MGLFramebuffer * self, void * closure) {
 	return PyLong_FromLong(self->width);
 }
@@ -403,6 +435,8 @@ PyObject * MGLFramebuffer_get_glo(MGLFramebuffer * self, void * closure) {
 
 PyGetSetDef MGLFramebuffer_tp_getseters[] = {
 	{(char *)"viewport", (getter)MGLFramebuffer_get_viewport, (setter)MGLFramebuffer_set_viewport, 0, 0},
+	{(char *)"color_mask", (getter)MGLFramebuffer_get_color_mask, (setter)MGLFramebuffer_set_color_mask, 0, 0},
+	{(char *)"depth_mask", (getter)MGLFramebuffer_get_depth_mask, (setter)MGLFramebuffer_set_depth_mask, 0, 0},
 
 	{(char *)"width", (getter)MGLFramebuffer_get_width, 0, 0, 0},
 	{(char *)"height", (getter)MGLFramebuffer_get_height, 0, 0, 0},
