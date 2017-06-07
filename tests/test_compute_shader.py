@@ -18,6 +18,9 @@ class TestCase(unittest.TestCase):
         self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
 
     def test_1(self):
+        if self.ctx.version_code < 430:
+            self.skipTest('OpenGL 4.3 is not supported')
+
         ctx = self.ctx
 
         compute_shader = ctx.compute_shader('''

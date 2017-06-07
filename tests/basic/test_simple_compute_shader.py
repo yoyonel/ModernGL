@@ -18,7 +18,7 @@ class TestCase(unittest.TestCase):
 
     def test_compute_shader(self):
         if self.ctx.version_code < 430:
-            return
+            self.skipTest('OpenGL 4.3 is not supported')
 
         src = '''
             #version 430

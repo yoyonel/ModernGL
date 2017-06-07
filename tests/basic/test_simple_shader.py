@@ -61,7 +61,7 @@ class TestCase(unittest.TestCase):
 
     def test_tess_control_shader(self):
         if self.ctx.version_code < 400:
-            return
+            self.skipTest('OpenGL 4.0 is not supported')
 
         src = '''
             #version 400
@@ -87,7 +87,7 @@ class TestCase(unittest.TestCase):
 
     def test_tess_evaluation_shader(self):
         if self.ctx.version_code < 400:
-            return
+            self.skipTest('OpenGL 4.0 is not supported')
 
         src = '''
             #version 400
