@@ -375,8 +375,27 @@ int MGLFramebuffer_set_viewport(MGLFramebuffer * self, PyObject * value, void * 
 }
 
 PyObject * MGLFramebuffer_get_color_mask(MGLFramebuffer * self, void * closure) {
-	PyErr_SetString(PyExc_NotImplementedError, "NYI");
-	return 0;
+	if (self->draw_buffers_len == 1) {
+		PyObject * color_mask = PyTuple_New(4);
+		PyTuple_SET_ITEM(color_mask, 0, PyBool_FromLong(self->color_mask[0]));
+		PyTuple_SET_ITEM(color_mask, 1, PyBool_FromLong(self->color_mask[1]));
+		PyTuple_SET_ITEM(color_mask, 2, PyBool_FromLong(self->color_mask[2]));
+		PyTuple_SET_ITEM(color_mask, 3, PyBool_FromLong(self->color_mask[3]));
+		return color_mask;
+	}
+
+	PyObject * res = PyTuple_New(self->draw_buffers_len);
+
+	for (int i = 0; i < self->draw_buffers_len; ++i) {
+		PyObject * color_mask = PyTuple_New(4);
+		PyTuple_SET_ITEM(color_mask, 0, PyBool_FromLong(self->color_mask[i * 4 + 0]));
+		PyTuple_SET_ITEM(color_mask, 1, PyBool_FromLong(self->color_mask[i * 4 + 1]));
+		PyTuple_SET_ITEM(color_mask, 2, PyBool_FromLong(self->color_mask[i * 4 + 2]));
+		PyTuple_SET_ITEM(color_mask, 3, PyBool_FromLong(self->color_mask[i * 4 + 3]));
+		PyTuple_SET_ITEM(res, i, color_mask);
+	}
+
+	return res;
 }
 
 int MGLFramebuffer_set_color_mask(MGLFramebuffer * self, PyObject * value, void * closure) {
@@ -385,8 +404,7 @@ int MGLFramebuffer_set_color_mask(MGLFramebuffer * self, PyObject * value, void 
 }
 
 PyObject * MGLFramebuffer_get_depth_mask(MGLFramebuffer * self, void * closure) {
-	PyErr_SetString(PyExc_NotImplementedError, "NYI");
-	return 0;
+	return PyBool_FromLong(self->depth_mask);
 }
 
 int MGLFramebuffer_set_depth_mask(MGLFramebuffer * self, PyObject * value, void * closure) {
