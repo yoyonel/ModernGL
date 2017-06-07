@@ -47,6 +47,7 @@ class TestCase(unittest.TestCase):
         buf_u1 = self.ctx.buffer(struct.pack('f', 9.5))
         buf_u2 = self.ctx.buffer(struct.pack('f', 4.0))
         buf_u3 = self.ctx.buffer(struct.pack('f', 3.0))
+        buf_u4 = self.ctx.buffer(struct.pack('f', 0.0))
         buf_r = self.ctx.buffer(reserve=buf_v.size)
 
         vao = self.ctx.vertex_array(self.prog, [
@@ -71,6 +72,7 @@ class TestCase(unittest.TestCase):
 
         buf_u1.bind_to_uniform_block(2)
         buf_u2.bind_to_uniform_block(4)
+        buf_u4.bind_to_uniform_block(1)
 
         vao.transform(buf_r)
         a, b = struct.unpack('2f', buf_r.read())
