@@ -192,11 +192,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformiv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniform2iv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_bvec2_array_value_getter;
-				self->value_setter = (void *)MGLUniform_bvec2_array_value_setter;
+				self->value_getter = (void *)MGLUniform_bvec_array_value_getter<2>;
+				self->value_setter = (void *)MGLUniform_bvec_array_value_setter<2>;
 			} else {
-				self->value_getter = (void *)MGLUniform_bvec2_value_getter;
-				self->value_setter = (void *)MGLUniform_bvec2_value_setter;
+				self->value_getter = (void *)MGLUniform_bvec_value_getter<2>;
+				self->value_setter = (void *)MGLUniform_bvec_value_setter<2>;
 			}
 			break;
 
@@ -207,11 +207,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformiv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniform3iv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_bvec3_array_value_getter;
-				self->value_setter = (void *)MGLUniform_bvec3_array_value_setter;
+				self->value_getter = (void *)MGLUniform_bvec_array_value_getter<3>;
+				self->value_setter = (void *)MGLUniform_bvec_array_value_setter<3>;
 			} else {
-				self->value_getter = (void *)MGLUniform_bvec3_value_getter;
-				self->value_setter = (void *)MGLUniform_bvec3_value_setter;
+				self->value_getter = (void *)MGLUniform_bvec_value_getter<3>;
+				self->value_setter = (void *)MGLUniform_bvec_value_setter<3>;
 			}
 			break;
 
@@ -222,11 +222,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformiv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniform4iv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_bvec4_array_value_getter;
-				self->value_setter = (void *)MGLUniform_bvec4_array_value_setter;
+				self->value_getter = (void *)MGLUniform_bvec_array_value_getter<4>;
+				self->value_setter = (void *)MGLUniform_bvec_array_value_setter<4>;
 			} else {
-				self->value_getter = (void *)MGLUniform_bvec4_value_getter;
-				self->value_setter = (void *)MGLUniform_bvec4_value_setter;
+				self->value_getter = (void *)MGLUniform_bvec_value_getter<4>;
+				self->value_setter = (void *)MGLUniform_bvec_value_setter<4>;
 			}
 			break;
 
@@ -252,11 +252,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformiv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniform2iv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_ivec2_array_value_getter;
-				self->value_setter = (void *)MGLUniform_ivec2_array_value_setter;
+				self->value_getter = (void *)MGLUniform_ivec_array_value_getter<2>;
+				self->value_setter = (void *)MGLUniform_ivec_array_value_setter<2>;
 			} else {
-				self->value_getter = (void *)MGLUniform_ivec2_value_getter;
-				self->value_setter = (void *)MGLUniform_ivec2_value_setter;
+				self->value_getter = (void *)MGLUniform_ivec_value_getter<2>;
+				self->value_setter = (void *)MGLUniform_ivec_value_setter<2>;
 			}
 			break;
 
@@ -267,11 +267,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformiv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniform3iv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_ivec3_array_value_getter;
-				self->value_setter = (void *)MGLUniform_ivec3_array_value_setter;
+				self->value_getter = (void *)MGLUniform_ivec_array_value_getter<3>;
+				self->value_setter = (void *)MGLUniform_ivec_array_value_setter<3>;
 			} else {
-				self->value_getter = (void *)MGLUniform_ivec3_value_getter;
-				self->value_setter = (void *)MGLUniform_ivec3_value_setter;
+				self->value_getter = (void *)MGLUniform_ivec_value_getter<3>;
+				self->value_setter = (void *)MGLUniform_ivec_value_setter<3>;
 			}
 			break;
 
@@ -282,11 +282,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformiv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniform4iv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_ivec4_array_value_getter;
-				self->value_setter = (void *)MGLUniform_ivec4_array_value_setter;
+				self->value_getter = (void *)MGLUniform_ivec_array_value_getter<4>;
+				self->value_setter = (void *)MGLUniform_ivec_array_value_setter<4>;
 			} else {
-				self->value_getter = (void *)MGLUniform_ivec4_value_getter;
-				self->value_setter = (void *)MGLUniform_ivec4_value_setter;
+				self->value_getter = (void *)MGLUniform_ivec_value_getter<4>;
+				self->value_setter = (void *)MGLUniform_ivec_value_setter<4>;
 			}
 			break;
 
@@ -312,11 +312,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformuiv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniform2uiv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_uvec2_array_value_getter;
-				self->value_setter = (void *)MGLUniform_uvec2_array_value_setter;
+				self->value_getter = (void *)MGLUniform_uvec_array_value_getter<2>;
+				self->value_setter = (void *)MGLUniform_uvec_array_value_setter<2>;
 			} else {
-				self->value_getter = (void *)MGLUniform_uvec2_value_getter;
-				self->value_setter = (void *)MGLUniform_uvec2_value_setter;
+				self->value_getter = (void *)MGLUniform_uvec_value_getter<2>;
+				self->value_setter = (void *)MGLUniform_uvec_value_setter<2>;
 			}
 			break;
 
@@ -327,11 +327,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformuiv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniform3uiv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_uvec3_array_value_getter;
-				self->value_setter = (void *)MGLUniform_uvec3_array_value_setter;
+				self->value_getter = (void *)MGLUniform_uvec_array_value_getter<3>;
+				self->value_setter = (void *)MGLUniform_uvec_array_value_setter<3>;
 			} else {
-				self->value_getter = (void *)MGLUniform_uvec3_value_getter;
-				self->value_setter = (void *)MGLUniform_uvec3_value_setter;
+				self->value_getter = (void *)MGLUniform_uvec_value_getter<3>;
+				self->value_setter = (void *)MGLUniform_uvec_value_setter<3>;
 			}
 			break;
 
@@ -342,11 +342,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformuiv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniform4uiv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_uvec4_array_value_getter;
-				self->value_setter = (void *)MGLUniform_uvec4_array_value_setter;
+				self->value_getter = (void *)MGLUniform_uvec_array_value_getter<4>;
+				self->value_setter = (void *)MGLUniform_uvec_array_value_setter<4>;
 			} else {
-				self->value_getter = (void *)MGLUniform_uvec4_value_getter;
-				self->value_setter = (void *)MGLUniform_uvec4_value_setter;
+				self->value_getter = (void *)MGLUniform_uvec_value_getter<4>;
+				self->value_setter = (void *)MGLUniform_uvec_value_setter<4>;
 			}
 			break;
 
@@ -372,11 +372,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformfv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniform2fv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_vec2_array_value_getter;
-				self->value_setter = (void *)MGLUniform_vec2_array_value_setter;
+				self->value_getter = (void *)MGLUniform_vec_array_value_getter<2>;
+				self->value_setter = (void *)MGLUniform_vec_array_value_setter<2>;
 			} else {
-				self->value_getter = (void *)MGLUniform_vec2_value_getter;
-				self->value_setter = (void *)MGLUniform_vec2_value_setter;
+				self->value_getter = (void *)MGLUniform_vec_value_getter<2>;
+				self->value_setter = (void *)MGLUniform_vec_value_setter<2>;
 			}
 			break;
 
@@ -387,11 +387,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformfv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniform3fv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_vec3_array_value_getter;
-				self->value_setter = (void *)MGLUniform_vec3_array_value_setter;
+				self->value_getter = (void *)MGLUniform_vec_array_value_getter<3>;
+				self->value_setter = (void *)MGLUniform_vec_array_value_setter<3>;
 			} else {
-				self->value_getter = (void *)MGLUniform_vec3_value_getter;
-				self->value_setter = (void *)MGLUniform_vec3_value_setter;
+				self->value_getter = (void *)MGLUniform_vec_value_getter<3>;
+				self->value_setter = (void *)MGLUniform_vec_value_setter<3>;
 			}
 			break;
 
@@ -402,11 +402,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformfv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniform4fv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_vec4_array_value_getter;
-				self->value_setter = (void *)MGLUniform_vec4_array_value_setter;
+				self->value_getter = (void *)MGLUniform_vec_array_value_getter<4>;
+				self->value_setter = (void *)MGLUniform_vec_array_value_setter<4>;
 			} else {
-				self->value_getter = (void *)MGLUniform_vec4_value_getter;
-				self->value_setter = (void *)MGLUniform_vec4_value_setter;
+				self->value_getter = (void *)MGLUniform_vec_value_getter<4>;
+				self->value_setter = (void *)MGLUniform_vec_value_setter<4>;
 			}
 			break;
 
@@ -432,11 +432,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformdv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniform2dv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_dvec2_array_value_getter;
-				self->value_setter = (void *)MGLUniform_dvec2_array_value_setter;
+				self->value_getter = (void *)MGLUniform_dvec_array_value_getter<2>;
+				self->value_setter = (void *)MGLUniform_dvec_array_value_setter<2>;
 			} else {
-				self->value_getter = (void *)MGLUniform_dvec2_value_getter;
-				self->value_setter = (void *)MGLUniform_dvec2_value_setter;
+				self->value_getter = (void *)MGLUniform_dvec_value_getter<2>;
+				self->value_setter = (void *)MGLUniform_dvec_value_setter<2>;
 			}
 			break;
 
@@ -447,11 +447,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformdv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniform3dv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_dvec3_array_value_getter;
-				self->value_setter = (void *)MGLUniform_dvec3_array_value_setter;
+				self->value_getter = (void *)MGLUniform_dvec_array_value_getter<3>;
+				self->value_setter = (void *)MGLUniform_dvec_array_value_setter<3>;
 			} else {
-				self->value_getter = (void *)MGLUniform_dvec3_value_getter;
-				self->value_setter = (void *)MGLUniform_dvec3_value_setter;
+				self->value_getter = (void *)MGLUniform_dvec_value_getter<3>;
+				self->value_setter = (void *)MGLUniform_dvec_value_setter<3>;
 			}
 			break;
 
@@ -462,11 +462,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformdv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniform4dv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_dvec4_array_value_getter;
-				self->value_setter = (void *)MGLUniform_dvec4_array_value_setter;
+				self->value_getter = (void *)MGLUniform_dvec_array_value_getter<4>;
+				self->value_setter = (void *)MGLUniform_dvec_array_value_setter<4>;
 			} else {
-				self->value_getter = (void *)MGLUniform_dvec4_value_getter;
-				self->value_setter = (void *)MGLUniform_dvec4_value_setter;
+				self->value_getter = (void *)MGLUniform_dvec_value_getter<4>;
+				self->value_setter = (void *)MGLUniform_dvec_value_setter<4>;
 			}
 			break;
 
@@ -537,11 +537,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformfv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix2fv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_float_matrix_2x2_array_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_2x2_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<float, 2, 2>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<float, 2, 2>;
 			} else {
-				self->value_getter = (void *)MGLUniform_float_matrix_2x2_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_2x2_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<float, 2, 2>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<float, 2, 2>;
 			}
 			break;
 
@@ -552,11 +552,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformfv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix2x3fv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_float_matrix_2x3_array_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_2x3_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<float, 2, 3>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<float, 2, 3>;
 			} else {
-				self->value_getter = (void *)MGLUniform_float_matrix_2x3_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_2x3_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<float, 2, 3>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<float, 2, 3>;
 			}
 			break;
 
@@ -567,11 +567,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformfv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix2x4fv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_float_matrix_2x4_array_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_2x4_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<float, 2, 4>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<float, 2, 4>;
 			} else {
-				self->value_getter = (void *)MGLUniform_float_matrix_2x4_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_2x4_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<float, 2, 4>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<float, 2, 4>;
 			}
 			break;
 
@@ -582,11 +582,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformfv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix3x2fv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_float_matrix_3x2_array_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_3x2_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<float, 3, 2>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<float, 3, 2>;
 			} else {
-				self->value_getter = (void *)MGLUniform_float_matrix_3x2_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_3x2_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<float, 3, 2>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<float, 3, 2>;
 			}
 			break;
 
@@ -597,11 +597,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformfv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix3fv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_float_matrix_3x3_array_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_3x3_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<float, 3, 3>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<float, 3, 3>;
 			} else {
-				self->value_getter = (void *)MGLUniform_float_matrix_3x3_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_3x3_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<float, 3, 3>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<float, 3, 3>;
 			}
 			break;
 
@@ -612,11 +612,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformfv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix3x4fv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_float_matrix_3x4_array_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_3x4_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<float, 3, 4>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<float, 3, 4>;
 			} else {
-				self->value_getter = (void *)MGLUniform_float_matrix_3x4_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_3x4_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<float, 3, 4>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<float, 3, 4>;
 			}
 			break;
 
@@ -627,11 +627,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformfv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix4x2fv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_float_matrix_4x2_array_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_4x2_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<float, 4, 2>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<float, 4, 2>;
 			} else {
-				self->value_getter = (void *)MGLUniform_float_matrix_4x2_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_4x2_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<float, 4, 2>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<float, 4, 2>;
 			}
 			break;
 
@@ -642,11 +642,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformfv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix4x3fv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_float_matrix_4x3_array_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_4x3_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<float, 4, 3>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<float, 4, 3>;
 			} else {
-				self->value_getter = (void *)MGLUniform_float_matrix_4x3_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_4x3_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<float, 4, 3>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<float, 4, 3>;
 			}
 			break;
 
@@ -657,11 +657,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformfv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix4fv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_float_matrix_4x4_array_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_4x4_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<float, 4, 4>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<float, 4, 4>;
 			} else {
-				self->value_getter = (void *)MGLUniform_float_matrix_4x4_value_getter;
-				self->value_setter = (void *)MGLUniform_float_matrix_4x4_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<float, 4, 4>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<float, 4, 4>;
 			}
 			break;
 
@@ -672,11 +672,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformdv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix2dv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_double_matrix_2x2_array_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_2x2_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<double, 2, 2>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<double, 2, 2>;
 			} else {
-				self->value_getter = (void *)MGLUniform_double_matrix_2x2_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_2x2_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<double, 2, 2>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<double, 2, 2>;
 			}
 			break;
 
@@ -687,11 +687,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformdv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix2x3dv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_double_matrix_2x3_array_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_2x3_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<double, 2, 3>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<double, 2, 3>;
 			} else {
-				self->value_getter = (void *)MGLUniform_double_matrix_2x3_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_2x3_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<double, 2, 3>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<double, 2, 3>;
 			}
 			break;
 
@@ -702,11 +702,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformdv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix2x4dv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_double_matrix_2x4_array_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_2x4_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<double, 2, 4>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<double, 2, 4>;
 			} else {
-				self->value_getter = (void *)MGLUniform_double_matrix_2x4_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_2x4_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<double, 2, 4>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<double, 2, 4>;
 			}
 			break;
 
@@ -717,11 +717,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformdv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix3x2dv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_double_matrix_3x2_array_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_3x2_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<double, 3, 2>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<double, 3, 2>;
 			} else {
-				self->value_getter = (void *)MGLUniform_double_matrix_3x2_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_3x2_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<double, 3, 2>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<double, 3, 2>;
 			}
 			break;
 
@@ -732,11 +732,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformdv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix3dv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_double_matrix_3x3_array_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_3x3_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<double, 3, 3>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<double, 3, 3>;
 			} else {
-				self->value_getter = (void *)MGLUniform_double_matrix_3x3_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_3x3_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<double, 3, 3>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<double, 3, 3>;
 			}
 			break;
 
@@ -747,11 +747,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformdv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix3x4dv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_double_matrix_3x4_array_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_3x4_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<double, 3, 4>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<double, 3, 4>;
 			} else {
-				self->value_getter = (void *)MGLUniform_double_matrix_3x4_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_3x4_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<double, 3, 4>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<double, 3, 4>;
 			}
 			break;
 
@@ -762,11 +762,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformdv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix4x2dv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_double_matrix_4x2_array_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_4x2_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<double, 4, 2>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<double, 4, 2>;
 			} else {
-				self->value_getter = (void *)MGLUniform_double_matrix_4x2_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_4x2_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<double, 4, 2>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<double, 4, 2>;
 			}
 			break;
 
@@ -777,11 +777,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformdv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix4x3dv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_double_matrix_4x3_array_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_4x3_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<double, 4, 3>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<double, 4, 3>;
 			} else {
-				self->value_getter = (void *)MGLUniform_double_matrix_4x3_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_4x3_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<double, 4, 3>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<double, 4, 3>;
 			}
 			break;
 
@@ -792,11 +792,11 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl) {
 			self->gl_value_reader_proc = (void *)gl.GetUniformdv;
 			self->gl_value_writer_proc = (void *)gl.ProgramUniformMatrix4dv;
 			if (self->array_length > 1) {
-				self->value_getter = (void *)MGLUniform_double_matrix_4x4_array_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_4x4_array_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_array_value_getter<double, 4, 4>;
+				self->value_setter = (void *)MGLUniform_matrix_array_value_setter<double, 4, 4>;
 			} else {
-				self->value_getter = (void *)MGLUniform_double_matrix_4x4_value_getter;
-				self->value_setter = (void *)MGLUniform_double_matrix_4x4_value_setter;
+				self->value_getter = (void *)MGLUniform_matrix_value_getter<double, 4, 4>;
+				self->value_setter = (void *)MGLUniform_matrix_value_setter<double, 4, 4>;
 			}
 			break;
 
