@@ -98,6 +98,18 @@ PyObject * MGLFramebuffer_clear(MGLFramebuffer * self, PyObject * args) {
 	gl.DrawBuffers(self->draw_buffers_len, self->draw_buffers);
 	gl.ClearColor(r, g, b, a);
 
+	for (int i = 0; i < self->draw_buffers_len; ++i) {
+		gl.ColorMaski(
+			i,
+			self->color_mask[i * 4 + 0],
+			self->color_mask[i * 4 + 1],
+			self->color_mask[i * 4 + 2],
+			self->color_mask[i * 4 + 3]
+		);
+	}
+
+	gl.DepthMask(self->depth_mask);
+
 	if (viewport != Py_None) {
 		gl.Enable(GL_SCISSOR_TEST);
 		gl.Scissor(x, y, width, height);
@@ -129,7 +141,7 @@ PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
 
 	for (int i = 0; i < self->draw_buffers_len; ++i) {
 		gl.ColorMaski(
-			GL_DRAW_BUFFER0 + i,
+			i,
 			self->color_mask[i * 4 + 0],
 			self->color_mask[i * 4 + 1],
 			self->color_mask[i * 4 + 2],
@@ -399,8 +411,105 @@ PyObject * MGLFramebuffer_get_color_mask(MGLFramebuffer * self, void * closure) 
 }
 
 int MGLFramebuffer_set_color_mask(MGLFramebuffer * self, PyObject * value, void * closure) {
-	PyErr_SetString(PyExc_NotImplementedError, "NYI");
-	return -1;
+	if (self->draw_buffers_len == 1) {
+		if (Py_TYPE(value) != &PyTuple_Type || PyTuple_GET_SIZE(value) != 4) {
+			MGLError_Set("the color_mask must be a 4-tuple not %s", Py_TYPE(value)->tp_name);
+			return -1;
+		}
+
+		PyObject * r = PyTuple_GET_ITEM(value, 0);
+		PyObject * g = PyTuple_GET_ITEM(value, 1);
+		PyObject * b = PyTuple_GET_ITEM(value, 2);
+		PyObject * a = PyTuple_GET_ITEM(value, 3);
+
+		if (r == Py_True) {
+			self->color_mask[0] = true;
+		} else if (r == Py_False) {
+			self->color_mask[0] = false;
+		} else {
+			MGLError_Set("the color_mask[0] must be a bool not %s", Py_TYPE(r)->tp_name);
+			return -1;
+		}
+
+		if (g == Py_True) {
+			self->color_mask[1] = true;
+		} else if (g == Py_False) {
+			self->color_mask[1] = false;
+		} else {
+			MGLError_Set("the color_mask[1] must be a bool not %s", Py_TYPE(g)->tp_name);
+			return -1;
+		}
+
+		if (b == Py_True) {
+			self->color_mask[2] = true;
+		} else if (b == Py_False) {
+			self->color_mask[2] = false;
+		} else {
+			MGLError_Set("the color_mask[2] must be a bool not %s", Py_TYPE(b)->tp_name);
+			return -1;
+		}
+
+		if (a == Py_True) {
+			self->color_mask[3] = true;
+		} else if (a == Py_False) {
+			self->color_mask[3] = false;
+		} else {
+			MGLError_Set("the color_mask[3] must be a bool not %s", Py_TYPE(a)->tp_name);
+			return -1;
+		}
+	} else {
+		for (int i = 0; i < self->draw_buffers_len; ++i) {
+			PyObject * color_mask = PyTuple_GET_ITEM(value, i);
+
+			if (Py_TYPE(color_mask) != &PyTuple_Type || PyTuple_GET_SIZE(color_mask) != 4) {
+				MGLError_Set("the color_mask must be a 4-tuple not %s", Py_TYPE(color_mask)->tp_name);
+				return -1;
+			}
+
+			PyObject * r = PyTuple_GET_ITEM(color_mask, 0);
+			PyObject * g = PyTuple_GET_ITEM(color_mask, 1);
+			PyObject * b = PyTuple_GET_ITEM(color_mask, 2);
+			PyObject * a = PyTuple_GET_ITEM(color_mask, 3);
+
+			if (r == Py_True) {
+				self->color_mask[i * 4 + 0] = true;
+			} else if (r == Py_False) {
+				self->color_mask[i * 4 + 0] = false;
+			} else {
+				MGLError_Set("the color_mask[%d][0] must be a bool not %s", i, Py_TYPE(r)->tp_name);
+				return -1;
+			}
+
+			if (g == Py_True) {
+				self->color_mask[i * 4 + 1] = true;
+			} else if (g == Py_False) {
+				self->color_mask[i * 4 + 1] = false;
+			} else {
+				MGLError_Set("the color_mask[%d][1] must be a bool not %s", i, Py_TYPE(g)->tp_name);
+				return -1;
+			}
+
+			if (b == Py_True) {
+				self->color_mask[i * 4 + 2] = true;
+			} else if (b == Py_False) {
+				self->color_mask[i * 4 + 2] = false;
+			} else {
+				MGLError_Set("the color_mask[%d][2] must be a bool not %s", i, Py_TYPE(b)->tp_name);
+				return -1;
+			}
+
+			if (a == Py_True) {
+				self->color_mask[i * 4 + 3] = true;
+			} else if (a == Py_False) {
+				self->color_mask[i * 4 + 3] = false;
+			} else {
+				MGLError_Set("the color_mask[%d][3] must be a bool not %s", i, Py_TYPE(a)->tp_name);
+				return -1;
+			}
+		}
+	}
+
+	return 0;
 }
 
 PyObject * MGLFramebuffer_get_depth_mask(MGLFramebuffer * self, void * closure) {
