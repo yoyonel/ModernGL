@@ -3,8 +3,7 @@ import struct
 import ModernGL
 import pyglet
 
-window = pyglet.window.Window()
-
+wnd = pyglet.window.Window()
 ctx = ModernGL.create_context()
 
 vert = ctx.vertex_shader('''
@@ -29,7 +28,7 @@ vbo = ctx.buffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
 vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
 
 
-@window.event
+@wnd.event
 def on_draw():
     ctx.clear(0.9, 0.9, 0.9)
     vao.render()
