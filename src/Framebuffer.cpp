@@ -97,7 +97,6 @@ PyObject * MGLFramebuffer_clear(MGLFramebuffer * self, PyObject * args) {
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
 	gl.DrawBuffers(self->draw_buffers_len, self->draw_buffers);
 	gl.ClearColor(r, g, b, a);
-	gl.BindFramebuffer(GL_FRAMEBUFFER, self->context->bound_framebuffer);
 
 	if (viewport != Py_None) {
 		gl.Enable(GL_SCISSOR_TEST);
@@ -107,6 +106,8 @@ PyObject * MGLFramebuffer_clear(MGLFramebuffer * self, PyObject * args) {
 	} else {
 		gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	}
+
+	gl.BindFramebuffer(GL_FRAMEBUFFER, self->context->bound_framebuffer->framebuffer_obj);
 
 	Py_RETURN_NONE;
 }
@@ -126,7 +127,9 @@ PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
 		);
 	}
 
-	self->context->bound_framebuffer = self->framebuffer_obj;
+	Py_INCREF(self);
+	Py_INCREF(self->context->bound_framebuffer);
+	self->context->bound_framebuffer = self;
 
 	Py_RETURN_NONE;
 }
@@ -212,7 +215,7 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 	gl.ReadPixels(x, y, width, height, format, type, data);
-	gl.BindFramebuffer(GL_FRAMEBUFFER, self->context->bound_framebuffer);
+	gl.BindFramebuffer(GL_FRAMEBUFFER, self->context->bound_framebuffer->framebuffer_obj);
 
 	return result;
 }
@@ -311,7 +314,7 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 	gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 	gl.ReadPixels(x, y, width, height, format, type, buffer_view.buf);
-	gl.BindFramebuffer(GL_FRAMEBUFFER, self->context->bound_framebuffer);
+	gl.BindFramebuffer(GL_FRAMEBUFFER, self->context->bound_framebuffer->framebuffer_obj);
 
 	PyBuffer_Release(&buffer_view);
 

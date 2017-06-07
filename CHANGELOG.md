@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - `copy_framebuffer` using `default_framebuffer`
 - Failing `__repr__` in VertexArrays
 
+### Changed
+- Framebuffer methods do not affect the bound framebuffer
+
 ## [4.1.3] - 2017-06-04
 ### Added
 - TextureFilter and TextureWrap classes and constants
@@ -32,7 +35,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Non-float renderbuffers are not readable
 - Buffer `read` keyword only `offset` argument
 
-### Changes
+### Changed
 - `Context.renderbuffer` will use `floats=False` by default
 - `bind_to_uniform_block` `location` parameter was renamed to `binding`
 - `bind_to_storage_buffer` `location` parameter was renamed to `binding`

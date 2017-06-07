@@ -256,7 +256,7 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 			GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT,
 			GL_NEAREST
 		);
-		gl.BindFramebuffer(GL_FRAMEBUFFER, self->bound_framebuffer);
+		gl.BindFramebuffer(GL_FRAMEBUFFER, self->bound_framebuffer->framebuffer_obj);
 
 	} else if (Py_TYPE(dst) == &MGLFramebuffer_Type) {
 
@@ -280,7 +280,7 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 
 		gl.BindFramebuffer(GL_READ_FRAMEBUFFER, src->framebuffer_obj);
 		gl.CopyTexImage2D(texture_target, 0, format, 0, 0, width, height, 0);
-		gl.BindFramebuffer(GL_FRAMEBUFFER, self->bound_framebuffer);
+		gl.BindFramebuffer(GL_FRAMEBUFFER, self->bound_framebuffer->framebuffer_obj);
 
 	} else {
 
@@ -1112,7 +1112,7 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 
 	int status = gl.CheckFramebufferStatus(GL_FRAMEBUFFER);
 
-	gl.BindFramebuffer(GL_FRAMEBUFFER, self->bound_framebuffer);
+	gl.BindFramebuffer(GL_FRAMEBUFFER, self->bound_framebuffer->framebuffer_obj);
 
 	if (status != GL_FRAMEBUFFER_COMPLETE) {
 		const char * message = "the framebuffer is not complete";
@@ -1482,33 +1482,7 @@ PyObject * MGLContext_get_max_texture_units(MGLContext * self) {
 	return PyLong_FromLong(self->max_texture_units);
 }
 
-PyObject * MGLContext_get_default_framebuffer(MGLContext * self) {
-	if (!self->default_framebuffer) {
-		MGLFramebuffer * framebuffer = MGLFramebuffer_New();
-
-		framebuffer->framebuffer_obj = 0;
-
-		framebuffer->color_attachments = 0;
-		framebuffer->depth_attachment = 0;
-
-		framebuffer->draw_buffers_len = 1;
-		framebuffer->draw_buffers = new unsigned[1];
-		framebuffer->draw_buffers[0] = GL_COLOR_ATTACHMENT0;
-
-		// NO INCREF
-		framebuffer->context = self;
-
-		framebuffer->viewport_x = 0;
-		framebuffer->viewport_y = 0;
-		framebuffer->viewport_width = 0;
-		framebuffer->viewport_height = 0;
-
-		framebuffer->width = 0;
-		framebuffer->height = 0;
-
-		self->default_framebuffer = (PyObject *)framebuffer;
-	}
-
+MGLFramebuffer * MGLContext_get_default_framebuffer(MGLContext * self) {
 	Py_INCREF(self->default_framebuffer);
 	return self->default_framebuffer;
 }
@@ -1700,4 +1674,33 @@ void MGLContext_Initialize(MGLContext * self) {
 
 	gl.GetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, (GLint *)&self->max_texture_units);
 	self->default_texture_unit = self->max_texture_units - 1;
+
+	{
+		MGLFramebuffer * framebuffer = MGLFramebuffer_New();
+
+		framebuffer->framebuffer_obj = 0;
+
+		framebuffer->color_attachments = 0;
+		framebuffer->depth_attachment = 0;
+
+		framebuffer->draw_buffers_len = 1;
+		framebuffer->draw_buffers = new unsigned[1];
+		framebuffer->draw_buffers[0] = GL_COLOR_ATTACHMENT0;
+
+		// NO INCREF
+		framebuffer->context = self;
+
+		framebuffer->viewport_x = 0;
+		framebuffer->viewport_y = 0;
+		framebuffer->viewport_width = 0;
+		framebuffer->viewport_height = 0;
+
+		framebuffer->width = 0;
+		framebuffer->height = 0;
+
+		self->default_framebuffer = framebuffer;
+	}
+
+	Py_INCREF(self->default_framebuffer);
+	self->bound_framebuffer = self->default_framebuffer;
 }

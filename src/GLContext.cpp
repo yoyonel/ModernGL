@@ -479,6 +479,8 @@ GLContext CreateGLContext(int width, int height) {
 
 	int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
+	// TODO: save as default framebuffer
+
 	if (status != GL_FRAMEBUFFER_COMPLETE) {
 		const char * message = "the framebuffer is not complete";
 

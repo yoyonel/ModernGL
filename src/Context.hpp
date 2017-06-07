@@ -7,15 +7,17 @@
 #include "GLMethods.hpp"
 #include "GLContext.hpp"
 
+struct MGLFramebuffer;
+
 struct MGLContext : public MGLObject {
-	PyObject * default_framebuffer;
+	MGLFramebuffer * default_framebuffer;
+	MGLFramebuffer * bound_framebuffer;
 
 	GLContext gl_context;
 
 	int max_texture_units;
 	int default_texture_unit;
 
-	int bound_framebuffer;
 
 	bool wireframe;
 
