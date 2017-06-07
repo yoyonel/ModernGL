@@ -43,6 +43,7 @@ MGLContext * create_standalone_context(PyObject * self, PyObject * args) {
 	MGLContext * ctx = MGLContext_New();
 
 	ctx->gl_context = CreateGLContext(width, height);
+	ctx->bound_framebuffer = 0; // TODO: read
 	ctx->wireframe = false;
 
 	if (PyErr_Occurred()) {
@@ -64,6 +65,7 @@ MGLContext * create_context(PyObject * self) {
 	MGLContext * ctx = MGLContext_New();
 
 	ctx->gl_context = LoadCurrentGLContext();
+	ctx->bound_framebuffer = 0; // TODO: read
 	ctx->wireframe = false;
 
 	if (PyErr_Occurred()) {

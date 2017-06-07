@@ -256,6 +256,7 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 			GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT,
 			GL_NEAREST
 		);
+		gl.BindFramebuffer(GL_FRAMEBUFFER, self->bound_framebuffer);
 
 	} else if (Py_TYPE(dst) == &MGLFramebuffer_Type) {
 
@@ -272,13 +273,14 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 			height = src->height < dst_texture->height ? src->height : dst_texture->height;
 		}
 
-		gl.BindFramebuffer(GL_READ_FRAMEBUFFER, src->framebuffer_obj);
 
 		const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 		int texture_target = dst_texture->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 		int format = formats[dst_texture->components];
 
+		gl.BindFramebuffer(GL_READ_FRAMEBUFFER, src->framebuffer_obj);
 		gl.CopyTexImage2D(texture_target, 0, format, 0, 0, width, height, 0);
+		gl.BindFramebuffer(GL_FRAMEBUFFER, self->bound_framebuffer);
 
 	} else {
 
@@ -1045,9 +1047,6 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 
 	}
 
-	int draw_framebuffer = 0;
-	gl.GetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint *)&draw_framebuffer);
-
 	MGLFramebuffer * framebuffer = MGLFramebuffer_New();
 
 	framebuffer->framebuffer_obj = 0;
@@ -1113,7 +1112,7 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 
 	int status = gl.CheckFramebufferStatus(GL_FRAMEBUFFER);
 
-	gl.BindFramebuffer(GL_FRAMEBUFFER, draw_framebuffer);
+	gl.BindFramebuffer(GL_FRAMEBUFFER, self->bound_framebuffer);
 
 	if (status != GL_FRAMEBUFFER_COMPLETE) {
 		const char * message = "the framebuffer is not complete";
