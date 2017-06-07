@@ -13,6 +13,9 @@ class TestBuffer(unittest.TestCase):
     def tearDownClass(cls):
         cls.ctx.release()
 
+    def tearDown(self):
+        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
+
     def test_buffer_clear_1(self):
         buf = self.ctx.buffer(data=b'\xAA\x55' * 10)
         buf.clear(chunk=b'AB')
@@ -48,8 +51,10 @@ class TestBuffer(unittest.TestCase):
         data = b'Hello World!'
         buf = self.ctx.buffer(data)
         res = bytearray(buf.size)
+
         with buf.access() as access:
             access.read_into(res)
+
         self.assertEqual(data, bytes(res))
 
     def test_buffer_orphan(self):
@@ -67,14 +72,18 @@ class TestBuffer(unittest.TestCase):
 
     def test_buffer_access(self):
         buf = self.ctx.buffer(data=b'\xAA\x55' * 10)
+
         with buf.access() as a:
             self.assertEqual(a.read(), b'\xAA\x55' * 10)
 
     def test_buffer_reentrant_access(self):
         buf = self.ctx.buffer(reserve=1024)
+
         with buf.access():
             with self.assertRaises(ModernGL.Error):
                 buf.read()
+
+        self.assertNotEqual(self.ctx.error, 'GL_NO_ERROR')
 
 
 if __name__ == '__main__':
