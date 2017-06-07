@@ -40,10 +40,10 @@ class TestCase(unittest.TestCase):
             self.ctx.renderbuffer((4, 4)),
         ])
 
-        fbo.clear(0.0, 0.0, 0.0, 0.0)
+        fbo.clear(1.0, 1.0, 1.0, 1.0)
 
-        self.assertEqual(fbo.read(components=4, attachment=0), b'\x00\x00\x00\x00' * 16)
-        self.assertEqual(fbo.read(components=4, attachment=1), b'\x00\x00\x00\x00' * 16)
+        self.assertEqual(fbo.read(components=4, attachment=0), b'\xff\xff\xff\xff' * 16)
+        self.assertEqual(fbo.read(components=4, attachment=1), b'\xff\xff\xff\xff' * 16)
 
         fbo.color_mask = (
             (True, False, True, False),
@@ -52,8 +52,8 @@ class TestCase(unittest.TestCase):
 
         fbo.clear(0.1, 0.2, 0.3, 0.4)
 
-        self.assertEqual(fbo.read(components=4, attachment=0), b'\x19\x00\x4c\x00' * 16)
-        self.assertEqual(fbo.read(components=4, attachment=1), b'\x00\x33\x00\x66' * 16)
+        self.assertEqual(fbo.read(components=4, attachment=0), b'\x19\xff\x4c\xff' * 16)
+        self.assertEqual(fbo.read(components=4, attachment=1), b'\xff\x33\xff\x66' * 16)
 
         fbo.color_mask = (
             (False, True, False, True),
