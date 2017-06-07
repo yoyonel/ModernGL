@@ -1,4 +1,3 @@
-import struct
 import unittest
 
 import ModernGL
