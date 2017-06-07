@@ -2,7 +2,7 @@
     ModernGL framebuffers
 '''
 
-from typing import Tuple
+from typing import List, Tuple
 
 from .common import InvalidObject
 from .renderbuffers import Renderbuffer
@@ -46,6 +46,30 @@ class Framebuffer:
     @viewport.setter
     def viewport(self, value):
         self.mglo.viewport = value
+
+    @property
+    def color_mask(self) -> List[Tuple[bool, bool, bool, bool]]:
+        '''
+            tuple: The color mask of the framebuffer.
+        '''
+
+        return self.mglo.color_mask
+
+    @color_mask.setter
+    def color_mask(self, value):
+        self.mglo.color_mask = value
+
+    @property
+    def depth_mask(self) -> bool:
+        '''
+            tuple: The depth mask of the framebuffer.
+        '''
+
+        return self.mglo.depth_mask
+
+    @depth_mask.setter
+    def depth_mask(self, value):
+        self.mglo.depth_mask = value
 
     @property
     def width(self) -> int:
