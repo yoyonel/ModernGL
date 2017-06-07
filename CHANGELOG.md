@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- Framebuffer `color_mask` attribute
+- Framebuffer `depth_mask` attribute
 - Framebuffer `viewport` attribute
 
 ### Fixed
@@ -14,6 +16,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Framebuffer methods do not affect the bound framebuffer
+
+### Removed
+- Invalid texture sampling parameters for multisample textures
+- Invalid texture sampling parameters for depth textures
 
 ## [4.1.3] - 2017-06-04
 ### Added
