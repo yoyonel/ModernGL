@@ -1168,10 +1168,13 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	framebuffer->color_mask = new bool[color_attachments_len * 4 + 1];
 
 	for (int i = 0; i < color_attachments_len; ++i) {
-		framebuffer->color_mask[i * 4 + 0] = true;
-		framebuffer->color_mask[i * 4 + 1] = true;
-		framebuffer->color_mask[i * 4 + 2] = true;
-		framebuffer->color_mask[i * 4 + 3] = true;
+		PyObject * item = PyTuple_GET_ITEM(color_attachments, i);
+		MGLFramebufferAttachment * attachment = (MGLFramebufferAttachment *)item;
+
+		framebuffer->color_mask[i * 4 + 0] = attachment->components >= 1;
+		framebuffer->color_mask[i * 4 + 1] = attachment->components >= 2;
+		framebuffer->color_mask[i * 4 + 2] = attachment->components >= 3;
+		framebuffer->color_mask[i * 4 + 3] = attachment->components >= 4;
 	}
 
 	framebuffer->depth_mask = true;

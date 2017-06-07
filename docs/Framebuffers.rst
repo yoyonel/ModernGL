@@ -7,7 +7,7 @@ Framebuffers
 	:noindex:
 
 .. autoclass:: Framebuffer
-	:members: width, height, size, samples
+	:members: viewport, color_mask, depth_mask, width, height, size, samples
 
 	.. automethod:: clear(red=0.0, green=0.0, blue=0.0, alpha=0.0, viewport=None)
 	.. automethod:: use()
