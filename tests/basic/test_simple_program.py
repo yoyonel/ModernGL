@@ -40,7 +40,7 @@ class TestCase(unittest.TestCase):
             #version 330
             uniform vec4 Color;
             uniform Lights {
-                uniform vec4 Light[];
+                uniform vec4 Light[1];
             };
             out vec4 color;
             void main() {
