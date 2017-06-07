@@ -42,7 +42,7 @@ short_description = 'ModernGL: PyOpenGL alternative'
 long_description = '''
 `ModernGL on github <https://github.com/cprogrammer1994/ModernGL>`_
 
-`Documentation <https://moderngl.github.io/>`_
+`Documentation <https://moderngl.readthedocs.io/>`_
 
 `Examples <https://moderngl.github.io/Examples.html>`_
 
