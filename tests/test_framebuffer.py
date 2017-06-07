@@ -26,7 +26,7 @@ class TestCase(unittest.TestCase):
         fbo3 = self.ctx.framebuffer(rbo3)
         fbo4 = self.ctx.framebuffer([rbo1, rbo2, rbo3])
 
-        fbo4.clear(0.0, 0.6, 0.7, 1.0)
+        fbo4.clear(0.0, 0x99 / 255, 0xb2 / 255, 1.0)
 
         pixels1 = fbo1.read(components=4, floats=False)
         self.assertEqual(pixels1, b'\x00\x99\xb2\xff' * 16)
