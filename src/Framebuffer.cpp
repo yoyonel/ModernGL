@@ -517,8 +517,16 @@ PyObject * MGLFramebuffer_get_depth_mask(MGLFramebuffer * self, void * closure) 
 }
 
 int MGLFramebuffer_set_depth_mask(MGLFramebuffer * self, PyObject * value, void * closure) {
-	PyErr_SetString(PyExc_NotImplementedError, "NYI");
-	return -1;
+	if (value == Py_True) {
+		self->depth_mask = true;
+	} else if (value == Py_False) {
+		self->depth_mask = false;
+	} else {
+		MGLError_Set("the depth_mask must be a bool not %s", Py_TYPE(value)->tp_name);
+		return -1;
+	}
+
+	return 0;
 }
 
 PyObject * MGLFramebuffer_get_width(MGLFramebuffer * self, void * closure) {
