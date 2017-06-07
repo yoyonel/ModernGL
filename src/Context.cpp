@@ -456,14 +456,14 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 	}
 
 	gl.BindTexture(texture_target, texture->texture_obj);
-	gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	if (samples) {
 		gl.TexImage2DMultisample(texture_target, samples, format, width, height, true);
 	} else {
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.TexImage2D(texture_target, 0, format, width, height, 0, format, pixel_type, buffer_view.buf);
+		gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
 
 	if (data != Py_None) {
@@ -563,10 +563,13 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	}
 
 	gl.BindTexture(texture_target, texture->texture_obj);
-	gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	gl.TexParameteri(texture_target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	gl.TexParameteri(texture_target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	// TODO: check depth texture parametering they cause GL_INVALID_ENUM
+
+	// gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	// gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// gl.TexParameteri(texture_target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	// gl.TexParameteri(texture_target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	if (samples) {
 		gl.TexImage2DMultisample(texture_target, samples, GL_DEPTH_COMPONENT24, width, height, true);
