@@ -5,13 +5,15 @@
 #include "Object.hpp"
 #include "Program.hpp"
 
+typedef void (* MGLProc)();
+
 struct MGLUniform : public MGLObject {
 	PyObject * name;
 
-	void * value_getter;
-	void * value_setter;
-	void * gl_value_reader_proc;
-	void * gl_value_writer_proc;
+	MGLProc value_getter;
+	MGLProc value_setter;
+	MGLProc gl_value_reader_proc;
+	MGLProc gl_value_writer_proc;
 
 	int program_obj;
 
@@ -40,161 +42,107 @@ typedef PyObject * (* MGLUniform_Getter)(MGLUniform * self);
 typedef int (* MGLUniform_Setter)(MGLUniform * self, PyObject * value);
 
 PyObject * MGLUniform_invalid_getter(MGLUniform * self);
+
 PyObject * MGLUniform_bool_value_getter(MGLUniform * self);
 PyObject * MGLUniform_int_value_getter(MGLUniform * self);
 PyObject * MGLUniform_uint_value_getter(MGLUniform * self);
 PyObject * MGLUniform_float_value_getter(MGLUniform * self);
 PyObject * MGLUniform_double_value_getter(MGLUniform * self);
-PyObject * MGLUniform_bvec2_value_getter(MGLUniform * self);
-PyObject * MGLUniform_bvec3_value_getter(MGLUniform * self);
-PyObject * MGLUniform_bvec4_value_getter(MGLUniform * self);
-PyObject * MGLUniform_ivec2_value_getter(MGLUniform * self);
-PyObject * MGLUniform_ivec3_value_getter(MGLUniform * self);
-PyObject * MGLUniform_ivec4_value_getter(MGLUniform * self);
-PyObject * MGLUniform_uvec2_value_getter(MGLUniform * self);
-PyObject * MGLUniform_uvec3_value_getter(MGLUniform * self);
-PyObject * MGLUniform_uvec4_value_getter(MGLUniform * self);
-PyObject * MGLUniform_vec2_value_getter(MGLUniform * self);
-PyObject * MGLUniform_vec3_value_getter(MGLUniform * self);
-PyObject * MGLUniform_vec4_value_getter(MGLUniform * self);
-PyObject * MGLUniform_dvec2_value_getter(MGLUniform * self);
-PyObject * MGLUniform_dvec3_value_getter(MGLUniform * self);
-PyObject * MGLUniform_dvec4_value_getter(MGLUniform * self);
+
 PyObject * MGLUniform_bool_array_value_getter(MGLUniform * self);
 PyObject * MGLUniform_int_array_value_getter(MGLUniform * self);
 PyObject * MGLUniform_uint_array_value_getter(MGLUniform * self);
 PyObject * MGLUniform_float_array_value_getter(MGLUniform * self);
 PyObject * MGLUniform_double_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_bvec2_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_bvec3_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_bvec4_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_ivec2_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_ivec3_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_ivec4_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_uvec2_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_uvec3_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_uvec4_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_vec2_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_vec3_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_vec4_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_dvec2_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_dvec3_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_dvec4_array_value_getter(MGLUniform * self);
+
 PyObject * MGLUniform_sampler_value_getter(MGLUniform * self);
 PyObject * MGLUniform_sampler_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_2x2_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_2x3_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_2x4_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_3x2_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_3x3_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_3x4_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_4x2_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_4x3_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_4x4_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_2x2_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_2x3_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_2x4_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_3x2_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_3x3_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_3x4_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_4x2_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_4x3_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_4x4_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_2x2_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_2x3_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_2x4_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_3x2_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_3x3_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_3x4_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_4x2_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_4x3_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_float_matrix_4x4_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_2x2_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_2x3_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_2x4_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_3x2_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_3x3_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_3x4_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_4x2_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_4x3_array_value_getter(MGLUniform * self);
-PyObject * MGLUniform_double_matrix_4x4_array_value_getter(MGLUniform * self);
 
 int MGLUniform_invalid_setter(MGLUniform * self, PyObject * value);
+
 int MGLUniform_bool_value_setter(MGLUniform * self, PyObject * value);
 int MGLUniform_int_value_setter(MGLUniform * self, PyObject * value);
 int MGLUniform_uint_value_setter(MGLUniform * self, PyObject * value);
 int MGLUniform_float_value_setter(MGLUniform * self, PyObject * value);
 int MGLUniform_double_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_bvec2_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_ivec2_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_uvec2_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_vec2_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_dvec2_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_bvec3_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_ivec3_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_uvec3_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_vec3_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_dvec3_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_bvec4_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_ivec4_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_uvec4_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_vec4_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_dvec4_value_setter(MGLUniform * self, PyObject * value);
+
 int MGLUniform_bool_array_value_setter(MGLUniform * self, PyObject * value);
 int MGLUniform_int_array_value_setter(MGLUniform * self, PyObject * value);
 int MGLUniform_uint_array_value_setter(MGLUniform * self, PyObject * value);
 int MGLUniform_float_array_value_setter(MGLUniform * self, PyObject * value);
 int MGLUniform_double_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_bvec2_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_ivec2_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_uvec2_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_vec2_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_dvec2_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_bvec3_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_ivec3_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_uvec3_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_vec3_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_dvec3_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_bvec4_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_ivec4_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_uvec4_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_vec4_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_dvec4_array_value_setter(MGLUniform * self, PyObject * value);
+
 int MGLUniform_sampler_value_setter(MGLUniform * self, PyObject * value);
 int MGLUniform_sampler_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_2x2_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_2x3_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_2x4_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_3x2_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_3x3_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_3x4_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_4x2_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_4x3_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_4x4_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_2x2_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_2x3_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_2x4_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_3x2_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_3x3_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_3x4_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_4x2_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_4x3_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_4x4_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_2x2_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_2x3_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_2x4_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_3x2_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_3x3_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_3x4_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_4x2_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_4x3_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_float_matrix_4x4_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_2x2_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_2x3_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_2x4_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_3x2_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_3x3_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_3x4_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_4x2_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_4x3_array_value_setter(MGLUniform * self, PyObject * value);
-int MGLUniform_double_matrix_4x4_array_value_setter(MGLUniform * self, PyObject * value);
+
+template <int N>
+PyObject * MGLUniform_bvec_value_getter(MGLUniform * self);
+
+template <int N>
+PyObject * MGLUniform_ivec_value_getter(MGLUniform * self);
+
+template <int N>
+PyObject * MGLUniform_uvec_value_getter(MGLUniform * self);
+
+template <int N>
+PyObject * MGLUniform_vec_value_getter(MGLUniform * self);
+
+template <int N>
+PyObject * MGLUniform_dvec_value_getter(MGLUniform * self);
+
+template <int N>
+PyObject * MGLUniform_bvec_array_value_getter(MGLUniform * self);
+
+template <int N>
+PyObject * MGLUniform_ivec_array_value_getter(MGLUniform * self);
+
+template <int N>
+PyObject * MGLUniform_uvec_array_value_getter(MGLUniform * self);
+
+template <int N>
+PyObject * MGLUniform_vec_array_value_getter(MGLUniform * self);
+
+template <int N>
+PyObject * MGLUniform_dvec_array_value_getter(MGLUniform * self);
+
+template <int N>
+int MGLUniform_bvec_value_setter(MGLUniform * self, PyObject * value);
+
+template <int N>
+int MGLUniform_ivec_value_setter(MGLUniform * self, PyObject * value);
+
+template <int N>
+int MGLUniform_uvec_value_setter(MGLUniform * self, PyObject * value);
+
+template <int N>
+int MGLUniform_vec_value_setter(MGLUniform * self, PyObject * value);
+
+template <int N>
+int MGLUniform_dvec_value_setter(MGLUniform * self, PyObject * value);
+
+template <int N>
+int MGLUniform_bvec_array_value_setter(MGLUniform * self, PyObject * value);
+
+template <int N>
+int MGLUniform_ivec_array_value_setter(MGLUniform * self, PyObject * value);
+
+template <int N>
+int MGLUniform_uvec_array_value_setter(MGLUniform * self, PyObject * value);
+
+template <int N>
+int MGLUniform_vec_array_value_setter(MGLUniform * self, PyObject * value);
+
+template <int N>
+int MGLUniform_dvec_array_value_setter(MGLUniform * self, PyObject * value);
+
+template <typename T, int N, int M>
+PyObject * MGLUniform_matrix_value_getter(MGLUniform * self);
+
+template <typename T, int N, int M>
+PyObject * MGLUniform_matrix_array_value_getter(MGLUniform * self);
+
+template <typename T, int N, int M>
+int MGLUniform_matrix_value_setter(MGLUniform * self, PyObject * value);
+
+template <typename T, int N, int M>
+int MGLUniform_matrix_array_value_setter(MGLUniform * self, PyObject * value);
