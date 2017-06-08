@@ -60,17 +60,14 @@ texture = ctx.texture(img.size, 3, img.tobytes())
 texture.use()
 
 
-@wnd.event
-def on_draw():
-    dt = pyglet.clock.tick()
+def update(dt):
     scale.value = (wnd.height / wnd.width * 0.75, 0.75)
 
-    pyglet.clock.tick()
     ctx.viewport = (0, 0, wnd.width, wnd.height)
     ctx.clear(0.9, 0.9, 0.9)
-    rotation.value += dt * 200
+    rotation.value += dt
     vao.render()
 
 
-pyglet.clock.schedule_interval(lambda *args: None, 1 / 60.0)
+pyglet.clock.schedule_interval(update, 1.0 / 60.0)
 pyglet.app.run()
