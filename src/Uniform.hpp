@@ -5,13 +5,15 @@
 #include "Object.hpp"
 #include "Program.hpp"
 
+typedef void (* MGLProc)();
+
 struct MGLUniform : public MGLObject {
 	PyObject * name;
 
-	void * value_getter;
-	void * value_setter;
-	void * gl_value_reader_proc;
-	void * gl_value_writer_proc;
+	MGLProc value_getter;
+	MGLProc value_setter;
+	MGLProc gl_value_reader_proc;
+	MGLProc gl_value_writer_proc;
 
 	int program_obj;
 
