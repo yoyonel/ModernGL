@@ -130,7 +130,7 @@ PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
 	gl.DrawBuffers(self->draw_buffers_len, self->draw_buffers);
 
-	if (self->framebuffer_obj) {
+	if (!self->viewport_width && !self->viewport_height) {
 		gl.Viewport(
 			self->viewport_x,
 			self->viewport_y,
@@ -382,6 +382,17 @@ int MGLFramebuffer_set_viewport(MGLFramebuffer * self, PyObject * value, void * 
 	self->viewport_y = viewport_y;
 	self->viewport_width = viewport_width;
 	self->viewport_height = viewport_height;
+
+	if (self->framebuffer_obj == self->context->bound_framebuffer->framebuffer_obj) {
+		const GLMethods & gl = self->context->gl;
+
+		gl.Viewport(
+			self->viewport_x,
+			self->viewport_y,
+			self->viewport_width,
+			self->viewport_height
+		);
+	}
 
 	return 0;
 }
