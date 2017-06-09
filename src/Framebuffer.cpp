@@ -509,6 +509,20 @@ int MGLFramebuffer_set_color_mask(MGLFramebuffer * self, PyObject * value, void 
 		}
 	}
 
+	if (self->framebuffer_obj == self->context->bound_framebuffer->framebuffer_obj) {
+		const GLMethods & gl = self->context->gl;
+
+		for (int i = 0; i < self->draw_buffers_len; ++i) {
+			gl.ColorMaski(
+				i,
+				self->color_mask[i * 4 + 0],
+				self->color_mask[i * 4 + 1],
+				self->color_mask[i * 4 + 2],
+				self->color_mask[i * 4 + 3]
+			);
+		}
+	}
+
 	return 0;
 }
 
@@ -524,6 +538,11 @@ int MGLFramebuffer_set_depth_mask(MGLFramebuffer * self, PyObject * value, void 
 	} else {
 		MGLError_Set("the depth_mask must be a bool not %s", Py_TYPE(value)->tp_name);
 		return -1;
+	}
+
+	if (self->framebuffer_obj == self->context->bound_framebuffer->framebuffer_obj) {
+		const GLMethods & gl = self->context->gl;
+		gl.DepthMask(self->depth_mask);
 	}
 
 	return 0;
