@@ -4,6 +4,7 @@ from PyQt5 import QtOpenGL, QtWidgets
 
 import ModernGL
 
+
 class QGLControllerWidget(QtOpenGL.QGLWidget):
     def __init__(self):
         fmt = QtOpenGL.QGLFormat()
