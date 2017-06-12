@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [4.1.6] - 2017-06-12
 ### Fixed
 - Broken uniform setter in 4.1.5
 
@@ -136,7 +136,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.0.0 - 2016-03-03
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.5...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.6...master
+[4.1.6]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.5...4.1.6
 [4.1.5]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.4...4.1.5
 [4.1.4]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.3...4.1.4
 [4.1.3]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.2...4.1.3
