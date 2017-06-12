@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Fixed
+- Broken uniform setter in 4.1.5
+
 ## [4.1.5] - 2017-06-09
 ### Fixed
 - Modifying framebuffer properties has no effect unless the framebuffer is explicitly bound
