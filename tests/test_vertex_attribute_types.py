@@ -238,24 +238,25 @@ class TestCase(unittest.TestCase):
         '''
 
         for vtype in vtypes:
-            if self.ctx.version_code < vtype['version']:
-                warnings.warn('skipping version %s' % vtype['version'])
-                continue
+            with self.subTest(vert_src=vert_src, vtype=vtype):
+                if self.ctx.version_code < vtype['version']:
+                    warnings.warn('skipping version %s' % vtype['version'])
+                    continue
 
-            prog = self.ctx.program(self.ctx.vertex_shader(vert_src % vtype), ['v_out'])
+                prog = self.ctx.program(self.ctx.vertex_shader(vert_src % vtype), ['v_out'])
 
-            if 'v_in' not in prog.attributes:
-                warnings.warn('skipping %s' % vtype['type'])
-                continue
+                if 'v_in' not in prog.attributes:
+                    warnings.warn('skipping %s' % vtype['type'])
+                    continue
 
-            fmt = ModernGL.detect_format(prog, ['v_in'])
-            vbo1 = self.ctx.buffer(struct.pack(fmt, *vtype['input']))
-            vbo2 = self.ctx.buffer(b'\xAA' * struct.calcsize(fmt))
-            vao = self.ctx.simple_vertex_array(prog, vbo1, ['v_in'])
-            vao.transform(vbo2, ModernGL.POINTS, 1)
+                fmt = ModernGL.detect_format(prog, ['v_in'])
+                vbo1 = self.ctx.buffer(struct.pack(fmt, *vtype['input']))
+                vbo2 = self.ctx.buffer(b'\xAA' * struct.calcsize(fmt))
+                vao = self.ctx.simple_vertex_array(prog, vbo1, ['v_in'])
+                vao.transform(vbo2, ModernGL.POINTS, 1)
 
-            for a, b in zip(struct.unpack(fmt, vbo2.read()), vtype['output']):
-                self.assertAlmostEqual(a, b)
+                for a, b in zip(struct.unpack(fmt, vbo2.read()), vtype['output']):
+                    self.assertAlmostEqual(a, b)
 
     def test_arrays(self):
         vert_src = '''
@@ -271,24 +272,25 @@ class TestCase(unittest.TestCase):
         '''
 
         for vtype in vtypes:
-            if self.ctx.version_code < vtype['version']:
-                warnings.warn('skipping version %s' % vtype['version'])
-                continue
+            with self.subTest(vert_src=vert_src, vtype=vtype):
+                if self.ctx.version_code < vtype['version']:
+                    warnings.warn('skipping version %s' % vtype['version'])
+                    continue
 
-            prog = self.ctx.program(self.ctx.vertex_shader(vert_src % vtype), ['v_out'])
+                prog = self.ctx.program(self.ctx.vertex_shader(vert_src % vtype), ['v_out'])
 
-            if 'v_in' not in prog.attributes:
-                warnings.warn('skipping %s' % vtype['type'])
-                continue
+                if 'v_in' not in prog.attributes:
+                    warnings.warn('skipping %s' % vtype['type'])
+                    continue
 
-            fmt = ModernGL.detect_format(prog, ['v_in'])
-            vbo1 = self.ctx.buffer(struct.pack(fmt, *(vtype['input'] * 2)))
-            vbo2 = self.ctx.buffer(b'\xAA' * struct.calcsize(fmt))
-            vao = self.ctx.simple_vertex_array(prog, vbo1, ['v_in'])
-            vao.transform(vbo2, ModernGL.POINTS, 1)
+                fmt = ModernGL.detect_format(prog, ['v_in'])
+                vbo1 = self.ctx.buffer(struct.pack(fmt, *(vtype['input'] * 2)))
+                vbo2 = self.ctx.buffer(b'\xAA' * struct.calcsize(fmt))
+                vao = self.ctx.simple_vertex_array(prog, vbo1, ['v_in'])
+                vao.transform(vbo2, ModernGL.POINTS, 1)
 
-            for a, b in zip(struct.unpack(fmt, vbo2.read()), vtype['output'] * 2):
-                self.assertAlmostEqual(a, b)
+                for a, b in zip(struct.unpack(fmt, vbo2.read()), vtype['output'] * 2):
+                    self.assertAlmostEqual(a, b)
 
 
 if __name__ == '__main__':
