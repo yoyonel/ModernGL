@@ -169,6 +169,19 @@ class Uniform:
     def value(self, value):
         self.mglo.value = value
 
+    def read(self) -> bytes:
+        '''
+            Read the value of the uniform.
+        '''
+
+        return self.mglo.read()
+
+    def write(self, value) -> None:
+        '''
+            Write the value of the uniform.
+        '''
+
+        return self.mglo.write(bytes(value))
 
 class UniformMap:
     '''
