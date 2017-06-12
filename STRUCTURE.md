@@ -2,8 +2,8 @@
 
 The module has two layers:
 
-- [Python layer](#)
-- [C++ layer](#)
+- [Python layer](#python-layer)
+- [C++ layer](#c-layer)
 
 ### Python layer
 
@@ -18,7 +18,7 @@ Types and methods implemented in this layer **should** be used in the Python lay
 
 ### Example
 
-For example the [write](#) method of the [`Buffer`](#) class is implemented in the Buffer.cpp:
+For example the [write](https://moderngl.readthedocs.io/en/stable/Buffers.html#ModernGL.Buffer.write) method of the [`Buffer`](https://moderngl.readthedocs.io/en/stable/Buffers.html#ModernGL.Buffer) class is implemented in the Buffer.cpp:
 
 ```c++
 PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args) {
