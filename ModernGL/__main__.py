@@ -3,6 +3,7 @@
 '''
 
 import argparse
+import sys
 
 import ModernGL
 
@@ -22,6 +23,8 @@ def main():
     print('Vendor:', ctx.vendor)
     print('Renderer:', ctx.renderer)
     print('Version:', ctx.version)
+    print('Python:', sys.version)
+    print('Platform:', sys.platform)
 
 
 if __name__ == '__main__':
