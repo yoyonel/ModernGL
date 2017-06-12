@@ -714,7 +714,7 @@ int MGLUniform_matrix_value_setter(MGLUniform * self, PyObject * value) {
 
 	int size = (int)PyTuple_GET_SIZE(value);
 
-	if (size != 4) {
+	if (size != N * M) {
 		MGLError_Set("the value must be a tuple of size %d not %d", N * M, size);
 		return -1;
 	}
