@@ -113,7 +113,7 @@ class TestCase(unittest.TestCase):
         prog.uniforms['Uniform'].value = (0.0, 1.0, 2.0, 3.0, 4.0, 5.0)
         vao.transform(self.res)
 
-        m = struct.unpack('3f', self.res.read(12))
+        m = struct.unpack('6f', self.res.read(24))
         self.assertAlmostEqual(m[0], 0.0)
         self.assertAlmostEqual(m[1], 1.0)
         self.assertAlmostEqual(m[2], 2.0)
