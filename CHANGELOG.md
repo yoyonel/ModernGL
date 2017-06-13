@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Uniform `read` and `write` methods
 
+### Fixed
+- Default framebuffer's drawbuffers
+
 ## [4.1.6] - 2017-06-12
 ### Fixed
 - Broken uniform setter in 4.1.5

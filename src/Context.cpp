@@ -1702,6 +1702,17 @@ void MGLContext_Initialize(MGLContext * self) {
 
 		framebuffer->draw_buffers_len = 1;
 		framebuffer->draw_buffers = new unsigned[1];
+
+		// According to glGet docs:
+		// The initial value is GL_BACK if there are back buffers, otherwise it is GL_FRONT.
+
+		// According to glDrawBuffer docs:
+		// The symbolic constants GL_FRONT, GL_BACK, GL_LEFT, GL_RIGHT, and GL_FRONT_AND_BACK
+		// are not allowed in the bufs array since they may refer to multiple buffers.
+
+		// GL_COLOR_ATTACHMENT0 is causes error: 1282
+		// This value is temporarily ignored
+
 		framebuffer->draw_buffers[0] = GL_COLOR_ATTACHMENT0;
 
 		framebuffer->color_mask = new bool[4];
