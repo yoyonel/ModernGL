@@ -8,7 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Uniform `read` and `write` methods
 - `write_offset` parameter for the `read_into` methods
-- Pixel Buffer Object (read framebuffer's pixels to a buffer)
+- Read framebuffer's pixels to a buffer
+- Read texture's pixels to a buffer
+- Write texture's from a buffer
+- Pixel Buffer Object
 
 ### Fixed
 - Default framebuffer wrong drawbuffers
