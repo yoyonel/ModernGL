@@ -325,6 +325,7 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 	int format = formats[components];
 
 	if (Py_TYPE(data) == &MGLBuffer_Type) {
+
 		MGLBuffer * buffer = (MGLBuffer *)data;
 
 		const GLMethods & gl = self->context->gl;
