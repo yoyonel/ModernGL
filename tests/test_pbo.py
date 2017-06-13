@@ -1,3 +1,4 @@
+import struct
 import unittest
 
 import ModernGL
@@ -41,6 +42,53 @@ class TestCase(unittest.TestCase):
         fbo4.read_into(buf, attachment=2, components=4, floats=False)
         self.assertEqual(buf.read(), b'\x00\x00\xff\xff' * 16)
 
+    def test_2(self):
+        pixels = b'\xFF\x00\x00\xFF\x00\xFF\x00\xFF\x00\x00\xFF\xFF\xFF\xFF\xFF\xFF'
+
+        texture = self.ctx.texture((2, 2), 4)
+        buf = self.ctx.buffer(pixels)
+        texture.write(buf)
+
+        self.assertEqual(texture.read(), pixels)
+
+    def test_3(self):
+        pixels = struct.pack(
+            '4f4f4f4f',
+            1.0, 0.0, 0.0, 1.0,
+            0.0, 1.0, 0.0, 1.0,
+            0.0, 0.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0,
+        )
+
+        buf = self.ctx.buffer(pixels)
+        texture = self.ctx.texture((2, 2), 4, floats=True)
+        texture.write(buf)
+
+        self.assertEqual(texture.read(), pixels)
+
+    def test_4(self):
+        pixels = b'\xFF\x00\x00\xFF\x00\xFF\x00\xFF\x00\x00\xFF\xFF\xFF\xFF\xFF\xFF'
+
+        texture = self.ctx.texture((2, 2), 4, pixels)
+        buf = self.ctx.buffer(reserve=len(pixels))
+        texture.read_into(buf)
+
+        self.assertEqual(buf.read(), pixels)
+
+    def test_5(self):
+        pixels = struct.pack(
+            '4f4f4f4f',
+            1.0, 0.0, 0.0, 1.0,
+            0.0, 1.0, 0.0, 1.0,
+            0.0, 0.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0,
+        )
+
+        texture = self.ctx.texture((2, 2), 4, pixels, floats=True)
+        buf = self.ctx.buffer(reserve=len(pixels))
+        texture.read_into(buf)
+
+        self.assertEqual(buf.read(), pixels)
 
 if __name__ == '__main__':
     unittest.main()
