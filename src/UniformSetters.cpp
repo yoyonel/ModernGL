@@ -41,7 +41,7 @@ int MGLUniform_uint_value_setter(MGLUniform * self, PyObject * value) {
 	unsigned c_value = PyLong_AsUnsignedLong(value);
 
 	if (PyErr_Occurred()) {
-		MGLError_Set("the value must be an unsigned int not %s", Py_TYPE(value));
+		MGLError_Set("the value must be an unsigned int not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -92,7 +92,7 @@ int MGLUniform_sampler_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_bool_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -128,7 +128,7 @@ int MGLUniform_bool_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_int_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -160,7 +160,7 @@ int MGLUniform_int_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_uint_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -192,7 +192,7 @@ int MGLUniform_uint_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_float_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -224,7 +224,7 @@ int MGLUniform_float_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_double_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -256,7 +256,7 @@ int MGLUniform_double_array_value_setter(MGLUniform * self, PyObject * value) {
 int MGLUniform_sampler_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -290,7 +290,7 @@ int MGLUniform_bvec_value_setter(MGLUniform * self, PyObject * value) {
 	int c_values[N];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -324,7 +324,7 @@ int MGLUniform_ivec_value_setter(MGLUniform * self, PyObject * value) {
 	int c_values[N];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -354,7 +354,7 @@ int MGLUniform_uvec_value_setter(MGLUniform * self, PyObject * value) {
 	unsigned c_values[N];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -384,7 +384,7 @@ int MGLUniform_vec_value_setter(MGLUniform * self, PyObject * value) {
 	float c_values[N];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -414,7 +414,7 @@ int MGLUniform_dvec_value_setter(MGLUniform * self, PyObject * value) {
 	double c_values[N];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -443,7 +443,7 @@ template <int N>
 int MGLUniform_bvec_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -461,7 +461,7 @@ int MGLUniform_bvec_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value)->tp_name);
 			delete[] c_values;
 			return -1;
 		}
@@ -499,7 +499,7 @@ template <int N>
 int MGLUniform_ivec_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -517,7 +517,7 @@ int MGLUniform_ivec_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value)->tp_name);
 			delete[] c_values;
 			return -1;
 		}
@@ -551,7 +551,7 @@ template <int N>
 int MGLUniform_uvec_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -569,7 +569,7 @@ int MGLUniform_uvec_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value)->tp_name);
 			delete[] c_values;
 			return -1;
 		}
@@ -603,7 +603,7 @@ template <int N>
 int MGLUniform_vec_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -621,7 +621,7 @@ int MGLUniform_vec_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value)->tp_name);
 			delete[] c_values;
 			return -1;
 		}
@@ -655,7 +655,7 @@ template <int N>
 int MGLUniform_dvec_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -673,7 +673,7 @@ int MGLUniform_dvec_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value)->tp_name);
 			delete[] c_values;
 			return -1;
 		}
@@ -708,7 +708,7 @@ int MGLUniform_matrix_value_setter(MGLUniform * self, PyObject * value) {
 	T c_values[N * M];
 
 	if (Py_TYPE(value) != &PyTuple_Type) {
-		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a tuple not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -737,7 +737,7 @@ template <typename T, int N, int M>
 int MGLUniform_matrix_array_value_setter(MGLUniform * self, PyObject * value) {
 
 	if (Py_TYPE(value) != &PyList_Type) {
-		MGLError_Set("the value must be a list not %s", Py_TYPE(value));
+		MGLError_Set("the value must be a list not %s", Py_TYPE(value)->tp_name);
 		return -1;
 	}
 
@@ -755,7 +755,7 @@ int MGLUniform_matrix_array_value_setter(MGLUniform * self, PyObject * value) {
 		PyObject * tuple = PyList_GET_ITEM(value, k);
 
 		if (Py_TYPE(tuple) != &PyTuple_Type) {
-			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value));
+			MGLError_Set("value[%d] must be a tuple not %s", k, Py_TYPE(value)->tp_name);
 			delete[] c_values;
 			return -1;
 		}
