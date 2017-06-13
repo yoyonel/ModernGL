@@ -339,6 +339,7 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
 	} else {
+
 		Py_buffer buffer_view;
 
 		int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_WRITABLE);
