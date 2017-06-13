@@ -3,6 +3,7 @@
 '''
 
 from .common import InvalidObject, TextureFilter
+from .buffers import Buffer
 
 
 class Texture:
@@ -171,12 +172,18 @@ class Texture:
                 write_offset (int): The write offset.
         '''
 
-        return self.mglo.read(buffer, viewport, alignment, write_offset)
+        if isinstance(buffer, Buffer):
+            buffer = buffer.mglo
+
+        return self.mglo.read_into(buffer, viewport, alignment, write_offset)
 
     def write(self, data, viewport=None, *, alignment=1) -> None:
         '''
             Update the content of the texture.
         '''
+
+        if isinstance(data, Buffer):
+            data = data.mglo
 
         self.mglo.write(data, viewport, alignment)
 

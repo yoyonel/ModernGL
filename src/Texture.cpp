@@ -2,6 +2,7 @@
 
 #include "Error.hpp"
 #include "InvalidObject.hpp"
+#include "Buffer.hpp"
 
 #include "InlineMethods.hpp"
 
@@ -188,37 +189,53 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 
-	Py_buffer buffer_view;
-
-	int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_WRITABLE);
-	if (get_buffer < 0) {
-		MGLError_Set("the buffer (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
-		return 0;
-	}
-
-	if (buffer_view.len < write_offset + expected_size) {
-		MGLError_Set("the buffer is too small");
-		PyBuffer_Release(&buffer_view);
-		return 0;
-	}
-
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
 	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	int pixel_type = self->floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
 	int format = formats[self->components];
 
-	char * ptr = (char *)buffer_view.buf + write_offset;
+	if (Py_TYPE(data) == &MGLBuffer_Type) {
 
-	const GLMethods & gl = self->context->gl;
+		MGLBuffer * buffer = (MGLBuffer *)data;
 
-	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
-	gl.BindTexture(texture_target, self->texture_obj);
+		const GLMethods & gl = self->context->gl;
 
-	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-	gl.GetTexImage(texture_target, 0, format, pixel_type, ptr);
+		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, buffer->buffer_obj);
+		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+		gl.BindTexture(texture_target, self->texture_obj);
+		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+		gl.GetTexImage(texture_target, 0, format, pixel_type, (void *)write_offset);
+		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
-	PyBuffer_Release(&buffer_view);
+	} else {
+
+		Py_buffer buffer_view;
+
+		int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_WRITABLE);
+		if (get_buffer < 0) {
+			MGLError_Set("the buffer (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+			return 0;
+		}
+
+		if (buffer_view.len < write_offset + expected_size) {
+			MGLError_Set("the buffer is too small");
+			PyBuffer_Release(&buffer_view);
+			return 0;
+		}
+
+		char * ptr = (char *)buffer_view.buf + write_offset;
+
+		const GLMethods & gl = self->context->gl;
+		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+		gl.BindTexture(texture_target, self->texture_obj);
+		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+		gl.GetTexImage(texture_target, 0, format, pixel_type, ptr);
+
+		PyBuffer_Release(&buffer_view);
+
+	}
+
 	Py_RETURN_NONE;
 }
 
@@ -292,31 +309,48 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 
-	PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
-
-	if (buffer_view.len != expected_size) {
-		MGLError_Set("data size mismatch %d != %d", buffer_view.len, expected_size);
-		if (data != Py_None) {
-			PyBuffer_Release(&buffer_view);
-		}
-		return 0;
-	}
-
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
 	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	int pixel_type = self->floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
 	int format = formats[self->components];
 
-	const GLMethods & gl = self->context->gl;
+	if (Py_TYPE(data) == &MGLBuffer_Type) {
 
-	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
-	gl.BindTexture(texture_target, self->texture_obj);
+		MGLBuffer * buffer = (MGLBuffer *)data;
 
-	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
-	gl.TexSubImage2D(texture_target, 0, x, y, width, height, format, pixel_type, buffer_view.buf);
+		const GLMethods & gl = self->context->gl;
 
-	PyBuffer_Release(&buffer_view);
+		gl.BindBuffer(GL_PIXEL_UNPACK_BUFFER, buffer->buffer_obj);
+		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+		gl.BindTexture(texture_target, self->texture_obj);
+		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+		gl.TexSubImage2D(texture_target, 0, x, y, width, height, format, pixel_type, 0);
+		gl.BindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+
+	} else {
+
+		PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
+
+		if (buffer_view.len != expected_size) {
+			MGLError_Set("data size mismatch %d != %d", buffer_view.len, expected_size);
+			if (data != Py_None) {
+				PyBuffer_Release(&buffer_view);
+			}
+			return 0;
+		}
+
+		const GLMethods & gl = self->context->gl;
+
+		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+		gl.BindTexture(texture_target, self->texture_obj);
+
+		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+		gl.TexSubImage2D(texture_target, 0, x, y, width, height, format, pixel_type, buffer_view.buf);
+
+		PyBuffer_Release(&buffer_view);
+
+	}
 
 	Py_RETURN_NONE;
 }
