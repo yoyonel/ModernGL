@@ -90,13 +90,15 @@ PyObject * MGLBufferAccess_read_into(MGLBufferAccess * self, PyObject * args) {
 	PyObject * data;
 	int size;
 	int offset;
+	int write_offset;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OII",
+		"OIII",
 		&data,
 		&size,
-		&offset
+		&offset,
+		&write_offset
 	);
 
 	if (!args_ok) {
@@ -125,13 +127,14 @@ PyObject * MGLBufferAccess_read_into(MGLBufferAccess * self, PyObject * args) {
 		return 0;
 	}
 
-	if (buffer_view.len < size) {
-		MGLError_Set("the buffer is too small %d < %d", buffer_view.len, size);
+	if (buffer_view.len < write_offset + size) {
+		MGLError_Set("the buffer is too small");
 		PyBuffer_Release(&buffer_view);
 		return 0;
 	}
 
-	memcpy(buffer_view.buf, self->ptr + offset, size);
+	char * ptr = (char *)buffer_view.buf + write_offset;
+	memcpy(ptr, self->ptr + offset, size);
 
 	PyBuffer_Release(&buffer_view);
 	Py_RETURN_NONE;
