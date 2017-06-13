@@ -117,25 +117,27 @@ PyObject * MGLBuffer_read_into(MGLBuffer * self, PyObject * args) {
 	PyObject * data;
 	int size;
 	int offset;
+	int write_offset;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OII",
+		"OIII",
 		&data,
 		&size,
-		&offset
+		&offset,
+		&write_offset
 	);
 
 	if (!args_ok) {
 		return 0;
 	}
 
-	if (size == -1) {
+	if (size < 0) {
 		size = self->size - offset;
 	}
 
-	if (offset < 0 || size < 0 || size + offset > self->size) {
-		MGLError_Set("out of rangeoffset = %d or size = %d", offset, size);
+	if (offset < 0 || write_offset < 0 || size + offset > self->size) {
+		MGLError_Set("out of range");
 		return 0;
 	}
 
@@ -147,8 +149,8 @@ PyObject * MGLBuffer_read_into(MGLBuffer * self, PyObject * args) {
 		return 0;
 	}
 
-	if (buffer_view.len < size) {
-		MGLError_Set("the buffer is too small %d < %d", buffer_view.len, size);
+	if (buffer_view.len < write_offset + size) {
+		MGLError_Set("the buffer is too small");
 		PyBuffer_Release(&buffer_view);
 		return 0;
 	}
@@ -158,7 +160,8 @@ PyObject * MGLBuffer_read_into(MGLBuffer * self, PyObject * args) {
 	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
 	void * map = gl.MapBufferRange(GL_ARRAY_BUFFER, offset, size, GL_MAP_READ_BIT);
 
-	memcpy(buffer_view.buf, map, size);
+	char * ptr = (char *)buffer_view.buf + write_offset;
+	memcpy(ptr, map, size);
 
 	gl.UnmapBuffer(GL_ARRAY_BUFFER);
 
