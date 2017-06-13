@@ -122,13 +122,15 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 	PyObject * data;
 	PyObject * viewport;
 	int alignment;
+	int write_offset; // TODO: unused
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OOI",
+		"OOII",
 		&data,
 		&viewport,
-		&alignment
+		&alignment,
+		&write_offset
 	);
 
 	if (!args_ok) {
@@ -194,8 +196,8 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 		return 0;
 	}
 
-	if (buffer_view.len < expected_size) {
-		MGLError_Set("the buffer is too small %d < %d", buffer_view.len, expected_size);
+	if (buffer_view.len < write_offset + expected_size) {
+		MGLError_Set("the buffer is too small");
 		PyBuffer_Release(&buffer_view);
 		return 0;
 	}
@@ -206,13 +208,15 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 	int pixel_type = self->floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
 	int format = formats[self->components];
 
+	char * ptr = (char *)buffer_view.buf + write_offset;
+
 	const GLMethods & gl = self->context->gl;
 
 	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 	gl.BindTexture(texture_target, self->texture_obj);
 
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-	gl.GetTexImage(texture_target, 0, format, pixel_type, buffer_view.buf);
+	gl.GetTexImage(texture_target, 0, format, pixel_type, ptr);
 
 	PyBuffer_Release(&buffer_view);
 	Py_RETURN_NONE;
