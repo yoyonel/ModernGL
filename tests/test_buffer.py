@@ -40,14 +40,22 @@ class TestBuffer(unittest.TestCase):
         self.assertEqual(buf.read(), b'abcabcabcd')
         self.assertEqual(buf.read(offset=3), b'abcabcd')
 
-    def test_buffer_read_into(self):
+    def test_buffer_read_into_1(self):
         data = b'Hello World!'
         buf = self.ctx.buffer(data)
         res = bytearray(buf.size)
         buf.read_into(res)
-        self.assertEqual(data, bytes(res))
+        self.assertEqual(bytes(res), data)
 
-    def test_buffer_access_read_into(self):
+    def test_buffer_read_into_2(self):
+        data = b'Hello World!'
+        buf = self.ctx.buffer(data)
+        res = bytearray(10)
+        buf.read_into(res, offset=6, size=5, write_offset=0)
+        buf.read_into(res, offset=0, size=5, write_offset=5)
+        self.assertEqual(bytes(res), b'WorldHello')
+
+    def test_buffer_access_read_into_1(self):
         data = b'Hello World!'
         buf = self.ctx.buffer(data)
         res = bytearray(buf.size)
@@ -55,7 +63,18 @@ class TestBuffer(unittest.TestCase):
         with buf.access() as access:
             access.read_into(res)
 
-        self.assertEqual(data, bytes(res))
+        self.assertEqual(bytes(res), data)
+
+    def test_buffer_access_read_into_2(self):
+        data = b'Hello World!'
+        buf = self.ctx.buffer(data)
+        res = bytearray(10)
+
+        with buf.access() as access:
+            access.read_into(res, offset=6, size=5, write_offset=0)
+            access.read_into(res, offset=0, size=5, write_offset=5)
+
+        self.assertEqual(bytes(res), b'WorldHello')
 
     def test_buffer_orphan(self):
         buf = self.ctx.buffer(reserve=1024)
