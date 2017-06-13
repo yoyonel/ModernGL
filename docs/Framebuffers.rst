@@ -13,7 +13,7 @@ Framebuffers
 	.. automethod:: use()
 
 	.. automethod:: read(viewport=None, components=3, attachment=0, alignment=1, floats=False) -> bytes
-	.. automethod:: read_into(buffer, viewport=None, components=3, attachment=0, alignment=1, floats=False)
+	.. automethod:: read_into(buffer, viewport=None, components=3, attachment=0, alignment=1, floats=False, write_offset=0)
 
 .. toctree::
 	:maxdepth: 4
