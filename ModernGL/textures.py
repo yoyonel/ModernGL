@@ -158,7 +158,7 @@ class Texture:
 
         return self.mglo.read(viewport, alignment)
 
-    def read_into(self, buffer, viewport=None, *, alignment=1) -> None:
+    def read_into(self, buffer, viewport=None, *, alignment=1, write_offset=0) -> None:
         '''
             Read the content of the texture into a buffer.
 
@@ -168,9 +168,10 @@ class Texture:
 
             Keyword Args:
                 alignment (int): The byte alignment of the pixels.
+                write_offset (int): The write offset.
         '''
 
-        return self.mglo.read(buffer, viewport, alignment)
+        return self.mglo.read(buffer, viewport, alignment, write_offset)
 
     def write(self, data, viewport=None, *, alignment=1) -> None:
         '''

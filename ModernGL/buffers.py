@@ -72,7 +72,7 @@ class BufferAccess:
 
         return self.mglo.read(size, offset)
 
-    def read_into(self, buffer, size=-1, *, offset=0) -> None:
+    def read_into(self, buffer, size=-1, *, offset=0, write_offset=0) -> None:
         '''
             Read the content.
 
@@ -81,13 +81,14 @@ class BufferAccess:
                 size (int): The size. Value `-1` means all.
 
             Keyword Args:
-                offset (int): The offset.
+                offset (int): The read offset.
+                write_offset (int): The write offset.
 
             Returns:
                 bytes: binary data
         '''
 
-        return self.mglo.read_into(buffer, size, offset)
+        return self.mglo.read_into(buffer, size, offset, write_offset)
 
     def write(self, data, *, offset=0) -> None:
         '''
@@ -222,7 +223,7 @@ class Buffer:
 
         return self.mglo.read(size, offset)
 
-    def read_into(self, buffer, size=-1, *, offset=0) -> None:
+    def read_into(self, buffer, size=-1, *, offset=0, write_offset=0) -> None:
         '''
             Read the content into a buffer.
 
@@ -231,13 +232,14 @@ class Buffer:
                 size (int): The size. Value ``-1`` means all.
 
             Keyword Args:
-                offset (int): The offset.
+                offset (int): The read offset.
+                write_offset (int): The write offset.
 
             Returns:
                 bytes: The content of the buffer.
         '''
 
-        return self.mglo.read_into(buffer, size, offset)
+        return self.mglo.read_into(buffer, size, offset, write_offset)
 
     def write(self, data, *, offset=0) -> None:
         '''

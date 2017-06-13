@@ -6,6 +6,7 @@ from typing import List, Tuple
 
 from .common import InvalidObject
 from .renderbuffers import Renderbuffer
+from .buffers import Buffer
 
 
 class Framebuffer:
@@ -183,7 +184,8 @@ class Framebuffer:
 
         return self.mglo.read(viewport, components, attachment, alignment, floats)
 
-    def read_into(self, buffer, viewport=None, components=3, *, attachment=0, alignment=1, floats=False) -> None:
+    def read_into(self, buffer, viewport=None, components=3, *,
+        attachment=0, alignment=1, floats=False, write_offset=0) -> None:
         '''
             Read the content of the framebuffer into a buffer.
 
@@ -196,9 +198,13 @@ class Framebuffer:
                 attachment (int): The color attachment.
                 alignment (int): The byte alignment of the pixels.
                 floats (bool): The precision of the pixels.
+                write_offset (int): The write offset.
         '''
 
-        return self.mglo.read_into(buffer, viewport, components, attachment, alignment, floats)
+        if isinstance(buffer, Buffer):
+            buffer = buffer.mglo
+
+        return self.mglo.read_into(buffer, viewport, components, attachment, alignment, floats, write_offset)
 
     def release(self) -> None:
         '''
