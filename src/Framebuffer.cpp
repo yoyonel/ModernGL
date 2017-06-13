@@ -133,7 +133,7 @@ PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
 		gl.DrawBuffers(self->draw_buffers_len, self->draw_buffers);
 	}
 
-	if (!self->viewport_width && !self->viewport_height) {
+	if (self->viewport_width && self->viewport_height) {
 		gl.Viewport(
 			self->viewport_x,
 			self->viewport_y,
