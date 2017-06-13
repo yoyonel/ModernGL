@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Default framebuffer wrong drawbuffers
 - Framebuffer non zero viewport settings
+- Uniform setter error messages
 
 ## [4.1.6] - 2017-06-12
 ### Fixed
