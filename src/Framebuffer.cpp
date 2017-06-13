@@ -4,6 +4,7 @@
 #include "InvalidObject.hpp"
 #include "Renderbuffer.hpp"
 #include "Texture.hpp"
+#include "Buffer.hpp"
 
 PyObject * MGLFramebuffer_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLFramebuffer * self = (MGLFramebuffer *)type->tp_alloc(type, 0);
@@ -254,16 +255,18 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 	int attachment;
 	int alignment;
 	int floats;
+	int write_offset; // TODO: unused
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OOIIIp",
+		"OOIIIpI",
 		&data,
 		&viewport,
 		&components,
 		&attachment,
 		&alignment,
-		&floats
+		&floats,
+		&write_offset
 	);
 
 	if (!args_ok) {
@@ -321,29 +324,46 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 	int format = formats[components];
 
-	Py_buffer buffer_view;
+	if (Py_TYPE(data) == &MGLBuffer_Type) {
+		MGLBuffer * buffer = (MGLBuffer *)data;
 
-	int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_WRITABLE);
-	if (get_buffer < 0) {
-		MGLError_Set("the buffer (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
-		return 0;
-	}
+		const GLMethods & gl = self->context->gl;
 
-	if (buffer_view.len < expected_size) {
-		MGLError_Set("the buffer is too small %d < %d", buffer_view.len, expected_size);
+		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, buffer->buffer_obj);
+		gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
+		gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
+		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+		gl.ReadPixels(x, y, width, height, format, type, (void *)write_offset);
+		gl.BindFramebuffer(GL_FRAMEBUFFER, self->context->bound_framebuffer->framebuffer_obj);
+		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+
+	} else {
+		Py_buffer buffer_view;
+
+		int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_WRITABLE);
+		if (get_buffer < 0) {
+			MGLError_Set("the buffer (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+			return 0;
+		}
+
+		if (buffer_view.len < write_offset + expected_size) {
+			MGLError_Set("the buffer is too small");
+			PyBuffer_Release(&buffer_view);
+			return 0;
+		}
+
+		char * ptr = (char *)buffer_view.buf + write_offset;
+
+		const GLMethods & gl = self->context->gl;
+
+		gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
+		gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
+		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+		gl.ReadPixels(x, y, width, height, format, type, ptr);
+		gl.BindFramebuffer(GL_FRAMEBUFFER, self->context->bound_framebuffer->framebuffer_obj);
+
 		PyBuffer_Release(&buffer_view);
-		return 0;
 	}
-
-	const GLMethods & gl = self->context->gl;
-
-	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
-	gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
-	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-	gl.ReadPixels(x, y, width, height, format, type, buffer_view.buf);
-	gl.BindFramebuffer(GL_FRAMEBUFFER, self->context->bound_framebuffer->framebuffer_obj);
-
-	PyBuffer_Release(&buffer_view);
 
 	return PyLong_FromLong(expected_size);
 }
