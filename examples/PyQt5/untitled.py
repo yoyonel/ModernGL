@@ -47,8 +47,8 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
 
         ibo = self.ctx.buffer(struct.pack(
             '6i',
-            0, 1, 2, # triangle 1
-            1, 2, 3, # triangle 2
+            0, 1, 2,    # triangle 1
+            1, 2, 3,    # triangle 2
         ))
 
         content = [

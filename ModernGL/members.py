@@ -183,6 +183,7 @@ class Uniform:
 
         return self.mglo.write(bytes(value))
 
+
 class UniformMap:
     '''
         UniformMap is a dictionary like object.

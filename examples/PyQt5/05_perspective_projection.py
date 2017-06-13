@@ -76,7 +76,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
         self.zfar = prog.uniforms['zfar']
         self.zfar.value = 1000.0
         self.ratio = prog.uniforms['ratio']
-        self.ratio.value = self.width()/ self.height()
+        self.ratio.value = self.width() / self.height()
         self.fovy = prog.uniforms['fovy']
         self.fovy.value = 60
 
@@ -103,6 +103,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
         self.ctx.clear(0.9, 0.9, 0.9)
         self.vao.render(ModernGL.LINES, 65 * 4)
         self.ctx.finish()
+
 
 app = QtWidgets.QApplication([])
 window = QGLControllerWidget()

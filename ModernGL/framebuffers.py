@@ -185,7 +185,7 @@ class Framebuffer:
         return self.mglo.read(viewport, components, attachment, alignment, floats)
 
     def read_into(self, buffer, viewport=None, components=3, *,
-        attachment=0, alignment=1, floats=False, write_offset=0) -> None:
+                  attachment=0, alignment=1, floats=False, write_offset=0) -> None:
         '''
             Read the content of the framebuffer into a buffer.
 
