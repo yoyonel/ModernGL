@@ -15,6 +15,7 @@
 #include "Subroutine.hpp"
 #include "SubroutineUniform.hpp"
 #include "Texture.hpp"
+#include "Texture3D.hpp"
 #include "TextureFilter.hpp"
 #include "Uniform.hpp"
 #include "UniformBlock.hpp"
@@ -275,6 +276,17 @@ bool MGL_InitializeModule(PyObject * module) {
 		Py_INCREF(&MGLTexture_Type);
 
 		PyModule_AddObject(module, "Texture", (PyObject *)&MGLTexture_Type);
+	}
+
+	{
+		if (PyType_Ready(&MGLTexture3D_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Texture3D in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return false;
+		}
+
+		Py_INCREF(&MGLTexture3D_Type);
+
+		PyModule_AddObject(module, "Texture3D", (PyObject *)&MGLTexture3D_Type);
 	}
 
 	{
