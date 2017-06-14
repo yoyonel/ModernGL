@@ -39,8 +39,8 @@ prog = ctx.program([
 data = bytes()
 
 for i in range(11):
-    data += struct.pack('5f', i / 10.0 - 0.5, 0.9, random.random(), random.random(), random.random())
-    data += struct.pack('5f', i / 10.0 - 0.5, -0.9, random.random(), random.random(), random.random())
+    data += struct.pack('5f', i / 10.0 - 0.5, 0.2, random.random(), random.random(), random.random())
+    data += struct.pack('5f', i / 10.0 - 0.5, -0.2, random.random(), random.random(), random.random())
 
 vbo = ctx.buffer(data)
 
@@ -62,4 +62,4 @@ texture.use()
 while wnd.update():
     ctx.viewport = wnd.viewport
     ctx.clear(0.9, 0.9, 0.9)
-    vao.render()
+    vao.render(ModernGL.TRIANGLE_STRIP)
