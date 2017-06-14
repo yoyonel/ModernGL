@@ -1490,6 +1490,7 @@ PyMethodDef MGLContext_tp_methods[] = {
 
 	{"buffer", (PyCFunction)MGLContext_buffer, METH_VARARGS, 0},
 	{"texture", (PyCFunction)MGLContext_texture, METH_VARARGS, 0},
+	{"texture3D", (PyCFunction)MGLContext_texture3D, METH_VARARGS, 0},
 	{"depth_texture", (PyCFunction)MGLContext_depth_texture, METH_VARARGS, 0},
 	{"vertex_array", (PyCFunction)MGLContext_vertex_array, METH_VARARGS, 0},
 	{"program", (PyCFunction)MGLContext_program, METH_VARARGS, 0},
