@@ -508,6 +508,7 @@ MGLTexture3D * MGLContext_texture3D(MGLContext * self, PyObject * args) {
 		"(III)IOIp",
 		&width,
 		&height,
+		&depth,
 		&components,
 		&data,
 		&alignment,
