@@ -4,6 +4,7 @@
 #include "Buffer.hpp"
 #include "ComputeShader.hpp"
 #include "Texture.hpp"
+#include "Texture3D.hpp"
 #include "VertexArray.hpp"
 #include "Program.hpp"
 #include "Shader.hpp"
@@ -482,6 +483,114 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 
 	texture->repeat_x = true;
 	texture->repeat_y = true;
+
+	Py_INCREF(self);
+	texture->context = self;
+
+	Py_INCREF(texture);
+	return texture;
+}
+
+MGLTexture3D * MGLContext_texture3D(MGLContext * self, PyObject * args) {
+	int width;
+	int height;
+	int depth;
+
+	int components;
+
+	PyObject * data;
+
+	int alignment;
+	int floats;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"(III)IOIp",
+		&width,
+		&height,
+		&components,
+		&data,
+		&alignment,
+		&floats
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (components < 1 || components > 4) {
+		MGLError_Set("the components must be 1, 2, 3 or 4");
+		return 0;
+	}
+
+	if (alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8) {
+		MGLError_Set("the alignment must be 1, 2, 4 or 8");
+		return 0;
+	}
+
+	int expected_size = width * components * (floats ? 4 : 1);
+	expected_size = (expected_size + alignment - 1) / alignment * alignment;
+	expected_size = expected_size * height * depth;
+
+	Py_buffer buffer_view;
+
+	if (data != Py_None) {
+		PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
+	} else {
+		buffer_view.len = expected_size;
+		buffer_view.buf = 0;
+	}
+
+	if (buffer_view.len != expected_size) {
+		MGLError_Set("data size mismatch %d != %d", buffer_view.len, expected_size);
+		if (data != Py_None) {
+			PyBuffer_Release(&buffer_view);
+		}
+		return 0;
+	}
+
+	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
+
+	int pixel_type = floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+	int format = formats[components];
+
+	const GLMethods & gl = self->gl;
+
+	MGLTexture3D * texture = MGLTexture3D_New();
+
+	texture->texture_obj = 0;
+	gl.GenTextures(1, (GLuint *)&texture->texture_obj);
+
+	if (!texture->texture_obj) {
+		MGLError_Set("cannot create texture");
+		Py_DECREF(texture);
+		return 0;
+	}
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->default_texture_unit);
+	gl.BindTexture(GL_TEXTURE_3D, texture->texture_obj);
+
+	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+	gl.TexImage3D(GL_TEXTURE_3D, 0, format, width, height, depth, 0, format, pixel_type, buffer_view.buf);
+	gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	if (data != Py_None) {
+		PyBuffer_Release(&buffer_view);
+	}
+
+	texture->width = width;
+	texture->height = height;
+	texture->depth = depth;
+	texture->components = components;
+	texture->floats = floats ? true : false;
+
+	Py_INCREF(MGL_LINEAR);
+	texture->filter = MGL_LINEAR;
+
+	texture->repeat_x = true;
+	texture->repeat_y = true;
+	texture->repeat_z = true;
 
 	Py_INCREF(self);
 	texture->context = self;
