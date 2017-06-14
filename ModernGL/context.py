@@ -342,7 +342,7 @@ class Context:
                 Texture3D: texture
         '''
 
-        return Texture3D.new(self.mglo.texture(size, components, data, alignment, floats))
+        return Texture3D.new(self.mglo.texture3D(size, components, data, alignment, floats))
 
     def depth_texture(self, size, data=None, *, samples=0, alignment=4) -> Texture:
         '''
