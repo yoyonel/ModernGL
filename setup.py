@@ -5,9 +5,9 @@ from setuptools import Extension, setup
 
 target = platform.system().lower()
 
-# if target == 'linux':
-#     from distutils import sysconfig
-#     sysconfig._config_vars['OPT'] = sysconfig.get_config_vars()['OPT'].replace('-Wstrict-prototypes', '')
+if target == 'linux':
+    from distutils import sysconfig
+    sysconfig._config_vars['OPT'] = sysconfig.get_config_vars()['OPT'].replace('-Wstrict-prototypes', '')
 
 libraries = {
     'windows': ['gdi32', 'opengl32', 'user32'],
