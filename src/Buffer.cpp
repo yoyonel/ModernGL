@@ -249,9 +249,9 @@ PyObject * MGLBuffer_clear(MGLBuffer * self, PyObject * args) {
 
 	if (buffer_view.len) {
 		char * src = (char *)buffer_view.buf;
-		int divisor = buffer_view.len;
+		Py_ssize_t divisor = buffer_view.len;
 
-		for (int i = 0; i < size; ++i) {
+		for (Py_ssize_t i = 0; i < size; ++i) {
 			map[i] = src[i % divisor];
 		}
 	} else {

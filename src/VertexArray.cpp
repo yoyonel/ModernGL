@@ -243,7 +243,7 @@ int MGLVertexArray_set_index_buffer(MGLVertexArray * self, PyObject * value, voi
 	Py_INCREF(value);
 	Py_DECREF(self->index_buffer);
 	self->index_buffer = (MGLBuffer *)value;
-	self->num_vertices = self->index_buffer->size / 4;
+	self->num_vertices = (int)(self->index_buffer->size / 4);
 
 	return 0;
 }
