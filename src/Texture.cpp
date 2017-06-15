@@ -34,13 +34,11 @@ int MGLTexture_tp_init(MGLTexture * self, PyObject * args, PyObject * kwargs) {
 }
 
 PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
-	PyObject * viewport;
 	int alignment;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OI",
-		&viewport,
+		"I",
 		&alignment
 	);
 
@@ -58,46 +56,9 @@ PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
 		return 0;
 	}
 
-	int x = 0;
-	int y = 0;
-	int width = self->width;
-	int height = self->height;
-
-	if (viewport != Py_None) {
-		if (Py_TYPE(viewport) != &PyTuple_Type) {
-			MGLError_Set("the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
-			return 0;
-		}
-
-		if (PyTuple_GET_SIZE(viewport) == 4) {
-
-			x = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
-			y = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
-			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 2));
-			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 3));
-
-		} else if (PyTuple_GET_SIZE(viewport) == 2) {
-
-			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
-			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
-
-		} else {
-
-			MGLError_Set("the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
-			return 0;
-
-		}
-
-		if (PyErr_Occurred()) {
-			MGLError_Set("wrong values in the viewport");
-			return 0;
-		}
-
-	}
-
-	int expected_size = width * self->components * (self->floats ?  4 : 1);
+	int expected_size = self->width * self->components * (self->floats ?  4 : 1);
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
-	expected_size = expected_size * height;
+	expected_size = expected_size * self->height;
 
 	PyObject * result = PyBytes_FromStringAndSize(0, expected_size);
 	char * data = PyBytes_AS_STRING(result);
@@ -121,15 +82,13 @@ PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
 
 PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 	PyObject * data;
-	PyObject * viewport;
 	int alignment;
 	int write_offset; // TODO: unused
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OOII",
+		"OII",
 		&data,
-		&viewport,
 		&alignment,
 		&write_offset
 	);
@@ -148,46 +107,9 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 		return 0;
 	}
 
-	int x = 0;
-	int y = 0;
-	int width = self->width;
-	int height = self->height;
-
-	if (viewport != Py_None) {
-		if (Py_TYPE(viewport) != &PyTuple_Type) {
-			MGLError_Set("the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
-			return 0;
-		}
-
-		if (PyTuple_GET_SIZE(viewport) == 4) {
-
-			x = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
-			y = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
-			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 2));
-			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 3));
-
-		} else if (PyTuple_GET_SIZE(viewport) == 2) {
-
-			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
-			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
-
-		} else {
-
-			MGLError_Set("the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
-			return 0;
-
-		}
-
-		if (PyErr_Occurred()) {
-			MGLError_Set("wrong values in the viewport");
-			return 0;
-		}
-
-	}
-
-	int expected_size = width * self->components * (self->floats ?  4 : 1);
+	int expected_size = self->width * self->components * (self->floats ?  4 : 1);
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
-	expected_size = expected_size * height;
+	expected_size = expected_size * self->height;
 
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 

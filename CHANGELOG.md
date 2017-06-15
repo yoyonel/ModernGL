@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Removed
+- Unused texture's `read` method's `viewport` parameter
+
 ### Added
 - Uniform `read` and `write` methods
 - `write_offset` parameter for the `read_into` methods
