@@ -199,3 +199,23 @@ pytest
 ## Code quality
 
 Code is tested with [pep8](https://www.python.org/dev/peps/pep-0008/), [flake8](http://flake8.pycqa.org/en/latest/), [prospector](https://prospector.landscape.io/en/master/) and [pylint](https://www.pylint.org/)
+
+# Community
+
+- [Code of conduct](https://github.com/cprogrammer1994/ModernGL/blob/master/CODE_OF_CONDUCT.md)
+
+## Contributors
+
+- [Szabolcs Dombi](https://github.com/cprogrammer1994)
+- [SimLeek](https://github.com/SimLeek)
+- [Aljenci](https://github.com/Aljenci)
+- [MinchinWeb](https://github.com/MinchinWeb)
+- [Silexstudio](https://github.com/Silexstudio)
+- [stuaxo](https://github.com/stuaxo)
+
+and [many others](https://github.com/cprogrammer1994/ModernGL/graphs/contributors)
+
+Thank You!
+
+Contributions are welcome. _(Please add yourself to the list)_
+
