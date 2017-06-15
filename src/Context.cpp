@@ -413,7 +413,7 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	int expected_size = width * components * (floats ?  4 : 1);
+	int expected_size = width * components * (floats ? 4 : 1);
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 

@@ -56,7 +56,7 @@ PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
 		return 0;
 	}
 
-	int expected_size = self->width * self->components * (self->floats ?  4 : 1);
+	int expected_size = self->width * self->components * (self->floats ? 4 : 1);
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * self->height;
 
@@ -107,7 +107,7 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 		return 0;
 	}
 
-	int expected_size = self->width * self->components * (self->floats ?  4 : 1);
+	int expected_size = self->width * self->components * (self->floats ? 4 : 1);
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * self->height;
 
@@ -227,7 +227,7 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 
 	}
 
-	int expected_size = width * self->components * (self->floats ?  4 : 1);
+	int expected_size = width * self->components * (self->floats ? 4 : 1);
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 
