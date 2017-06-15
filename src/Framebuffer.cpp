@@ -255,11 +255,11 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 	int attachment;
 	int alignment;
 	int floats;
-	int write_offset; // TODO: unused
+	Py_ssize_t write_offset;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OOIIIpI",
+		"OOIIIpn",
 		&data,
 		&viewport,
 		&components,
