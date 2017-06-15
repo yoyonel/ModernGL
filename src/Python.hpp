@@ -1,3 +1,4 @@
+#define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
 #if PY_MAJOR_VERSION >= 3

@@ -38,7 +38,7 @@ PyObject * MGLUniform_read(MGLUniform * self) {
 
 PyObject * MGLUniform_write(MGLUniform * self, PyObject * args) {
 	const char * buffer;
-	Py_ssize_t size = 0;   // TODO: PY_SSIZE_T_CLEAN
+	Py_ssize_t size;
 
 	int args_ok = PyArg_ParseTuple(
 		args,

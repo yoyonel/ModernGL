@@ -142,7 +142,7 @@ PyObject * MGLBufferAccess_read_into(MGLBufferAccess * self, PyObject * args) {
 
 PyObject * MGLBufferAccess_write(MGLBufferAccess * self, PyObject * args) {
 	const char * data;
-	Py_ssize_t size = 0;   // TODO: PY_SSIZE_T_CLEAN
+	Py_ssize_t size;
 	Py_ssize_t offset;
 
 	int args_ok = PyArg_ParseTuple(
