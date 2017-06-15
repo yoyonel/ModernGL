@@ -12,8 +12,8 @@ Textures
 .. autoclass:: Texture
 	:members: width, height, size, samples, components, depth, filter, repeat_x, repeat_y, swizzle
 
-	.. automethod:: read(viewport=None, alignment=1) -> bytes
-	.. automethod:: read_into(buffer, viewport=None, alignment=1, write_offset=0)
+	.. automethod:: read(alignment=1) -> bytes
+	.. automethod:: read_into(buffer, alignment=1, write_offset=0)
 	.. automethod:: write(data, viewport=None)
 	.. automethod:: build_mipmaps(base=0, max_level=1000)
 	.. automethod:: use(location=0)

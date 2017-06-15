@@ -7,7 +7,7 @@
 struct MGLBuffer : public MGLContextMember {
 	int buffer_obj;
 
-	int size;
+	Py_ssize_t size;
 	bool dynamic;
 };
 

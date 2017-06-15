@@ -18,7 +18,6 @@ struct MGLContext : public MGLObject {
 	int max_texture_units;
 	int default_texture_unit;
 
-
 	bool wireframe;
 
 	GLMethods gl;

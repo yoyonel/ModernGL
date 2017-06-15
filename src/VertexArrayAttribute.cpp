@@ -32,13 +32,13 @@ int MGLVertexArrayAttribute_tp_init(MGLVertexArrayAttribute * self, PyObject * a
 
 PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject * args) {
 	MGLBuffer * buffer;
-	int offset;
+	Py_ssize_t offset;
 	int stride;
 	int divisor;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O!III",
+		"O!nII",
 		&MGLBuffer_Type,
 		&buffer,
 		&offset,
@@ -60,7 +60,7 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 			self->attribute->scalar_type,
 			false,
 			stride,
-			(void *)(Py_ssize_t)offset
+			(void *)offset
 		);
 	} else {
 		((gl_attribute_ptr_proc)self->attribute->gl_attrib_ptr_proc)(
@@ -68,7 +68,7 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 			self->attribute->row_length,
 			self->attribute->scalar_type,
 			stride,
-			(void *)(Py_ssize_t)offset
+			(void *)offset
 		);
 	}
 

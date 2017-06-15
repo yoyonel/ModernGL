@@ -11,8 +11,6 @@ struct MGLVarying : public MGLObject {
 	int number;
 	int type;
 
-	// int dimension;
-	// int element_size;
 	int array_length;
 
 	bool matrix;

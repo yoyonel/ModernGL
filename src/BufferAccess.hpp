@@ -11,8 +11,10 @@ struct MGLBufferAccess : public MGLObject {
 	char * ptr;
 
 	int buffer_obj;
-	int offset;
-	int size;
+
+	Py_ssize_t offset;
+	Py_ssize_t size;
+
 	int access;
 };
 

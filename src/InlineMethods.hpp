@@ -46,7 +46,7 @@ inline int swizzle_from_char(char c) {
 	return -1;
 }
 
-inline int char_from_swizzle(int c) {
+inline char char_from_swizzle(int c) {
 	switch (c) {
 		case GL_RED:
 			return 'R';

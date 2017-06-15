@@ -225,7 +225,7 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 
 	}
 
-	int expected_size = width * components * (floats ?  4 : 1);
+	int expected_size = width * components * (floats ? 4 : 1);
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 
@@ -255,11 +255,11 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 	int attachment;
 	int alignment;
 	int floats;
-	int write_offset; // TODO: unused
+	Py_ssize_t write_offset;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OOIIIpI",
+		"OOIIIpn",
 		&data,
 		&viewport,
 		&components,
@@ -315,7 +315,7 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 
 	}
 
-	int expected_size = width * components * (floats ?  4 : 1);
+	int expected_size = width * components * (floats ? 4 : 1);
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 
