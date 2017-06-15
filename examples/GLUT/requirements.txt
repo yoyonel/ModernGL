@@ -1,4 +1,4 @@
-ModernGL>=2.4.0
+ModernGL
 PyOpenGL
 PyOpenGL_accelerate
 Pillow
