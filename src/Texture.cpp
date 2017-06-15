@@ -83,11 +83,11 @@ PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
 PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 	PyObject * data;
 	int alignment;
-	int write_offset; // TODO: unused
+	Py_ssize_t write_offset;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OII",
+		"OIn",
 		&data,
 		&alignment,
 		&write_offset
