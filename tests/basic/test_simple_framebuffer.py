@@ -40,6 +40,14 @@ class TestCase(unittest.TestCase):
         self.assertIsInstance(fbo3.color_attachments[1], ModernGL.Renderbuffer)
         self.assertIsInstance(fbo3.color_attachments[2], ModernGL.Renderbuffer)
 
+        self.assertIn(rbo1, fbo1.color_attachments)
+        self.assertIn(rbo2, fbo2.color_attachments)
+        self.assertIn(rbo2, fbo3.color_attachments)
+
+        self.assertNotIn(rbo2, fbo1.color_attachments)
+        self.assertNotIn(rbo3, fbo1.color_attachments)
+        self.assertNotIn(rbo3, fbo2.color_attachments)
+
     def test_framebuffer_get_depth_attachment(self):
         rbo1 = self.ctx.renderbuffer((16, 16))
         rbo2 = self.ctx.depth_renderbuffer((16, 16))
@@ -49,6 +57,9 @@ class TestCase(unittest.TestCase):
 
         self.assertIsInstance(fbo1.depth_attachment, ModernGL.Renderbuffer)
         self.assertIsInstance(fbo2.depth_attachment, ModernGL.Renderbuffer)
+
+        self.assertNotEqual(fbo1.depth_attachment, rbo2)
+        self.assertEqual(fbo2.depth_attachment, rbo2)
 
     def test_framebuffer_color_mask(self):
         fbo = self.ctx.framebuffer(self.ctx.renderbuffer((16, 16)))
