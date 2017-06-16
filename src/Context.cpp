@@ -949,6 +949,8 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	int height = 0;
 	int samples = 0;
 
+	bool new_depth_attachment = false; // TODO: better
+
 	int color_attachments_len = (int)PyTuple_GET_SIZE(color_attachments);
 
 	if (!color_attachments_len) {
@@ -1045,8 +1047,8 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		Py_INCREF(self);
 		renderbuffer->context = self;
 
-		Py_INCREF(renderbuffer);
 		depth_attachment = (PyObject *)renderbuffer;
+		new_depth_attachment = true;
 
 	}
 
@@ -1175,6 +1177,12 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		framebuffer->color_mask[i * 4 + 1] = attachment->components >= 2;
 		framebuffer->color_mask[i * 4 + 2] = attachment->components >= 3;
 		framebuffer->color_mask[i * 4 + 3] = attachment->components >= 4;
+	}
+
+	Py_INCREF(color_attachments);
+
+	if (!new_depth_attachment) {
+		Py_INCREF(depth_attachment);
 	}
 
 	framebuffer->depth_mask = true;
