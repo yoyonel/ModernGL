@@ -67,7 +67,6 @@ trans = ctx.program(
 
             if (living) {
                 vert = (neighbours == 2 || neighbours == 3) ? LIVING : DEAD;
-//                vert = (neighbours >= 2 && neighbours <= 4) ? LIVING : DEAD;
             } else {
                 vert = (neighbours == 3) ? LIVING : DEAD;
             }
@@ -86,7 +85,7 @@ vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
 
 text = ctx.buffer(grid.tobytes())
 tao = ctx.simple_vertex_array(trans, text, ['text'])
-pbo = ctx.buffer(reserve=512 * 512 * 4)
+pbo = ctx.buffer(reserve=pixels.nbytes)
 
 while wnd.update():
     ctx.viewport = wnd.viewport
