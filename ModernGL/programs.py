@@ -33,6 +33,12 @@ class ComputeShader:
     def __repr__(self):
         return '<ComputeShader: %d>' % self.glo
 
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
     @property
     def source(self) -> str:
         '''
@@ -167,6 +173,12 @@ class Shader:
     def __repr__(self):
         return '<Shader: %d>' % self.glo
 
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
     @property
     def source(self) -> str:
         '''
@@ -241,6 +253,12 @@ class Program:
 
     def __repr__(self):
         return '<Program: %d>' % self.glo
+
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
 
     @property
     def uniforms(self) -> UniformMap:

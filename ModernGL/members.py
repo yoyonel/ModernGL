@@ -32,6 +32,12 @@ class Uniform:
     def __repr__(self):
         return '<Uniform: %d>' % self.location
 
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
     @property
     def name(self) -> str:
         '''
@@ -220,6 +226,12 @@ class UniformMap:
     def __repr__(self):
         return repr(self.mglo)
 
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
 
 class UniformBlock:
     '''
@@ -244,6 +256,12 @@ class UniformBlock:
 
     def __repr__(self):
         return '<UniformBlock: %d>' % self.index
+
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
 
     @property
     def name(self) -> str:
@@ -318,6 +336,12 @@ class UniformBlockMap:
     def __repr__(self):
         return repr(self.mglo)
 
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
 
 class Varying:
     '''
@@ -342,6 +366,12 @@ class Varying:
 
     def __repr__(self):
         return '<Varying: %d>' % self.number
+
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
 
     @property
     def name(self) -> str:
@@ -396,6 +426,12 @@ class VaryingMap:
     def __repr__(self):
         return repr(self.mglo)
 
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
 
 class Attribute:
     '''
@@ -420,6 +456,12 @@ class Attribute:
 
     def __repr__(self):
         return '<Attribute: %d>' % self.location
+
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
 
     @property
     def name(self) -> str:
@@ -604,6 +646,12 @@ class AttributeMap:
     def __repr__(self):
         return repr(self.mglo)
 
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
 
 class Subroutine:
     '''
@@ -631,6 +679,12 @@ class Subroutine:
 
     def __repr__(self):
         return '<Subroutine: %d>' % self.index
+
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
 
     @property
     def name(self) -> str:
@@ -685,6 +739,12 @@ class SubroutineMap:
     def __repr__(self):
         return repr(self.mglo)
 
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
 
 class SubroutineUniform:
     '''
@@ -709,6 +769,12 @@ class SubroutineUniform:
 
     def __repr__(self):
         return '<SubroutineUniform: %d>' % self.location
+
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
 
     @property
     def name(self) -> str:
@@ -763,6 +829,12 @@ class SubroutineUniformMap:
     def __repr__(self):
         return repr(self.mglo)
 
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
 
 class ProgramStage:
     '''
@@ -787,6 +859,12 @@ class ProgramStage:
 
     def __repr__(self):
         return '<ProgramStage>'
+
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
 
     @property
     def subroutines(self) -> SubroutineMap:
