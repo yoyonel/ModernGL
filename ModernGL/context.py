@@ -65,6 +65,15 @@ class Context:
         self.mglo = None
         raise NotImplementedError()
 
+    def __repr__(self):
+        return '<Context>'
+
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
     @property
     def line_width(self) -> float:
         '''

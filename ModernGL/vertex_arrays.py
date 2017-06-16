@@ -119,6 +119,12 @@ class VertexArrayAttributeMap:
     def __repr__(self):
         return repr(self.mglo)
 
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
     @staticmethod
     def new(obj):
         '''
@@ -162,6 +168,12 @@ class VertexArray:
 
     def __repr__(self):
         return '<VertexArray: %d>' % self.glo
+
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
 
     @property
     def program(self) -> Program:

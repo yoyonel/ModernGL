@@ -36,6 +36,12 @@ class Framebuffer:
     def __repr__(self):
         return '<Framebuffer: %d>' % self.glo
 
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
     @property
     def viewport(self) -> Tuple[int, int, int, int]:
         '''

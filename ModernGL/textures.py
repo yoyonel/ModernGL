@@ -37,6 +37,12 @@ class Texture:
     def __repr__(self):
         return '<Texture: %d>' % self.glo
 
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
     @property
     def repeat_x(self) -> bool:
         '''
