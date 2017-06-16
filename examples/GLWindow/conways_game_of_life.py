@@ -1,10 +1,14 @@
 import struct
 import random
+import numpy
 
 import GLWindow
 import ModernGL
 
-wnd = GLWindow.create_window(1024, 1024)
+pixels = numpy.round(numpy.random.rand(512, 512)).astype('float32')
+grid = numpy.dstack(numpy.mgrid[0 : 512, 0 : 512][::-1] / 512).astype('float32')
+
+wnd = GLWindow.create_window(512, 512)
 ctx = ModernGL.create_context()
 
 prog = ctx.program([
@@ -45,8 +49,8 @@ trans = ctx.program(
         #define LIVING 0.0
         #define DEAD 1.0
 
-        #define DX 1.0 / 1024.0
-        #define DY 1.0 / 1024.0
+        #define DX 1.0 / 512.0
+        #define DY 1.0 / 512.0
 
         void main() {
             bool living = texture(Texture, text).r < 0.5;
@@ -72,12 +76,7 @@ trans = ctx.program(
     varyings=['vert']
 )
 
-data = bytearray()
-for i in range(1024):
-    for j in range(1024):
-        data += struct.pack('f', random.randint(0, 1))
-
-texture = ctx.texture((1024, 1024), 1, data, floats=True)
+texture = ctx.texture((512, 512), 1, pixels.tobytes(), floats=True)
 texture.filter = ModernGL.NEAREST
 texture.swizzle = 'RRR1'
 texture.use()
@@ -85,14 +84,9 @@ texture.use()
 vbo = ctx.buffer(struct.pack('8f', 0, 0, 0, 1, 1, 0, 1, 1))
 vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
 
-data = bytearray()
-for i in range(1024):
-    for j in range(1024):
-        data += struct.pack('2f', (j + 0.5) / 1024, (i + 0.5) / 1024)
-
-text = ctx.buffer(bytes(data))
+text = ctx.buffer(grid.tobytes())
 tao = ctx.simple_vertex_array(trans, text, ['text'])
-pbo = ctx.buffer(reserve=1024 * 1024 * 4)
+pbo = ctx.buffer(reserve=512 * 512 * 4)
 
 while wnd.update():
     ctx.viewport = wnd.viewport
