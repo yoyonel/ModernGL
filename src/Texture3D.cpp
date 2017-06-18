@@ -34,13 +34,11 @@ int MGLTexture3D_tp_init(MGLTexture3D * self, PyObject * args, PyObject * kwargs
 }
 
 PyObject * MGLTexture3D_read(MGLTexture3D * self, PyObject * args) {
-	PyObject * viewport;
 	int alignment;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OI",
-		&viewport,
+		"I",
 		&alignment
 	);
 
@@ -58,51 +56,9 @@ PyObject * MGLTexture3D_read(MGLTexture3D * self, PyObject * args) {
 		return 0;
 	}
 
-	int x = 0;
-	int y = 0;
-	int z = 0;
-	int width = self->width;
-	int height = self->height;
-	int depth = self->depth;
-
-	if (viewport != Py_None) {
-		if (Py_TYPE(viewport) != &PyTuple_Type) {
-			MGLError_Set("the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
-			return 0;
-		}
-
-		if (PyTuple_GET_SIZE(viewport) == 6) {
-
-			x = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
-			y = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
-			z = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 2));
-			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 3));
-			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 4));
-			depth = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 5));
-
-		} else if (PyTuple_GET_SIZE(viewport) == 3) {
-
-			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
-			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
-			depth = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 2));
-
-		} else {
-
-			MGLError_Set("the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
-			return 0;
-
-		}
-
-		if (PyErr_Occurred()) {
-			MGLError_Set("wrong values in the viewport");
-			return 0;
-		}
-
-	}
-
-	int expected_size = width * self->components * (self->floats ?  4 : 1);
+	int expected_size = self->width * self->components * (self->floats ?  4 : 1);
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
-	expected_size = expected_size * height * depth;
+	expected_size = expected_size * self->height * self->depth;
 
 	PyObject * result = PyBytes_FromStringAndSize(0, expected_size);
 	char * data = PyBytes_AS_STRING(result);
@@ -125,15 +81,13 @@ PyObject * MGLTexture3D_read(MGLTexture3D * self, PyObject * args) {
 
 PyObject * MGLTexture3D_read_into(MGLTexture3D * self, PyObject * args) {
 	PyObject * data;
-	PyObject * viewport;
 	int alignment;
-	int write_offset; // TODO: unused
+	Py_ssize_t write_offset;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OOII",
+		"OIn",
 		&data,
-		&viewport,
 		&alignment,
 		&write_offset
 	);
@@ -152,51 +106,9 @@ PyObject * MGLTexture3D_read_into(MGLTexture3D * self, PyObject * args) {
 		return 0;
 	}
 
-	int x = 0;
-	int y = 0;
-	int z = 0;
-	int width = self->width;
-	int height = self->height;
-	int depth = self->depth;
-
-	if (viewport != Py_None) {
-		if (Py_TYPE(viewport) != &PyTuple_Type) {
-			MGLError_Set("the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
-			return 0;
-		}
-
-		if (PyTuple_GET_SIZE(viewport) == 6) {
-
-			x = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
-			y = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
-			z = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 2));
-			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 3));
-			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 4));
-			depth = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 5));
-
-		} else if (PyTuple_GET_SIZE(viewport) == 3) {
-
-			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
-			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
-			depth = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
-
-		} else {
-
-			MGLError_Set("the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
-			return 0;
-
-		}
-
-		if (PyErr_Occurred()) {
-			MGLError_Set("wrong values in the viewport");
-			return 0;
-		}
-
-	}
-
-	int expected_size = width * self->components * (self->floats ?  4 : 1);
+	int expected_size = self->width * self->components * (self->floats ? 4 : 1);
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
-	expected_size = expected_size * height * depth;
+	expected_size = expected_size * self->height * self->depth;
 
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
@@ -321,7 +233,7 @@ PyObject * MGLTexture3D_write(MGLTexture3D * self, PyObject * args) {
 
 	}
 
-	int expected_size = width * self->components * (self->floats ?  4 : 1);
+	int expected_size = width * self->components * (self->floats ? 4 : 1);
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height * depth;
 
