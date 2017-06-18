@@ -470,12 +470,6 @@ int MGLTexture3D_set_filter(MGLTexture3D * self, PyObject * value) {
 
 PyObject * MGLTexture3D_get_swizzle(MGLTexture3D * self, void * closure) {
 
-	if (self->depth) {
-		MGLError_Set("cannot get swizzle of depth textures");
-		return 0;
-	}
-
-
 	const GLMethods & gl = self->context->gl;
 
 	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
@@ -504,11 +498,6 @@ PyObject * MGLTexture3D_get_swizzle(MGLTexture3D * self, void * closure) {
 
 int MGLTexture3D_set_swizzle(MGLTexture3D * self, PyObject * value, void * closure) {
 	const char * swizzle = PyUnicode_AsUTF8(value);
-
-	if (self->depth) {
-		MGLError_Set("cannot set swizzle for depth textures");
-		return -1;
-	}
 
 	if (!swizzle[0]) {
 		MGLError_Set("the swizzle is empty");
