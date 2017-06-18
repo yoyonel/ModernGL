@@ -34,5 +34,6 @@ class TestCase(unittest.TestCase):
             acc.write(b'ORLD', offset=1)
             self.assertEqual(acc.read(offset=2), b'RLD')
 
+
 if __name__ == '__main__':
     unittest.main()

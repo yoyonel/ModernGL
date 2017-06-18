@@ -2,7 +2,7 @@ import struct
 
 import ModernGL
 import pygame
-from pygame.locals import *
+from pygame.locals import DOUBLEBUF, OPENGL
 
 pygame.init()
 pygame.display.set_mode((800, 600), DOUBLEBUF | OPENGL)

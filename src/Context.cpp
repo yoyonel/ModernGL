@@ -163,13 +163,13 @@ PyObject * MGLContext_copy_buffer(MGLContext * self, PyObject * args) {
 	MGLBuffer * dst;
 	MGLBuffer * src;
 
-	int size;
-	int read_offset;
-	int write_offset;
+	Py_ssize_t size;
+	Py_ssize_t read_offset;
+	Py_ssize_t write_offset;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O!O!III",
+		"O!O!nnn",
 		&MGLBuffer_Type,
 		&dst,
 		&MGLBuffer_Type,
@@ -414,7 +414,7 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	int expected_size = width * components * (floats ?  4 : 1);
+	int expected_size = width * components * (floats ? 4 : 1);
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 
@@ -859,7 +859,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	array->index_buffer = index_buffer;
 
 	if (index_buffer != (MGLBuffer *)Py_None) {
-		array->num_vertices = index_buffer->size / 4;
+		array->num_vertices = (int)(index_buffer->size / 4);
 		gl.BindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer->buffer_obj);
 	} else {
 		array->num_vertices = -1;
@@ -875,7 +875,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		FormatIterator it = FormatIterator(format);
 		FormatInfo format_info = it.info();
 
-		int buf_vertices = buffer->size / format_info.size;
+		int buf_vertices = (int)(buffer->size / format_info.size);
 
 		if (!format_info.divisor && array->index_buffer == (MGLBuffer *)Py_None && (!i || array->num_vertices > buf_vertices)) {
 			array->num_vertices = buf_vertices;
@@ -1059,6 +1059,8 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	int height = 0;
 	int samples = 0;
 
+	bool new_depth_attachment = false; // TODO: better
+
 	int color_attachments_len = (int)PyTuple_GET_SIZE(color_attachments);
 
 	if (!color_attachments_len) {
@@ -1155,8 +1157,8 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		Py_INCREF(self);
 		renderbuffer->context = self;
 
-		Py_INCREF(renderbuffer);
 		depth_attachment = (PyObject *)renderbuffer;
+		new_depth_attachment = true;
 
 	}
 
@@ -1285,6 +1287,12 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		framebuffer->color_mask[i * 4 + 1] = attachment->components >= 2;
 		framebuffer->color_mask[i * 4 + 2] = attachment->components >= 3;
 		framebuffer->color_mask[i * 4 + 3] = attachment->components >= 4;
+	}
+
+	Py_INCREF(color_attachments);
+
+	if (!new_depth_attachment) {
+		Py_INCREF(depth_attachment);
 	}
 
 	framebuffer->depth_mask = true;

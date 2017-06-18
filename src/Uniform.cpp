@@ -38,11 +38,11 @@ PyObject * MGLUniform_read(MGLUniform * self) {
 
 PyObject * MGLUniform_write(MGLUniform * self, PyObject * args) {
 	const char * buffer;
-	int size;
+	Py_ssize_t size;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"y#",
+		"y#",   // TODO: replace y# with O if possible
 		&buffer,
 		&size
 	);

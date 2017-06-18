@@ -1,7 +1,11 @@
 import struct
+import sys
+
+from OpenGL.GLUT import (GLUT_DEPTH, GLUT_DOUBLE, GLUT_RGB, glutCreateWindow,
+                         glutDisplayFunc, glutInit, glutInitDisplayMode,
+                         glutInitWindowSize, glutMainLoop, glutSwapBuffers)
 
 import ModernGL
-from OpenGL.GLUT import *
 
 glutInit(sys.argv)
 glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)

@@ -1,3 +1,3 @@
-ModernGL>=2.4.0
+ModernGL
 pygame
 Pillow

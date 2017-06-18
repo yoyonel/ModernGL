@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Removed
+- Unused texture's `read` method's `viewport` parameter
+
+### Fixed
+- Broken framebuffer `color_attachments` attribute
+
+## [4.1.7] - 2017-06-13
 ### Added
 - Uniform `read` and `write` methods
 - `write_offset` parameter for the `read_into` methods
@@ -150,7 +157,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.0.0 - 2016-03-03
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.6...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.7...master
+[4.1.6]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.6...4.1.7
 [4.1.6]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.5...4.1.6
 [4.1.5]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.4...4.1.5
 [4.1.4]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.3...4.1.4

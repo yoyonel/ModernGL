@@ -90,5 +90,6 @@ class TestCase(unittest.TestCase):
 
         self.assertEqual(buf.read(), pixels)
 
+
 if __name__ == '__main__':
     unittest.main()

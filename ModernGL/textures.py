@@ -37,6 +37,12 @@ class Texture:
     def __repr__(self):
         return '<Texture: %d>' % self.glo
 
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
     @property
     def repeat_x(self) -> bool:
         '''
@@ -142,13 +148,9 @@ class Texture:
 
         return self.mglo.glo
 
-    def read(self, viewport=None, *, alignment=1) -> bytes:
+    def read(self, *, alignment=1) -> bytes:
         '''
             Read the content of the texture into a buffer.
-
-            Args:
-                buffer (bytearray): The buffer that will receive the pixels.
-                viewport (tuple): The viewport.
 
             Keyword Args:
                 alignment (int): The byte alignment of the pixels.
@@ -157,15 +159,14 @@ class Texture:
                 bytes: the pixels
         '''
 
-        return self.mglo.read(viewport, alignment)
+        return self.mglo.read(alignment)
 
-    def read_into(self, buffer, viewport=None, *, alignment=1, write_offset=0) -> None:
+    def read_into(self, buffer, *, alignment=1, write_offset=0) -> None:
         '''
             Read the content of the texture into a buffer.
 
             Args:
                 buffer (bytearray): The buffer that will receive the pixels.
-                viewport (tuple): The viewport.
 
             Keyword Args:
                 alignment (int): The byte alignment of the pixels.
@@ -175,7 +176,7 @@ class Texture:
         if isinstance(buffer, Buffer):
             buffer = buffer.mglo
 
-        return self.mglo.read_into(buffer, viewport, alignment, write_offset)
+        return self.mglo.read_into(buffer, alignment, write_offset)
 
     def write(self, data, viewport=None, *, alignment=1) -> None:
         '''

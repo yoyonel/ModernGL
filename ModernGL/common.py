@@ -45,6 +45,12 @@ class EnableFlag:
     def __repr__(self):
         return 'ModernGL.%s' % self.name
 
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
 
 BLEND = EnableFlag.new(mgl.BLEND, 'BLEND')
 '''
@@ -93,6 +99,12 @@ class Primitive:
 
     def __repr__(self):
         return 'ModernGL.%s' % self.name
+
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
 
 
 TRIANGLES = Primitive.new(mgl.TRIANGLES, 'TRIANGLES')
@@ -164,6 +176,12 @@ class Version:
 
     def __repr__(self):
         return 'ModernGL.CORE_%d' % self.code
+
+    def __eq__(self, other):
+        return self.major == other.major and self.minor == other.minor
+
+    def __ne__(self, other):
+        return self.major != other.major or self.minor != other.minor
 
     @property
     def major(self) -> int:
@@ -256,6 +274,12 @@ class TextureFilter:
 
     def __repr__(self):
         return 'ModernGL.%s' % self.name
+
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
 
 
 LINEAR = TextureFilter.new(mgl.LINEAR, 'LINEAR')

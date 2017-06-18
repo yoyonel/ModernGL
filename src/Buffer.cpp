@@ -34,13 +34,13 @@ int MGLBuffer_tp_init(MGLBuffer * self, PyObject * args, PyObject * kwargs) {
 }
 
 MGLBufferAccess * MGLBuffer_access(MGLBuffer * self, PyObject * args) {
-	int size;
-	int offset;
+	Py_ssize_t size;
+	Py_ssize_t offset;
 	int readonly;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"iip",
+		"nnp",
 		&size,
 		&offset,
 		&readonly
@@ -50,11 +50,11 @@ MGLBufferAccess * MGLBuffer_access(MGLBuffer * self, PyObject * args) {
 		return 0;
 	}
 
-	if (size == -1) {
+	if (size < 0) {
 		size = self->size - offset;
 	}
 
-	if (offset < 0 || size > self->size - offset) {
+	if (offset < 0 || offset + size > self->size) {
 		MGLError_Set("out of range offset = %d or size = %d", offset, size);
 		return 0;
 	}
@@ -73,12 +73,12 @@ MGLBufferAccess * MGLBuffer_access(MGLBuffer * self, PyObject * args) {
 }
 
 PyObject * MGLBuffer_read(MGLBuffer * self, PyObject * args) {
-	int size;
-	int offset;
+	Py_ssize_t size;
+	Py_ssize_t offset;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"II",
+		"nn",
 		&size,
 		&offset
 	);
@@ -87,11 +87,11 @@ PyObject * MGLBuffer_read(MGLBuffer * self, PyObject * args) {
 		return 0;
 	}
 
-	if (size == -1) {
+	if (size < 0) {
 		size = self->size - offset;
 	}
 
-	if (offset < 0 || size < 0 || size + offset > self->size) {
+	if (offset < 0 || offset + size > self->size) {
 		MGLError_Set("out of rangeoffset = %d or size = %d", offset, size);
 		return 0;
 	}
@@ -115,13 +115,13 @@ PyObject * MGLBuffer_read(MGLBuffer * self, PyObject * args) {
 
 PyObject * MGLBuffer_read_into(MGLBuffer * self, PyObject * args) {
 	PyObject * data;
-	int size;
-	int offset;
-	int write_offset;
+	Py_ssize_t size;
+	Py_ssize_t offset;
+	Py_ssize_t write_offset;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OIII",
+		"Onnn",
 		&data,
 		&size,
 		&offset,
@@ -136,7 +136,7 @@ PyObject * MGLBuffer_read_into(MGLBuffer * self, PyObject * args) {
 		size = self->size - offset;
 	}
 
-	if (offset < 0 || write_offset < 0 || size + offset > self->size) {
+	if (offset < 0 || write_offset < 0 || offset + size > self->size) {
 		MGLError_Set("out of range");
 		return 0;
 	}
@@ -171,12 +171,12 @@ PyObject * MGLBuffer_read_into(MGLBuffer * self, PyObject * args) {
 
 PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args) {
 	const char * data;
-	int size;
-	int offset;
+	Py_ssize_t size;
+	Py_ssize_t offset;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"y#I",
+		"y#n",   // TODO: replace y# with O if possible
 		&data,
 		&size,
 		&offset
@@ -198,13 +198,13 @@ PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args) {
 }
 
 PyObject * MGLBuffer_clear(MGLBuffer * self, PyObject * args) {
-	int size;
-	int offset;
+	Py_ssize_t size;
+	Py_ssize_t offset;
 	PyObject * chunk;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"iiO",
+		"nnO",
 		&size,
 		&offset,
 		&chunk
@@ -249,9 +249,9 @@ PyObject * MGLBuffer_clear(MGLBuffer * self, PyObject * args) {
 
 	if (buffer_view.len) {
 		char * src = (char *)buffer_view.buf;
-		int divisor = buffer_view.len;
+		Py_ssize_t divisor = buffer_view.len;
 
-		for (int i = 0; i < size; ++i) {
+		for (Py_ssize_t i = 0; i < size; ++i) {
 			map[i] = src[i % divisor];
 		}
 	} else {
@@ -329,7 +329,7 @@ PyMethodDef MGLBuffer_tp_methods[] = {
 };
 
 PyObject * MGLBuffer_get_size(MGLBuffer * self, void * closure) {
-	return PyLong_FromLong(self->size);
+	return PyLong_FromSsize_t(self->size);
 }
 
 PyObject * MGLBuffer_get_dynamic(MGLBuffer * self, void * closure) {

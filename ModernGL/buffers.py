@@ -40,6 +40,12 @@ class BufferAccess:
     def __exit__(self, *args):
         self.mglo.close()
 
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
     def open(self) -> None:
         '''
             Map the buffer.
@@ -159,6 +165,12 @@ class Buffer:
 
     def __repr__(self):
         return '<Buffer: %d>' % self.glo
+
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
 
     @property
     def size(self) -> int:
