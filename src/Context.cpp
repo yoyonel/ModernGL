@@ -421,7 +421,11 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 	Py_buffer buffer_view;
 
 	if (data != Py_None) {
-		PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
+		int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
+		if (get_buffer < 0) {
+			MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+			return 0;
+		}
 	} else {
 		buffer_view.len = expected_size;
 		buffer_view.buf = 0;
@@ -640,7 +644,11 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	Py_buffer buffer_view;
 
 	if (data != Py_None) {
-		PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
+		int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
+		if (get_buffer < 0) {
+			MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+			return 0;
+		}
 	} else {
 		buffer_view.len = expected_size;
 		buffer_view.buf = 0;

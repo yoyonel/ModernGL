@@ -16,8 +16,17 @@ class TestCase(unittest.TestCase):
     def tearDown(self):
         self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
 
-    def test_texture(self):
+    def test_texture_create_1(self):
         self.ctx.texture((16, 16), 3)
+
+    def test_texture_create_2(self):
+        pixels = b'\x10\x20\x30' * 16 * 16
+        self.ctx.texture((16, 16), 3, pixels)
+
+    def test_texture_create_string(self):
+        pixels = 'abc' * 16 * 16
+        with self.assertRaises(Exception):
+            self.ctx.texture((16, 16), 3, pixels)
 
     def test_multisample_texture(self):
         self.ctx.texture((16, 16), 3, samples=2)
