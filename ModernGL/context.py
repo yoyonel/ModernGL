@@ -334,7 +334,7 @@ class Context:
 
         return Texture.new(self.mglo.texture(size, components, data, samples, alignment, floats))
 
-    def texture3D(self, size, components, data=None, *, alignment=1, floats=False) -> Texture3D:
+    def texture3d(self, size, components, data=None, *, alignment=1, floats=False) -> Texture3D:
         '''
             Create a :py:class:`Texture3D`.
 
@@ -351,7 +351,7 @@ class Context:
                 Texture3D: texture
         '''
 
-        return Texture3D.new(self.mglo.texture3D(size, components, data, alignment, floats))
+        return Texture3D.new(self.mglo.texture3d(size, components, data, alignment, floats))
 
     def depth_texture(self, size, data=None, *, samples=0, alignment=4) -> Texture:
         '''

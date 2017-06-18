@@ -225,7 +225,7 @@ class Texture3D:
         as a render target.
 
         A Texture3D object cannot be instantiated directly, it requires a context.
-        Use :py:meth:`Context.texture_3d` to create one.
+        Use :py:meth:`Context.texture3d` to create one.
     '''
 
     __slots__ = ['mglo']

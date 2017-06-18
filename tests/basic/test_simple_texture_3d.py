@@ -17,55 +17,55 @@ class TestCase(unittest.TestCase):
         self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
 
     def test_texture_3d_create_1(self):
-        self.ctx.texture3D((8, 8, 8), 3)
+        self.ctx.texture3d((8, 8, 8), 3)
 
     def test_texture_3d_create_2(self):
         pixels = b'\x10\x20\x30' * 8 * 8 * 8
-        self.ctx.texture3D((8, 8, 8), 3, pixels)
+        self.ctx.texture3d((8, 8, 8), 3, pixels)
 
     def test_texture_3d_create_string(self):
         pixels = 'abc' * 8 * 8
         with self.assertRaises(Exception):
-            self.ctx.texture3D((8, 8, 8), 3, pixels)
+            self.ctx.texture3d((8, 8, 8), 3, pixels)
 
     def test_texture_3d_create_wrong_size(self):
         with self.assertRaises(Exception):
-            self.ctx.texture3D((8, 8), 3)
+            self.ctx.texture3d((8, 8), 3)
 
     def test_texture_3d_get_swizzle(self):
-        tex = self.ctx.texture3D((8, 8, 8), 4)
+        tex = self.ctx.texture3d((8, 8, 8), 4)
         self.assertEqual(tex.swizzle, 'RGBA')
 
     def test_texture_3d_swizzle_1(self):
-        tex = self.ctx.texture3D((8, 8, 8), 4)
+        tex = self.ctx.texture3d((8, 8, 8), 4)
         tex.swizzle = 'argb'
         self.assertEqual(tex.swizzle, 'ARGB')
 
     def test_texture_3d_swizzle_2(self):
-        tex = self.ctx.texture3D((8, 8, 8), 1)
+        tex = self.ctx.texture3d((8, 8, 8), 1)
         tex.swizzle = 'RRRR'
         self.assertEqual(tex.swizzle, 'RRRR')
 
     def test_texture_3d_swizzle_3(self):
-        tex = self.ctx.texture3D((8, 8, 8), 2)
+        tex = self.ctx.texture3d((8, 8, 8), 2)
         tex.swizzle = '01RG'
         self.assertEqual(tex.swizzle, '01RG')
 
     def test_texture_3d_read(self):
         pixels = b'\x10\x20\x30' * 8 * 8 * 8
-        tex = self.ctx.texture3D((8, 8, 8), 3, pixels)
+        tex = self.ctx.texture3d((8, 8, 8), 3, pixels)
         self.assertEqual(tex.read(), pixels)
 
     def test_texture_3d_read_into(self):
         pixels = b'\x10\x20\x30' * 8 * 8 * 8
-        tex = self.ctx.texture3D((8, 8, 8), 3, pixels)
+        tex = self.ctx.texture3d((8, 8, 8), 3, pixels)
         buf = bytearray(8 * 8 * 8 * 3)
         tex.read_into(buf)
         self.assertEqual(bytes(buf), pixels)
 
     def test_texture_3d_read_into_pbo(self):
         pixels = b'\x10\x20\x30' * 8 * 8 * 8
-        tex = self.ctx.texture3D((8, 8, 8), 3, pixels)
+        tex = self.ctx.texture3d((8, 8, 8), 3, pixels)
         buf = self.ctx.buffer(reserve=8 * 8 * 8 * 3)
 
         tex.read_into(buf)
@@ -75,7 +75,7 @@ class TestCase(unittest.TestCase):
         pixels1 = b'\x00\x00\x00' * 8 * 8 * 8
         pixels2 = b'\xff\xff\xff' * 8 * 8 * 8
 
-        tex = self.ctx.texture3D((8, 8, 8), 3, pixels1)
+        tex = self.ctx.texture3d((8, 8, 8), 3, pixels1)
         self.assertEqual(tex.read(), pixels1)
 
         tex.write(pixels2)
@@ -86,7 +86,7 @@ class TestCase(unittest.TestCase):
         pixels2 = b'\xff\xff\xff' * 6 * 6 * 6
         pixels3 = b'\x10\x20\x30'
 
-        tex = self.ctx.texture3D((8, 8, 8), 3)
+        tex = self.ctx.texture3d((8, 8, 8), 3)
 
         tex.write(pixels1, viewport=(0, 0, 0, 8, 8, 8))
         tex.write(pixels2, viewport=(1, 1, 1, 6, 6, 6))
