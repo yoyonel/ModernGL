@@ -252,7 +252,11 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 
 	} else {
 
-		PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
+		int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
+		if (get_buffer < 0) {
+			MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+			return 0;
+		}
 
 		if (buffer_view.len != expected_size) {
 			MGLError_Set("data size mismatch %d != %d", buffer_view.len, expected_size);
