@@ -45,7 +45,7 @@ from .vertex_arrays import (
 from .context import Context, create_context, create_standalone_context
 from .buffers import Buffer, BufferAccess, detect_format
 from .programs import ComputeShader, Shader, Program
-from .textures import Texture
+from .textures import Texture, Texture3D
 from .renderbuffers import Renderbuffer
 from .framebuffers import Framebuffer
 
@@ -62,7 +62,7 @@ __all__ = [
     'Uniform', 'UniformMap', 'UniformBlock', 'UniformBlockMap',
     'Varying', 'VaryingMap', 'Attribute', 'AttributeMap',
     'Program', 'ProgramStage', 'Shader', 'ComputeShader',
-    'Texture', 'Framebuffer', 'Renderbuffer',
+    'Texture', 'Texture3D', 'Framebuffer', 'Renderbuffer',
     'VertexArray', 'VertexArrayAttribute',
     'Buffer', 'BufferAccess',
     'Context',

@@ -15,7 +15,7 @@ from .common import InvalidObject
 from .buffers import Buffer, detect_format
 from .programs import ComputeShader, Shader, Program
 from .vertex_arrays import VertexArray
-from .textures import Texture
+from .textures import Texture, Texture3D
 from .renderbuffers import Renderbuffer
 from .framebuffers import Framebuffer
 
@@ -333,6 +333,25 @@ class Context:
         '''
 
         return Texture.new(self.mglo.texture(size, components, data, samples, alignment, floats))
+
+    def texture3d(self, size, components, data=None, *, alignment=1, floats=False) -> Texture3D:
+        '''
+            Create a :py:class:`Texture3D`.
+
+            Args:
+                size (tuple): The width, height and depth of the texture.
+                components (int): The number of components 1, 2, 3 or 4.
+                data (bytes): Content of the texture.
+
+            Keyword Args:
+                alignment (int): The byte alignment 1, 2, 4 or 8.
+                floats (bool): Use floating point precision.
+
+            Returns:
+                Texture3D: texture
+        '''
+
+        return Texture3D.new(self.mglo.texture3d(size, components, data, alignment, floats))
 
     def depth_texture(self, size, data=None, *, samples=0, alignment=4) -> Texture:
         '''
