@@ -1636,6 +1636,10 @@ int MGLContext_set_default_texture_unit(MGLContext * self, PyObject * value) {
 	return 0;
 }
 
+PyObject * MGLContext_get_max_integer_samples(MGLContext * self) {
+	return PyLong_FromLong(self->max_integer_samples);
+}
+
 PyObject * MGLContext_get_max_texture_units(MGLContext * self) {
 	return PyLong_FromLong(self->max_texture_units);
 }
@@ -1734,8 +1738,9 @@ PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"point_size", (getter)MGLContext_get_point_size, (setter)MGLContext_set_point_size, 0, 0},
 	{(char *)"viewport", (getter)MGLContext_get_viewport, (setter)MGLContext_set_viewport, 0, 0},
 
-	{(char *)"default_texture_unit", (getter)MGLContext_get_default_texture_unit, (setter)MGLContext_set_default_texture_unit, 0, 0},
+	{(char *)"max_integer_samples", (getter)MGLContext_get_max_integer_samples, 0, 0, 0},
 	{(char *)"max_texture_units", (getter)MGLContext_get_max_texture_units, 0, 0, 0},
+	{(char *)"default_texture_unit", (getter)MGLContext_get_default_texture_unit, (setter)MGLContext_set_default_texture_unit, 0, 0},
 	{(char *)"default_framebuffer", (getter)MGLContext_get_default_framebuffer, 0, 0, 0},
 
 	{(char *)"wireframe", (getter)MGLContext_get_wireframe, (setter)MGLContext_set_wireframe, 0, 0},
@@ -1830,6 +1835,10 @@ void MGLContext_Initialize(MGLContext * self) {
 	gl.Enable(GL_PRIMITIVE_RESTART);
 	gl.PrimitiveRestartIndex(-1);
 
+	self->max_integer_samples = 0;
+	gl.GetIntegerv(GL_MAX_INTEGER_SAMPLES, (GLint *)&self->max_integer_samples);
+
+	self->max_texture_units = 0;
 	gl.GetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, (GLint *)&self->max_texture_units);
 	self->default_texture_unit = self->max_texture_units - 1;
 
