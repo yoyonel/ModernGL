@@ -580,6 +580,7 @@ MGLTexture3D * MGLContext_texture3d(MGLContext * self, PyObject * args) {
 	gl.BindTexture(GL_TEXTURE_3D, texture->texture_obj);
 
 	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 	gl.TexImage3D(GL_TEXTURE_3D, 0, format, width, height, depth, 0, format, pixel_type, buffer_view.buf);
 	gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

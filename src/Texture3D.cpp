@@ -73,6 +73,7 @@ PyObject * MGLTexture3D_read(MGLTexture3D * self, PyObject * args) {
 	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 	gl.BindTexture(GL_TEXTURE_3D, self->texture_obj);
 
+	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 	gl.GetTexImage(GL_TEXTURE_3D, 0, format, pixel_type, data);
 
@@ -124,6 +125,7 @@ PyObject * MGLTexture3D_read_into(MGLTexture3D * self, PyObject * args) {
 		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, buffer->buffer_obj);
 		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 		gl.BindTexture(GL_TEXTURE_3D, self->texture_obj);
+		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.GetTexImage(GL_TEXTURE_3D, 0, format, pixel_type, (void *)write_offset);
 		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
@@ -149,6 +151,7 @@ PyObject * MGLTexture3D_read_into(MGLTexture3D * self, PyObject * args) {
 		const GLMethods & gl = self->context->gl;
 		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 		gl.BindTexture(GL_TEXTURE_3D, self->texture_obj);
+		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.GetTexImage(GL_TEXTURE_3D, 0, format, pixel_type, ptr);
 
@@ -252,6 +255,7 @@ PyObject * MGLTexture3D_write(MGLTexture3D * self, PyObject * args) {
 		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 		gl.BindTexture(GL_TEXTURE_3D, self->texture_obj);
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.TexSubImage3D(GL_TEXTURE_3D, 0, x, y, z, width, height, depth, format, pixel_type, 0);
 		gl.BindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
@@ -277,6 +281,7 @@ PyObject * MGLTexture3D_write(MGLTexture3D * self, PyObject * args) {
 		gl.BindTexture(GL_TEXTURE_3D, self->texture_obj);
 
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.TexSubImage3D(GL_TEXTURE_3D, 0, x, y, z, width, height, depth, format, pixel_type, buffer_view.buf);
 
 		PyBuffer_Release(&buffer_view);
