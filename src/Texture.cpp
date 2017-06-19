@@ -74,7 +74,31 @@ PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
 	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 	gl.BindTexture(texture_target, self->texture_obj);
 
+	// TODO: GL_PACK_ALIGNMENT or GL_UNPACK_ALIGNMENT not sure
+
+	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+
+	// To determine the required size of pixels, use glGetTexLevelParameter to determine
+	// the dimensions of the internal texture image, then scale the required number of pixels
+	// by the storage required for each pixel, based on format and type. Be sure to take the
+	// pixel storage parameters into account, especially GL_PACK_ALIGNMENT.
+
+	// int pack = 0;
+	// gl.GetIntegerv(GL_PACK_ALIGNMENT, &pack);
+	// printf("GL_PACK_ALIGNMENT: %d\n", pack);
+
+	// glGetTexLevelParameter with argument GL_TEXTURE_WIDTH
+	// glGetTexLevelParameter with argument GL_TEXTURE_HEIGHT
+	// glGetTexLevelParameter with argument GL_TEXTURE_INTERNAL_FORMAT
+
+	// int level_width = 0;
+	// int level_height = 0;
+	// gl.GetTexLevelParameteriv(texture_target, 0, GL_TEXTURE_WIDTH, &level_width);
+	// gl.GetTexLevelParameteriv(texture_target, 0, GL_TEXTURE_HEIGHT, &level_height);
+	// printf("level_width: %d\n", level_width);
+	// printf("level_height: %d\n", level_height);
+
 	gl.GetTexImage(texture_target, 0, format, pixel_type, data);
 
 	return result;
@@ -126,6 +150,10 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, buffer->buffer_obj);
 		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 		gl.BindTexture(texture_target, self->texture_obj);
+
+		// TODO: GL_PACK_ALIGNMENT or GL_UNPACK_ALIGNMENT not sure
+
+		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.GetTexImage(texture_target, 0, format, pixel_type, (void *)write_offset);
 		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
@@ -151,6 +179,10 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 		const GLMethods & gl = self->context->gl;
 		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 		gl.BindTexture(texture_target, self->texture_obj);
+
+		// TODO: GL_PACK_ALIGNMENT or GL_UNPACK_ALIGNMENT not sure
+
+		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.GetTexImage(texture_target, 0, format, pixel_type, ptr);
 
@@ -246,7 +278,11 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 		gl.BindBuffer(GL_PIXEL_UNPACK_BUFFER, buffer->buffer_obj);
 		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 		gl.BindTexture(texture_target, self->texture_obj);
+
+		// TODO: GL_PACK_ALIGNMENT or GL_UNPACK_ALIGNMENT not sure
+
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.TexSubImage2D(texture_target, 0, x, y, width, height, format, pixel_type, 0);
 		gl.BindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
@@ -271,7 +307,10 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 		gl.BindTexture(texture_target, self->texture_obj);
 
+		// TODO: GL_PACK_ALIGNMENT or GL_UNPACK_ALIGNMENT not sure
+
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.TexSubImage2D(texture_target, 0, x, y, width, height, format, pixel_type, buffer_view.buf);
 
 		PyBuffer_Release(&buffer_view);
