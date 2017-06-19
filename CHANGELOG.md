@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- 3D texture support (`Texture3D` class and Context `texture3d` method)
+
 ### Removed
 - Unused texture's `read` method's `viewport` parameter
 
