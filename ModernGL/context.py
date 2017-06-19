@@ -114,6 +114,22 @@ class Context:
         self.mglo.viewport = tuple(value)
 
     @property
+    def max_integer_samples(self) -> int:
+        '''
+            int: The max integer samples.
+        '''
+
+        return self.mglo.max_integer_samples
+
+    @property
+    def max_texture_units(self) -> int:
+        '''
+            int: The max texture units.
+        '''
+
+        return self.mglo.max_texture_units
+
+    @property
     def default_texture_unit(self) -> int:
         '''
             int: The default texture unit.
@@ -124,14 +140,6 @@ class Context:
     @default_texture_unit.setter
     def default_texture_unit(self, value):
         self.mglo.default_texture_unit = value
-
-    @property
-    def max_texture_units(self) -> int:
-        '''
-            int: The max texture units.
-        '''
-
-        return self.mglo.max_texture_units
 
     @property
     def default_framebuffer(self) -> Framebuffer:
