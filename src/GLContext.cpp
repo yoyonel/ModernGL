@@ -590,6 +590,10 @@ GLContext CreateGLContext(int width, int height) {
 	Display * dpy = XOpenDisplay(0);
 
 	if (!dpy) {
+		dpy = XOpenDisplay(":0.0");
+	}
+
+	if (!dpy) {
 		MGLError_Set("cannot detect the display");
 		return context;
 	}
