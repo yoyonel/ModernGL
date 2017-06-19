@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - 3D texture support (`Texture3D` class and Context `texture3d` method)
+- Context `max_integer_samples` attribute
+- Fallback display for linux
 
 ### Removed
 - Unused texture's `read` method's `viewport` parameter
@@ -14,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Broken framebuffer `color_attachments` attribute
 - Sigsev when creating a texture using string data by mistake
+- Validate Renderbuffer and Texture samples
 
 ## [4.1.7] - 2017-06-13
 ### Added
