@@ -159,7 +159,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - It was a tool for me to develop games in python
 
 [Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.7...master
-[4.1.6]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.6...4.1.7
+[4.1.7]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.6...4.1.7
 [4.1.6]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.5...4.1.6
 [4.1.5]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.4...4.1.5
 [4.1.4]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.3...4.1.4
