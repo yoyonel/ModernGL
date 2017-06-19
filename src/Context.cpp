@@ -274,7 +274,6 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 			height = src->height < dst_texture->height ? src->height : dst_texture->height;
 		}
 
-
 		const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 		int texture_target = dst_texture->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 		int format = formats[dst_texture->components];
