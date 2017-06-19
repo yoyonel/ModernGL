@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [4.1.8] - 2017-06-19
 ### Added
 - 3D texture support (`Texture3D` class and Context `texture3d` method)
 - Context `max_integer_samples` attribute
@@ -164,7 +166,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.0.0 - 2016-03-03
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.7...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.8...master
+[4.1.8]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.7...4.1.8
 [4.1.7]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.6...4.1.7
 [4.1.6]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.5...4.1.6
 [4.1.5]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.4...4.1.5
