@@ -586,6 +586,11 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	if (samples) {
 		gl.TexImage2DMultisample(texture_target, samples, GL_DEPTH_COMPONENT24, width, height, true);
 	} else {
+
+		// TODO: GL_PACK_ALIGNMENT or GL_UNPACK_ALIGNMENT not sure
+
+		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.TexImage2D(texture_target, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, pixel_type, buffer_view.buf);
 	}
 
