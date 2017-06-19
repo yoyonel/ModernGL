@@ -78,6 +78,27 @@ PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
 
 	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+
+	// To determine the required size of pixels, use glGetTexLevelParameter to determine
+	// the dimensions of the internal texture image, then scale the required number of pixels
+	// by the storage required for each pixel, based on format and type. Be sure to take the
+	// pixel storage parameters into account, especially GL_PACK_ALIGNMENT.
+
+	// int pack = 0;
+	// gl.GetIntegerv(GL_PACK_ALIGNMENT, &pack);
+	// printf("GL_PACK_ALIGNMENT: %d\n", pack);
+
+	// glGetTexLevelParameter with argument GL_TEXTURE_WIDTH
+	// glGetTexLevelParameter with argument GL_TEXTURE_HEIGHT
+	// glGetTexLevelParameter with argument GL_TEXTURE_INTERNAL_FORMAT
+
+	// int level_width = 0;
+	// int level_height = 0;
+	// gl.GetTexLevelParameteriv(texture_target, 0, GL_TEXTURE_WIDTH, &level_width);
+	// gl.GetTexLevelParameteriv(texture_target, 0, GL_TEXTURE_HEIGHT, &level_height);
+	// printf("level_width: %d\n", level_width);
+	// printf("level_height: %d\n", level_height);
+
 	gl.GetTexImage(texture_target, 0, format, pixel_type, data);
 
 	return result;
