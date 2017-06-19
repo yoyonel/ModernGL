@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Broken framebuffer `color_attachments` attribute
-- Sigsev when creating a texture using string data by mistake
+- Segmentation fault when creating a texture using string data by mistake
 - Validate Renderbuffer and Texture samples
 
 ## [4.1.7] - 2017-06-13
