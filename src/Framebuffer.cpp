@@ -241,6 +241,10 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
 	gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
+
+	// TODO: GL_PACK_ALIGNMENT or GL_UNPACK_ALIGNMENT not sure
+
+	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 	gl.ReadPixels(x, y, width, height, format, type, data);
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->context->bound_framebuffer->framebuffer_obj);
@@ -333,6 +337,10 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, buffer->buffer_obj);
 		gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
 		gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
+
+		// TODO: GL_PACK_ALIGNMENT or GL_UNPACK_ALIGNMENT not sure
+
+		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.ReadPixels(x, y, width, height, format, type, (void *)write_offset);
 		gl.BindFramebuffer(GL_FRAMEBUFFER, self->context->bound_framebuffer->framebuffer_obj);
@@ -360,6 +368,10 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 
 		gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
 		gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
+
+		// TODO: GL_PACK_ALIGNMENT or GL_UNPACK_ALIGNMENT not sure
+
+		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.ReadPixels(x, y, width, height, format, type, ptr);
 		gl.BindFramebuffer(GL_FRAMEBUFFER, self->context->bound_framebuffer->framebuffer_obj);
