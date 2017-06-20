@@ -176,7 +176,7 @@ PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args) {
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"y#n",   // TODO: replace y# with O if possible
+		"y#n",
 		&data,
 		&size,
 		&offset

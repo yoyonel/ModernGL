@@ -74,8 +74,6 @@ PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
 	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 	gl.BindTexture(texture_target, self->texture_obj);
 
-	// TODO: GL_PACK_ALIGNMENT or GL_UNPACK_ALIGNMENT not sure
-
 	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 
@@ -150,9 +148,6 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, buffer->buffer_obj);
 		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 		gl.BindTexture(texture_target, self->texture_obj);
-
-		// TODO: GL_PACK_ALIGNMENT or GL_UNPACK_ALIGNMENT not sure
-
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.GetTexImage(texture_target, 0, format, pixel_type, (void *)write_offset);
@@ -177,11 +172,9 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 		char * ptr = (char *)buffer_view.buf + write_offset;
 
 		const GLMethods & gl = self->context->gl;
+
 		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 		gl.BindTexture(texture_target, self->texture_obj);
-
-		// TODO: GL_PACK_ALIGNMENT or GL_UNPACK_ALIGNMENT not sure
-
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.GetTexImage(texture_target, 0, format, pixel_type, ptr);
@@ -278,9 +271,6 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 		gl.BindBuffer(GL_PIXEL_UNPACK_BUFFER, buffer->buffer_obj);
 		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 		gl.BindTexture(texture_target, self->texture_obj);
-
-		// TODO: GL_PACK_ALIGNMENT or GL_UNPACK_ALIGNMENT not sure
-
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.TexSubImage2D(texture_target, 0, x, y, width, height, format, pixel_type, 0);
@@ -306,9 +296,6 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 
 		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 		gl.BindTexture(texture_target, self->texture_obj);
-
-		// TODO: GL_PACK_ALIGNMENT or GL_UNPACK_ALIGNMENT not sure
-
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.TexSubImage2D(texture_target, 0, x, y, width, height, format, pixel_type, buffer_view.buf);
