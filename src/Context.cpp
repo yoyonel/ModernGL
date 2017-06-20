@@ -1845,10 +1845,13 @@ void MGLContext_Initialize(MGLContext * self) {
 	gl.GetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, (GLint *)&self->max_texture_units);
 	self->default_texture_unit = self->max_texture_units - 1;
 
+	int bound_framebuffer = 0;
+	gl.GetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &bound_framebuffer);
+
 	{
 		MGLFramebuffer * framebuffer = MGLFramebuffer_New();
 
-		framebuffer->framebuffer_obj = 0;
+		framebuffer->framebuffer_obj = bound_framebuffer;
 
 		framebuffer->color_attachments = 0;
 		framebuffer->depth_attachment = 0;

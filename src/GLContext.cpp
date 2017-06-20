@@ -390,6 +390,8 @@ GLContext LoadCurrentGLContext() {
 
 	context.context = (void *)cgl_context;
 
+	context.standalone = false;
+
 	return context;
 }
 
@@ -479,8 +481,6 @@ GLContext CreateGLContext(int width, int height) {
 
 	int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
-	// TODO: save as default framebuffer
-
 	if (status != GL_FRAMEBUFFER_COMPLETE) {
 		const char * message = "the framebuffer is not complete";
 
@@ -519,6 +519,7 @@ GLContext CreateGLContext(int width, int height) {
 	}
 
 	context.context = (void *)cgl_context;
+
 	context.standalone = true;
 
 	return context;
