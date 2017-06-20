@@ -116,6 +116,14 @@ class Texture:
         return (self.mglo.width, self.mglo.height)
 
     @property
+    def components(self) -> int:
+        '''
+            int: The number of components of the texture.
+        '''
+
+        return self.mglo.components
+
+    @property
     def samples(self) -> int:
         '''
             int: The number of samples of the texture.
@@ -124,12 +132,12 @@ class Texture:
         return self.mglo.samples
 
     @property
-    def components(self) -> int:
+    def floats(self) -> bool:
         '''
-            int: The number of components of the texture.
+            bool: Is the texture using floats?
         '''
 
-        return self.mglo.components
+        return self.mglo.floats
 
     @property
     def depth(self) -> bool:
@@ -352,6 +360,14 @@ class Texture3D:
         '''
 
         return self.mglo.components
+
+    @property
+    def floats(self) -> bool:
+        '''
+            bool: Is the texture using floats?
+        '''
+
+        return self.mglo.floats
 
     @property
     def glo(self) -> int:

@@ -557,16 +557,16 @@ PyObject * MGLTexture3D_get_height(MGLTexture3D * self, void * closure) {
 	return PyLong_FromLong(self->height);
 }
 
+PyObject * MGLTexture3D_get_depth(MGLTexture3D * self, void * closure) {
+	return PyLong_FromLong(self->depth);
+}
+
 PyObject * MGLTexture3D_get_components(MGLTexture3D * self, void * closure) {
 	return PyLong_FromLong(self->components);
 }
 
-PyObject * MGLTexture3D_get_samples(MGLTexture3D * self, void * closure) {
-	return PyLong_FromLong(self->samples);
-}
-
-PyObject * MGLTexture3D_get_depth(MGLTexture3D * self, void * closure) {
-	return PyBool_FromLong(self->depth);
+PyObject * MGLTexture3D_get_floats(MGLTexture3D * self, void * closure) {
+	return PyBool_FromLong(self->floats);
 }
 
 MGLContext * MGLTexture3D_get_context(MGLTexture3D * self, void * closure) {
@@ -589,6 +589,7 @@ PyGetSetDef MGLTexture3D_tp_getseters[] = {
 	{(char *)"height", (getter)MGLTexture3D_get_height, 0, 0, 0},
 	{(char *)"depth", (getter)MGLTexture3D_get_depth, 0, 0, 0},
 	{(char *)"components", (getter)MGLTexture3D_get_components, 0, 0, 0},
+	{(char *)"floats", (getter)MGLTexture3D_get_floats, 0, 0, 0},
 	{(char *)"context", (getter)MGLTexture3D_get_context, 0, 0, 0},
 	{(char *)"glo", (getter)MGLTexture3D_get_glo, 0, 0, 0},
 	{0},
