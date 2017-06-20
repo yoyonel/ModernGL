@@ -263,6 +263,11 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 
 		MGLTexture * dst_texture = (MGLTexture *)dst;
 
+		if (dst_texture->samples) {
+			MGLError_Set("multisample texture targets are not accepted");
+			return 0;
+		}
+
 		int width = src->width < dst_texture->width ? src->width : dst_texture->width;
 		int height = src->height < dst_texture->height ? src->height : dst_texture->height;
 
