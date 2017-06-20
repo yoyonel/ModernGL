@@ -1833,11 +1833,11 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 	}
 
 	{
-		int gl_doublebuffer = 0;
-		gl.GetIntegerv(GL_DOUBLEBUFFER, &gl_doublebuffer);
+		unsigned char gl_doublebuffer = 0;
+		gl.GetBooleanv(GL_DOUBLEBUFFER, &gl_doublebuffer);
 
-		int gl_stereo = 0;
-		gl.GetIntegerv(GL_STEREO, &gl_stereo);
+		unsigned char gl_stereo = 0;
+		gl.GetBooleanv(GL_STEREO, &gl_stereo);
 
 		PyDict_SetItemString(info, "GL_DOUBLEBUFFER", PyBool_FromLong(gl_doublebuffer));
 		PyDict_SetItemString(info, "GL_STEREO", PyBool_FromLong(gl_stereo));
