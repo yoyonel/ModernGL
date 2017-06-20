@@ -268,6 +268,11 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 			return 0;
 		}
 
+		if (src->samples) {
+			MGLError_Set("multisample framebuffer source with texture targets are not accepted");
+			return 0;
+		}
+
 		int width = src->width < dst_texture->width ? src->width : dst_texture->width;
 		int height = src->height < dst_texture->height ? src->height : dst_texture->height;
 
