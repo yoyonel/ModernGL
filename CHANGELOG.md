@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- Context `info` attribute
 - Support Textures in `copy_framebuffer`
 - Texture `floats` attribute
 

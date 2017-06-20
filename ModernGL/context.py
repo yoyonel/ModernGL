@@ -202,6 +202,14 @@ class Context:
 
         return self.mglo.version_code
 
+    @property
+    def info(self) -> int:
+        '''
+            int: The result of multiple glGet.
+        '''
+
+        return self.mglo.info
+
     def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, *, viewport=None) -> None:
         '''
             Clear the framebuffer.
