@@ -48,15 +48,13 @@ class CustomWidget(Widget):
         self.ctx.clear(0.9, 0.9, 0.9)
         self.vao.render()
 
-    def ask_update(self, *largs):
+    def ask_update(self, *args):
         self.canvas.ask_update()
 
 
 class MainApp(App):
-
     def build(self):
-        self.root = root = CustomWidget()
-        return root
+        return CustomWidget()
 
 
 if __name__ == '__main__':

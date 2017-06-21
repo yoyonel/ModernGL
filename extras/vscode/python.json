@@ -60,7 +60,7 @@
 	"ModernGL Numpy Array Buffer": {
 		"prefix": "mgl_numpy_array_buffer",
 		"body": [
-			"${1:vbo} = ${2:ctx}.buffer(${2:np.array(${3:[0.0, 0.0, 0.0]}, dtype=float32)})"
+			"${1:vbo} = ${2:ctx}.buffer(${2:np.array(${3:[0.0, 0.0, 0.0]}, dtype=float32).tobytes()})"
 		]
 	},
 	"ModernGL Simple VertexArray": {
@@ -219,6 +219,9 @@
 			"\tdef setUpClass(cls):",
 			"\t\tcls.ctx = ModernGL.create_standalone_context()",
 			"",
+			"\tdef tearDown(self):",
+        	"\t\tself.assertEqual(self.ctx.error, 'GL_NO_ERROR')",
+			"",
 			"\t@classmethod",
 			"\tdef tearDownClass(cls):",
 			"\t\tcls.ctx.release()",
@@ -365,6 +368,60 @@
 			"pixels = fbo.read(components=3, alignment=1)",
 			"img = Image.frombytes('RGB', fbo.size, pixels).transpose(Image.FLIP_TOP_BOTTOM)",
 			"img.show()",
+			""
+		]
+	},
+	"ModernGL Example GLUT": {
+		"prefix": "mgl_new_example_glut",
+		"body": [
+			"import struct",
+			"import sys",
+			"",
+			"from OpenGL.GLUT import (",
+			"    GLUT_DEPTH, GLUT_DOUBLE, GLUT_RGB,",
+			"    glutCreateWindow, glutDisplayFunc, glutInit, glutInitDisplayMode,",
+			"    glutInitWindowSize, glutMainLoop, glutSwapBuffers,",
+			")",
+			"",
+			"import ModernGL",
+			"",
+			"glutInit(sys.argv)",
+			"glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)",
+			"glutInitWindowSize(800, 600)",
+			"glutCreateWindow(b'Hello World')",
+			"",
+			"ctx = ModernGL.create_context()",
+			"",
+			"vert = ctx.vertex_shader('''",
+			"    #version 330",
+			"    in vec2 vert;",
+			"    void main() {",
+			"        gl_Position = vec4(vert, 0.0, 1.0);",
+			"    }",
+			"''')",
+			"",
+			"frag = ctx.fragment_shader('''",
+			"    #version 330",
+			"    out vec4 color;",
+			"    void main() {",
+			"        color = vec4(0.30, 0.50, 1.00, 1.0);",
+			"    }",
+			"''')",
+			"",
+			"prog = ctx.program([vert, frag])",
+			"",
+			"vbo = ctx.buffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))",
+			"vao = ctx.simple_vertex_array(prog, vbo, ['vert'])",
+			"",
+			"",
+			"def display():",
+			"    ctx.clear(0.9, 0.9, 0.9)",
+			"    vao.render()",
+			"    glutSwapBuffers()",
+			"",
+			"",
+			"glutDisplayFunc(display)",
+			"glutMainLoop()",
 			""
 		]
 	}

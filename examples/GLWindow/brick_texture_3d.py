@@ -1,5 +1,5 @@
 import struct
-from math import cos, sin, pi
+from math import cos, sin
 from random import randrange
 
 import GLWindow

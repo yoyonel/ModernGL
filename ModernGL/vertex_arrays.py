@@ -29,7 +29,7 @@ class VertexArrayAttribute:
         return res
 
     def __init__(self):
-        self.mglo = {}
+        self.mglo = None
         raise NotImplementedError('VertexArrayAttributeMap')
 
     def __getitem__(self, key) -> 'VertexArrayAttribute':

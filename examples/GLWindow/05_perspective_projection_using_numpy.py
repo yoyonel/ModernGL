@@ -35,8 +35,8 @@ def lookat(eye, target, up):
     ])
 
 
-def create_mvp(proj, view):
-    return np.transpose(proj @ view).astype(np.float32)
+def create_mvp(projection, modelview):
+    return np.transpose(projection @ modelview).astype('float32').tobytes()
 
 
 wnd = GLWindow.create_window()

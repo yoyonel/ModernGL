@@ -4,8 +4,6 @@ import random
 import GLWindow
 import ModernGL
 
-from PIL import Image
-
 wnd = GLWindow.create_window()
 ctx = ModernGL.create_context()
 
@@ -56,7 +54,7 @@ for i in range(4):
             b = int(k * 255 / 3)
             pixels += struct.pack('3B', r, g, b)
 
-texture = ctx.texture3D((4, 4, 4), 3, pixels)
+texture = ctx.texture3d((4, 4, 4), 3, pixels)
 texture.use()
 
 while wnd.update():

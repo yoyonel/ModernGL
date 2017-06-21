@@ -1,12 +1,11 @@
 import struct
-import random
 import numpy
 
 import GLWindow
 import ModernGL
 
 pixels = numpy.round(numpy.random.rand(512, 512)).astype('float32')
-grid = numpy.dstack(numpy.mgrid[0 : 512, 0 : 512][::-1] / 512).astype('float32')
+grid = numpy.dstack(numpy.mgrid[0:512, 0:512][::-1] / 512).astype('float32')
 
 wnd = GLWindow.create_window(512, 512)
 ctx = ModernGL.create_context()

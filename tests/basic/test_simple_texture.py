@@ -138,9 +138,8 @@ class TestCase(unittest.TestCase):
         pixels = b'\x80\x90\xA0\x80\x90\xA0\x00\x00\x80\x90\xA0\x80\x90\xA0\x00\x00'
         tex = self.ctx.texture((2, 2), 3, pixels, alignment=4)
         result = tex.read(alignment=4)
-        self.assertEqual(result[0 : 6], b'\x80\x90\xA0\x80\x90\xA0')
-        self.assertEqual(result[8 : 14], b'\x80\x90\xA0\x80\x90\xA0')
-
+        self.assertEqual(result[0:6], b'\x80\x90\xA0\x80\x90\xA0')
+        self.assertEqual(result[8:14], b'\x80\x90\xA0\x80\x90\xA0')
 
 
 if __name__ == '__main__':
