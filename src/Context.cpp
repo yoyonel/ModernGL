@@ -1060,6 +1060,26 @@ MGLShader * MGLContext_shader(MGLContext * self, PyObject * args) {
 	return shader;
 }
 
+MGLShader * MGLContext_shader_vertex_shader(MGLContext * self, PyObject * args) {
+	return MGLContext_shader<VERTEX_SHADER_SLOT>(self, args);
+}
+
+MGLShader * MGLContext_shader_fragment_shader(MGLContext * self, PyObject * args) {
+	return MGLContext_shader<FRAGMENT_SHADER_SLOT>(self, args);
+}
+
+MGLShader * MGLContext_shader_geometry_shader(MGLContext * self, PyObject * args) {
+	return MGLContext_shader<GEOMETRY_SHADER_SLOT>(self, args);
+}
+
+MGLShader * MGLContext_shader_tess_evaluation_shader(MGLContext * self, PyObject * args) {
+	return MGLContext_shader<TESS_EVALUATION_SHADER_SLOT>(self, args);
+}
+
+MGLShader * MGLContext_shader_tess_control_shader(MGLContext * self, PyObject * args) {
+	return MGLContext_shader<TESS_CONTROL_SHADER_SLOT>(self, args);
+}
+
 MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	PyObject * color_attachments;
 	PyObject * depth_attachment;
@@ -1514,13 +1534,13 @@ PyObject * MGLContext_release(MGLContext * self) {
 	Py_RETURN_NONE;
 }
 
-typedef MGLShader * (* MGLContext_shader_proc)(MGLContext *, PyObject *);
+// typedef MGLShader * (* MGLContext_shader_proc)(MGLContext *, PyObject *);
 
-MGLContext_shader_proc MGLContext_shader_vertex_shader = MGLContext_shader<VERTEX_SHADER_SLOT>;
-MGLContext_shader_proc MGLContext_shader_fragment_shader = MGLContext_shader<FRAGMENT_SHADER_SLOT>;
-MGLContext_shader_proc MGLContext_shader_geometry_shader = MGLContext_shader<GEOMETRY_SHADER_SLOT>;
-MGLContext_shader_proc MGLContext_shader_tess_evaluation_shader = MGLContext_shader<TESS_EVALUATION_SHADER_SLOT>;
-MGLContext_shader_proc MGLContext_shader_tess_control_shader = MGLContext_shader<TESS_CONTROL_SHADER_SLOT>;
+// MGLContext_shader_proc MGLContext_shader_vertex_shader = MGLContext_shader<VERTEX_SHADER_SLOT>;
+// MGLContext_shader_proc MGLContext_shader_fragment_shader = MGLContext_shader<FRAGMENT_SHADER_SLOT>;
+// MGLContext_shader_proc MGLContext_shader_geometry_shader = MGLContext_shader<GEOMETRY_SHADER_SLOT>;
+// MGLContext_shader_proc MGLContext_shader_tess_evaluation_shader = MGLContext_shader<TESS_EVALUATION_SHADER_SLOT>;
+// MGLContext_shader_proc MGLContext_shader_tess_control_shader = MGLContext_shader<TESS_CONTROL_SHADER_SLOT>;
 
 PyMethodDef MGLContext_tp_methods[] = {
 	{"clear", (PyCFunction)MGLContext_clear, METH_VARARGS, 0},
