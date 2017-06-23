@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - 3D texture `depth` attribute type
+- Validate the number of samples using wrong values
 
 ## [4.1.8] - 2017-06-19
 ### Added
