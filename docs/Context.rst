@@ -18,6 +18,7 @@ Context
 
 	.. automethod:: buffer(data=None, reserve=0, dynamic=False) -> Buffer
 	.. automethod:: texture(size, components, data=None, samples=0, floats=False) -> Texture
+	.. automethod:: texture3d(size, components, data=None, floats=False) -> Texture3D
 	.. automethod:: depth_texture(size, data=None, samples=0) -> Texture
 	.. automethod:: vertex_array(program, content, index_buffer=None) -> VertexArray
 	.. automethod:: simple_vertex_array(program, buffer, attributes) -> VertexArray
