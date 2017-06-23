@@ -408,7 +408,7 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	if (samples & (samples - 1) || samples > self->max_integer_samples) {
+	if ((samples & (samples - 1)) || samples > self->max_integer_samples) {
 		MGLError_Set("the number of samples is invalid");
 		return 0;
 	}
@@ -642,7 +642,7 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	if (samples & (samples - 1)|| samples > self->max_integer_samples) {
+	if ((samples & (samples - 1)) || samples > self->max_integer_samples) {
 		MGLError_Set("the number of samples is invalid");
 		return 0;
 	}
@@ -1369,7 +1369,7 @@ MGLRenderbuffer * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	if (samples & (samples - 1)|| samples > self->max_integer_samples) {
+	if ((samples & (samples - 1)) || samples > self->max_integer_samples) {
 		MGLError_Set("the number of samples is invalid");
 		return 0;
 	}
@@ -1432,7 +1432,7 @@ MGLRenderbuffer * MGLContext_depth_renderbuffer(MGLContext * self, PyObject * ar
 		return 0;
 	}
 
-	if (samples & (samples - 1) || samples > self->max_integer_samples) {
+	if ((samples & (samples - 1)) || samples > self->max_integer_samples) {
 		MGLError_Set("the number of samples is invalid");
 		return 0;
 	}
