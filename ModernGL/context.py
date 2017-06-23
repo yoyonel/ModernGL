@@ -122,6 +122,14 @@ class Context:
         return self.mglo.max_samples
 
     @property
+    def max_integer_samples(self) -> int:
+        '''
+            int: The max integer samples.
+        '''
+
+        return self.mglo.max_integer_samples
+
+    @property
     def max_texture_units(self) -> int:
         '''
             int: The max texture units.
