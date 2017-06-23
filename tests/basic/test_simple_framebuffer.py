@@ -119,15 +119,24 @@ class TestCase(unittest.TestCase):
         self.ctx.framebuffer(rbo1, rbo2)
 
     def test_framebuffer_multisample(self):
+        if self.ctx.max_samples < 2:
+            self.skipTest('multisampling is not supported')
+
         rbo1 = self.ctx.renderbuffer((16, 16), samples=2)
         self.ctx.framebuffer(rbo1)
 
     def test_depth_framebuffer_multisample(self):
+        if self.ctx.max_samples < 2:
+            self.skipTest('multisampling is not supported')
+
         rbo1 = self.ctx.renderbuffer((16, 16), samples=2)
         rbo2 = self.ctx.depth_renderbuffer((16, 16), samples=2)
         self.ctx.framebuffer(rbo1, rbo2)
 
     def test_framebuffer_multisample_sample_mismatch(self):
+        if self.ctx.max_samples < 2:
+            self.skipTest('multisampling is not supported')
+
         with self.assertRaisesRegex(ModernGL.Error, 'sample'):
             rbo1 = self.ctx.renderbuffer((16, 16))
             rbo2 = self.ctx.depth_renderbuffer((16, 16), samples=2)
