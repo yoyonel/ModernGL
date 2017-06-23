@@ -408,7 +408,7 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	if ((samples & (samples - 1)) || samples > self->max_integer_samples) {
+	if ((samples & (samples - 1)) || samples > self->max_samples) {
 		MGLError_Set("the number of samples is invalid");
 		return 0;
 	}
@@ -642,7 +642,7 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	if ((samples & (samples - 1)) || samples > self->max_integer_samples) {
+	if ((samples & (samples - 1)) || samples > self->max_samples) {
 		MGLError_Set("the number of samples is invalid");
 		return 0;
 	}
@@ -1369,7 +1369,7 @@ MGLRenderbuffer * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	if ((samples & (samples - 1)) || samples > self->max_integer_samples) {
+	if ((samples & (samples - 1)) || samples > self->max_samples) {
 		MGLError_Set("the number of samples is invalid");
 		return 0;
 	}
@@ -1432,7 +1432,7 @@ MGLRenderbuffer * MGLContext_depth_renderbuffer(MGLContext * self, PyObject * ar
 		return 0;
 	}
 
-	if ((samples & (samples - 1)) || samples > self->max_integer_samples) {
+	if ((samples & (samples - 1)) || samples > self->max_samples) {
 		MGLError_Set("the number of samples is invalid");
 		return 0;
 	}
@@ -1639,8 +1639,8 @@ int MGLContext_set_default_texture_unit(MGLContext * self, PyObject * value) {
 	return 0;
 }
 
-PyObject * MGLContext_get_max_integer_samples(MGLContext * self) {
-	return PyLong_FromLong(self->max_integer_samples);
+PyObject * MGLContext_get_max_samples(MGLContext * self) {
+	return PyLong_FromLong(self->max_samples);
 }
 
 PyObject * MGLContext_get_max_texture_units(MGLContext * self) {
@@ -1939,6 +1939,9 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		int gl_max_integer_samples = 0;
 		gl.GetIntegerv(GL_MAX_INTEGER_SAMPLES, &gl_max_integer_samples);
 
+		int gl_max_samples = 0;
+		gl.GetIntegerv(GL_MAX_SAMPLES, &gl_max_samples);
+
 		int gl_max_rectangle_texture_size = 0;
 		gl.GetIntegerv(GL_MAX_RECTANGLE_TEXTURE_SIZE, &gl_max_rectangle_texture_size);
 
@@ -2030,6 +2033,7 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(info, "GL_MAX_GEOMETRY_UNIFORM_BLOCKS", PyLong_FromLong(gl_max_geometry_uniform_blocks));
 		PyDict_SetItemString(info, "GL_MAX_GEOMETRY_UNIFORM_COMPONENTS", PyLong_FromLong(gl_max_geometry_uniform_components));
 		PyDict_SetItemString(info, "GL_MAX_INTEGER_SAMPLES", PyLong_FromLong(gl_max_integer_samples));
+		PyDict_SetItemString(info, "GL_MAX_SAMPLES", PyLong_FromLong(gl_max_samples));
 		PyDict_SetItemString(info, "GL_MAX_RECTANGLE_TEXTURE_SIZE", PyLong_FromLong(gl_max_rectangle_texture_size));
 		PyDict_SetItemString(info, "GL_MAX_RENDERBUFFER_SIZE", PyLong_FromLong(gl_max_renderbuffer_size));
 		PyDict_SetItemString(info, "GL_MAX_SAMPLE_MASK_WORDS", PyLong_FromLong(gl_max_sample_mask_words));
@@ -2240,7 +2244,7 @@ PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"point_size", (getter)MGLContext_get_point_size, (setter)MGLContext_set_point_size, 0, 0},
 	{(char *)"viewport", (getter)MGLContext_get_viewport, (setter)MGLContext_set_viewport, 0, 0},
 
-	{(char *)"max_integer_samples", (getter)MGLContext_get_max_integer_samples, 0, 0, 0},
+	{(char *)"max_samples", (getter)MGLContext_get_max_samples, 0, 0, 0},
 	{(char *)"max_texture_units", (getter)MGLContext_get_max_texture_units, 0, 0, 0},
 	{(char *)"default_texture_unit", (getter)MGLContext_get_default_texture_unit, (setter)MGLContext_set_default_texture_unit, 0, 0},
 	{(char *)"default_framebuffer", (getter)MGLContext_get_default_framebuffer, 0, 0, 0},
@@ -2338,8 +2342,8 @@ void MGLContext_Initialize(MGLContext * self) {
 	gl.Enable(GL_PRIMITIVE_RESTART);
 	gl.PrimitiveRestartIndex(-1);
 
-	self->max_integer_samples = 0;
-	gl.GetIntegerv(GL_MAX_INTEGER_SAMPLES, (GLint *)&self->max_integer_samples);
+	self->max_samples = 0;
+	gl.GetIntegerv(GL_MAX_SAMPLES, (GLint *)&self->max_samples);
 
 	self->max_texture_units = 0;
 	gl.GetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, (GLint *)&self->max_texture_units);
