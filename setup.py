@@ -1,5 +1,6 @@
 import glob
 import platform
+import sys
 
 from setuptools import Extension, setup
 
@@ -8,6 +9,11 @@ target = platform.system().lower()
 # if target == 'linux':
 #     from distutils import sysconfig
 #     sysconfig._config_vars['OPT'] = sysconfig.get_config_vars()['OPT'].replace('-Wstrict-prototypes', '')
+
+install_requires = []
+
+if sys.version_info < (3, 5):
+    install_requires.append('typing')
 
 libraries = {
     'windows': ['gdi32', 'opengl32', 'user32'],
@@ -130,6 +136,7 @@ args = {
     'classifiers': classifiers,
     'keywords': keywords,
     'packages': ['ModernGL', 'ModernGL.ext', 'ModernGL.tk'],
+    'install_requires': install_requires,
     'ext_modules': [ModernGL],
     'platforms': ['any'],
 }
