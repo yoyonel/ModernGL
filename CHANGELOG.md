@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [4.1.10] - 2017-06-23
+### Added
+- Documentation improvements
+- Context `max_samples` attribute
+
+### Fixed
+- Validate the number of samples using wrong values
+
 ## [4.1.9] - 2017-06-23
 ### Added
 - Context `info` attribute
@@ -14,7 +22,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - 3D texture `depth` attribute type
-- Validate the number of samples using wrong values
 
 ## [4.1.8] - 2017-06-19
 ### Added
@@ -176,7 +183,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.0.0 - 2016-03-03
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.9...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.10...master
+[4.1.10]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.9...4.1.10
 [4.1.9]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.8...4.1.9
 [4.1.8]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.7...4.1.8
 [4.1.7]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.6...4.1.7
