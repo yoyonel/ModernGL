@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [4.1.9] - 2017-06-23
 ### Added
 - Context `info` attribute
 - Support Textures in `copy_framebuffer`
@@ -173,7 +175,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 1.0.0 - 2016-03-03
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.8...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.9...master
+[4.1.9]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.8...4.1.9
 [4.1.8]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.7...4.1.8
 [4.1.7]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.6...4.1.7
 [4.1.6]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.5...4.1.6
