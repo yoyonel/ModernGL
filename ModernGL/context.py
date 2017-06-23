@@ -203,9 +203,9 @@ class Context:
         return self.mglo.version_code
 
     @property
-    def info(self) -> int:
+    def info(self) -> dict:
         '''
-            int: The result of multiple glGet.
+            dict: The result of multiple glGet.
         '''
 
         return self.mglo.info
