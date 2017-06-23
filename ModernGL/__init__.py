@@ -19,7 +19,7 @@ except ImportError:
             'Hint: python3 setup.py build_ext -b .',
         ])
 
-        raise ImportError(_IMPORT_ERROR)
+        raise ImportError(_IMPORT_ERROR) from None
 
 
 from .common import (

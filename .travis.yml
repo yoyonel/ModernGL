@@ -17,17 +17,16 @@ python:
   - 3.5
   - 3.4
 
-# addons:
-#   apt:
-#     sources:
-#       - ubuntu-toolchain-r-test
-#     packages:
-#       - gcc-4.8
-#       - g++-4.8
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-4.8
+      - g++-4.8
 
 install:
-  - python -c "import sys; print(sys.version, sys.platform)"
-  - python setup.py build_ext --inplace
+  - CC=gcc-4.8 CXX=g++-4.8 python setup.py build_ext --inplace
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start; fi
   - pip install -e .
 
