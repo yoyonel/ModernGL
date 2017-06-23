@@ -26,13 +26,15 @@ addons:
       - g++-4.8
 
 install:
-  - CC=gcc-4.8 CXX=g++-4.8 python setup.py build_ext --inplace
+  - CC=gcc-4.8 CXX=g++-4.8 python setup.py build_ext -b .
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start; fi
-  - if [ "${TRAVIS_PYTHON_VERSION}" = "3.4" ]; then pip install typing; fi
   - pip install -e .
 
+#  - if [ "${TRAVIS_PYTHON_VERSION}" = "3.4" ]; then pip install typing; fi
 #  - python setup.py install
 
 script:
   - python -m ModernGL
+  - python -m pytest tests/module
+
 #  - python -m ModernGL --info
