@@ -114,12 +114,12 @@ class Context:
         self.mglo.viewport = tuple(value)
 
     @property
-    def max_integer_samples(self) -> int:
+    def max_samples(self) -> int:
         '''
-            int: The max integer samples.
+            int: The max samples.
         '''
 
-        return self.mglo.max_integer_samples
+        return self.mglo.max_samples
 
     @property
     def max_texture_units(self) -> int:
