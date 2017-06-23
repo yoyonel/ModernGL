@@ -1514,6 +1514,14 @@ PyObject * MGLContext_release(MGLContext * self) {
 	Py_RETURN_NONE;
 }
 
+typedef MGLShader * (* MGLContext_shader_proc)(MGLContext *, PyObject *);
+
+MGLContext_shader_proc MGLContext_shader_vertex_shader = MGLContext_shader<VERTEX_SHADER_SLOT>;
+MGLContext_shader_proc MGLContext_shader_fragment_shader = MGLContext_shader<FRAGMENT_SHADER_SLOT>;
+MGLContext_shader_proc MGLContext_shader_geometry_shader = MGLContext_shader<GEOMETRY_SHADER_SLOT>;
+MGLContext_shader_proc MGLContext_shader_tess_evaluation_shader = MGLContext_shader<TESS_EVALUATION_SHADER_SLOT>;
+MGLContext_shader_proc MGLContext_shader_tess_control_shader = MGLContext_shader<TESS_CONTROL_SHADER_SLOT>;
+
 PyMethodDef MGLContext_tp_methods[] = {
 	{"clear", (PyCFunction)MGLContext_clear, METH_VARARGS, 0},
 	{"enable", (PyCFunction)MGLContext_enable, METH_VARARGS, 0},
@@ -1528,11 +1536,11 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"depth_texture", (PyCFunction)MGLContext_depth_texture, METH_VARARGS, 0},
 	{"vertex_array", (PyCFunction)MGLContext_vertex_array, METH_VARARGS, 0},
 	{"program", (PyCFunction)MGLContext_program, METH_VARARGS, 0},
-	{"vertex_shader", (PyCFunction)MGLContext_shader<VERTEX_SHADER_SLOT>, METH_VARARGS, 0},
-	{"fragment_shader", (PyCFunction)MGLContext_shader<FRAGMENT_SHADER_SLOT>, METH_VARARGS, 0},
-	{"geometry_shader", (PyCFunction)MGLContext_shader<GEOMETRY_SHADER_SLOT>, METH_VARARGS, 0},
-	{"tess_evaluation_shader", (PyCFunction)MGLContext_shader<TESS_EVALUATION_SHADER_SLOT>, METH_VARARGS, 0},
-	{"tess_control_shader", (PyCFunction)MGLContext_shader<TESS_CONTROL_SHADER_SLOT>, METH_VARARGS, 0},
+	{"vertex_shader", (PyCFunction)MGLContext_shader_vertex_shader, METH_VARARGS, 0},
+	{"fragment_shader", (PyCFunction)MGLContext_shader_fragment_shader, METH_VARARGS, 0},
+	{"geometry_shader", (PyCFunction)MGLContext_shader_geometry_shader, METH_VARARGS, 0},
+	{"tess_evaluation_shader", (PyCFunction)MGLContext_shader_tess_evaluation_shader, METH_VARARGS, 0},
+	{"tess_control_shader", (PyCFunction)MGLContext_shader_tess_control_shader, METH_VARARGS, 0},
 	{"framebuffer", (PyCFunction)MGLContext_framebuffer, METH_VARARGS, 0},
 	{"renderbuffer", (PyCFunction)MGLContext_renderbuffer, METH_VARARGS, 0},
 	{"depth_renderbuffer", (PyCFunction)MGLContext_depth_renderbuffer, METH_VARARGS, 0},
