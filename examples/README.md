@@ -6,13 +6,37 @@ You can use your favorite window with ModernGL.
 
 If you use ModernGL with a different window or you have an awesome example then please share it!
 
+## Requirements
+
+The examples depend on other modules please read the README files in the subfolders.
+
+Most of the examples depend on the following modules:
+
+- ModernGL _(obviously)_
+- Pyrr _(matrix multiplications)_
+- Pillow _(loading textures)_
+- numpy _(working with arrays)_
+
+It is reccommanded to install these before running the examples.
+
+```
+pip install ModernGL Pyrr Pillow numpy
+```
+
+Don't forget to install the module for window support.
+Only one per subfolder is enough but you can install all of them with the following commands.
+
+```
+pip install PyQt5
+pip install pyglet
+pip install pygame
+pip install kivy kivy.deps.sdl2 kivy.deps.glew
+pip install PyOpenGL PyOpenGL_accelerate
+pip install GLWindow
+pip install PySDL2
+```
+
 ## Contents
-
-Every folder has its own `requirements.txt`
-
-```
-pip install -r requirements.txt
-```
 
 - [GLUT](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLUT)
 	- [01_hello_world](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLUT/01_hello_world.py)

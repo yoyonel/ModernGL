@@ -1,4 +1,0 @@
-ModernGL
-PyOpenGL
-PyOpenGL_accelerate
-Pillow
