@@ -50,8 +50,10 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 		return 0;
 	}
 
-	self->gl->BindVertexArray(self->vertex_array_obj);
-	self->gl->BindBuffer(GL_ARRAY_BUFFER, buffer->buffer_obj);
+	const GLMethods & gl = self->attribute->context->gl;
+
+	gl.BindVertexArray(self->vertex_array_obj);
+	gl.BindBuffer(GL_ARRAY_BUFFER, buffer->buffer_obj);
 
 	if (self->attribute->normalizable) {
 		((gl_attribute_normal_ptr_proc)self->attribute->gl_attrib_ptr_proc)(
@@ -74,21 +76,27 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 		MGL_GLMETHOD_DBG_ATTRIB_PTR(self->attribute->gl_attrib_ptr_proc, self->location, self->attribute->row_length, self->attribute->scalar_type, stride, (void *)offset);
 	}
 
-	self->gl->VertexAttribDivisor(self->location, divisor);
-	self->gl->EnableVertexAttribArray(self->location);
+	gl.VertexAttribDivisor(self->location, divisor);
+	gl.EnableVertexAttribArray(self->location);
 
 	Py_RETURN_NONE;
 }
 
 PyObject * MGLVertexArrayAttribute_enable(MGLVertexArrayAttribute * self) {
-	self->gl->BindVertexArray(self->vertex_array_obj);
-	self->gl->EnableVertexAttribArray(self->location);
+	const GLMethods & gl = self->attribute->context->gl;
+
+	gl.BindVertexArray(self->vertex_array_obj);
+	gl.EnableVertexAttribArray(self->location);
+
 	Py_RETURN_NONE;
 }
 
 PyObject * MGLVertexArrayAttribute_disable(MGLVertexArrayAttribute * self) {
-	self->gl->BindVertexArray(self->vertex_array_obj);
-	self->gl->DisableVertexAttribArray(self->location);
+	const GLMethods & gl = self->attribute->context->gl;
+
+	gl.BindVertexArray(self->vertex_array_obj);
+	gl.DisableVertexAttribArray(self->location);
+
 	Py_RETURN_NONE;
 }
 
@@ -105,36 +113,51 @@ PyObject * MGLVertexArrayAttribute_get_location(MGLVertexArrayAttribute * self, 
 
 PyObject * MGLVertexArrayAttribute_get_divisor(MGLVertexArrayAttribute * self, void * closure) {
 	int divisor = 0;
-	self->gl->BindVertexArray(self->vertex_array_obj);
-	self->gl->GetVertexAttribiv(self->location, GL_VERTEX_ATTRIB_ARRAY_DIVISOR, &divisor);
+
+	const GLMethods & gl = self->attribute->context->gl;
+
+	gl.BindVertexArray(self->vertex_array_obj);
+	gl.GetVertexAttribiv(self->location, GL_VERTEX_ATTRIB_ARRAY_DIVISOR, &divisor);
+
 	return PyLong_FromLong(divisor);
 }
 
 PyObject * MGLVertexArrayAttribute_get_stride(MGLVertexArrayAttribute * self, void * closure) {
 	int stride = 0;
-	self->gl->BindVertexArray(self->vertex_array_obj);
-	self->gl->GetVertexAttribiv(self->location, GL_VERTEX_ATTRIB_ARRAY_STRIDE, &stride);
+
+	const GLMethods & gl = self->attribute->context->gl;
+
+	gl.BindVertexArray(self->vertex_array_obj);
+	gl.GetVertexAttribiv(self->location, GL_VERTEX_ATTRIB_ARRAY_STRIDE, &stride);
+
 	return PyLong_FromLong(stride);
 }
 
 PyObject * MGLVertexArrayAttribute_get_enabled(MGLVertexArrayAttribute * self, void * closure) {
 	int enabled = 0;
-	self->gl->BindVertexArray(self->vertex_array_obj);
-	self->gl->GetVertexAttribiv(self->location, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &enabled);
+
+	const GLMethods & gl = self->attribute->context->gl;
+
+	gl.BindVertexArray(self->vertex_array_obj);
+	gl.GetVertexAttribiv(self->location, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &enabled);
+
 	return PyBool_FromLong(enabled);
 }
 
 int MGLVertexArrayAttribute_set_enabled(MGLVertexArrayAttribute * self, PyObject * value, void * closure) {
+	const GLMethods & gl = self->attribute->context->gl;
+
 	if (value == Py_True) {
-		self->gl->BindVertexArray(self->vertex_array_obj);
-		self->gl->EnableVertexAttribArray(self->location);
+		gl.BindVertexArray(self->vertex_array_obj);
+		gl.EnableVertexAttribArray(self->location);
 	} else if (value == Py_False) {
-		self->gl->BindVertexArray(self->vertex_array_obj);
-		self->gl->DisableVertexAttribArray(self->location);
+		gl.BindVertexArray(self->vertex_array_obj);
+		gl.DisableVertexAttribArray(self->location);
 	} else {
 		MGLError_Set("invalid value for enabled");
 		return -1;
 	}
+
 	return 0;
 }
 

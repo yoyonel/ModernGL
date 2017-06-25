@@ -462,6 +462,8 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	for (int i = 0; i < num_attributes; ++i) {
 		MGLAttribute * attribute = MGLAttribute_New();
 
+		attribute->context = program->context;
+
 		int name_len = 0;
 		char name[256];
 
