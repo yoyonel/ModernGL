@@ -7,7 +7,6 @@
 #define GLMethods GLMethodsDebugImpl
 #define MGL_GLMETHOD_DBG_UNIFORM_READER(...)
 #define MGL_GLMETHOD_DBG_UNIFORM_WRITER(...)
-#define MGL_GLMETHOD_DBG_ATTRIB_NORM_PTR GLMethodsDebug_attrib_norm_ptr
 #define MGL_GLMETHOD_DBG_ATTRIB_PTR GLMethodsDebug_attrib_ptr
 
 #if defined(__x86_64__) || defined(_WIN64)
@@ -26,13 +25,9 @@ static FILE * GLMethodsDebugFile = stdout;
 // 	fprintf(GLMethodsDebugFile, "[%d] uniform_writer_%p(%u, %d, ...)\n", 0, glmethod, program, location);
 // }
 
-static void GLMethodsDebug_attrib_norm_ptr(GLenum error, GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer) {
-	fprintf(GLMethodsDebugFile, "[%4d] attrib_ptr(%u, %d, 0x%x, %d, %d, 0x%p)\n", error, index, size, type, normalized, stride, pointer);
-}
+struct MGLAttribute;
 
-static void GLMethodsDebug_attrib_ptr(GLenum error, GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid * pointer) {
-	fprintf(GLMethodsDebugFile, "[%4d] attrib_ptr(%u, %d, 0x%x, %d, 0x%p)\n", error, index, size, type, stride, pointer);
-}
+void GLMethodsDebug_attrib_ptr(MGLAttribute * attribute, GLuint index, GLsizei stride, const GLvoid * pointer);
 
 struct GLMethodsDebugImpl {
 	GLMethodsImpl gl;

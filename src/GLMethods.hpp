@@ -673,6 +673,5 @@ private:
 #define GLMethods GLMethodsImpl
 #define MGL_GLMETHOD_DBG_UNIFORM_READER(...)
 #define MGL_GLMETHOD_DBG_UNIFORM_WRITER(...)
-#define MGL_GLMETHOD_DBG_ATTRIB_NORM_PTR(...)
 #define MGL_GLMETHOD_DBG_ATTRIB_PTR(...)
 #endif
