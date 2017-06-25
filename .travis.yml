@@ -22,11 +22,12 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - gcc-4.8
-      - g++-4.8
+      - gcc-4.9
+      - g++-4.9
 
 install:
-  - CC=gcc-4.8 CXX=g++-4.8 python setup.py build_ext --inplace
+  - python -c "from distutils import sysconfig; import json; print(json.dumps(sysconfig.get_config_vars(), indent=4))"
+  - CC=gcc-4.9 CXX=g++-4.9 python setup.py build_ext --inplace
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start; fi
   - pip install -e .
 
