@@ -927,10 +927,10 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 				if (attribute->normalizable) {
 					((gl_attribute_normal_ptr_proc)attribute->gl_attrib_ptr_proc)(location, attribute->row_length, attribute->scalar_type, false, format_info.size, ptr);
-					MGL_GLMETHOD_DBG_ATTRIB_NORM_PTR(attribute->gl_attrib_ptr_proc, location, attribute->row_length, attribute->scalar_type, false, format_info.size, ptr);
+					MGL_GLMETHOD_DBG_ATTRIB_NORM_PTR(attribute->context->gl.gl.GetError(), location, attribute->row_length, attribute->scalar_type, false, format_info.size, ptr);
 				} else {
 					((gl_attribute_ptr_proc)attribute->gl_attrib_ptr_proc)(location, attribute->row_length, attribute->scalar_type, format_info.size, ptr);
-					MGL_GLMETHOD_DBG_ATTRIB_PTR(attribute->gl_attrib_ptr_proc, location, attribute->row_length, attribute->scalar_type, format_info.size, ptr);
+					MGL_GLMETHOD_DBG_ATTRIB_PTR(attribute->context->gl.gl.GetError(), location, attribute->row_length, attribute->scalar_type, format_info.size, ptr);
 				}
 
 				gl.VertexAttribDivisor(location, format_info.divisor);
