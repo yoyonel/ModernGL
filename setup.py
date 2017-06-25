@@ -6,9 +6,15 @@ from setuptools import Extension, setup
 
 target = platform.system().lower()
 
-# if target == 'linux':
-#     from distutils import sysconfig
-#     sysconfig._config_vars['OPT'] = sysconfig.get_config_vars()['OPT'].replace('-Wstrict-prototypes', '')
+if target == 'linux':
+    from distutils import sysconfig
+    cvars = sysconfig.get_config_vars()
+
+    if 'OPT' in cvars:
+        sysconfig._config_vars['OPT'] = cvars['OPT'].replace('-Wstrict-prototypes', '')
+
+    if 'CFLAGS' in cvars:
+        sysconfig._config_vars['CFLAGS'] = cvars['CFLAGS'].replace('-Wstrict-prototypes', '')
 
 install_requires = []
 
