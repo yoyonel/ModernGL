@@ -62,6 +62,7 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 			stride,
 			(void *)offset
 		);
+		MGL_GLMETHOD_DBG_ATTRIB_NORM_PTR(self->attribute->gl_attrib_ptr_proc, self->location, self->attribute->row_length, self->attribute->scalar_type, false, stride, (void *)offset);
 	} else {
 		((gl_attribute_ptr_proc)self->attribute->gl_attrib_ptr_proc)(
 			self->location,
@@ -70,6 +71,7 @@ PyObject * MGLVertexArrayAttribute_bind(MGLVertexArrayAttribute * self, PyObject
 			stride,
 			(void *)offset
 		);
+		MGL_GLMETHOD_DBG_ATTRIB_PTR(self->attribute->gl_attrib_ptr_proc, self->location, self->attribute->row_length, self->attribute->scalar_type, stride, (void *)offset);
 	}
 
 	self->gl->VertexAttribDivisor(self->location, divisor);
