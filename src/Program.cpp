@@ -394,6 +394,8 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 	for (int i = 0; i < num_uniforms; ++i) {
 		MGLUniform * uniform = MGLUniform_New();
 
+		uniform->context = program->context;
+
 		int name_len = 0;
 		char name[256];
 

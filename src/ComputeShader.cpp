@@ -238,6 +238,8 @@ void MGLComputeShader_Compile(MGLComputeShader * compute_shader) {
 	for (int i = 0; i < num_uniforms; ++i) {
 		MGLUniform * uniform = MGLUniform_New();
 
+		uniform->context = compute_shader->context;
+
 		int name_len = 0;
 		char name[256];
 
