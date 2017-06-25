@@ -2,6 +2,12 @@
 
 #include "OpenGL.hpp"
 
+#ifdef MGL_DEBUG
+#define DBG(name) printf("%s: %d\n", name, gl.GetError())
+#else
+#define DBG(...)
+#endif
+
 typedef GLvoid (GLAPI * gl_attribute_normal_ptr_proc)(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer);
 typedef GLvoid (GLAPI * gl_attribute_ptr_proc)(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid * pointer);
 
