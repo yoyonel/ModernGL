@@ -490,7 +490,7 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 
 	vertex_array->attributes = attributes;
 
-	// Subroutines
+	// TODO: move this to the program
 
 	gl.GetProgramStageiv(
 		vertex_array->program->program_obj,
