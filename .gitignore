@@ -11,6 +11,7 @@ build.py
 .vscode
 
 *.egg-info
+*.log
 *.pyd
 *.pyc
 *.bat
