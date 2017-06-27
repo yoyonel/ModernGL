@@ -34,7 +34,7 @@ PyObject * MGLUniform_read(MGLUniform * self) {
 	PyObject * result = PyBytes_FromStringAndSize(0, self->element_size);
 	char * data = PyBytes_AS_STRING(result);
 	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location, data);
-	MGL_GLMETHOD_DBG_UNIFORM_READER(self->gl_value_reader_proc, self->program_obj, self->location, data);
+	MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location, data);
 	return result;
 }
 
@@ -60,10 +60,10 @@ PyObject * MGLUniform_write(MGLUniform * self, PyObject * args) {
 
 	if (self->matrix) {
 		((gl_uniform_matrix_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, self->array_length, false, buffer);
-		MGL_GLMETHOD_DBG_UNIFORM_WRITER(self->gl_value_writer_proc, self->program_obj, self->location, self->array_length, false, buffer);
+		MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, self->array_length, buffer);
 	} else {
 		((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, self->array_length, buffer);
-		MGL_GLMETHOD_DBG_UNIFORM_WRITER(self->gl_value_writer_proc, self->program_obj, self->location, self->array_length, buffer);
+		MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, self->array_length, buffer);
 	}
 
 	Py_RETURN_NONE;
