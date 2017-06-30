@@ -34,6 +34,12 @@ prog = ctx.program([
     '''),
 ])
 
+# Vertex coordinates stored in vbo1
+#
+#     B------D
+#     |      |
+#     A------C
+
 vbo1 = ctx.buffer(struct.pack(
     '8f',
     -0.5, -0.5,
@@ -41,6 +47,11 @@ vbo1 = ctx.buffer(struct.pack(
     0.5, -0.5,
     0.5, 0.5,
 ))
+
+# Vertex colors stored in vbo2
+#
+#     A, B are green
+#     C, D are blue
 
 vbo2 = ctx.buffer(struct.pack(
     '12f',
@@ -50,19 +61,34 @@ vbo2 = ctx.buffer(struct.pack(
     0.0, 0.0, 1.0,
 ))
 
+# (Per instance) positions and scales stored in vbo3
+# There are 8 (position, scale) pairs
+
 vbo3 = ctx.buffer(struct.pack(
     '24f',
-    0.5, 0.0, 0.2,
+    0.5, 0.0, 0.3,
     0.35, 0.35, 0.2,
-    0.0, 0.5, 0.2,
+    0.0, 0.5, 0.3,
     -0.35, 0.35, 0.2,
-    -0.5, 0.0, 0.2,
+    -0.5, 0.0, 0.3,
     -0.35, -0.35, 0.2,
-    0.0, -0.5, 0.2,
+    0.0, -0.5, 0.3,
     0.35, -0.35, 0.2,
 ))
 
+# Index buffer (also called element buffer)
+# There are 2 trianges to render
+#
+#     A, B, C
+#     B, C, D
+
 ibo = ctx.buffer(struct.pack('6i', 0, 1, 2, 1, 2, 3))
+
+# The vao_content is a list of 3-tuples (buffer, format, attribs)
+# the format can have an empty or '/v', '/i', '/r' ending.
+# '/v' attributes are the default
+# '/i` attributes are per instance attributes
+# '/r' attributes are default values for the attributes (per render attributes)
 
 vao_content = [
     (vbo1, '2f', ['vert']),
