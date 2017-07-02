@@ -49,7 +49,7 @@ from .textures import Texture, Texture3D
 from .renderbuffers import Renderbuffer
 from .framebuffers import Framebuffer
 
-__version__ = '4.1.10'
+__version__ = '4.1.11'
 
 __all__ = [
     'InvalidObject', 'Version', 'EnableFlag', 'Primitive', 'Error', 'TextureFilter',
