@@ -4,13 +4,11 @@ import ModernGL
 
 from PIL import Image
 
-render_size = 1024, 1024
-image_size = 512, 512
-
+size = 512, 512
 ctx = ModernGL.create_standalone_context()
 
-color_rbo = ctx.renderbuffer(render_size)
-depth_rbo = ctx.depth_renderbuffer(render_size)
+color_rbo = ctx.renderbuffer(size, samples=ctx.max_samples)
+depth_rbo = ctx.depth_renderbuffer(size, samples=ctx.max_samples)
 fbo = ctx.framebuffer(color_rbo, depth_rbo)
 
 fbo.use()
@@ -54,7 +52,11 @@ vao = ctx.simple_vertex_array(prog, vbo, ['vert'])
 
 vao.render(ModernGL.TRIANGLE_STRIP)
 
-img = Image.frombytes('RGB', render_size, fbo.read())
+color_rbo2 = ctx.renderbuffer(size)
+depth_rbo2 = ctx.depth_renderbuffer(size)
+fbo2 = ctx.framebuffer(color_rbo2, depth_rbo2)
+ctx.copy_framebuffer(fbo2, fbo)
+
+img = Image.frombytes('RGB', size, fbo2.read())
 img = img.transpose(Image.FLIP_TOP_BOTTOM)
-img = img.resize(image_size, Image.LANCZOS)
 img.save('Fractal.png')

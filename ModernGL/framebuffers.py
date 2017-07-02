@@ -52,7 +52,7 @@ class Framebuffer:
 
     @viewport.setter
     def viewport(self, value):
-        self.mglo.viewport = value
+        self.mglo.viewport = tuple(value)
 
     @property
     def color_mask(self) -> List[Tuple[bool, bool, bool, bool]]:

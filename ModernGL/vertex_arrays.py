@@ -182,7 +182,7 @@ class VertexArray:
             The program used when rendering or transforming primitives.
         '''
 
-        return self.mglo.program
+        return Program.new(self.mglo.program)
 
     @property
     def attributes(self) -> VertexArrayAttributeMap:

@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Context `front_face` attribute
+
+### Fixed
+- VertexArray `program` member type
+- Context `viewport` attribute missing `tuple` cast
+- Misplaced `GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS`
+- Compile warnings (strict-prototypes)
+- Initial value of `wireframe`
 
 ## [4.1.10] - 2017-06-23
 ### Added

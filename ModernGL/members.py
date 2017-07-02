@@ -52,6 +52,8 @@ class Uniform:
     def location(self) -> int:
         '''
             int: The location of the uniform.
+            The location holds the value returned by the glGetUniformLocation.
+            To set the value of the uniform use the :py:attr:`value` instead.
         '''
 
         return self.mglo.location
