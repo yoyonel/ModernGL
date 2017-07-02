@@ -423,7 +423,6 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 
 					for (int j = 0; j < program_attribute->rows_length; ++j) {
 						MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
-						attrib->gl = &gl;
 						attrib->vertex_array_obj = vertex_array->vertex_array_obj;
 						attrib->location = matrix->location + j;
 						attrib->attribute = program_attribute;
@@ -445,7 +444,6 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 
 				for (int i = 0; i < program_attribute->array_length; ++i) {
 					MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
-					attrib->gl = &gl;
 					attrib->vertex_array_obj = vertex_array->vertex_array_obj;
 					attrib->location = attrib_list->location + i;
 					attrib->attribute = program_attribute;
@@ -467,7 +465,6 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 
 				for (int j = 0; j < program_attribute->rows_length; ++j) {
 					MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
-					attrib->gl = &gl;
 					attrib->vertex_array_obj = vertex_array->vertex_array_obj;
 					attrib->location = matrix->location + j;
 					attrib->attribute = program_attribute;
@@ -481,7 +478,6 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 			} else {
 
 				MGLVertexArrayAttribute * attrib = MGLVertexArrayAttribute_New();
-				attrib->gl = &gl;
 				attrib->vertex_array_obj = vertex_array->vertex_array_obj;
 				attrib->location = program_attribute->location;
 				attrib->attribute = program_attribute;
@@ -494,7 +490,7 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 
 	vertex_array->attributes = attributes;
 
-	// Subroutines
+	// TODO: move this to the program
 
 	gl.GetProgramStageiv(
 		vertex_array->program->program_obj,

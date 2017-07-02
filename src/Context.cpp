@@ -927,8 +927,10 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 				if (attribute->normalizable) {
 					((gl_attribute_normal_ptr_proc)attribute->gl_attrib_ptr_proc)(location, attribute->row_length, attribute->scalar_type, false, format_info.size, ptr);
+					MGL_GLMETHOD_DBG_ATTRIB_PTR(attribute, location, format_info.size, ptr);
 				} else {
 					((gl_attribute_ptr_proc)attribute->gl_attrib_ptr_proc)(location, attribute->row_length, attribute->scalar_type, format_info.size, ptr);
+					MGL_GLMETHOD_DBG_ATTRIB_PTR(attribute, location, format_info.size, ptr);
 				}
 
 				gl.VertexAttribDivisor(location, format_info.divisor);
@@ -1898,12 +1900,12 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(info, "GL_STEREO", PyBool_FromLong(gl_stereo));
 	}
 
-	if (gl.GetInteger64v) {
-		long long gl_timestamp = 0;
-		gl.GetInteger64v(GL_TIMESTAMP, &gl_timestamp);
+	// if (gl.GetInteger64v) {
+	// 	long long gl_timestamp = 0;
+	// 	gl.GetInteger64v(GL_TIMESTAMP, &gl_timestamp);
 
-		PyDict_SetItemString(info, "GL_TIMESTAMP", PyLong_FromLongLong(gl_timestamp));
-	}
+	// 	PyDict_SetItemString(info, "GL_TIMESTAMP", PyLong_FromLongLong(gl_timestamp));
+	// }
 
 	{
 		int gl_max_viewport_dims[2] = {};

@@ -95,7 +95,7 @@ void * LoadMethod(const char * method) {
 
 #endif
 
-bool GLMethods::load() {
+bool GLMethodsImpl::load() {
 	this->ActiveShaderProgram = (PROC_glActiveShaderProgram)LoadMethod(PREFIX "glActiveShaderProgram");
 	this->ActiveTexture = (PROC_glActiveTexture)LoadMethod(PREFIX "glActiveTexture");
 	this->AttachShader = (PROC_glAttachShader)LoadMethod(PREFIX "glAttachShader");
@@ -162,6 +162,7 @@ bool GLMethods::load() {
 	this->ClearTexImage = (PROC_glClearTexImage)LoadMethod(PREFIX "glClearTexImage");
 	this->ClearTexSubImage = (PROC_glClearTexSubImage)LoadMethod(PREFIX "glClearTexSubImage");
 	this->ClientWaitSync = (PROC_glClientWaitSync)LoadMethod(PREFIX "glClientWaitSync");
+	this->WaitSync = (PROC_glWaitSync)LoadMethod(PREFIX "glWaitSync");
 	this->ClipControl = (PROC_glClipControl)LoadMethod(PREFIX "glClipControl");
 	this->ColorMask = (PROC_glColorMask)LoadMethod(PREFIX "glColorMask");
 	this->ColorMaski = (PROC_glColorMaski)LoadMethod(PREFIX "glColorMaski");

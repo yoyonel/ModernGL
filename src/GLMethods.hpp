@@ -2,16 +2,10 @@
 
 #include "OpenGL.hpp"
 
-#ifdef MGL_DEBUG
-#define DBG(name) printf("%s: %d\n", name, gl.GetError())
-#else
-#define DBG(...)
-#endif
-
 typedef GLvoid (GLAPI * gl_attribute_normal_ptr_proc)(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer);
 typedef GLvoid (GLAPI * gl_attribute_ptr_proc)(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid * pointer);
 
-struct GLMethods {
+struct GLMethodsImpl {
 	PROC_glActiveShaderProgram ActiveShaderProgram;
 	PROC_glActiveTexture ActiveTexture;
 	PROC_glAttachShader AttachShader;
@@ -78,6 +72,7 @@ struct GLMethods {
 	PROC_glClearTexImage ClearTexImage;
 	PROC_glClearTexSubImage ClearTexSubImage;
 	PROC_glClientWaitSync ClientWaitSync;
+	PROC_glWaitSync WaitSync;
 	PROC_glClipControl ClipControl;
 	PROC_glColorMask ColorMask;
 	PROC_glColorMaski ColorMaski;
@@ -668,6 +663,15 @@ struct GLMethods {
 	bool load();
 
 private:
-	GLMethods(const GLMethods & copy);
-	void operator = (const GLMethods & rhs);
+	GLMethodsImpl(const GLMethodsImpl & copy);
+	void operator = (const GLMethodsImpl & rhs);
 };
+
+#ifdef MGL_DEBUG
+#include "GLMethodsDebug.hpp"
+#else
+#define GLMethods GLMethodsImpl
+#define MGL_GLMETHOD_DBG_UNIFORM_READER(...)
+#define MGL_GLMETHOD_DBG_UNIFORM_WRITER(...)
+#define MGL_GLMETHOD_DBG_ATTRIB_PTR(...)
+#endif

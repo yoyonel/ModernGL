@@ -2,12 +2,12 @@
 
 #include "Python.hpp"
 
-#include "Object.hpp"
+#include "ContextMember.hpp"
 #include "Program.hpp"
 
 typedef void (* MGLProc)();
 
-struct MGLUniform : public MGLObject {
+struct MGLUniform : public MGLContextMember {
 	PyObject * name;
 
 	MGLProc value_getter;

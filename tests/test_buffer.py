@@ -95,15 +95,6 @@ class TestBuffer(unittest.TestCase):
         with buf.access() as a:
             self.assertEqual(a.read(), b'\xAA\x55' * 10)
 
-    def test_buffer_reentrant_access(self):
-        buf = self.ctx.buffer(reserve=1024)
-
-        with buf.access():
-            with self.assertRaises(ModernGL.Error):
-                buf.read()
-
-        self.assertNotEqual(self.ctx.error, 'GL_NO_ERROR')
-
 
 if __name__ == '__main__':
     unittest.main()
