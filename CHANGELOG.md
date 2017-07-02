@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Misplaced `GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS`
 
 ## [4.1.10] - 2017-06-23
 ### Added
