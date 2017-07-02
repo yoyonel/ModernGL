@@ -6,10 +6,12 @@ import ModernGL
 
 # This example is not working with NPOT Textures
 
-pixels = numpy.round(numpy.random.rand(512, 512)).astype('float32')
-grid = numpy.dstack(numpy.mgrid[0:512, 0:512][::-1] / 512).astype('float32')
+width, height = 640, 460
 
-wnd = GLWindow.create_window(512, 512)
+pixels = numpy.round(numpy.random.rand(width, height)).astype('float32')
+grid = numpy.dstack(numpy.mgrid[0:height, 0:width][::-1]).astype('int32')
+
+wnd = GLWindow.create_window(width, height)
 ctx = ModernGL.create_context()
 
 prog = ctx.program([
@@ -43,28 +45,31 @@ trans = ctx.program(
         #version 330
 
         uniform sampler2D Texture;
+        uniform int Width;
+        uniform int Height;
 
-        in vec2 text;
+        in ivec2 text;
         out float vert;
 
         #define LIVING 0.0
         #define DEAD 1.0
 
-        #define DX 1.0 / 512.0
-        #define DY 1.0 / 512.0
+        bool cell(int x, int y) {
+            return texelFetch(Texture, ivec2((x + Width) % Width, (y + Height) % Height), 0).r < 0.5;
+        }
 
         void main() {
-            bool living = texture(Texture, text).r < 0.5;
+            bool living = cell(text.x, text.y);
 
             int neighbours = 0;
-            if (texture(Texture, text + vec2(-DX, -DY)).r < 0.5) neighbours++;
-            if (texture(Texture, text + vec2(-DX, 0.0)).r < 0.5) neighbours++;
-            if (texture(Texture, text + vec2(-DX, DY)).r < 0.5) neighbours++;
-            if (texture(Texture, text + vec2(DX, -DY)).r < 0.5) neighbours++;
-            if (texture(Texture, text + vec2(DX, 0.0)).r < 0.5) neighbours++;
-            if (texture(Texture, text + vec2(DX, DY)).r < 0.5) neighbours++;
-            if (texture(Texture, text + vec2(0.0, DY)).r < 0.5) neighbours++;
-            if (texture(Texture, text + vec2(0.0, -DY)).r < 0.5) neighbours++;
+            if (cell(text.x - 1, text.y - 1)) neighbours++;
+            if (cell(text.x - 1, text.y + 0)) neighbours++;
+            if (cell(text.x - 1, text.y + 1)) neighbours++;
+            if (cell(text.x + 1, text.y - 1)) neighbours++;
+            if (cell(text.x + 1, text.y + 0)) neighbours++;
+            if (cell(text.x + 1, text.y + 1)) neighbours++;
+            if (cell(text.x + 0, text.y + 1)) neighbours++;
+            if (cell(text.x + 0, text.y - 1)) neighbours++;
 
             if (living) {
                 vert = (neighbours == 2 || neighbours == 3) ? LIVING : DEAD;
@@ -76,7 +81,10 @@ trans = ctx.program(
     varyings=['vert']
 )
 
-texture = ctx.texture((512, 512), 1, pixels.tobytes(), floats=True)
+trans.uniforms['Width'].value = width;
+trans.uniforms['Height'].value = height;
+
+texture = ctx.texture((width, height), 1, pixels.tobytes(), floats=True)
 texture.filter = ModernGL.NEAREST
 texture.swizzle = 'RRR1'
 texture.use()
