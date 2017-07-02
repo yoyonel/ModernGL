@@ -160,7 +160,7 @@ class Context:
     @property
     def wireframe(self) -> bool:
         '''
-            bool: The default framebuffer.
+            bool: Wireframe settings for debugging.
         '''
 
         return self.mglo.wireframe
@@ -168,6 +168,18 @@ class Context:
     @wireframe.setter
     def wireframe(self, value):
         self.mglo.wireframe = value
+
+    @property
+    def front_face(self) -> str:
+        '''
+            str: The front_face.
+        '''
+
+        return self.mglo.front_face
+
+    @front_face.setter
+    def front_face(self, value):
+        self.mglo.front_face = str(value)
 
     @property
     def error(self) -> str:

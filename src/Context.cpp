@@ -1696,9 +1696,32 @@ int MGLContext_set_wireframe(MGLContext * self, PyObject * value) {
 		self->gl.PolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		self->wireframe = false;
 	} else {
-		MGLError_Set("invalid value for enabled");
+		MGLError_Set("invalid value for wireframe");
 		return -1;
 	}
+	return 0;
+}
+
+PyObject * MGLContext_get_front_face(MGLContext * self) {
+	if (self->front_face == GL_CW) {
+		return PyUnicode_FromString("CW");
+	}
+	return PyUnicode_FromString("CCW");
+}
+
+int MGLContext_set_front_face(MGLContext * self, PyObject * value) {
+	const char * str = PyUnicode_AsUTF8(value);
+
+	if (!strcmp(str, "CW")) {
+		self->front_face = GL_CW;
+	} else if (!strcmp(str, "CCW")) {
+		self->front_face = GL_CCW;
+	} else {
+		MGLError_Set("invalid value for front_face");
+		return -1;
+	}
+
+	self->gl.FrontFace(self->front_face);
 	return 0;
 }
 
@@ -2283,6 +2306,7 @@ PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"default_framebuffer", (getter)MGLContext_get_default_framebuffer, 0, 0, 0},
 
 	{(char *)"wireframe", (getter)MGLContext_get_wireframe, (setter)MGLContext_set_wireframe, 0, 0},
+	{(char *)"front_face", (getter)MGLContext_get_front_face, (setter)MGLContext_set_front_face, 0, 0},
 
 	{(char *)"error", (getter)MGLContext_get_error, 0, 0, 0},
 	{(char *)"vendor", (getter)MGLContext_get_vendor, 0, 0, 0},
@@ -2435,4 +2459,7 @@ void MGLContext_Initialize(MGLContext * self) {
 
 	Py_INCREF(self->default_framebuffer);
 	self->bound_framebuffer = self->default_framebuffer;
+
+	self->wireframe = false;
+	self->front_face = GL_CCW;
 }
