@@ -1783,28 +1783,13 @@ PyObject * MGLContext_get_version(MGLContext * self, void * closure) {
 }
 
 PyObject * MGLContext_get_version_code(MGLContext * self, void * closure) {
-	int major = 0;
-	int minor = 0;
-
-	const GLMethods & gl = self->gl;
-	gl.GetIntegerv(GL_MAJOR_VERSION, &major);
-	gl.GetIntegerv(GL_MINOR_VERSION, &minor);
-
-	return PyLong_FromLong(major * 100 + minor * 10);
+	return PyLong_FromLong(self->version_code);
 }
 
 PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 	PyObject * error_before = MGLContext_get_error(self, closure);
 
 	const GLMethods & gl = self->gl;
-
-	int major = 0;
-	int minor = 0;
-
-	gl.GetIntegerv(GL_MAJOR_VERSION, &major);
-	gl.GetIntegerv(GL_MINOR_VERSION, &minor);
-
-	int version_code = major * 100 + minor * 10;
 
 	PyObject * info = PyDict_New();
 
@@ -2111,7 +2096,7 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(info, "GL_MAX_VERTEX_ATTRIB_BINDINGS", PyLong_FromLong(gl_max_vertex_attrib_bindings));
 	}
 
-	if (version_code >= 410) {
+	if (self->version_code >= 410) {
 		int gl_viewport_bounds_range[2] = {};
 		gl.GetIntegerv(GL_VIEWPORT_BOUNDS_RANGE, gl_viewport_bounds_range);
 
@@ -2135,7 +2120,7 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(info, "GL_MAX_VIEWPORTS", PyLong_FromLong(gl_max_viewports));
 	}
 
-	if (version_code >= 420) {
+	if (self->version_code >= 420) {
 		int gl_min_map_buffer_alignment = 0;
 		gl.GetIntegerv(GL_MIN_MAP_BUFFER_ALIGNMENT, &gl_min_map_buffer_alignment);
 
@@ -2166,7 +2151,7 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(info, "GL_MAX_VERTEX_ATOMIC_COUNTERS", PyLong_FromLong(gl_max_vertex_atomic_counters));
 	}
 
-	if (version_code >= 430) {
+	if (self->version_code >= 430) {
 		int gl_max_compute_work_group_count[3] = {};
 		gl.GetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &gl_max_compute_work_group_count[0]);
 		gl.GetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &gl_max_compute_work_group_count[1]);
@@ -2393,6 +2378,14 @@ void MGLContext_Initialize(MGLContext * self) {
 	if (!gl.load()) {
 		return;
 	}
+
+	int major = 0;
+	int minor = 0;
+
+	gl.GetIntegerv(GL_MAJOR_VERSION, &major);
+	gl.GetIntegerv(GL_MINOR_VERSION, &minor);
+
+	self->version_code = major * 100 + minor * 10;
 
 	gl.BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

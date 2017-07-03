@@ -15,6 +15,8 @@ struct MGLContext : public MGLObject {
 
 	GLContext gl_context;
 
+	int version_code;
+
 	int max_samples;
 	int max_integer_samples;
 
