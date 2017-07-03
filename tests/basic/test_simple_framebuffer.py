@@ -76,17 +76,26 @@ class TestCase(unittest.TestCase):
             self.ctx.renderbuffer((16, 16), components=3),
             self.ctx.renderbuffer((16, 16), components=4),
         ])
-        mask = (
+        expected = (
             (True, False, False, False),
             (True, True, False, False),
             (True, True, True, False),
             (True, True, True, True),
         )
-        self.assertEqual(fbo.color_mask, mask)
+        self.assertEqual(fbo.color_mask, expected)
 
-    def test_framebuffer_depth_mask(self):
-        fbo = self.ctx.framebuffer(self.ctx.renderbuffer((16, 16)))
+    def test_framebuffer_depth_mask_1(self):
+        fbo = self.ctx.framebuffer(
+            self.ctx.renderbuffer((16, 16)),
+            self.ctx.depth_renderbuffer((16, 16)),
+        )
         self.assertEqual(fbo.depth_mask, True)
+
+    def test_framebuffer_depth_mask_2(self):
+        fbo = self.ctx.framebuffer(
+            self.ctx.renderbuffer((16, 16))
+        )
+        self.assertEqual(fbo.depth_mask, False)
 
     def test_framebuffer_color_attachments(self):
         rbo1 = self.ctx.renderbuffer((16, 16))
@@ -99,7 +108,8 @@ class TestCase(unittest.TestCase):
             self.ctx.renderbuffer((16, 16)),
             self.ctx.renderbuffer((16, 16)),
         ])
-        self.assertEqual(fbo.color_mask, ((True, True, True, True), (True, True, True, True)))
+        expected = ((True, True, True, True), (True, True, True, True))
+        self.assertEqual(fbo.color_mask, expected)
 
     def test_framebuffer_size_mismatch(self):
         with self.assertRaisesRegex(ModernGL.Error, 'size'):
@@ -152,7 +162,10 @@ class TestCase(unittest.TestCase):
 
     def test_framebuffer_having_color_in_depth(self):
         with self.assertRaisesRegex(ModernGL.Error, r'(color|depth)'):
-            self.ctx.framebuffer(self.ctx.renderbuffer((16, 16)), self.ctx.renderbuffer((16, 16)))
+            self.ctx.framebuffer(
+                self.ctx.renderbuffer((16, 16)),
+                self.ctx.renderbuffer((16, 16)),
+            )
 
 
 if __name__ == '__main__':
