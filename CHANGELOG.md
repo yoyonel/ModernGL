@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Framebuffer does not create a Renderbuffer when depth_attachment is None
 
 ## [4.1.11] - 2017-07-02
 ### Added
