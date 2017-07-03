@@ -26,6 +26,12 @@ struct MGLProgram : public MGLContextMember {
 
 	int program_obj;
 
+	int num_vertex_shader_subroutines;
+	int num_fragment_shader_subroutines;
+	int num_geometry_shader_subroutines;
+	int num_tess_evaluation_shader_subroutines;
+	int num_tess_control_shader_subroutines;
+
 	int geometry_vertices;
 	int num_varyings;
 };

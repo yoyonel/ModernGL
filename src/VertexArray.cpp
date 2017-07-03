@@ -148,46 +148,46 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 
 		unsigned * subroutines = self->subroutines;
 
-		if (self->num_vertex_shader_subroutines) {
+		if (self->program->num_vertex_shader_subroutines) {
 			gl.UniformSubroutinesuiv(
 				GL_VERTEX_SHADER,
-				self->num_vertex_shader_subroutines,
+				self->program->num_vertex_shader_subroutines,
 				subroutines
 			);
-			subroutines += self->num_vertex_shader_subroutines;
+			subroutines += self->program->num_vertex_shader_subroutines;
 		}
 
-		if (self->num_fragment_shader_subroutines) {
+		if (self->program->num_fragment_shader_subroutines) {
 			gl.UniformSubroutinesuiv(
 				GL_FRAGMENT_SHADER,
-				self->num_fragment_shader_subroutines,
+				self->program->num_fragment_shader_subroutines,
 				subroutines
 			);
-			subroutines += self->num_fragment_shader_subroutines;
+			subroutines += self->program->num_fragment_shader_subroutines;
 		}
 
-		if (self->num_geometry_shader_subroutines) {
+		if (self->program->num_geometry_shader_subroutines) {
 			gl.UniformSubroutinesuiv(
 				GL_GEOMETRY_SHADER,
-				self->num_geometry_shader_subroutines,
+				self->program->num_geometry_shader_subroutines,
 				subroutines
 			);
-			subroutines += self->num_geometry_shader_subroutines;
+			subroutines += self->program->num_geometry_shader_subroutines;
 		}
 
-		if (self->num_tess_evaluation_shader_subroutines) {
+		if (self->program->num_tess_evaluation_shader_subroutines) {
 			gl.UniformSubroutinesuiv(
 				GL_TESS_EVALUATION_SHADER,
-				self->num_tess_evaluation_shader_subroutines,
+				self->program->num_tess_evaluation_shader_subroutines,
 				subroutines
 			);
-			subroutines += self->num_tess_evaluation_shader_subroutines;
+			subroutines += self->program->num_tess_evaluation_shader_subroutines;
 		}
 
-		if (self->num_tess_control_shader_subroutines) {
+		if (self->program->num_tess_control_shader_subroutines) {
 			gl.UniformSubroutinesuiv(
 				GL_TESS_CONTROL_SHADER,
-				self->num_tess_control_shader_subroutines,
+				self->program->num_tess_control_shader_subroutines,
 				subroutines
 			);
 		}
@@ -490,49 +490,12 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 
 	vertex_array->attributes = attributes;
 
-	// TODO: move this to the program
-
-	gl.GetProgramStageiv(
-		vertex_array->program->program_obj,
-		GL_VERTEX_SHADER,
-		GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
-		&vertex_array->num_vertex_shader_subroutines
-	);
-
-	gl.GetProgramStageiv(
-		vertex_array->program->program_obj,
-		GL_FRAGMENT_SHADER,
-		GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
-		&vertex_array->num_fragment_shader_subroutines
-	);
-
-	gl.GetProgramStageiv(
-		vertex_array->program->program_obj,
-		GL_GEOMETRY_SHADER,
-		GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
-		&vertex_array->num_geometry_shader_subroutines
-	);
-
-	gl.GetProgramStageiv(
-		vertex_array->program->program_obj,
-		GL_TESS_EVALUATION_SHADER,
-		GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
-		&vertex_array->num_tess_evaluation_shader_subroutines
-	);
-
-	gl.GetProgramStageiv(
-		vertex_array->program->program_obj,
-		GL_TESS_CONTROL_SHADER,
-		GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
-		&vertex_array->num_tess_control_shader_subroutines
-	);
-
 	vertex_array->num_subroutines = 0;
-	vertex_array->num_subroutines += vertex_array->num_vertex_shader_subroutines;
-	vertex_array->num_subroutines += vertex_array->num_fragment_shader_subroutines;
-	vertex_array->num_subroutines += vertex_array->num_geometry_shader_subroutines;
-	vertex_array->num_subroutines += vertex_array->num_tess_evaluation_shader_subroutines;
-	vertex_array->num_subroutines += vertex_array->num_tess_control_shader_subroutines;
+	vertex_array->num_subroutines += vertex_array->program->num_vertex_shader_subroutines;
+	vertex_array->num_subroutines += vertex_array->program->num_fragment_shader_subroutines;
+	vertex_array->num_subroutines += vertex_array->program->num_geometry_shader_subroutines;
+	vertex_array->num_subroutines += vertex_array->program->num_tess_evaluation_shader_subroutines;
+	vertex_array->num_subroutines += vertex_array->program->num_tess_control_shader_subroutines;
 
 	if (vertex_array->num_subroutines) {
 		vertex_array->subroutines = new unsigned[vertex_array->num_subroutines];

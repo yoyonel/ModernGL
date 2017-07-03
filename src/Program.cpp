@@ -386,6 +386,59 @@ void MGLProgram_Compile(MGLProgram * program, PyObject * outputs) {
 		program->tess_control_shader = 0;
 	}
 
+	program->num_vertex_shader_subroutines = 0;
+	program->num_fragment_shader_subroutines = 0;
+	program->num_geometry_shader_subroutines = 0;
+	program->num_tess_evaluation_shader_subroutines = 0;
+	program->num_tess_control_shader_subroutines = 0;
+
+	if (program->context->version_code >= 400) {
+		if (shaders[VERTEX_SHADER_SLOT]) {
+			gl.GetProgramStageiv(
+				obj,
+				GL_VERTEX_SHADER,
+				GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
+				&program->num_vertex_shader_subroutines
+			);
+		}
+
+		if (shaders[FRAGMENT_SHADER_SLOT]) {
+			gl.GetProgramStageiv(
+				obj,
+				GL_FRAGMENT_SHADER,
+				GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
+				&program->num_fragment_shader_subroutines
+			);
+		}
+
+		if (shaders[GEOMETRY_SHADER_SLOT]) {
+			gl.GetProgramStageiv(
+				obj,
+				GL_GEOMETRY_SHADER,
+				GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
+				&program->num_geometry_shader_subroutines
+			);
+		}
+
+		if (shaders[TESS_EVALUATION_SHADER_SLOT]) {
+			gl.GetProgramStageiv(
+				obj,
+				GL_TESS_EVALUATION_SHADER,
+				GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
+				&program->num_tess_evaluation_shader_subroutines
+			);
+		}
+
+		if (shaders[TESS_CONTROL_SHADER_SLOT]) {
+			gl.GetProgramStageiv(
+				obj,
+				GL_TESS_CONTROL_SHADER,
+				GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
+				&program->num_tess_control_shader_subroutines
+			);
+		}
+	}
+
 	PyObject * uniforms = PyDict_New();
 
 	int num_uniforms = 0;
