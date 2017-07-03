@@ -571,6 +571,10 @@ PyObject * MGLFramebuffer_get_depth_mask(MGLFramebuffer * self, void * closure) 
 
 int MGLFramebuffer_set_depth_mask(MGLFramebuffer * self, PyObject * value, void * closure) {
 	if (value == Py_True) {
+		if (self->depth_attachment == Py_None) {
+			MGLError_Set("the depth_attachment is None");
+			return -1;
+		}
 		self->depth_mask = true;
 	} else if (value == Py_False) {
 		self->depth_mask = false;

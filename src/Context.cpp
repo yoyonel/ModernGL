@@ -1173,40 +1173,6 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 			return 0;
 		}
 
-	} else {
-
-		MGLRenderbuffer * renderbuffer = MGLRenderbuffer_New();
-
-		renderbuffer->renderbuffer_obj = 0;
-		gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
-
-		if (!renderbuffer->renderbuffer_obj) {
-			MGLError_Set("cannot create renderbuffer");
-			Py_DECREF(renderbuffer);
-			return 0;
-		}
-
-		gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->renderbuffer_obj);
-
-		if (samples == 0) {
-			gl.RenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
-		} else {
-			gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24, width, height);
-		}
-
-		renderbuffer->width = width;
-		renderbuffer->height = height;
-		renderbuffer->components = 1;
-		renderbuffer->samples = samples;
-		renderbuffer->floats = true;
-		renderbuffer->depth = true;
-
-		Py_INCREF(self);
-		renderbuffer->context = self;
-
-		depth_attachment = (PyObject *)renderbuffer;
-		new_depth_attachment = true;
-
 	}
 
 	MGLFramebuffer * framebuffer = MGLFramebuffer_New();
@@ -1337,12 +1303,9 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	}
 
 	Py_INCREF(color_attachments);
+	Py_INCREF(depth_attachment);
 
-	if (!new_depth_attachment) {
-		Py_INCREF(depth_attachment);
-	}
-
-	framebuffer->depth_mask = true;
+	framebuffer->depth_mask = (depth_attachment != Py_None);
 
 	framebuffer->color_attachments = color_attachments;
 	framebuffer->depth_attachment = depth_attachment;
