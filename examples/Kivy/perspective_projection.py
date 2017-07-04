@@ -60,12 +60,12 @@ class CustomWidget(Widget):
             Callback(self.draw)
 
     def draw(self, *args):
-        self.width, self.height = Window.size
-        self.ctx.viewport = (0, 0, self.width, self.height)
+        width, height = Window.size
+        self.ctx.viewport = (0, 0, width, height)
         self.ctx.clear(0.9, 0.9, 0.9)
         self.ctx.enable(ModernGL.DEPTH_TEST)
 
-        proj = Matrix44.perspective_projection(45.0, self.width / self.height, 0.1, 1000.0)
+        proj = Matrix44.perspective_projection(45.0, width / height, 0.1, 1000.0)
         lookat = Matrix44.look_at(
             (40.0, 30.0, 20.0),
             (0.0, 0.0, 0.0),
