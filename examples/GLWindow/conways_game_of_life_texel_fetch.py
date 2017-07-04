@@ -81,8 +81,8 @@ trans = ctx.program(
     varyings=['vert']
 )
 
-trans.uniforms['Width'].value = width;
-trans.uniforms['Height'].value = height;
+trans.uniforms['Width'].value = width
+trans.uniforms['Height'].value = height
 
 texture = ctx.texture((width, height), 1, pixels.tobytes(), floats=True)
 texture.filter = ModernGL.NEAREST
