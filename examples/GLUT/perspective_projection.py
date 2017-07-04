@@ -1,10 +1,22 @@
 import struct
+import sys
 
-import GLWindow
+from OpenGL.GLUT import (
+    GLUT_DEPTH, GLUT_DOUBLE, GLUT_RGB,
+    glutCreateWindow, glutDisplayFunc, glutInit, glutInitDisplayMode,
+    glutIdleFunc, glutInitWindowSize, glutMainLoop, glutSwapBuffers,
+)
+
 import ModernGL
 from pyrr import Matrix44
 
-wnd = GLWindow.create_window()
+width, height = 1280, 720
+
+glutInit(sys.argv)
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
+glutInitWindowSize(width, height)
+glutCreateWindow(b'')
+
 ctx = ModernGL.create_context()
 
 prog = ctx.program([
@@ -48,12 +60,13 @@ for i in range(0, 32 + 1):
 vbo = ctx.buffer(grid)
 vao = ctx.simple_vertex_array(prog, vbo, ['in_vert', 'in_color'])
 
-while wnd.update():
-    ctx.viewport = wnd.viewport
+
+def display():
+    ctx.viewport = (0, 0, width, height)
     ctx.clear(0.9, 0.9, 0.9)
     ctx.enable(ModernGL.DEPTH_TEST)
 
-    proj = Matrix44.perspective_projection(45.0, wnd.ratio, 0.1, 1000.0)
+    proj = Matrix44.perspective_projection(45.0, width / height, 0.1, 1000.0)
     lookat = Matrix44.look_at(
         (40.0, 30.0, 20.0),
         (0.0, 0.0, 0.0),
@@ -62,3 +75,10 @@ while wnd.update():
 
     mvp.write((proj * lookat).astype('float32').tobytes())
     vao.render(ModernGL.LINES)
+
+    glutSwapBuffers()
+
+
+glutDisplayFunc(display)
+glutIdleFunc(display)
+glutMainLoop()
