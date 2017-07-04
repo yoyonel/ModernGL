@@ -8,7 +8,6 @@ from OpenGL.GLUT import (
 )
 
 import ModernGL
-from pyrr import Matrix44
 
 width, height = 1280, 720
 

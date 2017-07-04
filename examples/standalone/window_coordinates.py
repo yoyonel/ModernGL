@@ -2,7 +2,6 @@ import struct
 
 import ModernGL
 from PIL import Image
-from pyrr import Matrix44
 
 render_size = 1024, 1024
 image_size = 512, 512

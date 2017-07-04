@@ -3,7 +3,6 @@ import struct
 from PyQt5 import QtOpenGL, QtWidgets
 
 import ModernGL
-from pyrr import Matrix44
 
 
 class QGLControllerWidget(QtOpenGL.QGLWidget):

@@ -6,7 +6,6 @@ from kivy.uix.widget import Widget
 from kivy.core.window import Window
 
 import ModernGL
-from pyrr import Matrix44
 
 
 class CustomWidget(Widget):

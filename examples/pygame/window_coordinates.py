@@ -4,7 +4,6 @@ import pygame
 from pygame.locals import DOUBLEBUF, OPENGL
 
 import ModernGL
-from pyrr import Matrix44
 
 width, height = 1280, 720
 
