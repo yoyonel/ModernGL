@@ -1,9 +1,10 @@
 import struct
 
-import GLWindow
+import pyglet
 import ModernGL
+from pyrr import Matrix44
 
-wnd = GLWindow.create_window()
+wnd = pyglet.window.Window(1280, 720)
 ctx = ModernGL.create_context()
 
 prog = ctx.program([
@@ -45,9 +46,14 @@ vbo = ctx.buffer(struct.pack(
 
 vao = ctx.simple_vertex_array(prog, vbo, ['in_vert', 'in_color'])
 
-while wnd.update():
-    ctx.viewport = wnd.viewport
+
+def update(dt):
+    ctx.viewport = (0, 0, wnd.width, wnd.height)
     ctx.clear(0.9, 0.9, 0.9)
     ctx.enable(ModernGL.BLEND)
-    window_size.value = wnd.size
+    window_size.value = (wnd.width, wnd.height)
     vao.render()
+
+
+pyglet.clock.schedule_interval(update, 1.0 / 60.0)
+pyglet.app.run()

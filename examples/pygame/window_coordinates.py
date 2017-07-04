@@ -1,9 +1,16 @@
 import struct
 
-import GLWindow
-import ModernGL
+import pygame
+from pygame.locals import DOUBLEBUF, OPENGL
 
-wnd = GLWindow.create_window()
+import ModernGL
+from pyrr import Matrix44
+
+width, height = 1280, 720
+
+pygame.init()
+pygame.display.set_mode((width, height), DOUBLEBUF | OPENGL)
+
 ctx = ModernGL.create_context()
 
 prog = ctx.program([
@@ -45,9 +52,17 @@ vbo = ctx.buffer(struct.pack(
 
 vao = ctx.simple_vertex_array(prog, vbo, ['in_vert', 'in_color'])
 
-while wnd.update():
-    ctx.viewport = wnd.viewport
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    ctx.viewport = (0, 0, width, height)
     ctx.clear(0.9, 0.9, 0.9)
     ctx.enable(ModernGL.BLEND)
-    window_size.value = wnd.size
+    window_size.value = (width, height)
     vao.render()
+
+    pygame.display.flip()
+    pygame.time.wait(10)

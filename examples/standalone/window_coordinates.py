@@ -1,10 +1,19 @@
 import struct
 
-import GLWindow
 import ModernGL
+from PIL import Image
+from pyrr import Matrix44
 
-wnd = GLWindow.create_window()
-ctx = ModernGL.create_context()
+render_size = 1024, 1024
+image_size = 512, 512
+
+ctx = ModernGL.create_standalone_context()
+
+color_rbo = ctx.renderbuffer(render_size)
+depth_rbo = ctx.depth_renderbuffer(render_size)
+fbo = ctx.framebuffer(color_rbo, depth_rbo)
+
+fbo.use()
 
 prog = ctx.program([
     ctx.vertex_shader('''
@@ -45,9 +54,14 @@ vbo = ctx.buffer(struct.pack(
 
 vao = ctx.simple_vertex_array(prog, vbo, ['in_vert', 'in_color'])
 
-while wnd.update():
-    ctx.viewport = wnd.viewport
-    ctx.clear(0.9, 0.9, 0.9)
-    ctx.enable(ModernGL.BLEND)
-    window_size.value = wnd.size
-    vao.render()
+width, height = render_size
+ctx.viewport = (0, 0, width, height)
+ctx.clear(0.9, 0.9, 0.9)
+ctx.enable(ModernGL.BLEND)
+window_size.value = (width, height)
+vao.render()
+
+img = Image.frombytes('RGB', render_size, fbo.read())
+img = img.transpose(Image.FLIP_TOP_BOTTOM)
+img = img.resize(image_size, Image.LANCZOS)
+img.save('window_coordinates.png')

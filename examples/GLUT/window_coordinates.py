@@ -1,9 +1,22 @@
 import struct
+import sys
 
-import GLWindow
+from OpenGL.GLUT import (
+    GLUT_DEPTH, GLUT_DOUBLE, GLUT_RGB,
+    glutCreateWindow, glutDisplayFunc, glutInit, glutInitDisplayMode,
+    glutIdleFunc, glutInitWindowSize, glutMainLoop, glutSwapBuffers,
+)
+
 import ModernGL
+from pyrr import Matrix44
 
-wnd = GLWindow.create_window()
+width, height = 1280, 720
+
+glutInit(sys.argv)
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
+glutInitWindowSize(width, height)
+glutCreateWindow(b'')
+
 ctx = ModernGL.create_context()
 
 prog = ctx.program([
@@ -45,9 +58,17 @@ vbo = ctx.buffer(struct.pack(
 
 vao = ctx.simple_vertex_array(prog, vbo, ['in_vert', 'in_color'])
 
-while wnd.update():
-    ctx.viewport = wnd.viewport
+
+def display():
+    ctx.viewport = (0, 0, width, height)
     ctx.clear(0.9, 0.9, 0.9)
     ctx.enable(ModernGL.BLEND)
-    window_size.value = wnd.size
+    window_size.value = (width, height)
     vao.render()
+
+    glutSwapBuffers()
+
+
+glutDisplayFunc(display)
+glutIdleFunc(display)
+glutMainLoop()
