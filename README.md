@@ -31,7 +31,7 @@ If you prefer **GPU accelerated high quality graphics** then you should develop 
 - Create GLSL shaders with only a few lines of code
 - Create framebuffers and validate them with a single call
 - Access cool OpenGL features by writing clean and self-explaining code
-- [vscode snippets](https://github.com/cprogrammer1994/ModernGL/blob/master/extras/vscode/python.json) for fast prototyping
+- [vscode snippets](https://github.com/cprogrammer1994/ModernGL/blob/master/extras/vscode/snippets/python.json) for fast prototyping
 - Render to pillow image - (no window required)
 
 ## Why is it simpler?

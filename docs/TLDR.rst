@@ -27,12 +27,12 @@ Choose a Window
 Snippets
 --------
 
-1. Download the `vscode snippets <https://github.com/cprogrammer1994/ModernGL/blob/master/extras/vscode/python.json>`_
+1. Download the `vscode snippets <https://github.com/cprogrammer1994/ModernGL/blob/master/extras/vscode/snippets/python.json>`_
 2. Open vscode
 3. Press ``ctrl+shift+P``
 4. Select ``Open User Snippets``
 5. Select ``Python``
-6. Paste some snippets from `vscode snippets <https://github.com/cprogrammer1994/ModernGL/blob/master/extras/vscode/python.json>`_
+6. Paste some snippets from `vscode snippets <https://github.com/cprogrammer1994/ModernGL/blob/master/extras/vscode/snippets/python.json>`_
 
 .. warning::
 	Do not replace the **python.json** if you have python snippets already.
