@@ -4,8 +4,7 @@ Headless rendering
 
 ModernGL examples that can be run on servers.
 
-
-<img style="width: 50%; height: 50%" alt="01_hello_world.png" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/headless.png">
+<img style="max-width: 50%" alt="01_hello_world.png" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/headless.png">
 
 ## Requirements
 
