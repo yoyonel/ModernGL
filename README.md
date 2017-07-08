@@ -224,7 +224,7 @@ Code is tested with [pep8], [flake8], [prospector] and [pylint]
 
 ## Community
 
-- [Code of conduct](https://github.com/cprogrammer1994/ModernGL/blob/master/CODE_OF_CONDUCT.md)
+- [Code of conduct](https://github.com/cprogrammer1994/ModernGL/blob/master/.github/CODE_OF_CONDUCT.md)
 
 ## Contributors
 
