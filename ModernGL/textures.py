@@ -450,3 +450,70 @@ class Texture3D:
 
         self.mglo.release()
         self.__class__ = InvalidObject
+
+
+class TextureCube:
+    '''
+        A Texture is an OpenGL object that contains one or more images that all
+        have the same image format. A texture can be used in two ways. It can
+        be the source of a texture access from a Shader, or it can be used
+        as a render target.
+
+        A Texture3D object cannot be instantiated directly, it requires a context.
+        Use :py:meth:`Context.texture_cube` to create one.
+    '''
+
+    __slots__ = ['mglo']
+
+    @staticmethod
+    def new(obj):
+        '''
+            For internal use only.
+        '''
+
+        res = Texture.__new__(Texture)
+        res.mglo = obj
+        return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def __repr__(self):
+        return '<Texture3D: %d>' % self.glo
+
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
+    @property
+    def glo(self) -> int:
+        '''
+            int: The internal OpenGL object.
+            This values is provided for debug purposes only.
+        '''
+
+        return self.mglo.glo
+
+    def use(self, location=0) -> None:
+        '''
+            Bind the texture.
+
+            Args:
+                location (int): The texture location.
+                    Same as the integer value that is used for sampler3D
+                    uniforms in the shaders. The value ``0`` will bind the
+                    texture to the ``GL_TEXTURE0`` binding point.
+        '''
+
+        self.mglo.use(location)
+
+    def release(self) -> None:
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject
