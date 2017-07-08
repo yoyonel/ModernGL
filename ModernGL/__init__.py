@@ -56,7 +56,7 @@ __all__ = [
     'POINTS', 'LINES', 'LINE_STRIP', 'LINE_LOOP', 'TRIANGLES', 'TRIANGLE_STRIP', 'TRIANGLE_FAN',
     'LINES_ADJACENCY', 'LINE_STRIP_ADJACENCY', 'TRIANGLES_ADJACENCY', 'TRIANGLE_STRIP_ADJACENCY',
     'CORE_330', 'CORE_400', 'CORE_410', 'CORE_420', 'CORE_430', 'CORE_440', 'CORE_450',
-    'BLEND', 'DEPTH_TEST', 'CULL_FACE', 'MULTISAMPLE',
+    'BLEND', 'DEPTH_TEST', 'CULL_FACE',
     'LINEAR', 'NEAREST', 'MIPMAP',
     'Subroutine', 'SubroutineMap', 'SubroutineUniform', 'SubroutineUniformMap',
     'Uniform', 'UniformMap', 'UniformBlock', 'UniformBlockMap',
