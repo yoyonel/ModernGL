@@ -21,7 +21,7 @@ class Texture:
     __slots__ = ['mglo']
 
     @staticmethod
-    def new(obj):
+    def new(obj) -> 'Texture':
         '''
             For internal use only.
         '''
@@ -239,12 +239,12 @@ class Texture3D:
     __slots__ = ['mglo']
 
     @staticmethod
-    def new(obj):
+    def new(obj) -> 'Texture3D':
         '''
             For internal use only.
         '''
 
-        res = Texture.__new__(Texture)
+        res = Texture3D.__new__(Texture3D)
         res.mglo = obj
         return res
 
