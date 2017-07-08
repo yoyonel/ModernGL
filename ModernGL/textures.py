@@ -466,12 +466,12 @@ class TextureCube:
     __slots__ = ['mglo']
 
     @staticmethod
-    def new(obj):
+    def new(obj) -> 'TextureCube':
         '''
             For internal use only.
         '''
 
-        res = Texture.__new__(Texture)
+        res = TextureCube.__new__(TextureCube)
         res.mglo = obj
         return res
 
@@ -480,7 +480,7 @@ class TextureCube:
         raise NotImplementedError()
 
     def __repr__(self):
-        return '<Texture3D: %d>' % self.glo
+        return '<TextureCube: %d>' % self.glo
 
     def __eq__(self, other):
         return self.mglo is other.mglo
