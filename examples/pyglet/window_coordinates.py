@@ -1,7 +1,7 @@
 import struct
 
-import pyglet
 import ModernGL
+import pyglet
 
 wnd = pyglet.window.Window(1280, 720)
 ctx = ModernGL.create_context()

@@ -8,7 +8,7 @@ ModernGL examples that can be run on servers.
 
 ## Requirements
 
-```
+```shell
 pip install ModernGL Pillow Pyrr numpy
 ```
 
@@ -50,8 +50,6 @@ wget https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/examples/
 xvfb-run --auto-servernum --server-args='-screen 0 640x480x24' python 01_hello_world.py
 ls 01_hello_world.png
 ```
-
-**01_hello_world.png**
 
 <img width="50%" alt="01_hello_world.png" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/01_hello_world.png">
 

@@ -2,7 +2,6 @@ import struct
 
 import GLWindow
 import ModernGL
-
 from PIL import Image, ImageDraw, ImageFont
 
 # Window & Context

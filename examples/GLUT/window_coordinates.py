@@ -1,13 +1,11 @@
 import struct
 import sys
 
-from OpenGL.GLUT import (
-    GLUT_DEPTH, GLUT_DOUBLE, GLUT_RGB,
-    glutCreateWindow, glutDisplayFunc, glutInit, glutInitDisplayMode,
-    glutIdleFunc, glutInitWindowSize, glutMainLoop, glutSwapBuffers,
-)
-
 import ModernGL
+from OpenGL.GLUT import (
+    GLUT_DEPTH, GLUT_DOUBLE, GLUT_RGB, glutCreateWindow, glutDisplayFunc, glutIdleFunc, glutInit, glutInitDisplayMode,
+    glutInitWindowSize, glutMainLoop, glutSwapBuffers
+)
 
 width, height = 1280, 720
 

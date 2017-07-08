@@ -1,9 +1,8 @@
 import struct
 
+import ModernGL
 import pygame
 from pygame.locals import DOUBLEBUF, OPENGL
-
-import ModernGL
 
 width, height = 1280, 720
 

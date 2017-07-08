@@ -1,6 +1,5 @@
 import GLWindow
 import ModernGL
-
 import numpy as np
 
 wnd = GLWindow.create_window()

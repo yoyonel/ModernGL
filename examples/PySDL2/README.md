@@ -1,6 +1,8 @@
+# PySDL2
+
 ## Requirements
 
-```
+```shell
 pip install PySDL2 ModernGL Pillow Pyrr numpy
 ```
 

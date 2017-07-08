@@ -1,34 +1,37 @@
-## Structure of ModernGL
+# Structure of ModernGL
 
 The module has two layers:
 
 - [Python layer](#python-layer)
 - [C++ layer](#c-layer)
 
-### Python layer
+## Python layer
 
 The documentation, type hints and the high level api is implemented in the python layer.
 
-### C++ layer
+## C++ layer
 
 > Same as the `ModernGL.mgl` module
 
 The OpenGL calls are made in the C++ layer.
 Types and methods implemented in this layer **should** be used in the Python layer only.
 
-### Example
+## Example
 
-For example the [write](https://moderngl.readthedocs.io/en/stable/Buffers.html#ModernGL.Buffer.write) method of the [`Buffer`](https://moderngl.readthedocs.io/en/stable/Buffers.html#ModernGL.Buffer) class is implemented in the Buffer.cpp:
+For example the [write] method of the [Buffer] class is implemented in the Buffer.cpp:
+
+[write]: https://moderngl.readthedocs.io/en/stable/Buffers.html#ModernGL.Buffer.write
+[Buffer]: https://moderngl.readthedocs.io/en/stable/Buffers.html#ModernGL.Buffer
 
 ```c++
 PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args) {
 
-	...
+  ...
 
-	const GLMethods & gl = self->context->gl;
-	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
-	gl.BufferSubData(GL_ARRAY_BUFFER, (GLintptr)offset, size, data);
-	Py_RETURN_NONE;
+  const GLMethods & gl = self->context->gl;
+  gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
+  gl.BufferSubData(GL_ARRAY_BUFFER, (GLintptr)offset, size, data);
+  Py_RETURN_NONE;
 }
 ```
 
@@ -36,16 +39,17 @@ This method is interfaced in the Python layer as follows:
 
 ```python
 def write(self, data, *, offset=0) -> None:
-	'''
-		google style docstring
-	'''
-	self.mglo.write(data, offset)
+  '''
+    google style docstring
+  '''
+  self.mglo.write(data, offset)
 ```
 
 The C++ implementation does not take any keyword arguments and no default values are specified.
 The python layer is documented and type hinted properly.
 
-Most of the objects have a `self.mglo` member. For example the Buffer object's `mglo` member is an `MGLBuffer` object from the C++ layer.
+Most of the objects have a `self.mglo` member.
+For example the Buffer object's `mglo` member is an `MGLBuffer` object from the C++ layer.
 The user **should not** access directly the C++ implementation.
 
 And finally a feature implemented entirely in the Python layer:
@@ -59,7 +63,7 @@ def detect_format(program, attributes) -> str:
     return ''.join('%d%s' % fmt(program.attributes[a]) for a in attributes)
 ```
 
-### The Purpose of the Python layer
+## The Purpose of the Python layer
 
 - Provides documentation
 - Provides type hinting
@@ -71,7 +75,7 @@ def detect_format(program, attributes) -> str:
 
 ## Files and folders
 
-```
+```s
 [ModernGL]                # the python implementation of ModernGL (the Python layer)
   |-- [ext]               # external modules are allowed to add files here
   |-- [tk]                # tkinter connector

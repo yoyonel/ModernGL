@@ -1,8 +1,7 @@
 import struct
 
-from PyQt5 import QtCore, QtOpenGL, QtWidgets
-
 import ModernGL
+from PyQt5 import QtCore, QtOpenGL, QtWidgets
 
 
 class QGLControllerWidget(QtOpenGL.QGLWidget):

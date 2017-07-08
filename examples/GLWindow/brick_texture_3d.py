@@ -3,9 +3,8 @@ from math import cos, sin
 from random import randrange
 
 import GLWindow
-from pyrr import Matrix44
-
 import ModernGL
+from pyrr import Matrix44
 
 
 def create_brick_texture(size):
