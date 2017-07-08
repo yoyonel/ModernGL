@@ -30,6 +30,7 @@ class Implementation:
     BLEND = MockObject()
     DEPTH_TEST = MockObject()
     CULL_FACE = MockObject()
+    ENABLE_MASK = MockObject()
 
     LINEAR = MockObject()
     NEAREST = MockObject()
