@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - `ModernGL.MULTISAMPLE` constant
 - Version class and Version constants
 
+### Fixed
+
+- Texture3D created with wrong type
+
 ## [4.1.11] - 2017-07-02
 
 ### Added
