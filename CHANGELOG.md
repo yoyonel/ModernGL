@@ -7,9 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Context `enable_only` method
+
 ### Changed
 
-- Framebuffer does not create a Renderbuffer when depth_attachment is None
+- Enable flags support bitwise `__or__`, `__and__` and `__inv__`
+- Framebuffer does not create a Renderbuffer when the depth_attachment is None
+
+### Removed
+
+- `ModernGL.MULTISAMPLE` constant
 
 ## [4.1.11] - 2017-07-02
 
