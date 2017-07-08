@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- TextureCube class and Context `texture_cube` method
 - Context `enable_only` method
 
 ### Changed
