@@ -15,6 +15,7 @@
 #include "Subroutine.hpp"
 #include "SubroutineUniform.hpp"
 #include "Texture.hpp"
+#include "TextureCube.hpp"
 #include "Texture3D.hpp"
 #include "TextureFilter.hpp"
 #include "Uniform.hpp"
@@ -263,6 +264,17 @@ bool MGL_InitializeModule(PyObject * module) {
 		Py_INCREF(&MGLTexture_Type);
 
 		PyModule_AddObject(module, "Texture", (PyObject *)&MGLTexture_Type);
+	}
+
+	{
+		if (PyType_Ready(&MGLTextureCube_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register TextureCube in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return false;
+		}
+
+		Py_INCREF(&MGLTextureCube_Type);
+
+		PyModule_AddObject(module, "TextureCube", (PyObject *)&MGLTextureCube_Type);
 	}
 
 	{
