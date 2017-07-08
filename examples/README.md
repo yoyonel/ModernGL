@@ -57,6 +57,9 @@ pip install PySDL2
   - [particle_system](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/particle_system.py)
   - [particle_system_2](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/particle_system_2.py)
   - [pillow_font](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/pillow_font.py)
+  - [using_texture3d](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/using_texture3d.py)
+  - [perspective_projection](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/perspective_projection.py)
+  - [window_coordinates](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/window_coordinates.py)
 
 - [Kivy](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/Kivy)
   - [01_hello_world](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/Kivy/01_hello_world.py)
