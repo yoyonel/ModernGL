@@ -1,7 +1,7 @@
 import struct
 
-import pyglet
 import ModernGL
+import pyglet
 from pyrr import Matrix44
 
 wnd = pyglet.window.Window(1280, 720)

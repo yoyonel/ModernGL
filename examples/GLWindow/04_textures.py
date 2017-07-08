@@ -3,7 +3,6 @@ import struct
 
 import GLWindow
 import ModernGL
-
 from PIL import Image
 
 # Window & Context

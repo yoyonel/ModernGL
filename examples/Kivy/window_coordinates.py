@@ -1,11 +1,10 @@
 import struct
 
+import ModernGL
 from kivy.app import App
+from kivy.core.window import Window
 from kivy.graphics import Callback
 from kivy.uix.widget import Widget
-from kivy.core.window import Window
-
-import ModernGL
 
 
 class CustomWidget(Widget):

@@ -1,10 +1,9 @@
 import os
 import struct
 
+import ModernGL
 import pyglet
 from PIL import Image
-
-import ModernGL
 
 wnd = pyglet.window.Window()
 ctx = ModernGL.create_context()

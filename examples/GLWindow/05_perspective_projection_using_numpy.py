@@ -2,9 +2,8 @@ import math
 import struct
 
 import GLWindow
-import numpy as np
-
 import ModernGL
+import numpy as np
 
 
 def perspective(fov, ratio, near, far):

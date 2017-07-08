@@ -1,7 +1,6 @@
 import struct
 
 import ModernGL
-
 from PIL import Image
 
 # Context

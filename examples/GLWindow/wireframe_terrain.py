@@ -1,10 +1,10 @@
-import struct
 import os
+import struct
 
 import GLWindow
 import ModernGL
-from pyrr import Matrix44
 from PIL import Image
+from pyrr import Matrix44
 
 data_folder = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'data'))
 

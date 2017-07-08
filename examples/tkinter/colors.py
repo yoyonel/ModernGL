@@ -1,8 +1,8 @@
 import struct
+import tkinter
 
 import ModernGL
 import ModernGL.tk
-import tkinter
 
 ctx = ModernGL.create_standalone_context()
 

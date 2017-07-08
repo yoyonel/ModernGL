@@ -1,10 +1,9 @@
 import os
 import struct
 
+import ModernGL
 from PIL import Image
 from PyQt5 import QtCore, QtOpenGL, QtWidgets
-
-import ModernGL
 
 
 class QGLControllerWidget(QtOpenGL.QGLWidget):
