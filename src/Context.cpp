@@ -2405,7 +2405,7 @@ void MGLContext_Initialize(MGLContext * self) {
 
 	gl.BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	// gl.Enable(GL_PRIMITIVE_RESTART_FIXED_INDEX);
+	gl.Enable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
 	gl.Enable(GL_PRIMITIVE_RESTART);
 	gl.PrimitiveRestartIndex(-1);
