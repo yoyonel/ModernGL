@@ -23,10 +23,9 @@ except ImportError:
 
 from .buffers import Buffer, BufferAccess, detect_format
 from .common import (
-    BLEND, CORE_330, CORE_400, CORE_410, CORE_420, CORE_430, CORE_440, CORE_450, CULL_FACE, DEPTH_TEST, LINE_LOOP,
-    LINE_STRIP, LINE_STRIP_ADJACENCY, LINEAR, LINES, LINES_ADJACENCY, MIPMAP, NEAREST, POINTS, TRIANGLE_FAN,
-    TRIANGLE_STRIP, TRIANGLE_STRIP_ADJACENCY, TRIANGLES, TRIANGLES_ADJACENCY, EnableFlag, InvalidObject, Primitive,
-    TextureFilter, Version
+    BLEND, CULL_FACE, DEPTH_TEST, LINE_LOOP, LINE_STRIP, LINE_STRIP_ADJACENCY, LINEAR, LINES, LINES_ADJACENCY, MIPMAP,
+    NEAREST, POINTS, TRIANGLE_FAN, TRIANGLE_STRIP, TRIANGLE_STRIP_ADJACENCY, TRIANGLES, TRIANGLES_ADJACENCY, EnableFlag,
+    InvalidObject, Primitive, TextureFilter
 )
 from .context import Context, create_context, create_standalone_context
 from .framebuffers import Framebuffer
@@ -42,10 +41,9 @@ from .vertex_arrays import VertexArray, VertexArrayAttribute
 __version__ = '4.1.11'
 
 __all__ = [
-    'InvalidObject', 'Version', 'EnableFlag', 'Primitive', 'Error', 'TextureFilter',
+    'InvalidObject', 'EnableFlag', 'Primitive', 'Error', 'TextureFilter',
     'POINTS', 'LINES', 'LINE_STRIP', 'LINE_LOOP', 'TRIANGLES', 'TRIANGLE_STRIP', 'TRIANGLE_FAN',
     'LINES_ADJACENCY', 'LINE_STRIP_ADJACENCY', 'TRIANGLES_ADJACENCY', 'TRIANGLE_STRIP_ADJACENCY',
-    'CORE_330', 'CORE_400', 'CORE_410', 'CORE_420', 'CORE_430', 'CORE_440', 'CORE_450',
     'BLEND', 'DEPTH_TEST', 'CULL_FACE',
     'LINEAR', 'NEAREST', 'MIPMAP',
     'Subroutine', 'SubroutineMap', 'SubroutineUniform', 'SubroutineUniformMap',

@@ -735,7 +735,7 @@ def create_context(require=None) -> Context:
         :py:func:`create_standalone_context` instead.
 
         Keyword Arguments:
-            require (Version): OpenGL version.
+            require (int): OpenGL version code.
 
         Returns:
             Context: context
@@ -743,29 +743,22 @@ def create_context(require=None) -> Context:
 
     ctx = Context.new(mgl.create_context())
 
-    if require is not None and ctx.version_code < require.code:
+    if require is not None and ctx.version_code < require:
         raise Exception('The version required is not provided')
 
     return ctx
 
 
-def create_standalone_context(size=(256, 256), require=None) -> Context:
+def create_standalone_context(size=(4, 4), require=None) -> Context:
     '''
         Create a standalone ModernGL context.
         This method will create a hidden window with the
         initial size given in the parameters. This will
         set the  initial viewport as well.
 
-        It is reccommanded to use a separate framebuffer when rendering.
-
-        The size is not really important for the default framebuffer.
-        It is only useful to get a viewport with a visible size.
-        Size ``(1, 1)`` is great to save memory, however makes harder to
-        detect when the viewport was forgotten to set.
-
         Keyword Arguments:
             size (tuple): Initial framebuffer size.
-            require (Version): OpenGL version.
+            require (int): OpenGL version code.
 
         Returns:
             Context: context
@@ -773,7 +766,7 @@ def create_standalone_context(size=(256, 256), require=None) -> Context:
 
     ctx = Context.new(mgl.create_standalone_context(*size))
 
-    if require is not None and ctx.version_code < require.code:
+    if require is not None and ctx.version_code < require:
         raise Exception('The version required is not provided')
 
     return ctx
