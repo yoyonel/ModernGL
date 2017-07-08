@@ -21,33 +21,23 @@ except ImportError:
 
         raise ImportError(_IMPORT_ERROR)
 
-
-from .common import (
-    InvalidObject, Version, EnableFlag, Primitive, TextureFilter,
-    POINTS, LINES, LINE_STRIP, LINE_LOOP, TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN,
-    LINES_ADJACENCY, LINE_STRIP_ADJACENCY, TRIANGLES_ADJACENCY, TRIANGLE_STRIP_ADJACENCY,
-    CORE_330, CORE_400, CORE_410, CORE_420, CORE_430, CORE_440, CORE_450,
-    BLEND, DEPTH_TEST, CULL_FACE, MULTISAMPLE,
-    LINEAR, NEAREST, MIPMAP,
-)
-
-from .members import (
-    Uniform, UniformMap, UniformBlock, UniformBlockMap,
-    Varying, VaryingMap, Attribute, AttributeMap,
-    Subroutine, SubroutineMap, SubroutineUniform, SubroutineUniformMap,
-    ProgramStage,
-)
-
-from .vertex_arrays import (
-    VertexArrayAttribute, VertexArray
-)
-
-from .context import Context, create_context, create_standalone_context
 from .buffers import Buffer, BufferAccess, detect_format
-from .programs import ComputeShader, Shader, Program
-from .textures import Texture, Texture3D
-from .renderbuffers import Renderbuffer
+from .common import (
+    BLEND, CORE_330, CORE_400, CORE_410, CORE_420, CORE_430, CORE_440, CORE_450, CULL_FACE, DEPTH_TEST, LINE_LOOP,
+    LINE_STRIP, LINE_STRIP_ADJACENCY, LINEAR, LINES, LINES_ADJACENCY, MIPMAP, NEAREST, POINTS, TRIANGLE_FAN,
+    TRIANGLE_STRIP, TRIANGLE_STRIP_ADJACENCY, TRIANGLES, TRIANGLES_ADJACENCY, EnableFlag, InvalidObject, Primitive,
+    TextureFilter, Version
+)
+from .context import Context, create_context, create_standalone_context
 from .framebuffers import Framebuffer
+from .members import (
+    Attribute, AttributeMap, ProgramStage, Subroutine, SubroutineMap, SubroutineUniform, SubroutineUniformMap, Uniform,
+    UniformBlock, UniformBlockMap, UniformMap, Varying, VaryingMap
+)
+from .programs import ComputeShader, Program, Shader
+from .renderbuffers import Renderbuffer
+from .textures import Texture, Texture3D
+from .vertex_arrays import VertexArray, VertexArrayAttribute
 
 __version__ = '4.1.11'
 
@@ -56,7 +46,7 @@ __all__ = [
     'POINTS', 'LINES', 'LINE_STRIP', 'LINE_LOOP', 'TRIANGLES', 'TRIANGLE_STRIP', 'TRIANGLE_FAN',
     'LINES_ADJACENCY', 'LINE_STRIP_ADJACENCY', 'TRIANGLES_ADJACENCY', 'TRIANGLE_STRIP_ADJACENCY',
     'CORE_330', 'CORE_400', 'CORE_410', 'CORE_420', 'CORE_430', 'CORE_440', 'CORE_450',
-    'BLEND', 'DEPTH_TEST', 'CULL_FACE', 'MULTISAMPLE',
+    'BLEND', 'DEPTH_TEST', 'CULL_FACE',
     'LINEAR', 'NEAREST', 'MIPMAP',
     'Subroutine', 'SubroutineMap', 'SubroutineUniform', 'SubroutineUniformMap',
     'Uniform', 'UniformMap', 'UniformBlock', 'UniformBlockMap',

@@ -1,20 +1,8 @@
 #pragma once
 
-#include "Python.hpp"
-
-#include "Object.hpp"
-
-struct MGLEnableFlag : public MGLObject {
-	PyObject * wrapper;
-
-	int flag;
+enum MGLEnableFlag {
+	MGL_BLEND = 1,
+	MGL_DEPTH_TEST = 2,
+	MGL_CULL_FACE = 4,
+	MGL_ENABLE_MASK = 7,
 };
-
-extern PyTypeObject MGLEnableFlag_Type;
-
-MGLEnableFlag * MGLEnableFlag_New();
-
-extern MGLEnableFlag * MGL_BLEND;
-extern MGLEnableFlag * MGL_DEPTH_TEST;
-extern MGLEnableFlag * MGL_CULL_FACE;
-extern MGLEnableFlag * MGL_MULTISAMPLE;

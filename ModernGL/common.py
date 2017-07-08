@@ -24,52 +24,54 @@ class EnableFlag:
         EnableFlag
     '''
 
-    __slots__ = ['mglo', 'name']
+    __slots__ = ['flags']
 
     @staticmethod
-    def new(obj, name) -> 'EnableFlag':
+    def new(flags) -> 'EnableFlag':
         '''
             For internal use only.
         '''
 
         res = EnableFlag.__new__(EnableFlag)
-        res.name = name
-        res.mglo = obj
+        res.flags = flags
         return res
 
     def __init__(self):
-        self.name = None
-        self.mglo = None
+        self.flags = None
         raise NotImplementedError('EnableFlag')
 
+    def __or__(self, other) -> 'EnableFlag':
+        return EnableFlag.new(self.flags | other.flags)
+
+    def __and__(self, other) -> 'EnableFlag':
+        return EnableFlag.new(self.flags & other.flags)
+
+    def __inv__(self, other) -> 'EnableFlag':
+        return EnableFlag.new(mgl.ENABLE_MASK & ~self.flags)
+
     def __repr__(self):
-        return 'ModernGL.%s' % self.name
+        return '<ModernGL.EnableFlag>'
 
     def __eq__(self, other):
-        return self.mglo is other.mglo
+        return self.flags == other.flags
 
     def __ne__(self, other):
-        return self.mglo is not other.mglo
+        return self.flags != other.flags
 
 
-BLEND = EnableFlag.new(mgl.BLEND, 'BLEND')
+BLEND = EnableFlag.new(mgl.BLEND)
 '''
     GL_BLEND
 '''
 
-DEPTH_TEST = EnableFlag.new(mgl.DEPTH_TEST, 'DEPTH_TEST')
+DEPTH_TEST = EnableFlag.new(mgl.DEPTH_TEST)
 '''
     GL_DEPTH_TEST
 '''
 
-CULL_FACE = EnableFlag.new(mgl.CULL_FACE, 'CULL_FACE')
+CULL_FACE = EnableFlag.new(mgl.CULL_FACE)
 '''
     GL_CULL_FACE
-'''
-
-MULTISAMPLE = EnableFlag.new(mgl.MULTISAMPLE, 'MULTISAMPLE')
-'''
-    GL_MULTISAMPLE
 '''
 
 

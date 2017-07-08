@@ -258,7 +258,7 @@ class Context:
 
         self.mglo.clear(red, green, blue, alpha, viewport)
 
-    def enable(self, flag) -> None:
+    def enable_only(self, flags) -> None:
         '''
             Enable flags.
 
@@ -267,15 +267,30 @@ class Context:
                 - :py:data:`ModernGL.BLEND`
                 - :py:data:`ModernGL.DEPTH_TEST`
                 - :py:data:`ModernGL.CULL_FACE`
-                - :py:data:`ModernGL.MULTISAMPLE`
 
             Args:
                 flag (EnableFlag): The flag to enable.
         '''
 
-        self.mglo.enable(flag.mglo)
+        self.mglo.enable_only(flags.flags)
 
-    def disable(self, flag) -> None:
+    def enable(self, flags) -> None:
+        '''
+            Enable flags.
+
+            Valid flags are:
+
+                - :py:data:`ModernGL.BLEND`
+                - :py:data:`ModernGL.DEPTH_TEST`
+                - :py:data:`ModernGL.CULL_FACE`
+
+            Args:
+                flag (EnableFlag): The flag to enable.
+        '''
+
+        self.mglo.enable(flags.flags)
+
+    def disable(self, flags) -> None:
         '''
             Disable flags.
 
@@ -284,13 +299,12 @@ class Context:
                 - :py:data:`ModernGL.BLEND`
                 - :py:data:`ModernGL.DEPTH_TEST`
                 - :py:data:`ModernGL.CULL_FACE`
-                - :py:data:`ModernGL.MULTISAMPLE`
 
             Args:
                 flag (EnableFlag): The flag to disable.
         '''
 
-        self.mglo.disable(flag.mglo)
+        self.mglo.disable(flags.flags)
 
     def finish(self) -> None:
         '''

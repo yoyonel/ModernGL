@@ -116,13 +116,12 @@ PyObject * MGLContext_clear(MGLContext * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLContext_enable(MGLContext * self, PyObject * args) {
-	MGLEnableFlag * flags;
+PyObject * MGLContext_enable_only(MGLContext * self, PyObject * args) {
+	int flags;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O!",
-		&MGLEnableFlag_Type,
+		"i",
 		&flags
 	);
 
@@ -130,18 +129,61 @@ PyObject * MGLContext_enable(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	self->gl.Enable(flags->flag);
+	if (flags & MGL_BLEND) {
+		self->gl.Enable(GL_BLEND);
+	} else {
+		self->gl.Disable(GL_BLEND);
+	}
+
+	if (flags & MGL_DEPTH_TEST) {
+		self->gl.Enable(GL_DEPTH_TEST);
+	} else {
+		self->gl.Disable(GL_DEPTH_TEST);
+	}
+
+	if (flags & MGL_CULL_FACE) {
+		self->gl.Enable(GL_CULL_FACE);
+	} else {
+		self->gl.Disable(GL_CULL_FACE);
+	}
+
+	Py_RETURN_NONE;
+}
+
+PyObject * MGLContext_enable(MGLContext * self, PyObject * args) {
+	int flags;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"i",
+		&flags
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (flags & MGL_BLEND) {
+		self->gl.Enable(GL_BLEND);
+	}
+
+	if (flags & MGL_DEPTH_TEST) {
+		self->gl.Enable(GL_DEPTH_TEST);
+	}
+
+	if (flags & MGL_CULL_FACE) {
+		self->gl.Enable(GL_CULL_FACE);
+	}
 
 	Py_RETURN_NONE;
 }
 
 PyObject * MGLContext_disable(MGLContext * self, PyObject * args) {
-	MGLEnableFlag * flags;
+	int flags;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O!",
-		&MGLEnableFlag_Type,
+		"i",
 		&flags
 	);
 
@@ -149,7 +191,17 @@ PyObject * MGLContext_disable(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	self->gl.Disable(flags->flag);
+	if (flags & MGL_BLEND) {
+		self->gl.Disable(GL_BLEND);
+	}
+
+	if (flags & MGL_DEPTH_TEST) {
+		self->gl.Disable(GL_DEPTH_TEST);
+	}
+
+	if (flags & MGL_CULL_FACE) {
+		self->gl.Disable(GL_CULL_FACE);
+	}
 
 	Py_RETURN_NONE;
 }
@@ -1509,6 +1561,7 @@ PyObject * MGLContext_release(MGLContext * self) {
 
 PyMethodDef MGLContext_tp_methods[] = {
 	{"clear", (PyCFunction)MGLContext_clear, METH_VARARGS, 0},
+	{"enable_only", (PyCFunction)MGLContext_enable_only, METH_VARARGS, 0},
 	{"enable", (PyCFunction)MGLContext_enable, METH_VARARGS, 0},
 	{"disable", (PyCFunction)MGLContext_disable, METH_VARARGS, 0},
 	{"finish", (PyCFunction)MGLContext_finish, METH_NOARGS, 0},
@@ -2420,4 +2473,6 @@ void MGLContext_Initialize(MGLContext * self) {
 
 	self->wireframe = false;
 	self->front_face = GL_CCW;
+
+	// TODO: multisample getter setter (bool)
 }
