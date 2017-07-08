@@ -8,6 +8,14 @@
 
 struct MGLTextureCube : public MGLContextMember {
 	int texture_obj;
+
+	int width;
+	int height;
+	int depth;
+
+	int components;
+
+	bool floats;
 };
 
 extern PyTypeObject MGLTextureCube_Type;
