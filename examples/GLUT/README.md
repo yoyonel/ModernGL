@@ -1,6 +1,8 @@
+# GLUT
+
 ## Requirements
 
-```
+```shell
 pip install PyOpenGL PyOpenGL_accelerate ModernGL Pillow Pyrr numpy
 ```
 
