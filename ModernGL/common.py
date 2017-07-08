@@ -24,10 +24,10 @@ class EnableFlag:
         EnableFlag
     '''
 
-    __slots__ = ['flag']
+    __slots__ = ['flags']
 
     @staticmethod
-    def new(flags, name) -> 'EnableFlag':
+    def new(flags) -> 'EnableFlag':
         '''
             For internal use only.
         '''
