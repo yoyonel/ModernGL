@@ -106,13 +106,13 @@ pip install PySDL2
 
 ### Basic
 
-<img width="45%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/01_hello_world.png">
+<img align="left" width="45%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/01_hello_world.png">
 
-<img width="45%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/02_uniforms_and_attributes.png">
+<img align="right" width="45%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/02_uniforms_and_attributes.png">
 
-<img width="45%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/03_alpha_blending.png">
+<img align="left" width="45%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/03_alpha_blending.png">
 
-<img width="45%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/04_textures.png">
+<img align="right" width="45%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/04_textures.png">
 
 ### julia_fractal
 
