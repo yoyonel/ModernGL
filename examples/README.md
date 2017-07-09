@@ -106,18 +106,18 @@ pip install PySDL2
 
 ### Basic
 
-<img align="right" width="50%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/01_hello_world.png">
+<img align="right" width="49%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/01_hello_world.png">
 
-<img align="left" width="50%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/02_uniforms_and_attributes.png">
+<img align="left" width="49%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/02_uniforms_and_attributes.png">
 
-<img align="right" width="50%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/03_alpha_blending.png">
+<img align="right" width="49%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/03_alpha_blending.png">
 
-<img align="left" width="50%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/04_textures.png">
+<img align="left" width="49%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/04_textures.png">
 
 ### julia_fractal
 
-<img width="50%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/julia_fractal.png">
+<img width="49%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/julia_fractal.png">
 
 ### particle_system
 
-<img width="50%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/particle_system.png">
+<img width="49%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/particle_system.png">
