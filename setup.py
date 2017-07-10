@@ -18,6 +18,9 @@ if target == 'linux':
 
 install_requires = []
 
+if sys.version_info < (3, 0):
+    raise Exception('Python 2 is not supported!')
+
 if sys.version_info < (3, 5):
     install_requires.append('typing')
 
