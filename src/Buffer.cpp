@@ -387,7 +387,6 @@ void MGLBuffer_tp_as_buffer_release_view(MGLBuffer * self, Py_buffer * view) {
 }
 
 PyBufferProcs MGLBuffer_tp_as_buffer = {
-	PyBufferProcs_PADDING
 	(getbufferproc)MGLBuffer_tp_as_buffer_get_view,                  // getbufferproc bf_getbuffer
 	(releasebufferproc)MGLBuffer_tp_as_buffer_release_view,          // releasebufferproc bf_releasebuffer
 };
