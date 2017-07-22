@@ -198,7 +198,7 @@ apt-get install python3-dev libgl1-mesa-dev libx11-dev
 python3 setup.py install
 ```
 
-### Building the shinx documentation
+### Building the sphinx documentation
 
 ```sh
 pip install -r docs/requirements.txt
