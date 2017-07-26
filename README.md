@@ -28,7 +28,7 @@ pip install ModernGL
 ### Why ModernGL?
 
 If you prefer **GPU accelerated high quality graphics** then you should develop your applications using ModernGL.
-It is much simpler then PyOpenGL and capable of rendering with the same quality and performace.
+It is much simpler than PyOpenGL and capable of rendering with the same quality and performace.
 
 - Full linting support - (using [vscode] and [pylint])
 - Create GLSL shaders with only a few lines of code
@@ -82,7 +82,7 @@ b'Hello'
 >>> vbo2.write(b'Some other data')
 ```
 
-### Is ModernGL faster then PyOpenGL?
+### Is ModernGL faster than PyOpenGL?
 
 In some cases **yes**, the core functions of ModernGL are written in C++, OpenGL functions are called in quick succession so these calls together count as a single python function call.
 
@@ -120,7 +120,7 @@ ctx.copy_framebuffer(fbo2, fbo1)
 Image.frombytes('RGB', size, fbo1.read(components=3))
 ```
 
-## Render to pillow image (larger then screen)
+## Render to pillow image (larger than screen)
 
 Just change the size to `(4096, 4096)`<br>
 
