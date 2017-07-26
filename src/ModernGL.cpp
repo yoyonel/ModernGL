@@ -484,8 +484,6 @@ bool MGL_InitializeModule(PyObject * module) {
 	return true;
 }
 
-#if PY_MAJOR_VERSION >= 3
-
 PyModuleDef MGL_moduledef = {
 	PyModuleDef_HEAD_INIT,
 	"mgl",
@@ -507,17 +505,3 @@ extern "C" PyObject * PyInit_mgl() {
 
 	return module;
 }
-
-#else
-
-extern "C" PyObject * initmgl() {
-	PyObject * module = Py_InitModule("mgl", MGL_module_methods);
-
-	if (!MGL_InitializeModule(module)) {
-		return 0;
-	}
-
-	return module;
-}
-
-#endif

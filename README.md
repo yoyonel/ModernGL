@@ -198,7 +198,7 @@ apt-get install python3-dev libgl1-mesa-dev libx11-dev
 python3 setup.py install
 ```
 
-### Building the shinx documentation
+### Building the sphinx documentation
 
 ```sh
 pip install -r docs/requirements.txt
@@ -224,7 +224,7 @@ Code is tested with [pep8], [flake8], [prospector] and [pylint]
 
 ## Community
 
-- [Code of conduct](https://github.com/cprogrammer1994/ModernGL/blob/master/CODE_OF_CONDUCT.md)
+- [Code of conduct](https://github.com/cprogrammer1994/ModernGL/blob/master/.github/CODE_OF_CONDUCT.md)
 
 ## Contributors
 

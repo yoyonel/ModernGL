@@ -37,7 +37,7 @@ class EnableFlag:
         return res
 
     def __init__(self):
-        self.flags = None
+        self.flags = 0
         raise NotImplementedError('EnableFlag')
 
     def __or__(self, other) -> 'EnableFlag':
@@ -46,7 +46,7 @@ class EnableFlag:
     def __and__(self, other) -> 'EnableFlag':
         return EnableFlag.new(self.flags & other.flags)
 
-    def __inv__(self, other) -> 'EnableFlag':
+    def __inv__(self) -> 'EnableFlag':
         return EnableFlag.new(mgl.ENABLE_MASK & ~self.flags)
 
     def __repr__(self):
