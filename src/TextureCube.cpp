@@ -208,6 +208,8 @@ PyObject * MGLTextureCube_release(MGLTextureCube * self) {
 }
 
 PyMethodDef MGLTextureCube_tp_methods[] = {
+	{"read", (PyCFunction)MGLTextureCube_read, METH_VARARGS, 0},
+	{"read_into", (PyCFunction)MGLTextureCube_read_into, METH_VARARGS, 0},
 	{"use", (PyCFunction)MGLTextureCube_use, METH_VARARGS, 0},
 	{"release", (PyCFunction)MGLTextureCube_release, METH_NOARGS, 0},
 	{0},
