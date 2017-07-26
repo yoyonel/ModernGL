@@ -496,7 +496,7 @@ class TextureCube:
 
         return self.mglo.glo
 
-    def read(self, face, *, alignment=1):
+    def read(self, face, *, alignment=1) -> bytes:
         '''
             Read a face from the cubemap texture.
 
@@ -509,7 +509,7 @@ class TextureCube:
 
         return self.mglo.read(face, alignment)
 
-    def read_into(self, buffer, face, *, alignment=1):
+    def read_into(self, buffer, face, *, alignment=1, write_offset=0) -> None:
         '''
             Read a face from the cubemap texture.
 
@@ -519,9 +519,10 @@ class TextureCube:
 
             Keyword Args:
                 alignment (int): The byte alignment of the pixels.
+                write_offset (int): The write offset.
         '''
 
-        return self.mglo.read_into(buffer, face, alignment)
+        return self.mglo.read_into(buffer, face, alignment, write_offset)
 
     def use(self, location=0) -> None:
         '''
