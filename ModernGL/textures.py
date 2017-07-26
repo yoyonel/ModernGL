@@ -401,7 +401,6 @@ class Texture3D:
 
             Args:
                 buffer (bytearray): The buffer that will receive the pixels.
-                viewport (tuple): The viewport.
 
             Keyword Args:
                 alignment (int): The byte alignment of the pixels.
@@ -497,9 +496,36 @@ class TextureCube:
 
         return self.mglo.glo
 
+    def read(self, face, *, alignment=1):
+        '''
+            Read a face from the cubemap texture.
+
+            Args:
+                face (int): The face to read.
+
+            Keyword Args:
+                alignment (int): The byte alignment of the pixels.
+        '''
+
+        return self.mglo.read(face, alignment)
+
+    def read_into(self, buffer, face, *, alignment=1):
+        '''
+            Read a face from the cubemap texture.
+
+            Args:
+                buffer (bytearray): The buffer that will receive the pixels.
+                face (int): The face to read.
+
+            Keyword Args:
+                alignment (int): The byte alignment of the pixels.
+        '''
+
+        return self.mglo.read_into(buffer, face, alignment)
+
     def use(self, location=0) -> None:
         '''
-            Bind the texture.
+            Bind the cubemap texture.
 
             Args:
                 location (int): The texture location.
