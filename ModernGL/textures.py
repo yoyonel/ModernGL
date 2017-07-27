@@ -189,6 +189,13 @@ class Texture:
     def write(self, data, viewport=None, *, alignment=1) -> None:
         '''
             Update the content of the texture.
+
+            Args:
+                data (bytes): The pixel data.
+                viewport (tuple): The viewport.
+
+            Keyword Args:
+                alignment (int): The byte alignment of the pixels.
         '''
 
         if isinstance(data, Buffer):
@@ -382,10 +389,6 @@ class Texture3D:
         '''
             Read the content of the texture into a buffer.
 
-            Args:
-                buffer (bytearray): The buffer that will receive the pixels.
-                viewport (tuple): The viewport.
-
             Keyword Args:
                 alignment (int): The byte alignment of the pixels.
 
@@ -415,6 +418,13 @@ class Texture3D:
     def write(self, data, viewport=None, *, alignment=1) -> None:
         '''
             Update the content of the texture.
+
+            Args:
+                data (bytes): The pixel data.
+                viewport (tuple): The viewport.
+
+            Keyword Args:
+                alignment (int): The byte alignment of the pixels.
         '''
 
         if isinstance(data, Buffer):
@@ -522,7 +532,28 @@ class TextureCube:
                 write_offset (int): The write offset.
         '''
 
+        if isinstance(buffer, Buffer):
+            buffer = buffer.mglo
+
         return self.mglo.read_into(buffer, face, alignment, write_offset)
+
+    def write(self, face, data, viewport=None, *, alignment=1) -> None:
+        '''
+            Update the content of the texture.
+
+            Args:
+                face (int): The face to update.
+                data (bytes): The pixel data.
+                viewport (tuple): The viewport.
+
+            Keyword Args:
+                alignment (int): The byte alignment of the pixels.
+        '''
+
+        if isinstance(data, Buffer):
+            data = data.mglo
+
+        self.mglo.write(face, data, viewport, alignment)
 
     def use(self, location=0) -> None:
         '''
