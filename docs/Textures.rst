@@ -30,5 +30,8 @@ Textures
 	.. automethod:: build_mipmaps(base=0, max_level=1000)
 	.. automethod:: use(location=0)
 
+.. autoclass:: TextureCube
+	.. automethod:: use(location=0)
+
 .. toctree::
 	:maxdepth: 4

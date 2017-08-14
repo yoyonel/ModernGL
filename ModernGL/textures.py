@@ -189,6 +189,13 @@ class Texture:
     def write(self, data, viewport=None, *, alignment=1) -> None:
         '''
             Update the content of the texture.
+
+            Args:
+                data (bytes): The pixel data.
+                viewport (tuple): The viewport.
+
+            Keyword Args:
+                alignment (int): The byte alignment of the pixels.
         '''
 
         if isinstance(data, Buffer):
@@ -382,10 +389,6 @@ class Texture3D:
         '''
             Read the content of the texture into a buffer.
 
-            Args:
-                buffer (bytearray): The buffer that will receive the pixels.
-                viewport (tuple): The viewport.
-
             Keyword Args:
                 alignment (int): The byte alignment of the pixels.
 
@@ -401,7 +404,6 @@ class Texture3D:
 
             Args:
                 buffer (bytearray): The buffer that will receive the pixels.
-                viewport (tuple): The viewport.
 
             Keyword Args:
                 alignment (int): The byte alignment of the pixels.
@@ -416,6 +418,13 @@ class Texture3D:
     def write(self, data, viewport=None, *, alignment=1) -> None:
         '''
             Update the content of the texture.
+
+            Args:
+                data (bytes): The pixel data.
+                viewport (tuple): The viewport.
+
+            Keyword Args:
+                alignment (int): The byte alignment of the pixels.
         '''
 
         if isinstance(data, Buffer):
@@ -433,6 +442,122 @@ class Texture3D:
     def use(self, location=0) -> None:
         '''
             Bind the texture.
+
+            Args:
+                location (int): The texture location.
+                    Same as the integer value that is used for sampler3D
+                    uniforms in the shaders. The value ``0`` will bind the
+                    texture to the ``GL_TEXTURE0`` binding point.
+        '''
+
+        self.mglo.use(location)
+
+    def release(self) -> None:
+        '''
+            Release the ModernGL object.
+        '''
+
+        self.mglo.release()
+        self.__class__ = InvalidObject
+
+
+class TextureCube:
+    '''
+        A Texture is an OpenGL object that contains one or more images that all
+        have the same image format. A texture can be used in two ways. It can
+        be the source of a texture access from a Shader, or it can be used
+        as a render target.
+
+        A Texture3D object cannot be instantiated directly, it requires a context.
+        Use :py:meth:`Context.texture_cube` to create one.
+    '''
+
+    __slots__ = ['mglo']
+
+    @staticmethod
+    def new(obj) -> 'TextureCube':
+        '''
+            For internal use only.
+        '''
+
+        res = TextureCube.__new__(TextureCube)
+        res.mglo = obj
+        return res
+
+    def __init__(self):
+        self.mglo = None
+        raise NotImplementedError()
+
+    def __repr__(self):
+        return '<TextureCube: %d>' % self.glo
+
+    def __eq__(self, other):
+        return self.mglo is other.mglo
+
+    def __ne__(self, other):
+        return self.mglo is not other.mglo
+
+    @property
+    def glo(self) -> int:
+        '''
+            int: The internal OpenGL object.
+            This values is provided for debug purposes only.
+        '''
+
+        return self.mglo.glo
+
+    def read(self, face, *, alignment=1) -> bytes:
+        '''
+            Read a face from the cubemap texture.
+
+            Args:
+                face (int): The face to read.
+
+            Keyword Args:
+                alignment (int): The byte alignment of the pixels.
+        '''
+
+        return self.mglo.read(face, alignment)
+
+    def read_into(self, buffer, face, *, alignment=1, write_offset=0) -> None:
+        '''
+            Read a face from the cubemap texture.
+
+            Args:
+                buffer (bytearray): The buffer that will receive the pixels.
+                face (int): The face to read.
+
+            Keyword Args:
+                alignment (int): The byte alignment of the pixels.
+                write_offset (int): The write offset.
+        '''
+
+        if isinstance(buffer, Buffer):
+            buffer = buffer.mglo
+
+        return self.mglo.read_into(buffer, face, alignment, write_offset)
+
+    def write(self, face, data, viewport=None, *, alignment=1) -> None:
+        '''
+            Update the content of the texture.
+
+            Args:
+                face (int): The face to update.
+                data (bytes): The pixel data.
+                viewport (tuple): The viewport.
+
+            Keyword Args:
+                alignment (int): The byte alignment of the pixels.
+        '''
+
+        if isinstance(data, Buffer):
+            data = data.mglo
+
+        self.mglo.write(face, data, viewport, alignment)
+
+    def use(self, location=0) -> None:
+        '''
+            Bind the cubemap texture.
 
             Args:
                 location (int): The texture location.
