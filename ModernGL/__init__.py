@@ -16,7 +16,7 @@ except ImportError:
         _IMPORT_ERROR = '\n'.join([
             'No implementation found for ModernGL',
             'Are you sure the source code is compiled properly?',
-            'Hint: python3 setup.py build_ext -b .',
+            'Hint: python3 setup.py build_ext --inplace',
         ])
 
         raise ImportError(_IMPORT_ERROR)
