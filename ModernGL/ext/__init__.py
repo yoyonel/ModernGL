@@ -2,12 +2,22 @@
     ModernGL extensions
 '''
 
+# pylint: disable=R0903, W0613
+
 import os
 import sys
 
 
 class ExtensionFinder():
+    '''
+        ExtensionFinder
+    '''
+
     def find_spec(self, fullname, path, target=None):
+        '''
+            find_spec
+        '''
+
         prefix = 'ModernGL.ext.'
 
         if fullname.startswith(prefix):
