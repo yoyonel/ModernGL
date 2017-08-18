@@ -37,10 +37,10 @@ class TestCase(unittest.TestCase):
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo1, ['in_a'])
         self.vao.transform(self.vbo2, ModernGL.POINTS, 1)
         x1, y1, x2, y2 = struct.unpack('2d2d', self.vbo2.read())
-        self.assertAlmostEquals(x1, 1.0)
-        self.assertAlmostEquals(y1, 1.0)
-        self.assertAlmostEquals(x2, 1.0)
-        self.assertAlmostEquals(y2, 1.0)
+        self.assertAlmostEqual(x1, 1.0)
+        self.assertAlmostEqual(y1, 1.0)
+        self.assertAlmostEqual(x2, 1.0)
+        self.assertAlmostEqual(y2, 1.0)
 
     def test_dvec3(self):
         self.prog = self.ctx.program([
@@ -62,12 +62,12 @@ class TestCase(unittest.TestCase):
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo1, ['in_a'])
         self.vao.transform(self.vbo2, ModernGL.POINTS, 1)
         x1, y1, z1, x2, y2, z2 = struct.unpack('3d3d', self.vbo2.read())
-        self.assertAlmostEquals(x1, 1.0)
-        self.assertAlmostEquals(y1, 1.0)
-        self.assertAlmostEquals(z1, 1.0)
-        self.assertAlmostEquals(x2, 1.0)
-        self.assertAlmostEquals(y2, 1.0)
-        self.assertAlmostEquals(z2, 1.0)
+        self.assertAlmostEqual(x1, 1.0)
+        self.assertAlmostEqual(y1, 1.0)
+        self.assertAlmostEqual(z1, 1.0)
+        self.assertAlmostEqual(x2, 1.0)
+        self.assertAlmostEqual(y2, 1.0)
+        self.assertAlmostEqual(z2, 1.0)
 
 if __name__ == '__main__':
     unittest.main()
