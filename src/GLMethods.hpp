@@ -5,7 +5,7 @@
 typedef GLvoid (GLAPI * gl_attribute_normal_ptr_proc)(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer);
 typedef GLvoid (GLAPI * gl_attribute_ptr_proc)(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid * pointer);
 
-struct GLMethodsImpl {
+struct GLMethods {
 	PROC_glActiveShaderProgram ActiveShaderProgram;
 	PROC_glActiveTexture ActiveTexture;
 	PROC_glAttachShader AttachShader;
@@ -663,15 +663,6 @@ struct GLMethodsImpl {
 	bool load();
 
 private:
-	GLMethodsImpl(const GLMethodsImpl & copy);
-	void operator = (const GLMethodsImpl & rhs);
+	GLMethods(const GLMethods & copy);
+	void operator = (const GLMethods & rhs);
 };
-
-#ifdef MGL_DEBUG
-#include "GLMethodsDebug.hpp"
-#else
-#define GLMethods GLMethodsImpl
-#define MGL_GLMETHOD_DBG_UNIFORM_READER(...)
-#define MGL_GLMETHOD_DBG_UNIFORM_WRITER(...)
-#define MGL_GLMETHOD_DBG_ATTRIB_PTR(...)
-#endif

@@ -20,7 +20,6 @@ int MGLUniform_bool_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, 1, &c_value);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, 1, &c_value);
 
 	return 0;
 }
@@ -34,7 +33,6 @@ int MGLUniform_int_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, 1, &c_value);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, 1, &c_value);
 
 	return 0;
 }
@@ -48,7 +46,6 @@ int MGLUniform_uint_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, 1, &c_value);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, 1, &c_value);
 
 	return 0;
 }
@@ -62,7 +59,6 @@ int MGLUniform_float_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, 1, &c_value);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, 1, &c_value);
 
 	return 0;
 }
@@ -76,7 +72,6 @@ int MGLUniform_double_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, 1, &c_value);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, 1, &c_value);
 
 	return 0;
 }
@@ -90,7 +85,6 @@ int MGLUniform_sampler_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, 1, &c_value);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, 1, &c_value);
 
 	return 0;
 }
@@ -126,7 +120,6 @@ int MGLUniform_bool_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, size, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, size, c_values);
 
 	delete[] c_values;
 	return 0;
@@ -159,7 +152,6 @@ int MGLUniform_int_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, size, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, size, c_values);
 
 	delete[] c_values;
 	return 0;
@@ -192,7 +184,6 @@ int MGLUniform_uint_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, size, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, size, c_values);
 
 	delete[] c_values;
 	return 0;
@@ -225,7 +216,6 @@ int MGLUniform_float_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, size, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, size, c_values);
 
 	delete[] c_values;
 	return 0;
@@ -258,7 +248,6 @@ int MGLUniform_double_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, size, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, size, c_values);
 
 	delete[] c_values;
 	return 0;
@@ -291,7 +280,6 @@ int MGLUniform_sampler_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, size, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, size, c_values);
 
 	delete[] c_values;
 	return 0;
@@ -327,7 +315,6 @@ int MGLUniform_bvec_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, 1, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, 1, c_values);
 
 	return 0;
 }
@@ -358,7 +345,6 @@ int MGLUniform_ivec_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, 1, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, 1, c_values);
 
 	return 0;
 }
@@ -389,7 +375,6 @@ int MGLUniform_uvec_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, 1, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, 1, c_values);
 
 	return 0;
 }
@@ -420,7 +405,6 @@ int MGLUniform_vec_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, 1, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, 1, c_values);
 
 	return 0;
 }
@@ -451,7 +435,6 @@ int MGLUniform_dvec_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, 1, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, 1, c_values);
 
 	return 0;
 }
@@ -507,7 +490,6 @@ int MGLUniform_bvec_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, size * N, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, size * N, c_values);
 
 	delete[] c_values;
 	return 0;
@@ -560,7 +542,6 @@ int MGLUniform_ivec_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, size * N, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, size * N, c_values);
 
 	delete[] c_values;
 	return 0;
@@ -613,7 +594,6 @@ int MGLUniform_uvec_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, size * N, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, size * N, c_values);
 
 	delete[] c_values;
 	return 0;
@@ -666,7 +646,6 @@ int MGLUniform_vec_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, size * N, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, size * N, c_values);
 
 	delete[] c_values;
 	return 0;
@@ -719,7 +698,6 @@ int MGLUniform_dvec_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_vector_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, size * N, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, size * N, c_values);
 
 	delete[] c_values;
 	return 0;
@@ -751,7 +729,6 @@ int MGLUniform_matrix_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_matrix_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, 1, false, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, 1, c_values);
 
 	return 0;
 }
@@ -803,7 +780,6 @@ int MGLUniform_matrix_array_value_setter(MGLUniform * self, PyObject * value) {
 	}
 
 	((gl_uniform_matrix_writer_proc)self->gl_value_writer_proc)(self->program_obj, self->location, size, false, c_values);
-	MGL_GLMETHOD_DBG_UNIFORM_WRITER(self, self->location, size, c_values);
 
 	delete[] c_values;
 	return 0;

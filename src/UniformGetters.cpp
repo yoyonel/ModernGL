@@ -10,42 +10,36 @@ PyObject * MGLUniform_invalid_getter(MGLUniform * self) {
 PyObject * MGLUniform_bool_value_getter(MGLUniform * self) {
 	int value = 0;
 	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location, &value);
-	MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location, &value);
 	return PyBool_FromLong(value);
 }
 
 PyObject * MGLUniform_int_value_getter(MGLUniform * self) {
 	int value = 0;
 	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location, &value);
-	MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location, &value);
 	return PyLong_FromLong(value);
 }
 
 PyObject * MGLUniform_uint_value_getter(MGLUniform * self) {
 	unsigned value = 0;
 	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location, &value);
-	MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location, &value);
 	return PyLong_FromUnsignedLong(value);
 }
 
 PyObject * MGLUniform_float_value_getter(MGLUniform * self) {
 	float value = 0;
 	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location, &value);
-	MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location, &value);
 	return PyFloat_FromDouble(value);
 }
 
 PyObject * MGLUniform_double_value_getter(MGLUniform * self) {
 	double value = 0;
 	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location, &value);
-	MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location, &value);
 	return PyFloat_FromDouble(value);
 }
 
 PyObject * MGLUniform_sampler_value_getter(MGLUniform * self) {
 	int value = 0;
 	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location, &value);
-	MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location, &value);
 	return PyLong_FromLong(value);
 }
 
@@ -56,7 +50,6 @@ PyObject * MGLUniform_bool_array_value_getter(MGLUniform * self) {
 	for (int i = 0; i < size; ++i) {
 		int value = 0;
 		((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location + i, &value);
-		MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location + i, &value);
 		PyList_SET_ITEM(lst, i, PyBool_FromLong(value));
 	}
 
@@ -70,7 +63,6 @@ PyObject * MGLUniform_int_array_value_getter(MGLUniform * self) {
 	for (int i = 0; i < size; ++i) {
 		int value = 0;
 		((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location + i, &value);
-		MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location + i, &value);
 		PyList_SET_ITEM(lst, i, PyLong_FromLong(value));
 	}
 
@@ -84,7 +76,6 @@ PyObject * MGLUniform_uint_array_value_getter(MGLUniform * self) {
 	for (int i = 0; i < size; ++i) {
 		unsigned value = 0;
 		((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location + i, &value);
-		MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location + i, &value);
 		PyList_SET_ITEM(lst, i, PyLong_FromUnsignedLong(value));
 	}
 
@@ -98,7 +89,6 @@ PyObject * MGLUniform_float_array_value_getter(MGLUniform * self) {
 	for (int i = 0; i < size; ++i) {
 		float value = 0;
 		((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location + i, &value);
-		MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location + i, &value);
 		PyList_SET_ITEM(lst, i, PyFloat_FromDouble(value));
 	}
 
@@ -112,7 +102,6 @@ PyObject * MGLUniform_double_array_value_getter(MGLUniform * self) {
 	for (int i = 0; i < size; ++i) {
 		double value = 0;
 		((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location + i, &value);
-		MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location + i, &value);
 		PyList_SET_ITEM(lst, i, PyFloat_FromDouble(value));
 	}
 
@@ -126,7 +115,6 @@ PyObject * MGLUniform_sampler_array_value_getter(MGLUniform * self) {
 	for (int i = 0; i < size; ++i) {
 		int value = 0;
 		((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location + i, &value);
-		MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location + i, &value);
 		PyList_SET_ITEM(lst, i, PyLong_FromLong(value));
 	}
 
@@ -138,7 +126,6 @@ PyObject * MGLUniform_bvec_value_getter(MGLUniform * self) {
 	int values[N] = {};
 
 	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location, values);
-	MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location, values);
 
 	PyObject * res = PyTuple_New(N);
 
@@ -154,7 +141,6 @@ PyObject * MGLUniform_ivec_value_getter(MGLUniform * self) {
 	int values[N] = {};
 
 	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location, values);
-	MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location, values);
 
 	PyObject * res = PyTuple_New(N);
 
@@ -170,7 +156,6 @@ PyObject * MGLUniform_uvec_value_getter(MGLUniform * self) {
 	unsigned values[N] = {};
 
 	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location, values);
-	MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location, values);
 
 	PyObject * res = PyTuple_New(N);
 
@@ -186,7 +171,6 @@ PyObject * MGLUniform_vec_value_getter(MGLUniform * self) {
 	float values[N] = {};
 
 	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location, values);
-	MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location, values);
 
 	PyObject * res = PyTuple_New(N);
 
@@ -202,7 +186,6 @@ PyObject * MGLUniform_dvec_value_getter(MGLUniform * self) {
 	double values[N] = {};
 
 	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location, values);
-	MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location, values);
 
 	PyObject * res = PyTuple_New(N);
 
@@ -221,7 +204,6 @@ PyObject * MGLUniform_bvec_array_value_getter(MGLUniform * self) {
 	for (int i = 0; i < size; ++i) {
 		int values[N] = {};
 		((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location + i, values);
-		MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location + i, values);
 
 		PyObject * tuple = PyTuple_New(N);
 
@@ -245,7 +227,6 @@ PyObject * MGLUniform_ivec_array_value_getter(MGLUniform * self) {
 		int values[N] = {};
 
 		((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location + i, values);
-		MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location + i, values);
 
 		PyObject * tuple = PyTuple_New(N);
 
@@ -269,7 +250,6 @@ PyObject * MGLUniform_uvec_array_value_getter(MGLUniform * self) {
 		unsigned values[N] = {};
 
 		((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location + i, values);
-		MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location + i, values);
 
 		PyObject * tuple = PyTuple_New(N);
 
@@ -293,7 +273,6 @@ PyObject * MGLUniform_vec_array_value_getter(MGLUniform * self) {
 		float values[N] = {};
 
 		((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location + i, values);
-		MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location + i, values);
 
 		PyObject * tuple = PyTuple_New(N);
 
@@ -317,7 +296,6 @@ PyObject * MGLUniform_dvec_array_value_getter(MGLUniform * self) {
 		double values[N] = {};
 
 		((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location + i, values);
-		MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location + i, values);
 
 		PyObject * tuple = PyTuple_New(N);
 
@@ -336,7 +314,6 @@ PyObject * MGLUniform_matrix_value_getter(MGLUniform * self) {
 	T values[N * M] = {};
 
 	((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location, values);
-	MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location, values);
 
 	PyObject * tuple = PyTuple_New(N * M);
 
@@ -356,7 +333,6 @@ PyObject * MGLUniform_matrix_array_value_getter(MGLUniform * self) {
 		T values[N * M] = {};
 
 		((gl_uniform_reader_proc)self->gl_value_reader_proc)(self->program_obj, self->location + i, values);
-		MGL_GLMETHOD_DBG_UNIFORM_READER(self, self->location + i, values);
 
 		PyObject * tuple = PyTuple_New(N * M);
 

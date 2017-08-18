@@ -95,7 +95,7 @@ void * LoadMethod(const char * method) {
 
 #endif
 
-bool GLMethodsImpl::load() {
+bool GLMethods::load() {
 	this->ActiveShaderProgram = (PROC_glActiveShaderProgram)LoadMethod(PREFIX "glActiveShaderProgram");
 	this->ActiveTexture = (PROC_glActiveTexture)LoadMethod(PREFIX "glActiveTexture");
 	this->AttachShader = (PROC_glAttachShader)LoadMethod(PREFIX "glAttachShader");
