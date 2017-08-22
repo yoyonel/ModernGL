@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [4.1.12] - 2017-08-22
+
 ### Added
 
 - TextureCube class and Context `texture_cube` method
@@ -266,7 +268,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.11...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.12...master
+[4.1.12]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.11...4.1.12
 [4.1.11]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.10...4.1.11
 [4.1.10]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.9...4.1.10
 [4.1.9]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.8...4.1.9
