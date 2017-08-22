@@ -7,6 +7,10 @@ from PIL import Image
 from pyrr import Matrix44
 
 
+def local(*path):
+    return os.path.join(os.path.dirname(__file__), *path)
+
+
 def terrain(size):
     vertices = np.dstack(np.mgrid[0:size, 0:size][::-1]) / size
     temp = np.dstack([np.arange(0, size * size - size), np.arange(size, size * size)])
@@ -33,8 +37,8 @@ class Example:
 
                 void main() {
                     v_color = in_color;
-                    float height = texture(Heightmap, in_vert.xy).r * 10.0;
-                    gl_Position = Mvp * vec4(in_vert.xy * 32.0 - 15.5, height, 1.0);
+                    float height = texture(Heightmap, in_vert.xy).r * 0.5;
+                    gl_Position = Mvp * vec4(in_vert.xy - 0.5, height, 1.0);
                 }
             '''),
             self.ctx.fragment_shader('''
@@ -62,13 +66,15 @@ class Example:
 
         self.vao = self.ctx.vertex_array(self.prog, vao_content, self.ibo)
 
-        self.img = Image.open(os.path.join(os.path.dirname(__file__), 'data', 'noise.jpg')).convert('L')
+        self.img = Image.open(local('data', 'noise.jpg')).convert('L')
         texture = self.ctx.texture(self.img.size, 1, self.img.tobytes())
         texture.use()
 
 
     def render(self):
         width, height = self.wnd.size
+        angle = self.wnd.time * 0.2
+
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(ModernGL.DEPTH_TEST)
@@ -76,8 +82,8 @@ class Example:
 
         proj = Matrix44.perspective_projection(45.0, width / height, 0.1, 1000.0)
         lookat = Matrix44.look_at(
-            (40.0, 30.0, 30.0),
-            (0.0, 0.0, 0.0),
+            (np.cos(angle), np.sin(angle), 0.8),
+            (0.0, 0.0, 0.1),
             (0.0, 0.0, 1.0),
         )
 
