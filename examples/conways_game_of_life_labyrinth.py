@@ -105,4 +105,4 @@ class Example:
         self.vao.render(ModernGL.TRIANGLE_STRIP)
 
 
-run_example(Example, size='fullscreen')
+run_example(Example)
