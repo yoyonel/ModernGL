@@ -1784,6 +1784,13 @@ int MGLContext_set_viewport(MGLContext * self, PyObject * value) {
 
 	self->gl.Viewport(x, y, width, height);
 
+	if (self->bound_framebuffer->framebuffer_obj == self->default_framebuffer->framebuffer_obj) {
+		self->default_framebuffer->viewport_x = x;
+		self->default_framebuffer->viewport_y = y;
+		self->default_framebuffer->viewport_width = width;
+		self->default_framebuffer->viewport_height = height;
+	}
+
 	return 0;
 }
 
@@ -2563,6 +2570,7 @@ void MGLContext_Initialize(MGLContext * self) {
 		// This value is temporarily ignored
 
 		framebuffer->draw_buffers[0] = GL_COLOR_ATTACHMENT0;
+		// framebuffer->draw_buffers[0] = GL_BACK_LEFT;
 
 		framebuffer->color_mask = new bool[4];
 		framebuffer->color_mask[0] = true;
