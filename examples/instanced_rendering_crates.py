@@ -12,7 +12,13 @@ def local(*path):
     return os.path.join(os.path.dirname(__file__), *path)
 
 
-class Example:
+class InstancedCrates:
+    '''
+        This example renders 32x32 crates.
+        For each crate the location is [x, y, sin(a * time + b)]
+        There are 1024 crates aligned in a grid.
+    '''
+
     def __init__(self, wnd):
         self.wnd = wnd
         self.ctx = ModernGL.create_context()
@@ -75,13 +81,12 @@ class Example:
             (self.vbo2, '3f/i', ['in_move']),
         ])
 
+        self.crate_a = np.random.uniform(0.7, 0.8, 32 * 32)
+        self.crate_b = np.random.uniform(0.0, 6.3, 32 * 32)
         self.crate_x = (np.tile(np.arange(32), 32) - 16) * 1.5
         self.crate_y = (np.repeat(np.arange(32), 32) - 16) * 1.5
         self.crate_x += np.random.uniform(-0.2, 0.2, 32 * 32)
         self.crate_y += np.random.uniform(-0.2, 0.2, 32 * 32)
-
-        self.crate_a = np.random.uniform(0.7, 0.8, 32 * 32)
-        self.crate_b = np.random.uniform(0.0, 6.3, 32 * 32)
 
     def render(self):
         angle = self.wnd.time * 0.2
@@ -109,4 +114,4 @@ class Example:
         self.vao.render(instances=1024)
 
 
-run_example(Example)
+run_example(InstancedCrates)
