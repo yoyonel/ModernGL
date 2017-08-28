@@ -597,11 +597,14 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
+	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
+	const int int_formats[] = {0, GL_R8, GL_RG8, GL_RGB8, GL_RGBA8};
+	const int float_formats[] = {0, GL_R32F, GL_RG32F, GL_RGB32F, GL_RGBA32F};
 
 	int texture_target = samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	int pixel_type = floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
-	int format = formats[components];
+	int base_format = base_formats[components];
+	int internal_format = floats ? float_formats[components] : int_formats[components];
 
 	const GLMethods & gl = self->gl;
 
@@ -621,11 +624,11 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 	gl.BindTexture(texture_target, texture->texture_obj);
 
 	if (samples) {
-		gl.TexImage2DMultisample(texture_target, samples, format, width, height, true);
+		gl.TexImage2DMultisample(texture_target, samples, internal_format, width, height, true);
 	} else {
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-		gl.TexImage2D(texture_target, 0, format, width, height, 0, format, pixel_type, buffer_view.buf);
+		gl.TexImage2D(texture_target, 0, internal_format, width, height, 0, base_format, pixel_type, buffer_view.buf);
 		gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
