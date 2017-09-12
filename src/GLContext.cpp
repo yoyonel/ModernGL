@@ -609,7 +609,15 @@ GLContext CreateGLContext(int width, int height) {
 		return context;
 	}
 
-	static int attributeList[] = {GLX_RGBA, GLX_DOUBLEBUFFER, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1, GLX_BLUE_SIZE, 1, None};
+	static int attributeList[] = {
+		GLX_RGBA,
+		GLX_DOUBLEBUFFER,
+		GLX_RED_SIZE, 8,
+		GLX_GREEN_SIZE, 8,
+		GLX_BLUE_SIZE, 8,
+		GLX_DEPTH_SIZE, 24
+		None,
+	};
 
 	XVisualInfo * vi = glXChooseVisual(dpy, DefaultScreen(dpy), attributeList);
 
