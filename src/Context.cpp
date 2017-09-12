@@ -1275,8 +1275,6 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	int height = 0;
 	int samples = 0;
 
-	bool new_depth_attachment = false; // TODO: better
-
 	int color_attachments_len = (int)PyTuple_GET_SIZE(color_attachments);
 
 	if (!color_attachments_len) {
