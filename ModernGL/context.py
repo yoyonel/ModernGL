@@ -4,6 +4,7 @@
 
 # pylint: disable=too-many-public-methods
 
+import re
 from typing import Tuple
 
 try:
@@ -18,6 +19,17 @@ from .vertex_arrays import VertexArray
 from .textures import Texture, Texture3D, TextureCube
 from .renderbuffers import Renderbuffer
 from .framebuffers import Framebuffer
+
+
+def _size_from_str(value):
+    size_map = {
+        'KB': 1024,
+        'MB': 1024 * 1024,
+        'GB': 1024 * 1024 * 1024,
+    }
+
+    match = re.match(r'(\d+)([KMG]B)', value)
+    return int(match.group(1)) * size_map[match.group(2)]
 
 
 class Context:
@@ -361,6 +373,9 @@ class Context:
             Returns:
                 Buffer: buffer
         '''
+
+        if isinstance(reserve, str):
+            reserve = _size_from_str(reserve)
 
         return Buffer.new(self.mglo.buffer(data, reserve, dynamic))
 

@@ -26,6 +26,10 @@ class TestCase(unittest.TestCase):
     def test_buffer_reserve(self):
         self.ctx.buffer(reserve=1024)
 
+    def test_buffer_reserve_human_readable(self):
+        buf = self.ctx.buffer(reserve='2KB')
+        self.assertEqual(buf.size, 2 * 1024)
+
     def test_buffer_data_and_reserve(self):
         with self.assertRaises(ModernGL.Error):
             self.ctx.buffer(b'Hello World!', reserve=1024)
