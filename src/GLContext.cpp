@@ -615,7 +615,7 @@ GLContext CreateGLContext(int width, int height) {
 		GLX_RED_SIZE, 8,
 		GLX_GREEN_SIZE, 8,
 		GLX_BLUE_SIZE, 8,
-		GLX_DEPTH_SIZE, 24
+		GLX_DEPTH_SIZE, 24,
 		None,
 	};
 
