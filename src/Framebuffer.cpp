@@ -156,7 +156,7 @@ PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
 	gl.DepthMask(self->depth_mask);
 
 	Py_INCREF(self);
-	Py_INCREF(self->context->bound_framebuffer);
+	Py_DECREF(self->context->bound_framebuffer);
 	self->context->bound_framebuffer = self;
 
 	Py_RETURN_NONE;
