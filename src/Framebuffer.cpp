@@ -603,6 +603,58 @@ PyObject * MGLFramebuffer_get_samples(MGLFramebuffer * self, void * closure) {
 	return PyLong_FromLong(self->samples);
 }
 
+PyObject * MGLFramebuffer_get_bits(MGLFramebuffer * self, void * closure) {
+	int red_bits = 0;
+	int green_bits = 0;
+	int blue_bits = 0;
+	int alpha_bits = 0;
+	int depth_bits = 0;
+	int stencil_bits = 0;
+
+	const GLMethods & gl = self->context->gl;
+
+	// if (self->framebuffer_obj) {
+	// 	gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE, &red_bits);
+	// 	gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE, &green_bits);
+	// 	gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE, &blue_bits);
+	// 	gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE, &alpha_bits);
+	// 	gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &depth_bits);
+	// 	gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencil_bits);
+	// } else {
+		gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_BACK_LEFT, GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE, &red_bits);
+		gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_BACK_LEFT, GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE, &green_bits);
+		gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_BACK_LEFT, GL_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE, &blue_bits);
+		gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_BACK_LEFT, GL_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE, &alpha_bits);
+		gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH, GL_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE, &depth_bits);
+		gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_STENCIL, GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE, &stencil_bits);
+	// }
+
+	PyObject * red_obj = PyLong_FromLong(red_bits);
+	PyObject * green_obj = PyLong_FromLong(green_bits);
+	PyObject * blue_obj = PyLong_FromLong(blue_bits);
+	PyObject * alpha_obj = PyLong_FromLong(alpha_bits);
+	PyObject * depth_obj = PyLong_FromLong(depth_bits);
+	PyObject * stencil_obj = PyLong_FromLong(stencil_bits);
+
+	PyObject * result = PyDict_New();
+
+	PyDict_SetItemString(result, "red", red_obj);
+	PyDict_SetItemString(result, "green", green_obj);
+	PyDict_SetItemString(result, "blue", blue_obj);
+	PyDict_SetItemString(result, "alpha", alpha_obj);
+	PyDict_SetItemString(result, "depth", depth_obj);
+	PyDict_SetItemString(result, "stencil", stencil_obj);
+
+	Py_DECREF(red_obj);
+	Py_DECREF(green_obj);
+	Py_DECREF(blue_obj);
+	Py_DECREF(alpha_obj);
+	Py_DECREF(depth_obj);
+	Py_DECREF(stencil_obj);
+
+	return result;
+}
+
 PyObject * MGLFramebuffer_get_color_attachments(MGLFramebuffer * self, void * closure) {
 	if (!self->color_attachments) {
 		MGLError_Set("missing color_attachments");
@@ -638,6 +690,7 @@ PyGetSetDef MGLFramebuffer_tp_getseters[] = {
 	{(char *)"width", (getter)MGLFramebuffer_get_width, 0, 0, 0},
 	{(char *)"height", (getter)MGLFramebuffer_get_height, 0, 0, 0},
 	{(char *)"samples", (getter)MGLFramebuffer_get_samples, 0, 0, 0},
+	{(char *)"bits", (getter)MGLFramebuffer_get_bits, 0, 0, 0},
 	{(char *)"color_attachments", (getter)MGLFramebuffer_get_color_attachments, 0, 0, 0},
 	{(char *)"depth_attachment", (getter)MGLFramebuffer_get_depth_attachment, 0, 0, 0},
 	{(char *)"context", (getter)MGLFramebuffer_get_context, 0, 0, 0},
