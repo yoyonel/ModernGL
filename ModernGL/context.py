@@ -359,6 +359,19 @@ class Context:
 
         self.mglo.copy_framebuffer(dst.mglo, src.mglo)
 
+    def detect_framebuffer(self, glo) -> Framebuffer:
+        '''
+            Detect framebuffer.
+
+            Args:
+                glo (int): Framebuffer object.
+
+            Returns:
+                Framebuffer: framebuffer.
+        '''
+
+        return self.mglo.detect_framebuffer(glo)
+
     def buffer(self, data=None, *, reserve=0, dynamic=False) -> Buffer:
         '''
             Create a :py:class:`Buffer`.
