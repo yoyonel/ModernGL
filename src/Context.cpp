@@ -368,6 +368,11 @@ MGLFramebuffer * MGLContext_detect_framebuffer(MGLContext * self, PyObject * arg
 		return 0;
 	}
 
+	if (!framebuffer_obj) {
+		Py_INCREF(self->default_framebuffer);
+		return self->default_framebuffer;
+	}
+
 	const GLMethods & gl = self->gl;
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, framebuffer_obj);
@@ -2685,16 +2690,18 @@ void MGLContext_Initialize(MGLContext * self) {
 
 		framebuffer->depth_mask = true;
 
-		// NO INCREF
 		framebuffer->context = self;
 
-		framebuffer->viewport_x = 0;
-		framebuffer->viewport_y = 0;
-		framebuffer->viewport_width = 0;
-		framebuffer->viewport_height = 0;
+		int scrissor_box[4] = {};
+		gl.GetIntegerv(GL_SCISSOR_BOX, scrissor_box);
 
-		framebuffer->width = 0;
-		framebuffer->height = 0;
+		framebuffer->viewport_x = scrissor_box[0];
+		framebuffer->viewport_y = scrissor_box[1];
+		framebuffer->viewport_width = scrissor_box[2];
+		framebuffer->viewport_height = scrissor_box[3];
+
+		framebuffer->width = scrissor_box[2];
+		framebuffer->height = scrissor_box[3];
 
 		self->default_framebuffer = framebuffer;
 	}
