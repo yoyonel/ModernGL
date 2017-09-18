@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Default framebuffer bits attribute
 - Context.detect_framebuffer
 - Support reserving buffers with human readable sizes
 
