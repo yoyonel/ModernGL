@@ -384,44 +384,6 @@ MGLFramebuffer * MGLContext_detect_framebuffer(MGLContext * self, PyObject * arg
 		}
 	}
 
-	// for (int i = 0; i < num_color_attachments; ++i) {
-	// 	int color_attachment_type = 0;
-	// 	gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE, &color_attachment_type);
-
-	// 	int color_attachment_name = 0;
-	// 	gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME, &color_attachment_name);
-	// }
-
-	MGLFramebuffer * framebuffer = MGLFramebuffer_New();
-
-	framebuffer->framebuffer_obj = framebuffer_obj;
-	framebuffer->color_attachments = 0;
-	framebuffer->depth_attachment = 0;
-
-	framebuffer->context = self;
-
-	framebuffer->draw_buffers_len = num_color_attachments;
-	framebuffer->draw_buffers = new unsigned[num_color_attachments];
-	framebuffer->color_mask = new bool[4 * num_color_attachments];
-
-	for (int i = 0; i < num_color_attachments; ++i) {
-		int color_mask[4] = {};
-		int draw_buffer = 0;
-
-		gl.GetIntegeri_v(GL_COLOR_WRITEMASK, i, color_mask);
-		gl.GetIntegerv(GL_DRAW_BUFFER0 + i, &draw_buffer);
-
-		framebuffer->color_mask[i * 4 + 0] = color_mask[0] ? true : false;
-		framebuffer->color_mask[i * 4 + 1] = color_mask[1] ? true : false;
-		framebuffer->color_mask[i * 4 + 2] = color_mask[2] ? true : false;
-		framebuffer->color_mask[i * 4 + 3] = color_mask[3] ? true : false;
-		framebuffer->draw_buffers[i] = draw_buffer;
-	}
-
-	int depth_mask = 0;
-	gl.GetIntegerv(GL_DEPTH_WRITEMASK, &depth_mask);
-	framebuffer->depth_mask = depth_mask;
-
 	int color_attachment_type = 0;
 	gl.GetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE, &color_attachment_type);
 
@@ -450,6 +412,28 @@ MGLFramebuffer * MGLContext_detect_framebuffer(MGLContext * self, PyObject * arg
 			break;
 		}
 	}
+
+	MGLFramebuffer * framebuffer = MGLFramebuffer_New();
+
+	framebuffer->framebuffer_obj = framebuffer_obj;
+	framebuffer->color_attachments = 0;
+	framebuffer->depth_attachment = 0;
+
+	framebuffer->draw_buffers_len = num_color_attachments;
+	framebuffer->draw_buffers = new unsigned[num_color_attachments];
+	framebuffer->color_mask = new bool[4 * num_color_attachments];
+
+	for (int i = 0; i < num_color_attachments; ++i) {
+		framebuffer->draw_buffers[i] = GL_COLOR_ATTACHMENT0 + i;
+		framebuffer->color_mask[i * 4 + 0] = true;
+		framebuffer->color_mask[i * 4 + 1] = true;
+		framebuffer->color_mask[i * 4 + 2] = true;
+		framebuffer->color_mask[i * 4 + 3] = true;
+	}
+
+	framebuffer->depth_mask = true;
+
+	framebuffer->context = self;
 
 	framebuffer->viewport_x = 0;
 	framebuffer->viewport_y = 0;
