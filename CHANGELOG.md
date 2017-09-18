@@ -9,11 +9,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Context.detect_framebuffer
 - Support reserving buffers with human readable sizes
 
 ### Fixed
 
 - Standalone context on linux requires 24 bits for the depth buffer at least
+- Bound framebuffer reference count
 
 ## [4.1.12] - 2017-08-22
 
