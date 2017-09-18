@@ -2,7 +2,7 @@
     ModernGL framebuffers
 '''
 
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 from .common import InvalidObject
 from .renderbuffers import Renderbuffer
@@ -109,6 +109,14 @@ class Framebuffer:
         '''
 
         return self.mglo.samples
+
+    @property
+    def bits(self) -> Dict[str, str]:
+        '''
+            dict: The bits of the framebuffer.
+        '''
+
+        return self.mglo.bits
 
     @property
     def color_attachments(self) -> Tuple[Renderbuffer]:
