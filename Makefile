@@ -7,7 +7,7 @@ endif
 all: build
 
 build:
-	$(PYTHON) setup.py build_ext --inplace
+	$(PYTHON) setup.py build_ext --inplace --force
 
 docs: build
 	$(PYTHON) setup.py build_sphinx
