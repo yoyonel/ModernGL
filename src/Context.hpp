@@ -19,6 +19,7 @@ struct MGLContext : public MGLObject {
 
 	int max_samples;
 	int max_integer_samples;
+	int max_color_attachments;
 
 	int max_texture_units;
 	int default_texture_unit;
