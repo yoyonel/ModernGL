@@ -3,12 +3,14 @@ import unittest
 
 import ModernGL
 
+from common import get_context
+
 
 class TestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.ctx = ModernGL.create_standalone_context()
+        cls.ctx = get_context()
         cls.vbo = cls.ctx.buffer(reserve=1024)
         cls.res = cls.ctx.buffer(reserve=1024)
         cls.vbo.clear()
@@ -25,10 +27,6 @@ class TestCase(unittest.TestCase):
 
     def tearDown(self):
         self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.ctx.release()
 
     def test_float_uniform(self):
         vertex_shader = self.ctx.vertex_shader('''

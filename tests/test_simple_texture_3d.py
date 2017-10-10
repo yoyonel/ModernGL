@@ -2,16 +2,14 @@ import unittest
 
 import ModernGL
 
+from common import get_context
+
 
 class TestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.ctx = ModernGL.create_standalone_context()
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.ctx.release()
+        cls.ctx = get_context()
 
     def tearDown(self):
         self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
@@ -64,10 +62,12 @@ class TestCase(unittest.TestCase):
         self.assertEqual(bytes(buf), pixels)
 
     def test_texture_3d_read_into_pbo(self):
+        if self.ctx.vendor.startswith('Intel'):
+            raise unittest.SkipTest('')
+
         pixels = b'\x10\x20\x30' * 8 * 8 * 8
         tex = self.ctx.texture3d((8, 8, 8), 3, pixels)
         buf = self.ctx.buffer(reserve=8 * 8 * 8 * 3)
-
         tex.read_into(buf)
         self.assertEqual(buf.read(), pixels)
 

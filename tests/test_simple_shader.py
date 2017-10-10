@@ -2,16 +2,14 @@ import unittest
 
 import ModernGL
 
+from common import get_context
+
 
 class TestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.ctx = ModernGL.create_standalone_context()
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.ctx.release()
+        cls.ctx = get_context()
 
     def tearDown(self):
         self.assertEqual(self.ctx.error, 'GL_NO_ERROR')

@@ -11,7 +11,7 @@ def readfile(name):
 
 
 here = os.path.dirname(os.path.abspath(__file__))
-repo = os.path.dirname(os.path.dirname(here))
+repo = os.path.dirname(here)
 
 
 class TestCase(unittest.TestCase):

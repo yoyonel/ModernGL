@@ -2,12 +2,14 @@ import unittest
 
 import ModernGL
 
+from common import get_context
+
 
 class TestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.ctx = ModernGL.create_standalone_context()
+        cls.ctx = get_context()
 
         cls.vertex_shader = cls.ctx.vertex_shader('''
             #version 330
@@ -47,10 +49,6 @@ class TestCase(unittest.TestCase):
                 color = Color * Light[0];
             }
         ''')
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.ctx.release()
 
     def tearDown(self):
         self.assertEqual(self.ctx.error, 'GL_NO_ERROR')

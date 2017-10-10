@@ -2,35 +2,33 @@ import unittest
 
 import ModernGL
 
+from common import get_context
+
 
 class TestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.ctx = ModernGL.create_standalone_context()
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.ctx.release()
+        cls.ctx = get_context()
 
     def tearDown(self):
         self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
+
+    def test_glo(self):
+        glo = self.ctx.default_framebuffer.glo
+        self.assertEqual(glo, 0)
 
     def test_viewport(self):
         x, y, width, height = self.ctx.default_framebuffer.viewport
         self.assertEqual(x, 0)
         self.assertEqual(y, 0)
-        self.assertEqual(width, 0)
-        self.assertEqual(height, 0)
+        self.assertNotEqual(width, 0)
+        self.assertNotEqual(height, 0)
 
     def test_size(self):
         width, height = self.ctx.default_framebuffer.size
-        self.assertEqual(width, 0)
-        self.assertEqual(height, 0)
-
-    def test_samples(self):
-        samples = self.ctx.default_framebuffer.samples
-        self.assertEqual(samples, 0)
+        self.assertNotEqual(width, 0)
+        self.assertNotEqual(height, 0)
 
     def test_having_color_attachments(self):
         with self.assertRaisesRegex(ModernGL.Error, 'attachment'):

@@ -2,19 +2,17 @@ import unittest
 
 import ModernGL
 
+from common import get_context
+
 
 class TestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.ctx = ModernGL.create_standalone_context()
+        cls.ctx = get_context()
 
     def tearDown(self):
         self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.ctx.release()
 
     def test_sampler_2D_getsetter(self):
         self.prog = self.ctx.program(self.ctx.vertex_shader('''

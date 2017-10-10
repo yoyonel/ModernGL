@@ -8,128 +8,80 @@ from common import get_context
 
 vtypes = [
     {
-        'version': 330,
-        'type': 'int',
-        'input': [-1],
-        'output': [-2],
-    },
-    {
-        'version': 330,
-        'type': 'ivec2',
-        'input': [-1, -1],
-        'output': [-2, -2],
-    },
-    {
-        'version': 330,
-        'type': 'ivec3',
-        'input': [-1, -1, -1],
-        'output': [-2, -2, -2],
-    },
-    {
-        'version': 330,
-        'type': 'ivec4',
-        'input': [-1, -1, -1, -1],
-        'output': [-2, -2, -2, -2],
-    },
-    {
-        'version': 330,
-        'type': 'uint',
-        'input': [1],
-        'output': [2],
-    },
-    {
-        'version': 330,
-        'type': 'uvec2',
-        'input': [1, 1],
-        'output': [2, 2],
-    },
-    {
-        'version': 330,
-        'type': 'uvec3',
-        'input': [1, 1, 1],
-        'output': [2, 2, 2],
-    },
-    {
-        'version': 330,
-        'type': 'uvec4',
-        'input': [1, 1, 1, 1],
-        'output': [2, 2, 2, 2],
-    },
-    {
-        'version': 330,
-        'type': 'float',
+        'version': 410,
+        'type': 'double',
         'input': [1.0],
         'output': [2.0],
     },
     {
-        'version': 330,
-        'type': 'vec2',
+        'version': 410,
+        'type': 'dvec2',
         'input': [1.0, 1.0],
         'output': [2.0, 2.0],
     },
     {
-        'version': 330,
-        'type': 'vec3',
+        'version': 410,
+        'type': 'dvec3',
         'input': [1.0, 1.0, 1.0],
         'output': [2.0, 2.0, 2.0],
     },
     {
-        'version': 330,
-        'type': 'vec4',
+        'version': 410,
+        'type': 'dvec4',
         'input': [1.0, 1.0, 1.0, 1.0],
         'output': [2.0, 2.0, 2.0, 2.0],
     },
     {
-        'version': 330,
-        'type': 'mat2',
+        'version': 410,
+        'type': 'dmat2',
         'input': [1.0, 1.0, 1.0, 1.0],
         'output': [2.0, 2.0, 2.0, 2.0],
     },
     {
-        'version': 330,
-        'type': 'mat2x3',
+        'version': 410,
+        'type': 'dmat2x3',
         'input': [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
         'output': [2.0, 2.0, 2.0, 2.0, 2.0, 2.0],
     },
     {
-        'version': 330,
-        'type': 'mat2x4',
+        'version': 410,
+        'type': 'dmat2x4',
         'input': [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
         'output': [2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0],
     },
     {
-        'version': 330,
-        'type': 'mat3x2',
+        'version': 410,
+        'type': 'dmat3x2',
         'input': [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
         'output': [2.0, 2.0, 2.0, 2.0, 2.0, 2.0],
     },
     {
-        'version': 330,
-        'type': 'mat3',
+        'version': 410,
+        'type': 'dmat3',
         'input': [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
         'output': [2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0],
     },
     {
-        'version': 330,
-        'type': 'mat3x4',
+        'version': 410,
+        'type': 'dmat3x4',
         'input': [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
         'output': [2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0],
     },
     {
-        'version': 330,
-        'type': 'mat4x2',
+        'version': 410,
+        'type': 'dmat4x2',
         'input': [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
         'output': [2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0],
     },
     {
-        'version': 330,
-        'type': 'mat4x3',
+        'version': 410,
+        'type': 'dmat4x3',
         'input': [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
         'output': [2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0],
     },
     {
-        'version': 330,
-        'type': 'mat4',
+        'version': 410,
+        'type': 'dmat4',
         'input': [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
         'output': [2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0],
     },
@@ -141,6 +93,9 @@ class TestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.ctx = get_context()
+
+        if cls.ctx.vendor.startswith('Intel'):
+            raise unittest.SkipTest('')
 
     def tearDown(self):
         self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
@@ -182,8 +137,8 @@ class TestCase(unittest.TestCase):
         vert_src = '''
             #version %(version)s
 
-            in %(type)s v_in[2];
-            out %(type)s v_out[2];
+            in %(type)s v_in[];
+            out %(type)s v_out[];
 
             void main() {
                 v_out[0] = v_in[0] + v_in[0];
