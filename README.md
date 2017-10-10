@@ -234,6 +234,7 @@ Code is tested with [pep8], [flake8], [prospector] and [pylint]
 - [MinchinWeb](https://github.com/MinchinWeb)
 - [Silexstudio](https://github.com/Silexstudio)
 - [stuaxo](https://github.com/stuaxo)
+- [Tomi Aarnio](https://github.com/toaarnio)
 
 and [many others](https://github.com/cprogrammer1994/ModernGL/graphs/contributors)
 
