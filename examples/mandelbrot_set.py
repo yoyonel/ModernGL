@@ -34,14 +34,19 @@ class Example:
                 out vec4 f_color;
 
                 uniform sampler2D Texture;
-                uniform vec2 Seed;
+                uniform vec2 Center;
+                uniform float Scale;
+                uniform float Ratio;
                 uniform int Iter;
 
                 void main() {
-                    vec2 c = Seed;
+                    vec2 c;
                     int i;
 
-                    vec2 z = vec2(3.0 * v_text.x, 2.0 * v_text.y);
+                    c.x = Ratio * v_text.x * Scale - Center.x;
+                    c.y = v_text.y * Scale - Center.y;
+
+                    vec2 z = c;
 
                     for (i = 0; i < Iter; i++) {
                         float x = (z.x * z.x - z.y * z.y) + c.x;
@@ -61,7 +66,9 @@ class Example:
             ''')
         ])
 
-        self.seed = self.prog.uniforms['Seed']
+        self.center = self.prog.uniforms['Center']
+        self.scale = self.prog.uniforms['Scale']
+        self.ratio = self.prog.uniforms['Ratio']
         self.iter = self.prog.uniforms['Iter']
 
         img = Image.open(local('data', 'pal.png')).convert('RGB')
@@ -77,8 +84,10 @@ class Example:
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
 
-        self.seed.value = (-0.8, 0.156)
+        self.center.value = (0.5, 0.0)
         self.iter.value = 100
+        self.scale.value = 1.5
+        self.ratio.value = self.wnd.ratio
 
         self.vao.render(ModernGL.TRIANGLE_STRIP)
 
