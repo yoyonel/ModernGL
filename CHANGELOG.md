@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [4.2.0] - 2017-10-17
+
 ### Added
 
 - Default framebuffer bits attribute
@@ -279,7 +281,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.12...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.2.0...master
+[4.2.0]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.12...4.2.0
 [4.1.12]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.11...4.1.12
 [4.1.11]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.10...4.1.11
 [4.1.10]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.9...4.1.10
