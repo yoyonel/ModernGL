@@ -2,6 +2,10 @@ import ModernGL
 from ModernGL.ext.examples import run_example
 import numpy as np
 
+"""
+    Renders a blue triangle
+"""
+
 
 class Example:
     def __init__(self, wnd):

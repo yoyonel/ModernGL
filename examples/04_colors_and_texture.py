@@ -7,6 +7,10 @@ from ModernGL.ext.obj import Obj
 from PIL import Image
 from pyrr import Matrix44
 
+"""
+    Renders a floating, oscillating, 3d islan with lights
+"""
+
 
 def local(*path):
     return os.path.join(os.path.dirname(__file__), *path)

@@ -2,6 +2,10 @@ import ModernGL
 from ModernGL.ext.examples import run_example
 import numpy as np
 
+"""
+    Renders 2 triangles that share the same head using index buffers (ibo)
+"""
+
 
 class Example:
     def __init__(self, wnd):
