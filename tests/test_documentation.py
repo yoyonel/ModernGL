@@ -118,11 +118,11 @@ class TestCase(unittest.TestCase):
         ignored = {'new', 'release', 'mglo', 'glo'}
         self.assertSetEqual(implemented - documented - ignored, EMPTY_SET, msg='Texture3D')
 
-    # def test_texture_cube_docs(self):
-    #     documented = detect_class('Textures.rst', 'TextureCube')
-    #     implemented = detect_implementation('TextureCube')
-    #     ignored = {''}
-    #     self.assertSetEqual(implemented - documented - ignored, EMPTY_SET, msg='TextureCube')
+    def test_texture_cube_docs(self):
+        documented = detect_class('Textures.rst', 'TextureCube')
+        implemented = detect_implementation('TextureCube')
+        ignored = {'new', 'release', 'mglo', 'glo'}
+        self.assertSetEqual(implemented - documented - ignored, EMPTY_SET, msg='TextureCube')
 
     def test_uniform_docs(self):
         documented = detect_class('Uniforms.rst', 'Uniform')
