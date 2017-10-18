@@ -281,7 +281,7 @@ class Context:
                 - :py:data:`ModernGL.CULL_FACE`
 
             Args:
-                flag (EnableFlag): The flag to enable.
+                flags (EnableFlag): The flag to enable.
         '''
 
         self.mglo.enable_only(flags.flags)
