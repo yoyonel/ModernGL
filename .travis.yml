@@ -36,6 +36,6 @@ install:
 
 script:
   - python -m ModernGL
-  - python -m pytest tests/test_module_integrity.py
+  - python -m pytest tests/test_local.py tests/test_module_integrity.py tests/test_documentation.py
 
 #  - python -m ModernGL --info
