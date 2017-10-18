@@ -35,7 +35,7 @@ from .members import (
 )
 from .programs import ComputeShader, Program, Shader
 from .renderbuffers import Renderbuffer
-from .textures import Texture, Texture3D
+from .textures import Texture, Texture3D, TextureCube
 from .vertex_arrays import VertexArray, VertexArrayAttribute
 
 __version__ = '4.2.0'
