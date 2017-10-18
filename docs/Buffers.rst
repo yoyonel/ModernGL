@@ -16,7 +16,7 @@ Buffers
 	.. automethod:: bind_to_uniform_block(binding=0)
 	.. automethod:: bind_to_storage_buffer(binding=0)
 
-.. autoclass:: ModernGL.BufferAccess
+.. autoclass:: BufferAccess
 
 	.. automethod:: open()
 	.. automethod:: close()
