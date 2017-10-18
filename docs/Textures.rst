@@ -31,6 +31,9 @@ Textures
 	.. automethod:: use(location=0)
 
 .. autoclass:: TextureCube
+	.. automethod:: read(face, alignment=1) -> bytes
+	.. automethod:: read_into(buffer, face, alignment=1, write_offset=0)
+	.. automethod:: write(face, data, viewport=None, alignment=1)
 	.. automethod:: use(location=0)
 
 .. toctree::
