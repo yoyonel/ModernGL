@@ -2,6 +2,10 @@ import ModernGL
 from ModernGL.ext.examples import run_example
 import numpy as np
 
+"""
+    Renders a traingle that has all RGB combinations
+"""
+
 
 class Example:
     def __init__(self, wnd):
