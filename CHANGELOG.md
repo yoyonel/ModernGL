@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Missing TextureCube class
+- Buffer.clear return type hint
+
 ## [4.2.0] - 2017-10-17
 
 ### Added
