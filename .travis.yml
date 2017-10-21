@@ -1,21 +1,39 @@
-language: python
+language: generic
 
-os:
-  - linux
-#  - osx
+sudo: false
 
 notifications:
   email: false
 
-sudo: false
-
 matrix:
   fast_finish: true
-
-python:
-  - 3.6
-  - 3.5
-  - 3.4
+  include:
+    - os: linux
+      language: python
+      python: 3.4
+      env:
+        - CC=gcc-4.9
+        - CXX=g++-4.9
+    - os: linux
+      language: python
+      python: 3.5
+      env:
+        - CC=gcc-4.9
+        - CXX=g++-4.9
+    - os: linux
+      language: python
+      python: 3.6
+      env:
+        - CC=gcc-4.9
+        - CXX=g++-4.9
+    - os: osx
+      language: generic
+      before_install:
+        - brew update
+        - brew install python3
+        - virtualenv env -p python3
+        - source env/bin/activate
+        - python -m pip install pytest
 
 addons:
   apt:
@@ -26,16 +44,12 @@ addons:
       - g++-4.9
 
 install:
-  - python -c "from distutils import sysconfig; import json; print(json.dumps(sysconfig.get_config_vars(), indent=4))"
-  - CC=gcc-4.9 CXX=g++-4.9 python setup.py build_ext --inplace
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start; fi
-  - pip install -e .
-
-#  - if [ "${TRAVIS_PYTHON_VERSION}" = "3.4" ]; then pip install typing; fi
-#  - python setup.py install
+  - python -c "from distutils import sysconfig; import json; print(json.dumps(sysconfig.get_config_vars(), indent=4))"
+  - python setup.py build_ext --inplace
+  - python -m pip install -e .
 
 script:
   - python -m ModernGL
   - python -m pytest tests/test_local.py tests/test_module_integrity.py tests/test_documentation.py
-
-#  - python -m ModernGL --info
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then python -m pytest; fi
