@@ -7,8 +7,7 @@ import ModernGL
 import numpy as np
 from ModernGL.ext.obj import Obj
 from ModernGL.ext.examples import run_example
-from PIL import Image
-from pyrr import Matrix44, Matrix33
+from pyrr import Matrix44
 
 
 def local(*path):
@@ -80,7 +79,8 @@ class Example:
         obj = Obj.open(local('data', 'lowpoly_toy_car.obj'))
 
         self.vbo1 = self.ctx.buffer(obj.pack('vx vy vz nx ny nz'))
-        self.vbo2 = self.ctx.buffer(struct.pack('15f',
+        self.vbo2 = self.ctx.buffer(struct.pack(
+            '15f',
             1.0, 1.0, 1.0,
             0.0, 0.0, 0.0,
             1.0, 0.0, 0.0,
@@ -112,13 +112,19 @@ class Example:
         self.light.value = camera_pos
 
         # self.vbo2.write(Matrix33.from_z_rotation(self.wnd.time).astype('f4').tobytes(), offset=24)
-        self.vbo2.write(b''.join(struct.pack('15f', *car['color'], *car['pos'],
+        self.vbo2.write(b''.join(struct.pack(
+            '15f',
+            *car['color'],
+            *car['pos'],
             1.0, 0.0, 0.0,
             0.0, 1.0, 0.0,
             0.0, 0.0, 1.0,
         ) for car in cars))
         self.vao.render(instances=len(cars))
-        self.vbo2.write(b''.join(struct.pack('15f', 0.0, 0.0, 0.0, *car['pos'],
+        self.vbo2.write(b''.join(struct.pack(
+            '15f',
+            0.0, 0.0, 0.0,
+            *car['pos'],
             1.0, 0.0, 0.0,
             0.0, 1.0, 0.0,
             0.3, 0.6, 0.0,

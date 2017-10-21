@@ -1,8 +1,6 @@
 import struct
 import unittest
 
-import ModernGL
-
 from common import get_context
 
 

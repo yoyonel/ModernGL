@@ -70,5 +70,6 @@ class TestCase(unittest.TestCase):
         self.assertAlmostEqual(y2, 1.0)
         self.assertAlmostEqual(z2, 1.0)
 
+
 if __name__ == '__main__':
     unittest.main()

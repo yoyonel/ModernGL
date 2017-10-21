@@ -50,7 +50,7 @@ __all__ = [
     'Uniform', 'UniformMap', 'UniformBlock', 'UniformBlockMap',
     'Varying', 'VaryingMap', 'Attribute', 'AttributeMap',
     'Program', 'ProgramStage', 'Shader', 'ComputeShader',
-    'Texture', 'Texture3D', 'Framebuffer', 'Renderbuffer',
+    'Texture', 'Texture3D', 'TextureCube', 'Framebuffer', 'Renderbuffer',
     'VertexArray', 'VertexArrayAttribute',
     'Buffer', 'BufferAccess',
     'Context',

@@ -17,8 +17,12 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+
 import os
 import sys
+
+import sphinx_rtd_theme
+
 sys.path.insert(0, os.path.abspath('..'))
 
 
@@ -85,8 +89,6 @@ todo_include_todos = False
 #
 # html_theme = 'alabaster'
 
-import sphinx_rtd_theme
-
 html_theme = "sphinx_rtd_theme"
 
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
@@ -152,12 +154,21 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'ModernGL', 'ModernGL Documentation', author, 'ModernGL', 'One line description of project.', 'Miscellaneous'),
+    (
+        master_doc,
+        'ModernGL',
+        'ModernGL Documentation',
+        author,
+        'ModernGL',
+        'One line description of project.',
+        'Miscellaneous',
+    ),
 ]
 
 
 def setup(app):
     app.add_stylesheet('css/custom.css')
+
 
 autodoc_member_order = 'bysource'
 # autodoc_member_order = 'groupwise'

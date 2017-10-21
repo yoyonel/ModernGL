@@ -112,20 +112,20 @@ class Example:
                 body.position = Vec2d(300 + x * 50, 105 + y * (size + 0.1))
                 shape = pymunk.Poly.create_box(body, (size, size))
                 shape.friction = 0.3
-                self.space.add(body,shape)
+                self.space.add(body, shape)
                 self.bodies.append(body)
 
     def shoot(self):
         mass = 100
         r = 15
-        moment = pymunk.moment_for_circle(mass, 0, r, (0,0))
+        moment = pymunk.moment_for_circle(mass, 0, r, (0, 0))
         body = pymunk.Body(mass, moment)
         body.position = (0, 165)
-        shape = pymunk.Circle(body, r, (0,0))
+        shape = pymunk.Circle(body, r, (0, 0))
         shape.friction = 0.3
         self.space.add(body, shape)
         f = 50000
-        body.apply_impulse_at_local_point((f,0), (0,0))
+        body.apply_impulse_at_local_point((f, 0), (0, 0))
         self.balls.append(body)
 
     def render(self):

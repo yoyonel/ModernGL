@@ -85,7 +85,7 @@ class Example:
         figure_size = (640, 360)
 
         temp = io.BytesIO()
-        figure = plt.figure(0, figsize=(figure_size[0] / 72, figure_size[1] / 72))
+        plt.figure(0, figsize=(figure_size[0] / 72, figure_size[1] / 72))
 
         mu, sigma = 100, 15
         x = mu + sigma * np.random.randn(10000)

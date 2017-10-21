@@ -70,7 +70,6 @@ class Example:
         texture = self.ctx.texture(self.img.size, 1, self.img.tobytes())
         texture.use()
 
-
     def render(self):
         width, height = self.wnd.size
         angle = self.wnd.time * 0.2

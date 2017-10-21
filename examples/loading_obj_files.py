@@ -15,7 +15,6 @@ class Example:
         self.obj = Obj.open(os.path.join(os.path.dirname(__file__), 'data', 'sitting_dummy.obj'))
         self.wood = Image.open(os.path.join(os.path.dirname(__file__), 'data', 'wood.jpg'))
 
-
         self.prog = self.ctx.program([
             self.ctx.vertex_shader('''
                 #version 330
@@ -76,7 +75,6 @@ class Example:
 
         self.vbo = self.ctx.buffer(self.obj.pack('vx vy vz nx ny nz tx ty'))
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, ['in_vert', 'in_norm', 'in_text'])
-
 
     def render(self):
         width, height = self.wnd.size

@@ -29,7 +29,7 @@ def detect_class(filename, classname):
     lines = read_docs(filename).splitlines()
     start = lines.index('.. autoclass:: ' + classname)
     end = next(i for i in range(start + 1, len(lines)) if not re.match(r'^\s|^$', lines[i]))
-    docs = '\n'.join(lines[start : end])
+    docs = '\n'.join(lines[start:end])
     members = detect_members(docs)
     methods = detect_methods(docs)
     return set(members + methods)
