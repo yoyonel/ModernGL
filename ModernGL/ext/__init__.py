@@ -32,10 +32,13 @@ class ExtensionFinder():
                 local = os.path.isfile(os.path.join(here, 'README.md'))
 
                 if local:
-                    error = 'missing extension\n\nDo not run ModernGL from the git repository!'
+                    error = 'missing extension\n\nDo not run ModernGL from the git repository!\n\n'
+                    error += 'For developers:\n'
+                    error += '\tpython -m pip install %s\n' % fullname
+                    error += '\tpython -m ModernGL.ext --collect'
 
                 else:
-                    error = 'missing extension\n\nHint: python3 -m pip install %s' % fullname
+                    error = 'missing extension\n\nHint: python -m pip install %s' % fullname
 
                 raise ModuleNotFoundError(error)
 
