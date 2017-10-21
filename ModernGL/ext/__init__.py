@@ -2,7 +2,7 @@
     ModernGL extensions
 '''
 
-# pylint: disable=R0903, W0613
+# pylint: disable=unused-argument, too-few-public-methods, no-self-use
 
 import os
 import sys
