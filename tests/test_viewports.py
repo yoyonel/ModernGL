@@ -10,6 +10,7 @@ class TestCase(unittest.TestCase):
         cls.ctx = get_context()
 
     def test_viewport(self):
+        self.ctx.screen.use()
         self.ctx.viewport = (1, 2, 3, 4)
         self.assertTupleEqual(self.ctx.viewport, (1, 2, 3, 4))
         self.assertTupleEqual(self.ctx.screen.viewport, (1, 2, 3, 4))
