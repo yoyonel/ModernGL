@@ -42,19 +42,19 @@ class TestBuffer(unittest.TestCase):
             (buf_v, '2f', ['in_v']),
         ])
 
-        self.prog.uniforms['mult'].value = 0.0
+        self.prog['mult'].value = 0.0
         vao.transform(res, ModernGL.POINTS)
         x, y = struct.unpack('2f', res.read())
         self.assertAlmostEqual(x, 0.0)
         self.assertAlmostEqual(y, 0.0)
 
-        self.prog.uniforms['mult'].value = 1.0
+        self.prog['mult'].value = 1.0
         vao.transform(res, ModernGL.POINTS)
         x, y = struct.unpack('2f', res.read())
         self.assertAlmostEqual(x, 11.0)
         self.assertAlmostEqual(y, 18.0)
 
-        self.prog.uniforms['mult'].value = 2.0
+        self.prog['mult'].value = 2.0
         vao.transform(res, ModernGL.POINTS)
         x, y = struct.unpack('2f', res.read())
         self.assertAlmostEqual(x, 22.0)

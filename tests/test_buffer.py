@@ -78,15 +78,6 @@ class TestBuffer(unittest.TestCase):
         buf = self.ctx.buffer(reserve=1024)
         buf.orphan()
 
-    def test_buffer_invalidate(self):
-        buf = self.ctx.buffer(reserve=1024)
-        buf.release()
-
-        self.assertEqual(type(buf), ModernGL.InvalidObject)
-
-        with self.assertRaises(AttributeError):
-            buf.read()
-
     def test_buffer_access(self):
         buf = self.ctx.buffer(data=b'\xAA\x55' * 10)
 

@@ -53,7 +53,7 @@ class TestCase(unittest.TestCase):
         prog = self.ctx.program(vert, ['color'])
         vao = self.ctx.simple_vertex_array(prog, vbo1, ['vert'])
 
-        vao.subroutines = (prog.vertex_shader.subroutines['ColorRed'],)
+        vao.subroutines = [prog['ColorRed'].index]
         vao.transform(vbo2)
 
         x, y, z, w = struct.unpack('4f', vbo2.read())
@@ -62,7 +62,7 @@ class TestCase(unittest.TestCase):
         self.assertAlmostEqual(z, 0.0)
         self.assertAlmostEqual(w, 1.0)
 
-        vao.subroutines = [prog.vertex_shader.subroutines['ColorBlue']]
+        vao.subroutines = [prog['ColorBlue'].index]
         vao.transform(vbo2)
 
         x, y, z, w = struct.unpack('4f', vbo2.read())
@@ -71,7 +71,7 @@ class TestCase(unittest.TestCase):
         self.assertAlmostEqual(z, 1.0)
         self.assertAlmostEqual(w, 1.0)
 
-        vao.subroutines = [prog.vertex_shader.subroutines['ColorYellow'].index]
+        vao.subroutines = [prog['ColorYellow'].index]
         vao.transform(vbo2)
 
         x, y, z, w = struct.unpack('4f', vbo2.read())

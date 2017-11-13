@@ -1857,7 +1857,7 @@ class Program:
             The geometry input primitive will be used for validation.
         '''
 
-        return self._geom[0]
+        return self._geom_info[0]
 
     @property
     def geometry_output(self) -> Primitive:
@@ -1866,7 +1866,7 @@ class Program:
             The GeometryShader's output primitive if the GeometryShader exists.
         '''
 
-        return self._geom[1]
+        return self._geom_info[1]
 
     @property
     def geometry_vertices(self) -> int:
@@ -1875,7 +1875,7 @@ class Program:
             the geometry shader will output.
         '''
 
-        return self._geom[2]
+        return self._geom_info[2]
 
     @property
     def subroutines(self) -> Tuple[str, ...]:

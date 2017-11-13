@@ -27,26 +27,11 @@ class TestCase(unittest.TestCase):
 
         program = self.ctx.program(vertex_shader, ['vert_length'])
 
-        self.assertIsNot(program.vertex_shader, None)
-        self.assertIs(program.fragment_shader, None)
-        self.assertIs(program.geometry_shader, None)
-        self.assertIs(program.tess_evaluation_shader, None)
-        self.assertIs(program.tess_control_shader, None)
-
         self.assertIs(program.geometry_input, None)
         self.assertIs(program.geometry_output, None)
 
-        self.assertEqual(len(program.uniforms), 0)
-        self.assertEqual(len(program.attributes), 1)
-
-        self.assertEqual(len(program.varyings), 1)
-        self.assertEqual(len(program.uniform_blocks), 0)
-
-        self.assertTrue('vert' in program.attributes)
-        self.assertTrue('vert' not in program.varyings)
-
-        self.assertTrue('vert_length' not in program.attributes)
-        self.assertTrue('vert_length' in program.varyings)
+        self.assertIn('vert', program)
+        self.assertIn('vert_length', program)
 
 
 if __name__ == '__main__':

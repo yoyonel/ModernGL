@@ -10,6 +10,7 @@ class TestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.ctx = get_context()
+        cls.max_samples = cls.ctx.info['GL_MAX_SAMPLES']
 
     def tearDown(self):
         self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
@@ -27,7 +28,7 @@ class TestCase(unittest.TestCase):
             self.ctx.texture((16, 16), 3, pixels)
 
     def test_multisample_texture(self):
-        if self.ctx.max_samples < 2:
+        if self.max_samples < 2:
             self.skipTest('multisampling is not supported')
 
         self.ctx.texture((16, 16), 3, samples=2)
@@ -36,13 +37,13 @@ class TestCase(unittest.TestCase):
         self.ctx.depth_texture((16, 16))
 
     def test_multisample_depth_texture(self):
-        if self.ctx.max_samples < 2:
+        if self.max_samples < 2:
             self.skipTest('multisampling is not supported')
 
         self.ctx.depth_texture((16, 16), samples=2)
 
     def test_texture_invalid_samples(self):
-        if self.ctx.max_samples < 2:
+        if self.max_samples < 2:
             self.skipTest('multisampling is not supported')
 
         with self.assertRaisesRegex(ModernGL.Error, 'sample'):

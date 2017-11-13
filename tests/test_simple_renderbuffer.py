@@ -10,6 +10,7 @@ class TestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.ctx = get_context()
+        cls.max_samples = cls.ctx.info['GL_MAX_SAMPLES']
 
     def tearDown(self):
         self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
@@ -18,7 +19,7 @@ class TestCase(unittest.TestCase):
         self.ctx.renderbuffer((64, 64))
 
     def test_multisample_renderbuffer(self):
-        if self.ctx.max_samples < 2:
+        if self.max_samples < 2:
             self.skipTest('multisampling is not supported')
 
         self.ctx.renderbuffer((64, 64), samples=2)
@@ -27,7 +28,7 @@ class TestCase(unittest.TestCase):
         self.ctx.depth_renderbuffer((64, 64))
 
     def test_multisample_depth_renderbuffer(self):
-        if self.ctx.max_samples < 2:
+        if self.max_samples < 2:
             self.skipTest('multisampling is not supported')
 
         self.ctx.depth_renderbuffer((64, 64), samples=2)

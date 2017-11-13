@@ -21,7 +21,7 @@ class TestCase(unittest.TestCase):
             }
         '''))
 
-        sampler_uniform = self.prog.uniforms['Texture2D']
+        sampler_uniform = self.prog['Texture2D']
 
         sampler_uniform.value = 3
         self.assertEqual(sampler_uniform.value, 3)
@@ -38,7 +38,7 @@ class TestCase(unittest.TestCase):
             }
         '''))
 
-        sampler_uniform = self.prog.uniforms['Texture3D']
+        sampler_uniform = self.prog['Texture3D']
 
         sampler_uniform.value = 3
         self.assertEqual(sampler_uniform.value, 3)

@@ -50,21 +50,17 @@ class TestCase(unittest.TestCase):
             (buf_v, '2f', ['in_v']),
         ])
 
-        self.assertFalse('Block1' in self.prog.uniforms)
-        self.assertFalse('Block2' in self.prog.uniforms)
-        self.assertFalse('Block3' in self.prog.uniforms)
+        self.assertIn('Block1', self.prog)
+        self.assertIn('Block2', self.prog)
+        self.assertIn('Block3', self.prog)
 
-        self.assertFalse('x' in self.prog.uniforms)
-        self.assertFalse('y' in self.prog.uniforms)
-        self.assertFalse('z' in self.prog.uniforms)
+        self.assertNotIn('x', self.prog)
+        self.assertNotIn('y', self.prog)
+        self.assertNotIn('z', self.prog)
 
-        self.assertTrue('Block1' in self.prog.uniform_blocks)
-        self.assertTrue('Block2' in self.prog.uniform_blocks)
-        self.assertTrue('Block3' in self.prog.uniform_blocks)
-
-        self.prog.uniform_blocks['Block1'].binding = 2
-        self.prog.uniform_blocks['Block2'].binding = 4
-        self.prog.uniform_blocks['Block3'].binding = 1
+        self.prog['Block1'].binding = 2
+        self.prog['Block2'].binding = 4
+        self.prog['Block3'].binding = 1
 
         buf_u1.bind_to_uniform_block(2)
         buf_u2.bind_to_uniform_block(4)

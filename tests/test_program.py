@@ -1,6 +1,7 @@
 import unittest
 
 from common import get_context
+import ModernGL
 
 
 class TestCase(unittest.TestCase):
@@ -42,27 +43,13 @@ class TestCase(unittest.TestCase):
 
         program = self.ctx.program([vertex_shader, fragment_shader])
 
-        self.assertIsNot(program.vertex_shader, None)
-        self.assertIsNot(program.fragment_shader, None)
-        self.assertIs(program.geometry_shader, None)
-        self.assertIs(program.tess_evaluation_shader, None)
-        self.assertIs(program.tess_control_shader, None)
+        self.assertIn('vert', program)
+        self.assertIn('pos', program)
+        self.assertIn('scale', program)
 
-        self.assertIs(program.geometry_input, None)
-        self.assertIs(program.geometry_output, None)
-
-        self.assertEqual(len(program.uniforms), 2)
-        self.assertEqual(len(program.attributes), 1)
-
-        self.assertEqual(len(program.varyings), 0)
-        self.assertEqual(len(program.uniform_blocks), 0)
-
-        self.assertTrue('pos' in program.uniforms)
-        self.assertTrue('scale' in program.uniforms)
-        self.assertTrue('vert' not in program.uniforms)
-
-        self.assertTrue('vert' in program.attributes)
-        self.assertTrue('pos' not in program.attributes)
+        self.assertIsInstance(program['vert'], ModernGL.Attribute)
+        self.assertIsInstance(program['pos'], ModernGL.Uniform)
+        self.assertIsInstance(program['scale'], ModernGL.Uniform)
 
 
 if __name__ == '__main__':

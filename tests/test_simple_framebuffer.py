@@ -10,6 +10,7 @@ class TestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.ctx = get_context()
+        cls.max_samples = cls.ctx.info['GL_MAX_SAMPLES']
 
     def tearDown(self):
         self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
@@ -53,7 +54,7 @@ class TestCase(unittest.TestCase):
         fbo1 = self.ctx.framebuffer(rbo1)
         fbo2 = self.ctx.framebuffer(rbo1, rbo2)
 
-        self.assertIsInstance(fbo1.depth_attachment, ModernGL.Renderbuffer)
+        self.assertIsNone(fbo1.depth_attachment)
         self.assertIsInstance(fbo2.depth_attachment, ModernGL.Renderbuffer)
 
         self.assertNotEqual(fbo1.depth_attachment, rbo2)
@@ -127,14 +128,14 @@ class TestCase(unittest.TestCase):
         self.ctx.framebuffer(rbo1, rbo2)
 
     def test_framebuffer_multisample(self):
-        if self.ctx.max_samples < 2:
+        if self.max_samples < 2:
             self.skipTest('multisampling is not supported')
 
         rbo1 = self.ctx.renderbuffer((16, 16), samples=2)
         self.ctx.framebuffer(rbo1)
 
     def test_depth_framebuffer_multisample(self):
-        if self.ctx.max_samples < 2:
+        if self.max_samples < 2:
             self.skipTest('multisampling is not supported')
 
         rbo1 = self.ctx.renderbuffer((16, 16), samples=2)
@@ -142,7 +143,7 @@ class TestCase(unittest.TestCase):
         self.ctx.framebuffer(rbo1, rbo2)
 
     def test_framebuffer_multisample_sample_mismatch(self):
-        if self.ctx.max_samples < 2:
+        if self.max_samples < 2:
             self.skipTest('multisampling is not supported')
 
         with self.assertRaisesRegex(ModernGL.Error, 'sample'):

@@ -56,26 +56,24 @@ class TestCase(unittest.TestCase):
     def test_program_uniforms_1(self):
         program = self.ctx.program(self.vertex_shader)
 
-        self.assertIn('Mvp', program.uniforms)
-        self.assertNotIn('Block', program.uniforms)
-        self.assertNotIn('Transform', program.uniforms)
+        self.assertIn('Mvp', program)
+        self.assertIn('Block', program)
+        self.assertNotIn('Transform', program)
 
     def test_program_uniforms_2(self):
         program = self.ctx.program([self.vertex_shader, self.geometry_shader, self.fragment_shader])
 
-        self.assertIn('Mvp', program.uniforms)
-        self.assertIn('Position', program.uniforms)
-        self.assertIn('Color', program.uniforms)
+        self.assertIn('Mvp', program)
+        self.assertIn('Position', program)
+        self.assertIn('Color', program)
 
     def test_program_uniform_blocks(self):
         program = self.ctx.program([self.vertex_shader, self.fragment_shader])
 
-        self.assertIn('Block', program.uniform_blocks)
-        self.assertIn('Lights', program.uniform_blocks)
-        self.assertNotIn('Transform', program.uniform_blocks)
-        self.assertNotIn('Light', program.uniform_blocks)
-        self.assertNotIn('Block', program.uniforms)
-        self.assertNotIn('Lights', program.uniforms)
+        self.assertIn('Block', program)
+        self.assertIn('Lights', program)
+        self.assertNotIn('Transform', program)
+        self.assertNotIn('Light', program)
 
     def test_program_geometry_primitives_1(self):
         program = self.ctx.program(self.vertex_shader)

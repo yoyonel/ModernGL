@@ -8,6 +8,7 @@ class TestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.ctx = get_context()
+        cls.vendor = cls.ctx.info['GL_VENDOR']
 
     def tearDown(self):
         self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
@@ -60,7 +61,7 @@ class TestCase(unittest.TestCase):
         self.assertEqual(bytes(buf), pixels)
 
     def test_texture_3d_read_into_pbo(self):
-        if self.ctx.vendor.startswith('Intel'):
+        if self.vendor.startswith('Intel'):
             raise unittest.SkipTest('')
 
         pixels = b'\x10\x20\x30' * 8 * 8 * 8
