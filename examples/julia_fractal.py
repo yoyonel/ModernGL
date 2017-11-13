@@ -54,8 +54,8 @@ class Example:
             ''')
         ])
 
-        self.center = self.prog.uniforms['Center']
-        self.iter = self.prog.uniforms['Iter']
+        self.center = self.prog['Center']
+        self.iter = self.prog['Iter']
 
         vertices = np.array([-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0])
 

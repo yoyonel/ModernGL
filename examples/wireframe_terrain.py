@@ -53,7 +53,7 @@ class Example:
             '''),
         ])
 
-        self.mvp = self.prog.uniforms['Mvp']
+        self.mvp = self.prog['Mvp']
 
         vertices, index = terrain(32)
 

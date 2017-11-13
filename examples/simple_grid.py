@@ -39,7 +39,7 @@ class Example:
             '''),
         ])
 
-        self.mvp = self.prog.uniforms['Mvp']
+        self.mvp = self.prog['Mvp']
 
         self.vbo = self.ctx.buffer(grid(15, 10).astype('f4').tobytes())
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, ['in_vert'])

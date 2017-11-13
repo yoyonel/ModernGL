@@ -80,8 +80,8 @@ class Example:
             varyings=['out_vert']
         )
 
-        self.transform.uniforms['Width'].value = width
-        self.transform.uniforms['Height'].value = height
+        self.transform['Width'].value = width
+        self.transform['Height'].value = height
 
         self.texture = self.ctx.texture((width, height), 1, pixels.tobytes(), floats=True)
         self.texture.filter = ModernGL.NEAREST

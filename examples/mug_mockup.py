@@ -94,8 +94,8 @@ class Example:
         bg_img = Image.open(local('data', 'mug-background.jpg')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
         self.bg_texture = self.ctx.texture(bg_img.size, 3, bg_img.tobytes())
 
-        self.mvp = self.prog.uniforms['Mvp']
-        self.light = self.prog.uniforms['Light']
+        self.mvp = self.prog['Mvp']
+        self.light = self.prog['Light']
 
         sticker_img = Image.open(local('data', 'mug-pymet-logo.png')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGBA')
         self.sticker_texture = self.ctx.texture(sticker_img.size, 4, sticker_img.tobytes())

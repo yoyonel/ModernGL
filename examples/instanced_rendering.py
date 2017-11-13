@@ -39,8 +39,8 @@ class Example:
             '''),
         ])
 
-        self.scale = self.prog.uniforms['Scale']
-        self.rotation = self.prog.uniforms['Rotation']
+        self.scale = self.prog['Scale']
+        self.rotation = self.prog['Rotation']
 
         vertices = np.array([
             # x, y, red, green, blue, alpha

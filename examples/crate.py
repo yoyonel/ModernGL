@@ -57,8 +57,8 @@ class Example:
             '''),
         ])
 
-        self.mvp = self.prog.uniforms['Mvp']
-        self.light = self.prog.uniforms['Light']
+        self.mvp = self.prog['Mvp']
+        self.light = self.prog['Light']
 
         obj = Obj.open(local('data', 'crate.obj'))
         img = Image.open(local('data', 'crate.png')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')

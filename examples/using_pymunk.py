@@ -140,16 +140,16 @@ class Example:
         for i in range(10):
             self.space.step(self.wnd.frame_time / 10)
 
-        self.prog.uniforms['Camera'].value = (200, 300, width / 2, height / 2)
+        self.prog['Camera'].value = (200, 300, width / 2, height / 2)
 
         self.vbo2.write(b''.join(struct.pack('3f2f4f', b.position.x, b.position.y, b.angle, 10, 10, 1, 1, 1, 0) for b in self.bodies))
-        self.prog.uniforms['Texture'].value = 0
+        self.prog['Texture'].value = 0
         self.vao.render(ModernGL.TRIANGLE_STRIP, instances=len(self.bodies))
 
         self.vbo2.orphan()
 
         self.vbo2.write(b''.join(struct.pack('3f2f4f', b.position.x, b.position.y, b.angle, 15, 15, 1, 1, 1, 0) for b in self.balls))
-        self.prog.uniforms['Texture'].value = 1
+        self.prog['Texture'].value = 1
         self.vao.render(ModernGL.TRIANGLE_STRIP, instances=len(self.balls))
 
 

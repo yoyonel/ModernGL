@@ -53,7 +53,7 @@ class Example:
         ''')
 
         self.transform = self.ctx.program(self.tvert, ['out_pos', 'out_prev'])
-        self.acc = self.transform.uniforms['Acc']
+        self.acc = self.transform['Acc']
         self.acc.value = (0.0, -0.0001)
 
         self.vbo1 = self.ctx.buffer(b''.join(particle() for i in range(1024)))

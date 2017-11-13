@@ -22,8 +22,6 @@ cars = []
 cars += [{'color': random_color(), 'pos': (1.5, i * 2.0 - 9.0, 0.0), 'angle': uniform(-0.5, 0.5)} for i in range(10)]
 cars += [{'color': random_color(), 'pos': (-1.5, i * 2.0 - 9.0, 0.0), 'angle': uniform(-0.5, 0.5)} for i in range(10)]
 
-print(cars)
-
 
 class Example:
     def __init__(self, wnd):
@@ -73,8 +71,8 @@ class Example:
             '''),
         ])
 
-        self.mvp = self.prog.uniforms['Mvp']
-        self.light = self.prog.uniforms['Light']
+        self.mvp = self.prog['Mvp']
+        self.light = self.prog['Light']
 
         obj = Obj.open(local('data', 'lowpoly_toy_car.obj'))
 

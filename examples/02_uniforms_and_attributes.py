@@ -39,8 +39,8 @@ class Example:
                 '''),
         ])
 
-        self.scale = self.prog.uniforms['scale']
-        self.rotation = self.prog.uniforms['rotation']
+        self.scale = self.prog['scale']
+        self.rotation = self.prog['rotation']
 
         width, height = self.wnd.size
         self.scale.value = (height / width * 0.75, 0.25)

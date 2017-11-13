@@ -66,9 +66,9 @@ class Example:
             '''),
         ])
 
-        self.light = self.prog.uniforms['Light']
-        self.color = self.prog.uniforms['Color']
-        self.mvp = self.prog.uniforms['Mvp']
+        self.light = self.prog['Light']
+        self.color = self.prog['Color']
+        self.mvp = self.prog['Mvp']
 
         self.texture = self.ctx.texture(self.wood.size, 3, self.wood.tobytes())
         self.texture.build_mipmaps()

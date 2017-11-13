@@ -70,14 +70,14 @@ class Example:
         ])
 
         width, height = self.wnd.size
-        self.prog.uniforms['z_near'].value = 0.1
-        self.prog.uniforms['z_far'].value = 1000.0
-        self.prog.uniforms['ratio'].value = width / height
-        self.prog.uniforms['fovy'].value = 60
+        self.prog['z_near'].value = 0.1
+        self.prog['z_far'].value = 1000.0
+        self.prog['ratio'].value = width / height
+        self.prog['fovy'].value = 60
 
-        self.prog.uniforms['eye'].value = (3, 3, 3)
-        self.prog.uniforms['center'].value = (0, 0, 0)
-        self.prog.uniforms['up'].value = (0, 0, 1)
+        self.prog['eye'].value = (3, 3, 3)
+        self.prog['center'].value = (0, 0, 0)
+        self.prog['up'].value = (0, 0, 1)
 
         grid = []
 

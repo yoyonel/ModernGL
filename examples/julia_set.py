@@ -61,8 +61,8 @@ class Example:
             ''')
         ])
 
-        self.seed = self.prog.uniforms['Seed']
-        self.iter = self.prog.uniforms['Iter']
+        self.seed = self.prog['Seed']
+        self.iter = self.prog['Iter']
 
         img = Image.open(local('data', 'pal.png')).convert('RGB')
         self.texture = self.ctx.texture(img.size, 3, img.tobytes())

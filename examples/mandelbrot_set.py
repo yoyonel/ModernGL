@@ -66,10 +66,10 @@ class Example:
             ''')
         ])
 
-        self.center = self.prog.uniforms['Center']
-        self.scale = self.prog.uniforms['Scale']
-        self.ratio = self.prog.uniforms['Ratio']
-        self.iter = self.prog.uniforms['Iter']
+        self.center = self.prog['Center']
+        self.scale = self.prog['Scale']
+        self.ratio = self.prog['Ratio']
+        self.iter = self.prog['Iter']
 
         img = Image.open(local('data', 'pal.png')).convert('RGB')
         self.texture = self.ctx.texture(img.size, 3, img.tobytes())

@@ -72,7 +72,7 @@ class Example:
             '''),
         ])
 
-        self.mvp = self.prog.uniforms['Mvp']
+        self.mvp = self.prog['Mvp']
 
         vertices, index = terrain(32)
 
@@ -109,11 +109,11 @@ class Example:
         tex3.use(3)
         tex4.use(4)
 
-        self.prog.uniforms['Heightmap'].value = 0
-        self.prog.uniforms['Color1'].value = 1
-        self.prog.uniforms['Color2'].value = 2
-        self.prog.uniforms['Cracks'].value = 3
-        self.prog.uniforms['Darken'].value = 4
+        self.prog['Heightmap'].value = 0
+        self.prog['Color1'].value = 1
+        self.prog['Color2'].value = 2
+        self.prog['Cracks'].value = 3
+        self.prog['Darken'].value = 4
 
     def render(self):
         width, height = self.wnd.size

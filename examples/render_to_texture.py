@@ -63,10 +63,10 @@ class Example:
             '''),
         ])
 
-        self.mvp = self.prog.uniforms['Mvp']
-        self.light = self.prog.uniforms['Light']
-        self.color = self.prog.uniforms['Color']
-        self.use_texture = self.prog.uniforms['UseTexture']
+        self.mvp = self.prog['Mvp']
+        self.light = self.prog['Light']
+        self.color = self.prog['Color']
+        self.use_texture = self.prog['UseTexture']
 
         self.objects = {}
 
@@ -105,7 +105,7 @@ class Example:
                 self.fbo.use()
 
             else:
-                self.ctx.default_framebuffer.use()
+                self.screen.use()
 
             self.use_texture.value = False
 
