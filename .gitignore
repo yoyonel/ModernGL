@@ -9,6 +9,9 @@ ModernGL/ext/**/*
 **/build
 **/dist
 
+venv
+temp_*
+
 build.py
 
 .tox
