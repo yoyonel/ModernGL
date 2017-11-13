@@ -27,14 +27,15 @@ class Implementation:
         Implementation
     '''
 
+    NOTHING = MockObject()
     BLEND = MockObject()
     DEPTH_TEST = MockObject()
     CULL_FACE = MockObject()
-    ENABLE_MASK = MockObject()
 
     LINEAR = MockObject()
     NEAREST = MockObject()
-    MIPMAP = MockObject()
+    LINEAR_MIPMAP = MockObject()
+    NEAREST_MIPMAP = MockObject()
 
     TRIANGLES = MockObject()
     TRIANGLE_STRIP = MockObject()
@@ -53,9 +54,24 @@ class Implementation:
             create_context
         '''
 
-    def create_standalone_context(self, *args) -> 'Context':
+    def create_standalone_context(self) -> 'Context':
         '''
             create_standalone_context
+        '''
+
+    def set_error_class(self, *args) -> None:
+        '''
+            set_error_class
+        '''
+
+    def set_default_context_size(self, *args) -> None:
+        '''
+            set_default_context_size
+        '''
+
+    def strsize(self, *args) -> int:
+        '''
+            strsize
         '''
 
 

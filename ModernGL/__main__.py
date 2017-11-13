@@ -30,9 +30,9 @@ def main(argv=None):
         install = '(git repository)' if repo else '(installed)'
 
         print('ModernGL:', ModernGL.__version__, install)
-        print('Vendor:', ctx.vendor)
-        print('Renderer:', ctx.renderer)
-        print('Version:', ctx.version)
+        print('Vendor:', ctx.info['GL_VENDOR'])
+        print('Renderer:', ctx.info['GL_RENDERER'])
+        print('Version:', ctx.info['GL_VERSION'])
         print('Python:', sys.version)
         print('Platform:', sys.platform)
 

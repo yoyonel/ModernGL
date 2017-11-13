@@ -1,17 +1,9 @@
-#include "Texture3D.hpp"
-
-#include "Error.hpp"
-#include "InvalidObject.hpp"
-#include "Buffer.hpp"
+#include "Types.hpp"
 
 #include "InlineMethods.hpp"
 
 PyObject * MGLTexture3D_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLTexture3D * self = (MGLTexture3D *)type->tp_alloc(type, 0);
-
-	#ifdef MGL_VERBOSE
-	printf("MGLTexture3D_tp_new %p\n", self);
-	#endif
 
 	if (self) {
 	}
@@ -20,16 +12,11 @@ PyObject * MGLTexture3D_tp_new(PyTypeObject * type, PyObject * args, PyObject * 
 }
 
 void MGLTexture3D_tp_dealloc(MGLTexture3D * self) {
-
-	#ifdef MGL_VERBOSE
-	printf("MGLTexture3D_tp_dealloc %p\n", self);
-	#endif
-
 	MGLTexture3D_Type.tp_free((PyObject *)self);
 }
 
 int MGLTexture3D_tp_init(MGLTexture3D * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("cannot create mgl.Texture3D manually");
+	MGLError_Set("not allowed");
 	return -1;
 }
 
@@ -291,14 +278,6 @@ PyObject * MGLTexture3D_write(MGLTexture3D * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLTexture3D_clear(MGLTexture3D * self, PyObject * args) {
-
-	// TODO:
-
-	PyErr_Format(PyExc_NotImplementedError, "NYI");
-	return 0;
-}
-
 PyObject * MGLTexture3D_use(MGLTexture3D * self, PyObject * args) {
 
 	// TODO: test this method
@@ -365,12 +344,11 @@ PyObject * MGLTexture3D_release(MGLTexture3D * self) {
 }
 
 PyMethodDef MGLTexture3D_tp_methods[] = {
-	{"read", (PyCFunction)MGLTexture3D_read, METH_VARARGS, 0},
-	{"read_into", (PyCFunction)MGLTexture3D_read_into, METH_VARARGS, 0},
 	{"write", (PyCFunction)MGLTexture3D_write, METH_VARARGS, 0},
-	{"clear", (PyCFunction)MGLTexture3D_clear, METH_VARARGS, 0},
 	{"use", (PyCFunction)MGLTexture3D_use, METH_VARARGS, 0},
 	{"build_mipmaps", (PyCFunction)MGLTexture3D_build_mipmaps, METH_VARARGS, 0},
+	{"read", (PyCFunction)MGLTexture3D_read, METH_VARARGS, 0},
+	{"read_into", (PyCFunction)MGLTexture3D_read_into, METH_VARARGS, 0},
 	{"release", (PyCFunction)MGLTexture3D_release, METH_NOARGS, 0},
 	{0},
 };
@@ -549,49 +527,12 @@ int MGLTexture3D_set_swizzle(MGLTexture3D * self, PyObject * value, void * closu
 	return 0;
 }
 
-PyObject * MGLTexture3D_get_width(MGLTexture3D * self, void * closure) {
-	return PyLong_FromLong(self->width);
-}
-
-PyObject * MGLTexture3D_get_height(MGLTexture3D * self, void * closure) {
-	return PyLong_FromLong(self->height);
-}
-
-PyObject * MGLTexture3D_get_depth(MGLTexture3D * self, void * closure) {
-	return PyLong_FromLong(self->depth);
-}
-
-PyObject * MGLTexture3D_get_components(MGLTexture3D * self, void * closure) {
-	return PyLong_FromLong(self->components);
-}
-
-PyObject * MGLTexture3D_get_floats(MGLTexture3D * self, void * closure) {
-	return PyBool_FromLong(self->floats);
-}
-
-MGLContext * MGLTexture3D_get_context(MGLTexture3D * self, void * closure) {
-	Py_INCREF(self->context);
-	return self->context;
-}
-
-PyObject * MGLTexture3D_get_glo(MGLTexture3D * self, void * closure) {
-	return PyLong_FromLong(self->texture_obj);
-}
-
 PyGetSetDef MGLTexture3D_tp_getseters[] = {
 	{(char *)"repeat_x", (getter)MGLTexture3D_get_repeat_x, (setter)MGLTexture3D_set_repeat_x, 0, 0},
 	{(char *)"repeat_y", (getter)MGLTexture3D_get_repeat_y, (setter)MGLTexture3D_set_repeat_y, 0, 0},
 	{(char *)"repeat_z", (getter)MGLTexture3D_get_repeat_z, (setter)MGLTexture3D_set_repeat_z, 0, 0},
 	{(char *)"filter", (getter)MGLTexture3D_get_filter, (setter)MGLTexture3D_set_filter, 0, 0},
 	{(char *)"swizzle", (getter)MGLTexture3D_get_swizzle, (setter)MGLTexture3D_set_swizzle, 0, 0},
-
-	{(char *)"width", (getter)MGLTexture3D_get_width, 0, 0, 0},
-	{(char *)"height", (getter)MGLTexture3D_get_height, 0, 0, 0},
-	{(char *)"depth", (getter)MGLTexture3D_get_depth, 0, 0, 0},
-	{(char *)"components", (getter)MGLTexture3D_get_components, 0, 0, 0},
-	{(char *)"floats", (getter)MGLTexture3D_get_floats, 0, 0, 0},
-	{(char *)"context", (getter)MGLTexture3D_get_context, 0, 0, 0},
-	{(char *)"glo", (getter)MGLTexture3D_get_glo, 0, 0, 0},
 	{0},
 };
 
@@ -636,30 +577,17 @@ PyTypeObject MGLTexture3D_Type = {
 	MGLTexture3D_tp_new,                                    // tp_new
 };
 
-MGLTexture3D * MGLTexture3D_New() {
-	MGLTexture3D * self = (MGLTexture3D *)MGLTexture3D_tp_new(&MGLTexture3D_Type, 0, 0);
-	return self;
-}
-
 void MGLTexture3D_Invalidate(MGLTexture3D * texture) {
 	if (Py_TYPE(texture) == &MGLInvalidObject_Type) {
-
-		#ifdef MGL_VERBOSE
-		printf("MGLTexture3D_Invalidate %p already released\n", texture);
-		#endif
-
 		return;
 	}
 
-	#ifdef MGL_VERBOSE
-	printf("MGLTexture3D_Invalidate %p\n", texture);
-	#endif
+	// TODO: decref
 
-	texture->context->gl.DeleteTextures(1, (GLuint *)&texture->texture_obj);
+	const GLMethods & gl = texture->context->gl;
+	gl.DeleteTextures(1, (GLuint *)&texture->texture_obj);
 
 	Py_DECREF(texture->context);
-
 	Py_TYPE(texture) = &MGLInvalidObject_Type;
-
 	Py_DECREF(texture);
 }

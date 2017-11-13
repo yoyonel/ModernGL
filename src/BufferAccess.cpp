@@ -1,13 +1,7 @@
-#include "BufferAccess.hpp"
-
-#include "Error.hpp"
+#include "Types.hpp"
 
 PyObject * MGLBufferAccess_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLBufferAccess * self = (MGLBufferAccess *)type->tp_alloc(type, 0);
-
-	#ifdef MGL_VERBOSE
-	printf("MGLBufferAccess_tp_new %p\n", self);
-	#endif
 
 	if (self) {
 	}
@@ -16,16 +10,11 @@ PyObject * MGLBufferAccess_tp_new(PyTypeObject * type, PyObject * args, PyObject
 }
 
 void MGLBufferAccess_tp_dealloc(MGLBufferAccess * self) {
-
-	#ifdef MGL_VERBOSE
-	printf("MGLBufferAccess_tp_dealloc %p\n", self);
-	#endif
-
 	MGLBufferAccess_Type.tp_free((PyObject *)self);
 }
 
 int MGLBufferAccess_tp_init(MGLBufferAccess * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("cannot create mgl.BufferAccess manually");
+	MGLError_Set("not allowed");
 	return -1;
 }
 
@@ -51,6 +40,46 @@ PyObject * MGLBufferAccess_close(MGLBufferAccess * self) {
 		self->gl->UnmapBuffer(GL_ARRAY_BUFFER);
 		self->ptr = 0;
 	}
+	Py_RETURN_NONE;
+}
+
+PyObject * MGLBufferAccess_write(MGLBufferAccess * self, PyObject * args) {
+	PyObject * data;
+	Py_ssize_t offset;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"On",
+		&data,
+		&offset
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	Py_buffer buffer_view;
+
+	int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
+	if (get_buffer < 0) {
+		MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+		return 0;
+	}
+
+	if (offset < 0 || buffer_view.len + offset > self->size) {
+		MGLError_Set("out of range offset = %d or size = %d", offset, buffer_view.len);
+		PyBuffer_Release(&buffer_view);
+		return 0;
+	}
+
+	if (!self->ptr) {
+		MGLError_Set("access objet is not open");
+		PyBuffer_Release(&buffer_view);
+		return 0;
+	}
+
+	memcpy(self->ptr + offset, buffer_view.buf, buffer_view.len);
+	PyBuffer_Release(&buffer_view);
 	Py_RETURN_NONE;
 }
 
@@ -140,63 +169,15 @@ PyObject * MGLBufferAccess_read_into(MGLBufferAccess * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLBufferAccess_write(MGLBufferAccess * self, PyObject * args) {
-	const char * data;
-	Py_ssize_t size;
-	Py_ssize_t offset;
-
-	int args_ok = PyArg_ParseTuple(
-		args,
-		"y#n",
-		&data,
-		&size,
-		&offset
-	);
-
-	if (!args_ok) {
-		return 0;
-	}
-
-	if (offset < 0 || size + offset > self->size) {
-		MGLError_Set("out of range offset = %d or size = %d", offset, size);
-		return 0;
-	}
-
-	if (!self->ptr) {
-		MGLError_Set("access objet is not open");
-		return 0;
-	}
-
-	memcpy(self->ptr + offset, data, size);
-
-	Py_RETURN_NONE;
-}
-
 PyMethodDef MGLBufferAccess_tp_methods[] = {
 	{"open", (PyCFunction)MGLBufferAccess_open, METH_NOARGS, 0},
 	{"close", (PyCFunction)MGLBufferAccess_close, METH_VARARGS, 0},
+	{"write", (PyCFunction)MGLBufferAccess_write, METH_VARARGS, 0},
 	{"read", (PyCFunction)MGLBufferAccess_read, METH_VARARGS, 0},
 	{"read_into", (PyCFunction)MGLBufferAccess_read_into, METH_VARARGS, 0},
-	{"write", (PyCFunction)MGLBufferAccess_write, METH_VARARGS, 0},
-	{0},
-};
-
-PyObject * MGLBufferAccess_get_offset(MGLBufferAccess * self) {
-	return PyLong_FromSsize_t(self->offset);
-}
-
-PyObject * MGLBufferAccess_get_size(MGLBufferAccess * self) {
-	return PyLong_FromSsize_t(self->size);
-}
-
-PyObject * MGLBufferAccess_get_readonly(MGLBufferAccess * self) {
-	return PyBool_FromLong(!(self->access & GL_MAP_WRITE_BIT));
-}
-
-PyGetSetDef MGLBufferAccess_tp_getseters[] = {
-	{(char *)"offset", (getter)MGLBufferAccess_get_offset, 0, 0, 0},
-	{(char *)"size", (getter)MGLBufferAccess_get_size, 0, 0, 0},
-	{(char *)"readonly", (getter)MGLBufferAccess_get_readonly, 0, 0, 0},
+	// {"write_chunk", (PyCFunction)MGLBufferAccess_write_chunk, METH_VARARGS, 0},
+	// {"read_chunk", (PyCFunction)MGLBufferAccess_read_chunk, METH_VARARGS, 0},
+	// {"read_chunk_into", (PyCFunction)MGLBufferAccess_read_chunk_into, METH_VARARGS, 0},
 	{0},
 };
 
@@ -230,7 +211,7 @@ PyTypeObject MGLBufferAccess_Type = {
 	0,                                                      // tp_iternext
 	MGLBufferAccess_tp_methods,                             // tp_methods
 	0,                                                      // tp_members
-	MGLBufferAccess_tp_getseters,                           // tp_getset
+	0,                                                      // tp_getset
 	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
@@ -240,8 +221,3 @@ PyTypeObject MGLBufferAccess_Type = {
 	0,                                                      // tp_alloc
 	MGLBufferAccess_tp_new,                                 // tp_new
 };
-
-MGLBufferAccess * MGLBufferAccess_New() {
-	MGLBufferAccess * self = (MGLBufferAccess *)MGLBufferAccess_tp_new(&MGLBufferAccess_Type, 0, 0);
-	return self;
-}

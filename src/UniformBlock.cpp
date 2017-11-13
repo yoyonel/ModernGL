@@ -1,13 +1,7 @@
-#include "UniformBlock.hpp"
-
-#include "Error.hpp"
+#include "Types.hpp"
 
 PyObject * MGLUniformBlock_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLUniformBlock * self = (MGLUniformBlock *)type->tp_alloc(type, 0);
-
-	#ifdef MGL_VERBOSE
-	printf("MGLUniformBlock_tp_new %p\n", self);
-	#endif
 
 	if (self) {
 	}
@@ -17,34 +11,17 @@ PyObject * MGLUniformBlock_tp_new(PyTypeObject * type, PyObject * args, PyObject
 
 void MGLUniformBlock_tp_dealloc(MGLUniformBlock * self) {
 
-	#ifdef MGL_VERBOSE
-	printf("MGLUniformBlock_tp_dealloc %p\n", self);
-	#endif
-
 	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 int MGLUniformBlock_tp_init(MGLUniformBlock * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("cannot create mgl.UniformBlock manually");
+	MGLError_Set("not allowed");
 	return -1;
 }
 
 PyMethodDef MGLUniformBlock_tp_methods[] = {
 	{0},
 };
-
-PyObject * MGLUniformBlock_get_name(MGLUniformBlock * self, void * closure) {
-	Py_INCREF(self->name);
-	return self->name;
-}
-
-PyObject * MGLUniformBlock_get_index(MGLUniformBlock * self, void * closure) {
-	return PyLong_FromLong(self->index);
-}
-
-PyObject * MGLUniformBlock_get_size(MGLUniformBlock * self, void * closure) {
-	return PyLong_FromLong(self->size);
-}
 
 PyObject * MGLUniformBlock_get_binding(MGLUniformBlock * self, void * closure) {
 	int binding = 0;
@@ -65,9 +42,6 @@ int MGLUniformBlock_set_binding(MGLUniformBlock * self, PyObject * value, void *
 }
 
 PyGetSetDef MGLUniformBlock_tp_getseters[] = {
-	{(char *)"name", (getter)MGLUniformBlock_get_name, 0, 0, 0},
-	{(char *)"index", (getter)MGLUniformBlock_get_index, 0, 0, 0},
-	{(char *)"size", (getter)MGLUniformBlock_get_size, 0, 0, 0},
 	{(char *)"binding", (getter)MGLUniformBlock_get_binding, (setter)MGLUniformBlock_set_binding, 0, 0},
 	{0},
 };
@@ -112,11 +86,6 @@ PyTypeObject MGLUniformBlock_Type = {
 	0,                                                      // tp_alloc
 	MGLUniformBlock_tp_new,                                 // tp_new
 };
-
-MGLUniformBlock * MGLUniformBlock_New() {
-	MGLUniformBlock * self = (MGLUniformBlock *)MGLUniformBlock_tp_new(&MGLUniformBlock_Type, 0, 0);
-	return self;
-}
 
 void MGLUniformBlock_Complete(MGLUniformBlock * uniform_block, const GLMethods & gl) {
 }

@@ -1,13 +1,7 @@
-#include "TextureFilter.hpp"
-
-#include "Error.hpp"
+#include "Types.hpp"
 
 PyObject * MGLTextureFilter_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLTextureFilter * self = (MGLTextureFilter *)type->tp_alloc(type, 0);
-
-	#ifdef MGL_VERBOSE
-	printf("MGLTextureFilter_tp_new %p\n", self);
-	#endif
 
 	if (self) {
 	}
@@ -16,16 +10,11 @@ PyObject * MGLTextureFilter_tp_new(PyTypeObject * type, PyObject * args, PyObjec
 }
 
 void MGLTextureFilter_tp_dealloc(MGLTextureFilter * self) {
-
-	#ifdef MGL_VERBOSE
-	printf("MGLTextureFilter_tp_dealloc %p\n", self);
-	#endif
-
 	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 int MGLTextureFilter_tp_init(MGLTextureFilter * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("cannot create mgl.TextureFilter manually");
+	MGLError_Set("not allowed");
 	return -1;
 }
 
@@ -90,11 +79,7 @@ PyTypeObject MGLTextureFilter_Type = {
 	MGLTextureFilter_tp_new,                                // tp_new
 };
 
-MGLTextureFilter * MGLTextureFilter_New() {
-	MGLTextureFilter * self = (MGLTextureFilter *)MGLTextureFilter_tp_new(&MGLTextureFilter_Type, 0, 0);
-	return self;
-}
-
 MGLTextureFilter * MGL_LINEAR;
 MGLTextureFilter * MGL_NEAREST;
-MGLTextureFilter * MGL_MIPMAP;
+MGLTextureFilter * MGL_LINEAR_MIPMAP;
+MGLTextureFilter * MGL_NEAREST_MIPMAP;

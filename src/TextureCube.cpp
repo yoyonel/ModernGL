@@ -1,17 +1,9 @@
-#include "TextureCube.hpp"
-
-#include "Error.hpp"
-#include "InvalidObject.hpp"
-#include "Buffer.hpp"
+#include "Types.hpp"
 
 #include "InlineMethods.hpp"
 
 PyObject * MGLTextureCube_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLTextureCube * self = (MGLTextureCube *)type->tp_alloc(type, 0);
-
-	#ifdef MGL_VERBOSE
-	printf("MGLTextureCube_tp_new %p\n", self);
-	#endif
 
 	if (self) {
 	}
@@ -20,16 +12,11 @@ PyObject * MGLTextureCube_tp_new(PyTypeObject * type, PyObject * args, PyObject 
 }
 
 void MGLTextureCube_tp_dealloc(MGLTextureCube * self) {
-
-	#ifdef MGL_VERBOSE
-	printf("MGLTextureCube_tp_dealloc %p\n", self);
-	#endif
-
 	MGLTextureCube_Type.tp_free((PyObject *)self);
 }
 
 int MGLTextureCube_tp_init(MGLTextureCube * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("cannot create mgl.TextureCube manually");
+	MGLError_Set("not allowed");
 	return -1;
 }
 
@@ -291,9 +278,7 @@ PyObject * MGLTextureCube_write(MGLTextureCube * self, PyObject * args) {
 
 		if (buffer_view.len != expected_size) {
 			MGLError_Set("data size mismatch %d != %d", buffer_view.len, expected_size);
-			if (data != Py_None) {
-				PyBuffer_Release(&buffer_view);
-			}
+			PyBuffer_Release(&buffer_view);
 			return 0;
 		}
 
@@ -307,7 +292,6 @@ PyObject * MGLTextureCube_write(MGLTextureCube * self, PyObject * args) {
 		gl.TexSubImage2D(faces[face], 0, x, y, width, height, format, pixel_type, buffer_view.buf);
 
 		PyBuffer_Release(&buffer_view);
-
 	}
 
 	Py_RETURN_NONE;
@@ -339,26 +323,12 @@ PyObject * MGLTextureCube_release(MGLTextureCube * self) {
 }
 
 PyMethodDef MGLTextureCube_tp_methods[] = {
-	{"read", (PyCFunction)MGLTextureCube_read, METH_VARARGS, 0},
-	{"read_into", (PyCFunction)MGLTextureCube_read_into, METH_VARARGS, 0},
 	{"write", (PyCFunction)MGLTextureCube_write, METH_VARARGS, 0},
 	{"use", (PyCFunction)MGLTextureCube_use, METH_VARARGS, 0},
+//	{"build_mipmaps", (PyCFunction)MGLTexture3D_build_mipmaps, METH_VARARGS, 0},
+	{"read", (PyCFunction)MGLTextureCube_read, METH_VARARGS, 0},
+	{"read_into", (PyCFunction)MGLTextureCube_read_into, METH_VARARGS, 0},
 	{"release", (PyCFunction)MGLTextureCube_release, METH_NOARGS, 0},
-	{0},
-};
-
-MGLContext * MGLTextureCube_get_context(MGLTextureCube * self, void * closure) {
-	Py_INCREF(self->context);
-	return self->context;
-}
-
-PyObject * MGLTextureCube_get_glo(MGLTextureCube * self, void * closure) {
-	return PyLong_FromLong(self->texture_obj);
-}
-
-PyGetSetDef MGLTextureCube_tp_getseters[] = {
-	{(char *)"context", (getter)MGLTextureCube_get_context, 0, 0, 0},
-	{(char *)"glo", (getter)MGLTextureCube_get_glo, 0, 0, 0},
 	{0},
 };
 
@@ -392,7 +362,7 @@ PyTypeObject MGLTextureCube_Type = {
 	0,                                                      // tp_iternext
 	MGLTextureCube_tp_methods,                              // tp_methods
 	0,                                                      // tp_members
-	MGLTextureCube_tp_getseters,                            // tp_getset
+	0,                                                      // tp_getset
 	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
@@ -403,30 +373,16 @@ PyTypeObject MGLTextureCube_Type = {
 	MGLTextureCube_tp_new,                                  // tp_new
 };
 
-MGLTextureCube * MGLTextureCube_New() {
-	MGLTextureCube * self = (MGLTextureCube *)MGLTextureCube_tp_new(&MGLTextureCube_Type, 0, 0);
-	return self;
-}
-
 void MGLTextureCube_Invalidate(MGLTextureCube * texture) {
 	if (Py_TYPE(texture) == &MGLInvalidObject_Type) {
-
-		#ifdef MGL_VERBOSE
-		printf("MGLTextureCube_Invalidate %p already released\n", texture);
-		#endif
-
 		return;
 	}
 
-	#ifdef MGL_VERBOSE
-	printf("MGLTextureCube_Invalidate %p\n", texture);
-	#endif
+	// TODO: decref
 
-	texture->context->gl.DeleteTextures(1, (GLuint *)&texture->texture_obj);
-
-	Py_DECREF(texture->context);
+	const GLMethods & gl = texture->context->gl;
+	gl.DeleteTextures(1, (GLuint *)&texture->texture_obj);
 
 	Py_TYPE(texture) = &MGLInvalidObject_Type;
-
 	Py_DECREF(texture);
 }

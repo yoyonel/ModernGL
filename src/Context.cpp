@@ -1,30 +1,10 @@
-#include "Context.hpp"
-
-#include "Error.hpp"
-#include "Buffer.hpp"
-#include "ComputeShader.hpp"
-#include "Texture.hpp"
-#include "Texture3D.hpp"
-#include "TextureCube.hpp"
-#include "VertexArray.hpp"
-#include "Program.hpp"
-#include "Shader.hpp"
-#include "Framebuffer.hpp"
-#include "FramebufferAttachment.hpp"
-#include "Renderbuffer.hpp"
-#include "EnableFlag.hpp"
-#include "InvalidObject.hpp"
-#include "Attribute.hpp"
-#include "Uniform.hpp"
+#include "Types.hpp"
 
 #include "BufferFormat.hpp"
+#include "InlineMethods.hpp"
 
 PyObject * MGLContext_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLContext * self = (MGLContext *)type->tp_alloc(type, 0);
-
-	#ifdef MGL_VERBOSE
-	printf("MGLContext_tp_new %p\n", self);
-	#endif
 
 	if (self) {
 	}
@@ -33,88 +13,12 @@ PyObject * MGLContext_tp_new(PyTypeObject * type, PyObject * args, PyObject * kw
 }
 
 void MGLContext_tp_dealloc(MGLContext * self) {
-
-	#ifdef MGL_VERBOSE
-	printf("MGLContext_tp_dealloc %p\n", self);
-	#endif
-
 	MGLContext_Type.tp_free((PyObject *)self);
 }
 
 int MGLContext_tp_init(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("cannot create mgl.Context manually");
+	MGLError_Set("not allowed");
 	return -1;
-}
-
-PyObject * MGLContext_clear(MGLContext * self, PyObject * args) {
-	float r, g, b, a;
-	PyObject * viewport;
-
-	int args_ok = PyArg_ParseTuple(
-		args,
-		"ffffO",
-		&r,
-		&g,
-		&b,
-		&a,
-		&viewport
-	);
-
-	if (!args_ok) {
-		return 0;
-	}
-
-	int x = 0;
-	int y = 0;
-	int width = 0;
-	int height = 0;
-
-	if (viewport != Py_None) {
-		if (Py_TYPE(viewport) != &PyTuple_Type) {
-			MGLError_Set("the viewport must be a tuple not %s", Py_TYPE(viewport)->tp_name);
-			return 0;
-		}
-
-		if (PyTuple_GET_SIZE(viewport) == 4) {
-
-			x = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
-			y = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
-			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 2));
-			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 3));
-
-		} else if (PyTuple_GET_SIZE(viewport) == 2) {
-
-			width = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 0));
-			height = PyLong_AsLong(PyTuple_GET_ITEM(viewport, 1));
-
-		} else {
-
-			MGLError_Set("the viewport size %d is invalid", PyTuple_GET_SIZE(viewport));
-			return 0;
-
-		}
-
-		if (PyErr_Occurred()) {
-			MGLError_Set("invalid values in the viewport");
-			return 0;
-		}
-
-	}
-
-	const GLMethods & gl = self->gl;
-
-	gl.ClearColor(r, g, b, a);
-
-	if (viewport != Py_None) {
-		gl.Enable(GL_SCISSOR_TEST);
-		gl.Scissor(x, y, width, height);
-		gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-		gl.Disable(GL_SCISSOR_TEST);
-	} else {
-		gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	}
-
-	Py_RETURN_NONE;
 }
 
 PyObject * MGLContext_enable_only(MGLContext * self, PyObject * args) {
@@ -356,24 +260,35 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 }
 
 MGLFramebuffer * MGLContext_detect_framebuffer(MGLContext * self, PyObject * args) {
-	unsigned framebuffer_obj;
+	PyObject * glo;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"I",
-		&framebuffer_obj
+		"O",
+		&glo
 	);
 
 	if (!args_ok) {
 		return 0;
 	}
 
-	if (!framebuffer_obj) {
-		Py_INCREF(self->default_framebuffer);
-		return self->default_framebuffer;
+	const GLMethods & gl = self->gl;
+
+	int framebuffer_obj = 0;
+	if (glo == Py_None) {
+		gl.GetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &framebuffer_obj);
+	} else {
+		framebuffer_obj = PyLong_AsLong(glo);
+		if (PyErr_Occurred()) {
+			MGLError_Set("the glo must be an integer");
+			return 0;
+		}
 	}
 
-	const GLMethods & gl = self->gl;
+	if (!framebuffer_obj) {
+		Py_INCREF(self->screen);
+		return self->screen;
+	}
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, framebuffer_obj);
 
@@ -418,11 +333,9 @@ MGLFramebuffer * MGLContext_detect_framebuffer(MGLContext * self, PyObject * arg
 		}
 	}
 
-	MGLFramebuffer * framebuffer = MGLFramebuffer_New();
+	MGLFramebuffer * framebuffer = (MGLFramebuffer *)MGLFramebuffer_Type.tp_alloc(&MGLFramebuffer_Type, 0);
 
 	framebuffer->framebuffer_obj = framebuffer_obj;
-	framebuffer->color_attachments = 0;
-	framebuffer->depth_attachment = 0;
 
 	framebuffer->draw_buffers_len = num_color_attachments;
 	framebuffer->draw_buffers = new unsigned[num_color_attachments];
@@ -448,10 +361,12 @@ MGLFramebuffer * MGLContext_detect_framebuffer(MGLContext * self, PyObject * arg
 	framebuffer->width = width;
 	framebuffer->height = height;
 
-	return framebuffer;
+	gl.BindFramebuffer(GL_FRAMEBUFFER, self->bound_framebuffer->framebuffer_obj);
+
+	return framebuffer; // TODO:
 }
 
-MGLBuffer * MGLContext_buffer(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_buffer(MGLContext * self, PyObject * args) {
 	PyObject * data;
 	int reserve;
 	int dynamic;
@@ -494,7 +409,7 @@ MGLBuffer * MGLContext_buffer(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	MGLBuffer * buffer = MGLBuffer_New();
+	MGLBuffer * buffer = (MGLBuffer *)MGLBuffer_Type.tp_alloc(&MGLBuffer_Type, 0);
 
 	buffer->size = (int)buffer_view.len;
 	buffer->dynamic = dynamic ? true : false;
@@ -521,10 +436,15 @@ MGLBuffer * MGLContext_buffer(MGLContext * self, PyObject * args) {
 	}
 
 	Py_INCREF(buffer);
-	return buffer;
+
+	PyObject * result = PyTuple_New(3);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)buffer);
+	PyTuple_SET_ITEM(result, 1, PyLong_FromSsize_t(buffer->size));
+	PyTuple_SET_ITEM(result, 2, PyLong_FromLong(buffer->buffer_obj));
+	return result;
 }
 
-MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_texture(MGLContext * self, PyObject * args) {
 	int width;
 	int height;
 
@@ -610,7 +530,7 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 
 	gl.ActiveTexture(GL_TEXTURE0 + self->default_texture_unit);
 
-	MGLTexture * texture = MGLTexture_New();
+	MGLTexture * texture = (MGLTexture *)MGLTexture_Type.tp_alloc(&MGLTexture_Type, 0);
 
 	texture->texture_obj = 0;
 	gl.GenTextures(1, (GLuint *)&texture->texture_obj);
@@ -654,10 +574,14 @@ MGLTexture * MGLContext_texture(MGLContext * self, PyObject * args) {
 	texture->context = self;
 
 	Py_INCREF(texture);
-	return texture;
+
+	PyObject * result = PyTuple_New(2);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)texture);
+	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(texture->texture_obj));
+	return result;
 }
 
-MGLTexture3D * MGLContext_texture3d(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_texture3d(MGLContext * self, PyObject * args) {
 	int width;
 	int height;
 	int depth;
@@ -727,7 +651,7 @@ MGLTexture3D * MGLContext_texture3d(MGLContext * self, PyObject * args) {
 
 	const GLMethods & gl = self->gl;
 
-	MGLTexture3D * texture = MGLTexture3D_New();
+	MGLTexture3D * texture = (MGLTexture3D *)MGLTexture3D_Type.tp_alloc(&MGLTexture3D_Type, 0);
 
 	texture->texture_obj = 0;
 	gl.GenTextures(1, (GLuint *)&texture->texture_obj);
@@ -768,10 +692,14 @@ MGLTexture3D * MGLContext_texture3d(MGLContext * self, PyObject * args) {
 	texture->context = self;
 
 	Py_INCREF(texture);
-	return texture;
+
+	PyObject * result = PyTuple_New(2);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)texture);
+	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(texture->texture_obj));
+	return result;
 }
 
-MGLTextureCube * MGLContext_texture_cube(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_texture_cube(MGLContext * self, PyObject * args) {
 	int width;
 	int height;
 
@@ -839,7 +767,7 @@ MGLTextureCube * MGLContext_texture_cube(MGLContext * self, PyObject * args) {
 
 	const GLMethods & gl = self->gl;
 
-	MGLTextureCube * texture = MGLTextureCube_New();
+	MGLTextureCube * texture = (MGLTextureCube *)MGLTextureCube_Type.tp_alloc(&MGLTextureCube_Type, 0);
 
 	texture->texture_obj = 0;
 	gl.GenTextures(1, (GLuint *)&texture->texture_obj);
@@ -852,6 +780,10 @@ MGLTextureCube * MGLContext_texture_cube(MGLContext * self, PyObject * args) {
 
 	gl.ActiveTexture(GL_TEXTURE0 + self->default_texture_unit);
 	gl.BindTexture(GL_TEXTURE_CUBE_MAP, texture->texture_obj);
+
+	if (data == Py_None) {
+		expected_size = 0;
+	}
 
 	const char * ptr[6] = {
 		(const char *)buffer_view.buf + expected_size * 0 / 6,
@@ -886,10 +818,14 @@ MGLTextureCube * MGLContext_texture_cube(MGLContext * self, PyObject * args) {
 	texture->context = self;
 
 	Py_INCREF(texture);
-	return texture;
+
+	PyObject * result = PyTuple_New(2);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)texture);
+	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(texture->texture_obj));
+	return result;
 }
 
-MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	int width;
 	int height;
 
@@ -954,7 +890,7 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 
 	gl.ActiveTexture(GL_TEXTURE0 + self->default_texture_unit);
 
-	MGLTexture * texture = MGLTexture_New();
+	MGLTexture * texture = (MGLTexture *)MGLTexture_Type.tp_alloc(&MGLTexture_Type, 0);
 
 	texture->texture_obj = 0;
 	gl.GenTextures(1, (GLuint *)&texture->texture_obj);
@@ -1003,10 +939,14 @@ MGLTexture * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	texture->context = self;
 
 	Py_INCREF(texture);
-	return texture;
+
+	PyObject * result = PyTuple_New(2);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)texture);
+	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(texture->texture_obj));
+	return result;
 }
 
-MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	MGLProgram * program;
 	PyObject * content;
 	MGLBuffer * index_buffer;
@@ -1088,38 +1028,29 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		}
 
 		for (int j = 0; j < attributes_len; ++j) {
-			PyObject * attribute = PyTuple_GET_ITEM(attributes, j);
+			MGLAttribute * attribute = (MGLAttribute *)PyTuple_GET_ITEM(attributes, j);
 
-			if (Py_TYPE(attribute) != &PyUnicode_Type) {
-				MGLError_Set("content[%d][2][%d] must be a string not %s", i, j, Py_TYPE(attribute)->tp_name);
+			if (Py_TYPE(attribute) != &MGLAttribute_Type) {
+				MGLError_Set("content[%d][2][%d] must be an attribute not %s", i, j, Py_TYPE(attribute)->tp_name);
 				return 0;
 			}
 
 			{
-				const char * name = PyUnicode_AsUTF8(attribute);
-
 				FormatNode * node = it.next();
 
 				while (node->shape == 'x') {
 					node = it.next();
 				}
 
-				MGLAttribute * attribute = (MGLAttribute *)PyDict_GetItemString(program->attributes, name);
-
-				if (!attribute) {
-					MGLError_Set("%s is not a valid attribute", name);
-					return 0;
-				}
-
 				int scalars = attribute->dimension * attribute->array_length;
 
 				if (scalars != node->count) {
-					MGLError_Set("%s size is %d not %d", name, scalars, node->count);
+					// MGLError_Set("%s size is %d not %d", name, scalars, node->count);
 					return 0;
 				}
 
 				if (attribute->shape != node->shape) {
-					MGLError_Set("%s shape is '%c' not '%c'", name, attribute->shape, node->shape);
+					// MGLError_Set("%s shape is '%c' not '%c'", name, attribute->shape, node->shape);
 					return 0;
 				}
 			}
@@ -1133,7 +1064,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 	const GLMethods & gl = self->gl;
 
-	MGLVertexArray * array = MGLVertexArray_New();
+	MGLVertexArray * array = (MGLVertexArray *)MGLVertexArray_Type.tp_alloc(&MGLVertexArray_Type, 0);
 
 	Py_INCREF(program);
 	array->program = program;
@@ -1190,7 +1121,7 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 				node = it.next();
 			}
 
-			MGLAttribute * attribute = (MGLAttribute *)PyDict_GetItem(program->attributes, PyTuple_GET_ITEM(attributes, j));
+			MGLAttribute * attribute = (MGLAttribute *)PyTuple_GET_ITEM(attributes, j);
 
 			for (int r = 0; r < attribute->rows_length; ++r) {
 				int location = attribute->location + r;
@@ -1216,28 +1147,32 @@ MGLVertexArray * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	MGLVertexArray_Complete(array);
 
 	Py_INCREF(array);
-	return array;
+
+	PyObject * result = PyTuple_New(2);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)array);
+	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(array->vertex_array_obj));
+	return result;
 }
 
-MGLProgram * MGLContext_program(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_program(MGLContext * self, PyObject * args) {
 	PyObject * shaders;
-	PyObject * varyings;
+	PyObject * outputs;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
 		"OO",
 		&shaders,
-		&varyings
+		&outputs
 	);
 
 	if (!args_ok) {
 		return 0;
 	}
 
-	int num_varyings = (int)PyTuple_GET_SIZE(varyings);
+	int num_outputs = (int)PyTuple_GET_SIZE(outputs);
 
-	for (int i = 0; i < num_varyings; ++i) {
-		PyObject * item = PyTuple_GET_ITEM(varyings, i);
+	for (int i = 0; i < num_outputs; ++i) {
+		PyObject * item = PyTuple_GET_ITEM(outputs, i);
 		if (Py_TYPE(item) != &PyUnicode_Type) {
 			MGLError_Set("varyings[%d] must be a string not %s", i, Py_TYPE(item)->tp_name);
 			return 0;
@@ -1270,15 +1205,309 @@ MGLProgram * MGLContext_program(MGLContext * self, PyObject * args) {
 		}
 	}
 
-	MGLProgram * program = MGLProgram_New();
-
-	Py_INCREF(shaders);
-	program->shaders = shaders;
+	MGLProgram * program = (MGLProgram *)MGLProgram_Type.tp_alloc(&MGLProgram_Type, 0);
 
 	Py_INCREF(self);
 	program->context = self;
 
-	MGLProgram_Compile(program, varyings);
+	const GLMethods & gl = program->context->gl;
+
+	int program_obj = gl.CreateProgram();
+
+	if (!program_obj) {
+		MGLError_Set("cannot create program");
+		return 0;
+	}
+
+	MGLShader * mgl_shaders[NUM_SHADER_SLOTS] = {};
+
+	for (int i = 0; i < num_shaders; ++i) {
+		MGLShader * shader = (MGLShader *)PyTuple_GET_ITEM(shaders, i);
+		gl.AttachShader(program_obj, shader->shader_obj);
+	}
+
+	if (num_outputs) {
+		const char ** varyings_array = new const char * [num_outputs];
+
+		for (int i = 0; i < num_outputs; ++i) {
+			varyings_array[i] = PyUnicode_AsUTF8(PyTuple_GET_ITEM(outputs, i));
+		}
+
+		gl.TransformFeedbackVaryings(program_obj, num_outputs, varyings_array, GL_INTERLEAVED_ATTRIBS);
+
+		delete[] varyings_array;
+	}
+
+	gl.LinkProgram(program_obj);
+
+	int linked = GL_FALSE;
+	gl.GetProgramiv(program_obj, GL_LINK_STATUS, &linked);
+
+	if (!linked) {
+		const char * message = "GLSL Linker failed";
+		const char * title = "Program";
+		const char * underline = "=======";
+
+		int log_len = 0;
+		gl.GetProgramiv(program_obj, GL_INFO_LOG_LENGTH, &log_len);
+
+		char * log = new char[log_len];
+		gl.GetProgramInfoLog(program_obj, log_len, &log_len, log);
+
+		gl.DeleteProgram(program_obj);
+
+		MGLError_Set("%s\n\n%s\n%s\n%s\n", message, title, underline, log);
+
+		delete[] log;
+		return 0;
+	}
+
+	program->program_obj = program_obj;
+
+	// int num_vertex_shader_subroutine_locations = 0;
+	// int num_fragment_shader_subroutine_locations = 0;
+	// int num_geometry_shader_subroutine_locations = 0;
+	// int num_tess_evaluation_shader_subroutine_locations = 0;
+	// int num_tess_control_shader_subroutine_locations = 0;
+
+	int num_vertex_shader_subroutines = 0;
+	int num_fragment_shader_subroutines = 0;
+	int num_geometry_shader_subroutines = 0;
+	int num_tess_evaluation_shader_subroutines = 0;
+	int num_tess_control_shader_subroutines = 0;
+
+	int num_vertex_shader_subroutine_uniforms = 0;
+	int num_fragment_shader_subroutine_uniforms = 0;
+	int num_geometry_shader_subroutine_uniforms = 0;
+	int num_tess_evaluation_shader_subroutine_uniforms = 0;
+	int num_tess_control_shader_subroutine_uniforms = 0;
+
+	if (program->context->version_code >= 400) {
+		if (counter[VERTEX_SHADER_SLOT]) {
+			// gl.GetProgramStageiv(
+			// 	program_obj,
+			// 	GL_VERTEX_SHADER,
+			// 	GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
+			// 	&num_vertex_shader_subroutine_locations
+			// );
+			gl.GetProgramStageiv(
+				program_obj,
+				GL_VERTEX_SHADER,
+				GL_ACTIVE_SUBROUTINES,
+				&num_vertex_shader_subroutines
+			);
+			gl.GetProgramStageiv(
+				program_obj,
+				GL_VERTEX_SHADER,
+				GL_ACTIVE_SUBROUTINE_UNIFORMS,
+				&num_vertex_shader_subroutine_uniforms
+			);
+		}
+
+		if (counter[FRAGMENT_SHADER_SLOT]) {
+			// gl.GetProgramStageiv(
+			// 	program_obj,
+			// 	GL_FRAGMENT_SHADER,
+			// 	GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
+			// 	&num_fragment_shader_subroutine_locations
+			// );
+			gl.GetProgramStageiv(
+				program_obj,
+				GL_FRAGMENT_SHADER,
+				GL_ACTIVE_SUBROUTINES,
+				&num_fragment_shader_subroutines
+			);
+			gl.GetProgramStageiv(
+				program_obj,
+				GL_FRAGMENT_SHADER,
+				GL_ACTIVE_SUBROUTINE_UNIFORMS,
+				&num_fragment_shader_subroutine_uniforms
+			);
+		}
+
+		if (counter[GEOMETRY_SHADER_SLOT]) {
+			// gl.GetProgramStageiv(
+			// 	program_obj,
+			// 	GL_GEOMETRY_SHADER,
+			// 	GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
+			// 	&num_geometry_shader_subroutine_locations
+			// );
+			gl.GetProgramStageiv(
+				program_obj,
+				GL_GEOMETRY_SHADER,
+				GL_ACTIVE_SUBROUTINES,
+				&num_geometry_shader_subroutines
+			);
+			gl.GetProgramStageiv(
+				program_obj,
+				GL_GEOMETRY_SHADER,
+				GL_ACTIVE_SUBROUTINE_UNIFORMS,
+				&num_geometry_shader_subroutine_uniforms
+			);
+		}
+
+		if (counter[TESS_EVALUATION_SHADER_SLOT]) {
+			// gl.GetProgramStageiv(
+			// 	program_obj,
+			// 	GL_TESS_EVALUATION_SHADER,
+			// 	GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
+			// 	&num_tess_evaluation_shader_subroutine_locations
+			// );
+			gl.GetProgramStageiv(
+				program_obj,
+				GL_TESS_EVALUATION_SHADER,
+				GL_ACTIVE_SUBROUTINES,
+				&num_tess_evaluation_shader_subroutines
+			);
+			gl.GetProgramStageiv(
+				program_obj,
+				GL_TESS_EVALUATION_SHADER,
+				GL_ACTIVE_SUBROUTINE_UNIFORMS,
+				&num_tess_evaluation_shader_subroutine_uniforms
+			);
+		}
+
+		if (counter[TESS_CONTROL_SHADER_SLOT]) {
+			// gl.GetProgramStageiv(
+			// 	program_obj,
+			// 	GL_TESS_CONTROL_SHADER,
+			// 	GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS,
+			// 	&num_tess_control_shader_subroutine_locations
+			// );
+			gl.GetProgramStageiv(
+				program_obj,
+				GL_TESS_CONTROL_SHADER,
+				GL_ACTIVE_SUBROUTINES,
+				&num_tess_control_shader_subroutines
+			);
+			gl.GetProgramStageiv(
+				program_obj,
+				GL_TESS_CONTROL_SHADER,
+				GL_ACTIVE_SUBROUTINE_UNIFORMS,
+				&num_tess_control_shader_subroutine_uniforms
+			);
+		}
+	}
+
+	if (counter[GEOMETRY_SHADER_SLOT]) {
+
+		int geometry_in = 0;
+		int geometry_out = 0;
+		program->geometry_vertices = 0;
+
+		gl.GetProgramiv(program_obj, GL_GEOMETRY_INPUT_TYPE, &geometry_in);
+		gl.GetProgramiv(program_obj, GL_GEOMETRY_OUTPUT_TYPE, &geometry_out);
+		gl.GetProgramiv(program_obj, GL_GEOMETRY_VERTICES_OUT, &program->geometry_vertices);
+
+		switch (geometry_in) {
+			case GL_TRIANGLES:
+				program->geometry_input = MGL_TRIANGLES;
+				break;
+
+			case GL_TRIANGLE_STRIP:
+				program->geometry_input = MGL_TRIANGLE_STRIP;
+				break;
+
+			case GL_TRIANGLE_FAN:
+				program->geometry_input = MGL_TRIANGLE_FAN;
+				break;
+
+			case GL_LINES:
+				program->geometry_input = MGL_LINES;
+				break;
+
+			case GL_LINE_STRIP:
+				program->geometry_input = MGL_LINE_STRIP;
+				break;
+
+			case GL_LINE_LOOP:
+				program->geometry_input = MGL_LINE_LOOP;
+				break;
+
+			case GL_POINTS:
+				program->geometry_input = MGL_POINTS;
+				break;
+
+			case GL_LINE_STRIP_ADJACENCY:
+				program->geometry_input = MGL_LINE_STRIP_ADJACENCY;
+				break;
+
+			case GL_LINES_ADJACENCY:
+				program->geometry_input = MGL_LINES_ADJACENCY;
+				break;
+
+			case GL_TRIANGLE_STRIP_ADJACENCY:
+				program->geometry_input = MGL_TRIANGLE_STRIP_ADJACENCY;
+				break;
+
+			case GL_TRIANGLES_ADJACENCY:
+				program->geometry_input = MGL_TRIANGLES_ADJACENCY;
+				break;
+
+			default:
+				program->geometry_input = MGL_NO_PRIMITIVE;
+				break;
+		}
+
+		switch (geometry_out) {
+			case GL_TRIANGLES:
+				program->geometry_output = MGL_TRIANGLES;
+				break;
+
+			case GL_TRIANGLE_STRIP:
+				program->geometry_output = MGL_TRIANGLE_STRIP;
+				break;
+
+			case GL_TRIANGLE_FAN:
+				program->geometry_output = MGL_TRIANGLE_FAN;
+				break;
+
+			case GL_LINES:
+				program->geometry_output = MGL_LINES;
+				break;
+
+			case GL_LINE_STRIP:
+				program->geometry_output = MGL_LINE_STRIP;
+				break;
+
+			case GL_LINE_LOOP:
+				program->geometry_output = MGL_LINE_LOOP;
+				break;
+
+			case GL_POINTS:
+				program->geometry_output = MGL_POINTS;
+				break;
+
+			case GL_LINE_STRIP_ADJACENCY:
+				program->geometry_output = MGL_LINE_STRIP_ADJACENCY;
+				break;
+
+			case GL_LINES_ADJACENCY:
+				program->geometry_output = MGL_LINES_ADJACENCY;
+				break;
+
+			case GL_TRIANGLE_STRIP_ADJACENCY:
+				program->geometry_output = MGL_TRIANGLE_STRIP_ADJACENCY;
+				break;
+
+			case GL_TRIANGLES_ADJACENCY:
+				program->geometry_output = MGL_TRIANGLES_ADJACENCY;
+				break;
+
+			default:
+				program->geometry_output = MGL_NO_PRIMITIVE;
+				break;
+		}
+
+		Py_INCREF(program->geometry_input);
+		Py_INCREF(program->geometry_output);
+
+	} else {
+
+		program->geometry_input = MGL_NO_PRIMITIVE;
+		program->geometry_output = MGL_NO_PRIMITIVE;
+		program->geometry_vertices = 0;
+	}
 
 	if (PyErr_Occurred()) {
 		Py_DECREF(program);
@@ -1286,11 +1515,219 @@ MGLProgram * MGLContext_program(MGLContext * self, PyObject * args) {
 	}
 
 	Py_INCREF(program);
-	return program;
+
+	int num_attributes = 0;
+	int num_varyings = 0;
+	int num_uniforms = 0;
+	int num_uniform_blocks = 0;
+
+	gl.GetProgramiv(program->program_obj, GL_ACTIVE_ATTRIBUTES, &num_attributes);
+	gl.GetProgramiv(program->program_obj, GL_TRANSFORM_FEEDBACK_VARYINGS, &num_varyings);
+	gl.GetProgramiv(program->program_obj, GL_ACTIVE_UNIFORMS, &num_uniforms);
+	gl.GetProgramiv(program->program_obj, GL_ACTIVE_UNIFORM_BLOCKS, &num_uniform_blocks);
+
+	int num_subroutines = num_vertex_shader_subroutines + num_fragment_shader_subroutines + num_geometry_shader_subroutines + num_tess_evaluation_shader_subroutines + num_tess_control_shader_subroutines;
+	int num_subroutine_uniforms = num_vertex_shader_subroutine_uniforms + num_fragment_shader_subroutine_uniforms + num_geometry_shader_subroutine_uniforms + num_tess_evaluation_shader_subroutine_uniforms + num_tess_control_shader_subroutine_uniforms;
+
+	program->num_vertex_shader_subroutines = num_vertex_shader_subroutine_uniforms;
+	program->num_fragment_shader_subroutines = num_fragment_shader_subroutine_uniforms;
+	program->num_geometry_shader_subroutines = num_geometry_shader_subroutine_uniforms;
+	program->num_tess_evaluation_shader_subroutines = num_tess_evaluation_shader_subroutine_uniforms;
+	program->num_tess_control_shader_subroutines = num_tess_control_shader_subroutine_uniforms;
+
+	program->num_varyings = num_varyings;
+
+	PyObject * attributes_lst = PyTuple_New(num_attributes);
+	PyObject * varyings_lst = PyTuple_New(num_varyings);
+	PyObject * uniforms_lst = PyTuple_New(num_uniforms);
+	PyObject * uniform_blocks_lst = PyTuple_New(num_uniform_blocks);
+	PyObject * subroutines_lst = PyTuple_New(num_subroutines);
+	PyObject * subroutine_uniforms_lst = PyTuple_New(num_subroutine_uniforms);
+
+	for (int i = 0; i < num_attributes; ++i) {
+		int type = 0;
+		int array_length = 0;
+		int dimension = 0;
+		int name_len = 0;
+		char shape = 0;
+		char name[256];
+
+		gl.GetActiveAttrib(program->program_obj, i, 256, &name_len, &array_length, (GLenum *)&type, name);
+		int location = gl.GetAttribLocation(program->program_obj, name);
+
+		clean_glsl_name(name, name_len);
+
+		MGLAttribute * mglo = (MGLAttribute *)MGLAttribute_Type.tp_alloc(&MGLAttribute_Type, 0);
+		mglo->type = type;
+		mglo->location = location;
+		mglo->array_length = array_length;
+		mglo->program_obj = program->program_obj;
+		MGLAttribute_Complete(mglo, gl);
+
+		PyObject * item = PyTuple_New(6);
+		PyTuple_SET_ITEM(item, 0, (PyObject *)mglo);
+		PyTuple_SET_ITEM(item, 1, PyLong_FromLong(location));
+		PyTuple_SET_ITEM(item, 2, PyLong_FromLong(array_length));
+		PyTuple_SET_ITEM(item, 3, PyLong_FromLong(mglo->dimension));
+		PyTuple_SET_ITEM(item, 4, PyUnicode_FromFormat("%c", mglo->shape));
+		PyTuple_SET_ITEM(item, 5, PyUnicode_FromStringAndSize(name, name_len));
+
+		PyTuple_SET_ITEM(attributes_lst, i, item);
+	}
+
+	for (int i = 0; i < num_varyings; ++i) {
+		int type = 0;
+		int array_length = 0;
+		int dimension = 0;
+		int name_len = 0;
+		char name[256];
+
+		gl.GetTransformFeedbackVarying(program->program_obj, i, 256, &name_len, &array_length, (GLenum *)&type, name);
+
+		PyObject * item = PyTuple_New(4);
+		PyTuple_SET_ITEM(item, 0, PyLong_FromLong(i));
+		PyTuple_SET_ITEM(item, 1, PyLong_FromLong(array_length));
+		PyTuple_SET_ITEM(item, 2, PyLong_FromLong(dimension));
+		PyTuple_SET_ITEM(item, 3, PyUnicode_FromStringAndSize(name, name_len));
+
+		PyTuple_SET_ITEM(varyings_lst, i, item);
+	}
+
+	int uniform_counter = 0;
+	for (int i = 0; i < num_uniforms; ++i) {
+		int type = 0;
+		int dimension = 0;
+		int array_length = 0;
+		int name_len = 0;
+		char name[256];
+
+		gl.GetActiveUniform(program->program_obj, i, 256, &name_len, &array_length, (GLenum *)&type, name);
+		int location = gl.GetUniformLocation(program->program_obj, name);
+
+		clean_glsl_name(name, name_len);
+
+		if (location < 0) {
+			continue;
+		}
+
+		MGLUniform * mglo = (MGLUniform *)MGLUniform_Type.tp_alloc(&MGLUniform_Type, 0);
+		mglo->type = type;
+		mglo->location = location;
+		mglo->array_length = array_length;
+		mglo->program_obj = program->program_obj;
+		MGLUniform_Complete(mglo, gl);
+
+		PyObject * item = PyTuple_New(5);
+		PyTuple_SET_ITEM(item, 0, (PyObject *)mglo);
+		PyTuple_SET_ITEM(item, 1, PyLong_FromLong(location));
+		PyTuple_SET_ITEM(item, 2, PyLong_FromLong(array_length));
+		PyTuple_SET_ITEM(item, 3, PyLong_FromLong(mglo->dimension));
+		PyTuple_SET_ITEM(item, 4, PyUnicode_FromStringAndSize(name, name_len));
+
+		PyTuple_SET_ITEM(uniforms_lst, uniform_counter, item);
+		++uniform_counter;
+	}
+
+	if (uniform_counter != num_uniforms) {
+		_PyTuple_Resize(&uniforms_lst, uniform_counter);
+	}
+
+	for (int i = 0; i < num_uniform_blocks; ++i) {
+		int size = 0;
+		int name_len = 0;
+		char name[256];
+
+		gl.GetActiveUniformBlockName(program->program_obj, i, 256, &name_len, name);
+		int index = gl.GetUniformBlockIndex(program->program_obj, name);
+		gl.GetActiveUniformBlockiv(program->program_obj, index, GL_UNIFORM_BLOCK_DATA_SIZE, &size);
+
+		clean_glsl_name(name, name_len);
+
+		MGLUniformBlock * mglo = (MGLUniformBlock *)MGLUniformBlock_Type.tp_alloc(&MGLUniformBlock_Type, 0);
+
+		mglo->index = index;
+		mglo->size = size;
+		mglo->program_obj = program->program_obj;
+		mglo->gl = &gl;
+
+		PyObject * item = PyTuple_New(4);
+		PyTuple_SET_ITEM(item, 0, (PyObject *)mglo);
+		PyTuple_SET_ITEM(item, 1, PyLong_FromLong(index));
+		PyTuple_SET_ITEM(item, 2, PyLong_FromLong(size));
+		PyTuple_SET_ITEM(item, 3, PyUnicode_FromStringAndSize(name, name_len));
+
+		PyTuple_SET_ITEM(uniform_blocks_lst, i, item);
+	}
+
+	int subroutine_uniforms_base = 0;
+	int subroutines_base = 0;
+
+	if (program->context->version_code >= 400) {
+		const int shader_type[5] = {
+			GL_VERTEX_SHADER,
+			GL_FRAGMENT_SHADER,
+			GL_GEOMETRY_SHADER,
+			GL_TESS_EVALUATION_SHADER,
+			GL_TESS_CONTROL_SHADER,
+		};
+
+		for (int st = 0; st < 5; ++st) {
+			int num_subroutines = 0;
+			gl.GetProgramStageiv(program_obj, shader_type[st], GL_ACTIVE_SUBROUTINES, &num_subroutines);
+
+			int num_subroutine_uniforms = 0;
+			gl.GetProgramStageiv(program_obj, shader_type[st], GL_ACTIVE_SUBROUTINE_UNIFORMS, &num_subroutine_uniforms);
+
+			for (int i = 0; i < num_subroutines; ++i) {
+				int name_len = 0;
+				char name[256];
+
+				gl.GetActiveSubroutineName(program_obj, shader_type[st], i, 256, &name_len, name);
+				int index = gl.GetSubroutineIndex(program_obj, shader_type[st], name);
+
+				PyObject * item = PyTuple_New(2);
+				PyTuple_SET_ITEM(item, 0, PyLong_FromLong(index));
+				PyTuple_SET_ITEM(item, 1, PyUnicode_FromStringAndSize(name, name_len));
+				PyTuple_SET_ITEM(subroutines_lst, subroutines_base + i, item);
+			}
+
+			for (int i = 0; i < num_subroutine_uniforms; ++i) {
+				int name_len = 0;
+				char name[256];
+
+				gl.GetActiveSubroutineUniformName(program_obj, shader_type[st], i, 256, &name_len, name);
+				int location = subroutine_uniforms_base + gl.GetSubroutineUniformLocation(program_obj, shader_type[st], name);
+				PyTuple_SET_ITEM(subroutine_uniforms_lst, location, PyUnicode_FromStringAndSize(name, name_len));
+			}
+
+			subroutine_uniforms_base += num_subroutine_uniforms;
+			subroutines_base += num_subroutines;
+		}
+	}
+
+	Py_INCREF(program->geometry_input->wrapper);
+	Py_INCREF(program->geometry_output->wrapper);
+
+	PyObject * geom_info = PyTuple_New(3);
+	PyTuple_SET_ITEM(geom_info, 0, program->geometry_input->wrapper);
+	PyTuple_SET_ITEM(geom_info, 1, program->geometry_output->wrapper);
+	PyTuple_SET_ITEM(geom_info, 2, PyLong_FromLong(program->geometry_vertices));
+
+	PyObject * result = PyTuple_New(9);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)program);
+	PyTuple_SET_ITEM(result, 1, attributes_lst);
+	PyTuple_SET_ITEM(result, 2, varyings_lst);
+	PyTuple_SET_ITEM(result, 3, uniforms_lst);
+	PyTuple_SET_ITEM(result, 4, uniform_blocks_lst);
+	PyTuple_SET_ITEM(result, 5, subroutines_lst);
+	PyTuple_SET_ITEM(result, 6, subroutine_uniforms_lst);
+	PyTuple_SET_ITEM(result, 7, geom_info);
+	PyTuple_SET_ITEM(result, 8, PyLong_FromLong(program->program_obj));
+	return result;
 }
 
 template <int ShaderSlot>
-MGLShader * MGLContext_shader(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_shader(MGLContext * self, PyObject * args) {
 	PyObject * source;
 
 	int args_ok = PyArg_ParseTuple(
@@ -1308,7 +1745,7 @@ MGLShader * MGLContext_shader(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	MGLShader * shader = MGLShader_New();
+	MGLShader * shader = (MGLShader *)MGLShader_Type.tp_alloc(&MGLShader_Type, 0);
 
 	shader->shader_slot = ShaderSlot;
 	shader->shader_type = SHADER_TYPE[ShaderSlot];
@@ -1327,30 +1764,34 @@ MGLShader * MGLContext_shader(MGLContext * self, PyObject * args) {
 	}
 
 	Py_INCREF(shader);
-	return shader;
+
+	PyObject * result = PyTuple_New(2);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)shader);
+	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(shader->shader_obj));
+	return result;
 }
 
-MGLShader * MGLContext_shader_vertex_shader(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_shader_vertex_shader(MGLContext * self, PyObject * args) {
 	return MGLContext_shader<VERTEX_SHADER_SLOT>(self, args);
 }
 
-MGLShader * MGLContext_shader_fragment_shader(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_shader_fragment_shader(MGLContext * self, PyObject * args) {
 	return MGLContext_shader<FRAGMENT_SHADER_SLOT>(self, args);
 }
 
-MGLShader * MGLContext_shader_geometry_shader(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_shader_geometry_shader(MGLContext * self, PyObject * args) {
 	return MGLContext_shader<GEOMETRY_SHADER_SLOT>(self, args);
 }
 
-MGLShader * MGLContext_shader_tess_evaluation_shader(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_shader_tess_evaluation_shader(MGLContext * self, PyObject * args) {
 	return MGLContext_shader<TESS_EVALUATION_SHADER_SLOT>(self, args);
 }
 
-MGLShader * MGLContext_shader_tess_control_shader(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_shader_tess_control_shader(MGLContext * self, PyObject * args) {
 	return MGLContext_shader<TESS_CONTROL_SHADER_SLOT>(self, args);
 }
 
-MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	PyObject * color_attachments;
 	PyObject * depth_attachment;
 
@@ -1384,31 +1825,54 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	for (int i = 0; i < color_attachments_len; ++i) {
 		PyObject * item = PyTuple_GET_ITEM(color_attachments, i);
 
-		if (Py_TYPE(item) != &MGLTexture_Type && Py_TYPE(item) != &MGLRenderbuffer_Type) {
-			MGLError_Set("color_attachments[%d] must be a Renderbuffer or Texture not %s", i, Py_TYPE(item)->tp_name);
-			return 0;
-		}
+		if (Py_TYPE(item) == &MGLTexture_Type) {
+			MGLTexture * texture = (MGLTexture *)item;
 
-		MGLFramebufferAttachment * attachment = (MGLFramebufferAttachment *)item;
-
-		if (attachment->depth) {
-			MGLError_Set("color_attachments[%d] is a depth attachment", i);
-			return 0;
-		}
-
-		if (i == 0) {
-			width = attachment->width;
-			height = attachment->height;
-			samples = attachment->samples;
-		} else {
-			if (attachment->width != width || attachment->height != height || attachment->samples != samples) {
-				MGLError_Set("the color_attachments have different sizes or samples");
+			if (texture->depth) {
+				MGLError_Set("color_attachments[%d] is a depth attachment", i);
 				return 0;
 			}
-		}
 
-		if (attachment->context != self) {
-			MGLError_Set("color_attachments[%d] belongs to a different context", i);
+			if (i == 0) {
+				width = texture->width;
+				height = texture->height;
+				samples = texture->samples;
+			} else {
+				if (texture->width != width || texture->height != height || texture->samples != samples) {
+					MGLError_Set("the color_attachments have different sizes or samples");
+					return 0;
+				}
+			}
+
+			if (texture->context != self) {
+				MGLError_Set("color_attachments[%d] belongs to a different context", i);
+				return 0;
+			}
+		} else if (Py_TYPE(item) == &MGLRenderbuffer_Type) {
+			MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)item;
+
+			if (renderbuffer->depth) {
+				MGLError_Set("color_attachments[%d] is a depth attachment", i);
+				return 0;
+			}
+
+			if (i == 0) {
+				width = renderbuffer->width;
+				height = renderbuffer->height;
+				samples = renderbuffer->samples;
+			} else {
+				if (renderbuffer->width != width || renderbuffer->height != height || renderbuffer->samples != samples) {
+					MGLError_Set("the color_attachments have different sizes or samples");
+					return 0;
+				}
+			}
+
+			if (renderbuffer->context != self) {
+				MGLError_Set("color_attachments[%d] belongs to a different context", i);
+				return 0;
+			}
+		} else {
+			MGLError_Set("color_attachments[%d] must be a Renderbuffer or Texture not %s", i, Py_TYPE(item)->tp_name);
 			return 0;
 		}
 	}
@@ -1417,31 +1881,47 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 
 	if (depth_attachment != Py_None) {
 
-		if (Py_TYPE(depth_attachment) != &MGLTexture_Type && Py_TYPE(depth_attachment) != &MGLRenderbuffer_Type) {
+		if (Py_TYPE(depth_attachment) == &MGLTexture_Type) {
+			MGLTexture * texture = (MGLTexture *)depth_attachment;
+
+			if (!texture->depth) {
+				MGLError_Set("the depth_attachment is a color attachment");
+				return 0;
+			}
+
+			if (texture->context != self) {
+				MGLError_Set("the depth_attachment belongs to a different context");
+				return 0;
+			}
+
+			if (texture->width != width || texture->height != height || texture->samples != samples) {
+				MGLError_Set("the depth_attachment have different sizes or samples");
+				return 0;
+			}
+		} else if (Py_TYPE(depth_attachment) == &MGLRenderbuffer_Type) {
+			MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)depth_attachment;
+
+			if (!renderbuffer->depth) {
+				MGLError_Set("the depth_attachment is a color attachment");
+				return 0;
+			}
+
+			if (renderbuffer->context != self) {
+				MGLError_Set("the depth_attachment belongs to a different context");
+				return 0;
+			}
+
+			if (renderbuffer->width != width || renderbuffer->height != height || renderbuffer->samples != samples) {
+				MGLError_Set("the depth_attachment have different sizes or samples");
+				return 0;
+			}
+		} else {
 			MGLError_Set("the depth_attachment must be a Renderbuffer or Texture not %s", Py_TYPE(depth_attachment)->tp_name);
 			return 0;
 		}
-
-		MGLFramebufferAttachment * attachment = (MGLFramebufferAttachment *)depth_attachment;
-
-		if (!attachment->depth) {
-			MGLError_Set("the depth_attachment is a color attachment");
-			return 0;
-		}
-
-		if (attachment->context != self) {
-			MGLError_Set("the depth_attachment belongs to a different context");
-			return 0;
-		}
-
-		if (attachment->width != width || attachment->height != height || attachment->samples != samples) {
-			MGLError_Set("the depth_attachment have different sizes or samples");
-			return 0;
-		}
-
 	}
 
-	MGLFramebuffer * framebuffer = MGLFramebuffer_New();
+	MGLFramebuffer * framebuffer = (MGLFramebuffer *)MGLFramebuffer_Type.tp_alloc(&MGLFramebuffer_Type, 0);
 
 	framebuffer->framebuffer_obj = 0;
 	gl.GenFramebuffers(1, (GLuint *)&framebuffer->framebuffer_obj);
@@ -1560,21 +2040,22 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 
 	for (int i = 0; i < color_attachments_len; ++i) {
 		PyObject * item = PyTuple_GET_ITEM(color_attachments, i);
-		MGLFramebufferAttachment * attachment = (MGLFramebufferAttachment *)item;
-
-		framebuffer->color_mask[i * 4 + 0] = attachment->components >= 1;
-		framebuffer->color_mask[i * 4 + 1] = attachment->components >= 2;
-		framebuffer->color_mask[i * 4 + 2] = attachment->components >= 3;
-		framebuffer->color_mask[i * 4 + 3] = attachment->components >= 4;
+		if (Py_TYPE(item) == &MGLTexture_Type) {
+			MGLTexture * texture = (MGLTexture *)item;
+			framebuffer->color_mask[i * 4 + 0] = texture->components >= 1;
+			framebuffer->color_mask[i * 4 + 1] = texture->components >= 2;
+			framebuffer->color_mask[i * 4 + 2] = texture->components >= 3;
+			framebuffer->color_mask[i * 4 + 3] = texture->components >= 4;
+		} else if (Py_TYPE(item) == &MGLRenderbuffer_Type) {
+			MGLTexture * renderbuffer = (MGLTexture *)item;
+			framebuffer->color_mask[i * 4 + 0] = renderbuffer->components >= 1;
+			framebuffer->color_mask[i * 4 + 1] = renderbuffer->components >= 2;
+			framebuffer->color_mask[i * 4 + 2] = renderbuffer->components >= 3;
+			framebuffer->color_mask[i * 4 + 3] = renderbuffer->components >= 4;
+		}
 	}
 
-	Py_INCREF(color_attachments);
-	Py_INCREF(depth_attachment);
-
 	framebuffer->depth_mask = (depth_attachment != Py_None);
-
-	framebuffer->color_attachments = color_attachments;
-	framebuffer->depth_attachment = depth_attachment;
 
 	framebuffer->viewport_x = 0;
 	framebuffer->viewport_y = 0;
@@ -1589,10 +2070,20 @@ MGLFramebuffer * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	framebuffer->context = self;
 
 	Py_INCREF(framebuffer);
-	return framebuffer;
+
+	PyObject * size = PyTuple_New(2);
+	PyTuple_SET_ITEM(size, 0, PyLong_FromLong(framebuffer->width));
+	PyTuple_SET_ITEM(size, 1, PyLong_FromLong(framebuffer->height));
+
+	PyObject * result = PyTuple_New(4);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)framebuffer);
+	PyTuple_SET_ITEM(result, 1, size);
+	PyTuple_SET_ITEM(result, 2, PyLong_FromLong(framebuffer->samples));
+	PyTuple_SET_ITEM(result, 3, PyLong_FromLong(framebuffer->framebuffer_obj));
+	return result;
 }
 
-MGLRenderbuffer * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 	int width;
 	int height;
 
@@ -1632,7 +2123,7 @@ MGLRenderbuffer * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 
 	const GLMethods & gl = self->gl;
 
-	MGLRenderbuffer * renderbuffer = MGLRenderbuffer_New();
+	MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)MGLRenderbuffer_Type.tp_alloc(&MGLRenderbuffer_Type, 0);
 
 	renderbuffer->renderbuffer_obj = 0;
 	gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
@@ -1662,10 +2153,14 @@ MGLRenderbuffer * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 	renderbuffer->context = self;
 
 	Py_INCREF(renderbuffer);
-	return renderbuffer;
+
+	PyObject * result = PyTuple_New(2);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)renderbuffer);
+	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(renderbuffer->renderbuffer_obj));
+	return result;
 }
 
-MGLRenderbuffer * MGLContext_depth_renderbuffer(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_depth_renderbuffer(MGLContext * self, PyObject * args) {
 	int width;
 	int height;
 
@@ -1690,7 +2185,7 @@ MGLRenderbuffer * MGLContext_depth_renderbuffer(MGLContext * self, PyObject * ar
 
 	const GLMethods & gl = self->gl;
 
-	MGLRenderbuffer * renderbuffer = MGLRenderbuffer_New();
+	MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)MGLRenderbuffer_Type.tp_alloc(&MGLRenderbuffer_Type, 0);
 
 	renderbuffer->renderbuffer_obj = 0;
 	gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
@@ -1720,10 +2215,14 @@ MGLRenderbuffer * MGLContext_depth_renderbuffer(MGLContext * self, PyObject * ar
 	renderbuffer->context = self;
 
 	Py_INCREF(renderbuffer);
-	return renderbuffer;
+
+	PyObject * result = PyTuple_New(2);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)renderbuffer);
+	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(renderbuffer->renderbuffer_obj));
+	return result;
 }
 
-MGLComputeShader * MGLContext_compute_shader(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_compute_shader(MGLContext * self, PyObject * args) {
 	PyObject * source;
 
 	int args_ok = PyArg_ParseTuple(
@@ -1741,7 +2240,7 @@ MGLComputeShader * MGLContext_compute_shader(MGLContext * self, PyObject * args)
 		return 0;
 	}
 
-	MGLComputeShader * compute_shader = MGLComputeShader_New();
+	MGLComputeShader * compute_shader = (MGLComputeShader *)MGLComputeShader_Type.tp_alloc(&MGLComputeShader_Type, 0);
 
 	Py_INCREF(source);
 	compute_shader->source = source;
@@ -1756,7 +2255,10 @@ MGLComputeShader * MGLContext_compute_shader(MGLContext * self, PyObject * args)
 		return 0;
 	}
 
-	return compute_shader;
+	PyObject * result = PyTuple_New(2);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)compute_shader);
+	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(compute_shader->program_obj));
+	return result;
 }
 
 PyObject * MGLContext_release(MGLContext * self) {
@@ -1765,16 +2267,7 @@ PyObject * MGLContext_release(MGLContext * self) {
 	Py_RETURN_NONE;
 }
 
-// typedef MGLShader * (* MGLContext_shader_proc)(MGLContext *, PyObject *);
-
-// MGLContext_shader_proc MGLContext_shader_vertex_shader = MGLContext_shader<VERTEX_SHADER_SLOT>;
-// MGLContext_shader_proc MGLContext_shader_fragment_shader = MGLContext_shader<FRAGMENT_SHADER_SLOT>;
-// MGLContext_shader_proc MGLContext_shader_geometry_shader = MGLContext_shader<GEOMETRY_SHADER_SLOT>;
-// MGLContext_shader_proc MGLContext_shader_tess_evaluation_shader = MGLContext_shader<TESS_EVALUATION_SHADER_SLOT>;
-// MGLContext_shader_proc MGLContext_shader_tess_control_shader = MGLContext_shader<TESS_CONTROL_SHADER_SLOT>;
-
 PyMethodDef MGLContext_tp_methods[] = {
-	{"clear", (PyCFunction)MGLContext_clear, METH_VARARGS, 0},
 	{"enable_only", (PyCFunction)MGLContext_enable_only, METH_VARARGS, 0},
 	{"enable", (PyCFunction)MGLContext_enable, METH_VARARGS, 0},
 	{"disable", (PyCFunction)MGLContext_disable, METH_VARARGS, 0},
@@ -1845,53 +2338,6 @@ int MGLContext_set_point_size(MGLContext * self, PyObject * value) {
 	return 0;
 }
 
-PyObject * MGLContext_get_viewport(MGLContext * self) {
-	int viewport[4] = {};
-
-	self->gl.GetIntegerv(GL_VIEWPORT, viewport);
-
-	PyObject * x = PyLong_FromLong(viewport[0]);
-	PyObject * y = PyLong_FromLong(viewport[1]);
-	PyObject * width = PyLong_FromLong(viewport[2]);
-	PyObject * height = PyLong_FromLong(viewport[3]);
-
-	return PyTuple_Pack(4, x, y, width, height);
-}
-
-int MGLContext_set_viewport(MGLContext * self, PyObject * value) {
-	int size = (int)PyTuple_GET_SIZE(value);
-
-	if (PyErr_Occurred()) {
-		return -1;
-	}
-
-	if (size != 4) {
-		MGLError_Set("the viewport must be a tuple of size 4 not %d", size);
-		return -1;
-	}
-
-	int x = PyLong_AsLong(PyTuple_GET_ITEM(value, 0));
-	int y = PyLong_AsLong(PyTuple_GET_ITEM(value, 1));
-	int width = PyLong_AsLong(PyTuple_GET_ITEM(value, 2));
-	int height = PyLong_AsLong(PyTuple_GET_ITEM(value, 3));
-
-	if (PyErr_Occurred()) {
-		MGLError_Set("invalid values in the viewport");
-		return -1;
-	}
-
-	self->gl.Viewport(x, y, width, height);
-
-	if (self->bound_framebuffer->framebuffer_obj == self->default_framebuffer->framebuffer_obj) {
-		self->default_framebuffer->viewport_x = x;
-		self->default_framebuffer->viewport_y = y;
-		self->default_framebuffer->viewport_width = width;
-		self->default_framebuffer->viewport_height = height;
-	}
-
-	return 0;
-}
-
 PyObject * MGLContext_get_default_texture_unit(MGLContext * self) {
 	return PyLong_FromLong(self->default_texture_unit);
 }
@@ -1920,12 +2366,12 @@ PyObject * MGLContext_get_max_texture_units(MGLContext * self) {
 	return PyLong_FromLong(self->max_texture_units);
 }
 
-MGLFramebuffer * MGLContext_get_default_framebuffer(MGLContext * self) {
-	Py_INCREF(self->default_framebuffer);
-	return self->default_framebuffer;
+MGLFramebuffer * MGLContext_get_screen(MGLContext * self) {
+	Py_INCREF(self->screen);
+	return self->screen;
 }
 
-MGLFramebuffer * MGLContext_get_bound_framebuffer(MGLContext * self) {
+MGLFramebuffer * MGLContext_get_fbo(MGLContext * self) {
 	Py_INCREF(self->bound_framebuffer);
 	return self->bound_framebuffer;
 }
@@ -1993,39 +2439,6 @@ PyObject * MGLContext_get_error(MGLContext * self, void * closure) {
 	return PyUnicode_FromFormat("GL_UNKNOWN_ERROR");
 }
 
-PyObject * MGLContext_get_vendor(MGLContext * self, void * closure) {
-	const char * vendor = (const char *)self->gl.GetString(GL_VENDOR);
-
-	if (!vendor) {
-		MGLError_Set("missing vendor information");
-		return 0;
-	}
-
-	return PyUnicode_FromFormat("%s", vendor);
-}
-
-PyObject * MGLContext_get_renderer(MGLContext * self, void * closure) {
-	const char * renderer = (const char *)self->gl.GetString(GL_RENDERER);
-
-	if (!renderer) {
-		MGLError_Set("missing renderer information");
-		return 0;
-	}
-
-	return PyUnicode_FromFormat("%s", renderer);
-}
-
-PyObject * MGLContext_get_version(MGLContext * self, void * closure) {
-	const char * version = (const char *)self->gl.GetString(GL_VERSION);
-
-	if (!version) {
-		MGLError_Set("missing version information");
-		return 0;
-	}
-
-	return PyUnicode_FromFormat("%s", version);
-}
-
 PyObject * MGLContext_get_version_code(MGLContext * self, void * closure) {
 	return PyLong_FromLong(self->version_code);
 }
@@ -2037,6 +2450,24 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 
 	PyObject * info = PyDict_New();
 
+	PyDict_SetItemString(
+		info,
+		"GL_VENDOR",
+		PyUnicode_FromString((const char *)self->gl.GetString(GL_VENDOR))
+	);
+
+	PyDict_SetItemString(
+		info,
+		"GL_RENDERER",
+		PyUnicode_FromString((const char *)self->gl.GetString(GL_RENDERER))
+	);
+
+	PyDict_SetItemString(
+		info,
+		"GL_VERSION",
+		PyUnicode_FromString((const char *)self->gl.GetString(GL_VERSION))
+	);
+
 	{
 		float gl_point_size_range[2] = {};
 		gl.GetFloatv(GL_POINT_SIZE_RANGE, gl_point_size_range);
@@ -2046,7 +2477,7 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 			"GL_POINT_SIZE_RANGE",
 			PyTuple_Pack(
 				2,
-				PyFloat_FromDouble(gl_point_size_range[0]),
+				PyFloat_FromDouble(gl_point_size_range[0]), // TODO: PyTuple_Pack and decref
 				PyFloat_FromDouble(gl_point_size_range[1])
 			)
 		);
@@ -2532,24 +2963,14 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"line_width", (getter)MGLContext_get_line_width, (setter)MGLContext_set_line_width, 0, 0},
 	{(char *)"point_size", (getter)MGLContext_get_point_size, (setter)MGLContext_set_point_size, 0, 0},
-	{(char *)"viewport", (getter)MGLContext_get_viewport, (setter)MGLContext_set_viewport, 0, 0},
 
-	{(char *)"max_samples", (getter)MGLContext_get_max_samples, 0, 0, 0},
-	{(char *)"max_integer_samples", (getter)MGLContext_get_max_integer_samples, 0, 0, 0},
-	{(char *)"max_texture_units", (getter)MGLContext_get_max_texture_units, 0, 0, 0},
-	{(char *)"default_texture_unit", (getter)MGLContext_get_default_texture_unit, (setter)MGLContext_set_default_texture_unit, 0, 0},
-	{(char *)"default_framebuffer", (getter)MGLContext_get_default_framebuffer, 0, 0, 0},
-	{(char *)"bound_framebuffer", (getter)MGLContext_get_bound_framebuffer, 0, 0, 0},
+	{(char *)"fbo", (getter)MGLContext_get_fbo, 0, 0, 0},
 
 	{(char *)"wireframe", (getter)MGLContext_get_wireframe, (setter)MGLContext_set_wireframe, 0, 0},
 	{(char *)"front_face", (getter)MGLContext_get_front_face, (setter)MGLContext_set_front_face, 0, 0},
 
-	{(char *)"error", (getter)MGLContext_get_error, 0, 0, 0},
-	{(char *)"vendor", (getter)MGLContext_get_vendor, 0, 0, 0},
-	{(char *)"renderer", (getter)MGLContext_get_renderer, 0, 0, 0},
-	{(char *)"version", (getter)MGLContext_get_version, 0, 0, 0},
-	{(char *)"version_code", (getter)MGLContext_get_version_code, 0, 0, 0},
 	{(char *)"info", (getter)MGLContext_get_info, 0, 0, 0},
+	{(char *)"error", (getter)MGLContext_get_error, 0, 0, 0},
 	{0},
 };
 
@@ -2594,29 +3015,15 @@ PyTypeObject MGLContext_Type = {
 	MGLContext_tp_new,                                      // tp_new
 };
 
-MGLContext * MGLContext_New() {
-	MGLContext * self = (MGLContext *)MGLContext_tp_new(&MGLContext_Type, 0, 0);
-	return self;
-}
-
 void MGLContext_Invalidate(MGLContext * context) {
 	if (Py_TYPE(context) == &MGLInvalidObject_Type) {
-
-		#ifdef MGL_VERBOSE
-		printf("MGLContext_Invalidate %p already released\n", context);
-		#endif
-
 		return;
 	}
 
-	#ifdef MGL_VERBOSE
-	printf("MGLContext_Invalidate %p\n", context);
-	#endif
+	// TODO: decref
 
 	DestroyGLContext(context->gl_context);
-
 	Py_TYPE(context) = &MGLInvalidObject_Type;
-
 	Py_DECREF(context);
 }
 
@@ -2660,12 +3067,9 @@ void MGLContext_Initialize(MGLContext * self) {
 	gl.GetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &bound_framebuffer);
 
 	{
-		MGLFramebuffer * framebuffer = MGLFramebuffer_New();
+		MGLFramebuffer * framebuffer = (MGLFramebuffer *)MGLFramebuffer_Type.tp_alloc(&MGLFramebuffer_Type, 0);
 
 		framebuffer->framebuffer_obj = 0;
-
-		framebuffer->color_attachments = 0;
-		framebuffer->depth_attachment = 0;
 
 		framebuffer->draw_buffers_len = 1;
 		framebuffer->draw_buffers = new unsigned[1];
@@ -2682,6 +3086,8 @@ void MGLContext_Initialize(MGLContext * self) {
 
 		// framebuffer->draw_buffers[0] = GL_COLOR_ATTACHMENT0;
 		// framebuffer->draw_buffers[0] = GL_BACK_LEFT;
+
+		// TODO: bind unbind
 
 		gl.GetIntegerv(GL_DRAW_BUFFER, (int *)&framebuffer->draw_buffers[0]);
 
@@ -2706,7 +3112,7 @@ void MGLContext_Initialize(MGLContext * self) {
 		framebuffer->width = scrissor_box[2];
 		framebuffer->height = scrissor_box[3];
 
-		self->default_framebuffer = framebuffer;
+		self->screen = framebuffer;
 	}
 
 	if (bound_framebuffer) {
@@ -2715,8 +3121,8 @@ void MGLContext_Initialize(MGLContext * self) {
 		MGLFramebuffer * framebuffer = MGLContext_detect_framebuffer(self, args);
 		self->bound_framebuffer = framebuffer;
 	} else {
-		Py_INCREF(self->default_framebuffer);
-		self->bound_framebuffer = self->default_framebuffer;
+		Py_INCREF(self->screen);
+		self->bound_framebuffer = self->screen;
 	}
 
 	self->wireframe = false;

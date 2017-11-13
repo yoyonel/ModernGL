@@ -1,38 +1,7 @@
-#include "Shader.hpp"
-
-#include "Error.hpp"
-#include "InvalidObject.hpp"
-
-const int SHADER_TYPE[] = {
-	GL_VERTEX_SHADER,
-	GL_FRAGMENT_SHADER,
-	GL_GEOMETRY_SHADER,
-	GL_TESS_EVALUATION_SHADER,
-	GL_TESS_CONTROL_SHADER,
-};
-
-const char * SHADER_NAME[] = {
-	"vertex_shader",
-	"fragment_shader",
-	"geometry_shader",
-	"tess_evaluation_shader",
-	"tess_control_shader",
-};
-
-const char * SHADER_NAME_UNDERLINE[] = {
-	"=============",
-	"===============",
-	"===============",
-	"======================",
-	"===================",
-};
+#include "Types.hpp"
 
 PyObject * MGLShader_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLShader * self = (MGLShader *)type->tp_alloc(type, 0);
-
-	#ifdef MGL_VERBOSE
-	printf("MGLShader_tp_new %p\n", self);
-	#endif
 
 	if (self) {
 	}
@@ -41,16 +10,11 @@ PyObject * MGLShader_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwa
 }
 
 void MGLShader_tp_dealloc(MGLShader * self) {
-
-	#ifdef MGL_VERBOSE
-	printf("MGLShader_tp_dealloc %p\n", self);
-	#endif
-
 	MGLShader_Type.tp_free((PyObject *)self);
 }
 
 int MGLShader_tp_init(MGLShader * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("cannot create mgl.Shader manually");
+	MGLError_Set("not allowed");
 	return -1;
 }
 
@@ -61,32 +25,6 @@ PyObject * MGLShader_release(MGLShader * self) {
 
 PyMethodDef MGLShader_tp_methods[] = {
 	{"release", (PyCFunction)MGLShader_release, METH_NOARGS, 0},
-	{0},
-};
-
-PyObject * MGLShader_get_source(MGLShader * self, void * closure) {
-	Py_INCREF(self->source);
-	return self->source;
-}
-
-PyObject * MGLShader_get_typename(MGLShader * self, void * closure) {
-	return PyUnicode_FromFormat("%s", SHADER_NAME[self->shader_slot]);
-}
-
-MGLContext * MGLShader_get_context(MGLShader * self, void * closure) {
-	Py_INCREF(self->context);
-	return self->context;
-}
-
-PyObject * MGLShader_get_glo(MGLShader * self, void * closure) {
-	return PyLong_FromLong(self->shader_obj);
-}
-
-PyGetSetDef MGLShader_tp_getseters[] = {
-	{(char *)"source", (getter)MGLShader_get_source, 0, 0, 0},
-	{(char *)"typename", (getter)MGLShader_get_typename, 0, 0, 0},
-	{(char *)"context", (getter)MGLShader_get_context, 0, 0, 0},
-	{(char *)"glo", (getter)MGLShader_get_glo, 0, 0, 0},
 	{0},
 };
 
@@ -120,7 +58,7 @@ PyTypeObject MGLShader_Type = {
 	0,                                                      // tp_iternext
 	MGLShader_tp_methods,                                   // tp_methods
 	0,                                                      // tp_members
-	MGLShader_tp_getseters,                                 // tp_getset
+	0,                                                      // tp_getset
 	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
@@ -131,33 +69,17 @@ PyTypeObject MGLShader_Type = {
 	MGLShader_tp_new,                                       // tp_new
 };
 
-MGLShader * MGLShader_New() {
-	MGLShader * self = (MGLShader *)MGLShader_tp_new(&MGLShader_Type, 0, 0);
-	return self;
-}
-
 void MGLShader_Invalidate(MGLShader * shader) {
 	if (Py_TYPE(shader) == &MGLInvalidObject_Type) {
-
-		#ifdef MGL_VERBOSE
-		printf("MGLShader_Invalidate %p already released\n", shader);
-		#endif
-
 		return;
 	}
 
-	#ifdef MGL_VERBOSE
-	printf("MGLShader_Invalidate %p\n", shader);
-	#endif
+	// TODO: decref
 
 	const GLMethods & gl = shader->context->gl;
 	gl.DeleteShader(shader->shader_obj);
 
-	Py_DECREF(shader->source);
-	Py_DECREF(shader->context);
-
 	Py_TYPE(shader) = &MGLInvalidObject_Type;
-
 	Py_DECREF(shader);
 }
 

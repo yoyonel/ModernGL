@@ -1,17 +1,7 @@
-#include "Buffer.hpp"
-
-#include "Error.hpp"
-#include "InvalidObject.hpp"
-#include "BufferAccess.hpp"
-
-#include "UniformBlock.hpp"
+#include "Types.hpp"
 
 PyObject * MGLBuffer_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLBuffer * self = (MGLBuffer *)type->tp_alloc(type, 0);
-
-	#ifdef MGL_VERBOSE
-	printf("MGLBuffer_tp_new %p\n", self);
-	#endif
 
 	if (self) {
 	}
@@ -20,56 +10,48 @@ PyObject * MGLBuffer_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwa
 }
 
 void MGLBuffer_tp_dealloc(MGLBuffer * self) {
-
-	#ifdef MGL_VERBOSE
-	printf("MGLBuffer_tp_dealloc %p\n", self);
-	#endif
-
 	MGLBuffer_Type.tp_free((PyObject *)self);
 }
 
 int MGLBuffer_tp_init(MGLBuffer * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("cannot create mgl.Buffer manually");
+	MGLError_Set("not allowed");
 	return -1;
 }
 
-MGLBufferAccess * MGLBuffer_access(MGLBuffer * self, PyObject * args) {
-	Py_ssize_t size;
+PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args) {
+	PyObject * data;
 	Py_ssize_t offset;
-	int readonly;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"nnp",
-		&size,
-		&offset,
-		&readonly
+		"On",
+		&data,
+		&offset
 	);
 
 	if (!args_ok) {
 		return 0;
 	}
 
-	if (size < 0) {
-		size = self->size - offset;
-	}
+	Py_buffer buffer_view;
 
-	if (offset < 0 || offset + size > self->size) {
-		MGLError_Set("out of range offset = %d or size = %d", offset, size);
+	int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
+	if (get_buffer < 0) {
+		MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
 		return 0;
 	}
 
-	MGLBufferAccess * access = MGLBufferAccess_New();
+	if (offset < 0 || buffer_view.len + offset > self->size) {
+		MGLError_Set("out of range offset = %d or size = %d", offset, buffer_view.len);
+		PyBuffer_Release(&buffer_view);
+		return 0;
+	}
 
-	access->gl = &self->context->gl;
-	access->ptr = 0;
-
-	access->buffer_obj = self->buffer_obj;
-	access->offset = offset;
-	access->size = size;
-	access->access = readonly ? GL_MAP_READ_BIT : (GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
-
-	return access;
+	const GLMethods & gl = self->context->gl;
+	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
+	gl.BufferSubData(GL_ARRAY_BUFFER, (GLintptr)offset, buffer_view.len, buffer_view.buf);
+	PyBuffer_Release(&buffer_view);
+	Py_RETURN_NONE;
 }
 
 PyObject * MGLBuffer_read(MGLBuffer * self, PyObject * args) {
@@ -169,32 +151,224 @@ PyObject * MGLBuffer_read_into(MGLBuffer * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args) {
-	const char * data;
-	Py_ssize_t size;
-	Py_ssize_t offset;
+PyObject * MGLBuffer_write_chunks(MGLBuffer * self, PyObject * args) {
+	PyObject * data;
+	Py_ssize_t start;
+	Py_ssize_t step;
+	Py_ssize_t count;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"y#n",
+		"Onnn",
 		&data,
-		&size,
-		&offset
+		&start,
+		&step,
+		&count
 	);
 
 	if (!args_ok) {
 		return 0;
 	}
 
-	if (offset < 0 || size + offset > self->size) {
-		MGLError_Set("out of range offset = %d or size = %d", offset, size);
+	Py_ssize_t abs_step = step > 0 ? step : -step;
+
+	Py_buffer buffer_view;
+
+	int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
+	if (get_buffer < 0) {
+		MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
 		return 0;
 	}
 
 	const GLMethods & gl = self->context->gl;
 	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
-	gl.BufferSubData(GL_ARRAY_BUFFER, (GLintptr)offset, size, data);
+
+	Py_ssize_t chunk_size = buffer_view.len / count;
+
+	if (buffer_view.len != chunk_size * count) {
+		MGLError_Set("data (%d bytes) cannot be divided to %d equal chunks", buffer_view.len, count);
+		PyBuffer_Release(&buffer_view);
+		return 0;
+	}
+
+	if (start < 0) {
+		start = self->size + start;
+	}
+
+	if (start < 0 || chunk_size > abs_step || start + chunk_size > self->size || start + count * step - step < 0 || start + count * step - step + chunk_size > self->size) {
+		MGLError_Set("buffer overflow");
+		PyBuffer_Release(&buffer_view);
+		return 0;
+	}
+
+	char * write_ptr = (char *)gl.MapBufferRange(GL_ARRAY_BUFFER, 0, self->size, GL_MAP_WRITE_BIT);
+	char * read_ptr = (char *)buffer_view.buf;
+
+	if (!write_ptr) {
+		MGLError_Set("cannot map the buffer");
+		PyBuffer_Release(&buffer_view);
+		return 0;
+	}
+
+	write_ptr += start;
+	for (Py_ssize_t i = 0; i < count; ++i) {
+		memcpy(write_ptr, read_ptr, chunk_size);
+		read_ptr += chunk_size;
+		write_ptr += step;
+	}
+
+	gl.UnmapBuffer(GL_ARRAY_BUFFER);
+	PyBuffer_Release(&buffer_view);
 	Py_RETURN_NONE;
+}
+
+PyObject * MGLBuffer_read_chunks(MGLBuffer * self, PyObject * args) {
+	Py_ssize_t chunk_size;
+	Py_ssize_t start;
+	Py_ssize_t step;
+	Py_ssize_t count;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"nnnn",
+		&chunk_size,
+		&start,
+		&step,
+		&count
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	Py_ssize_t abs_step = step > 0 ? step : -step;
+
+	if (start < 0) {
+		start = self->size + start;
+	}
+
+	if (start < 0 || chunk_size < 0 || chunk_size > abs_step || start + chunk_size > self->size || start + count * step - step < 0 || start + count * step - step + chunk_size > self->size) {
+		MGLError_Set("size error"); // TODO: error message
+		return 0;
+	}
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
+
+	char * read_ptr = (char *)gl.MapBufferRange(GL_ARRAY_BUFFER, 0, self->size, GL_MAP_READ_BIT);
+
+	if (!read_ptr) {
+		MGLError_Set("cannot map the buffer");
+		return 0;
+	}
+
+	PyObject * data = PyBytes_FromStringAndSize(0, chunk_size * count);
+	char * write_ptr = PyBytes_AS_STRING(data);
+
+	read_ptr += start;
+	for (Py_ssize_t i = 0; i < count; ++i) {
+		memcpy(write_ptr, read_ptr, chunk_size);
+		write_ptr += chunk_size;
+		read_ptr += step;
+	}
+
+	gl.UnmapBuffer(GL_ARRAY_BUFFER);
+	return data;
+}
+
+PyObject * MGLBuffer_read_chunks_into(MGLBuffer * self, PyObject * args) {
+	PyObject * data;
+	Py_ssize_t chunk_size;
+	Py_ssize_t start;
+	Py_ssize_t step;
+	Py_ssize_t count;
+	Py_ssize_t write_offset;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"Onnnnn",
+		&data,
+		&chunk_size,
+		&start,
+		&step,
+		&count,
+		&write_offset
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	Py_buffer buffer_view;
+
+	int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_WRITABLE);
+	if (get_buffer < 0) {
+		MGLError_Set("the buffer (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+		return 0;
+	}
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
+
+	char * read_ptr = (char *)gl.MapBufferRange(GL_ARRAY_BUFFER, 0, self->size, GL_MAP_READ_BIT);
+	char * write_ptr = (char *)buffer_view.buf + write_offset;
+
+	if (!read_ptr) {
+		MGLError_Set("cannot map the buffer");
+		return 0;
+	}
+
+	read_ptr += start;
+	for (Py_ssize_t i = 0; i < count; ++i) {
+		memcpy(write_ptr, read_ptr, chunk_size);
+		write_ptr += chunk_size;
+		read_ptr += step;
+	}
+
+	gl.UnmapBuffer(GL_ARRAY_BUFFER);
+	PyBuffer_Release(&buffer_view);
+	Py_RETURN_NONE;
+}
+
+MGLBufferAccess * MGLBuffer_access(MGLBuffer * self, PyObject * args) {
+	Py_ssize_t size;
+	Py_ssize_t offset;
+	int readonly;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"nnp",
+		&size,
+		&offset,
+		&readonly
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (size < 0) {
+		size = self->size - offset;
+	}
+
+	if (offset < 0 || offset + size > self->size) {
+		MGLError_Set("out of range offset = %d or size = %d", offset, size);
+		return 0;
+	}
+
+	MGLBufferAccess * access = (MGLBufferAccess *)MGLBufferAccess_Type.tp_alloc(&MGLBufferAccess_Type, 0);
+
+	access->gl = &self->context->gl;
+	access->ptr = 0;
+
+	access->buffer_obj = self->buffer_obj;
+	access->offset = offset;
+	access->size = size;
+	access->access = readonly ? GL_MAP_READ_BIT : (GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
+
+	return access;
 }
 
 PyObject * MGLBuffer_clear(MGLBuffer * self, PyObject * args) {
@@ -316,40 +490,18 @@ PyObject * MGLBuffer_release(MGLBuffer * self) {
 }
 
 PyMethodDef MGLBuffer_tp_methods[] = {
-	{"access", (PyCFunction)MGLBuffer_access, METH_VARARGS, 0},
+	{"write", (PyCFunction)MGLBuffer_write, METH_VARARGS, 0},
 	{"read", (PyCFunction)MGLBuffer_read, METH_VARARGS, 0},
 	{"read_into", (PyCFunction)MGLBuffer_read_into, METH_VARARGS, 0},
-	{"write", (PyCFunction)MGLBuffer_write, METH_VARARGS, 0},
+	{"write_chunks", (PyCFunction)MGLBuffer_write_chunks, METH_VARARGS, 0},
+	{"read_chunks", (PyCFunction)MGLBuffer_read_chunks, METH_VARARGS, 0},
+	{"read_chunks_into", (PyCFunction)MGLBuffer_read_chunks_into, METH_VARARGS, 0},
+	{"access", (PyCFunction)MGLBuffer_access, METH_VARARGS, 0},
 	{"clear", (PyCFunction)MGLBuffer_clear, METH_VARARGS, 0},
 	{"orphan", (PyCFunction)MGLBuffer_orphan, METH_NOARGS, 0},
 	{"bind_to_uniform_block", (PyCFunction)MGLBuffer_bind_to_uniform_block, METH_VARARGS, 0},
 	{"bind_to_storage_buffer", (PyCFunction)MGLBuffer_bind_to_storage_buffer, METH_VARARGS, 0},
 	{"release", (PyCFunction)MGLBuffer_release, METH_NOARGS, 0},
-	{0},
-};
-
-PyObject * MGLBuffer_get_size(MGLBuffer * self, void * closure) {
-	return PyLong_FromSsize_t(self->size);
-}
-
-PyObject * MGLBuffer_get_dynamic(MGLBuffer * self, void * closure) {
-	return PyBool_FromLong(self->dynamic);
-}
-
-MGLContext * MGLBuffer_get_context(MGLBuffer * self, void * closure) {
-	Py_INCREF(self->context);
-	return self->context;
-}
-
-PyObject * MGLBuffer_get_glo(MGLBuffer * self, void * closure) {
-	return PyLong_FromLong(self->buffer_obj);
-}
-
-PyGetSetDef MGLBuffer_tp_getseters[] = {
-	{(char *)"size", (getter)MGLBuffer_get_size, 0, 0, 0},
-	{(char *)"dynamic", (getter)MGLBuffer_get_dynamic, 0, 0, 0},
-	{(char *)"context", (getter)MGLBuffer_get_context, 0, 0, 0},
-	{(char *)"glo", (getter)MGLBuffer_get_glo, 0, 0, 0},
 	{0},
 };
 
@@ -421,7 +573,7 @@ PyTypeObject MGLBuffer_Type = {
 	0,                                                      // tp_iternext
 	MGLBuffer_tp_methods,                                   // tp_methods
 	0,                                                      // tp_members
-	MGLBuffer_tp_getseters,                                 // tp_getset
+	0,                                                      // tp_getset
 	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
@@ -432,31 +584,16 @@ PyTypeObject MGLBuffer_Type = {
 	MGLBuffer_tp_new,                                       // tp_new
 };
 
-MGLBuffer * MGLBuffer_New() {
-	MGLBuffer * self = (MGLBuffer *)MGLBuffer_tp_new(&MGLBuffer_Type, 0, 0);
-	return self;
-}
-
 void MGLBuffer_Invalidate(MGLBuffer * buffer) {
 	if (Py_TYPE(buffer) == &MGLInvalidObject_Type) {
-
-		#ifdef MGL_VERBOSE
-		printf("MGLBuffer_Invalidate %p already released\n", buffer);
-		#endif
-
 		return;
 	}
 
-	#ifdef MGL_VERBOSE
-	printf("MGLBuffer_Invalidate %p\n", buffer);
-	#endif
+	// TODO: decref
 
 	const GLMethods & gl = buffer->context->gl;
 	gl.DeleteBuffers(1, (GLuint *)&buffer->buffer_obj);
 
-	Py_DECREF(buffer->context);
-
 	Py_TYPE(buffer) = &MGLInvalidObject_Type;
-
 	Py_DECREF(buffer);
 }

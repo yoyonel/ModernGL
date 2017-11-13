@@ -1,17 +1,7 @@
-#include "Framebuffer.hpp"
-
-#include "Error.hpp"
-#include "InvalidObject.hpp"
-#include "Renderbuffer.hpp"
-#include "Texture.hpp"
-#include "Buffer.hpp"
+#include "Types.hpp"
 
 PyObject * MGLFramebuffer_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLFramebuffer * self = (MGLFramebuffer *)type->tp_alloc(type, 0);
-
-	#ifdef MGL_VERBOSE
-	printf("MGLFramebuffer_tp_new %p\n", self);
-	#endif
 
 	if (self) {
 	}
@@ -20,16 +10,11 @@ PyObject * MGLFramebuffer_tp_new(PyTypeObject * type, PyObject * args, PyObject 
 }
 
 void MGLFramebuffer_tp_dealloc(MGLFramebuffer * self) {
-
-	#ifdef MGL_VERBOSE
-	printf("MGLFramebuffer_tp_dealloc %p\n", self);
-	#endif
-
 	MGLFramebuffer_Type.tp_free((PyObject *)self);
 }
 
 int MGLFramebuffer_tp_init(MGLFramebuffer * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("cannot create mgl.Framebuffer manually");
+	MGLError_Set("not allowed");
 	return -1;
 }
 
@@ -240,7 +225,12 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	const GLMethods & gl = self->context->gl;
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
-	gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
+	// if (self->framebuffer_obj) {
+		gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
+	// } else {
+		// gl.ReadBuffer(GL_BACK_LEFT);
+		// gl.ReadBuffer(self->draw_buffers[0]);
+	// }
 	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 	gl.ReadPixels(x, y, width, height, format, type, data);
@@ -571,10 +561,6 @@ PyObject * MGLFramebuffer_get_depth_mask(MGLFramebuffer * self, void * closure) 
 
 int MGLFramebuffer_set_depth_mask(MGLFramebuffer * self, PyObject * value, void * closure) {
 	if (value == Py_True) {
-		if (self->depth_attachment == Py_None) {
-			MGLError_Set("the depth_attachment is None");
-			return -1;
-		}
 		self->depth_mask = true;
 	} else if (value == Py_False) {
 		self->depth_mask = false;
@@ -589,18 +575,6 @@ int MGLFramebuffer_set_depth_mask(MGLFramebuffer * self, PyObject * value, void 
 	}
 
 	return 0;
-}
-
-PyObject * MGLFramebuffer_get_width(MGLFramebuffer * self, void * closure) {
-	return PyLong_FromLong(self->width);
-}
-
-PyObject * MGLFramebuffer_get_height(MGLFramebuffer * self, void * closure) {
-	return PyLong_FromLong(self->height);
-}
-
-PyObject * MGLFramebuffer_get_samples(MGLFramebuffer * self, void * closure) {
-	return PyLong_FromLong(self->samples);
 }
 
 PyObject * MGLFramebuffer_get_bits(MGLFramebuffer * self, void * closure) {
@@ -653,46 +627,12 @@ PyObject * MGLFramebuffer_get_bits(MGLFramebuffer * self, void * closure) {
 	return result;
 }
 
-PyObject * MGLFramebuffer_get_color_attachments(MGLFramebuffer * self, void * closure) {
-	if (!self->color_attachments) {
-		MGLError_Set("missing color_attachments");
-		return 0;
-	}
-	Py_INCREF(self->color_attachments);
-	return self->color_attachments;
-}
-
-PyObject * MGLFramebuffer_get_depth_attachment(MGLFramebuffer * self, void * closure) {
-	if (!self->depth_attachment) {
-		MGLError_Set("missing depth_attachment");
-		return 0;
-	}
-	Py_INCREF(self->depth_attachment);
-	return self->depth_attachment;
-}
-
-MGLContext * MGLFramebuffer_get_context(MGLFramebuffer * self, void * closure) {
-	Py_INCREF(self->context);
-	return self->context;
-}
-
-PyObject * MGLFramebuffer_get_glo(MGLFramebuffer * self, void * closure) {
-	return PyLong_FromLong(self->framebuffer_obj);
-}
-
 PyGetSetDef MGLFramebuffer_tp_getseters[] = {
 	{(char *)"viewport", (getter)MGLFramebuffer_get_viewport, (setter)MGLFramebuffer_set_viewport, 0, 0},
 	{(char *)"color_mask", (getter)MGLFramebuffer_get_color_mask, (setter)MGLFramebuffer_set_color_mask, 0, 0},
 	{(char *)"depth_mask", (getter)MGLFramebuffer_get_depth_mask, (setter)MGLFramebuffer_set_depth_mask, 0, 0},
 
-	{(char *)"width", (getter)MGLFramebuffer_get_width, 0, 0, 0},
-	{(char *)"height", (getter)MGLFramebuffer_get_height, 0, 0, 0},
-	{(char *)"samples", (getter)MGLFramebuffer_get_samples, 0, 0, 0},
 	{(char *)"bits", (getter)MGLFramebuffer_get_bits, 0, 0, 0},
-	{(char *)"color_attachments", (getter)MGLFramebuffer_get_color_attachments, 0, 0, 0},
-	{(char *)"depth_attachment", (getter)MGLFramebuffer_get_depth_attachment, 0, 0, 0},
-	{(char *)"context", (getter)MGLFramebuffer_get_context, 0, 0, 0},
-	{(char *)"glo", (getter)MGLFramebuffer_get_glo, 0, 0, 0},
 	{0},
 };
 
@@ -737,70 +677,18 @@ PyTypeObject MGLFramebuffer_Type = {
 	MGLFramebuffer_tp_new,                                  // tp_new
 };
 
-MGLFramebuffer * MGLFramebuffer_New() {
-	MGLFramebuffer * self = (MGLFramebuffer *)MGLFramebuffer_tp_new(&MGLFramebuffer_Type, 0, 0);
-	return self;
-}
-
 void MGLFramebuffer_Invalidate(MGLFramebuffer * framebuffer) {
 	if (Py_TYPE(framebuffer) == &MGLInvalidObject_Type) {
-
-		#ifdef MGL_VERBOSE
-		printf("MGLFramebuffer_Invalidate %p already released\n", framebuffer);
-		#endif
-
 		return;
 	}
 
-	#ifdef MGL_VERBOSE
-	printf("MGLFramebuffer_Invalidate %p\n", framebuffer);
-	#endif
+	// TODO: decref
 
 	if (framebuffer->framebuffer_obj) {
 		framebuffer->context->gl.DeleteFramebuffers(1, (GLuint *)&framebuffer->framebuffer_obj);
-
-		if (framebuffer->color_attachments) {
-			int color_attachments_len = (int)PyTuple_GET_SIZE(framebuffer->color_attachments);
-
-			for (int i = 0; i < color_attachments_len; ++i) {
-				PyObject * attachment = PyTuple_GET_ITEM(framebuffer->color_attachments, i);
-
-				if (Py_TYPE(attachment) == &MGLTexture_Type) {
-					MGLTexture * texture = (MGLTexture *)attachment;
-					if (Py_REFCNT(texture) == 2) {
-						MGLTexture_Invalidate(texture);
-					}
-				} else if (Py_TYPE(attachment) == &MGLRenderbuffer_Type) {
-					MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)attachment;
-					if (Py_REFCNT(renderbuffer) == 2) {
-						MGLRenderbuffer_Invalidate(renderbuffer);
-					}
-				}
-			}
-
-			Py_DECREF(framebuffer->color_attachments);
-		}
-
-		if (framebuffer->depth_attachment) {
-			if (Py_TYPE(framebuffer->depth_attachment) == &MGLTexture_Type) {
-				MGLTexture * texture = (MGLTexture *)framebuffer->depth_attachment;
-				if (Py_REFCNT(texture) == 2) {
-					MGLTexture_Invalidate(texture);
-				}
-			} else if (Py_TYPE(framebuffer->depth_attachment) == &MGLRenderbuffer_Type) {
-				MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)framebuffer->depth_attachment;
-				if (Py_REFCNT(renderbuffer) == 2) {
-					MGLRenderbuffer_Invalidate(renderbuffer);
-				}
-			}
-
-			Py_DECREF(framebuffer->depth_attachment);
-		}
-
 		Py_DECREF(framebuffer->context);
 	}
 
 	Py_TYPE(framebuffer) = &MGLInvalidObject_Type;
-
 	Py_DECREF(framebuffer);
 }

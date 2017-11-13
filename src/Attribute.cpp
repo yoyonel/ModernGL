@@ -1,14 +1,7 @@
-#include "Attribute.hpp"
-
-#include "Error.hpp"
-#include "InvalidObject.hpp"
+#include "Types.hpp"
 
 PyObject * MGLAttribute_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLAttribute * self = (MGLAttribute *)type->tp_alloc(type, 0);
-
-	#ifdef MGL_VERBOSE
-	printf("MGLAttribute_tp_new %p\n", self);
-	#endif
 
 	if (self) {
 	}
@@ -17,52 +10,13 @@ PyObject * MGLAttribute_tp_new(PyTypeObject * type, PyObject * args, PyObject * 
 }
 
 void MGLAttribute_tp_dealloc(MGLAttribute * self) {
-
-	#ifdef MGL_VERBOSE
-	printf("MGLAttribute_tp_dealloc %p\n", self);
-	#endif
-
 	MGLAttribute_Type.tp_free((PyObject *)self);
 }
 
 int MGLAttribute_tp_init(MGLAttribute * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("cannot create mgl.Attribute manually");
+	MGLError_Set("not allowed");
 	return -1;
 }
-
-PyMethodDef MGLAttribute_tp_methods[] = {
-	{0},
-};
-
-PyObject * MGLAttribute_get_name(MGLAttribute * self, void * closure) {
-	Py_INCREF(self->name);
-	return self->name;
-}
-
-PyObject * MGLAttribute_get_location(MGLAttribute * self, void * closure) {
-	return PyLong_FromLong(self->location);
-}
-
-PyObject * MGLAttribute_get_array_length(MGLAttribute * self, void * closure) {
-	return PyLong_FromLong(self->array_length);
-}
-
-PyObject * MGLAttribute_get_dimension(MGLAttribute * self, void * closure) {
-	return PyLong_FromLong(self->dimension);
-}
-
-PyObject * MGLAttribute_get_shape(MGLAttribute * self, void * closure) {
-	return PyUnicode_FromFormat("%c", self->shape);
-}
-
-PyGetSetDef MGLAttribute_tp_getseters[] = {
-	{(char *)"name", (getter)MGLAttribute_get_name, 0, 0, 0},
-	{(char *)"location", (getter)MGLAttribute_get_location, 0, 0, 0},
-	{(char *)"array_length", (getter)MGLAttribute_get_array_length, 0, 0, 0},
-	{(char *)"dimension", (getter)MGLAttribute_get_dimension, 0, 0, 0},
-	{(char *)"shape", (getter)MGLAttribute_get_shape, 0, 0, 0},
-	{0},
-};
 
 PyTypeObject MGLAttribute_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
@@ -92,9 +46,9 @@ PyTypeObject MGLAttribute_Type = {
 	0,                                                      // tp_weaklistoffset
 	0,                                                      // tp_iter
 	0,                                                      // tp_iternext
-	MGLAttribute_tp_methods,                                // tp_methods
+	0,                                                      // tp_methods
 	0,                                                      // tp_members
-	MGLAttribute_tp_getseters,                              // tp_getset
+	0,                                                      // tp_getset
 	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
@@ -105,21 +59,14 @@ PyTypeObject MGLAttribute_Type = {
 	MGLAttribute_tp_new,                                    // tp_new
 };
 
-MGLAttribute * MGLAttribute_New() {
-	MGLAttribute * self = (MGLAttribute *)MGLAttribute_tp_new(&MGLAttribute_Type, 0, 0);
-	return self;
-}
-
 void MGLAttribute_Invalidate(MGLAttribute * attribute) {
+	if (Py_TYPE(attribute) == &MGLInvalidObject_Type) {
+		return;
+	}
 
-	#ifdef MGL_VERBOSE
-	printf("MGLAttribute_Invalidate %p\n", attribute);
-	#endif
-
-	Py_DECREF(attribute->name);
+	// TODO: decref
 
 	Py_TYPE(attribute) = &MGLInvalidObject_Type;
-
 	Py_DECREF(attribute);
 }
 
