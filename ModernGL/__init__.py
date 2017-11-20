@@ -1720,7 +1720,7 @@ class Renderbuffer:
         return self._depth
 
     @property
-    def floats(self) -> bool: # TODO:
+    def floats(self) -> bool:   # TODO:
         '''
         '''
 
@@ -3033,11 +3033,11 @@ class Context:
         if type(color_attachments) is Texture or type(color_attachments) is Renderbuffer:
             color_attachments = (color_attachments,)
 
-        color_attachments_mglo = tuple(x.mglo for x in color_attachments)
-        depth_attachment_mglo = None if depth_attachment is None else depth_attachment.mglo
+        ca_mglo = tuple(x.mglo for x in color_attachments)
+        da_mglo = None if depth_attachment is None else depth_attachment.mglo
 
         res = Framebuffer.__new__(Framebuffer)
-        res.mglo, res._size, res._samples, res._glo = self.mglo.framebuffer(color_attachments_mglo, depth_attachment_mglo)
+        res.mglo, res._size, res._samples, res._glo = self.mglo.framebuffer(ca_mglo, da_mglo)
         res._color_attachments = tuple(color_attachments)
         res._depth_attachment = depth_attachment
         return res
