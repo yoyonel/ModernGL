@@ -2444,28 +2444,29 @@ PyObject * MGLContext_get_version_code(MGLContext * self, void * closure) {
 }
 
 PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
-	PyObject * error_before = MGLContext_get_error(self, closure);
-
 	const GLMethods & gl = self->gl;
 
 	PyObject * info = PyDict_New();
 
+	const char * vendor = (const char *)self->gl.GetString(GL_VENDOR);
 	PyDict_SetItemString(
 		info,
 		"GL_VENDOR",
-		PyUnicode_FromString((const char *)self->gl.GetString(GL_VENDOR))
+		PyUnicode_FromString(vendor ? vendor : "")
 	);
 
+	const char * renderer = (const char *)self->gl.GetString(GL_RENDERER);
 	PyDict_SetItemString(
 		info,
 		"GL_RENDERER",
-		PyUnicode_FromString((const char *)self->gl.GetString(GL_RENDERER))
+		PyUnicode_FromString(renderer ? renderer : "")
 	);
 
+	const char * version = (const char *)self->gl.GetString(GL_VERSION);
 	PyDict_SetItemString(
 		info,
 		"GL_VERSION",
-		PyUnicode_FromString((const char *)self->gl.GetString(GL_VERSION))
+		PyUnicode_FromString(version ? version : "")
 	);
 
 	{
@@ -2847,8 +2848,8 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 			PyTuple_Pack(
 				3,
 				PyLong_FromLong(gl_max_compute_work_group_count[0]),
-				PyLong_FromLong(gl_max_compute_work_group_count[0]),
-				PyLong_FromLong(gl_max_compute_work_group_count[0])
+				PyLong_FromLong(gl_max_compute_work_group_count[1]),
+				PyLong_FromLong(gl_max_compute_work_group_count[2])
 			)
 		);
 
@@ -2948,14 +2949,6 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(info, "GL_MAX_UNIFORM_LOCATIONS", PyLong_FromLong(gl_max_uniform_locations));
 		PyDict_SetItemString(info, "GL_MAX_ELEMENT_INDEX", PyLong_FromLong(gl_max_element_index));
 	}
-
-	PyObject * error_after = MGLContext_get_error(self, closure);
-
-	PyDict_SetItemString(info, "GL_ERROR_BEFORE_INFO", error_before);
-	PyDict_SetItemString(info, "GL_ERROR_AFTER_INFO", error_after);
-
-	Py_DECREF(error_before);
-	Py_DECREF(error_after);
 
 	return info;
 }
