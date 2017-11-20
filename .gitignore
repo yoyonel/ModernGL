@@ -16,7 +16,9 @@ build.py
 
 .tox
 .cache
-.vscode
+
+.vscode/*
+!.vscode/extensions.json
 
 *.egg-info
 *.log
