@@ -1,10 +1,9 @@
 #pragma once
 
 #include "Python.hpp"
-#include "GLMethods.hpp"
 #include "GLContext.hpp"
-
-#define MGLError_Set(...) MGLError_SetTrace(__FILE__, __FUNCTION__, __LINE__, __VA_ARGS__)
+#include "GLMethods.hpp"
+#include "Error.hpp"
 
 typedef void (* MGLProc)();
 
@@ -384,9 +383,6 @@ void MGLAttribute_Complete(MGLAttribute * attribute, const GLMethods & gl);
 void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl);
 void MGLUniformBlock_Complete(MGLUniformBlock * uniform_block, const GLMethods & gl);
 void MGLVertexArray_Complete(MGLVertexArray * vertex_array);
-
-void MGLError_SetTrace(const char * filename, const char * function, int line, const char * format, ...);
-void MGLError_SetTrace(const char * filename, const char * function, int line, PyObject * message);
 
 void MGLComputeShader_Compile(MGLComputeShader * compute_shader);
 void MGLProgram_Compile(MGLProgram * program, PyObject * outputs);
