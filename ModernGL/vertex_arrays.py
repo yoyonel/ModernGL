@@ -125,6 +125,9 @@ class VertexArrayAttributeMap:
     def __ne__(self, other):
         return self.mglo is not other.mglo
 
+    def get(self, key, default = None):
+        return self.mglo.get(key, default)
+
     @staticmethod
     def new(obj):
         '''
