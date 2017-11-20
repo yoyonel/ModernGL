@@ -2,6 +2,8 @@
     ModernGL: PyOpenGL alternative
 '''
 
+# pylint: disable=C0123, W0212
+
 import os
 from typing import Dict, Tuple
 
@@ -38,6 +40,10 @@ __all__ = [
 
 
 class Error(Exception):
+    '''
+        ModernGL Error
+    '''
+
     filename = None
     function = None
     line = None
@@ -997,7 +1003,11 @@ class UniformBlock:
         return '<UniformBlock: %d>' % self._index
 
     @property
-    def binding(self):
+    def binding(self) -> int:
+        '''
+            int: The binding of the uniform block.
+        '''
+
         return self.mglo.binding
 
     @binding.setter
@@ -1007,7 +1017,7 @@ class UniformBlock:
     @property
     def name(self) -> str:
         '''
-            str: name
+            str: The name of the uniform block.
         '''
 
         return self._name
@@ -1720,8 +1730,9 @@ class Renderbuffer:
         return self._depth
 
     @property
-    def floats(self) -> bool:   # TODO:
+    def floats(self) -> bool:
         '''
+            bool: Is the renderbuffer using floats?
         '''
 
         return self._floats
@@ -1827,13 +1838,13 @@ class Program:
         Use :py:meth:`Context.program` to create one.
     '''
 
-    __slots__ = ['mglo', '_members', '_subroutines', '_geom_info', '_glo']
+    __slots__ = ['mglo', '_members', '_subroutines', '_geom', '_glo']
 
     def __init__(self):
         self.mglo = None
         self._members = {}
         self._subroutines = None
-        self._geom_info = (None, None, None)
+        self._geom = (None, None, None)
         self._glo = None
         raise NotImplementedError()
 
@@ -1857,7 +1868,7 @@ class Program:
             The geometry input primitive will be used for validation.
         '''
 
-        return self._geom_info[0]
+        return self._geom[0]
 
     @property
     def geometry_output(self) -> Primitive:
@@ -1866,7 +1877,7 @@ class Program:
             The GeometryShader's output primitive if the GeometryShader exists.
         '''
 
-        return self._geom_info[1]
+        return self._geom[1]
 
     @property
     def geometry_vertices(self) -> int:
@@ -1875,7 +1886,7 @@ class Program:
             the geometry shader will output.
         '''
 
-        return self._geom_info[2]
+        return self._geom[2]
 
     @property
     def subroutines(self) -> Tuple[str, ...]:
@@ -2034,6 +2045,7 @@ class ComputeShader:
 
     def __init__(self):
         self.mglo = None
+        self._glo = None
         raise NotImplementedError()
 
     def __repr__(self):
@@ -2835,31 +2847,31 @@ class Context:
         varyings = tuple(varyings)
 
         res = Program.__new__(Program)
-        res.mglo, l1, l2, l3, l4, l5, res._subroutines, res._geom_info, res._glo = self.mglo.program(shaders, varyings)
+        res.mglo, ls1, ls2, ls3, ls4, ls5, res._subroutines, res._geom, res._glo = self.mglo.program(shaders, varyings)
 
         members = {}
 
-        for item in l1:
+        for item in ls1:
             obj = Attribute.__new__(Attribute)
             obj.mglo, obj._location, obj._array_length, obj._dimension, obj._shape, obj._name = item
             members[obj.name] = obj
 
-        for item in l2:
+        for item in ls2:
             obj = Varying.__new__(Varying)
             obj._number, obj._array_length, obj._dimension, obj._name = item
             members[obj.name] = obj
 
-        for item in l3:
+        for item in ls3:
             obj = Uniform.__new__(Uniform)
             obj.mglo, obj._location, obj._array_length, obj._dimension, obj._name = item
             members[obj.name] = obj
 
-        for item in l4:
+        for item in ls4:
             obj = UniformBlock.__new__(UniformBlock)
             obj.mglo, obj._index, obj._size, obj._name = item
             members[obj.name] = obj
 
-        for item in l5:
+        for item in ls5:
             obj = Subroutine.__new__(Subroutine)
             obj._index, obj._name = item
             members[obj.name] = obj

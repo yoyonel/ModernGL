@@ -54,7 +54,7 @@ class Implementation:
             create_context
         '''
 
-    def create_standalone_context(self) -> 'Context':
+    def create_standalone_context(self, *args) -> 'Context':
         '''
             create_standalone_context
         '''
