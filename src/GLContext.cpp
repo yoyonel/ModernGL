@@ -8,6 +8,7 @@ struct GLVersion {
 };
 
 GLVersion version[] = {
+	{4, 6},
 	{4, 5},
 	{4, 4},
 	{4, 3},
@@ -584,6 +585,8 @@ GLContext LoadCurrentGLContext() {
 int SilentXErrorHandler(Display * d, XErrorEvent * e) {
     return 0;
 }
+
+// TODO: add support for EGL and OSMesa
 
 GLContext CreateGLContext(int width, int height) {
 	GLContext context = {};
