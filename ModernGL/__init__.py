@@ -3140,7 +3140,7 @@ def create_context(require=None) -> Context:
     return ctx
 
 
-def create_standalone_context(require=None) -> 'Context':
+def create_standalone_context(require=None, **settings) -> 'Context':
     '''
         Create a standalone ModernGL context.
 
@@ -3153,7 +3153,7 @@ def create_standalone_context(require=None) -> 'Context':
 
     ctx = Context.__new__(Context)
     ctx._screen = Framebuffer.__new__(Framebuffer)
-    ctx.mglo, ctx._screen.mglo, ctx.version_code = mgl.create_standalone_context()
+    ctx.mglo, ctx._screen.mglo, ctx.version_code = mgl.create_standalone_context(settings)
     ctx._info = None
 
     if require is not None and ctx.version_code < require:

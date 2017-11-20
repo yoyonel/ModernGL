@@ -214,8 +214,18 @@ void InitModernContext() {
 	}
 }
 
-GLContext CreateGLContext(int width, int height) {
+GLContext CreateGLContext(PyObject * settings) {
 	GLContext context = {};
+
+	int width = 1;
+	int height = 1;
+	PyObject * size_hint = (settings != Py_None) ? PyDict_GetItemString(settings, "size") : 0;
+	if (size_hint && Py_TYPE(size_hint) == &PyTuple_Type && PyTuple_GET_SIZE(size_hint) == 2) {
+		width = PyLong_AsLong(PyTuple_GET_ITEM(size_hint, 0));
+		height = PyLong_AsLong(PyTuple_GET_ITEM(size_hint, 1));
+		width = width < 1 ? width : 1;
+		height = height < 1 ? height : 1;
+	}
 
 	InitModernContext();
 
@@ -257,8 +267,8 @@ GLContext CreateGLContext(int width, int height) {
 		0,                                   // dwStyle
 		0,                                   // x
 		0,                                   // y
-		0,                                   // nWidth
-		0,                                   // nHeight
+		width,                               // nWidth
+		height,                              // nHeight
 		0,                                   // hWndParent
 		0,                                   // hMenu
 		inst,                                // hInstance
@@ -396,8 +406,18 @@ GLContext LoadCurrentGLContext() {
 	return context;
 }
 
-GLContext CreateGLContext(int width, int height) {
+GLContext CreateGLContext(PyObject * settings) {
 	GLContext context = {};
+
+	int width = 1;
+	int height = 1;
+	PyObject * size_hint = (settings != Py_None) ? PyDict_GetItemString(settings, "size") : 0;
+	if (size_hint && Py_TYPE(size_hint) == &PyTuple_Type && PyTuple_GET_SIZE(size_hint) == 2) {
+		width = PyLong_AsLong(PyTuple_GET_ITEM(size_hint, 0));
+		height = PyLong_AsLong(PyTuple_GET_ITEM(size_hint, 1));
+		width = width < 1 ? width : 1;
+		height = height < 1 ? height : 1;
+	}
 
 	// CGDirectDisplayID display = CGMainDisplayID();
 	// CGOpenGLDisplayMask cglDisplayMask = CGDisplayIDToOpenGLDisplayMask(display);
@@ -539,7 +559,7 @@ void DestroyGLContext(const GLContext & context) {
 
 #else
 
-#include <GL/glx.h>
+#include <GL/glx.h> // TODO: this should be optional
 #include <GL/gl.h>
 
 #define GLX_CONTEXT_MAJOR_VERSION 0x2091
@@ -588,8 +608,18 @@ int SilentXErrorHandler(Display * d, XErrorEvent * e) {
 
 // TODO: add support for EGL and OSMesa
 
-GLContext CreateGLContext(int width, int height) {
+GLContext CreateGLContext(PyObject * settings) {
 	GLContext context = {};
+
+	int width = 1;
+	int height = 1;
+	PyObject * size_hint = (settings != Py_None) ? PyDict_GetItemString(settings, "size") : 0;
+	if (size_hint && Py_TYPE(size_hint) == &PyTuple_Type && PyTuple_GET_SIZE(size_hint) == 2) {
+		width = PyLong_AsLong(PyTuple_GET_ITEM(size_hint, 0));
+		height = PyLong_AsLong(PyTuple_GET_ITEM(size_hint, 1));
+		width = width < 1 ? width : 1;
+		height = height < 1 ? height : 1;
+	}
 
 	Display * dpy = XOpenDisplay(0);
 

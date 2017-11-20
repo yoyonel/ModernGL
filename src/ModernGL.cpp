@@ -2,9 +2,6 @@
 
 #include "GLContext.hpp"
 
-int STANDALONE_CONTEXT_WIDTH = 1;
-int STANDALONE_CONTEXT_HEIGHT = 1;
-
 PyObject * strsize(PyObject * self, PyObject * args) {
 	const char * str;
 
@@ -79,10 +76,22 @@ PyObject * set_error_class(PyObject * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * create_standalone_context(PyObject * self) {
+PyObject * create_standalone_context(PyObject * self, PyObject * args) {
+	PyObject * settings;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"O",
+		&settings
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
 	MGLContext * ctx = (MGLContext *)MGLContext_Type.tp_alloc(&MGLContext_Type, 0);
 
-	ctx->gl_context = CreateGLContext(STANDALONE_CONTEXT_WIDTH, STANDALONE_CONTEXT_HEIGHT);
+	ctx->gl_context = CreateGLContext(settings);
 	ctx->wireframe = false;
 
 	if (PyErr_Occurred()) {
@@ -131,30 +140,9 @@ PyObject * create_context(PyObject * self) {
 	return result;
 }
 
-PyObject * set_default_context_size(PyObject * self, PyObject * args) {
-	int width;
-	int height;
-
-	int args_ok = PyArg_ParseTuple(
-		args,
-		"II",
-		&width,
-		&height
-	);
-
-	if (!args_ok) {
-		return 0;
-	}
-
-	STANDALONE_CONTEXT_WIDTH = width;
-	STANDALONE_CONTEXT_HEIGHT = height;
-	Py_RETURN_NONE;
-}
-
 PyMethodDef MGL_module_methods[] = {
-	{"create_standalone_context", (PyCFunction)create_standalone_context, METH_NOARGS, 0},
+	{"create_standalone_context", (PyCFunction)create_standalone_context, METH_VARARGS, 0},
 	{"create_context", (PyCFunction)create_context, METH_NOARGS, 0},
-	{"set_default_context_size", (PyCFunction)set_default_context_size, METH_VARARGS, 0},
 	{"set_error_class", (PyCFunction)set_error_class, METH_VARARGS, 0},
 	{"strsize", (PyCFunction)strsize, METH_VARARGS, 0},
 	{0},

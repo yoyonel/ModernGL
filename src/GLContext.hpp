@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Python.hpp"
+
 #if defined(_WIN32) || defined(_WIN64)
 
 struct GLContext {
@@ -28,5 +30,5 @@ struct GLContext {
 #endif
 
 GLContext LoadCurrentGLContext();
-GLContext CreateGLContext(int width, int height);
+GLContext CreateGLContext(PyObject * settings);
 void DestroyGLContext(const GLContext & context);
