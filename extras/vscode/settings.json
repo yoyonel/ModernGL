@@ -3,6 +3,7 @@
     "files.exclude": {
         "ModernGL/ext/**/*": true,
         "ModernGL.egg-info": true,
-        ".cache": true
+        ".cache": true,
+        ".tox": true
     }
 }
