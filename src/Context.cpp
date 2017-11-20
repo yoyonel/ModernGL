@@ -2472,7 +2472,6 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 	{
 		float gl_point_size_range[2] = {};
 		gl.GetFloatv(GL_POINT_SIZE_RANGE, gl_point_size_range);
-		printf("checkpoint 0\n");
 
 		PyDict_SetItemString(
 			info,
@@ -2486,7 +2485,6 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 
 		float gl_smooth_line_width_range[2] = {};
 		gl.GetFloatv(GL_SMOOTH_LINE_WIDTH_RANGE, gl_smooth_line_width_range);
-		printf("checkpoint 1\n");
 
 		PyDict_SetItemString(
 			info,
@@ -2500,7 +2498,6 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 
 		float gl_aliased_line_width_range[2] = {};
 		gl.GetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, gl_aliased_line_width_range);
-		printf("checkpoint 2\n");
 
 		PyDict_SetItemString(
 			info,
@@ -2514,23 +2511,18 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 
 		float gl_point_fade_threshold_size = 0.0f;
 		gl.GetFloatv(GL_POINT_FADE_THRESHOLD_SIZE, &gl_point_fade_threshold_size);
-		printf("checkpoint 3\n");
 
 		float gl_point_size_granularity = 0.0f;
 		gl.GetFloatv(GL_POINT_SIZE_GRANULARITY, &gl_point_size_granularity);
-		printf("checkpoint 4\n");
 
 		float gl_smooth_line_width_granularity = 0.0f;
 		gl.GetFloatv(GL_SMOOTH_LINE_WIDTH_GRANULARITY, &gl_smooth_line_width_granularity);
-		printf("checkpoint 5\n");
 
 		float gl_min_program_texel_offset = 0.0f;
 		gl.GetFloatv(GL_MIN_PROGRAM_TEXEL_OFFSET, &gl_min_program_texel_offset);
-		printf("checkpoint 6\n");
 
 		float gl_max_program_texel_offset = 0.0f;
 		gl.GetFloatv(GL_MAX_PROGRAM_TEXEL_OFFSET, &gl_max_program_texel_offset);
-		printf("checkpoint 7\n");
 
 		PyDict_SetItemString(info, "GL_POINT_FADE_THRESHOLD_SIZE", PyFloat_FromDouble(gl_point_fade_threshold_size));
 		PyDict_SetItemString(info, "GL_POINT_SIZE_GRANULARITY", PyFloat_FromDouble(gl_point_size_granularity));
@@ -2542,19 +2534,15 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 	{
 		int gl_minor_version = 0;
 		gl.GetIntegerv(GL_MINOR_VERSION, &gl_minor_version);
-		printf("checkpoint 8\n");
 
 		int gl_major_version = 0;
 		gl.GetIntegerv(GL_MAJOR_VERSION, &gl_major_version);
-		printf("checkpoint 9\n");
 
 		int gl_sample_buffers = 0;
 		gl.GetIntegerv(GL_SAMPLE_BUFFERS, &gl_sample_buffers);
-		printf("checkpoint 10\n");
 
 		int gl_subpixel_bits = 0;
 		gl.GetIntegerv(GL_SUBPIXEL_BITS, &gl_subpixel_bits);
-		printf("checkpoint 11\n");
 
 		PyDict_SetItemString(info, "GL_MINOR_VERSION", PyLong_FromLong(gl_minor_version));
 		PyDict_SetItemString(info, "GL_MAJOR_VERSION", PyLong_FromLong(gl_major_version));
@@ -2565,11 +2553,9 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 	{
 		unsigned char gl_doublebuffer = 0;
 		gl.GetBooleanv(GL_DOUBLEBUFFER, &gl_doublebuffer);
-		printf("checkpoint 12\n");
 
 		unsigned char gl_stereo = 0;
 		gl.GetBooleanv(GL_STEREO, &gl_stereo);
-		printf("checkpoint 13\n");
 
 		PyDict_SetItemString(info, "GL_DOUBLEBUFFER", PyBool_FromLong(gl_doublebuffer));
 		PyDict_SetItemString(info, "GL_STEREO", PyBool_FromLong(gl_stereo));
@@ -2578,7 +2564,6 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 	{
 		int gl_max_viewport_dims[2] = {};
 		gl.GetIntegerv(GL_MAX_VIEWPORT_DIMS, gl_max_viewport_dims);
-		printf("checkpoint 14\n");
 
 		PyDict_SetItemString(
 			info,
@@ -2592,195 +2577,148 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 
 		int gl_max_3d_texture_size = 0;
 		gl.GetIntegerv(GL_MAX_3D_TEXTURE_SIZE, &gl_max_3d_texture_size);
-		printf("checkpoint 15\n");
 
 		int gl_max_array_texture_layers = 0;
 		gl.GetIntegerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &gl_max_array_texture_layers);
-		printf("checkpoint 16\n");
 
 		int gl_max_clip_distances = 0;
 		gl.GetIntegerv(GL_MAX_CLIP_DISTANCES, &gl_max_clip_distances);
-		printf("checkpoint 17\n");
 
 		int gl_max_color_attachments = 0;
 		gl.GetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &gl_max_color_attachments);
-		printf("checkpoint 18\n");
 
 		int gl_max_color_texture_samples = 0;
 		gl.GetIntegerv(GL_MAX_COLOR_TEXTURE_SAMPLES, &gl_max_color_texture_samples);
-		printf("checkpoint 19\n");
 
 		int gl_max_combined_fragment_uniform_components = 0;
 		gl.GetIntegerv(GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS, &gl_max_combined_fragment_uniform_components);
-		printf("checkpoint 20\n");
 
 		int gl_max_combined_geometry_uniform_components = 0;
 		gl.GetIntegerv(GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS, &gl_max_combined_geometry_uniform_components);
-		printf("checkpoint 21\n");
 
 		int gl_max_combined_texture_image_units = 0;
 		gl.GetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &gl_max_combined_texture_image_units);
-		printf("checkpoint 22\n");
 
 		int gl_max_combined_uniform_blocks = 0;
 		gl.GetIntegerv(GL_MAX_COMBINED_UNIFORM_BLOCKS, &gl_max_combined_uniform_blocks);
-		printf("checkpoint 23\n");
 
 		int gl_max_combined_vertex_uniform_components = 0;
 		gl.GetIntegerv(GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS, &gl_max_combined_vertex_uniform_components);
-		printf("checkpoint 24\n");
 
 		int gl_max_cube_map_texture_size = 0;
 		gl.GetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE, &gl_max_cube_map_texture_size);
-		printf("checkpoint 25\n");
 
 		int gl_max_depth_texture_samples = 0;
 		gl.GetIntegerv(GL_MAX_DEPTH_TEXTURE_SAMPLES, &gl_max_depth_texture_samples);
-		printf("checkpoint 26\n");
 
 		int gl_max_draw_buffers = 0;
 		gl.GetIntegerv(GL_MAX_DRAW_BUFFERS, &gl_max_draw_buffers);
-		printf("checkpoint 27\n");
 
 		int gl_max_dual_source_draw_buffers = 0;
 		gl.GetIntegerv(GL_MAX_DUAL_SOURCE_DRAW_BUFFERS, &gl_max_dual_source_draw_buffers);
-		printf("checkpoint 28\n");
 
 		int gl_max_elements_indices = 0;
 		gl.GetIntegerv(GL_MAX_ELEMENTS_INDICES, &gl_max_elements_indices);
-		printf("checkpoint 29\n");
 
 		int gl_max_elements_vertices = 0;
 		gl.GetIntegerv(GL_MAX_ELEMENTS_VERTICES, &gl_max_elements_vertices);
-		printf("checkpoint 30\n");
 
 		int gl_max_fragment_input_components = 0;
 		gl.GetIntegerv(GL_MAX_FRAGMENT_INPUT_COMPONENTS, &gl_max_fragment_input_components);
-		printf("checkpoint 31\n");
 
 		int gl_max_fragment_uniform_components = 0;
 		gl.GetIntegerv(GL_MAX_FRAGMENT_UNIFORM_COMPONENTS, &gl_max_fragment_uniform_components);
-		printf("checkpoint 32\n");
 
 		int gl_max_fragment_uniform_vectors = 0;
 		gl.GetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS, &gl_max_fragment_uniform_vectors);
-		printf("checkpoint 33\n");
 
 		int gl_max_fragment_uniform_blocks = 0;
 		gl.GetIntegerv(GL_MAX_FRAGMENT_UNIFORM_BLOCKS, &gl_max_fragment_uniform_blocks);
-		printf("checkpoint 34\n");
 
 		int gl_max_geometry_input_components = 0;
 		gl.GetIntegerv(GL_MAX_GEOMETRY_INPUT_COMPONENTS, &gl_max_geometry_input_components);
-		printf("checkpoint 35\n");
 
 		int gl_max_geometry_output_components = 0;
 		gl.GetIntegerv(GL_MAX_GEOMETRY_OUTPUT_COMPONENTS, &gl_max_geometry_output_components);
-		printf("checkpoint 36\n");
 
 		int gl_max_geometry_texture_image_units = 0;
 		gl.GetIntegerv(GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS, &gl_max_geometry_texture_image_units);
-		printf("checkpoint 37\n");
 
 		int gl_max_geometry_uniform_blocks = 0;
 		gl.GetIntegerv(GL_MAX_GEOMETRY_UNIFORM_BLOCKS, &gl_max_geometry_uniform_blocks);
-		printf("checkpoint 38\n");
 
 		int gl_max_geometry_uniform_components = 0;
 		gl.GetIntegerv(GL_MAX_GEOMETRY_UNIFORM_COMPONENTS, &gl_max_geometry_uniform_components);
-		printf("checkpoint 39\n");
 
 		int gl_max_integer_samples = 0;
 		gl.GetIntegerv(GL_MAX_INTEGER_SAMPLES, &gl_max_integer_samples);
-		printf("checkpoint 40\n");
 
 		int gl_max_samples = 0;
 		gl.GetIntegerv(GL_MAX_SAMPLES, &gl_max_samples);
-		printf("checkpoint 41\n");
 
 		int gl_max_rectangle_texture_size = 0;
 		gl.GetIntegerv(GL_MAX_RECTANGLE_TEXTURE_SIZE, &gl_max_rectangle_texture_size);
-		printf("checkpoint 42\n");
 
 		int gl_max_renderbuffer_size = 0;
 		gl.GetIntegerv(GL_MAX_RENDERBUFFER_SIZE, &gl_max_renderbuffer_size);
-		printf("checkpoint 43\n");
 
 		int gl_max_sample_mask_words = 0;
 		gl.GetIntegerv(GL_MAX_SAMPLE_MASK_WORDS, &gl_max_sample_mask_words);
-		printf("checkpoint 44\n");
 
+		// TODO: 64-bit integer
 		int gl_max_server_wait_timeout = 0;
 		gl.GetIntegerv(GL_MAX_SERVER_WAIT_TIMEOUT, &gl_max_server_wait_timeout);
-		printf("checkpoint 45\n");
 
 		int gl_max_texture_buffer_size = 0;
 		gl.GetIntegerv(GL_MAX_TEXTURE_BUFFER_SIZE, &gl_max_texture_buffer_size);
-		printf("checkpoint 46\n");
 
 		int gl_max_texture_image_units = 0;
 		gl.GetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &gl_max_texture_image_units);
-		printf("checkpoint 47\n");
 
 		int gl_max_texture_lod_bias = 0;
 		gl.GetIntegerv(GL_MAX_TEXTURE_LOD_BIAS, &gl_max_texture_lod_bias);
-		printf("checkpoint 48\n");
 
 		int gl_max_texture_size = 0;
 		gl.GetIntegerv(GL_MAX_TEXTURE_SIZE, &gl_max_texture_size);
-		printf("checkpoint 49\n");
 
 		int gl_max_uniform_buffer_bindings = 0;
 		gl.GetIntegerv(GL_MAX_UNIFORM_BUFFER_BINDINGS, &gl_max_uniform_buffer_bindings);
-		printf("checkpoint 50\n");
 
 		int gl_max_uniform_block_size = 0;
 		gl.GetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE, &gl_max_uniform_block_size);
-		printf("checkpoint 51\n");
 
 		int gl_max_varying_components = 0;
 		gl.GetIntegerv(GL_MAX_VARYING_COMPONENTS, &gl_max_varying_components);
-		printf("checkpoint 52\n");
 
 		int gl_max_varying_vectors = 0;
 		gl.GetIntegerv(GL_MAX_VARYING_VECTORS, &gl_max_varying_vectors);
-		printf("checkpoint 53\n");
 
 		int gl_max_varying_floats = 0;
 		gl.GetIntegerv(GL_MAX_VARYING_FLOATS, &gl_max_varying_floats);
-		printf("checkpoint 54\n");
 
 		int gl_max_vertex_attribs = 0;
 		gl.GetIntegerv(GL_MAX_VERTEX_ATTRIBS, &gl_max_vertex_attribs);
-		printf("checkpoint 55\n");
 
 		int gl_max_vertex_texture_image_units = 0;
 		gl.GetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &gl_max_vertex_texture_image_units);
-		printf("checkpoint 56\n");
 
 		int gl_max_vertex_uniform_components = 0;
 		gl.GetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &gl_max_vertex_uniform_components);
-		printf("checkpoint 57\n");
 
 		int gl_max_vertex_uniform_vectors = 0;
 		gl.GetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &gl_max_vertex_uniform_vectors);
-		printf("checkpoint 58\n");
 
 		int gl_max_vertex_output_components = 0;
 		gl.GetIntegerv(GL_MAX_VERTEX_OUTPUT_COMPONENTS, &gl_max_vertex_output_components);
-		printf("checkpoint 59\n");
 
 		int gl_max_vertex_uniform_blocks = 0;
 		gl.GetIntegerv(GL_MAX_VERTEX_UNIFORM_BLOCKS, &gl_max_vertex_uniform_blocks);
-		printf("checkpoint 60\n");
 
 		int gl_max_vertex_attrib_relative_offset = 0;
 		gl.GetIntegerv(GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET, &gl_max_vertex_attrib_relative_offset);
-		printf("checkpoint 61\n");
 
 		int gl_max_vertex_attrib_bindings = 0;
 		gl.GetIntegerv(GL_MAX_VERTEX_ATTRIB_BINDINGS, &gl_max_vertex_attrib_bindings);
-		printf("checkpoint 62\n");
 
 		PyDict_SetItemString(info, "GL_MAX_3D_TEXTURE_SIZE", PyLong_FromLong(gl_max_3d_texture_size));
 		PyDict_SetItemString(info, "GL_MAX_ARRAY_TEXTURE_LAYERS", PyLong_FromLong(gl_max_array_texture_layers));
@@ -2835,7 +2773,6 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 	if (self->version_code >= 410) {
 		int gl_viewport_bounds_range[2] = {};
 		gl.GetIntegerv(GL_VIEWPORT_BOUNDS_RANGE, gl_viewport_bounds_range);
-		printf("checkpoint 63\n");
 
 		PyDict_SetItemString(
 			info,
@@ -2849,11 +2786,9 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 
 		int gl_viewport_subpixel_bits = 0;
 		gl.GetIntegerv(GL_VIEWPORT_SUBPIXEL_BITS, &gl_viewport_subpixel_bits);
-		printf("checkpoint 64\n");
 
 		int gl_max_viewports = 0;
 		gl.GetIntegerv(GL_MAX_VIEWPORTS, &gl_max_viewports);
-		printf("checkpoint 65\n");
 
 		PyDict_SetItemString(info, "GL_VIEWPORT_SUBPIXEL_BITS", PyLong_FromLong(gl_viewport_subpixel_bits));
 		PyDict_SetItemString(info, "GL_MAX_VIEWPORTS", PyLong_FromLong(gl_max_viewports));
@@ -2862,31 +2797,24 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 	if (self->version_code >= 420) {
 		int gl_min_map_buffer_alignment = 0;
 		gl.GetIntegerv(GL_MIN_MAP_BUFFER_ALIGNMENT, &gl_min_map_buffer_alignment);
-		printf("checkpoint 66\n");
 
 		int gl_max_combined_atomic_counters = 0;
 		gl.GetIntegerv(GL_MAX_COMBINED_ATOMIC_COUNTERS, &gl_max_combined_atomic_counters);
-		printf("checkpoint 67\n");
 
 		int gl_max_fragment_atomic_counters = 0;
 		gl.GetIntegerv(GL_MAX_FRAGMENT_ATOMIC_COUNTERS, &gl_max_fragment_atomic_counters);
-		printf("checkpoint 68\n");
 
 		int gl_max_geometry_atomic_counters = 0;
 		gl.GetIntegerv(GL_MAX_GEOMETRY_ATOMIC_COUNTERS, &gl_max_geometry_atomic_counters);
-		printf("checkpoint 69\n");
 
 		int gl_max_tess_control_atomic_counters = 0;
 		gl.GetIntegerv(GL_MAX_TESS_CONTROL_ATOMIC_COUNTERS, &gl_max_tess_control_atomic_counters);
-		printf("checkpoint 70\n");
 
 		int gl_max_tess_evaluation_atomic_counters = 0;
 		gl.GetIntegerv(GL_MAX_TESS_EVALUATION_ATOMIC_COUNTERS, &gl_max_tess_evaluation_atomic_counters);
-		printf("checkpoint 71\n");
 
 		int gl_max_vertex_atomic_counters = 0;
 		gl.GetIntegerv(GL_MAX_VERTEX_ATOMIC_COUNTERS, &gl_max_vertex_atomic_counters);
-		printf("checkpoint 72\n");
 
 		PyDict_SetItemString(info, "GL_MIN_MAP_BUFFER_ALIGNMENT", PyLong_FromLong(gl_min_map_buffer_alignment));
 		PyDict_SetItemString(info, "GL_MAX_COMBINED_ATOMIC_COUNTERS", PyLong_FromLong(gl_max_combined_atomic_counters));
@@ -2900,19 +2828,13 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 	if (self->version_code >= 430) {
 		int gl_max_compute_work_group_count[3] = {};
 		gl.GetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &gl_max_compute_work_group_count[0]);
-		printf("checkpoint 73\n");
 		gl.GetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &gl_max_compute_work_group_count[1]);
-		printf("checkpoint 74\n");
 		gl.GetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &gl_max_compute_work_group_count[2]);
-		printf("checkpoint 75\n");
 
 		int gl_max_compute_work_group_size[3] = {};
 		gl.GetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, &gl_max_compute_work_group_size[0]);
-		printf("checkpoint 76\n");
 		gl.GetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1, &gl_max_compute_work_group_size[1]);
-		printf("checkpoint 77\n");
 		gl.GetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2, &gl_max_compute_work_group_size[2]);
-		printf("checkpoint 78\n");
 
 		PyDict_SetItemString(
 			info,
@@ -2938,87 +2860,69 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 
 		int gl_max_shader_storage_buffer_bindings = 0;
 		gl.GetIntegerv(GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS, &gl_max_shader_storage_buffer_bindings);
-		printf("checkpoint 79\n");
 
 		int gl_max_combined_shader_storage_blocks = 0;
 		gl.GetIntegerv(GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS, &gl_max_combined_shader_storage_blocks);
-		printf("checkpoint 80\n");
 
 		int gl_max_vertex_shader_storage_blocks = 0;
 		gl.GetIntegerv(GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS, &gl_max_vertex_shader_storage_blocks);
-		printf("checkpoint 81\n");
 
 		int gl_max_fragment_shader_storage_blocks = 0;
 		gl.GetIntegerv(GL_MAX_FRAGMENT_SHADER_STORAGE_BLOCKS, &gl_max_fragment_shader_storage_blocks);
-		printf("checkpoint 82\n");
 
 		int gl_max_geometry_shader_storage_blocks = 0;
 		gl.GetIntegerv(GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS, &gl_max_geometry_shader_storage_blocks);
-		printf("checkpoint 83\n");
 
 		int gl_max_tess_evaluation_shader_storage_blocks = 0;
 		gl.GetIntegerv(GL_MAX_TESS_EVALUATION_SHADER_STORAGE_BLOCKS, &gl_max_tess_evaluation_shader_storage_blocks);
-		printf("checkpoint 84\n");
 
 		int gl_max_tess_control_shader_storage_blocks = 0;
 		gl.GetIntegerv(GL_MAX_TESS_CONTROL_SHADER_STORAGE_BLOCKS, &gl_max_tess_control_shader_storage_blocks);
-		printf("checkpoint 85\n");
 
 		int gl_max_compute_shader_storage_blocks = 0;
 		gl.GetIntegerv(GL_MAX_COMPUTE_SHADER_STORAGE_BLOCKS, &gl_max_compute_shader_storage_blocks);
-		printf("checkpoint 86\n");
 
 		int gl_max_compute_uniform_components = 0;
 		gl.GetIntegerv(GL_MAX_COMPUTE_UNIFORM_COMPONENTS, &gl_max_compute_uniform_components);
-		printf("checkpoint 87\n");
 
 		int gl_max_compute_atomic_counters = 0;
 		gl.GetIntegerv(GL_MAX_COMPUTE_ATOMIC_COUNTERS, &gl_max_compute_atomic_counters);
-		printf("checkpoint 88\n");
 
 		int gl_max_compute_atomic_counter_buffers = 0;
 		gl.GetIntegerv(GL_MAX_COMPUTE_ATOMIC_COUNTER_BUFFERS, &gl_max_compute_atomic_counter_buffers);
-		printf("checkpoint 89\n");
 
 		int gl_max_compute_work_group_invocations = 0;
 		gl.GetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &gl_max_compute_work_group_invocations);
-		printf("checkpoint 90\n");
 
 		int gl_max_compute_uniform_blocks = 0;
 		gl.GetIntegerv(GL_MAX_COMPUTE_UNIFORM_BLOCKS, &gl_max_compute_uniform_blocks);
-		printf("checkpoint 91\n");
 
 		int gl_max_compute_texture_image_units = 0;
 		gl.GetIntegerv(GL_MAX_COMPUTE_TEXTURE_IMAGE_UNITS, &gl_max_compute_texture_image_units);
-		printf("checkpoint 92\n");
 
 		int gl_max_combined_compute_uniform_components = 0;
 		gl.GetIntegerv(GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS, &gl_max_combined_compute_uniform_components);
-		printf("checkpoint 93\n");
 
 		int gl_max_framebuffer_width = 0;
 		gl.GetIntegerv(GL_MAX_FRAMEBUFFER_WIDTH, &gl_max_framebuffer_width);
-		printf("checkpoint 94\n");
 
 		int gl_max_framebuffer_height = 0;
 		gl.GetIntegerv(GL_MAX_FRAMEBUFFER_HEIGHT, &gl_max_framebuffer_height);
-		printf("checkpoint 95\n");
 
 		int gl_max_framebuffer_layers = 0;
 		gl.GetIntegerv(GL_MAX_FRAMEBUFFER_LAYERS, &gl_max_framebuffer_layers);
-		printf("checkpoint 96\n");
 
 		int gl_max_framebuffer_samples = 0;
 		gl.GetIntegerv(GL_MAX_FRAMEBUFFER_SAMPLES, &gl_max_framebuffer_samples);
-		printf("checkpoint 97\n");
 
 		int gl_max_uniform_locations = 0;
 		gl.GetIntegerv(GL_MAX_UNIFORM_LOCATIONS, &gl_max_uniform_locations);
-		printf("checkpoint 98\n");
 
+		// TODO: 64-bit integer
 		int gl_max_element_index = 0;
 		gl.GetIntegerv(GL_MAX_ELEMENT_INDEX, &gl_max_element_index);
-		printf("checkpoint 99\n");
+
+		// TODO: GL_MAX_SHADER_STORAGE_BLOCK_SIZE
 
 		PyDict_SetItemString(info, "GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS", PyLong_FromLong(gl_max_shader_storage_buffer_bindings));
 		PyDict_SetItemString(info, "GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS", PyLong_FromLong(gl_max_combined_shader_storage_blocks));
@@ -3114,7 +3018,6 @@ void MGLContext_Invalidate(MGLContext * context) {
 }
 
 void MGLContext_Initialize(MGLContext * self) {
-
 	GLMethods & gl = self->gl;
 
 	if (!gl.load()) {
@@ -3204,6 +3107,11 @@ void MGLContext_Initialize(MGLContext * self) {
 	if (bound_framebuffer) {
 		PyObject * args = PyTuple_New(1);
 		PyTuple_SET_ITEM(args, 0, PyLong_FromLong(bound_framebuffer));
+
+		MGLFramebuffer temp_bound_framebuffer = {};
+		self->bound_framebuffer = &temp_bound_framebuffer;
+		temp_bound_framebuffer.framebuffer_obj = bound_framebuffer;
+
 		MGLFramebuffer * framebuffer = MGLContext_detect_framebuffer(self, args);
 		self->bound_framebuffer = framebuffer;
 	} else {
