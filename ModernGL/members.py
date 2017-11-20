@@ -234,6 +234,9 @@ class UniformMap:
     def __ne__(self, other):
         return self.mglo is not other.mglo
 
+    def get(self, key, default = None):
+        return self.mglo.get(key, default)
+
 
 class UniformBlock:
     '''
@@ -344,6 +347,9 @@ class UniformBlockMap:
     def __ne__(self, other):
         return self.mglo is not other.mglo
 
+    def get(self, key, default = None):
+        return self.mglo.get(key, default)
+
 
 class Varying:
     '''
@@ -433,6 +439,9 @@ class VaryingMap:
 
     def __ne__(self, other):
         return self.mglo is not other.mglo
+
+    def get(self, key, default = None):
+        return self.mglo.get(key, default)
 
 
 class Attribute:
@@ -654,6 +663,9 @@ class AttributeMap:
     def __ne__(self, other):
         return self.mglo is not other.mglo
 
+    def get(self, key, default = None):
+        return self.mglo.get(key, default)
+
 
 class Subroutine:
     '''
@@ -747,6 +759,9 @@ class SubroutineMap:
     def __ne__(self, other):
         return self.mglo is not other.mglo
 
+    def get(self, key, default = None):
+        return self.mglo.get(key, default)
+
 
 class SubroutineUniform:
     '''
@@ -836,6 +851,9 @@ class SubroutineUniformMap:
 
     def __ne__(self, other):
         return self.mglo is not other.mglo
+
+    def get(self, key, default = None):
+        return self.mglo.get(key, default)
 
 
 class ProgramStage:
