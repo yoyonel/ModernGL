@@ -24,16 +24,17 @@ PyObject * MGLFramebuffer_release(MGLFramebuffer * self) {
 }
 
 PyObject * MGLFramebuffer_clear(MGLFramebuffer * self, PyObject * args) {
-	float r, g, b, a;
+	float r, g, b, a, depth;
 	PyObject * viewport;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"ffffO",
+		"fffffO",
 		&r,
 		&g,
 		&b,
 		&a,
+		&depth,
 		&viewport
 	);
 
@@ -83,6 +84,7 @@ PyObject * MGLFramebuffer_clear(MGLFramebuffer * self, PyObject * args) {
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
 	gl.DrawBuffers(self->draw_buffers_len, self->draw_buffers);
 	gl.ClearColor(r, g, b, a);
+	gl.ClearDepth(depth);
 
 	for (int i = 0; i < self->draw_buffers_len; ++i) {
 		gl.ColorMaski(

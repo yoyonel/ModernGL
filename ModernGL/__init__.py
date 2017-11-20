@@ -2205,11 +2205,11 @@ class Framebuffer:
 
         return self._glo
 
-    def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, *, viewport=None) -> None:
+    def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, *, viewport=None) -> None:
         '''
             Clear the framebuffer.
 
-            Values must be in ``(0, 255)`` range.
+            Values must be in ``[0.0, 1.0]`` range.
             If the `viewport` is not ``None`` then scrissor test
             will be used to clear the given viewport.
 
@@ -2223,6 +2223,7 @@ class Framebuffer:
                 green (float): color component.
                 blue (float): color component.
                 alpha (float): alpha component.
+                depth (float): depth value.
 
             Keyword Args:
                 viewport (tuple): The viewport.
@@ -2231,7 +2232,7 @@ class Framebuffer:
         if viewport is not None:
             viewport = tuple(viewport)
 
-        self.mglo.clear(red, green, blue, alpha, viewport)
+        self.mglo.clear(red, green, blue, alpha, depth, viewport)
 
     def use(self) -> None:
         '''
