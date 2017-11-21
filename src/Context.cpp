@@ -2416,8 +2416,8 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 			PyTuple_Pack(
 				3,
 				PyLong_FromLong(gl_max_compute_work_group_count[0]),
-				PyLong_FromLong(gl_max_compute_work_group_count[0]),
-				PyLong_FromLong(gl_max_compute_work_group_count[0])
+				PyLong_FromLong(gl_max_compute_work_group_count[1]),
+				PyLong_FromLong(gl_max_compute_work_group_count[2])
 			)
 		);
 
