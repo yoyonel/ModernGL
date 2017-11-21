@@ -164,6 +164,14 @@ class Context:
     @property
     def default_framebuffer(self) -> Framebuffer:
         '''
+            Framebuffer: Please use the screen attribute instead.
+        '''
+
+        return Framebuffer.new(self.mglo.default_framebuffer)
+
+    @property
+    def screen(self) -> Framebuffer:
+        '''
             Framebuffer: The default framebuffer.
         '''
 
