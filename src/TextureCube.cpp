@@ -53,14 +53,6 @@ PyObject * MGLTextureCube_read(MGLTextureCube * self, PyObject * args) {
 	char * data = PyBytes_AS_STRING(result);
 
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-	const int faces[] = {
-		GL_TEXTURE_CUBE_MAP_POSITIVE_X,
-		GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-		GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
-		GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-		GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
-		GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
-	};
 
 	int pixel_type = self->floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
 	int format = formats[self->components];
@@ -72,7 +64,7 @@ PyObject * MGLTextureCube_read(MGLTextureCube * self, PyObject * args) {
 
 	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-	gl.GetTexImage(faces[face], 0, format, pixel_type, data);
+	gl.GetTexImage(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, format, pixel_type, data);
 
 	return result;
 }
@@ -111,14 +103,6 @@ PyObject * MGLTextureCube_read_into(MGLTextureCube * self, PyObject * args) {
 	expected_size = expected_size * self->height;
 
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-	const int faces[] = {
-		GL_TEXTURE_CUBE_MAP_POSITIVE_X,
-		GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-		GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
-		GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-		GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
-		GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
-	};
 
 	int pixel_type = self->floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
 	int format = formats[self->components];
@@ -134,7 +118,7 @@ PyObject * MGLTextureCube_read_into(MGLTextureCube * self, PyObject * args) {
 		gl.BindTexture(GL_TEXTURE_CUBE_MAP, self->texture_obj);
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-		gl.GetTexImage(faces[face], 0, format, pixel_type, (char *)write_offset);
+		gl.GetTexImage(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, format, pixel_type, (char *)write_offset);
 		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
 	} else {
@@ -160,7 +144,7 @@ PyObject * MGLTextureCube_read_into(MGLTextureCube * self, PyObject * args) {
 		gl.BindTexture(GL_TEXTURE_CUBE_MAP, self->texture_obj);
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-		gl.GetTexImage(faces[face], 0, format, pixel_type, ptr);
+		gl.GetTexImage(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, format, pixel_type, ptr);
 
 		PyBuffer_Release(&buffer_view);
 
@@ -242,14 +226,13 @@ PyObject * MGLTextureCube_write(MGLTextureCube * self, PyObject * args) {
 	expected_size = expected_size * height;
 
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-	const int faces[] = {
-		GL_TEXTURE_CUBE_MAP_POSITIVE_X,
-		GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-		GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
-		GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-		GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
-		GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
-	};
+
+	// GL_TEXTURE_CUBE_MAP_POSITIVE_X = GL_TEXTURE_CUBE_MAP_POSITIVE_X + 0
+	// GL_TEXTURE_CUBE_MAP_NEGATIVE_X = GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1
+	// GL_TEXTURE_CUBE_MAP_POSITIVE_Y = GL_TEXTURE_CUBE_MAP_POSITIVE_X + 2
+	// GL_TEXTURE_CUBE_MAP_NEGATIVE_Y = GL_TEXTURE_CUBE_MAP_POSITIVE_X + 3
+	// GL_TEXTURE_CUBE_MAP_POSITIVE_Z = GL_TEXTURE_CUBE_MAP_POSITIVE_X + 4
+	// GL_TEXTURE_CUBE_MAP_NEGATIVE_Z = GL_TEXTURE_CUBE_MAP_POSITIVE_X + 5
 
 	int pixel_type = self->floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
 	int format = formats[self->components];
@@ -265,7 +248,7 @@ PyObject * MGLTextureCube_write(MGLTextureCube * self, PyObject * args) {
 		gl.BindTexture(GL_TEXTURE_CUBE_MAP, self->texture_obj);
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-		gl.TexSubImage2D(faces[face], 0, x, y, width, height, format, pixel_type, 0);
+		gl.TexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, x, y, width, height, format, pixel_type, 0);
 		gl.BindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
 	} else {
@@ -289,7 +272,7 @@ PyObject * MGLTextureCube_write(MGLTextureCube * self, PyObject * args) {
 
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-		gl.TexSubImage2D(faces[face], 0, x, y, width, height, format, pixel_type, buffer_view.buf);
+		gl.TexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, x, y, width, height, format, pixel_type, buffer_view.buf);
 
 		PyBuffer_Release(&buffer_view);
 	}
