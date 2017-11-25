@@ -137,7 +137,7 @@ classifiers = [
 
 args = {
     'name': 'ModernGL',
-    'version': '4.2.0',
+    'version': '4.2.1',
     'description': short_description,
     'long_description': long_description.strip(),
     'url': 'https://github.com/cprogrammer1994/ModernGL',
