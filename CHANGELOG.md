@@ -7,8 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [4.2.1] - 2017-11-25
+
+### Added
+
+- UniformMap.get, AttributeMap.get, ... methods
+
 ### Fixed
 
+- Contex.info GL_MAX_COMPUTE_WORK_GROUP_COUNT value
 - Missing TextureCube class
 - Buffer.clear return type hint
 
@@ -286,7 +293,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.2.0...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.2.1...master
+[4.2.1]: https://github.com/cprogrammer1994/ModernGL/compare/4.2.0...4.2.1
 [4.2.0]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.12...4.2.0
 [4.1.12]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.11...4.1.12
 [4.1.11]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.10...4.1.11
