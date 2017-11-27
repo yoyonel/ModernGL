@@ -1,0 +1,6 @@
+click
+glfw
+ModernGL
+ModernGL.ext.obj
+pillow
+pyrr
