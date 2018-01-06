@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+- Program.\_\_getitem\_\_ returns Uniforms, UniformBuffers, Attributes and Varyings
+
 ## [4.2.1] - 2017-11-25
 
 ### Added
@@ -15,7 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Contex.info GL_MAX_COMPUTE_WORK_GROUP_COUNT value
+- Contex.info `GL_MAX_COMPUTE_WORK_GROUP_COUNT` value
 - Missing TextureCube class
 - Buffer.clear return type hint
 
