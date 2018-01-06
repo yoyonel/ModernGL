@@ -64,6 +64,14 @@ class TestCase(unittest.TestCase):
         self.assertTrue('vert' in program.attributes)
         self.assertTrue('pos' not in program.attributes)
 
+        # Temporary fix for forward compatibility
+        self.assertIsNot(program['vert'], None)
+        self.assertIsNot(program['pos'], None)
+        self.assertIsNot(program['scale'], None)
+
+        with self.assertRaises(KeyError):
+            self.assertIsNot(program['this_must_fail'], None)
+
 
 if __name__ == '__main__':
     unittest.main()

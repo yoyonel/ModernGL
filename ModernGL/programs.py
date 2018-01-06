@@ -251,6 +251,18 @@ class Program:
         self.mglo = None
         raise NotImplementedError()
 
+    def __getitem__(self, key):
+        itm = self.mglo.uniforms.get(key)
+        if itm is None:
+            itm = self.mglo.uniform_blocks.get(key)
+        if itm is None:
+            itm = self.mglo.attributes.get(key)
+        if itm is None:
+            itm = self.mglo.varyings.get(key)
+        if itm is None:
+            raise KeyError()
+        return itm
+
     def __repr__(self):
         return '<Program: %d>' % self.glo
 
