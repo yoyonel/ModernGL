@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [4.2.2] - 2018-01-06
 
+### Added
+
+- Cygwin build args
 - Program.\_\_getitem\_\_ returns Uniforms, UniformBuffers, Attributes and Varyings
 
 ## [4.2.1] - 2017-11-25
