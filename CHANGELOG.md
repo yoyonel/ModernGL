@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [4.2.2] - 2018-01-06
+
 - Program.\_\_getitem\_\_ returns Uniforms, UniformBuffers, Attributes and Varyings
 
 ## [4.2.1] - 2017-11-25
@@ -295,7 +297,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.2.1...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.2.2...master
+[4.2.2]: https://github.com/cprogrammer1994/ModernGL/compare/4.2.1...4.2.2
 [4.2.1]: https://github.com/cprogrammer1994/ModernGL/compare/4.2.0...4.2.1
 [4.2.0]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.12...4.2.0
 [4.1.12]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.11...4.1.12

@@ -38,7 +38,7 @@ from .renderbuffers import Renderbuffer
 from .textures import Texture, Texture3D, TextureCube
 from .vertex_arrays import VertexArray, VertexArrayAttribute
 
-__version__ = '4.2.1'
+__version__ = '4.2.2'
 
 __all__ = [
     'InvalidObject', 'EnableFlag', 'Primitive', 'Error', 'TextureFilter',
