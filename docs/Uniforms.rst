@@ -4,7 +4,12 @@ Uniform
 .. currentmodule:: ModernGL
 
 .. autoclass:: Uniform
-	:members: name, location, dimension, array_length, value
+
+	.. autoattribute:: name
+	.. autoattribute:: location
+	.. autoattribute:: dimension
+	.. autoattribute:: array_length
+	.. autoattribute:: value
 
 	.. automethod:: read() -> bytes
 	.. automethod:: write(value)

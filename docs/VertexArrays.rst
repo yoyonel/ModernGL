@@ -10,7 +10,11 @@ VertexArray
 	:noindex:
 
 .. autoclass:: VertexArray
-	:members: program, index_buffer, vertices, subroutines
+
+	.. autoattribute:: program
+	.. autoattribute:: index_buffer
+	.. autoattribute:: vertices
+	.. autoattribute:: subroutines
 
 	.. automethod:: render(mode=TRIANGLES, vertices=-1, first=0, instances=1)
 	.. automethod:: transform(buf, mode=POINTS, vertices=-1, *, first=0, instances=1)

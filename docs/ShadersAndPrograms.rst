@@ -22,10 +22,16 @@ Shaders and Programs
 	:noindex:
 
 .. autoclass:: Shader
-	:members: source, typename
+
+	.. autoattribute:: source
+	.. autoattribute:: typename
 
 .. autoclass:: Program
-	:members: geometry_input, geometry_output, geometry_vertices, subroutines
+
+	.. autoattribute:: geometry_input
+	.. autoattribute:: geometry_output
+	.. autoattribute:: geometry_vertices
+	.. autoattribute:: subroutines
 
 .. toctree::
 	:maxdepth: 4

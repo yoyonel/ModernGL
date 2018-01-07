@@ -7,7 +7,9 @@ Buffers
 	:noindex:
 
 .. autoclass:: Buffer
-	:members: size, dynamic
+
+	.. autoattribute:: size
+	.. autoattribute:: dynamic
 
 	.. automethod:: access(size=-1, offset=0, readonly=False) -> BufferAccess
 	.. automethod:: read(size=-1, offset=0) -> bytes
@@ -22,7 +24,10 @@ Buffers
 	.. automethod:: bind_to_storage_buffer(binding=0)
 
 .. autoclass:: BufferAccess
-	:members: size, offset, readonly
+
+	.. autoattribute:: size
+	.. autoattribute:: offset
+	.. autoattribute:: readonly
 
 	.. automethod:: open()
 	.. automethod:: close()

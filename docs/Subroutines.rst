@@ -4,11 +4,9 @@ Subroutines
 .. currentmodule:: ModernGL
 
 .. autoclass:: Subroutine
-	:members: name, index
 
-.. autoclass:: SubroutineMap
-
-	.. automethod:: __getitem__(key) -> Subroutine
+	.. autoattribute:: name
+	.. autoattribute:: index
 
 .. toctree::
 	:maxdepth: 4

@@ -4,11 +4,11 @@ Uniform Blocks
 .. currentmodule:: ModernGL
 
 .. autoclass:: UniformBlock
-	:members: name, index, size, binding
 
-.. autoclass:: UniformBlockMap
-
-	.. automethod:: __getitem__(key) -> UniformBlock
+	.. autoattribute:: name
+	.. autoattribute:: index
+	.. autoattribute:: size
+	.. autoattribute:: binding
 
 .. toctree::
 	:maxdepth: 4

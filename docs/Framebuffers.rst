@@ -7,7 +7,17 @@ Framebuffers
 	:noindex:
 
 .. autoclass:: Framebuffer
-	:members: viewport, color_mask, depth_mask, width, height, size, samples, color_attachments, depth_attachment, bits
+
+	.. autoattribute:: viewport
+	.. autoattribute:: color_mask
+	.. autoattribute:: depth_mask
+	.. autoattribute:: width
+	.. autoattribute:: height
+	.. autoattribute:: size
+	.. autoattribute:: samples
+	.. autoattribute:: color_attachments
+	.. autoattribute:: depth_attachment
+	.. autoattribute:: bits
 
 	.. automethod:: clear(red=0.0, green=0.0, blue=0.0, alpha=0.0, viewport=None)
 	.. automethod:: use()

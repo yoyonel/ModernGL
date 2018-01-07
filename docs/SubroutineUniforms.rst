@@ -4,11 +4,9 @@ SubroutineUniforms
 .. currentmodule:: ModernGL
 
 .. autoclass:: SubroutineUniform
-	:members: name, location
 
-.. autoclass:: SubroutineUniformMap
-
-	.. automethod:: __getitem__(key) -> SubroutineUniform
+	.. autoattribute:: name
+	.. autoattribute:: location
 
 .. toctree::
 	:maxdepth: 4

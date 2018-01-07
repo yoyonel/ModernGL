@@ -4,7 +4,9 @@ Varyings
 .. currentmodule:: ModernGL
 
 .. autoclass:: Varying
-	:members: name, number
+
+	.. autoattribute:: name
+	.. autoattribute:: number
 
 .. autoclass:: VaryingMap
 

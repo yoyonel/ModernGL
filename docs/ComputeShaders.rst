@@ -7,7 +7,8 @@ ComputeShaders
 	:noindex:
 
 .. autoclass:: ComputeShader
-	:members: source
+
+	.. autoattribute:: source
 
 	.. automethod:: run(group_x=1, group_y=1, group_z=1)
 

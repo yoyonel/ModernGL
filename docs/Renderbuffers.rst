@@ -10,7 +10,14 @@ Renderbuffers
 	:noindex:
 
 .. autoclass:: Renderbuffer
-	:members: width, height, size, samples, components, depth, floats
+
+	.. autoattribute:: width
+	.. autoattribute:: height
+	.. autoattribute:: size
+	.. autoattribute:: samples
+	.. autoattribute:: components
+	.. autoattribute:: depth
+	.. autoattribute:: floats
 
 .. toctree::
 	:maxdepth: 4

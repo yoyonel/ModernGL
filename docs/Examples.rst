@@ -5,7 +5,7 @@ Examples
 
 
 .. figure:: Examples/images/01_hello_world.png
-	:scale: 50 %
+	:scale: 50%
 	:alt: Hello World
 	:align: center
 	:figclass: align-center
@@ -13,7 +13,7 @@ Examples
 	Hello World
 
 .. figure:: Examples/images/03_alpha_blending.png
-	:scale: 50 %
+	:scale: 50%
 	:alt: Alpha Blending
 	:align: center
 	:figclass: align-center
@@ -21,7 +21,7 @@ Examples
 	Alpha Blending
 
 .. figure:: Examples/images/julia_fractal.png
-	:scale: 50 %
+	:scale: 50%
 	:alt: Julia Fractal
 	:align: center
 	:figclass: align-center

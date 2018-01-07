@@ -13,7 +13,18 @@ Textures
 	:noindex:
 
 .. autoclass:: Texture
-	:members: width, height, size, components, samples, floats, depth, filter, repeat_x, repeat_y, swizzle
+
+	.. autoattribute:: width
+	.. autoattribute:: height
+	.. autoattribute:: size
+	.. autoattribute:: components
+	.. autoattribute:: samples
+	.. autoattribute:: floats
+	.. autoattribute:: depth
+	.. autoattribute:: filter
+	.. autoattribute:: repeat_x
+	.. autoattribute:: repeat_y
+	.. autoattribute:: swizzle
 
 	.. automethod:: read(alignment=1) -> bytes
 	.. automethod:: read_into(buffer, alignment=1, write_offset=0)
@@ -22,7 +33,18 @@ Textures
 	.. automethod:: use(location=0)
 
 .. autoclass:: Texture3D
-	:members: width, height, depth, size, components, floats, filter, repeat_x, repeat_y, repeat_z, swizzle
+
+	.. autoattribute:: width
+	.. autoattribute:: height
+	.. autoattribute:: depth
+	.. autoattribute:: size
+	.. autoattribute:: components
+	.. autoattribute:: floats
+	.. autoattribute:: filter
+	.. autoattribute:: repeat_x
+	.. autoattribute:: repeat_y
+	.. autoattribute:: repeat_z
+	.. autoattribute:: swizzle
 
 	.. automethod:: read(alignment=1) -> bytes
 	.. automethod:: read_into(buffer, alignment=1, write_offset=0)

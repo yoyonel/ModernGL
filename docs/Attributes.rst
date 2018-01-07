@@ -4,11 +4,11 @@ Attributes
 .. currentmodule:: ModernGL
 
 .. autoclass:: Attribute
-	:members: name, location, dimension, array_length
 
-.. autoclass:: AttributeMap
-
-	.. automethod:: __getitem__(key) -> Attribute
+	.. autoattribute:: name
+	.. autoattribute:: location
+	.. autoattribute:: dimension
+	.. autoattribute:: array_length
 
 .. toctree::
 	:maxdepth: 4
