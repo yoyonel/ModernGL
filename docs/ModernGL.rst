@@ -2,6 +2,7 @@ ModernGL
 ********
 
 ModernGL on `Github <https://github.com/cprogrammer1994/ModernGL>`_
+ModernGL on `PyPI <https://pypi.org/pypi/ModernGL>`_
 
 If you have less time to read docs go to the `TL;DR <TLDR.html>`_ section.
 
@@ -34,10 +35,6 @@ ModernGL can be integrated easily in GLWindow_, PyQt5_, pyglet_, pygame_, GLUT_ 
 
 - Create a window
 - Call :py:func:`ModernGL.create_context`
-
-.. automodule:: ModernGL
-
-	.. currentmodule:: ModernGL
 
 .. toctree::
 	:maxdepth: 4

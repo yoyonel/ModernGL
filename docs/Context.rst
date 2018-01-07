@@ -4,10 +4,23 @@ Context
 .. currentmodule:: ModernGL
 
 .. autofunction:: ModernGL.create_context(require=None) -> Context
-.. autofunction:: ModernGL.create_standalone_context(size=(256, 256), require=None) -> Context
+.. autofunction:: ModernGL.create_standalone_context(require=None) -> Context
 
 .. autoclass:: Context
-	:members: line_width, point_size, viewport, max_samples, max_integer_samples, max_texture_units, default_texture_unit, screen, wireframe, error, version_code, info, front_face
+
+	.. autoattribute:: line_width
+	.. autoattribute:: point_size
+	.. autoattribute:: viewport
+	.. autoattribute:: max_samples
+	.. autoattribute:: max_integer_samples
+	.. autoattribute:: max_texture_units
+	.. autoattribute:: default_texture_unit
+	.. autoattribute:: screen
+	.. autoattribute:: wireframe
+	.. autoattribute:: error
+	.. autoattribute:: version_code
+	.. autoattribute:: info
+	.. autoattribute:: front_face
 
 	.. automethod:: clear(red=0.0, green=0.0, blue=0.0, alpha=0.0, viewport=None)
 	.. automethod:: enable(flag)
