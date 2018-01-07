@@ -670,7 +670,7 @@ PyObject * MGLContext_texture3d(MGLContext * self, PyObject * args) {
 
 	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-	gl.TexImage3D(GL_TEXTURE_3D, 0, base_format, width, height, depth, 0, internal_format, pixel_type, buffer_view.buf);
+	gl.TexImage3D(GL_TEXTURE_3D, 0, internal_format, width, height, depth, 0, base_format, pixel_type, buffer_view.buf);
 	gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -802,12 +802,12 @@ PyObject * MGLContext_texture_cube(MGLContext * self, PyObject * args) {
 
 	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, base_format, width, height, 0, internal_format, pixel_type, ptr[0]);
-	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, base_format, width, height, 0, internal_format, pixel_type, ptr[1]);
-	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, base_format, width, height, 0, internal_format, pixel_type, ptr[2]);
-	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, base_format, width, height, 0, internal_format, pixel_type, ptr[3]);
-	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, base_format, width, height, 0, internal_format, pixel_type, ptr[4]);
-	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, base_format, width, height, 0, internal_format, pixel_type, ptr[5]);
+	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[0]);
+	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[1]);
+	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[2]);
+	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[3]);
+	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[4]);
+	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[5]);
 	gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
