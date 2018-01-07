@@ -41,10 +41,6 @@ def detect_implementation(classname):
 
 class TestCase(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        raise unittest.SkipTest('')
-
     def test_context_docs(self):
         documented = detect_class('Context.rst', 'Context')
         implemented = detect_implementation('Context')
@@ -94,13 +90,6 @@ class TestCase(unittest.TestCase):
         self.assertSetEqual(implemented - documented - ignored, EMPTY_SET, msg='Shader')
         self.assertSetEqual(documented - implemented, EMPTY_SET, msg='Shader')
 
-    def test_program_stage_docs(self):
-        documented = detect_class('ProgramStages.rst', 'ProgramStage')
-        implemented = detect_implementation('ProgramStage')
-        ignored = {'new', 'mglo'}
-        self.assertSetEqual(implemented - documented - ignored, EMPTY_SET, msg='ProgramStage')
-        self.assertSetEqual(documented - implemented, EMPTY_SET, msg='ProgramStage')
-
     def test_renderbuffer_docs(self):
         documented = detect_class('Renderbuffers.rst', 'Renderbuffer')
         implemented = detect_implementation('Renderbuffer')
@@ -114,13 +103,6 @@ class TestCase(unittest.TestCase):
         ignored = {'new', 'mglo'}
         self.assertSetEqual(implemented - documented - ignored, EMPTY_SET, msg='Subroutine')
         self.assertSetEqual(documented - implemented, EMPTY_SET, msg='Subroutine')
-
-    def test_subroutine_uniforms_docs(self):
-        documented = detect_class('SubroutineUniforms.rst', 'SubroutineUniform')
-        implemented = detect_implementation('SubroutineUniform')
-        ignored = {'new', 'mglo'}
-        self.assertSetEqual(implemented - documented - ignored, EMPTY_SET, msg='SubroutineUniform')
-        self.assertSetEqual(documented - implemented, EMPTY_SET, msg='SubroutineUniform')
 
     def test_texture_docs(self):
         documented = detect_class('Textures.rst', 'Texture')
@@ -170,13 +152,6 @@ class TestCase(unittest.TestCase):
         ignored = {'new', 'release', 'mglo', 'glo'}
         self.assertSetEqual(implemented - documented - ignored, EMPTY_SET, msg='VertexArray')
         self.assertSetEqual(documented - implemented, EMPTY_SET, msg='VertexArray')
-
-    def test_vertex_array_attribute_docs(self):
-        documented = detect_class('VertexArrayAttributes.rst', 'VertexArrayAttribute')
-        implemented = detect_implementation('VertexArrayAttribute')
-        ignored = {'new', 'mglo'}
-        self.assertSetEqual(implemented - documented - ignored, EMPTY_SET, msg='VertexArrayAttribute')
-        self.assertSetEqual(documented - implemented, EMPTY_SET, msg='VertexArrayAttribute')
 
 
 if __name__ == '__main__':

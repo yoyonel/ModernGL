@@ -25,7 +25,7 @@ Shaders and Programs
 	:members: source, typename
 
 .. autoclass:: Program
-	:members: uniforms, uniform_blocks, attributes, varyings, vertex_shader, fragment_shader, geometry_shader, tess_evaluation_shader, tess_control_shader, geometry_input, geometry_output, geometry_vertices
+	:members: geometry_input, geometry_output, geometry_vertices, subroutines
 
 .. toctree::
 	:maxdepth: 4

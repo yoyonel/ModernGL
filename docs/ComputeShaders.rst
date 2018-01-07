@@ -7,7 +7,7 @@ ComputeShaders
 	:noindex:
 
 .. autoclass:: ComputeShader
-	:members: source, uniforms, uniform_blocks
+	:members: source
 
 	.. automethod:: run(group_x=1, group_y=1, group_z=1)
 
