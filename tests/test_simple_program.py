@@ -50,9 +50,6 @@ class TestCase(unittest.TestCase):
             }
         ''')
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_program_uniforms_1(self):
         program = self.ctx.program(self.vertex_shader)
 

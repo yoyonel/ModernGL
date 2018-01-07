@@ -11,9 +11,6 @@ class TestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.ctx = get_context()
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_buffer_create_bytes(self):
         self.ctx.buffer(b'Hello World!')
 

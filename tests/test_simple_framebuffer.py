@@ -12,9 +12,6 @@ class TestCase(unittest.TestCase):
         cls.ctx = get_context()
         cls.max_samples = cls.ctx.info['GL_MAX_SAMPLES']
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_framebuffer_color_attachment(self):
         rbo = self.ctx.renderbuffer((16, 16))
         self.ctx.framebuffer(rbo)

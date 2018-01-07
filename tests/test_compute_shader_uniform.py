@@ -11,9 +11,6 @@ class TestCase(unittest.TestCase):
         raise unittest.SkipTest('NYI')
         cls.ctx = get_context()
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_1(self):
         if self.ctx.version_code < 430:
             self.skipTest('OpenGL 4.3 is not supported')

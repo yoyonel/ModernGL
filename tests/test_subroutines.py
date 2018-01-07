@@ -10,9 +10,6 @@ class TestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.ctx = get_context()
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_1(self):
         if self.ctx.version_code < 400:
             self.skipTest('OpenGL 4.0 is not supported')

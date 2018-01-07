@@ -9,9 +9,6 @@ class TestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.ctx = get_context()
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_buffer_readonly_access(self):
         buf = self.ctx.buffer(b'Hello World!')
         with buf.access(offset=1, size=4, readonly=True) as acc:

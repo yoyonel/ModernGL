@@ -10,9 +10,6 @@ class TestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.ctx = get_context()
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_program(self):
 
         vertex_shader = self.ctx.vertex_shader('''

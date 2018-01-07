@@ -98,9 +98,6 @@ class TestCase(unittest.TestCase):
         if cls.ctx.vendor.startswith('Intel'):
             raise unittest.SkipTest('')
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_simple(self):
         vert_src = '''
             #version %(version)s

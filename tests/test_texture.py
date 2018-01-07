@@ -36,9 +36,6 @@ class TestCase(unittest.TestCase):
         vbo = cls.ctx.buffer(struct.pack('8f', 0, 0, 0, 1, 1, 0, 1, 1))
         cls.vao = cls.ctx.simple_vertex_array(prog, vbo, ['vert'])
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_1(self):
         fbo = self.ctx.framebuffer(self.ctx.renderbuffer((16, 16)))
         pixels = struct.pack('16B', 255, 0, 0, 255, 0, 255, 0, 255, 0, 0, 255, 255, 0, 0, 0, 255)

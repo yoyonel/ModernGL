@@ -13,9 +13,6 @@ class TestCase(unittest.TestCase):
         raise unittest.SkipTest('NYI')
         cls.ctx = get_context()
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_vao_attribs(self):
 
         vertex_shader = self.ctx.vertex_shader('''

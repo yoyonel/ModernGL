@@ -10,9 +10,6 @@ class TestCase(unittest.TestCase):
         cls.ctx = get_context()
         cls.vendor = cls.ctx.info['GL_VENDOR']
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_texture_3d_create_1(self):
         self.ctx.texture3d((8, 8, 8), 3)
 

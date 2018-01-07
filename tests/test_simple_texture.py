@@ -12,9 +12,6 @@ class TestCase(unittest.TestCase):
         cls.ctx = get_context()
         cls.max_samples = cls.ctx.info['GL_MAX_SAMPLES']
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_texture_create_1(self):
         self.ctx.texture((16, 16), 3)
 

@@ -9,9 +9,6 @@ class TestBuffer(unittest.TestCase):
     def setUpClass(cls):
         cls.ctx = get_context()
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_1(self):
         buf1 = self.ctx.buffer(data=b'\xAA\x55' * 10)
         buf2 = self.ctx.buffer(reserve=buf1.size)

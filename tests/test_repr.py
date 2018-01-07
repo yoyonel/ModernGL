@@ -9,9 +9,6 @@ class TestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.ctx = get_context()
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_buffer_repr(self):
         buf = self.ctx.buffer(reserve=1024)
         self.assertRegex(repr(buf), r'<Buffer: \d+>')

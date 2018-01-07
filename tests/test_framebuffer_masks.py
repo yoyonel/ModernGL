@@ -9,9 +9,6 @@ class TestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.ctx = get_context()
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_1(self):
         fbo = self.ctx.framebuffer(self.ctx.renderbuffer((4, 4)))
 

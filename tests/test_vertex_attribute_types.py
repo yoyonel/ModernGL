@@ -143,9 +143,6 @@ class TestCase(unittest.TestCase):
         raise unittest.SkipTest('')
         cls.ctx = get_context()
 
-    def tearDown(self):
-        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
-
     def test_simple(self):
         vert_src = '''
             #version %(version)s
