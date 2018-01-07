@@ -6,15 +6,20 @@ from setuptools import Extension, setup
 
 target = platform.system().lower()
 
-if target == 'linux':
+if target.startswith('cygwin'):
+    target = 'cygwin'
+
+if target == 'linux' or target == 'cygwin':
     from distutils import sysconfig
     cvars = sysconfig.get_config_vars()
 
     if 'OPT' in cvars:
         sysconfig._config_vars['OPT'] = cvars['OPT'].replace('-Wstrict-prototypes', '')
+        sysconfig._config_vars['OPT'] = cvars['OPT'].replace('-Wimplicit-function-declaration', '')
 
     if 'CFLAGS' in cvars:
         sysconfig._config_vars['CFLAGS'] = cvars['CFLAGS'].replace('-Wstrict-prototypes', '')
+        sysconfig._config_vars['CFLAGS'] = cvars['CFLAGS'].replace('-Wimplicit-function-declaration', '')
 
 install_requires = []
 
@@ -27,18 +32,21 @@ if sys.version_info < (3, 5):
 libraries = {
     'windows': ['gdi32', 'opengl32', 'user32'],
     'linux': ['GL', 'dl', 'X11'],
+    'cygwin': ['GL', 'X11'],
     'darwin': [],
 }
 
 extra_compile_args = {
     'windows': [],
     'linux': [],
+    'cygwin': [],
     'darwin': ['-Wno-deprecated-declarations'],
 }
 
 extra_linker_args = {
     'windows': [],
     'linux': [],
+    'cygwin': [],
     'darwin': ['-framework', 'OpenGL', '-Wno-deprecated'],
 }
 
