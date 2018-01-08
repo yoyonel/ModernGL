@@ -181,6 +181,55 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
+PyObject * MGLVertexArray_bind(MGLVertexArray * self, PyObject * args) {
+	MGLAttribute * attribute;
+	MGLBuffer * buffer;
+	Py_ssize_t offset;
+	int stride;
+	int divisor;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"O!O!nII",
+		&MGLAttribute_Type,
+		&attribute,
+		&MGLBuffer_Type,
+		&buffer,
+		&offset,
+		&stride,
+		&divisor
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	char * ptr = (char *)offset;
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.BindVertexArray(self->vertex_array_obj);
+	gl.BindBuffer(GL_ARRAY_BUFFER, buffer->buffer_obj);
+
+	for (int r = 0; r < attribute->rows_length; ++r) {
+		int location = attribute->location + r;
+
+		if (attribute->normalizable) {
+			((gl_attribute_normal_ptr_proc)attribute->gl_attrib_ptr_proc)(location, attribute->row_length, attribute->scalar_type, false, stride, ptr);
+		} else {
+			((gl_attribute_ptr_proc)attribute->gl_attrib_ptr_proc)(location, attribute->row_length, attribute->scalar_type, stride, ptr);
+		}
+
+		gl.VertexAttribDivisor(location, divisor);
+
+		gl.EnableVertexAttribArray(location);
+
+		ptr += attribute->row_size;
+	}
+
+	Py_RETURN_NONE;
+}
+
 PyObject * MGLVertexArray_release(MGLVertexArray * self) {
 	MGLVertexArray_Invalidate(self);
 	Py_RETURN_NONE;
@@ -189,6 +238,7 @@ PyObject * MGLVertexArray_release(MGLVertexArray * self) {
 PyMethodDef MGLVertexArray_tp_methods[] = {
 	{"render", (PyCFunction)MGLVertexArray_render, METH_VARARGS, 0},
 	{"transform", (PyCFunction)MGLVertexArray_transform, METH_VARARGS, 0},
+	{"bind", (PyCFunction)MGLVertexArray_bind, METH_VARARGS, 0},
 	{"release", (PyCFunction)MGLVertexArray_release, METH_NOARGS, 0},
 	{0},
 };

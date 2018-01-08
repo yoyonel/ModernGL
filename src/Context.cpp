@@ -1080,7 +1080,7 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	}
 
 	gl.BindVertexArray(array->vertex_array_obj);
-	gl.UseProgram(program->program_obj);
+	gl.UseProgram(program->program_obj); // TODO: check why?
 
 	Py_INCREF(index_buffer);
 	array->index_buffer = index_buffer;
