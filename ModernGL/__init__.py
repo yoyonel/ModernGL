@@ -376,33 +376,6 @@ class Buffer:
 
         self.mglo.clear(size, offset, chunk)
 
-    def access(self, *, size=-1, offset=0, readonly=False) -> BufferAccess:
-        '''
-            Create a :py:class:`BufferAccess` object.
-
-            Keyword Args:
-                size (int): The size. Value `-1` means all.
-                offset (int): The offset.
-                readonly (bool): The readonly.
-
-            Examples:
-
-                Simple ``with`` statement::
-
-                    # The buffer will be mapped once and accessed multiple times.
-
-                    >>> with buffer.access() as access:
-                    ...     access.read(...)
-                    ...     access.write(...)
-        '''
-
-        res = BufferAccess.__new__(BufferAccess)
-        res.mglo = self.mglo.access(size, offset, readonly)
-        res._size = size
-        res._offset = offset
-        res._readonly = readonly
-        return res
-
     def bind_to_uniform_block(self, binding=0) -> None:
         '''
             Bind the buffer to a uniform block.
