@@ -1744,12 +1744,29 @@ class Program:
         self.mglo.release()
 
 
-class Query:
-    __slots__ = ['mglo', '_glo']
+class ConditionalRender:
+    __slots__ = ['mglo']
 
     def __init__(self):
         self.mglo = None
-        self._glo = None
+        raise TypeError()
+
+    def __repr__(self):
+        return '<Query>'
+
+    def __enter__(self):
+        self.mglo.begin_render()
+        return self
+
+    def __exit__(self, *args):
+        self.mglo.end_render()
+
+
+class Query:
+    __slots__ = ['mglo']
+
+    def __init__(self):
+        self.mglo = None
         raise TypeError()
 
     def __repr__(self):
@@ -1773,6 +1790,11 @@ class Query:
     @property
     def elapsed(self) -> int:
         return self.mglo.elapsed
+
+    def conditional_rendering(self):
+        res = ConditionalRender.__new__(ConditionalRender)
+        res.mglo = self.mglo
+        return res
 
 
 class VertexArray:

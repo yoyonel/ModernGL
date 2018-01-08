@@ -67,6 +67,7 @@ class Example:
 
         self.vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, ['in_vert', 'in_norm', 'in_text'])
+        self.query = self.ctx.query(any_samples=True)
 
     def render(self):
         angle = self.wnd.time
@@ -86,7 +87,11 @@ class Example:
 
         self.mvp.write((proj * lookat).astype('f4').tobytes())
         self.light.value = camera_pos
-        self.vao.render()
+        with self.query:
+            self.vao.render()
+
+        with self.query.conditional_rendering():
+            self.vao.render()
 
 
 run_example(Example)

@@ -77,9 +77,50 @@ PyObject * MGLQuery_end(MGLQuery * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
+PyObject * MGLQuery_begin_render(MGLQuery * self, PyObject * args) {
+	int args_ok = PyArg_ParseTuple(
+		args,
+		""
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	const GLMethods & gl = self->context->gl;
+
+	if (self->query_obj[ANY_SAMPLES_PASSED]) {
+		gl.BeginConditionalRender(self->query_obj[ANY_SAMPLES_PASSED], GL_QUERY_NO_WAIT);
+	} else if (self->query_obj[SAMPLES_PASSED]) {
+		gl.BeginConditionalRender(self->query_obj[SAMPLES_PASSED], GL_QUERY_NO_WAIT);
+	} else {
+		MGLError_Set("no samples");
+		return 0;
+	}
+
+	Py_RETURN_NONE;
+}
+
+PyObject * MGLQuery_end_render(MGLQuery * self, PyObject * args) {
+	int args_ok = PyArg_ParseTuple(
+		args,
+		""
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	const GLMethods & gl = self->context->gl;
+	gl.EndConditionalRender();
+	Py_RETURN_NONE;
+}
+
 PyMethodDef MGLQuery_tp_methods[] = {
 	{"begin", (PyCFunction)MGLQuery_begin, METH_VARARGS, 0},
 	{"end", (PyCFunction)MGLQuery_end, METH_VARARGS, 0},
+	{"begin_render", (PyCFunction)MGLQuery_begin_render, METH_VARARGS, 0},
+	{"end_render", (PyCFunction)MGLQuery_end_render, METH_VARARGS, 0},
 	// {"release", (PyCFunction)MGLQuery_release, METH_NOARGS, 0},
 	{0},
 };
