@@ -95,7 +95,7 @@ class Primitive:
     def __init__(self):
         self.name = None
         self.mglo = None
-        raise NotImplementedError()
+        raise TypeError()
 
     def __repr__(self):
         return 'ModernGL.%s' % self.name
@@ -182,7 +182,7 @@ class TextureFilter:
     def __init__(self):
         self.name = None
         self.mglo = None
-        raise NotImplementedError()
+        raise TypeError()
 
     def __repr__(self):
         return 'ModernGL.%s' % self.name
@@ -232,7 +232,7 @@ class Buffer:
         self._size = None
         self._dynamic = None
         self._glo = None
-        raise NotImplementedError()
+        raise TypeError()
 
     def __repr__(self):
         return '<Buffer: %d>' % self.glo
@@ -489,7 +489,7 @@ class Attribute:
         self._dimension = None
         self._shape = None
         self._name = None
-        raise NotImplementedError('Attribute')
+        raise TypeError()
 
     def __repr__(self):
         return '<Attribute: %d>' % self._location
@@ -657,7 +657,7 @@ class Uniform:
         self._array_length = None
         self._dimension = None
         self._name = None
-        raise NotImplementedError('Uniform')
+        raise TypeError()
 
     def __repr__(self):
         return '<Uniform: %d>' % self._location
@@ -828,7 +828,7 @@ class UniformBlock:
         self._index = None
         self._size = None
         self._name = None
-        raise NotImplementedError('UniformBlock')
+        raise TypeError()
 
     def __repr__(self):
         return '<UniformBlock: %d>' % self._index
@@ -882,7 +882,7 @@ class Varying:
         self._array_length = None
         self._dimension = None
         self._name = None
-        raise NotImplementedError('Varying')
+        raise TypeError()
 
     def __repr__(self):
         return '<Varying: %d>' % self.number
@@ -914,7 +914,7 @@ class Subroutine:
     def __init__(self):
         self._index = None
         self._name = None
-        raise NotImplementedError('Subroutine')
+        raise TypeError()
 
     def __repr__(self):
         return '<Subroutine: %d>' % self._index
@@ -958,7 +958,7 @@ class Texture:
         self._floats = None
         self._depth = None
         self._glo = None
-        raise NotImplementedError()
+        raise TypeError()
 
     def __repr__(self):
         return '<Texture: %d>' % self.glo
@@ -1174,7 +1174,7 @@ class Texture3D:
         self._samples = None
         self._floats = None
         self._glo = None
-        raise NotImplementedError()
+        raise TypeError()
 
     def __repr__(self):
         return '<Texture3D: %d>' % self.glo
@@ -1393,7 +1393,7 @@ class TextureCube:
         self._components = None
         self._floats = None
         self._glo = None
-        raise NotImplementedError()
+        raise TypeError()
 
     def __repr__(self):
         return '<TextureCube: %d>' % self.glo
@@ -1504,7 +1504,7 @@ class Renderbuffer:
         self._depth = None
         self._floats = None
         self._glo = None
-        raise NotImplementedError()
+        raise TypeError()
 
     def __repr__(self):
         return '<Renderbuffer: %d>' % self.glo
@@ -1606,7 +1606,7 @@ class Shader:
         self._source = None
         self._typename = None
         self._glo = None
-        raise NotImplementedError()
+        raise TypeError()
 
     def __repr__(self):
         return '<Shader: %d>' % self.glo
@@ -1677,7 +1677,7 @@ class Program:
         self._subroutines = None
         self._geom = (None, None, None)
         self._glo = None
-        raise NotImplementedError()
+        raise TypeError()
 
     def __repr__(self):
         return '<Program: %d>' % self._glo
@@ -1750,7 +1750,7 @@ class Query:
     def __init__(self):
         self.mglo = None
         self._glo = None
-        raise NotImplementedError()
+        raise TypeError()
 
     def __repr__(self):
         return '<Query>'
@@ -1796,7 +1796,7 @@ class VertexArray:
         self._program = None
         self._index_buffer = None
         self._glo = None
-        raise NotImplementedError()
+        raise TypeError()
 
     def __repr__(self):
         return '<VertexArray: %d>' % self.glo
@@ -1908,7 +1908,7 @@ class ComputeShader:
     def __init__(self):
         self.mglo = None
         self._glo = None
-        raise NotImplementedError()
+        raise TypeError()
 
     def __repr__(self):
         return '<ComputeShader: %d>' % self.glo
@@ -1970,7 +1970,7 @@ class Framebuffer:
         self._size = (None, None)
         self._samples = None
         self._glo = None
-        raise NotImplementedError()
+        raise TypeError()
 
     def __repr__(self):
         return '<Framebuffer: %d>' % self.glo
@@ -2202,7 +2202,7 @@ class Context:
         self._screen = None
         self._info = None
         self.version_code = None
-        raise NotImplementedError()
+        raise TypeError()
 
     def __repr__(self):
         return '<Context>'
