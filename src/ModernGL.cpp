@@ -172,17 +172,6 @@ bool MGL_InitializeModule(PyObject * module) {
 	}
 
 	{
-		if (PyType_Ready(&MGLBufferAccess_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register BufferAccess in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return false;
-		}
-
-		Py_INCREF(&MGLBufferAccess_Type);
-
-		PyModule_AddObject(module, "BufferAccess", (PyObject *)&MGLBufferAccess_Type);
-	}
-
-	{
 		if (PyType_Ready(&MGLComputeShader_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register ComputeShader in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return false;

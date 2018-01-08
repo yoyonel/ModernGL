@@ -327,45 +327,6 @@ PyObject * MGLBuffer_read_chunks_into(MGLBuffer * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-MGLBufferAccess * MGLBuffer_access(MGLBuffer * self, PyObject * args) {
-	Py_ssize_t size;
-	Py_ssize_t offset;
-	int readonly;
-
-	int args_ok = PyArg_ParseTuple(
-		args,
-		"nnp",
-		&size,
-		&offset,
-		&readonly
-	);
-
-	if (!args_ok) {
-		return 0;
-	}
-
-	if (size < 0) {
-		size = self->size - offset;
-	}
-
-	if (offset < 0 || offset + size > self->size) {
-		MGLError_Set("out of range offset = %d or size = %d", offset, size);
-		return 0;
-	}
-
-	MGLBufferAccess * access = (MGLBufferAccess *)MGLBufferAccess_Type.tp_alloc(&MGLBufferAccess_Type, 0);
-
-	access->gl = &self->context->gl;
-	access->ptr = 0;
-
-	access->buffer_obj = self->buffer_obj;
-	access->offset = offset;
-	access->size = size;
-	access->access = readonly ? GL_MAP_READ_BIT : (GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
-
-	return access;
-}
-
 PyObject * MGLBuffer_clear(MGLBuffer * self, PyObject * args) {
 	Py_ssize_t size;
 	Py_ssize_t offset;
@@ -491,7 +452,6 @@ PyMethodDef MGLBuffer_tp_methods[] = {
 	{"write_chunks", (PyCFunction)MGLBuffer_write_chunks, METH_VARARGS, 0},
 	{"read_chunks", (PyCFunction)MGLBuffer_read_chunks, METH_VARARGS, 0},
 	{"read_chunks_into", (PyCFunction)MGLBuffer_read_chunks_into, METH_VARARGS, 0},
-	{"access", (PyCFunction)MGLBuffer_access, METH_VARARGS, 0},
 	{"clear", (PyCFunction)MGLBuffer_clear, METH_VARARGS, 0},
 	{"orphan", (PyCFunction)MGLBuffer_orphan, METH_NOARGS, 0},
 	{"bind_to_uniform_block", (PyCFunction)MGLBuffer_bind_to_uniform_block, METH_VARARGS, 0},

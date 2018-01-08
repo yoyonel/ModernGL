@@ -50,7 +50,6 @@ static const char * SHADER_NAME_UNDERLINE[] = {
 
 struct MGLAttribute;
 struct MGLBuffer;
-struct MGLBufferAccess;
 struct MGLComputeShader;
 struct MGLContext;
 struct MGLFramebuffer;
@@ -100,21 +99,6 @@ struct MGLBuffer {
 
 	Py_ssize_t size;
 	bool dynamic;
-};
-
-struct MGLBufferAccess {
-	PyObject_HEAD
-
-	GLMethods * gl;
-
-	char * ptr;
-
-	int buffer_obj;
-
-	Py_ssize_t offset;
-	Py_ssize_t size;
-
-	int access;
 };
 
 struct MGLComputeShader {
@@ -405,7 +389,6 @@ void MGLShader_Compile(MGLShader * shader);
 void MGLContext_Initialize(MGLContext * self);
 
 extern PyTypeObject MGLAttribute_Type;
-extern PyTypeObject MGLBufferAccess_Type;
 extern PyTypeObject MGLBuffer_Type;
 extern PyTypeObject MGLComputeShader_Type;
 extern PyTypeObject MGLContext_Type;
