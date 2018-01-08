@@ -1884,6 +1884,9 @@ class VertexArray:
 
         self.mglo.transform(buffer.mglo, mode.mglo, vertices, first, instances)
 
+    def bind(self, attrib, buffer, *, offset, stride, divisor) -> None:
+        self.mglo.bind(self._program._members[attrib].mglo, buffer.mglo, offset, stride, divisor)
+
     def release(self) -> None:
         '''
             Release the ModernGL object.

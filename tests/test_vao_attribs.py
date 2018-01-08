@@ -10,7 +10,6 @@ class TestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        raise unittest.SkipTest('NYI')
         cls.ctx = get_context()
 
     def test_vao_attribs(self):
@@ -37,19 +36,19 @@ class TestCase(unittest.TestCase):
         for a, b in zip(struct.unpack('8f', res.read()), (1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0)):
             self.assertAlmostEqual(a, b)
 
-        vao.attributes['in_vert'].bind(vbo, 4, 0, 0)
+        vao.bind('in_vert', vbo, offset=4, stride=0, divisor=0)
         vao.transform(res, ModernGL.POINTS, 2)
 
         for a, b in zip(struct.unpack('8f', res.read()), (2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0)):
             self.assertAlmostEqual(a, b)
 
-        vao.attributes['in_vert'].bind(vbo, 8, 20, 0)
+        vao.bind('in_vert', vbo, offset=8, stride=20, divisor=0)
         vao.transform(res, ModernGL.POINTS, 2)
 
         for a, b in zip(struct.unpack('8f', res.read()), (3.0, 4.0, 5.0, 6.0, 8.0, 9.0, 10.0, 11.0)):
             self.assertAlmostEqual(a, b)
 
-        vao.attributes['in_vert'].bind(vbo, 12, 0, 1)
+        vao.bind('in_vert', vbo, offset=12, stride=0, divisor=1)
         vao.transform(res, ModernGL.POINTS, 2)
 
         for a, b in zip(struct.unpack('8f', res.read()), (4.0, 5.0, 6.0, 7.0, 4.0, 5.0, 6.0, 7.0)):
