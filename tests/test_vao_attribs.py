@@ -54,6 +54,9 @@ class TestCase(unittest.TestCase):
         for a, b in zip(struct.unpack('8f', res.read()), (4.0, 5.0, 6.0, 7.0, 4.0, 5.0, 6.0, 7.0)):
             self.assertAlmostEqual(a, b)
 
+        with self.assertRaises(KeyError):
+            vao.bind('in_vert_that_does_not_exist', vbo, offset=12, stride=0, divisor=1)
+
 
 if __name__ == '__main__':
     unittest.main()

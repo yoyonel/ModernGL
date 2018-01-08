@@ -1884,8 +1884,11 @@ class VertexArray:
 
         self.mglo.transform(buffer.mglo, mode.mglo, vertices, first, instances)
 
-    def bind(self, attrib, buffer, *, offset, stride, divisor) -> None:
-        self.mglo.bind(self._program._members[attrib].mglo, buffer.mglo, offset, stride, divisor)
+    def bind(self, attribute, buffer, *, offset, stride, divisor) -> None:
+        attr = self._program._members.get(attribute)
+        if type(attr) is not Attribute:
+            raise KeyError(attribute)
+        self.mglo.bind(attr.mglo, buffer.mglo, offset, stride, divisor)
 
     def release(self) -> None:
         '''
