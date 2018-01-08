@@ -50,36 +50,9 @@ class TestBuffer(unittest.TestCase):
         buf.read_into(res, offset=0, size=5, write_offset=5)
         self.assertEqual(bytes(res), b'WorldHello')
 
-    def test_buffer_access_read_into_1(self):
-        data = b'Hello World!'
-        buf = self.ctx.buffer(data)
-        res = bytearray(buf.size)
-
-        with buf.access() as access:
-            access.read_into(res)
-
-        self.assertEqual(bytes(res), data)
-
-    def test_buffer_access_read_into_2(self):
-        data = b'Hello World!'
-        buf = self.ctx.buffer(data)
-        res = bytearray(10)
-
-        with buf.access() as access:
-            access.read_into(res, offset=6, size=5, write_offset=0)
-            access.read_into(res, offset=0, size=5, write_offset=5)
-
-        self.assertEqual(bytes(res), b'WorldHello')
-
     def test_buffer_orphan(self):
         buf = self.ctx.buffer(reserve=1024)
         buf.orphan()
-
-    def test_buffer_access(self):
-        buf = self.ctx.buffer(data=b'\xAA\x55' * 10)
-
-        with buf.access() as a:
-            self.assertEqual(a.read(), b'\xAA\x55' * 10)
 
 
 if __name__ == '__main__':
