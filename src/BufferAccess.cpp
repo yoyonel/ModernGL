@@ -13,11 +13,6 @@ void MGLBufferAccess_tp_dealloc(MGLBufferAccess * self) {
 	MGLBufferAccess_Type.tp_free((PyObject *)self);
 }
 
-int MGLBufferAccess_tp_init(MGLBufferAccess * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyObject * MGLBufferAccess_open(MGLBufferAccess * self) {
 	if (self->ptr) {
 		MGLError_Set("already open");
@@ -217,7 +212,7 @@ PyTypeObject MGLBufferAccess_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLBufferAccess_tp_init,                      // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLBufferAccess_tp_new,                                 // tp_new
 };

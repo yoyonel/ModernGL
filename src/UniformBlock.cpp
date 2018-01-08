@@ -14,11 +14,6 @@ void MGLUniformBlock_tp_dealloc(MGLUniformBlock * self) {
 	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
-int MGLUniformBlock_tp_init(MGLUniformBlock * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyMethodDef MGLUniformBlock_tp_methods[] = {
 	{0},
 };
@@ -82,7 +77,7 @@ PyTypeObject MGLUniformBlock_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLUniformBlock_tp_init,                      // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLUniformBlock_tp_new,                                 // tp_new
 };

@@ -15,11 +15,6 @@ void MGLComputeShader_tp_dealloc(MGLComputeShader * self) {
 	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
-int MGLComputeShader_tp_init(MGLComputeShader * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyObject * MGLComputeShader_run(MGLComputeShader * self, PyObject * args) {
 	unsigned x;
 	unsigned y;
@@ -130,7 +125,7 @@ PyTypeObject MGLComputeShader_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLComputeShader_tp_init,                     // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLComputeShader_tp_new,                                // tp_new
 };

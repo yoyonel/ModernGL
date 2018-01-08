@@ -15,11 +15,6 @@ void MGLQuery_tp_dealloc(MGLQuery * self) {
 	MGLQuery_Type.tp_free((PyObject *)self);
 }
 
-int MGLQuery_tp_init(MGLQuery * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyObject * MGLQuery_begin(MGLQuery * self, PyObject * args) {
 	int args_ok = PyArg_ParseTuple(
 		args,
@@ -159,7 +154,7 @@ PyTypeObject MGLQuery_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLQuery_tp_init,                             // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLQuery_tp_new,                                        // tp_new
 };

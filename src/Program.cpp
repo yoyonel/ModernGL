@@ -15,11 +15,6 @@ void MGLProgram_tp_dealloc(MGLProgram * self) {
 	MGLProgram_Type.tp_free((PyObject *)self);
 }
 
-int MGLProgram_tp_init(MGLProgram * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyObject * MGLProgram_release(MGLProgram * self) {
 	MGLProgram_Invalidate(self);
 	Py_RETURN_NONE;
@@ -66,7 +61,7 @@ PyTypeObject MGLProgram_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLProgram_tp_init,                           // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLProgram_tp_new,                                      // tp_new
 };

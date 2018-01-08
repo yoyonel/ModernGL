@@ -13,11 +13,6 @@ void MGLAttribute_tp_dealloc(MGLAttribute * self) {
 	MGLAttribute_Type.tp_free((PyObject *)self);
 }
 
-int MGLAttribute_tp_init(MGLAttribute * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyTypeObject MGLAttribute_Type = {
 	PyVarObject_HEAD_INIT(0, 0)
 	"mgl.Attribute",                                        // tp_name
@@ -54,7 +49,7 @@ PyTypeObject MGLAttribute_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLAttribute_tp_init,                         // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLAttribute_tp_new,                                    // tp_new
 };

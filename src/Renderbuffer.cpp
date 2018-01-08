@@ -13,11 +13,6 @@ void MGLRenderbuffer_tp_dealloc(MGLRenderbuffer * self) {
 	MGLRenderbuffer_Type.tp_free((PyObject *)self);
 }
 
-int MGLRenderbuffer_tp_init(MGLRenderbuffer * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyObject * MGLRenderbuffer_release(MGLRenderbuffer * self) {
 	MGLRenderbuffer_Invalidate(self);
 	Py_RETURN_NONE;
@@ -64,7 +59,7 @@ PyTypeObject MGLRenderbuffer_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLRenderbuffer_tp_init,                      // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLRenderbuffer_tp_new,                                 // tp_new
 };

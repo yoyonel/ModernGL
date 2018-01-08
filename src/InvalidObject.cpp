@@ -13,11 +13,6 @@ void MGLInvalidObject_tp_dealloc(MGLInvalidObject * self) {
 	MGLInvalidObject_Type.tp_free((PyObject *)self);
 }
 
-int MGLInvalidObject_tp_init(MGLInvalidObject * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyMethodDef MGLInvalidObject_tp_methods[] = {
 	{0},
 };
@@ -62,7 +57,7 @@ PyTypeObject MGLInvalidObject_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLInvalidObject_tp_init,                     // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLInvalidObject_tp_new,                                // tp_new
 };

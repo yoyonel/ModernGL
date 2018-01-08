@@ -15,11 +15,6 @@ void MGLUniform_tp_dealloc(MGLUniform * self) {
 	MGLUniform_Type.tp_free((PyObject *)self);
 }
 
-int MGLUniform_tp_init(MGLUniform * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyObject * MGLUniform_get_value(MGLUniform * self, void * closure) {
 	return ((MGLUniform_Getter)self->value_getter)(self);
 }
@@ -102,7 +97,7 @@ PyTypeObject MGLUniform_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLUniform_tp_init,                           // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLUniform_tp_new,                                      // tp_new
 };

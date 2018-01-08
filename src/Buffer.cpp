@@ -13,11 +13,6 @@ void MGLBuffer_tp_dealloc(MGLBuffer * self) {
 	MGLBuffer_Type.tp_free((PyObject *)self);
 }
 
-int MGLBuffer_tp_init(MGLBuffer * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args) {
 	PyObject * data;
 	Py_ssize_t offset;
@@ -579,7 +574,7 @@ PyTypeObject MGLBuffer_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLBuffer_tp_init,                            // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLBuffer_tp_new,                                       // tp_new
 };

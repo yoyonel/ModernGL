@@ -16,11 +16,6 @@ void MGLContext_tp_dealloc(MGLContext * self) {
 	MGLContext_Type.tp_free((PyObject *)self);
 }
 
-int MGLContext_tp_init(MGLContext * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyObject * MGLContext_enable_only(MGLContext * self, PyObject * args) {
 	int flags;
 
@@ -3062,7 +3057,7 @@ PyTypeObject MGLContext_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLContext_tp_init,                           // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLContext_tp_new,                                      // tp_new
 };

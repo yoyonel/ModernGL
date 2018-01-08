@@ -15,11 +15,6 @@ void MGLTextureCube_tp_dealloc(MGLTextureCube * self) {
 	MGLTextureCube_Type.tp_free((PyObject *)self);
 }
 
-int MGLTextureCube_tp_init(MGLTextureCube * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyObject * MGLTextureCube_read(MGLTextureCube * self, PyObject * args) {
 	int face;
 	int alignment;
@@ -351,7 +346,7 @@ PyTypeObject MGLTextureCube_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLTextureCube_tp_init,                       // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLTextureCube_tp_new,                                  // tp_new
 };

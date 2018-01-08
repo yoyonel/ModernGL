@@ -13,11 +13,6 @@ void MGLVertexArray_tp_dealloc(MGLVertexArray * self) {
 	MGLVertexArray_Type.tp_free((PyObject *)self);
 }
 
-int MGLVertexArray_tp_init(MGLVertexArray * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 	MGLPrimitive * mode;
 	int vertices;
@@ -301,7 +296,7 @@ PyTypeObject MGLVertexArray_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLVertexArray_tp_init,                       // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLVertexArray_tp_new,                                  // tp_new
 };

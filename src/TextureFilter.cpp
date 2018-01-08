@@ -13,11 +13,6 @@ void MGLTextureFilter_tp_dealloc(MGLTextureFilter * self) {
 	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
-int MGLTextureFilter_tp_init(MGLTextureFilter * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyMethodDef MGLTextureFilter_tp_methods[] = {
 	{0},
 };
@@ -74,7 +69,7 @@ PyTypeObject MGLTextureFilter_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLTextureFilter_tp_init,                     // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLTextureFilter_tp_new,                                // tp_new
 };

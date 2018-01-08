@@ -13,11 +13,6 @@ void MGLFramebuffer_tp_dealloc(MGLFramebuffer * self) {
 	MGLFramebuffer_Type.tp_free((PyObject *)self);
 }
 
-int MGLFramebuffer_tp_init(MGLFramebuffer * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyObject * MGLFramebuffer_release(MGLFramebuffer * self) {
 	MGLFramebuffer_Invalidate(self);
 	Py_RETURN_NONE;
@@ -674,7 +669,7 @@ PyTypeObject MGLFramebuffer_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLFramebuffer_tp_init,                       // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLFramebuffer_tp_new,                                  // tp_new
 };

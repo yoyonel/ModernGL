@@ -15,11 +15,6 @@ void MGLTexture3D_tp_dealloc(MGLTexture3D * self) {
 	MGLTexture3D_Type.tp_free((PyObject *)self);
 }
 
-int MGLTexture3D_tp_init(MGLTexture3D * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyObject * MGLTexture3D_read(MGLTexture3D * self, PyObject * args) {
 	int alignment;
 
@@ -572,7 +567,7 @@ PyTypeObject MGLTexture3D_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLTexture3D_tp_init,                         // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLTexture3D_tp_new,                                    // tp_new
 };

@@ -13,11 +13,6 @@ void MGLPrimitive_tp_dealloc(MGLPrimitive * self) {
 	Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
-int MGLPrimitive_tp_init(MGLPrimitive * self, PyObject * args, PyObject * kwargs) {
-	MGLError_Set("not allowed");
-	return -1;
-}
-
 PyMethodDef MGLPrimitive_tp_methods[] = {
 	{0},
 };
@@ -74,7 +69,7 @@ PyTypeObject MGLPrimitive_Type = {
 	0,                                                      // tp_descr_get
 	0,                                                      // tp_descr_set
 	0,                                                      // tp_dictoffset
-	(initproc)MGLPrimitive_tp_init,                         // tp_init
+	0,                                                      // tp_init
 	0,                                                      // tp_alloc
 	MGLPrimitive_tp_new,                                    // tp_new
 };
