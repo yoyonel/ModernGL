@@ -213,6 +213,21 @@ struct MGLProgram {
 	int num_varyings;
 };
 
+enum MGLQueryKeys {
+	SAMPLES_PASSED,
+	ANY_SAMPLES_PASSED,
+	TIME_ELAPSED,
+	PRIMITIVES_GENERATED,
+};
+
+struct MGLQuery {
+	PyObject_HEAD
+
+	MGLContext * context;
+
+	int query_obj[4];
+};
+
 struct MGLRenderbuffer {
 	PyObject_HEAD
 
@@ -398,6 +413,7 @@ extern PyTypeObject MGLFramebuffer_Type;
 extern PyTypeObject MGLInvalidObject_Type;
 extern PyTypeObject MGLPrimitive_Type;
 extern PyTypeObject MGLProgram_Type;
+extern PyTypeObject MGLQuery_Type;
 extern PyTypeObject MGLRenderbuffer_Type;
 extern PyTypeObject MGLShader_Type;
 extern PyTypeObject MGLTexture3D_Type;

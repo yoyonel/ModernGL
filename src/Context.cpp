@@ -2267,6 +2267,61 @@ PyObject * MGLContext_compute_shader(MGLContext * self, PyObject * args) {
 	return result;
 }
 
+PyObject * MGLContext_query(MGLContext * self, PyObject * args) {
+	int samples_passed;
+	int any_samples_passed;
+	int time_elapsed;
+	int primitives_generated;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"pppp",
+		&samples_passed,
+		&any_samples_passed,
+		&time_elapsed,
+		&primitives_generated
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	// If none of them is set, all will be set.
+	if (!(samples_passed + any_samples_passed + time_elapsed + primitives_generated)) {
+		samples_passed = 1;
+		any_samples_passed = 1;
+		time_elapsed = 1;
+		primitives_generated = 1;
+	}
+
+	MGLQuery * query = (MGLQuery *)MGLQuery_Type.tp_alloc(&MGLQuery_Type, 0);
+
+	Py_INCREF(self);
+	query->context = self;
+
+	const GLMethods & gl = self->gl;
+
+	if (samples_passed) {
+		gl.GenQueries(1, (GLuint *)&query->query_obj[SAMPLES_PASSED]);
+	}
+	if (any_samples_passed) {
+		gl.GenQueries(1, (GLuint *)&query->query_obj[ANY_SAMPLES_PASSED]);
+	}
+	if (time_elapsed) {
+		gl.GenQueries(1, (GLuint *)&query->query_obj[TIME_ELAPSED]);
+	}
+	if (primitives_generated) {
+		gl.GenQueries(1, (GLuint *)&query->query_obj[PRIMITIVES_GENERATED]);
+	}
+
+	// PyObject * result = PyTuple_New(2);
+	// PyTuple_SET_ITEM(result, 0, (PyObject *)query);
+	// PyTuple_SET_ITEM(result, 1, PyLong_FromLong(query->query_obj));
+	// return result;
+
+	return (PyObject *)query;
+}
+
 PyObject * MGLContext_release(MGLContext * self) {
 	// TODO:
 	// MGLContext_Invalidate(self);
@@ -2298,6 +2353,7 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"renderbuffer", (PyCFunction)MGLContext_renderbuffer, METH_VARARGS, 0},
 	{"depth_renderbuffer", (PyCFunction)MGLContext_depth_renderbuffer, METH_VARARGS, 0},
 	{"compute_shader", (PyCFunction)MGLContext_compute_shader, METH_VARARGS, 0},
+	{"query", (PyCFunction)MGLContext_query, METH_VARARGS, 0},
 
 	{"release", (PyCFunction)MGLContext_release, METH_NOARGS, 0},
 

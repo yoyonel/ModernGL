@@ -1913,6 +1913,37 @@ class Program:
         self.mglo.release()
 
 
+class Query:
+    __slots__ = ['mglo', '_glo']
+
+    def __init__(self):
+        self.mglo = None
+        self._glo = None
+        raise NotImplementedError()
+
+    def __repr__(self):
+        return '<Query>'
+
+    def __enter__(self):
+        self.mglo.begin()
+        return self
+
+    def __exit__(self, *args):
+        self.mglo.end()
+
+    @property
+    def samples(self) -> int:
+        return self.mglo.samples
+
+    @property
+    def primitives(self) -> int:
+        return self.mglo.primitives
+
+    @property
+    def elapsed(self) -> int:
+        return self.mglo.elapsed
+
+
 class VertexArray:
     '''
         A VertexArray object is an OpenGL object that stores all of the state
@@ -2475,7 +2506,7 @@ class Context:
 
         return self._info
 
-    def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, *, viewport=None) -> None:
+    def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, *, viewport=None) -> None:
         '''
             Clear the framebuffer.
 
@@ -2501,7 +2532,7 @@ class Context:
         if viewport is not None:
             viewport = tuple(viewport)
 
-        self.mglo.fbo.clear(red, green, blue, alpha, viewport)
+        self.mglo.fbo.clear(red, green, blue, alpha, depth, viewport)
 
     def enable_only(self, flags) -> None:
         '''
@@ -2877,6 +2908,12 @@ class Context:
             members[obj.name] = obj
 
         res._members = members
+        return res
+
+    def query(self, *, samples=False, any_samples=False, time=False, primitives=False) -> 'Query':
+        res = Query.__new__(Query)
+        # res.mglo, res._glo = self.mglo.query()
+        res.mglo = self.mglo.query(samples, any_samples, time, primitives)
         return res
 
     def vertex_shader(self, source) -> 'Shader':
