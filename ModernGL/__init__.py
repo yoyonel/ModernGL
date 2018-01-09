@@ -2633,10 +2633,8 @@ class Context:
         if len(attributes) == 1 and type(attributes[0]) is not str:
             attributes = attributes[0]
 
-        index_buffer_mglo = None if index_buffer is None else index_buffer.mglo
-
         content = [(buffer, detect_format(program, attributes), attributes)]
-        return self.vertex_array(program, content, index_buffer_mglo)
+        return self.vertex_array(program, content, index_buffer)
 
     def program(self, shaders, varyings=()) -> 'Program':
         '''
