@@ -1725,7 +1725,7 @@ class ConditionalRender:
         raise TypeError()
 
     def __repr__(self):
-        return '<Query>'
+        return '<ConditionalRender>'
 
     def __enter__(self):
         self.mglo.begin_render()
@@ -1736,10 +1736,11 @@ class ConditionalRender:
 
 
 class Query:
-    __slots__ = ['mglo']
+    __slots__ = ['mglo', 'crender']
 
     def __init__(self):
         self.mglo = None
+        self.crender = None
         raise TypeError()
 
     def __repr__(self):
@@ -1763,11 +1764,6 @@ class Query:
     @property
     def elapsed(self) -> int:
         return self.mglo.elapsed
-
-    def conditional_rendering(self):
-        res = ConditionalRender.__new__(ConditionalRender)
-        res.mglo = self.mglo
-        return res
 
 
 class VertexArray:
@@ -2744,8 +2740,11 @@ class Context:
 
     def query(self, *, samples=False, any_samples=False, time=False, primitives=False) -> 'Query':
         res = Query.__new__(Query)
-        # res.mglo, res._glo = self.mglo.query()
         res.mglo = self.mglo.query(samples, any_samples, time, primitives)
+        res.crender = None
+        if samples or any_samples:
+            res.crender = ConditionalRender.__new__(ConditionalRender)
+            res.crender.mglo = res.mglo
         return res
 
     def vertex_shader(self, source) -> 'Shader':
