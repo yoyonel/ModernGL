@@ -2611,7 +2611,7 @@ class Context:
         res._index_buffer = index_buffer
         return res
 
-    def simple_vertex_array(self, program, buffer, *attributes) -> 'VertexArray':
+    def simple_vertex_array(self, program, buffer, *attributes, index_buffer=None) -> 'VertexArray':
         '''
             Create a :py:class:`VertexArray`.
 
@@ -2633,8 +2633,10 @@ class Context:
         if len(attributes) == 1 and type(attributes[0]) is not str:
             attributes = attributes[0]
 
+        index_buffer_mglo = None if index_buffer is None else index_buffer.mglo
+
         content = [(buffer, detect_format(program, attributes), attributes)]
-        return self.vertex_array(program, content, None)
+        return self.vertex_array(program, content, index_buffer_mglo)
 
     def program(self, shaders, varyings=()) -> 'Program':
         '''
