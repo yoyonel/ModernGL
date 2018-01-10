@@ -1045,6 +1045,8 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 				int scalars = attribute->dimension * attribute->array_length;
 
+				// TODO: restore errors
+
 				if (scalars != node->count) {
 					// MGLError_Set("%s size is %d not %d", name, scalars, node->count);
 					return 0;
