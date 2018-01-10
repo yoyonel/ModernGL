@@ -213,6 +213,14 @@ pytest
 
 > Some of the tests may be skipped when the supported OpenGL version is below the requirements of the given test.
 
+### Headless rendering
+
+```sh
+apt-get install xvfb
+alias xpy='xvfb-run -s "-screen 0 1x1x24" python3'
+xpy -m ModernGL
+```
+
 ## Code quality
 
 Code is tested with [pep8], [flake8], [prospector] and [pylint]
