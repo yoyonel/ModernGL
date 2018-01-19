@@ -208,7 +208,8 @@ void MGLQuery_Invalidate(MGLQuery * query) {
 	// TODO: decref
 
 	const GLMethods & gl = query->context->gl;
-	gl.DeleteTextures(1, (GLuint *)&query->query_obj);
+	// gl.DeleteTextures(1, (GLuint *)&query->query_obj);
+	// TODO: fix delete
 
 	Py_DECREF(query->context);
 	Py_TYPE(query) = &MGLInvalidObject_Type;
