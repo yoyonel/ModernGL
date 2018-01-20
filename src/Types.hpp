@@ -233,6 +233,24 @@ struct MGLRenderbuffer {
 	bool depth;
 };
 
+struct MGLScope {
+	PyObject_HEAD
+
+	MGLContext * context;
+
+	int * textures;
+	int * buffers;
+
+	int num_textures;
+	int num_buffers;
+
+	int framebuffer_obj;
+	int enable_flags;
+
+	int old_framebuffer_obj;
+	int old_enable_flags;
+};
+
 struct MGLShader {
 	PyObject_HEAD
 
@@ -399,6 +417,7 @@ extern PyTypeObject MGLPrimitive_Type;
 extern PyTypeObject MGLProgram_Type;
 extern PyTypeObject MGLQuery_Type;
 extern PyTypeObject MGLRenderbuffer_Type;
+extern PyTypeObject MGLScope_Type;
 extern PyTypeObject MGLShader_Type;
 extern PyTypeObject MGLTexture3D_Type;
 extern PyTypeObject MGLTextureCube_Type;

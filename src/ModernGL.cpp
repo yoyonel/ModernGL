@@ -260,6 +260,17 @@ bool MGL_InitializeModule(PyObject * module) {
 	}
 
 	{
+		if (PyType_Ready(&MGLScope_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Scope in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return false;
+		}
+
+		Py_INCREF(&MGLScope_Type);
+
+		PyModule_AddObject(module, "Scope", (PyObject *)&MGLScope_Type);
+	}
+
+	{
 		if (PyType_Ready(&MGLShader_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Shader in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return false;

@@ -1770,6 +1770,24 @@ class Query:
         return self.mglo.elapsed
 
 
+class Scope:
+    __slots__ = ['mglo']
+
+    def __init__(self):
+        self.mglo = None
+        raise TypeError()
+
+    def __repr__(self):
+        return '<Scope>'
+
+    def __enter__(self):
+        self.mglo.begin()
+        return self
+
+    def __exit__(self, *args):
+        self.mglo.end()
+
+
 class VertexArray:
     '''
         A VertexArray object is an OpenGL object that stores all of the state
@@ -2749,6 +2767,15 @@ class Context:
         if samples or any_samples:
             res.crender = ConditionalRender.__new__(ConditionalRender)
             res.crender.mglo = res.mglo
+        return res
+
+    def scope(self, framebuffer, enable_only, *, textures, uniform_buffers, shader_storage_buffers) -> 'Scope':
+        textures = tuple((tex.mglo, idx) for tex, idx in textures)
+        uniform_buffers = tuple((buf.mglo, idx) for buf, idx in uniform_buffers)
+        shader_storage_buffers = tuple((buf.mglo, idx) for buf, idx in shader_storage_buffers)
+
+        res = Scope.__new__(Scope)
+        res.mglo = self.mglo.scope(framebuffer.mglo, enable_only, textures, uniform_buffers, shader_storage_buffers)
         return res
 
     def vertex_shader(self, source) -> 'Shader':
