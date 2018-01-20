@@ -134,6 +134,7 @@ struct MGLContext {
 	int max_texture_units;
 	int default_texture_unit;
 
+	int enable_flags;
 	int front_face;
 	bool wireframe;
 

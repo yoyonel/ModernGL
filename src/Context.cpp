@@ -29,6 +29,8 @@ PyObject * MGLContext_enable_only(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
+	self->enable_flags = flags;
+
 	if (flags & MGL_BLEND) {
 		self->gl.Enable(GL_BLEND);
 	} else {
@@ -69,6 +71,8 @@ PyObject * MGLContext_enable(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
+	self->enable_flags |= flags;
+
 	if (flags & MGL_BLEND) {
 		self->gl.Enable(GL_BLEND);
 	}
@@ -100,6 +104,8 @@ PyObject * MGLContext_disable(MGLContext * self, PyObject * args) {
 	if (!args_ok) {
 		return 0;
 	}
+
+	self->enable_flags &= ~flags;
 
 	if (flags & MGL_BLEND) {
 		self->gl.Disable(GL_BLEND);
@@ -3192,8 +3198,9 @@ void MGLContext_Initialize(MGLContext * self) {
 		self->bound_framebuffer = self->screen;
 	}
 
-	self->wireframe = false;
+	self->enable_flags = 0;
 	self->front_face = GL_CCW;
+	self->wireframe = false;
 
 	// TODO: multisample getter setter (bool)
 }
