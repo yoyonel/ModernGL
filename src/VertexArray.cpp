@@ -368,10 +368,6 @@ void MGLVertexArray_Invalidate(MGLVertexArray * array) {
 void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 	const GLMethods & gl = vertex_array->context->gl;
 
-	PyObject * name;
-	MGLAttribute * program_attribute;
-	Py_ssize_t pos = 0;
-
 	vertex_array->num_subroutines = 0;
 	vertex_array->num_subroutines += vertex_array->program->num_vertex_shader_subroutines;
 	vertex_array->num_subroutines += vertex_array->program->num_fragment_shader_subroutines;
