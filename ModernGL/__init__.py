@@ -17,7 +17,7 @@ __version__ = '4.2.0'
 
 __all__ = [
     'Error',
-    'NOTHING', 'BLEND', 'DEPTH_TEST', 'CULL_FACE',
+    'NOTHING', 'BLEND', 'DEPTH_TEST', 'CULL_FACE', 'RASTERIZER_DISCARD',
     'Primitive',
     'TRIANGLES', 'TRIANGLE_STRIP', 'TRIANGLE_FAN', 'LINES', 'LINE_STRIP', 'LINE_LOOP', 'POINTS',
     'LINE_STRIP_ADJACENCY', 'LINES_ADJACENCY', 'TRIANGLE_STRIP_ADJACENCY', 'TRIANGLES_ADJACENCY',
@@ -51,7 +51,6 @@ class Error(Exception):
 
 mgl.set_error_class(Error)
 
-
 NOTHING = 0
 '''
     Nothing
@@ -70,6 +69,11 @@ DEPTH_TEST = 2
 CULL_FACE = 4
 '''
     Face Culling
+'''
+
+RASTERIZER_DISCARD = 8
+'''
+    Rasterizer Discard
 '''
 
 

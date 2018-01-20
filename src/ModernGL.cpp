@@ -437,14 +437,6 @@ bool MGL_InitializeModule(PyObject * module) {
 	}
 
 	{
-		PyModule_AddObject(module, "NOTHING", PyLong_FromLong(MGL_NOTHING));
-		PyModule_AddObject(module, "BLEND", PyLong_FromLong(MGL_BLEND));
-		PyModule_AddObject(module, "DEPTH_TEST", PyLong_FromLong(MGL_DEPTH_TEST));
-		PyModule_AddObject(module, "CULL_FACE", PyLong_FromLong(MGL_CULL_FACE));
-		PyModule_AddObject(module, "ENABLE_MASK", PyLong_FromLong(MGL_ENABLE_MASK));
-	}
-
-	{
 		MGL_LINEAR = (MGLTextureFilter *)MGLTextureFilter_Type.tp_alloc(&MGLTextureFilter_Type, 0);
 		MGL_LINEAR->wrapper = 0;
 		MGL_LINEAR->min_filter = GL_LINEAR;

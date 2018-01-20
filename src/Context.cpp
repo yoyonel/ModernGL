@@ -47,6 +47,12 @@ PyObject * MGLContext_enable_only(MGLContext * self, PyObject * args) {
 		self->gl.Disable(GL_CULL_FACE);
 	}
 
+	if (flags & MGL_RASTERIZER_DISCARD) {
+		self->gl.Enable(GL_RASTERIZER_DISCARD);
+	} else {
+		self->gl.Disable(GL_RASTERIZER_DISCARD);
+	}
+
 	Py_RETURN_NONE;
 }
 
@@ -75,6 +81,10 @@ PyObject * MGLContext_enable(MGLContext * self, PyObject * args) {
 		self->gl.Enable(GL_CULL_FACE);
 	}
 
+	if (flags & MGL_RASTERIZER_DISCARD) {
+		self->gl.Enable(GL_RASTERIZER_DISCARD);
+	}
+
 	Py_RETURN_NONE;
 }
 
@@ -101,6 +111,10 @@ PyObject * MGLContext_disable(MGLContext * self, PyObject * args) {
 
 	if (flags & MGL_CULL_FACE) {
 		self->gl.Disable(GL_CULL_FACE);
+	}
+
+	if (flags & MGL_RASTERIZER_DISCARD) {
+		self->gl.Disable(GL_RASTERIZER_DISCARD);
 	}
 
 	Py_RETURN_NONE;
