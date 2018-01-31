@@ -1,6 +1,6 @@
 import unittest
 
-import ModernGL
+import moderngl
 
 from common import get_context
 
@@ -15,7 +15,7 @@ class TestCase(unittest.TestCase):
         self.ctx.buffer(b'Hello World!')
 
     def test_buffer_create_string(self):
-        with self.assertRaisesRegex(ModernGL.Error, 'buffer interface'):
+        with self.assertRaisesRegex(moderngl.Error, 'buffer interface'):
             self.ctx.buffer('Hello World!')
 
     def test_buffer_reserve(self):
@@ -26,7 +26,7 @@ class TestCase(unittest.TestCase):
         self.assertEqual(buf.size, 2 * 1024)
 
     def test_buffer_data_and_reserve(self):
-        with self.assertRaises(ModernGL.Error):
+        with self.assertRaises(moderngl.Error):
             self.ctx.buffer(b'Hello World!', reserve=1024)
 
     def test_data_size(self):

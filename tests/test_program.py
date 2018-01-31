@@ -1,7 +1,7 @@
 import unittest
 
 from common import get_context
-import ModernGL
+import moderngl
 
 
 class TestCase(unittest.TestCase):
@@ -44,9 +44,9 @@ class TestCase(unittest.TestCase):
         self.assertIn('pos', program)
         self.assertIn('scale', program)
 
-        self.assertIsInstance(program['vert'], ModernGL.Attribute)
-        self.assertIsInstance(program['pos'], ModernGL.Uniform)
-        self.assertIsInstance(program['scale'], ModernGL.Uniform)
+        self.assertIsInstance(program['vert'], moderngl.Attribute)
+        self.assertIsInstance(program['pos'], moderngl.Uniform)
+        self.assertIsInstance(program['scale'], moderngl.Uniform)
 
 
 if __name__ == '__main__':

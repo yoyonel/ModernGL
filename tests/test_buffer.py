@@ -1,6 +1,6 @@
 import unittest
 
-import ModernGL
+import moderngl
 
 from common import get_context
 

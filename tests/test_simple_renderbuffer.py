@@ -1,6 +1,6 @@
 import unittest
 
-import ModernGL
+import moderngl
 
 from common import get_context
 
@@ -31,7 +31,7 @@ class TestCase(unittest.TestCase):
         self.ctx.depth_renderbuffer((64, 64), samples=2)
 
     def test_renderbuffer_invalid_samples(self):
-        with self.assertRaisesRegex(ModernGL.Error, 'sample'):
+        with self.assertRaisesRegex(moderngl.Error, 'sample'):
             self.ctx.renderbuffer((64, 64), samples=3)
 
 

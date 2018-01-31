@@ -1,6 +1,6 @@
 import unittest
 
-import ModernGL
+import moderngl
 
 from common import get_context
 
@@ -61,14 +61,14 @@ class TestCase(unittest.TestCase):
         self.assertIn('Color', prog)
         self.assertIn('Alpha', prog)
 
-        self.assertIsInstance(prog['in_vert'], ModernGL.Attribute)
-        self.assertIsInstance(prog['Position'], ModernGL.Uniform)
-        self.assertIsInstance(prog['Scale'], ModernGL.Uniform)
-        self.assertIsInstance(prog['Mvp'], ModernGL.Uniform)
-        self.assertIsInstance(prog['UseTexture'], ModernGL.Uniform)
-        self.assertIsInstance(prog['Texture'], ModernGL.Uniform)
-        self.assertIsInstance(prog['Color'], ModernGL.Uniform)
-        self.assertIsInstance(prog['Alpha'], ModernGL.Uniform)
+        self.assertIsInstance(prog['in_vert'], moderngl.Attribute)
+        self.assertIsInstance(prog['Position'], moderngl.Uniform)
+        self.assertIsInstance(prog['Scale'], moderngl.Uniform)
+        self.assertIsInstance(prog['Mvp'], moderngl.Uniform)
+        self.assertIsInstance(prog['UseTexture'], moderngl.Uniform)
+        self.assertIsInstance(prog['Texture'], moderngl.Uniform)
+        self.assertIsInstance(prog['Color'], moderngl.Uniform)
+        self.assertIsInstance(prog['Alpha'], moderngl.Uniform)
 
 
 if __name__ == '__main__':

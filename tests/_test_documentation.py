@@ -2,7 +2,7 @@ import re
 import os
 import unittest
 
-import ModernGL
+import moderngl
 
 
 EMPTY_SET = set()
@@ -36,7 +36,7 @@ def detect_class(filename, classname):
 
 
 def detect_implementation(classname):
-    return set(x for x in dir(getattr(ModernGL, classname)) if not x.startswith('_'))
+    return set(x for x in dir(getattr(moderngl, classname)) if not x.startswith('_'))
 
 
 class TestCase(unittest.TestCase):

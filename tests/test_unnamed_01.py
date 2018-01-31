@@ -1,7 +1,7 @@
 import struct
 import unittest
 
-import ModernGL
+import moderngl
 
 from common import get_context
 
@@ -40,19 +40,19 @@ class TestBuffer(unittest.TestCase):
         ])
 
         self.prog['mult'].value = 0.0
-        vao.transform(res, ModernGL.POINTS)
+        vao.transform(res, moderngl.POINTS)
         x, y = struct.unpack('2f', res.read())
         self.assertAlmostEqual(x, 0.0)
         self.assertAlmostEqual(y, 0.0)
 
         self.prog['mult'].value = 1.0
-        vao.transform(res, ModernGL.POINTS)
+        vao.transform(res, moderngl.POINTS)
         x, y = struct.unpack('2f', res.read())
         self.assertAlmostEqual(x, 11.0)
         self.assertAlmostEqual(y, 18.0)
 
         self.prog['mult'].value = 2.0
-        vao.transform(res, ModernGL.POINTS)
+        vao.transform(res, moderngl.POINTS)
         x, y = struct.unpack('2f', res.read())
         self.assertAlmostEqual(x, 22.0)
         self.assertAlmostEqual(y, 36.0)

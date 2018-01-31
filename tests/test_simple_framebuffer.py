@@ -1,6 +1,6 @@
 import unittest
 
-import ModernGL
+import moderngl
 
 from common import get_context
 
@@ -29,12 +29,12 @@ class TestCase(unittest.TestCase):
         self.assertEqual(len(fbo2.color_attachments), 2)
         self.assertEqual(len(fbo3.color_attachments), 3)
 
-        self.assertIsInstance(fbo1.color_attachments[0], ModernGL.Renderbuffer)
-        self.assertIsInstance(fbo2.color_attachments[0], ModernGL.Renderbuffer)
-        self.assertIsInstance(fbo2.color_attachments[1], ModernGL.Renderbuffer)
-        self.assertIsInstance(fbo3.color_attachments[0], ModernGL.Renderbuffer)
-        self.assertIsInstance(fbo3.color_attachments[1], ModernGL.Renderbuffer)
-        self.assertIsInstance(fbo3.color_attachments[2], ModernGL.Renderbuffer)
+        self.assertIsInstance(fbo1.color_attachments[0], moderngl.Renderbuffer)
+        self.assertIsInstance(fbo2.color_attachments[0], moderngl.Renderbuffer)
+        self.assertIsInstance(fbo2.color_attachments[1], moderngl.Renderbuffer)
+        self.assertIsInstance(fbo3.color_attachments[0], moderngl.Renderbuffer)
+        self.assertIsInstance(fbo3.color_attachments[1], moderngl.Renderbuffer)
+        self.assertIsInstance(fbo3.color_attachments[2], moderngl.Renderbuffer)
 
         self.assertIn(rbo1, fbo1.color_attachments)
         self.assertIn(rbo2, fbo2.color_attachments)
@@ -52,7 +52,7 @@ class TestCase(unittest.TestCase):
         fbo2 = self.ctx.framebuffer(rbo1, rbo2)
 
         self.assertIsNone(fbo1.depth_attachment)
-        self.assertIsInstance(fbo2.depth_attachment, ModernGL.Renderbuffer)
+        self.assertIsInstance(fbo2.depth_attachment, moderngl.Renderbuffer)
 
         self.assertNotEqual(fbo1.depth_attachment, rbo2)
         self.assertEqual(fbo2.depth_attachment, rbo2)
@@ -108,13 +108,13 @@ class TestCase(unittest.TestCase):
         self.assertEqual(fbo.color_mask, expected)
 
     def test_framebuffer_size_mismatch(self):
-        with self.assertRaisesRegex(ModernGL.Error, 'size'):
+        with self.assertRaisesRegex(moderngl.Error, 'size'):
             rbo1 = self.ctx.renderbuffer((16, 16))
             rbo2 = self.ctx.depth_renderbuffer((32, 32))
             self.ctx.framebuffer(rbo1, rbo2)
 
     def test_framebuffer_color_attachments_size_mismatch(self):
-        with self.assertRaisesRegex(ModernGL.Error, 'size'):
+        with self.assertRaisesRegex(moderngl.Error, 'size'):
             rbo1 = self.ctx.renderbuffer((16, 16))
             rbo2 = self.ctx.renderbuffer((32, 32))
             self.ctx.framebuffer([rbo1, rbo2])
@@ -143,21 +143,21 @@ class TestCase(unittest.TestCase):
         if self.max_samples < 2:
             self.skipTest('multisampling is not supported')
 
-        with self.assertRaisesRegex(ModernGL.Error, 'sample'):
+        with self.assertRaisesRegex(moderngl.Error, 'sample'):
             rbo1 = self.ctx.renderbuffer((16, 16))
             rbo2 = self.ctx.depth_renderbuffer((16, 16), samples=2)
             self.ctx.framebuffer(rbo1, rbo2)
 
     def test_empty_framebuffer(self):
-        with self.assertRaisesRegex(ModernGL.Error, 'empty'):
+        with self.assertRaisesRegex(moderngl.Error, 'empty'):
             self.ctx.framebuffer([])
 
     def test_framebuffer_having_depth_in_colors(self):
-        with self.assertRaisesRegex(ModernGL.Error, r'(color|depth)'):
+        with self.assertRaisesRegex(moderngl.Error, r'(color|depth)'):
             self.ctx.framebuffer(self.ctx.depth_renderbuffer((16, 16)))
 
     def test_framebuffer_having_color_in_depth(self):
-        with self.assertRaisesRegex(ModernGL.Error, r'(color|depth)'):
+        with self.assertRaisesRegex(moderngl.Error, r'(color|depth)'):
             self.ctx.framebuffer(
                 self.ctx.renderbuffer((16, 16)),
                 self.ctx.renderbuffer((16, 16)),

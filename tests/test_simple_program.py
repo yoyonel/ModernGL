@@ -1,6 +1,6 @@
 import unittest
 
-import ModernGL
+import moderngl
 
 from common import get_context
 
@@ -82,16 +82,16 @@ class TestCase(unittest.TestCase):
     def test_program_geometry_primitives_2(self):
         program = self.ctx.program([self.vertex_shader, self.geometry_shader])
 
-        self.assertIsInstance(program.geometry_input, ModernGL.Primitive)
-        self.assertIsInstance(program.geometry_output, ModernGL.Primitive)
+        self.assertIsInstance(program.geometry_input, moderngl.Primitive)
+        self.assertIsInstance(program.geometry_output, moderngl.Primitive)
         self.assertEqual(program.geometry_vertices, 2)
 
     def test_program_duplicate_shader_1(self):
-        with self.assertRaisesRegex(ModernGL.Error, 'duplicate'):
+        with self.assertRaisesRegex(moderngl.Error, 'duplicate'):
             self.ctx.program([self.vertex_shader, self.vertex_shader])
 
     def test_program_duplicate_shader_2(self):
-        with self.assertRaisesRegex(ModernGL.Error, 'duplicate'):
+        with self.assertRaisesRegex(moderngl.Error, 'duplicate'):
             self.ctx.program([self.vertex_shader, self.fragment_shader, self.fragment_shader])
 
 

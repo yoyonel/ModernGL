@@ -144,7 +144,7 @@ classifiers = [
 ]
 
 args = {
-    'name': 'ModernGL',
+    'name': 'moderngl',
     'version': '5.0.0',
     'description': short_description,
     'long_description': long_description.strip(),
@@ -155,7 +155,7 @@ args = {
     'license': 'MIT',
     'classifiers': classifiers,
     'keywords': keywords,
-    'packages': ['ModernGL', 'ModernGL.ext'],
+    'packages': ['moderngl', 'moderngl.ext'],
     'install_requires': install_requires,
     'ext_modules': [ModernGL],
     'platforms': ['any'],

@@ -2,7 +2,7 @@ import struct
 import unittest
 import warnings
 
-import ModernGL
+import moderngl
 
 from common import get_context
 
@@ -167,11 +167,11 @@ class TestCase(unittest.TestCase):
                     warnings.warn('skipping %s' % vtype['type'])
                     continue
 
-                fmt = ModernGL.detect_format(prog, ['v_in'])
+                fmt = moderngl.detect_format(prog, ['v_in'])
                 vbo1 = self.ctx.buffer(struct.pack(fmt, *vtype['input']))
                 vbo2 = self.ctx.buffer(b'\xAA' * struct.calcsize(fmt))
                 vao = self.ctx.simple_vertex_array(prog, vbo1, ['v_in'])
-                vao.transform(vbo2, ModernGL.POINTS, 1)
+                vao.transform(vbo2, moderngl.POINTS, 1)
 
                 for a, b in zip(struct.unpack(fmt, vbo2.read()), vtype['output']):
                     self.assertAlmostEqual(a, b)
@@ -201,11 +201,11 @@ class TestCase(unittest.TestCase):
                     warnings.warn('skipping %s' % vtype['type'])
                     continue
 
-                fmt = ModernGL.detect_format(prog, ['v_in'])
+                fmt = moderngl.detect_format(prog, ['v_in'])
                 vbo1 = self.ctx.buffer(struct.pack(fmt, *(vtype['input'] * 2)))
                 vbo2 = self.ctx.buffer(b'\xAA' * struct.calcsize(fmt))
                 vao = self.ctx.simple_vertex_array(prog, vbo1, ['v_in'])
-                vao.transform(vbo2, ModernGL.POINTS, 1)
+                vao.transform(vbo2, moderngl.POINTS, 1)
 
                 for a, b in zip(struct.unpack(fmt, vbo2.read()), vtype['output'] * 2):
                     self.assertAlmostEqual(a, b)

@@ -18,7 +18,7 @@ class TestCase(unittest.TestCase):
 
     def test_version(self):
         setup = readfile(os.path.join(repo, 'setup.py'))
-        init = readfile(os.path.join(repo, 'ModernGL', '__init__.py'))
+        init = readfile(os.path.join(repo, 'moderngl', '__init__.py'))
         docs = readfile(os.path.join(repo, 'docs', 'conf.py'))
 
         match0 = re.search(r'\'version\': \'(\d+\.\d+\.\d+)\'', setup, flags=re.M)
@@ -27,7 +27,7 @@ class TestCase(unittest.TestCase):
         match2 = re.search(r'version = \'(\d+\.\d+\.\d+)\'', docs, flags=re.M)
         match3 = re.search(r'release = \'(\d+\.\d+\.\d+)\'', docs, flags=re.M)
 
-        self.assertEqual(match0.group(1), match1.group(1), msg='Version error: ModernGL/__init__.py')
+        self.assertEqual(match0.group(1), match1.group(1), msg='Version error: moderngl/__init__.py')
         self.assertEqual(match0.group(1), match2.group(1), msg='Version error: docs/conf.py')
         self.assertEqual(match0.group(1), match3.group(1), msg='Version error: docs/conf.py')
 

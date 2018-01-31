@@ -1,7 +1,7 @@
 import struct
 import unittest
 
-import ModernGL
+import moderngl
 
 from common import get_context
 
@@ -44,14 +44,14 @@ class TestCase(unittest.TestCase):
         fbo.use()
         texture.use()
 
-        texture.filter = ModernGL.LINEAR
-        self.vao.render(ModernGL.TRIANGLE_STRIP)
+        texture.filter = moderngl.LINEAR
+        self.vao.render(moderngl.TRIANGLE_STRIP)
 
         r, g, b = struct.unpack('3B', fbo.read((8, 8, 1, 1)))
         self.assertTrue(abs(r - 49) < 8 and abs(g - 63) < 8 and abs(b - 63) < 8)
 
-        texture.filter = ModernGL.NEAREST
-        self.vao.render(ModernGL.TRIANGLE_STRIP)
+        texture.filter = moderngl.NEAREST
+        self.vao.render(moderngl.TRIANGLE_STRIP)
 
         r, g, b = struct.unpack('3B', fbo.read((6, 6, 1, 1)))
         self.assertTrue(abs(r - 255) < 8 and abs(g - 0) < 8 and abs(b - 0) < 8)
@@ -74,8 +74,8 @@ class TestCase(unittest.TestCase):
         fbo.use()
         texture.use()
 
-        texture.filter = ModernGL.NEAREST
-        self.vao.render(ModernGL.TRIANGLE_STRIP)
+        texture.filter = moderngl.NEAREST
+        self.vao.render(moderngl.TRIANGLE_STRIP)
 
         r, g, b = struct.unpack('3B', fbo.read((5, 7, 1, 1)))
         self.assertTrue(abs(r - 255) < 8 and abs(g - 0) < 8 and abs(b - 0) < 8)
@@ -85,8 +85,8 @@ class TestCase(unittest.TestCase):
 
         texture.write(pixels2)
 
-        texture.filter = ModernGL.NEAREST
-        self.vao.render(ModernGL.TRIANGLE_STRIP)
+        texture.filter = moderngl.NEAREST
+        self.vao.render(moderngl.TRIANGLE_STRIP)
 
         r, g, b = struct.unpack('3B', fbo.read((5, 7, 1, 1)))
         self.assertTrue(abs(r - 20) < 8 and abs(g - 30) < 8 and abs(b - 40) < 8)
@@ -107,8 +107,8 @@ class TestCase(unittest.TestCase):
         texture.use()
 
         texture.write(pbo1)
-        texture.filter = ModernGL.NEAREST
-        self.vao.render(ModernGL.TRIANGLE_STRIP)
+        texture.filter = moderngl.NEAREST
+        self.vao.render(moderngl.TRIANGLE_STRIP)
 
         r, g, b = struct.unpack('3B', fbo.read((5, 7, 1, 1)))
         self.assertTrue(abs(r - 255) < 8 and abs(g - 0) < 8 and abs(b - 0) < 8)
@@ -117,8 +117,8 @@ class TestCase(unittest.TestCase):
         self.assertTrue(abs(r - 0) < 8 and abs(g - 255) < 8 and abs(b - 0) < 8)
 
         texture.write(pbo2)
-        texture.filter = ModernGL.NEAREST
-        self.vao.render(ModernGL.TRIANGLE_STRIP)
+        texture.filter = moderngl.NEAREST
+        self.vao.render(moderngl.TRIANGLE_STRIP)
 
         r, g, b = struct.unpack('3B', fbo.read((5, 7, 1, 1)))
         self.assertTrue(abs(r - 20) < 8 and abs(g - 30) < 8 and abs(b - 40) < 8)

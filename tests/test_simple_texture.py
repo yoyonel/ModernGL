@@ -1,6 +1,6 @@
 import unittest
 
-import ModernGL
+import moderngl
 
 from common import get_context
 
@@ -43,7 +43,7 @@ class TestCase(unittest.TestCase):
         if self.max_samples < 2:
             self.skipTest('multisampling is not supported')
 
-        with self.assertRaisesRegex(ModernGL.Error, 'sample'):
+        with self.assertRaisesRegex(moderngl.Error, 'sample'):
             self.ctx.texture((16, 16), 3, samples=3)
 
     def test_texture_get_swizzle(self):

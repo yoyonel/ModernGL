@@ -1,7 +1,7 @@
 import struct
 import unittest
 
-import ModernGL
+import moderngl
 
 from common import get_context
 
@@ -31,25 +31,25 @@ class TestCase(unittest.TestCase):
         res = self.ctx.buffer(reserve=struct.calcsize('8f'))
 
         vao = self.ctx.simple_vertex_array(program, vbo, ['in_vert'])
-        vao.transform(res, ModernGL.POINTS, 2)
+        vao.transform(res, moderngl.POINTS, 2)
 
         for a, b in zip(struct.unpack('8f', res.read()), (1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0)):
             self.assertAlmostEqual(a, b)
 
         vao.bind('in_vert', vbo, offset=4, stride=0, divisor=0)
-        vao.transform(res, ModernGL.POINTS, 2)
+        vao.transform(res, moderngl.POINTS, 2)
 
         for a, b in zip(struct.unpack('8f', res.read()), (2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0)):
             self.assertAlmostEqual(a, b)
 
         vao.bind('in_vert', vbo, offset=8, stride=20, divisor=0)
-        vao.transform(res, ModernGL.POINTS, 2)
+        vao.transform(res, moderngl.POINTS, 2)
 
         for a, b in zip(struct.unpack('8f', res.read()), (3.0, 4.0, 5.0, 6.0, 8.0, 9.0, 10.0, 11.0)):
             self.assertAlmostEqual(a, b)
 
         vao.bind('in_vert', vbo, offset=12, stride=0, divisor=1)
-        vao.transform(res, ModernGL.POINTS, 2)
+        vao.transform(res, moderngl.POINTS, 2)
 
         for a, b in zip(struct.unpack('8f', res.read()), (4.0, 5.0, 6.0, 7.0, 4.0, 5.0, 6.0, 7.0)):
             self.assertAlmostEqual(a, b)

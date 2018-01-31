@@ -1,7 +1,7 @@
 import struct
 import unittest
 
-import ModernGL
+import moderngl
 
 from common import get_context
 
@@ -37,7 +37,7 @@ class TestBuffer(unittest.TestCase):
             (buf_v2, '2f/i', ['in_v2']),
         ])
 
-        vao.transform(res, ModernGL.POINTS)
+        vao.transform(res, moderngl.POINTS)
         tup = struct.unpack('8f', res.read())
         self.assertAlmostEqual(tup[0], 11.0)
         self.assertAlmostEqual(tup[1], 102.0)

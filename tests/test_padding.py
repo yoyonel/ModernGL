@@ -1,7 +1,7 @@
 import struct
 import unittest
 
-import ModernGL
+import moderngl
 
 from common import get_context
 
@@ -43,7 +43,7 @@ class TestCase(unittest.TestCase):
             (buf, 'ixi12xii', ['a_in', 'b_in', 'c_in', 'd_in']),
         ])
 
-        vao.transform(res, ModernGL.POINTS)
+        vao.transform(res, moderngl.POINTS)
         a, b, c, d = struct.unpack('=iiii', res.read())
 
         self.assertEqual(a, 2)
@@ -59,7 +59,7 @@ class TestCase(unittest.TestCase):
             (buf, 'i8x', ['a_in']),
         ])
 
-        vao.transform(res, ModernGL.POINTS)
+        vao.transform(res, moderngl.POINTS)
 
         self.assertEqual(vao.vertices, 4)
 
@@ -78,7 +78,7 @@ class TestCase(unittest.TestCase):
             (buf, '128xiiii', ['a_in', 'b_in', 'c_in', 'd_in']),
         ])
 
-        vao.transform(res, ModernGL.POINTS)
+        vao.transform(res, moderngl.POINTS)
         a, b, c, d = struct.unpack('=iiii', res.read())
 
         self.assertEqual(a, 2)
