@@ -16,6 +16,7 @@ build.py
 
 .tox
 .cache
+.pytest_cache
 
 .vscode/*
 !.vscode/extensions.json
