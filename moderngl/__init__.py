@@ -51,30 +51,12 @@ class Error(Exception):
 
 mgl.set_error_class(Error)
 
+
 NOTHING = 0
-'''
-    Nothing
-'''
-
 BLEND = 1
-'''
-    Blending
-'''
-
 DEPTH_TEST = 2
-'''
-    Depth Test
-'''
-
 CULL_FACE = 4
-'''
-    Face Culling
-'''
-
 RASTERIZER_DISCARD = 8
-'''
-    Rasterizer Discard
-'''
 
 
 class Primitive:
