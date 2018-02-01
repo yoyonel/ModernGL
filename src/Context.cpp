@@ -469,18 +469,21 @@ PyObject * MGLContext_texture(MGLContext * self, PyObject * args) {
 
 	int samples;
 	int alignment;
-	int floats;
+
+	const char * dtype;
+	int dtype_size;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"(II)IOIIp",
+		"(II)IOIIs#",
 		&width,
 		&height,
 		&components,
 		&data,
 		&samples,
 		&alignment,
-		&floats
+		&dtype,
+		&dtype_size
 	);
 
 	if (!args_ok) {
@@ -507,7 +510,14 @@ PyObject * MGLContext_texture(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	int expected_size = width * components * (floats ? 4 : 1);
+	if (dtype_size != 2) {
+		MGLError_Set("dtype must be 'u1', 'u2', 'u4', 'i1', 'i2', 'i4', 'f2' or 'f4'");
+		return 0;
+	}
+
+	MGLDataType data_type = from_dtype(dtype);
+
+	int expected_size = width * components * data_type.size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 
@@ -533,13 +543,11 @@ PyObject * MGLContext_texture(MGLContext * self, PyObject * args) {
 	}
 
 	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-	const int int_formats[] = {0, GL_R8, GL_RG8, GL_RGB8, GL_RGBA8};
-	const int float_formats[] = {0, GL_R32F, GL_RG32F, GL_RGB32F, GL_RGBA32F};
 
 	int texture_target = samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
-	int pixel_type = floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+	int pixel_type = data_type.gl_type;
 	int base_format = base_formats[components];
-	int internal_format = floats ? float_formats[components] : int_formats[components];
+	int internal_format = data_type.internal_format[components];
 
 	const GLMethods & gl = self->gl;
 
@@ -576,7 +584,7 @@ PyObject * MGLContext_texture(MGLContext * self, PyObject * args) {
 	texture->height = height;
 	texture->components = components;
 	texture->samples = samples;
-	texture->floats = floats ? true : false;
+	texture->data_type = data_type;
 	texture->depth = false;
 
 	Py_INCREF(MGL_LINEAR);
@@ -606,18 +614,21 @@ PyObject * MGLContext_texture3d(MGLContext * self, PyObject * args) {
 	PyObject * data;
 
 	int alignment;
-	int floats;
+
+	const char * dtype;
+	int dtype_size;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"(III)IOIp",
+		"(III)IOIs#",
 		&width,
 		&height,
 		&depth,
 		&components,
 		&data,
 		&alignment,
-		&floats
+		&dtype,
+		&dtype_size
 	);
 
 	if (!args_ok) {
@@ -634,7 +645,14 @@ PyObject * MGLContext_texture3d(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	int expected_size = width * components * (floats ? 4 : 1);
+	if (dtype_size != 2) {
+		MGLError_Set("dtype must be 'u1', 'u2', 'u4', 'i1', 'i2', 'i4', 'f2' or 'f4'");
+		return 0;
+	}
+
+	MGLDataType data_type = from_dtype(dtype);
+
+	int expected_size = width * components * data_type.size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height * depth;
 
@@ -660,12 +678,10 @@ PyObject * MGLContext_texture3d(MGLContext * self, PyObject * args) {
 	}
 
 	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-	const int int_formats[] = {0, GL_R8, GL_RG8, GL_RGB8, GL_RGBA8};
-	const int float_formats[] = {0, GL_R32F, GL_RG32F, GL_RGB32F, GL_RGBA32F};
 
-	int pixel_type = floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+	int pixel_type = data_type.gl_type;
 	int base_format = base_formats[components];
-	int internal_format = floats ? float_formats[components] : int_formats[components];
+	int internal_format = data_type.internal_format[components];
 
 	const GLMethods & gl = self->gl;
 
@@ -697,7 +713,7 @@ PyObject * MGLContext_texture3d(MGLContext * self, PyObject * args) {
 	texture->height = height;
 	texture->depth = depth;
 	texture->components = components;
-	texture->floats = floats ? true : false;
+	texture->data_type = data_type;
 
 	Py_INCREF(MGL_LINEAR);
 	texture->filter = MGL_LINEAR;
@@ -726,17 +742,20 @@ PyObject * MGLContext_texture_cube(MGLContext * self, PyObject * args) {
 	PyObject * data;
 
 	int alignment;
-	int floats;
+
+	const char * dtype;
+	int dtype_size;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"(II)IOIp",
+		"(II)IOIs#",
 		&width,
 		&height,
 		&components,
 		&data,
 		&alignment,
-		&floats
+		&dtype,
+		&dtype_size
 	);
 
 	if (!args_ok) {
@@ -753,7 +772,14 @@ PyObject * MGLContext_texture_cube(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	int expected_size = width * components * (floats ? 4 : 1);
+	if (dtype_size != 2) {
+		MGLError_Set("dtype must be 'u1', 'u2', 'u4', 'i1', 'i2', 'i4', 'f2' or 'f4'");
+		return 0;
+	}
+
+	MGLDataType data_type = from_dtype(dtype);
+
+	int expected_size = width * components * data_type.size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height * 6;
 
@@ -779,12 +805,10 @@ PyObject * MGLContext_texture_cube(MGLContext * self, PyObject * args) {
 	}
 
 	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-	const int int_formats[] = {0, GL_R8, GL_RG8, GL_RGB8, GL_RGBA8};
-	const int float_formats[] = {0, GL_R32F, GL_RG32F, GL_RGB32F, GL_RGBA32F};
 
-	int pixel_type = floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+	int pixel_type = data_type.gl_type;
 	int base_format = base_formats[components];
-	int internal_format = floats ? float_formats[components] : int_formats[components];
+	int internal_format = data_type.internal_format[components];
 
 	const GLMethods & gl = self->gl;
 
@@ -833,7 +857,7 @@ PyObject * MGLContext_texture_cube(MGLContext * self, PyObject * args) {
 	texture->width = width;
 	texture->height = height;
 	texture->components = components;
-	texture->floats = floats ? true : false;
+	texture->data_type = data_type;
 
 	Py_INCREF(self);
 	texture->context = self;
@@ -947,7 +971,7 @@ PyObject * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	texture->height = height;
 	texture->components = 1;
 	texture->samples = samples;
-	texture->floats = true;
+	texture->data_type = from_dtype("f4");
 	texture->depth = true;
 
 	Py_INCREF(MGL_LINEAR);
@@ -2113,16 +2137,19 @@ PyObject * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 	int components;
 
 	int samples;
-	int floats;
+
+	const char * dtype;
+	int dtype_size;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"(II)IIp",
+		"(II)IIs#",
 		&width,
 		&height,
 		&components,
 		&samples,
-		&floats
+		&dtype,
+		&dtype_size
 	);
 
 	if (!args_ok) {
@@ -2139,10 +2166,14 @@ PyObject * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	const int int_formats[] = {0, GL_R8, GL_RG8, GL_RGB8, GL_RGBA8};
-	const int float_formats[] = {0, GL_R32F, GL_RG32F, GL_RGB32F, GL_RGBA32F};
+	if (dtype_size != 2) {
+		MGLError_Set("dtype must be 'u1', 'u2', 'u4', 'i1', 'i2', 'i4', 'f2' or 'f4'");
+		return 0;
+	}
 
-	int format = floats ? float_formats[components] : int_formats[components];
+	MGLDataType data_type = from_dtype(dtype);
+
+	int format = data_type.internal_format[components];
 
 	const GLMethods & gl = self->gl;
 
@@ -2169,7 +2200,7 @@ PyObject * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 	renderbuffer->height = height;
 	renderbuffer->components = components;
 	renderbuffer->samples = samples;
-	renderbuffer->floats = floats ? true : false;
+	renderbuffer->data_type = data_type;
 	renderbuffer->depth = false;
 
 	Py_INCREF(self);
@@ -2231,7 +2262,7 @@ PyObject * MGLContext_depth_renderbuffer(MGLContext * self, PyObject * args) {
 	renderbuffer->height = height;
 	renderbuffer->components = 1;
 	renderbuffer->samples = samples;
-	renderbuffer->floats = true;
+	renderbuffer->data_type = from_dtype("f4");
 	renderbuffer->depth = true;
 
 	Py_INCREF(self);

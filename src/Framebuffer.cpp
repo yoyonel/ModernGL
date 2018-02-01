@@ -149,16 +149,19 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	int components;
 	int alignment;
 	int attachment;
-	int floats;
+
+	const char * dtype;
+	int dtype_size;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OIIIp",
+		"OIIIs#",
 		&viewport,
 		&components,
 		&attachment,
 		&alignment,
-		&floats
+		&dtype,
+		&dtype_size
 	);
 
 	if (!args_ok) {
@@ -169,6 +172,13 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 		MGLError_Set("the alignment must be 1, 2, 4 or 8");
 		return 0;
 	}
+
+	if (dtype_size != 2) {
+		MGLError_Set("dtype must be 'u1', 'u2', 'u4', 'i1', 'i2', 'i4', 'f2' or 'f4'");
+		return 0;
+	}
+
+	MGLDataType data_type = from_dtype(dtype);
 
 	int x = 0;
 	int y = 0;
@@ -207,14 +217,14 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 
 	}
 
-	int expected_size = width * components * (floats ? 4 : 1);
+	int expected_size = width * components * data_type.size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 
-	int type = floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+	int pixel_type = data_type.gl_type;
 
-	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-	int format = formats[components];
+	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
+	int base_format = base_formats[components];
 
 	PyObject * result = PyBytes_FromStringAndSize(0, expected_size);
 	char * data = PyBytes_AS_STRING(result);
@@ -230,7 +240,7 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	// }
 	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-	gl.ReadPixels(x, y, width, height, format, type, data);
+	gl.ReadPixels(x, y, width, height, base_format, pixel_type, data);
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->context->bound_framebuffer->framebuffer_obj);
 
 	return result;
@@ -242,18 +252,20 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 	int components;
 	int attachment;
 	int alignment;
-	int floats;
+	const char * dtype;
+	int dtype_size;
 	Py_ssize_t write_offset;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OOIIIpn",
+		"OOIIIs#n",
 		&data,
 		&viewport,
 		&components,
 		&attachment,
 		&alignment,
-		&floats,
+		&dtype,
+		&dtype_size,
 		&write_offset
 	);
 
@@ -265,6 +277,13 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 		MGLError_Set("the alignment must be 1, 2, 4 or 8");
 		return 0;
 	}
+
+	if (dtype_size != 2) {
+		MGLError_Set("dtype must be 'u1', 'u2', 'u4', 'i1', 'i2', 'i4', 'f2' or 'f4'");
+		return 0;
+	}
+
+	MGLDataType data_type = from_dtype(dtype);
 
 	int x = 0;
 	int y = 0;
@@ -303,14 +322,14 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 
 	}
 
-	int expected_size = width * components * (floats ? 4 : 1);
+	int expected_size = width * components * data_type.size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 
-	int type = floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+	int pixel_type = data_type.gl_type;
 
-	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-	int format = formats[components];
+	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
+	int base_format = base_formats[components];
 
 	if (Py_TYPE(data) == &MGLBuffer_Type) {
 
@@ -323,7 +342,7 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 		gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-		gl.ReadPixels(x, y, width, height, format, type, (void *)write_offset);
+		gl.ReadPixels(x, y, width, height, base_format, pixel_type, (void *)write_offset);
 		gl.BindFramebuffer(GL_FRAMEBUFFER, self->context->bound_framebuffer->framebuffer_obj);
 		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
@@ -351,7 +370,7 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 		gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-		gl.ReadPixels(x, y, width, height, format, type, ptr);
+		gl.ReadPixels(x, y, width, height, base_format, pixel_type, ptr);
 		gl.BindFramebuffer(GL_FRAMEBUFFER, self->context->bound_framebuffer->framebuffer_obj);
 
 		PyBuffer_Release(&buffer_view);

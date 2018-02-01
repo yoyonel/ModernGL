@@ -66,6 +66,12 @@ struct MGLUniform;
 struct MGLUniformBlock;
 struct MGLVertexArray;
 
+struct MGLDataType {
+	int * internal_format;
+	int gl_type;
+	int size;
+};
+
 struct MGLAttribute {
 	PyObject_HEAD
 
@@ -229,7 +235,7 @@ struct MGLRenderbuffer {
 
 	int samples;
 
-	bool floats;
+	MGLDataType data_type;
 	bool depth;
 };
 
@@ -279,7 +285,7 @@ struct MGLTexture {
 
 	int samples;
 
-	bool floats;
+	MGLDataType data_type;
 	bool depth;
 
 	MGLTextureFilter * filter;
@@ -302,7 +308,7 @@ struct MGLTexture3D {
 
 	int samples;
 
-	bool floats;
+	MGLDataType data_type;
 
 	MGLTextureFilter * filter;
 
@@ -324,7 +330,7 @@ struct MGLTextureCube {
 
 	int components;
 
-	bool floats;
+	MGLDataType data_type;
 };
 
 struct MGLTextureFilter {
@@ -382,6 +388,8 @@ struct MGLVertexArray {
 	int vertex_array_obj;
 	int num_vertices;
 };
+
+MGLDataType from_dtype(const char * dtype);
 
 void MGLAttribute_Invalidate(MGLAttribute * attribute);
 void MGLBuffer_Invalidate(MGLBuffer * buffer);

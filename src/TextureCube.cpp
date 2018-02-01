@@ -40,7 +40,7 @@ PyObject * MGLTextureCube_read(MGLTextureCube * self, PyObject * args) {
 		return 0;
 	}
 
-	int expected_size = self->width * self->components * (self->floats ? 4 : 1);
+	int expected_size = self->width * self->components * self->data_type.size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * self->height;
 
@@ -49,7 +49,7 @@ PyObject * MGLTextureCube_read(MGLTextureCube * self, PyObject * args) {
 
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
-	int pixel_type = self->floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+	int pixel_type = self->data_type.gl_type;
 	int format = formats[self->components];
 
 	const GLMethods & gl = self->context->gl;
@@ -93,13 +93,13 @@ PyObject * MGLTextureCube_read_into(MGLTextureCube * self, PyObject * args) {
 		return 0;
 	}
 
-	int expected_size = self->width * self->components * (self->floats ? 4 : 1);
+	int expected_size = self->width * self->components * self->data_type.size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * self->height;
 
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
-	int pixel_type = self->floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+	int pixel_type = self->data_type.gl_type;
 	int format = formats[self->components];
 
 	if (Py_TYPE(data) == &MGLBuffer_Type) {
@@ -216,7 +216,7 @@ PyObject * MGLTextureCube_write(MGLTextureCube * self, PyObject * args) {
 
 	}
 
-	int expected_size = width * self->components * (self->floats ? 4 : 1);
+	int expected_size = width * self->components * self->data_type.size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 
@@ -229,7 +229,7 @@ PyObject * MGLTextureCube_write(MGLTextureCube * self, PyObject * args) {
 	// GL_TEXTURE_CUBE_MAP_POSITIVE_Z = GL_TEXTURE_CUBE_MAP_POSITIVE_X + 4
 	// GL_TEXTURE_CUBE_MAP_NEGATIVE_Z = GL_TEXTURE_CUBE_MAP_POSITIVE_X + 5
 
-	int pixel_type = self->floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+	int pixel_type = self->data_type.gl_type;
 	int format = formats[self->components];
 
 	if (Py_TYPE(data) == &MGLBuffer_Type) {

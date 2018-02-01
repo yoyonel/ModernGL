@@ -38,17 +38,17 @@ PyObject * MGLTexture3D_read(MGLTexture3D * self, PyObject * args) {
 		return 0;
 	}
 
-	int expected_size = self->width * self->components * (self->floats ?  4 : 1);
+	int expected_size = self->width * self->components * self->data_type.size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * self->height * self->depth;
 
 	PyObject * result = PyBytes_FromStringAndSize(0, expected_size);
 	char * data = PyBytes_AS_STRING(result);
 
-	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
+	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
-	int pixel_type = self->floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
-	int format = formats[self->components];
+	int pixel_type = self->data_type.gl_type;
+	int base_format = base_formats[self->components];
 
 	const GLMethods & gl = self->context->gl;
 
@@ -57,7 +57,7 @@ PyObject * MGLTexture3D_read(MGLTexture3D * self, PyObject * args) {
 
 	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-	gl.GetTexImage(GL_TEXTURE_3D, 0, format, pixel_type, data);
+	gl.GetTexImage(GL_TEXTURE_3D, 0, base_format, pixel_type, data);
 
 	return result;
 }
@@ -89,13 +89,13 @@ PyObject * MGLTexture3D_read_into(MGLTexture3D * self, PyObject * args) {
 		return 0;
 	}
 
-	int expected_size = self->width * self->components * (self->floats ? 4 : 1);
+	int expected_size = self->width * self->components * self->data_type.size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * self->height * self->depth;
 
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
-	int pixel_type = self->floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+	int pixel_type = self->data_type.gl_type;
 	int format = formats[self->components];
 
 	if (Py_TYPE(data) == &MGLBuffer_Type) {
@@ -218,13 +218,13 @@ PyObject * MGLTexture3D_write(MGLTexture3D * self, PyObject * args) {
 
 	}
 
-	int expected_size = width * self->components * (self->floats ? 4 : 1);
+	int expected_size = width * self->components * self->data_type.size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height * depth;
 
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
-	int pixel_type = self->floats ? GL_FLOAT : GL_UNSIGNED_BYTE;
+	int pixel_type = self->data_type.gl_type;
 	int format = formats[self->components];
 
 	if (Py_TYPE(data) == &MGLBuffer_Type) {
