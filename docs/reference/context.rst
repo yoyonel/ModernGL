@@ -26,14 +26,14 @@ Standalone ModernGL context
     ctx = moderngl.create_standalone_context()
     print(ctx.version_code)
 
-Context creation
+Context Creation
 ----------------
 
 .. autofunction:: moderngl.create_context(require=None) -> Context
 .. autofunction:: moderngl.create_standalone_context(require=None) -> Context
 
-Create ModernGL objects
------------------------
+ModernGL Objects
+----------------
 
 .. automethod:: Context.buffer(data=None, reserve=0, dynamic=False) -> Buffer
 .. automethod:: Context.texture(size, components, data=None, samples=0, alignment=1, dtype='u1') -> Texture
