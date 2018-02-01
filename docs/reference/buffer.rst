@@ -1,5 +1,5 @@
-Context
-=======
+Buffer
+======
 
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
