@@ -907,14 +907,14 @@ class Texture:
         to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_samples', '_floats', '_depth', '_glo']
+    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_depth', '_glo']
 
     def __init__(self):
         self.mglo = None
         self._size = (None, None)
         self._components = None
         self._samples = None
-        self._floats = None
+        self._dtype = None
         self._depth = None
         self._glo = None
         raise TypeError()
@@ -1014,12 +1014,12 @@ class Texture:
         return self._samples
 
     @property
-    def floats(self) -> bool:
+    def dtype(self) -> str:
         '''
-            bool: Is the texture using floats?
+            str: Data type.
         '''
 
-        return self._floats
+        return self._dtype
 
     @property
     def depth(self) -> bool:
@@ -1124,14 +1124,14 @@ class Texture3D:
         Use :py:meth:`Context.texture3d` to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_samples', '_floats', '_glo']
+    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_glo']
 
     def __init__(self):
         self.mglo = None
         self._size = (None, None, None)
         self._components = None
         self._samples = None
-        self._floats = None
+        self._dtype = None
         self._glo = None
         raise TypeError()
 
@@ -1242,12 +1242,12 @@ class Texture3D:
         return self._components
 
     @property
-    def floats(self) -> bool:
+    def dtype(self) -> str:
         '''
-            bool: Is the texture using floats?
+            str: Data type.
         '''
 
-        return self._floats
+        return self._dtype
 
     @property
     def glo(self) -> int:
@@ -1344,13 +1344,13 @@ class TextureCube:
         Use :py:meth:`Context.texture_cube` to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_floats', '_glo']
+    __slots__ = ['mglo', '_size', '_components', '_dtype', '_glo']
 
     def __init__(self):
         self.mglo = None
         self._size = (None, None)
         self._components = None
-        self._floats = None
+        self._dtype = None
         self._glo = None
         raise TypeError()
 
@@ -1453,7 +1453,7 @@ class Renderbuffer:
         to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_samples', '_depth', '_floats', '_glo']
+    __slots__ = ['mglo', '_size', '_components', '_samples', '_depth', '_dtype', '_glo']
 
     def __init__(self):
         self.mglo = None
@@ -1461,7 +1461,7 @@ class Renderbuffer:
         self._components = None
         self._samples = None
         self._depth = None
-        self._floats = None
+        self._dtype = None
         self._glo = None
         raise TypeError()
 
@@ -1520,12 +1520,12 @@ class Renderbuffer:
         return self._depth
 
     @property
-    def floats(self) -> bool:
+    def dtype(self) -> str:
         '''
-            bool: Is the renderbuffer using floats?
+            str: Data type.
         '''
 
-        return self._floats
+        return self._dtype
 
     @property
     def glo(self) -> int:
@@ -2117,7 +2117,7 @@ class Framebuffer:
 
         self.mglo.use()
 
-    def read(self, viewport=None, components=3, *, attachment=0, alignment=1, floats=False) -> bytes:
+    def read(self, viewport=None, components=3, *, attachment=0, alignment=1, dtype='u1') -> bytes:
         '''
             Read the content of the framebuffer.
 
@@ -2128,16 +2128,16 @@ class Framebuffer:
             Keyword Args:
                 attachment (int): The color attachment.
                 alignment (int): The byte alignment of the pixels.
-                floats (bool): The precision of the pixels.
+                dtype (str): Data type.
 
             Returns:
                 the pixels
         '''
 
-        return self.mglo.read(viewport, components, attachment, alignment, floats)
+        return self.mglo.read(viewport, components, attachment, alignment, dtype)
 
     def read_into(self, buffer, viewport=None, components=3, *,
-                  attachment=0, alignment=1, floats=False, write_offset=0) -> None:
+                  attachment=0, alignment=1, dtype='u1', write_offset=0) -> None:
         '''
             Read the content of the framebuffer into a buffer.
 
@@ -2149,14 +2149,14 @@ class Framebuffer:
             Keyword Args:
                 attachment (int): The color attachment.
                 alignment (int): The byte alignment of the pixels.
-                floats (bool): The precision of the pixels.
+                dtype (str): Data type.
                 write_offset (int): The write offset.
         '''
 
         if type(buffer) is Buffer:
             buffer = buffer.mglo
 
-        return self.mglo.read_into(buffer, viewport, components, attachment, alignment, floats, write_offset)
+        return self.mglo.read_into(buffer, viewport, components, attachment, alignment, dtype, write_offset)
 
     def release(self) -> None:
         '''
@@ -2494,7 +2494,7 @@ class Context:
         res._dynamic = dynamic
         return res
 
-    def texture(self, size, components, data=None, *, samples=0, alignment=1, floats=False) -> 'Texture':
+    def texture(self, size, components, data=None, *, samples=0, alignment=1, dtype='u1') -> 'Texture':
         '''
             Create a :py:class:`Texture`.
 
@@ -2506,22 +2506,22 @@ class Context:
             Keyword Args:
                 samples (int): The number of samples. Value `0` means no multisample format.
                 alignment (int): The byte alignment 1, 2, 4 or 8.
-                floats (bool): Use floating point precision.
+                dtype (str): Data type.
 
             Returns:
                 :py:class:`Texture` object
         '''
 
         res = Texture.__new__(Texture)
-        res.mglo, res._glo = self.mglo.texture(size, components, data, samples, alignment, floats)
+        res.mglo, res._glo = self.mglo.texture(size, components, data, samples, alignment, dtype)
         res._size = size
         res._components = components
         res._samples = samples
-        res._floats = floats
+        res._dtype = dtype
         res._depth = False
         return res
 
-    def texture3d(self, size, components, data=None, *, alignment=1, floats=False) -> 'Texture3D':
+    def texture3d(self, size, components, data=None, *, alignment=1, dtype='u1') -> 'Texture3D':
         '''
             Create a :py:class:`Texture3D`.
 
@@ -2532,17 +2532,17 @@ class Context:
 
             Keyword Args:
                 alignment (int): The byte alignment 1, 2, 4 or 8.
-                floats (bool): Use floating point precision.
+                dtype (str): Data type.
 
             Returns:
                 :py:class:`Texture3D` object
         '''
 
         res = Texture3D.__new__(Texture3D)
-        res.mglo, res._glo = self.mglo.texture3d(size, components, data, alignment, floats)
+        res.mglo, res._glo = self.mglo.texture3d(size, components, data, alignment, dtype)
         return res
 
-    def texture_cube(self, size, components, data=None, *, alignment=1, floats=False) -> 'TextureCube':
+    def texture_cube(self, size, components, data=None, *, alignment=1, dtype='u1') -> 'TextureCube':
         '''
             Create a :py:class:`TextureCube`.
 
@@ -2553,17 +2553,17 @@ class Context:
 
             Keyword Args:
                 alignment (int): The byte alignment 1, 2, 4 or 8.
-                floats (bool): Use floating point precision.
+                dtype (str): Data type.
 
             Returns:
                 :py:class:`TextureCube` object
         '''
 
         res = TextureCube.__new__(TextureCube)
-        res.mglo, res._glo = self.mglo.texture_cube(size, components, data, alignment, floats)
+        res.mglo, res._glo = self.mglo.texture_cube(size, components, data, alignment, dtype)
         res._size = size
         res._components = components
-        res._floats = floats
+        res._dtype = dtype
         return res
 
     def depth_texture(self, size, data=None, *, samples=0, alignment=4) -> 'Texture':
@@ -2587,7 +2587,7 @@ class Context:
         res._size = size
         res._components = 1
         res._samples = samples
-        res._floats = True
+        res._dtype = 'f4'
         res._depth = True
         return res
 
@@ -2889,7 +2889,7 @@ class Context:
         res._source = source
         return res
 
-    def simple_framebuffer(self, size, components=4, *, samples=0, floats=False) -> 'Framebuffer':
+    def simple_framebuffer(self, size, components=4, *, samples=0, dtype='u1') -> 'Framebuffer':
         '''
             A :py:class:`Framebuffer` is a collection of buffers that can be used as the destination for rendering.
             The buffers for Framebuffer objects reference images from either Textures or Renderbuffers.
@@ -2900,14 +2900,14 @@ class Context:
 
             Keyword Args:
                 samples (int): The number of samples. Value `0` means no multisample format.
-                floats (bool): Use floating point precision.
+                dtype (str): Data type.
 
             Returns:
                 :py:class:`Framebuffer` object
         '''
 
         return self.framebuffer(
-            self.renderbuffer(size, components, samples=samples, floats=floats),
+            self.renderbuffer(size, components, samples=samples, dtype=dtype),
             self.depth_renderbuffer(size, samples=samples),
         )
 
@@ -2936,7 +2936,7 @@ class Context:
         res._depth_attachment = depth_attachment
         return res
 
-    def renderbuffer(self, size, components=4, *, samples=0, floats=False) -> 'Renderbuffer':
+    def renderbuffer(self, size, components=4, *, samples=0, dtype='u1') -> 'Renderbuffer':
         '''
             :py:class:`Renderbuffer` objects are OpenGL objects that contain images.
             They are created and used specifically with :py:class:`Framebuffer` objects.
@@ -2947,19 +2947,19 @@ class Context:
 
             Keyword Args:
                 samples (int): The number of samples. Value `0` means no multisample format.
-                floats (bool): Use floating point precision.
+                dtype (str): Data type.
 
             Returns:
                 :py:class:`Renderbuffer` object
         '''
 
         res = Renderbuffer.__new__(Renderbuffer)
-        res.mglo, res._glo = self.mglo.renderbuffer(size, components, samples, floats)
+        res.mglo, res._glo = self.mglo.renderbuffer(size, components, samples, dtype)
         res._size = size
         res._components = components
         res._samples = samples
         res._depth = False
-        res._floats = floats
+        res._dtype = dtype
         return res
 
     def depth_renderbuffer(self, size, *, samples=0) -> 'Renderbuffer':
@@ -2983,7 +2983,7 @@ class Context:
         res._components = 1
         res._samples = samples
         res._depth = True
-        res._floats = True
+        res._dtype = True
         return res
 
     def compute_shader(self, source) -> 'ComputeShader':
