@@ -2117,7 +2117,7 @@ class Framebuffer:
 
         self.mglo.use()
 
-    def read(self, viewport=None, components=3, *, attachment=0, alignment=1, dtype='u1') -> bytes:
+    def read(self, viewport=None, components=3, *, attachment=0, alignment=1, dtype='f1') -> bytes:
         '''
             Read the content of the framebuffer.
 
@@ -2137,7 +2137,7 @@ class Framebuffer:
         return self.mglo.read(viewport, components, attachment, alignment, dtype)
 
     def read_into(self, buffer, viewport=None, components=3, *,
-                  attachment=0, alignment=1, dtype='u1', write_offset=0) -> None:
+                  attachment=0, alignment=1, dtype='f1', write_offset=0) -> None:
         '''
             Read the content of the framebuffer into a buffer.
 
@@ -2494,7 +2494,7 @@ class Context:
         res._dynamic = dynamic
         return res
 
-    def texture(self, size, components, data=None, *, samples=0, alignment=1, dtype='u1') -> 'Texture':
+    def texture(self, size, components, data=None, *, samples=0, alignment=1, dtype='f1') -> 'Texture':
         '''
             Create a :py:class:`Texture`.
 
@@ -2521,7 +2521,7 @@ class Context:
         res._depth = False
         return res
 
-    def texture3d(self, size, components, data=None, *, alignment=1, dtype='u1') -> 'Texture3D':
+    def texture3d(self, size, components, data=None, *, alignment=1, dtype='f1') -> 'Texture3D':
         '''
             Create a :py:class:`Texture3D`.
 
@@ -2542,7 +2542,7 @@ class Context:
         res.mglo, res._glo = self.mglo.texture3d(size, components, data, alignment, dtype)
         return res
 
-    def texture_cube(self, size, components, data=None, *, alignment=1, dtype='u1') -> 'TextureCube':
+    def texture_cube(self, size, components, data=None, *, alignment=1, dtype='f1') -> 'TextureCube':
         '''
             Create a :py:class:`TextureCube`.
 
@@ -2889,7 +2889,7 @@ class Context:
         res._source = source
         return res
 
-    def simple_framebuffer(self, size, components=4, *, samples=0, dtype='u1') -> 'Framebuffer':
+    def simple_framebuffer(self, size, components=4, *, samples=0, dtype='f1') -> 'Framebuffer':
         '''
             A :py:class:`Framebuffer` is a collection of buffers that can be used as the destination for rendering.
             The buffers for Framebuffer objects reference images from either Textures or Renderbuffers.
@@ -2936,7 +2936,7 @@ class Context:
         res._depth_attachment = depth_attachment
         return res
 
-    def renderbuffer(self, size, components=4, *, samples=0, dtype='u1') -> 'Renderbuffer':
+    def renderbuffer(self, size, components=4, *, samples=0, dtype='f1') -> 'Renderbuffer':
         '''
             :py:class:`Renderbuffer` objects are OpenGL objects that contain images.
             They are created and used specifically with :py:class:`Framebuffer` objects.
