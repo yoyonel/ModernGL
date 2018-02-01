@@ -63,7 +63,7 @@ Methods
 .. automethod:: Context.enable_only(flags)
 .. automethod:: Context.enable(flags)
 .. automethod:: Context.disable(flags)
-.. automethod:: Context.finish(self)
+.. automethod:: Context.finish()
 .. automethod:: Context.copy_buffer(dst, src, size=-1, read_offset=0, write_offset=0)
 .. automethod:: Context.copy_framebuffer(dst, src)
 .. automethod:: Context.detect_framebuffer(glo=None) -> Framebuffer
