@@ -307,7 +307,7 @@ class Buffer:
                 offset (int): The offset.
 
             Returns:
-                bytes: The content of the buffer.
+                The content of the buffer.
         '''
 
         return self.mglo.read(size, offset)
@@ -325,7 +325,7 @@ class Buffer:
                 write_offset (int): The write offset.
 
             Returns:
-                bytes: The content of the buffer.
+                The content of the buffer.
         '''
 
         return self.mglo.read_into(buffer, size, offset, write_offset)
@@ -341,7 +341,7 @@ class Buffer:
                 count (int): The number of offsets.
 
             Returns:
-                bytes: binary data
+                binary data
         '''
 
         return self.mglo.read_chunks(chunk_size, start, step, count)
@@ -361,7 +361,7 @@ class Buffer:
                 write_offset (int): The write offset.
 
             Returns:
-                bytes: binary data
+                binary data
         '''
 
         return self.mglo.read(buffer, chunk_size, start, step, count, write_offset)
@@ -1064,7 +1064,7 @@ class Texture:
                 alignment (int): The byte alignment of the pixels.
 
             Returns:
-                bytes: the pixels
+                the pixels
         '''
 
         return self.mglo.read(alignment)
@@ -1284,7 +1284,7 @@ class Texture3D:
                 alignment (int): The byte alignment of the pixels.
 
             Returns:
-                bytes: the pixels
+                the pixels
         '''
 
         return self.mglo.read(alignment)
@@ -2149,7 +2149,7 @@ class Framebuffer:
                 floats (bool): The precision of the pixels.
 
             Returns:
-                bytes: the pixels
+                the pixels
         '''
 
         return self.mglo.read(viewport, components, attachment, alignment, floats)
@@ -2482,7 +2482,7 @@ class Context:
                 glo (int): Framebuffer object.
 
             Returns:
-                Framebuffer: framebuffer.
+                :py:class:`Framebuffer` object
         '''
 
         res = Framebuffer.__new__(Framebuffer)
@@ -2501,7 +2501,7 @@ class Context:
                 dynamic (bool): Treat buffer as dynamic.
 
             Returns:
-                Buffer: buffer
+                :py:class:`Buffer` object
         '''
 
         if type(reserve) is str:
@@ -2527,7 +2527,7 @@ class Context:
                 floats (bool): Use floating point precision.
 
             Returns:
-                Texture: texture
+                :py:class:`Texture` object
         '''
 
         res = Texture.__new__(Texture)
@@ -2553,7 +2553,7 @@ class Context:
                 floats (bool): Use floating point precision.
 
             Returns:
-                Texture3D: texture
+                :py:class:`Texture3D` object
         '''
 
         res = Texture3D.__new__(Texture3D)
@@ -2574,7 +2574,7 @@ class Context:
                 floats (bool): Use floating point precision.
 
             Returns:
-                TextureCube: texture
+                :py:class:`TextureCube` object
         '''
 
         res = TextureCube.__new__(TextureCube)
@@ -2597,7 +2597,7 @@ class Context:
                 alignment (int): The byte alignment 1, 2, 4 or 8.
 
             Returns:
-                Texture: depth texture
+                :py:class:`Texture` object
         '''
 
         res = Texture.__new__(Texture)
@@ -2620,7 +2620,7 @@ class Context:
                 index_buffer (Buffer): An index buffer.
 
             Returns:
-                VertexArray: vertex array
+                :py:class:`VertexArray` object
         '''
 
         index_buffer_mglo = None if index_buffer is None else index_buffer.mglo
@@ -2649,7 +2649,7 @@ class Context:
                 attributes (list): A list of attribute names.
 
             Returns:
-                VertexArray: vertex array
+                :py:class:`VertexArray` object
         '''
 
         if len(attributes) == 1 and type(attributes[0]) is not str:
@@ -2674,7 +2674,7 @@ class Context:
                 varyings (list): A list of varying names.
 
             Returns:
-                Program: program
+                :py:class:`Program` object
 
             Examples:
 
@@ -2791,7 +2791,7 @@ class Context:
                 source (str): The source code in GLSL.
 
             Returns:
-                Shader: vertex shader
+                :py:class:`Shader` object
 
             Examples:
 
@@ -2823,7 +2823,7 @@ class Context:
                 source (str): The source code in GLSL.
 
             Returns:
-                Shader: fragment shader
+                :py:class:`Shader` object
 
             Examples:
 
@@ -2858,7 +2858,7 @@ class Context:
                 source (str): The source code in GLSL.
 
             Returns:
-                Shader: geometry shader
+                :py:class:`Shader` object
         '''
 
         res = Shader.__new__(Shader)
@@ -2879,7 +2879,7 @@ class Context:
                 source (str): The source code in GLSL.
 
             Returns:
-                Shader: tesselation evaluation shader
+                :py:class:`Shader` object
         '''
 
         res = Shader.__new__(Shader)
@@ -2898,7 +2898,7 @@ class Context:
                 source (str): The source code in GLSL.
 
             Returns:
-                Shader: tesselation control shader
+                :py:class:`Shader` object
         '''
 
         res = Shader.__new__(Shader)
@@ -2921,7 +2921,7 @@ class Context:
                 floats (bool): Use floating point precision.
 
             Returns:
-                Framebuffer: framebuffer
+                :py:class:`Framebuffer` object
         '''
 
         return self.framebuffer(
@@ -2939,7 +2939,7 @@ class Context:
                 depth_attachment (Renderbuffer or Texture): A `Texture` or `Renderbuffer` object.
 
             Returns:
-                Framebuffer: framebuffer
+                :py:class:`Framebuffer` object
         '''
 
         if type(color_attachments) is Texture or type(color_attachments) is Renderbuffer:
@@ -2968,7 +2968,7 @@ class Context:
                 floats (bool): Use floating point precision.
 
             Returns:
-                Renderbuffer: renderbuffer
+                :py:class:`Renderbuffer` object
         '''
 
         res = Renderbuffer.__new__(Renderbuffer)
@@ -2992,7 +2992,7 @@ class Context:
                 samples (int): The number of samples. Value `0` means no multisample format.
 
             Returns:
-                Renderbuffer: depth renderbuffer
+                :py:class:`Renderbuffer` object
         '''
 
         res = Renderbuffer.__new__(Renderbuffer)
@@ -3013,7 +3013,7 @@ class Context:
                 source (str): The source of the compute shader.
 
             Returns:
-                ComputeShader: compute shader program
+                :py:class:`ComputeShader` object
         '''
 
         res = ComputeShader.__new__(ComputeShader)
@@ -3038,7 +3038,7 @@ def create_context(require=None) -> Context:
             require (int): OpenGL version code.
 
         Returns:
-            Context: context
+            :py:class:`Context` object
     '''
 
     ctx = Context.__new__(Context)
@@ -3060,7 +3060,7 @@ def create_standalone_context(require=None, **settings) -> 'Context':
             require (int): OpenGL version code.
 
         Returns:
-            Context: context
+            :py:class:`Context` object
     '''
 
     backend = os.environ.get('MODERNGL_BACKEND')
@@ -3088,7 +3088,7 @@ def detect_format(program, attributes) -> str:
             attributes (list): A list of attribute names.
 
         Returns:
-            str: The tightly packed format for the attributes.
+            The tightly packed format for the attributes.
     '''
 
     def fmt(attr):
