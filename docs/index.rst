@@ -4,10 +4,10 @@ ModernGL
 ModernGL is a high performance rendering module for Python.
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   installation.rst
-   reference/index.rst
+    installation.rst
+    reference/index.rst
 
 Indices and tables
 ==================

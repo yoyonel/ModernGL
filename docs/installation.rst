@@ -20,4 +20,4 @@ Version check:
     - The package name is "moderngl" for `ModernGL>=5.0.0`
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2

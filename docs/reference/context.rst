@@ -7,7 +7,7 @@ Context
 Examples
 --------
 
-ModernGL context in a window
+ModernGL Context in a Window
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
@@ -17,7 +17,7 @@ ModernGL context in a window
     ctx = moderngl.create_context()
     print(ctx.version_code)
 
-Standalone ModernGL context
+Standalone ModernGL Context
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
@@ -86,4 +86,4 @@ Attributes
 .. autoattribute:: Context.front_face
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
