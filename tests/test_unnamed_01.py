@@ -35,8 +35,8 @@ class TestBuffer(unittest.TestCase):
         res = self.ctx.buffer(reserve=buf_v.size)
 
         vao = self.ctx.vertex_array(self.prog, [
-            (buf_m, '4f', ['in_m']),
-            (buf_v, '2f', ['in_v']),
+            (buf_m, '4f', 'in_m'),
+            (buf_v, '2f', 'in_v'),
         ])
 
         self.prog['mult'].value = 0.0

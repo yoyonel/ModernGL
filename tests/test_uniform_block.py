@@ -44,7 +44,7 @@ class TestCase(unittest.TestCase):
         buf_r = self.ctx.buffer(reserve=buf_v.size)
 
         vao = self.ctx.vertex_array(self.prog, [
-            (buf_v, '2f', ['in_v']),
+            (buf_v, '2f', 'in_v'),
         ])
 
         self.assertIn('Block1', self.prog)

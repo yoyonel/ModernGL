@@ -48,7 +48,7 @@ class TestCase(unittest.TestCase):
         ''')
 
         prog = self.ctx.program(vert, ['color'])
-        vao = self.ctx.simple_vertex_array(prog, vbo1, ['vert'])
+        vao = self.ctx.simple_vertex_array(prog, vbo1, 'vert')
 
         vao.subroutines = [prog['ColorRed'].index]
         vao.transform(vbo2)

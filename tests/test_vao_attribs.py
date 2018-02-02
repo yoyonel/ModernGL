@@ -25,12 +25,12 @@ class TestCase(unittest.TestCase):
             }
         ''')
 
-        program = self.ctx.program(vertex_shader, ['out_vert'])
+        program = self.ctx.program(vertex_shader, varyings=['out_vert'])
 
         vbo = self.ctx.buffer(struct.pack('12f', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12))
         res = self.ctx.buffer(reserve=struct.calcsize('8f'))
 
-        vao = self.ctx.simple_vertex_array(program, vbo, ['in_vert'])
+        vao = self.ctx.simple_vertex_array(program, vbo, 'in_vert')
         vao.transform(res, moderngl.POINTS, 2)
 
         for a, b in zip(struct.unpack('8f', res.read()), (1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0)):

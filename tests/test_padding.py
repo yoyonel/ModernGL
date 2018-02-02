@@ -40,7 +40,7 @@ class TestCase(unittest.TestCase):
         res = self.ctx.buffer(reserve=16)
 
         vao = self.ctx.vertex_array(self.prog, [
-            (buf, 'ixi12xii', ['a_in', 'b_in', 'c_in', 'd_in']),
+            (buf, 'ixi12xii', 'a_in', 'b_in', 'c_in', 'd_in'),
         ])
 
         vao.transform(res, moderngl.POINTS)
@@ -56,7 +56,7 @@ class TestCase(unittest.TestCase):
         res = self.ctx.buffer(reserve=64)
 
         vao = self.ctx.vertex_array(self.prog, [
-            (buf, 'i8x', ['a_in']),
+            (buf, 'i8x', 'a_in'),
         ])
 
         vao.transform(res, moderngl.POINTS)
@@ -75,7 +75,7 @@ class TestCase(unittest.TestCase):
         res = self.ctx.buffer(reserve=16)
 
         vao = self.ctx.vertex_array(self.prog, [
-            (buf, '128xiiii', ['a_in', 'b_in', 'c_in', 'd_in']),
+            (buf, '128xiiii', 'a_in', 'b_in', 'c_in', 'd_in'),
         ])
 
         vao.transform(res, moderngl.POINTS)

@@ -34,7 +34,7 @@ class TestCase(unittest.TestCase):
         ])
 
         vbo = cls.ctx.buffer(struct.pack('8f', 0, 0, 0, 1, 1, 0, 1, 1))
-        cls.vao = cls.ctx.simple_vertex_array(prog, vbo, ['vert'])
+        cls.vao = cls.ctx.simple_vertex_array(prog, vbo, 'vert')
 
     def test_1(self):
         fbo = self.ctx.framebuffer(self.ctx.renderbuffer((16, 16)))

@@ -34,9 +34,9 @@ class TestCase(unittest.TestCase):
             }
         ''')
 
-        prog = self.ctx.program(vertex_shader, ['v_out'])
+        prog = self.ctx.program(vertex_shader, varyings=['v_out'])
         vbo = self.ctx.buffer(struct.pack('f', 1.0))
-        vao = self.ctx.simple_vertex_array(prog, vbo, ['v_in'])
+        vao = self.ctx.simple_vertex_array(prog, vbo, 'v_in')
 
         prog['Uniform'].value = 7.0
         vao.transform(self.res)
@@ -55,9 +55,9 @@ class TestCase(unittest.TestCase):
             }
         ''')
 
-        prog = self.ctx.program(vertex_shader, ['v_out'])
+        prog = self.ctx.program(vertex_shader, varyings=['v_out'])
         vbo = self.ctx.buffer(struct.pack('i', 1))
-        vao = self.ctx.simple_vertex_array(prog, vbo, ['v_in'])
+        vao = self.ctx.simple_vertex_array(prog, vbo, 'v_in')
 
         prog['Uniform'].value = -2
         vao.transform(self.res)
@@ -76,9 +76,9 @@ class TestCase(unittest.TestCase):
             }
         ''')
 
-        prog = self.ctx.program(vertex_shader, ['v_out'])
+        prog = self.ctx.program(vertex_shader, varyings=['v_out'])
         vbo = self.ctx.buffer(struct.pack('3f', 1.0, 1.0, 1.0))
-        vao = self.ctx.simple_vertex_array(prog, vbo, ['v_in'])
+        vao = self.ctx.simple_vertex_array(prog, vbo, 'v_in')
 
         prog['Uniform'].value = (0.5, 1.0, 1.5)
         vao.transform(self.res)
@@ -99,9 +99,9 @@ class TestCase(unittest.TestCase):
             }
         ''')
 
-        prog = self.ctx.program(vertex_shader, ['v_out'])
+        prog = self.ctx.program(vertex_shader, varyings=['v_out'])
         vbo = self.ctx.buffer(struct.pack('f', 1.0))
-        vao = self.ctx.simple_vertex_array(prog, vbo, ['v_in'])
+        vao = self.ctx.simple_vertex_array(prog, vbo, 'v_in')
 
         prog['Uniform'].value = (0.0, 1.0, 2.0, 3.0, 4.0, 5.0)
         vao.transform(self.res)

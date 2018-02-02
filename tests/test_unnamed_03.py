@@ -33,8 +33,8 @@ class TestBuffer(unittest.TestCase):
         res = self.ctx.buffer(reserve=buf_v1.size)
 
         vao = self.ctx.vertex_array(self.prog, [
-            (buf_v1, '2f', ['in_v1']),
-            (buf_v2, '2f/i', ['in_v2']),
+            (buf_v1, '2f', 'in_v1'),
+            (buf_v2, '2f/i', 'in_v2'),
         ])
 
         vao.transform(res, moderngl.POINTS)

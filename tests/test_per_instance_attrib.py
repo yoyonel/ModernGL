@@ -32,16 +32,16 @@ class TestCase(unittest.TestCase):
         vbo3 = cls.ctx.buffer(struct.pack('4f', 100.0, 200.0, 300.0, 400.0))
 
         vao1_content = [
-            (vbo1, 'f', ['v_in_1']),
-            (vbo2, 'f/i', ['v_in_2']),
+            (vbo1, 'f', 'v_in_1'),
+            (vbo2, 'f/i', 'v_in_2'),
         ]
 
         cls.vao1 = cls.ctx.vertex_array(prog, vao1_content)
 
         vao2_content = [
-            (vbo1, 'f', ['v_in_1']),
-            (vbo2, 'f/i', ['v_in_2']),
-            (vbo3, 'f/r', ['v_in_3']),
+            (vbo1, 'f', 'v_in_1'),
+            (vbo2, 'f/i', 'v_in_2'),
+            (vbo3, 'f/r', 'v_in_3'),
         ]
 
         cls.vao2 = cls.ctx.vertex_array(prog, vao2_content)
