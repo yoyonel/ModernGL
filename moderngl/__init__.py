@@ -2922,7 +2922,7 @@ class Context:
             self.depth_renderbuffer(size, samples=samples),
         )
 
-    def framebuffer(self, color_attachments, depth_attachment=None) -> 'Framebuffer':
+    def framebuffer(self, color_attachments=(), depth_attachment=None) -> 'Framebuffer':
         '''
             A :py:class:`Framebuffer` is a collection of buffers that can be used as the destination for rendering.
             The buffers for Framebuffer objects reference images from either Textures or Renderbuffers.
