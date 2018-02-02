@@ -2274,6 +2274,18 @@ class Context:
         self.mglo.blend_func = tuple(value)
 
     @property
+    def multisample(self) -> bool:
+        '''
+            bool: Multisample.
+        '''
+
+        raise Exception()
+
+    @multisample.setter
+    def multisample(self, value):
+        self.mglo.multisample = value
+
+    @property
     def viewport(self) -> Tuple[int, int, int, int]:
         '''
             tuple: The viewport.
