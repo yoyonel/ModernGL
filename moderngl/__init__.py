@@ -58,6 +58,20 @@ DEPTH_TEST = 2
 CULL_FACE = 4
 RASTERIZER_DISCARD = 8
 
+ZERO = 0x0000
+ONE = 0x0001
+SRC_COLOR = 0x0300
+ONE_MINUS_SRC_COLOR = 0x0301
+SRC_ALPHA = 0x0302
+ONE_MINUS_SRC_ALPHA = 0x0303
+DST_ALPHA = 0x0304
+ONE_MINUS_DST_ALPHA = 0x0305
+DST_COLOR = 0x0306
+ONE_MINUS_DST_COLOR = 0x0307
+
+DEFAULT_BLENDING = (SRC_ALPHA, ONE_MINUS_SRC_ALPHA)
+PREMULTIPLIED_ALPHA = (SRC_ALPHA, ONE)
+
 
 class Primitive:
     '''
@@ -2607,7 +2621,7 @@ class Context:
 
         index_buffer_mglo = None if index_buffer is None else index_buffer.mglo
 
-        content = tuple((a.mglo, b, tuple(program._members[x].mglo for x in c)) for a, b, c in content)
+        content = tuple((a.mglo, b, *(program._members[x].mglo for x in c)) for a, b, *c in content)
 
         res = VertexArray.__new__(VertexArray)
         res.mglo, res._glo = self.mglo.vertex_array(program.mglo, content, index_buffer_mglo)
@@ -2634,10 +2648,7 @@ class Context:
                 :py:class:`VertexArray` object
         '''
 
-        if len(attributes) == 1 and type(attributes[0]) is not str:
-            attributes = attributes[0]
-
-        content = [(buffer, detect_format(program, attributes), attributes)]
+        content = [(buffer, detect_format(program, attributes), *attributes)]
         return self.vertex_array(program, content, index_buffer)
 
     def program(self, shaders, varyings=()) -> 'Program':
