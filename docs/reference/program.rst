@@ -4,6 +4,15 @@ Program
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
 
+Create
+------
+
+.. automethod:: Context.program(shaders, varyings=()) -> Program
+    :noindex:
+
+Attributes
+----------
+
 .. autoattribute:: Program.geometry_input
 .. autoattribute:: Program.geometry_output
 .. autoattribute:: Program.geometry_vertices

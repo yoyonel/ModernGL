@@ -35,25 +35,25 @@ Context Creation
 ModernGL Objects
 ----------------
 
-.. automethod:: Context.buffer(data=None, reserve=0, dynamic=False) -> Buffer
-.. automethod:: Context.texture(size, components, data=None, samples=0, alignment=1, dtype='u1') -> Texture
-.. automethod:: Context.texture3d(size, components, data=None, alignment=1, dtype='u1') -> Texture3D
-.. automethod:: Context.texture_cube(size, components, data=None, alignment=1, dtype='u1') -> TextureCube
-.. automethod:: Context.depth_texture(size, data=None, samples=0, alignment=4) -> Texture
-.. automethod:: Context.vertex_array(program, content, index_buffer=None) -> VertexArray
-.. automethod:: Context.simple_vertex_array(program, buffer, *attributes, index_buffer=None) -> VertexArray
 .. automethod:: Context.program(shaders, varyings=()) -> Program
-.. automethod:: Context.query(samples=False, any_samples=False, time=False, primitives=False) -> Query
-.. automethod:: Context.scope(framebuffer, enable_only, textures, uniform_buffers, shader_storage_buffers) -> Scope
+.. automethod:: Context.simple_vertex_array(program, buffer, *attributes, index_buffer=None) -> VertexArray
+.. automethod:: Context.vertex_array(program, content, index_buffer=None) -> VertexArray
 .. automethod:: Context.vertex_shader(source) -> Shader
 .. automethod:: Context.fragment_shader(source) -> Shader
 .. automethod:: Context.geometry_shader(source) -> Shader
 .. automethod:: Context.tess_evaluation_shader(source) -> Shader
 .. automethod:: Context.tess_control_shader(source) -> Shader
-.. automethod:: Context.simple_framebuffer(size, components=4, samples=0, dtype='u1') -> Framebuffer
+.. automethod:: Context.buffer(data=None, reserve=0, dynamic=False) -> Buffer
+.. automethod:: Context.texture(size, components, data=None, samples=0, alignment=1, dtype='f1') -> Texture
+.. automethod:: Context.depth_texture(size, data=None, samples=0, alignment=4) -> Texture
+.. automethod:: Context.texture3d(size, components, data=None, alignment=1, dtype='f1') -> Texture3D
+.. automethod:: Context.texture_cube(size, components, data=None, alignment=1, dtype='f1') -> TextureCube
+.. automethod:: Context.simple_framebuffer(size, components=4, samples=0, dtype='f1') -> Framebuffer
 .. automethod:: Context.framebuffer(color_attachments, depth_attachment=None) -> Framebuffer
-.. automethod:: Context.renderbuffer(size, components=4, samples=0, dtype='u1') -> Renderbuffer
+.. automethod:: Context.renderbuffer(size, components=4, samples=0, dtype='f1') -> Renderbuffer
 .. automethod:: Context.depth_renderbuffer(size, samples=0) -> Renderbuffer
+.. automethod:: Context.scope(framebuffer, enable_only, textures, uniform_buffers, shader_storage_buffers) -> Scope
+.. automethod:: Context.query(samples=False, any_samples=False, time=False, primitives=False) -> Query
 .. automethod:: Context.compute_shader(source) -> ComputeShader
 
 Methods

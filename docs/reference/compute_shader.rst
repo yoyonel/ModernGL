@@ -4,6 +4,12 @@ ComputeShader
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
 
+Create
+------
+
+.. automethod:: Context.compute_shader(source) -> ComputeShader
+    :noindex:
+
 Methods
 -------
 

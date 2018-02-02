@@ -1,11 +1,11 @@
-Varying
-=======
+Subroutine
+==========
 
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
 
-..autoattribute:: Varying.number
-..autoattribute:: Varying.name
+..autoattribute:: Subroutine.number
+..autoattribute:: Subroutine.name
 
 .. toctree::
     :maxdepth: 2

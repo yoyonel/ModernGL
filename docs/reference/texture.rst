@@ -4,6 +4,15 @@ Texture
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
 
+Create
+------
+
+.. automethod:: Context.texture(size, components, data=None, samples=0, alignment=1, dtype='f1') -> Texture
+    :noindex:
+
+.. automethod:: Context.depth_texture(size, data=None, samples=0, alignment=4) -> Texture
+    :noindex:
+
 Methods
 -------
 

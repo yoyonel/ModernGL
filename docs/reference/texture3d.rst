@@ -4,6 +4,12 @@ Texture3D
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
 
+Create
+------
+
+.. automethod:: Context.texture3d(size, components, data=None, alignment=1, dtype='f1') -> Texture3D
+    :noindex:
+
 Methods
 -------
 

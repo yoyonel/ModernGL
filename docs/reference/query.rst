@@ -4,9 +4,11 @@ Query
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
 
-Usage
------
+Create
+------
 
+.. automethod:: Context.query(samples=False, any_samples=False, time=False, primitives=False) -> Query
+    :noindex:
 
 Attributes
 ----------

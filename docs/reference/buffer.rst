@@ -4,6 +4,12 @@ Buffer
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
 
+Create
+------
+
+.. automethod:: Context.buffer(data=None, reserve=0, dynamic=False) -> Buffer
+    :noindex:
+
 Methods
 -------
 

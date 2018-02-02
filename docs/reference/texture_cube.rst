@@ -4,6 +4,12 @@ TextureCube
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
 
+Create
+------
+
+.. automethod:: Context.texture_cube(size, components, data=None, alignment=1, dtype='f1') -> TextureCube
+    :noindex:
+
 Methods
 -------
 
