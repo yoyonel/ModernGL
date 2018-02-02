@@ -2838,7 +2838,7 @@ class Context:
         '''
 
         res = Shader.__new__(Shader)
-        res.mglo, res._glo = self.mglo.vertex_shader(source)
+        res.mglo, res._glo = self.mglo.shader(source, 0)
         res._typename = 'vertex_shader'
         res._source = source
         return res
@@ -2870,7 +2870,7 @@ class Context:
         '''
 
         res = Shader.__new__(Shader)
-        res.mglo, res._glo = self.mglo.fragment_shader(source)
+        res.mglo, res._glo = self.mglo.shader(source, 1)
         res._typename = 'fragment_shader'
         res._source = source
         return res
@@ -2891,7 +2891,7 @@ class Context:
         '''
 
         res = Shader.__new__(Shader)
-        res.mglo, res._glo = self.mglo.geometry_shader(source)
+        res.mglo, res._glo = self.mglo.shader(source, 2)
         res._typename = 'geometry_shader'
         res._source = source
         return res
@@ -2912,7 +2912,7 @@ class Context:
         '''
 
         res = Shader.__new__(Shader)
-        res.mglo, res._glo = self.mglo.tess_evaluation_shader(source)
+        res.mglo, res._glo = self.mglo.shader(source, 3)
         res._typename = 'tess_evaluation_shader'
         res._source = source
         return res
@@ -2931,7 +2931,7 @@ class Context:
         '''
 
         res = Shader.__new__(Shader)
-        res.mglo, res._glo = self.mglo.tess_control_shader(source)
+        res.mglo, res._glo = self.mglo.shader(source, 4)
         res._typename = 'tess_control_shader'
         res._source = source
         return res

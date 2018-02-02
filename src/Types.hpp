@@ -262,8 +262,6 @@ struct MGLShader {
 
 	MGLContext * context;
 
-	PyObject * source;
-
 	int shader_obj;
 	int shader_type;
 	int shader_slot;

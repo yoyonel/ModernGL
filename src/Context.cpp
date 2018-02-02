@@ -1775,14 +1775,15 @@ PyObject * MGLContext_program(MGLContext * self, PyObject * args) {
 	return result;
 }
 
-template <int ShaderSlot>
 PyObject * MGLContext_shader(MGLContext * self, PyObject * args) {
 	PyObject * source;
+	int shader_slot;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O",
-		&source
+		"Oi",
+		&source,
+		&shader_slot
 	);
 
 	if (!args_ok) {
@@ -1796,48 +1797,63 @@ PyObject * MGLContext_shader(MGLContext * self, PyObject * args) {
 
 	MGLShader * shader = (MGLShader *)MGLShader_Type.tp_alloc(&MGLShader_Type, 0);
 
-	shader->shader_slot = ShaderSlot;
-	shader->shader_type = SHADER_TYPE[ShaderSlot];
+	const int shader_type[5] = {
+		GL_VERTEX_SHADER,
+		GL_FRAGMENT_SHADER,
+		GL_GEOMETRY_SHADER,
+		GL_TESS_EVALUATION_SHADER,
+		GL_TESS_CONTROL_SHADER,
+	};
 
-	Py_INCREF(source);
-	shader->source = source;
+	shader->shader_slot = shader_slot;
+	shader->shader_type = shader_type[shader_slot];
 
 	Py_INCREF(self);
 	shader->context = self;
 
-	MGLShader_Compile(shader);
+	const GLMethods & gl = shader->context->gl;
 
-	if (PyErr_Occurred()) {
-		Py_DECREF(shader);
+	const char * source_str = PyUnicode_AsUTF8(source);
+
+	int obj = gl.CreateShader(shader->shader_type);
+
+	if (!obj) {
+		MGLError_Set("cannot create shader");
 		return 0;
 	}
 
+	gl.ShaderSource(obj, 1, &source_str, 0);
+	gl.CompileShader(obj);
+
+	int compiled = GL_FALSE;
+	gl.GetShaderiv(obj, GL_COMPILE_STATUS, &compiled);
+
+	if (!compiled) {
+		const char * message = "GLSL Compiler failed";
+		const char * title = SHADER_NAME[shader->shader_slot];
+		const char * underline = SHADER_NAME_UNDERLINE[shader->shader_slot];
+
+		int log_len = 0;
+		gl.GetShaderiv(obj, GL_INFO_LOG_LENGTH, &log_len);
+
+		char * log = new char[log_len];
+		gl.GetShaderInfoLog(obj, log_len, &log_len, log);
+
+		gl.DeleteShader(obj);
+
+		MGLError_Set("%s\n\n%s\n%s\n%s\n", message, title, underline, log);
+
+		delete[] log;
+		return 0;
+	}
+
+	shader->shader_obj = obj;
 	Py_INCREF(shader);
 
 	PyObject * result = PyTuple_New(2);
 	PyTuple_SET_ITEM(result, 0, (PyObject *)shader);
 	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(shader->shader_obj));
 	return result;
-}
-
-PyObject * MGLContext_shader_vertex_shader(MGLContext * self, PyObject * args) {
-	return MGLContext_shader<VERTEX_SHADER_SLOT>(self, args);
-}
-
-PyObject * MGLContext_shader_fragment_shader(MGLContext * self, PyObject * args) {
-	return MGLContext_shader<FRAGMENT_SHADER_SLOT>(self, args);
-}
-
-PyObject * MGLContext_shader_geometry_shader(MGLContext * self, PyObject * args) {
-	return MGLContext_shader<GEOMETRY_SHADER_SLOT>(self, args);
-}
-
-PyObject * MGLContext_shader_tess_evaluation_shader(MGLContext * self, PyObject * args) {
-	return MGLContext_shader<TESS_EVALUATION_SHADER_SLOT>(self, args);
-}
-
-PyObject * MGLContext_shader_tess_control_shader(MGLContext * self, PyObject * args) {
-	return MGLContext_shader<TESS_CONTROL_SHADER_SLOT>(self, args);
 }
 
 PyObject * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
@@ -2691,11 +2707,7 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"depth_texture", (PyCFunction)MGLContext_depth_texture, METH_VARARGS, 0},
 	{"vertex_array", (PyCFunction)MGLContext_vertex_array, METH_VARARGS, 0},
 	{"program", (PyCFunction)MGLContext_program, METH_VARARGS, 0},
-	{"vertex_shader", (PyCFunction)MGLContext_shader_vertex_shader, METH_VARARGS, 0},
-	{"fragment_shader", (PyCFunction)MGLContext_shader_fragment_shader, METH_VARARGS, 0},
-	{"geometry_shader", (PyCFunction)MGLContext_shader_geometry_shader, METH_VARARGS, 0},
-	{"tess_evaluation_shader", (PyCFunction)MGLContext_shader_tess_evaluation_shader, METH_VARARGS, 0},
-	{"tess_control_shader", (PyCFunction)MGLContext_shader_tess_control_shader, METH_VARARGS, 0},
+	{"shader", (PyCFunction)MGLContext_shader, METH_VARARGS, 0},
 	{"framebuffer", (PyCFunction)MGLContext_framebuffer, METH_VARARGS, 0},
 	{"renderbuffer", (PyCFunction)MGLContext_renderbuffer, METH_VARARGS, 0},
 	{"depth_renderbuffer", (PyCFunction)MGLContext_depth_renderbuffer, METH_VARARGS, 0},
