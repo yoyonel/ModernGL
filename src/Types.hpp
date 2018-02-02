@@ -410,8 +410,6 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl);
 void MGLUniformBlock_Complete(MGLUniformBlock * uniform_block, const GLMethods & gl);
 void MGLVertexArray_Complete(MGLVertexArray * vertex_array);
 
-void MGLComputeShader_Compile(MGLComputeShader * compute_shader);
-void MGLProgram_Compile(MGLProgram * program, PyObject * outputs);
 void MGLShader_Compile(MGLShader * shader);
 void MGLContext_Initialize(MGLContext * self);
 

@@ -2301,6 +2301,8 @@ PyObject * MGLContext_compute_shader(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
+	const char * source_str = PyUnicode_AsUTF8(source);
+
 	MGLComputeShader * compute_shader = (MGLComputeShader *)MGLComputeShader_Type.tp_alloc(&MGLComputeShader_Type, 0);
 
 	Py_INCREF(source);
@@ -2309,16 +2311,74 @@ PyObject * MGLContext_compute_shader(MGLContext * self, PyObject * args) {
 	Py_INCREF(self);
 	compute_shader->context = self;
 
-	MGLComputeShader_Compile(compute_shader);
+	const GLMethods & gl = self->gl;
 
-	if (PyErr_Occurred()) {
-		Py_DECREF(compute_shader);
+	int program_obj = gl.CreateProgram();
+
+	if (!program_obj) {
+		MGLError_Set("cannot create program");
 		return 0;
 	}
 
-	const GLMethods & gl = self->gl;
+	int shader_obj = gl.CreateShader(GL_COMPUTE_SHADER);
 
-	int program_obj = compute_shader->program_obj; // TODO: better
+	if (!shader_obj) {
+		MGLError_Set("cannot create the shader object");
+		return 0;
+	}
+
+	gl.ShaderSource(shader_obj, 1, &source_str, 0);
+	gl.CompileShader(shader_obj);
+
+	int compiled = GL_FALSE;
+	gl.GetShaderiv(shader_obj, GL_COMPILE_STATUS, &compiled);
+
+	if (!compiled) {
+		const char * message = "GLSL Compiler failed";
+		const char * title = "ComputeShader";
+		const char * underline = "=============";
+
+		int log_len = 0;
+		gl.GetShaderiv(shader_obj, GL_INFO_LOG_LENGTH, &log_len);
+
+		char * log = new char[log_len];
+		gl.GetShaderInfoLog(shader_obj, log_len, &log_len, log);
+
+		gl.DeleteShader(shader_obj);
+
+		MGLError_Set("%s\n\n%s\n%s\n%s\n", message, title, underline, log);
+
+		delete[] log;
+		return 0;
+	}
+
+	gl.AttachShader(program_obj, shader_obj);
+	gl.LinkProgram(program_obj);
+
+	int linked = GL_FALSE;
+	gl.GetProgramiv(program_obj, GL_LINK_STATUS, &linked);
+
+	if (!linked) {
+		const char * message = "GLSL Linker failed";
+		const char * title = "ComputeShader";
+		const char * underline = "=============";
+
+		int log_len = 0;
+		gl.GetProgramiv(program_obj, GL_INFO_LOG_LENGTH, &log_len);
+
+		char * log = new char[log_len];
+		gl.GetProgramInfoLog(program_obj, log_len, &log_len, log);
+
+		gl.DeleteProgram(program_obj);
+
+		MGLError_Set("%s\n\n%s\n%s\n%s\n", message, title, underline, log);
+
+		delete[] log;
+		return 0;
+	}
+
+	compute_shader->shader_obj = shader_obj;
+	compute_shader->program_obj = program_obj;
 
 	int num_uniforms = 0;
 	int num_uniform_blocks = 0;
