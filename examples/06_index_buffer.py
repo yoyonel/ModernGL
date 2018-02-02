@@ -1,5 +1,5 @@
-import ModernGL
-from ModernGL.ext.examples import run_example
+import moderngl
+from moderngl.ext.examples import run_example
 import numpy as np
 
 """
@@ -10,7 +10,7 @@ import numpy as np
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program([
             self.ctx.vertex_shader('''
@@ -52,7 +52,7 @@ class Example:
 
         vao_content = [
             # 2 floats are assigned to the 'in' variable named 'in_vert' in the shader code
-            (self.vbo, '2f', ['in_vert'])
+            (self.vbo, '2f', 'in_vert')
         ]
 
         self.vao = self.ctx.vertex_array(self.prog, vao_content, self.ibo)

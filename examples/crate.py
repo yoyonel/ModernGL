@@ -1,9 +1,9 @@
 import os
 
-import ModernGL
+import moderngl
 import numpy as np
-from ModernGL.ext.obj import Obj
-from ModernGL.ext.examples import run_example
+from moderngl.ext.obj import Obj
+from moderngl.ext.examples import run_example
 from PIL import Image
 from pyrr import Matrix44
 
@@ -15,7 +15,7 @@ def local(*path):
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program([
             self.ctx.vertex_shader('''
@@ -66,14 +66,14 @@ class Example:
         self.texture.use()
 
         self.vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
-        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, ['in_vert', 'in_norm', 'in_text'])
+        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert', 'in_norm', 'in_text')
 
     def render(self):
         angle = self.wnd.time
         width, height = self.wnd.size
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
-        self.ctx.enable(ModernGL.DEPTH_TEST)
+        self.ctx.enable(moderngl.DEPTH_TEST)
 
         camera_pos = (np.cos(angle) * 5.0, np.sin(angle) * 5.0, 2.0)
 

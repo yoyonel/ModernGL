@@ -1,5 +1,5 @@
-import ModernGL
-from ModernGL.ext.examples import run_example
+import moderngl
+from moderngl.ext.examples import run_example
 import numpy as np
 
 
@@ -12,7 +12,7 @@ def particle():
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program([
             self.ctx.vertex_shader('''
@@ -52,18 +52,18 @@ class Example:
             }
         ''')
 
-        self.transform = self.ctx.program(self.tvert, ['out_pos', 'out_prev'])
+        self.transform = self.ctx.program(self.tvert, varyings=['out_pos', 'out_prev'])
         self.acc = self.transform['Acc']
         self.acc.value = (0.0, -0.0001)
 
         self.vbo1 = self.ctx.buffer(b''.join(particle() for i in range(1024)))
         self.vbo2 = self.ctx.buffer(reserve=self.vbo1.size)
 
-        self.vao1 = self.ctx.simple_vertex_array(self.transform, self.vbo1, ['in_pos', 'in_prev'])
-        self.vao2 = self.ctx.simple_vertex_array(self.transform, self.vbo2, ['in_pos', 'in_prev'])
+        self.vao1 = self.ctx.simple_vertex_array(self.transform, self.vbo1, 'in_pos', 'in_prev')
+        self.vao2 = self.ctx.simple_vertex_array(self.transform, self.vbo2, 'in_pos', 'in_prev')
 
         self.render_vao = self.ctx.vertex_array(self.prog, [
-            (self.vbo1, '2f8x', ['in_vert']),
+            (self.vbo1, '2f8x', 'in_vert'),
         ])
 
         self.idx = 0
@@ -77,8 +77,8 @@ class Example:
             self.vbo1.write(particle(), offset=self.idx * 16)
             self.idx = (self.idx + 1) % 1024
 
-        self.render_vao.render(ModernGL.POINTS, 1024)
-        self.vao1.transform(self.vbo2, ModernGL.POINTS, 1024)
+        self.render_vao.render(moderngl.POINTS, 1024)
+        self.vao1.transform(self.vbo2, moderngl.POINTS, 1024)
         self.ctx.copy_buffer(self.vbo1, self.vbo2)
 
 

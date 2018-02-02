@@ -1,5 +1,5 @@
-import ModernGL
-from ModernGL.ext.examples import run_example
+import moderngl
+from moderngl.ext.examples import run_example
 import numpy as np
 
 """
@@ -11,7 +11,7 @@ import numpy as np
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program([
             self.ctx.vertex_shader('''
@@ -98,9 +98,9 @@ class Example:
         # '/i` attributes are per instance attributes
         # '/r' attributes are default values for the attributes (per render attributes)
         vao_content = [
-            (self.position_vertex_buffer, '2f', ['in_vert']),
-            (self.color_buffer, '3f', ['in_color']),
-            (self.pos_scale_buffer, '2f1f/i', ['in_pos', 'in_scale']),
+            (self.position_vertex_buffer, '2f', 'in_vert'),
+            (self.color_buffer, '3f', 'in_color'),
+            (self.pos_scale_buffer, '2f1f/i', 'in_pos', 'in_scale'),
         ]
 
         self.vao = self.ctx.vertex_array(self.prog, vao_content, self.index_buffer)

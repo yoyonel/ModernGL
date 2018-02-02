@@ -1,11 +1,11 @@
-import ModernGL
-from ModernGL.ext.examples import run_example
+import moderngl
+from moderngl.ext.examples import run_example
 
 
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
     def render(self):
         self.ctx.viewport = self.wnd.viewport

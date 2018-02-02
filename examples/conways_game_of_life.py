@@ -1,12 +1,12 @@
-import ModernGL
+import moderngl
 import numpy as np
-from ModernGL.ext.examples import run_example
+from moderngl.ext.examples import run_example
 
 
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         width, height = self.wnd.size
         canvas = np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]).astype('f4')
@@ -83,16 +83,16 @@ class Example:
         self.transform['Width'].value = width
         self.transform['Height'].value = height
 
-        self.texture = self.ctx.texture((width, height), 1, pixels.tobytes(), floats=True)
-        self.texture.filter = ModernGL.NEAREST
+        self.texture = self.ctx.texture((width, height), 1, pixels.tobytes(), dtype='f4')
+        self.texture.filter = moderngl.NEAREST
         self.texture.swizzle = 'RRR1'
         self.texture.use()
 
         self.vbo = self.ctx.buffer(canvas.tobytes())
-        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, ['in_vert'])
+        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert')
 
         self.text = self.ctx.buffer(grid.tobytes())
-        self.tao = self.ctx.simple_vertex_array(self.transform, self.text, ['in_text'])
+        self.tao = self.ctx.simple_vertex_array(self.transform, self.text, 'in_text')
         self.pbo = self.ctx.buffer(reserve=pixels.nbytes)
 
     def render(self):
@@ -102,7 +102,7 @@ class Example:
         self.tao.transform(self.pbo)
         self.texture.write(self.pbo)
 
-        self.vao.render(ModernGL.TRIANGLE_STRIP)
+        self.vao.render(moderngl.TRIANGLE_STRIP)
 
 
 run_example(Example)

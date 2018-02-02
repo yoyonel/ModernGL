@@ -1,6 +1,6 @@
-import ModernGL
+import moderngl
 import numpy as np
-from ModernGL.ext.examples import run_example
+from moderngl.ext.examples import run_example
 from pyrr import Matrix44
 
 
@@ -14,7 +14,7 @@ def grid(size, steps):
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program([
             self.ctx.vertex_shader('''
@@ -42,13 +42,13 @@ class Example:
         self.mvp = self.prog['Mvp']
 
         self.vbo = self.ctx.buffer(grid(15, 10).astype('f4').tobytes())
-        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, ['in_vert'])
+        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert')
 
     def render(self):
         width, height = self.wnd.size
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
-        self.ctx.enable(ModernGL.DEPTH_TEST)
+        self.ctx.enable(moderngl.DEPTH_TEST)
 
         proj = Matrix44.perspective_projection(45.0, width / height, 0.1, 1000.0)
         lookat = Matrix44.look_at(
@@ -58,7 +58,7 @@ class Example:
         )
 
         self.mvp.write((proj * lookat).astype('f4').tobytes())
-        self.vao.render(ModernGL.LINES)
+        self.vao.render(moderngl.LINES)
 
 
 run_example(Example)

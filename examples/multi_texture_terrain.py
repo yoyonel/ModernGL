@@ -1,8 +1,8 @@
 import os
 
-import ModernGL
+import moderngl
 import numpy as np
-from ModernGL.ext.examples import run_example
+from moderngl.ext.examples import run_example
 from PIL import Image
 from pyrr import Matrix44
 
@@ -21,7 +21,7 @@ def terrain(size):
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program([
             self.ctx.vertex_shader('''
@@ -80,7 +80,7 @@ class Example:
         self.ibo = self.ctx.buffer(index.astype('i4').tobytes())
 
         vao_content = [
-            (self.vbo, '2f', ['in_vert']),
+            (self.vbo, '2f', 'in_vert'),
         ]
 
         self.vao = self.ctx.vertex_array(self.prog, vao_content, self.ibo)
@@ -121,7 +121,7 @@ class Example:
 
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
-        self.ctx.enable(ModernGL.DEPTH_TEST)
+        self.ctx.enable(moderngl.DEPTH_TEST)
 
         proj = Matrix44.perspective_projection(45.0, width / height, 0.1, 1000.0)
         lookat = Matrix44.look_at(
@@ -131,7 +131,7 @@ class Example:
         )
 
         self.mvp.write((proj * lookat).astype('f4').tobytes())
-        self.vao.render(ModernGL.TRIANGLE_STRIP)
+        self.vao.render(moderngl.TRIANGLE_STRIP)
 
 
 run_example(Example)

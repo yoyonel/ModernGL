@@ -1,4 +1,4 @@
-# ModernGL Examples
+# moderngl Examples
 
 Hello world :tada:
 
@@ -34,7 +34,7 @@ Multiple instance rendering
 ## Dependencies
 
 ```
-pip install ModernGL ModernGL.ext.examples ModernGL.ext.obj
+pip install moderngl moderngl.ext.examples moderngl.ext.obj
 ```
 
 ### Window backends

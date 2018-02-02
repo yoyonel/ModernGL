@@ -1,8 +1,8 @@
 import os
 
-import ModernGL
-from ModernGL.ext.examples import run_example
-from ModernGL.ext.obj import Obj
+import moderngl
+from moderngl.ext.examples import run_example
+from moderngl.ext.obj import Obj
 from PIL import Image
 from pyrr import Matrix44
 
@@ -10,7 +10,7 @@ from pyrr import Matrix44
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         self.obj = Obj.open(os.path.join(os.path.dirname(__file__), 'data', 'sitting_dummy.obj'))
         self.wood = Image.open(os.path.join(os.path.dirname(__file__), 'data', 'wood.jpg'))
@@ -74,13 +74,13 @@ class Example:
         self.texture.build_mipmaps()
 
         self.vbo = self.ctx.buffer(self.obj.pack('vx vy vz nx ny nz tx ty'))
-        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, ['in_vert', 'in_norm', 'in_text'])
+        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert', 'in_norm', 'in_text')
 
     def render(self):
         width, height = self.wnd.size
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
-        self.ctx.enable(ModernGL.DEPTH_TEST)
+        self.ctx.enable(moderngl.DEPTH_TEST)
 
         proj = Matrix44.perspective_projection(45.0, width / height, 0.1, 1000.0)
         lookat = Matrix44.look_at(

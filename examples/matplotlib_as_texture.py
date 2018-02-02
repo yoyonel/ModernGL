@@ -2,10 +2,10 @@ import io
 import os
 
 import matplotlib
-import ModernGL
+import moderngl
 import numpy as np
-from ModernGL.ext.examples import run_example
-from ModernGL.ext.obj import Obj
+from moderngl.ext.examples import run_example
+from moderngl.ext.obj import Obj
 from PIL import Image
 from pyrr import Matrix44
 
@@ -21,7 +21,7 @@ def local(*path):
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program([
             self.ctx.vertex_shader('''
@@ -79,7 +79,7 @@ class Example:
         for name in ['ground', 'grass', 'billboard', 'billboard-holder', 'billboard-image']:
             obj = Obj.open(local('data', 'scene-1-%s.obj' % name))
             vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
-            vao = self.ctx.simple_vertex_array(self.prog, vbo, ['in_vert', 'in_norm', 'in_text'])
+            vao = self.ctx.simple_vertex_array(self.prog, vbo, 'in_vert', 'in_norm', 'in_text')
             self.objects[name] = vao
 
         figure_size = (640, 360)
@@ -106,7 +106,7 @@ class Example:
         width, height = self.wnd.size
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
-        self.ctx.enable(ModernGL.DEPTH_TEST)
+        self.ctx.enable(moderngl.DEPTH_TEST)
 
         proj = Matrix44.perspective_projection(45.0, width / height, 0.1, 1000.0)
         lookat = Matrix44.look_at(

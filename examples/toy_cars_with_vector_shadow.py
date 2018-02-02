@@ -3,10 +3,10 @@ import struct
 from colorsys import hls_to_rgb as hls
 from random import uniform
 
-import ModernGL
+import moderngl
 import numpy as np
-from ModernGL.ext.obj import Obj
-from ModernGL.ext.examples import run_example
+from moderngl.ext.obj import Obj
+from moderngl.ext.examples import run_example
 from pyrr import Matrix44
 
 
@@ -26,7 +26,7 @@ cars += [{'color': random_color(), 'pos': (-1.5, i * 2.0 - 9.0, 0.0), 'angle': u
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program([
             self.ctx.vertex_shader('''
@@ -86,8 +86,8 @@ class Example:
             0.0, 0.0, 1.0,
         ) * len(cars))
         self.vao = self.ctx.vertex_array(self.prog, [
-            (self.vbo1, '3f3f', ['in_vert', 'in_norm']),
-            (self.vbo2, '3f3f9f/i', ['in_color', 'in_origin', 'in_basis']),
+            (self.vbo1, '3f3f', 'in_vert', 'in_norm'),
+            (self.vbo2, '3f3f9f/i', 'in_color', 'in_origin', 'in_basis'),
         ])
 
     def render(self):
@@ -95,7 +95,7 @@ class Example:
         width, height = self.wnd.size
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
-        self.ctx.enable(ModernGL.DEPTH_TEST)
+        self.ctx.enable(moderngl.DEPTH_TEST)
 
         camera_pos = (np.cos(angle) * 20.0, np.sin(angle) * 20.0, 5.0)
 

@@ -1,8 +1,8 @@
 import os
 
-import ModernGL
+import moderngl
 import numpy as np
-from ModernGL.ext.examples import run_example
+from moderngl.ext.examples import run_example
 from PIL import Image
 
 
@@ -13,7 +13,7 @@ def local(*path):
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program([
             self.ctx.vertex_shader('''
@@ -78,7 +78,7 @@ class Example:
         vertices = np.array([-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0])
 
         self.vbo = self.ctx.buffer(vertices.astype('f4').tobytes())
-        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, ['in_vert'])
+        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert')
 
     def render(self):
         self.ctx.viewport = self.wnd.viewport
@@ -89,7 +89,7 @@ class Example:
         self.scale.value = 1.5
         self.ratio.value = self.wnd.ratio
 
-        self.vao.render(ModernGL.TRIANGLE_STRIP)
+        self.vao.render(moderngl.TRIANGLE_STRIP)
 
 
 run_example(Example)

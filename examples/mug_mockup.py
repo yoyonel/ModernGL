@@ -1,10 +1,10 @@
 import os
 import struct
 
-import ModernGL
+import moderngl
 import numpy as np
-from ModernGL.ext.examples import run_example
-from ModernGL.ext.obj import Obj
+from moderngl.ext.examples import run_example
+from moderngl.ext.obj import Obj
 from PIL import Image
 from pyrr import Matrix44
 
@@ -16,7 +16,7 @@ def local(*path):
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         self.canvas_prog = self.ctx.program([
             self.ctx.vertex_shader('''
@@ -89,7 +89,7 @@ class Example:
         ])
 
         self.canvas_vbo = self.ctx.buffer(np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0], dtype='f4').tobytes())
-        self.canvas_vao = self.ctx.simple_vertex_array(self.canvas_prog, self.canvas_vbo, ['in_vert'])
+        self.canvas_vao = self.ctx.simple_vertex_array(self.canvas_prog, self.canvas_vbo, 'in_vert')
 
         bg_img = Image.open(local('data', 'mug-background.jpg')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
         self.bg_texture = self.ctx.texture(bg_img.size, 3, bg_img.tobytes())
@@ -106,7 +106,7 @@ class Example:
 
         obj = Obj.open(local('data', 'mug.obj'))
         self.mug_vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
-        self.mug_vao = self.ctx.simple_vertex_array(self.prog, self.mug_vbo, ['in_vert', 'in_norm', 'in_text'])
+        self.mug_vao = self.ctx.simple_vertex_array(self.prog, self.mug_vbo, 'in_vert', 'in_norm', 'in_text')
 
         segs = 32
         radius = 29.94
@@ -128,16 +128,16 @@ class Example:
         ])
 
         self.sticker_vbo = self.ctx.buffer(sticker_vertices.T.astype('f4').tobytes())
-        self.sticker_vao = self.ctx.simple_vertex_array(self.prog, self.sticker_vbo, ['in_vert', 'in_norm', 'in_text'])
+        self.sticker_vao = self.ctx.simple_vertex_array(self.prog, self.sticker_vbo, 'in_vert', 'in_norm', 'in_text')
 
     def render(self):
         width, height = self.wnd.size
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
         self.bg_texture.use()
-        self.ctx.enable_only(ModernGL.BLEND)
-        self.canvas_vao.render(ModernGL.TRIANGLE_STRIP)
-        self.ctx.enable_only(ModernGL.DEPTH_TEST)
+        self.ctx.enable_only(moderngl.BLEND)
+        self.canvas_vao.render(moderngl.TRIANGLE_STRIP)
+        self.ctx.enable_only(moderngl.DEPTH_TEST)
 
         proj = Matrix44.perspective_projection(30.0, width / height, 1.0, 1000.0)
         lookat = Matrix44.look_at(
@@ -150,9 +150,9 @@ class Example:
         self.light.value = (-143.438, -159.072, 213.268)
         self.mug_texture.use()
         self.mug_vao.render()
-        self.ctx.enable_only(ModernGL.DEPTH_TEST | ModernGL.BLEND)
+        self.ctx.enable_only(moderngl.DEPTH_TEST | moderngl.BLEND)
         self.sticker_texture.use()
-        self.sticker_vao.render(ModernGL.TRIANGLE_STRIP)
+        self.sticker_vao.render(moderngl.TRIANGLE_STRIP)
 
 
 run_example(Example)

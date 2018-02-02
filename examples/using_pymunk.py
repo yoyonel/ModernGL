@@ -1,10 +1,10 @@
 import os
 import struct
 
-import ModernGL
+import moderngl
 import numpy as np
 import pymunk
-from ModernGL.ext.examples import run_example
+from moderngl.ext.examples import run_example
 from PIL import Image
 from pymunk import Vec2d
 
@@ -16,7 +16,7 @@ def local(*path):
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program([
             self.ctx.vertex_shader('''
@@ -87,8 +87,8 @@ class Example:
         self.vbo2 = self.ctx.buffer(reserve=1024 * 1024)
 
         vao_content = [
-            (vbo1, '2f2f', ['in_vert', 'in_texture']),
-            (self.vbo2, '3f2f4f/i', ['in_pos', 'in_size', 'in_tint']),
+            (vbo1, '2f2f', 'in_vert', 'in_texture'),
+            (self.vbo2, '3f2f4f/i', 'in_pos', 'in_size', 'in_tint'),
         ]
 
         self.vao = self.ctx.vertex_array(self.prog, vao_content)
@@ -132,7 +132,7 @@ class Example:
         width, height = self.wnd.size
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
-        self.ctx.enable(ModernGL.BLEND)
+        self.ctx.enable(moderngl.BLEND)
 
         if self.wnd.key_pressed(' '):
             self.shoot()
@@ -144,13 +144,13 @@ class Example:
 
         self.vbo2.write(b''.join(struct.pack('3f2f4f', b.position.x, b.position.y, b.angle, 10, 10, 1, 1, 1, 0) for b in self.bodies))
         self.prog['Texture'].value = 0
-        self.vao.render(ModernGL.TRIANGLE_STRIP, instances=len(self.bodies))
+        self.vao.render(moderngl.TRIANGLE_STRIP, instances=len(self.bodies))
 
         self.vbo2.orphan()
 
         self.vbo2.write(b''.join(struct.pack('3f2f4f', b.position.x, b.position.y, b.angle, 15, 15, 1, 1, 1, 0) for b in self.balls))
         self.prog['Texture'].value = 1
-        self.vao.render(ModernGL.TRIANGLE_STRIP, instances=len(self.balls))
+        self.vao.render(moderngl.TRIANGLE_STRIP, instances=len(self.balls))
 
 
 run_example(Example)

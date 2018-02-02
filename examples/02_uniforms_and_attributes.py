@@ -1,5 +1,5 @@
-import ModernGL
-from ModernGL.ext.examples import run_example
+import moderngl
+from moderngl.ext.examples import run_example
 import numpy as np
 
 """
@@ -10,7 +10,7 @@ import numpy as np
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program([
             self.ctx.vertex_shader('''
@@ -52,7 +52,7 @@ class Example:
         ])
 
         self.vbo = self.ctx.buffer(vertices.astype('f4').tobytes())
-        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, ['vert'])
+        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'vert')
         self.frame_count = 0
 
         print(self.wnd.time)

@@ -1,12 +1,12 @@
-import ModernGL
+import moderngl
 import numpy as np
-from ModernGL.ext.examples import run_example
+from moderngl.ext.examples import run_example
 
 
 class Example:
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program([
             self.ctx.vertex_shader('''
@@ -55,12 +55,12 @@ class Example:
         ])
 
         self.vbo = self.ctx.buffer(vertices.astype('f4').tobytes())
-        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, ['vert', 'vert_color'])
+        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'vert', 'vert_color')
 
     def render(self):
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
-        self.ctx.enable(ModernGL.BLEND)
+        self.ctx.enable(moderngl.BLEND)
         self.rotation.value = self.wnd.time
         self.vao.render(instances=10)
 

@@ -1,9 +1,9 @@
 import os
 
-import ModernGL
+import moderngl
 import numpy as np
-from ModernGL.ext.obj import Obj
-from ModernGL.ext.examples import run_example
+from moderngl.ext.obj import Obj
+from moderngl.ext.examples import run_example
 from PIL import Image
 from pyrr import Matrix44
 
@@ -21,7 +21,7 @@ class InstancedCrates:
 
     def __init__(self, wnd):
         self.wnd = wnd
-        self.ctx = ModernGL.create_context()
+        self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program([
             self.ctx.vertex_shader('''
@@ -77,8 +77,8 @@ class InstancedCrates:
         self.vbo1 = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
         self.vbo2 = self.ctx.buffer(reserve=12 * 1024)
         self.vao = self.ctx.vertex_array(self.prog, [
-            (self.vbo1, '3f3f2f', ['in_vert', 'in_norm', 'in_text']),
-            (self.vbo2, '3f/i', ['in_move']),
+            (self.vbo1, '3f3f2f', 'in_vert', 'in_norm', 'in_text'),
+            (self.vbo2, '3f/i', 'in_move'),
         ])
 
         self.crate_a = np.random.uniform(0.7, 0.8, 32 * 32)
@@ -93,7 +93,7 @@ class InstancedCrates:
         width, height = self.wnd.size
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
-        self.ctx.enable(ModernGL.DEPTH_TEST)
+        self.ctx.enable(moderngl.DEPTH_TEST)
 
         camera_pos = (np.cos(angle) * 5.0, np.sin(angle) * 5.0, 2.0)
 
