@@ -2250,6 +2250,30 @@ class Context:
         self.mglo.point_size = value
 
     @property
+    def depth_func(self) -> int:
+        '''
+            int: Set the default depth func.
+        '''
+
+        raise Exception()
+
+    @depth_func.setter
+    def depth_func(self, value):
+        self.mglo.depth_func = value
+
+    @property
+    def blend_func(self) -> int:
+        '''
+            int: Set the default depth func.
+        '''
+
+        raise Exception()
+
+    @blend_func.setter
+    def blend_func(self, value):
+        self.mglo.blend_func = tuple(value)
+
+    @property
     def viewport(self) -> Tuple[int, int, int, int]:
         '''
             tuple: The viewport.
