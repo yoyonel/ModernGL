@@ -963,6 +963,8 @@ PyObject * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 		gl.TexImage2D(texture_target, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, pixel_type, buffer_view.buf);
 	}
 
+	gl.TexParameteri(GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);  // TODO: test this
+
 	if (data != Py_None) {
 		PyBuffer_Release(&buffer_view);
 	}
