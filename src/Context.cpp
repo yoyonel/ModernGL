@@ -963,7 +963,7 @@ PyObject * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 		gl.TexImage2D(texture_target, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, pixel_type, buffer_view.buf);
 	}
 
-	gl.TexParameteri(GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);  // TODO: test this
+	gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);  // TODO: test this
 
 	if (data != Py_None) {
 		PyBuffer_Release(&buffer_view);
@@ -1032,7 +1032,7 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		PyObject * tuple = PyTuple_GET_ITEM(content, i);
 		PyObject * buffer = PyTuple_GET_ITEM(tuple, 0);
 		PyObject * format = PyTuple_GET_ITEM(tuple, 1);
-		PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
+		// PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
 
 		if (Py_TYPE(buffer) != &MGLBuffer_Type) {
 			MGLError_Set("content[%d][0] must be a Buffer not %s", i, Py_TYPE(buffer)->tp_name);
@@ -1062,7 +1062,7 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 			return 0;
 		}
 
-		int attributes_len = (int)PyTuple_GET_SIZE(attributes);
+		int attributes_len = (int)PyTuple_GET_SIZE(tuple) - 2;
 
 		if (!attributes_len) {
 			MGLError_Set("content[%d][2] must not be empty", i);
@@ -1075,10 +1075,10 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		}
 
 		for (int j = 0; j < attributes_len; ++j) {
-			MGLAttribute * attribute = (MGLAttribute *)PyTuple_GET_ITEM(attributes, j);
+			MGLAttribute * attribute = (MGLAttribute *)PyTuple_GET_ITEM(tuple, j + 2);
 
 			if (Py_TYPE(attribute) != &MGLAttribute_Type) {
-				MGLError_Set("content[%d][2][%d] must be an attribute not %s", i, j, Py_TYPE(attribute)->tp_name);
+				MGLError_Set("content[%d][%d] must be an attribute not %s", i, j + 2, Py_TYPE(attribute)->tp_name);
 				return 0;
 			}
 
@@ -1145,7 +1145,7 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 		MGLBuffer * buffer = (MGLBuffer *)PyTuple_GET_ITEM(tuple, 0);
 		const char * format = PyUnicode_AsUTF8(PyTuple_GET_ITEM(tuple, 1));
-		PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
+		// PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
 
 		FormatIterator it = FormatIterator(format);
 		FormatInfo format_info = it.info();
@@ -1160,7 +1160,7 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 		char * ptr = 0;
 
-		int attributes_len = (int)PyTuple_GET_SIZE(attributes);
+		int attributes_len = (int)PyTuple_GET_SIZE(tuple) - 2;
 
 		for (int j = 0; j < attributes_len; ++j) {
 			FormatNode * node = it.next();
@@ -1170,7 +1170,7 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 				node = it.next();
 			}
 
-			MGLAttribute * attribute = (MGLAttribute *)PyTuple_GET_ITEM(attributes, j);
+			MGLAttribute * attribute = (MGLAttribute *)PyTuple_GET_ITEM(tuple, j + 2);
 
 			for (int r = 0; r < attribute->rows_length; ++r) {
 				int location = attribute->location + r;
@@ -1866,10 +1866,15 @@ PyObject * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 
 	int color_attachments_len = (int)PyTuple_GET_SIZE(color_attachments);
 
-	if (!color_attachments_len) {
-		MGLError_Set("the color_attachments must not be empty");
+	if (!color_attachments_len && depth_attachment == Py_None) {
+		MGLError_Set("the framebuffer is empty");
 		return 0;
 	}
+
+	// if (!color_attachments_len) {
+	// 	MGLError_Set("the color_attachments must not be empty");
+	// 	return 0;
+	// }
 
 	for (int i = 0; i < color_attachments_len; ++i) {
 		PyObject * item = PyTuple_GET_ITEM(color_attachments, i);
