@@ -2429,9 +2429,6 @@ class Context:
                 viewport (tuple): The viewport.
         '''
 
-        if viewport is not None:
-            viewport = tuple(viewport)
-
         self.mglo.fbo.clear(red, green, blue, alpha, depth, viewport)
 
     def enable_only(self, flags) -> None:
