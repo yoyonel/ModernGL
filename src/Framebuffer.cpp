@@ -174,7 +174,7 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	}
 
 	if (dtype_size != 2) {
-		MGLError_Set("dtype must be 'u1', 'u2', 'u4', 'i1', 'i2', 'i4', 'f2' or 'f4'");
+		MGLError_Set("invalid dtype");
 		return 0;
 	}
 
@@ -279,7 +279,7 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 	}
 
 	if (dtype_size != 2) {
-		MGLError_Set("dtype must be 'u1', 'u2', 'u4', 'i1', 'i2', 'i4', 'f2' or 'f4'");
+		MGLError_Set("invalid dtype");
 		return 0;
 	}
 
