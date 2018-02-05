@@ -61,7 +61,6 @@ struct MGLShader;
 struct MGLTexture;
 struct MGLTexture3D;
 struct MGLTextureCube;
-struct MGLTextureFilter;
 struct MGLUniform;
 struct MGLUniformBlock;
 struct MGLVertexArray;
@@ -330,15 +329,6 @@ struct MGLTextureCube {
 	MGLDataType data_type;
 };
 
-struct MGLTextureFilter {
-	PyObject_HEAD
-
-	PyObject * wrapper;
-
-	int min_filter;
-	int mag_filter;
-};
-
 struct MGLUniform {
 	PyObject_HEAD
 
@@ -424,7 +414,6 @@ extern PyTypeObject MGLScope_Type;
 extern PyTypeObject MGLShader_Type;
 extern PyTypeObject MGLTexture3D_Type;
 extern PyTypeObject MGLTextureCube_Type;
-extern PyTypeObject MGLTextureFilter_Type;
 extern PyTypeObject MGLTexture_Type;
 extern PyTypeObject MGLUniformBlock_Type;
 extern PyTypeObject MGLUniform_Type;
@@ -442,10 +431,5 @@ extern MGLPrimitive * MGL_LINES_ADJACENCY;
 extern MGLPrimitive * MGL_TRIANGLE_STRIP_ADJACENCY;
 extern MGLPrimitive * MGL_TRIANGLES_ADJACENCY;
 extern MGLPrimitive * MGL_NO_PRIMITIVE;
-
-extern MGLTextureFilter * MGL_LINEAR;
-extern MGLTextureFilter * MGL_NEAREST;
-extern MGLTextureFilter * MGL_LINEAR_MIPMAP;
-extern MGLTextureFilter * MGL_NEAREST_MIPMAP;
 
 extern PyObject * MGLError_TypePtr;

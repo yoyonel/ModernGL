@@ -21,8 +21,8 @@ __all__ = [
     'Primitive',
     'TRIANGLES', 'TRIANGLE_STRIP', 'TRIANGLE_FAN', 'LINES', 'LINE_STRIP', 'LINE_LOOP', 'POINTS',
     'LINE_STRIP_ADJACENCY', 'LINES_ADJACENCY', 'TRIANGLE_STRIP_ADJACENCY', 'TRIANGLES_ADJACENCY',
-    'TextureFilter',
-    'LINEAR', 'NEAREST', 'LINEAR_MIPMAP', 'NEAREST_MIPMAP',
+    'NEAREST', 'LINEAR', 'NEAREST_MIPMAP_NEAREST', 'LINEAR_MIPMAP_NEAREST',
+    'NEAREST_MIPMAP_LINEAR', 'LINEAR_MIPMAP_LINEAR',
     'Buffer',
     'Attribute', 'Uniform', 'UniformBlock', 'Varying',
     'Texture', 'Texture3D', 'TextureCube',
@@ -160,56 +160,12 @@ TRIANGLES_ADJACENCY = Primitive.new(mgl.TRIANGLES_ADJACENCY, 'TRIANGLES_ADJACENC
 '''
 
 
-class TextureFilter:
-    '''
-        TextureFilter
-    '''
-
-    __slots__ = ['mglo', 'name']
-
-    @staticmethod
-    def new(obj, name) -> 'TextureFilter':
-        '''
-            For internal use only.
-        '''
-
-        res = TextureFilter.__new__(TextureFilter)
-        obj.wrapper = res
-        res.name = name
-        res.mglo = obj
-        return res
-
-    def __init__(self):
-        self.name = None
-        self.mglo = None
-        raise TypeError()
-
-    def __repr__(self):
-        return 'ModernGL.%s' % self.name
-
-    def __eq__(self, other):
-        return type(self) is type(other) and self.mglo is other.mglo
-
-
-LINEAR = TextureFilter.new(mgl.LINEAR, 'LINEAR')
-'''
-    (GL_LINEAR, GL_LINEAR)
-'''
-
-NEAREST = TextureFilter.new(mgl.NEAREST, 'NEAREST')
-'''
-    (GL_NEAREST, GL_NEAREST)
-'''
-
-LINEAR_MIPMAP = TextureFilter.new(mgl.LINEAR_MIPMAP, 'LINEAR_MIPMAP')
-'''
-    (GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR)
-'''
-
-NEAREST_MIPMAP = TextureFilter.new(mgl.NEAREST_MIPMAP, 'NEAREST_MIPMAP')
-'''
-    (GL_NEAREST_MIPMAP_LINEAR, GL_NEAREST)
-'''
+NEAREST = 0x2600
+LINEAR = 0x2601
+NEAREST_MIPMAP_NEAREST = 0x2700
+LINEAR_MIPMAP_NEAREST = 0x2701
+NEAREST_MIPMAP_LINEAR = 0x2702
+LINEAR_MIPMAP_LINEAR = 0x2703
 
 
 class Buffer:

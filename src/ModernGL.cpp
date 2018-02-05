@@ -315,17 +315,6 @@ bool MGL_InitializeModule(PyObject * module) {
 	}
 
 	{
-		if (PyType_Ready(&MGLTextureFilter_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register TextureFilter in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return false;
-		}
-
-		Py_INCREF(&MGLTextureFilter_Type);
-
-		PyModule_AddObject(module, "TextureFilter", (PyObject *)&MGLTextureFilter_Type);
-	}
-
-	{
 		if (PyType_Ready(&MGLUniform_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Uniform in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return false;
@@ -445,32 +434,6 @@ bool MGL_InitializeModule(PyObject * module) {
 		MGL_NO_PRIMITIVE->transform_primitive = 0;
 		Py_INCREF(MGL_NO_PRIMITIVE);
 		Py_INCREF(Py_None);
-	}
-
-	{
-		MGL_LINEAR = (MGLTextureFilter *)MGLTextureFilter_Type.tp_alloc(&MGLTextureFilter_Type, 0);
-		MGL_LINEAR->wrapper = 0;
-		MGL_LINEAR->min_filter = GL_LINEAR;
-		MGL_LINEAR->mag_filter = GL_LINEAR;
-		PyModule_AddObject(module, "LINEAR", (PyObject *)MGL_LINEAR);
-
-		MGL_NEAREST = (MGLTextureFilter *)MGLTextureFilter_Type.tp_alloc(&MGLTextureFilter_Type, 0);
-		MGL_NEAREST->wrapper = 0;
-		MGL_NEAREST->min_filter = GL_NEAREST;
-		MGL_NEAREST->mag_filter = GL_NEAREST;
-		PyModule_AddObject(module, "NEAREST", (PyObject *)MGL_NEAREST);
-
-		MGL_LINEAR_MIPMAP = (MGLTextureFilter *)MGLTextureFilter_Type.tp_alloc(&MGLTextureFilter_Type, 0);
-		MGL_LINEAR_MIPMAP->wrapper = 0;
-		MGL_LINEAR_MIPMAP->min_filter = GL_LINEAR_MIPMAP_LINEAR;
-		MGL_LINEAR_MIPMAP->mag_filter = GL_LINEAR;
-		PyModule_AddObject(module, "LINEAR_MIPMAP", (PyObject *)MGL_LINEAR_MIPMAP);
-
-		MGL_NEAREST_MIPMAP = (MGLTextureFilter *)MGLTextureFilter_Type.tp_alloc(&MGLTextureFilter_Type, 0);
-		MGL_NEAREST_MIPMAP->wrapper = 0;
-		MGL_NEAREST_MIPMAP->min_filter = GL_NEAREST_MIPMAP_LINEAR;
-		MGL_NEAREST_MIPMAP->mag_filter = GL_NEAREST;
-		PyModule_AddObject(module, "NEAREST_MIPMAP", (PyObject *)MGL_NEAREST_MIPMAP);
 	}
 
 	return true;
