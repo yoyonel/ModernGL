@@ -1450,111 +1450,107 @@ PyObject * MGLContext_program(MGLContext * self, PyObject * args) {
 
 		switch (geometry_in) {
 			case GL_TRIANGLES:
-				program->geometry_input = MGL_TRIANGLES;
+				program->geometry_input = GL_TRIANGLES;
 				break;
 
 			case GL_TRIANGLE_STRIP:
-				program->geometry_input = MGL_TRIANGLE_STRIP;
+				program->geometry_input = GL_TRIANGLE_STRIP;
 				break;
 
 			case GL_TRIANGLE_FAN:
-				program->geometry_input = MGL_TRIANGLE_FAN;
+				program->geometry_input = GL_TRIANGLE_FAN;
 				break;
 
 			case GL_LINES:
-				program->geometry_input = MGL_LINES;
+				program->geometry_input = GL_LINES;
 				break;
 
 			case GL_LINE_STRIP:
-				program->geometry_input = MGL_LINE_STRIP;
+				program->geometry_input = GL_LINE_STRIP;
 				break;
 
 			case GL_LINE_LOOP:
-				program->geometry_input = MGL_LINE_LOOP;
+				program->geometry_input = GL_LINE_LOOP;
 				break;
 
 			case GL_POINTS:
-				program->geometry_input = MGL_POINTS;
+				program->geometry_input = GL_POINTS;
 				break;
 
 			case GL_LINE_STRIP_ADJACENCY:
-				program->geometry_input = MGL_LINE_STRIP_ADJACENCY;
+				program->geometry_input = GL_LINE_STRIP_ADJACENCY;
 				break;
 
 			case GL_LINES_ADJACENCY:
-				program->geometry_input = MGL_LINES_ADJACENCY;
+				program->geometry_input = GL_LINES_ADJACENCY;
 				break;
 
 			case GL_TRIANGLE_STRIP_ADJACENCY:
-				program->geometry_input = MGL_TRIANGLE_STRIP_ADJACENCY;
+				program->geometry_input = GL_TRIANGLE_STRIP_ADJACENCY;
 				break;
 
 			case GL_TRIANGLES_ADJACENCY:
-				program->geometry_input = MGL_TRIANGLES_ADJACENCY;
+				program->geometry_input = GL_TRIANGLES_ADJACENCY;
 				break;
 
 			default:
-				program->geometry_input = MGL_NO_PRIMITIVE;
+				program->geometry_input = -1;
 				break;
 		}
 
 		switch (geometry_out) {
 			case GL_TRIANGLES:
-				program->geometry_output = MGL_TRIANGLES;
+				program->geometry_output = GL_TRIANGLES;
 				break;
 
 			case GL_TRIANGLE_STRIP:
-				program->geometry_output = MGL_TRIANGLE_STRIP;
+				program->geometry_output = GL_TRIANGLE_STRIP;
 				break;
 
 			case GL_TRIANGLE_FAN:
-				program->geometry_output = MGL_TRIANGLE_FAN;
+				program->geometry_output = GL_TRIANGLE_FAN;
 				break;
 
 			case GL_LINES:
-				program->geometry_output = MGL_LINES;
+				program->geometry_output = GL_LINES;
 				break;
 
 			case GL_LINE_STRIP:
-				program->geometry_output = MGL_LINE_STRIP;
+				program->geometry_output = GL_LINE_STRIP;
 				break;
 
 			case GL_LINE_LOOP:
-				program->geometry_output = MGL_LINE_LOOP;
+				program->geometry_output = GL_LINE_LOOP;
 				break;
 
 			case GL_POINTS:
-				program->geometry_output = MGL_POINTS;
+				program->geometry_output = GL_POINTS;
 				break;
 
 			case GL_LINE_STRIP_ADJACENCY:
-				program->geometry_output = MGL_LINE_STRIP_ADJACENCY;
+				program->geometry_output = GL_LINE_STRIP_ADJACENCY;
 				break;
 
 			case GL_LINES_ADJACENCY:
-				program->geometry_output = MGL_LINES_ADJACENCY;
+				program->geometry_output = GL_LINES_ADJACENCY;
 				break;
 
 			case GL_TRIANGLE_STRIP_ADJACENCY:
-				program->geometry_output = MGL_TRIANGLE_STRIP_ADJACENCY;
+				program->geometry_output = GL_TRIANGLE_STRIP_ADJACENCY;
 				break;
 
 			case GL_TRIANGLES_ADJACENCY:
-				program->geometry_output = MGL_TRIANGLES_ADJACENCY;
+				program->geometry_output = GL_TRIANGLES_ADJACENCY;
 				break;
 
 			default:
-				program->geometry_output = MGL_NO_PRIMITIVE;
+				program->geometry_output = -1;
 				break;
 		}
 
-		Py_INCREF(program->geometry_input);
-		Py_INCREF(program->geometry_output);
-
 	} else {
-
-		program->geometry_input = MGL_NO_PRIMITIVE;
-		program->geometry_output = MGL_NO_PRIMITIVE;
+		program->geometry_input = -1;
+		program->geometry_output = -1;
 		program->geometry_vertices = 0;
 	}
 
@@ -1754,12 +1750,9 @@ PyObject * MGLContext_program(MGLContext * self, PyObject * args) {
 		}
 	}
 
-	Py_INCREF(program->geometry_input->wrapper);
-	Py_INCREF(program->geometry_output->wrapper);
-
 	PyObject * geom_info = PyTuple_New(3);
-	PyTuple_SET_ITEM(geom_info, 0, program->geometry_input->wrapper);
-	PyTuple_SET_ITEM(geom_info, 1, program->geometry_output->wrapper);
+	PyTuple_SET_ITEM(geom_info, 0, PyLong_FromLong(program->geometry_input));
+	PyTuple_SET_ITEM(geom_info, 1, PyLong_FromLong(program->geometry_output));
 	PyTuple_SET_ITEM(geom_info, 2, PyLong_FromLong(program->geometry_vertices));
 
 	PyObject * result = PyTuple_New(9);

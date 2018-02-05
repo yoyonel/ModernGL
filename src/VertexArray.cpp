@@ -14,15 +14,14 @@ void MGLVertexArray_tp_dealloc(MGLVertexArray * self) {
 }
 
 PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
-	MGLPrimitive * mode;
+	int mode;
 	int vertices;
 	int first;
 	int instances;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O!III",
-		&MGLPrimitive_Type,
+		"IIII",
 		&mode,
 		&vertices,
 		&first,
@@ -42,13 +41,6 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 		vertices = self->num_vertices;
 	}
 
-	MGLPrimitive * gs_input = self->program->geometry_input;
-
-	if (gs_input != MGL_NO_PRIMITIVE && gs_input->primitive != mode->geometry_primitive) {
-		MGLError_Set("the render mode is not compatible with the geometry_input");
-		return 0;
-	}
-
 	const GLMethods & gl = self->context->gl;
 
 	gl.UseProgram(self->program->program_obj);
@@ -56,9 +48,9 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 
 	if (self->index_buffer != (MGLBuffer *)Py_None) {
 		const void * ptr = (const void *)((GLintptr)first * 4);
-		gl.DrawElementsInstanced(mode->primitive, vertices, GL_UNSIGNED_INT, ptr, instances);
+		gl.DrawElementsInstanced(mode, vertices, GL_UNSIGNED_INT, ptr, instances);
 	} else {
-		gl.DrawArraysInstanced(mode->primitive, first, vertices, instances);
+		gl.DrawArraysInstanced(mode, first, vertices, instances);
 	}
 
 	Py_RETURN_NONE;
@@ -66,17 +58,16 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 
 PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	MGLBuffer * output;
-	MGLPrimitive * mode;
+	int mode;
 	int vertices;
 	int first;
 	int instances;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O!O!III",
+		"O!IIII",
 		&MGLBuffer_Type,
 		&output,
-		&MGLPrimitive_Type,
 		&mode,
 		&vertices,
 		&first,
@@ -101,13 +92,6 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 		vertices = self->num_vertices;
 	}
 
-	MGLPrimitive * gs_input = self->program->geometry_input;
-
-	if (gs_input != MGL_NO_PRIMITIVE && gs_input->primitive != mode->geometry_primitive) {
-		MGLError_Set("the render mode is not compatible with the geometry_input");
-		return 0;
-	}
-
 	const GLMethods & gl = self->context->gl;
 
 	gl.UseProgram(self->program->program_obj);
@@ -116,7 +100,7 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	gl.BindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, output->buffer_obj);
 
 	gl.Enable(GL_RASTERIZER_DISCARD);
-	gl.BeginTransformFeedback(mode->primitive);
+	gl.BeginTransformFeedback(mode);
 
 	if (self->subroutines) {
 
@@ -169,9 +153,9 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 
 	if (self->index_buffer != (MGLBuffer *)Py_None) {
 		const void * ptr = (const void *)((GLintptr)first * 4);
-		gl.DrawElementsInstanced(mode->primitive, vertices, GL_UNSIGNED_INT, ptr, instances);
+		gl.DrawElementsInstanced(mode, vertices, GL_UNSIGNED_INT, ptr, instances);
 	} else {
-		gl.DrawArraysInstanced(mode->primitive, first, vertices, instances);
+		gl.DrawArraysInstanced(mode, first, vertices, instances);
 	}
 
 	gl.EndTransformFeedback();

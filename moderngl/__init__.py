@@ -58,6 +58,7 @@ DEPTH_TEST = 2
 CULL_FACE = 4
 RASTERIZER_DISCARD = 8
 
+
 ZERO = 0x0000
 ONE = 0x0001
 SRC_COLOR = 0x0300
@@ -69,95 +70,22 @@ ONE_MINUS_DST_ALPHA = 0x0305
 DST_COLOR = 0x0306
 ONE_MINUS_DST_COLOR = 0x0307
 
+
 DEFAULT_BLENDING = (SRC_ALPHA, ONE_MINUS_SRC_ALPHA)
 PREMULTIPLIED_ALPHA = (SRC_ALPHA, ONE)
 
 
-class Primitive:
-    '''
-        Primitive
-    '''
-
-    __slots__ = ['mglo', 'name']
-
-    @staticmethod
-    def new(obj, name) -> 'Primitive':
-        '''
-            For internal use only.
-        '''
-
-        res = Primitive.__new__(Primitive)
-        obj.wrapper = res
-        res.name = name
-        res.mglo = obj
-        return res
-
-    def __init__(self):
-        self.name = None
-        self.mglo = None
-        raise TypeError()
-
-    def __repr__(self):
-        return 'ModernGL.%s' % self.name
-
-    def __eq__(self, other):
-        return type(self) is type(other) and self.mglo is other.mglo
-
-
-TRIANGLES = Primitive.new(mgl.TRIANGLES, 'TRIANGLES')
-'''
-    GL_TRIANGLES
-'''
-
-TRIANGLE_STRIP = Primitive.new(mgl.TRIANGLE_STRIP, 'TRIANGLE_STRIP')
-'''
-    GL_TRIANGLE_STRIP
-'''
-
-TRIANGLE_FAN = Primitive.new(mgl.TRIANGLE_FAN, 'TRIANGLE_FAN')
-'''
-    GL_TRIANGLE_FAN
-'''
-
-LINES = Primitive.new(mgl.LINES, 'LINES')
-'''
-    GL_LINES
-'''
-
-LINE_STRIP = Primitive.new(mgl.LINE_STRIP, 'LINE_STRIP')
-'''
-    GL_LINE_STRIP
-'''
-
-LINE_LOOP = Primitive.new(mgl.LINE_LOOP, 'LINE_LOOP')
-'''
-    GL_LINE_LOOP
-'''
-
-POINTS = Primitive.new(mgl.POINTS, 'POINTS')
-'''
-    GL_POINTS
-'''
-
-LINE_STRIP_ADJACENCY = Primitive.new(mgl.LINE_STRIP_ADJACENCY, 'LINE_STRIP_ADJACENCY')
-'''
-    GL_LINE_STRIP_ADJACENCY
-'''
-
-LINES_ADJACENCY = Primitive.new(mgl.LINES_ADJACENCY, 'LINES_ADJACENCY')
-'''
-    GL_LINES_ADJACENCY
-'''
-
-TRIANGLE_STRIP_ADJACENCY = Primitive.new(mgl.TRIANGLE_STRIP_ADJACENCY, 'TRIANGLE_STRIP_ADJACENCY')
-'''
-    GL_TRIANGLE_STRIP_ADJACENCY
-'''
-
-TRIANGLES_ADJACENCY = Primitive.new(mgl.TRIANGLES_ADJACENCY, 'TRIANGLES_ADJACENCY')
-'''
-    GL_TRIANGLES_ADJACENCY
-'''
+POINTS = 0x0000
+LINES = 0x0001
+LINE_LOOP = 0x0002
+LINE_STRIP = 0x0003
+TRIANGLES = 0x0004
+TRIANGLE_STRIP = 0x0005
+TRIANGLE_FAN = 0x0006
+LINES_ADJACENCY = 0x000A
+LINE_STRIP_ADJACENCY = 0x000B
+TRIANGLES_ADJACENCY = 0x000C
+TRIANGLE_STRIP_ADJACENCY = 0x000D
 
 
 NEAREST = 0x2600

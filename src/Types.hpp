@@ -54,7 +54,6 @@ struct MGLComputeShader;
 struct MGLContext;
 struct MGLFramebuffer;
 struct MGLInvalidObject;
-struct MGLPrimitive;
 struct MGLProgram;
 struct MGLRenderbuffer;
 struct MGLShader;
@@ -167,22 +166,13 @@ struct MGLInvalidObject {
 	PyObject_HEAD
 };
 
-struct MGLPrimitive {
-	PyObject_HEAD
-	PyObject * wrapper;
-
-	int primitive;
-	int geometry_primitive;
-	int transform_primitive;
-};
-
 struct MGLProgram {
 	PyObject_HEAD
 
 	MGLContext * context;
 
-	MGLPrimitive * geometry_input;
-	MGLPrimitive * geometry_output;
+	int geometry_input;
+	int geometry_output;
 
 	int program_obj;
 
@@ -406,7 +396,6 @@ extern PyTypeObject MGLComputeShader_Type;
 extern PyTypeObject MGLContext_Type;
 extern PyTypeObject MGLFramebuffer_Type;
 extern PyTypeObject MGLInvalidObject_Type;
-extern PyTypeObject MGLPrimitive_Type;
 extern PyTypeObject MGLProgram_Type;
 extern PyTypeObject MGLQuery_Type;
 extern PyTypeObject MGLRenderbuffer_Type;
@@ -418,18 +407,5 @@ extern PyTypeObject MGLTexture_Type;
 extern PyTypeObject MGLUniformBlock_Type;
 extern PyTypeObject MGLUniform_Type;
 extern PyTypeObject MGLVertexArray_Type;
-
-extern MGLPrimitive * MGL_TRIANGLES;
-extern MGLPrimitive * MGL_TRIANGLE_STRIP;
-extern MGLPrimitive * MGL_TRIANGLE_FAN;
-extern MGLPrimitive * MGL_LINES;
-extern MGLPrimitive * MGL_LINE_STRIP;
-extern MGLPrimitive * MGL_LINE_LOOP;
-extern MGLPrimitive * MGL_POINTS;
-extern MGLPrimitive * MGL_LINE_STRIP_ADJACENCY;
-extern MGLPrimitive * MGL_LINES_ADJACENCY;
-extern MGLPrimitive * MGL_TRIANGLE_STRIP_ADJACENCY;
-extern MGLPrimitive * MGL_TRIANGLES_ADJACENCY;
-extern MGLPrimitive * MGL_NO_PRIMITIVE;
 
 extern PyObject * MGLError_TypePtr;
