@@ -424,28 +424,27 @@ int MGLTexture3D_set_repeat_z(MGLTexture3D * self, PyObject * value) {
 }
 
 PyObject * MGLTexture3D_get_filter(MGLTexture3D * self) {
-	Py_INCREF(self->filter->wrapper);
-	return self->filter->wrapper;
+	PyObject * res = PyTuple_New(2);
+	PyTuple_SET_ITEM(res, 0, PyLong_FromLong(self->min_filter));
+	PyTuple_SET_ITEM(res, 1, PyLong_FromLong(self->mag_filter));
+	return res;
 }
 
 int MGLTexture3D_set_filter(MGLTexture3D * self, PyObject * value) {
-	if (Py_TYPE(value) != &MGLTextureFilter_Type) {
-		MGLError_Set("the value must be a TextureFilter not %s", Py_TYPE(value)->tp_name);
+	if (PyTuple_GET_SIZE(value) != 2) {
+		// TODO: error
 		return -1;
 	}
 
-	MGLTextureFilter * filter = (MGLTextureFilter *)value;
-
-	Py_INCREF(filter);
-	Py_DECREF(self->filter);
-	self->filter = filter;
+	self->min_filter = PyLong_AsLong(PyTuple_GET_ITEM(value, 0));
+	self->mag_filter = PyLong_AsLong(PyTuple_GET_ITEM(value, 1));
 
 	const GLMethods & gl = self->context->gl;
 
 	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 	gl.BindTexture(GL_TEXTURE_3D, self->texture_obj);
-	gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, filter->min_filter);
-	gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, filter->mag_filter);
+	gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, self->min_filter);
+	gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, self->mag_filter);
 
 	return 0;
 }

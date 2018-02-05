@@ -276,10 +276,12 @@ struct MGLTexture {
 
 	int samples;
 
+	int min_filter;
+	int mag_filter;
+
 	MGLDataType data_type;
 	bool depth;
 
-	MGLTextureFilter * filter;
 	bool repeat_x;
 	bool repeat_y;
 };
@@ -299,9 +301,10 @@ struct MGLTexture3D {
 
 	int samples;
 
-	MGLDataType data_type;
+	int min_filter;
+	int mag_filter;
 
-	MGLTextureFilter * filter;
+	MGLDataType data_type;
 
 	bool repeat_x;
 	bool repeat_y;
@@ -320,6 +323,9 @@ struct MGLTextureCube {
 	int depth;
 
 	int components;
+
+	int min_filter;
+	int mag_filter;
 
 	MGLDataType data_type;
 };

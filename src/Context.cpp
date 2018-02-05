@@ -587,8 +587,8 @@ PyObject * MGLContext_texture(MGLContext * self, PyObject * args) {
 	texture->data_type = data_type;
 	texture->depth = false;
 
-	Py_INCREF(MGL_LINEAR);
-	texture->filter = MGL_LINEAR;
+	texture->min_filter = GL_LINEAR;
+	texture->mag_filter = GL_LINEAR;
 
 	texture->repeat_x = true;
 	texture->repeat_y = true;
@@ -715,8 +715,8 @@ PyObject * MGLContext_texture3d(MGLContext * self, PyObject * args) {
 	texture->components = components;
 	texture->data_type = data_type;
 
-	Py_INCREF(MGL_LINEAR);
-	texture->filter = MGL_LINEAR;
+	texture->min_filter = GL_LINEAR;
+	texture->mag_filter = GL_LINEAR;
 
 	texture->repeat_x = true;
 	texture->repeat_y = true;
@@ -976,8 +976,8 @@ PyObject * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	texture->data_type = from_dtype("f4");
 	texture->depth = true;
 
-	Py_INCREF(MGL_LINEAR);
-	texture->filter = MGL_LINEAR;
+	texture->min_filter = GL_LINEAR;
+	texture->mag_filter = GL_LINEAR;
 
 	texture->repeat_x = false;
 	texture->repeat_y = false;

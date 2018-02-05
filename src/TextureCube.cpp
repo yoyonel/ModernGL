@@ -303,10 +303,114 @@ PyObject * MGLTextureCube_release(MGLTextureCube * self) {
 PyMethodDef MGLTextureCube_tp_methods[] = {
 	{"write", (PyCFunction)MGLTextureCube_write, METH_VARARGS, 0},
 	{"use", (PyCFunction)MGLTextureCube_use, METH_VARARGS, 0},
-//	{"build_mipmaps", (PyCFunction)MGLTexture3D_build_mipmaps, METH_VARARGS, 0},
+//	{"build_mipmaps", (PyCFunction)MGLTextureCube_build_mipmaps, METH_VARARGS, 0},
 	{"read", (PyCFunction)MGLTextureCube_read, METH_VARARGS, 0},
 	{"read_into", (PyCFunction)MGLTextureCube_read_into, METH_VARARGS, 0},
 	{"release", (PyCFunction)MGLTextureCube_release, METH_NOARGS, 0},
+	{0},
+};
+
+PyObject * MGLTextureCube_get_filter(MGLTextureCube * self) {
+	PyObject * res = PyTuple_New(2);
+	PyTuple_SET_ITEM(res, 0, PyLong_FromLong(self->min_filter));
+	PyTuple_SET_ITEM(res, 1, PyLong_FromLong(self->mag_filter));
+	return res;
+}
+
+int MGLTextureCube_set_filter(MGLTextureCube * self, PyObject * value) {
+	if (PyTuple_GET_SIZE(value) != 2) {
+		// TODO: error
+		return -1;
+	}
+
+	self->min_filter = PyLong_AsLong(PyTuple_GET_ITEM(value, 0));
+	self->mag_filter = PyLong_AsLong(PyTuple_GET_ITEM(value, 1));
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+	gl.BindTexture(GL_TEXTURE_CUBE_MAP, self->texture_obj);
+	gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, self->min_filter);
+	gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, self->mag_filter);
+
+	return 0;
+}
+
+PyObject * MGLTextureCube_get_swizzle(MGLTextureCube * self, void * closure) {
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+	gl.BindTexture(GL_TEXTURE_CUBE_MAP, self->texture_obj);
+
+	int swizzle_r = 0;
+	int swizzle_g = 0;
+	int swizzle_b = 0;
+	int swizzle_a = 0;
+
+	gl.GetTexParameteriv(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_SWIZZLE_R, &swizzle_r);
+	gl.GetTexParameteriv(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_SWIZZLE_G, &swizzle_g);
+	gl.GetTexParameteriv(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_SWIZZLE_B, &swizzle_b);
+	gl.GetTexParameteriv(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_SWIZZLE_A, &swizzle_a);
+
+	char swizzle[5] = {
+		char_from_swizzle(swizzle_r),
+		char_from_swizzle(swizzle_g),
+		char_from_swizzle(swizzle_b),
+		char_from_swizzle(swizzle_a),
+		0,
+	};
+
+	return PyUnicode_FromStringAndSize(swizzle, 4);
+}
+
+int MGLTextureCube_set_swizzle(MGLTextureCube * self, PyObject * value, void * closure) {
+	const char * swizzle = PyUnicode_AsUTF8(value);
+
+	if (!swizzle[0]) {
+		MGLError_Set("the swizzle is empty");
+		return -1;
+	}
+
+	int tex_swizzle[4] = {-1, -1, -1, -1};
+
+	for (int i = 0; swizzle[i]; ++i) {
+		if (i > 3) {
+			MGLError_Set("the swizzle is too long");
+			return -1;
+		}
+
+		tex_swizzle[i] = swizzle_from_char(swizzle[i]);
+
+		if (tex_swizzle[i] == -1) {
+			MGLError_Set("'%c' is not a valid swizzle parameter", swizzle[i]);
+			return -1;
+		}
+	}
+
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+	gl.BindTexture(GL_TEXTURE_CUBE_MAP, self->texture_obj);
+
+	gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_SWIZZLE_R, tex_swizzle[0]);
+	if (tex_swizzle[1] != -1) {
+		gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_SWIZZLE_G, tex_swizzle[1]);
+		if (tex_swizzle[2] != -1) {
+			gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_SWIZZLE_B, tex_swizzle[2]);
+			if (tex_swizzle[3] != -1) {
+				gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_SWIZZLE_A, tex_swizzle[3]);
+			}
+		}
+	}
+
+	return 0;
+}
+
+PyGetSetDef MGLTextureCube_tp_getseters[] = {
+	{(char *)"filter", (getter)MGLTextureCube_get_filter, (setter)MGLTextureCube_set_filter, 0, 0},
+	{(char *)"swizzle", (getter)MGLTextureCube_get_swizzle, (setter)MGLTextureCube_set_swizzle, 0, 0},
 	{0},
 };
 
@@ -340,7 +444,7 @@ PyTypeObject MGLTextureCube_Type = {
 	0,                                                      // tp_iternext
 	MGLTextureCube_tp_methods,                              // tp_methods
 	0,                                                      // tp_members
-	0,                                                      // tp_getset
+	MGLTextureCube_tp_getseters,                            // tp_getset
 	0,                                                      // tp_base
 	0,                                                      // tp_dict
 	0,                                                      // tp_descr_get
