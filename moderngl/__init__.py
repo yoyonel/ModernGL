@@ -225,13 +225,14 @@ class Buffer:
         Copy buffer content using :py:meth:`Context.copy_buffer`.
     '''
 
-    __slots__ = ['mglo', '_size', '_dynamic', '_glo']
+    __slots__ = ['mglo', '_size', '_dynamic', '_glo', 'extra']
 
     def __init__(self):
         self.mglo = None
         self._size = None
         self._dynamic = None
         self._glo = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -453,7 +454,7 @@ class Attribute:
         Attribute
     '''
 
-    __slots__ = ['mglo', '_location', '_array_length', '_dimension', '_shape', '_name']
+    __slots__ = ['mglo', '_location', '_array_length', '_dimension', '_shape', '_name', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -462,6 +463,7 @@ class Attribute:
         self._dimension = None
         self._shape = None
         self._name = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -622,7 +624,7 @@ class Uniform:
         In ModernGL, Uniforms can be accessed using :py:attr:`Program.uniforms`
     '''
 
-    __slots__ = ['mglo', '_location', '_array_length', '_dimension', '_name']
+    __slots__ = ['mglo', '_location', '_array_length', '_dimension', '_name', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -630,6 +632,7 @@ class Uniform:
         self._array_length = None
         self._dimension = None
         self._name = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -794,13 +797,14 @@ class UniformBlock:
         UniformBlock
     '''
 
-    __slots__ = ['mglo', '_index', '_size', '_name']
+    __slots__ = ['mglo', '_index', '_size', '_name', 'extra']
 
     def __init__(self):
         self.mglo = None
         self._index = None
         self._size = None
         self._name = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -848,13 +852,14 @@ class Varying:
         Varying
     '''
 
-    __slots__ = ['_number', '_array_length', '_dimension', '_name']
+    __slots__ = ['_number', '_array_length', '_dimension', '_name', 'extra']
 
     def __init__(self):
         self._number = None
         self._array_length = None
         self._dimension = None
         self._name = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -882,11 +887,12 @@ class Subroutine:
         Subroutine
     '''
 
-    __slots__ = ['_index', '_name']
+    __slots__ = ['_index', '_name', 'extra']
 
     def __init__(self):
         self._index = None
         self._name = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -921,7 +927,7 @@ class Texture:
         to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_depth', '_glo']
+    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_depth', '_glo', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -931,6 +937,7 @@ class Texture:
         self._dtype = None
         self._depth = None
         self._glo = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -1138,7 +1145,7 @@ class Texture3D:
         Use :py:meth:`Context.texture3d` to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_glo']
+    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_glo', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -1147,6 +1154,7 @@ class Texture3D:
         self._samples = None
         self._dtype = None
         self._glo = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -1358,7 +1366,7 @@ class TextureCube:
         Use :py:meth:`Context.texture_cube` to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_dtype', '_glo']
+    __slots__ = ['mglo', '_size', '_components', '_dtype', '_glo', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -1366,6 +1374,7 @@ class TextureCube:
         self._components = None
         self._dtype = None
         self._glo = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -1467,7 +1476,7 @@ class Renderbuffer:
         to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_samples', '_depth', '_dtype', '_glo']
+    __slots__ = ['mglo', '_size', '_components', '_samples', '_depth', '_dtype', '_glo', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -1477,6 +1486,7 @@ class Renderbuffer:
         self._depth = None
         self._dtype = None
         self._glo = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -1572,13 +1582,14 @@ class Shader:
             - :py:meth:`Context.tess_control_shader`
     '''
 
-    __slots__ = ['mglo', '_source', '_typename', '_glo']
+    __slots__ = ['mglo', '_source', '_typename', '_glo', 'extra']
 
     def __init__(self):
         self.mglo = None
         self._source = None
         self._typename = None
         self._glo = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -1642,7 +1653,7 @@ class Program:
         Use :py:meth:`Context.program` to create one.
     '''
 
-    __slots__ = ['mglo', '_members', '_subroutines', '_geom', '_glo']
+    __slots__ = ['mglo', '_members', '_subroutines', '_geom', '_glo', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -1650,6 +1661,7 @@ class Program:
         self._subroutines = None
         self._geom = (None, None, None)
         self._glo = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -1736,11 +1748,12 @@ class ConditionalRender:
 
 
 class Query:
-    __slots__ = ['mglo', 'crender']
+    __slots__ = ['mglo', 'crender', 'extra']
 
     def __init__(self):
         self.mglo = None
         self.crender = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -1767,10 +1780,11 @@ class Query:
 
 
 class Scope:
-    __slots__ = ['mglo']
+    __slots__ = ['mglo', 'extra']
 
     def __init__(self):
         self.mglo = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -1798,13 +1812,14 @@ class VertexArray:
         to create one.
     '''
 
-    __slots__ = ['mglo', '_program', '_index_buffer', '_glo']
+    __slots__ = ['mglo', '_program', '_index_buffer', '_glo', 'extra']
 
     def __init__(self):
         self.mglo = None
         self._program = None
         self._index_buffer = None
         self._glo = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -1918,11 +1933,12 @@ class ComputeShader:
         While it can do rendering, it is generally used for tasks not directly related to drawing.
     '''
 
-    __slots__ = ['mglo', '_glo']
+    __slots__ = ['mglo', '_glo', 'extra']
 
     def __init__(self):
         self.mglo = None
         self._glo = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -1976,7 +1992,7 @@ class Framebuffer:
         Create a :py:class:`Framebuffer` using :py:meth:`Context.framebuffer`.
     '''
 
-    __slots__ = ['mglo', '_color_attachments', '_depth_attachment', '_size', '_samples', '_glo']
+    __slots__ = ['mglo', '_color_attachments', '_depth_attachment', '_size', '_samples', '_glo', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -1985,6 +2001,7 @@ class Framebuffer:
         self._size = (None, None)
         self._samples = None
         self._glo = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
@@ -2210,13 +2227,14 @@ class Context:
             - :py:meth:`Context.framebuffer`
     '''
 
-    __slots__ = ['mglo', '_screen', '_info', 'version_code']
+    __slots__ = ['mglo', '_screen', '_info', 'version_code', 'extra']
 
     def __init__(self):
         self.mglo = None
         self._screen = None
         self._info = None
         self.version_code = None
+        self.extra = None
         raise TypeError()
 
     def __repr__(self):
