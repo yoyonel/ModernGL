@@ -18,7 +18,6 @@ __version__ = '5.0.0'
 __all__ = [
     'Error',
     'NOTHING', 'BLEND', 'DEPTH_TEST', 'CULL_FACE', 'RASTERIZER_DISCARD',
-    'Primitive',
     'TRIANGLES', 'TRIANGLE_STRIP', 'TRIANGLE_FAN', 'LINES', 'LINE_STRIP', 'LINE_LOOP', 'POINTS',
     'LINE_STRIP_ADJACENCY', 'LINES_ADJACENCY', 'TRIANGLE_STRIP_ADJACENCY', 'TRIANGLES_ADJACENCY',
     'NEAREST', 'LINEAR', 'NEAREST_MIPMAP_NEAREST', 'LINEAR_MIPMAP_NEAREST',
@@ -855,16 +854,16 @@ class Texture:
         self.mglo.repeat_y = value
 
     @property
-    def filter(self) -> TextureFilter:
+    def filter(self) -> Tuple[int, int]:
         '''
-            TextureFilter: The filter of the texture.
+            tuple: The filter of the texture.
         '''
 
         return self.mglo.filter
 
     @filter.setter
     def filter(self, value):
-        self.mglo.filter = value.mglo
+        self.mglo.filter = value
 
     @property
     def swizzle(self) -> str:
@@ -1084,16 +1083,16 @@ class Texture3D:
         self.mglo.repeat_z = value
 
     @property
-    def filter(self) -> TextureFilter:
+    def filter(self) -> Tuple[int, int]:
         '''
-            TextureFilter: The filter of the texture.
+            tuple: The filter of the texture.
         '''
 
         return self.mglo.filter
 
     @filter.setter
     def filter(self, value):
-        self.mglo.filter = value.mglo
+        self.mglo.filter = value
 
     @property
     def swizzle(self) -> str:
@@ -1561,9 +1560,9 @@ class Program:
         yield from self._members
 
     @property
-    def geometry_input(self) -> Primitive:
+    def geometry_input(self) -> int:
         '''
-            :py:class:`Primitive`: The geometry input primitive.
+            int: The geometry input primitive.
             The GeometryShader's input primitive if the GeometryShader exists.
             The geometry input primitive will be used for validation.
         '''
@@ -1571,9 +1570,9 @@ class Program:
         return self._geom[0]
 
     @property
-    def geometry_output(self) -> Primitive:
+    def geometry_output(self) -> int:
         '''
-            :py:class:`Primitive`: The geometry output primitive.
+            int: The geometry output primitive.
             The GeometryShader's output primitive if the GeometryShader exists.
         '''
 
@@ -1768,7 +1767,7 @@ class VertexArray:
             the input primitive of the GeometryShader.
 
             Args:
-                mode (Primitive): By default `TRIANGLES` will be used.
+                mode (int): By default `TRIANGLES` will be used.
                 vertices (int): The number of vertices to transform.
 
             Keyword Args:
@@ -1776,7 +1775,7 @@ class VertexArray:
                 instances (int): The number of instances.
         '''
 
-        self.mglo.render(mode.mglo, vertices, first, instances)
+        self.mglo.render(mode, vertices, first, instances)
 
     def transform(self, buffer, mode=POINTS, vertices=-1, *, first=0, instances=1) -> None:
         '''
@@ -1787,7 +1786,7 @@ class VertexArray:
 
             Args:
                 buffer (Buffer): The buffer to store the output.
-                mode (Primitive): By default `TRIANGLES` will be used.
+                mode (int): By default `TRIANGLES` will be used.
                 vertices (int): The number of vertices to transform.
 
             Keyword Args:
@@ -1795,7 +1794,7 @@ class VertexArray:
                 instances (int): The number of instances.
         '''
 
-        self.mglo.transform(buffer.mglo, mode.mglo, vertices, first, instances)
+        self.mglo.transform(buffer.mglo, mode, vertices, first, instances)
 
     def bind(self, attribute, buffer, *, offset, stride, divisor) -> None:
         attr = self._program._members.get(attribute)

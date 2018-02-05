@@ -1751,8 +1751,18 @@ PyObject * MGLContext_program(MGLContext * self, PyObject * args) {
 	}
 
 	PyObject * geom_info = PyTuple_New(3);
-	PyTuple_SET_ITEM(geom_info, 0, PyLong_FromLong(program->geometry_input));
-	PyTuple_SET_ITEM(geom_info, 1, PyLong_FromLong(program->geometry_output));
+	if (program->geometry_input != -1) {
+		PyTuple_SET_ITEM(geom_info, 0, PyLong_FromLong(program->geometry_input));
+	} else {
+		Py_INCREF(Py_None);
+		PyTuple_SET_ITEM(geom_info, 0, Py_None);
+	}
+	if (program->geometry_output != -1) {
+		PyTuple_SET_ITEM(geom_info, 1, PyLong_FromLong(program->geometry_output));
+	} else {
+		Py_INCREF(Py_None);
+		PyTuple_SET_ITEM(geom_info, 1, Py_None);
+	}
 	PyTuple_SET_ITEM(geom_info, 2, PyLong_FromLong(program->geometry_vertices));
 
 	PyObject * result = PyTuple_New(9);

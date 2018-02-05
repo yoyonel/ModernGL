@@ -81,9 +81,6 @@ class TestCase(unittest.TestCase):
 
     def test_program_geometry_primitives_2(self):
         program = self.ctx.program([self.vertex_shader, self.geometry_shader])
-
-        self.assertIsInstance(program.geometry_input, moderngl.Primitive)
-        self.assertIsInstance(program.geometry_output, moderngl.Primitive)
         self.assertEqual(program.geometry_vertices, 2)
 
     def test_program_duplicate_shader_1(self):
