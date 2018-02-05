@@ -2321,9 +2321,6 @@ PyObject * MGLContext_compute_shader(MGLContext * self, PyObject * args) {
 
 	MGLComputeShader * compute_shader = (MGLComputeShader *)MGLComputeShader_Type.tp_alloc(&MGLComputeShader_Type, 0);
 
-	Py_INCREF(source);
-	compute_shader->source = source;
-
 	Py_INCREF(self);
 	compute_shader->context = self;
 
