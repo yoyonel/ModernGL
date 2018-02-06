@@ -4,27 +4,7 @@ Context
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
 
-Examples
---------
-
-ModernGL Context in a Window
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-    import moderngl
-    # create a window
-    ctx = moderngl.create_context()
-    print(ctx.version_code)
-
-Standalone ModernGL Context
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-    import moderngl
-    ctx = moderngl.create_standalone_context()
-    print(ctx.version_code)
+.. autoclass:: moderngl.Context
 
 Context Creation
 ----------------
@@ -84,6 +64,69 @@ Attributes
 .. autoattribute:: Context.version_code
 .. autoattribute:: Context.info
 .. autoattribute:: Context.front_face
+
+Examples
+--------
+
+ModernGL Context
+^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    import moderngl
+    # create a window
+    ctx = moderngl.create_context()
+    print(ctx.version_code)
+
+Standalone ModernGL Context
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    import moderngl
+    ctx = moderngl.create_standalone_context()
+    print(ctx.version_code)
+
+ContextManager
+^^^^^^^^^^^^^^
+
+.. rubric:: context_manager.py
+
+.. code-block:: python
+    :linenos:
+
+    import moderngl
+
+
+    class ContextManager:
+        ctx = None
+
+        @staticmethod
+        def get_default_context(allow_fallback_standalone_context=True) -> moderngl.Context:
+            '''
+                Default context
+            '''
+
+            if ContextManager.ctx is None:
+                try:
+                    ContextManager.ctx = moderngl.create_context()
+                except moderngl.Error:
+                    if allow_fallback_standalone_context:
+                        ContextManager.ctx = moderngl.create_standalone_context()
+                    else:
+                        raise
+
+            return ContextManager.ctx
+
+.. rubric:: example.py
+
+.. code-block:: python
+    :linenos:
+
+    from context_manager import ContextManager
+
+    ctx = ContextManager.get_default_context()
+    print(ctx.version_code)
 
 .. toctree::
     :maxdepth: 2

@@ -2082,32 +2082,8 @@ class Framebuffer:
 
 class Context:
     '''
-        Create a :py:class:`Context` using:
-
-        - :py:func:`ModernGL.create_context`
-        - :py:func:`ModernGL.create_standalone_context`
-
-        The :py:func:`create_context` must be used when rendering in a window.
-        The :py:func:`create_standalone_context` must be used when rendering
-        without a window.
-
-        Members:
-
-            - :py:meth:`Context.program`
-            - :py:meth:`Context.vertex_shader`
-            - :py:meth:`Context.fragment_shader`
-            - :py:meth:`Context.geometry_shader`
-            - :py:meth:`Context.tess_evaluation_shader`
-            - :py:meth:`Context.tess_control_shader`
-            - :py:meth:`Context.buffer`
-            - :py:meth:`Context.simple_vertex_array`
-            - :py:meth:`Context.vertex_array`
-            - :py:meth:`Context.texture`
-            - :py:meth:`Context.depth_texture`
-            - :py:meth:`Context.renderbuffer`
-            - :py:meth:`Context.depth_renderbuffer`
-            - :py:meth:`Context.simple_framebuffer`
-            - :py:meth:`Context.framebuffer`
+        Class exposing OpenGL features.
+        ModernGL objects can be created from this class.
     '''
 
     __slots__ = ['mglo', '_screen', '_info', 'version_code', 'extra']
@@ -2544,8 +2520,7 @@ class Context:
             Create a :py:class:`VertexArray`.
 
             Args:
-                program (Program): The program used by :py:meth:`~VertexArray.render` and
-                                   :py:meth:`~VertexArray.transform`.
+                program (Program): The program used when rendering.
                 content (list): A list of (buffer, format, attributes).
                 index_buffer (Buffer): An index buffer.
 
@@ -2569,14 +2544,16 @@ class Context:
 
             This is an alias for::
 
-                format = detect_format(program, attributes)
+                format = moderngl.detect_format(program, attributes)
                 vertex_array(program, [(buffer, format, attributes)])
 
             Args:
-                program (Program): The program used by :py:meth:`~VertexArray.render` and
-                                   :py:meth:`~VertexArray.transform`.
+                program (Program): The program used when rendering.
                 buffer (Buffer): The buffer.
                 attributes (list): A list of attribute names.
+
+            Keyword Args:
+                index_buffer (Buffer): An index buffer.
 
             Returns:
                 :py:class:`VertexArray` object
@@ -2591,8 +2568,6 @@ class Context:
 
             Only linked programs will be returned.
 
-            For more information please see: :py:class:`Program` and :py:class:`Shader`
-
             A single shader in the `shaders` parameter is also accepted.
             The varyings are only used when a transform program is created.
 
@@ -2602,46 +2577,6 @@ class Context:
 
             Returns:
                 :py:class:`Program` object
-
-            Examples:
-
-                A simple program designed for rendering::
-
-                    >>> my_render_program = ctx.program([
-                    ... 	ctx.vertex_shader(\'\'\'
-                    ... 		#version 330
-                    ...
-                    ... 		in vec2 vert;
-                    ...
-                    ... 		void main() {
-                    ... 			gl_Position = vec4(vert, 0.0, 1.0);
-                    ... 		}
-                    ... 	\'\'\'),
-                    ... 	ctx.fragment_shader(\'\'\'
-                    ... 		#version 330
-                    ...
-                    ... 		out vec4 color;
-                    ...
-                    ... 		void main() {
-                    ... 			color = vec4(0.3, 0.5, 1.0, 1.0);
-                    ... 		}
-                    ... 	\'\'\'),
-                    ... ])
-
-                A simple program designed for transforming::
-
-                    >>> my_vertex_shader = ctx.vertex_shader(\'\'\'
-                    ...     #version 330
-                    ...
-                    ...     in vec4 vert;
-                    ...     out float vert_length;
-                    ...
-                    ...     void main() {
-                    ...         vert_length = length(vert);
-                    ...     }
-                    ... \'\'\')
-
-                    >>> my_transform_program = ctx.program(my_vertex_shader, ['vert_length'])
         '''
 
         if type(shaders) is Shader:
@@ -2688,15 +2623,31 @@ class Context:
         return res
 
     def query(self, *, samples=False, any_samples=False, time=False, primitives=False) -> 'Query':
+        '''
+            Create a :py:class:`Query` object.
+
+            Keyword Args:
+                samples (bool): Query ``GL_SAMPLES_PASSED``?
+                any_samples (bool): Query ``GL_ANY_SAMPLES_PASSED``?
+                time (bool): Query ``GL_TIME_ELAPSED``?
+                primitives (bool): Query ``GL_PRIMITIVES_GENERATED``?
+        '''
+
         res = Query.__new__(Query)
         res.mglo = self.mglo.query(samples, any_samples, time, primitives)
         res.crender = None
+
         if samples or any_samples:
             res.crender = ConditionalRender.__new__(ConditionalRender)
             res.crender.mglo = res.mglo
+
         return res
 
     def scope(self, framebuffer, enable_only, *, textures, uniform_buffers, shader_storage_buffers) -> 'Scope':
+        '''
+            Create a :py:class:`Scope` object.
+        '''
+
         textures = tuple((tex.mglo, idx) for tex, idx in textures)
         uniform_buffers = tuple((buf.mglo, idx) for buf, idx in uniform_buffers)
         shader_storage_buffers = tuple((buf.mglo, idx) for buf, idx in shader_storage_buffers)
