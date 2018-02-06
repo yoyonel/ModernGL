@@ -4,6 +4,8 @@ TextureCube
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
 
+.. autoclass:: moderngl.TextureCube
+
 Create
 ------
 

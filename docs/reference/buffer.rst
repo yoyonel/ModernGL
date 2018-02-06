@@ -4,6 +4,8 @@ Buffer
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
 
+.. autoclass:: moderngl.Buffer
+
 Create
 ------
 

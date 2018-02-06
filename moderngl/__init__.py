@@ -2092,7 +2092,7 @@ class Context:
         self.mglo = None
         self._screen = None
         self._info = None
-        self.version_code = None
+        self.version_code = None  #: int: The OpenGL version code.
         self.extra = None
         raise TypeError()
 
@@ -2166,9 +2166,6 @@ class Context:
     def viewport(self) -> Tuple[int, int, int, int]:
         '''
             tuple: The viewport.
-
-            Reading this property may force the GPU to sync.
-            Use this property to set the viewport only.
         '''
 
         return self.mglo.fbo.viewport
@@ -2267,9 +2264,8 @@ class Context:
 
     def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, *, viewport=None) -> None:
         '''
-            Clear the framebuffer.
+            Clear the bound framebuffer. By default clears the :py:data:`screen`.
 
-            Values must be in ``(0, 255)`` range.
             If the `viewport` is not ``None`` then scrissor test
             will be used to clear the given viewport.
 
@@ -2283,6 +2279,7 @@ class Context:
                 green (float): color component.
                 blue (float): color component.
                 alpha (float): alpha component.
+                depth (float): depth value.
 
             Keyword Args:
                 viewport (tuple): The viewport.
@@ -2294,15 +2291,14 @@ class Context:
         '''
             Enable flags.
 
-            Valid flags are:
-
-                - :py:data:`ModernGL.NOTHING`
-                - :py:data:`ModernGL.BLEND`
-                - :py:data:`ModernGL.DEPTH_TEST`
-                - :py:data:`ModernGL.CULL_FACE`
+            - :py:data:`moderngl.NOTHING`
+            - :py:data:`moderngl.BLEND`
+            - :py:data:`moderngl.DEPTH_TEST`
+            - :py:data:`moderngl.CULL_FACE`
+            - :py:data:`moderngl.RASTERIZER_DISCARD`
 
             Args:
-                flags (EnableFlag): The flag to enable.
+                flags (EnableFlag): The flags to enable. Unset flags will be disabled.
         '''
 
         self.mglo.enable_only(flags)
@@ -2311,14 +2307,10 @@ class Context:
         '''
             Enable flags.
 
-            Valid flags are:
-
-                - :py:data:`ModernGL.BLEND`
-                - :py:data:`ModernGL.DEPTH_TEST`
-                - :py:data:`ModernGL.CULL_FACE`
+            For valid flags, please see :py:meth:`enable_only`.
 
             Args:
-                flag (EnableFlag): The flag to enable.
+                flag (int): The flags to enable.
         '''
 
         self.mglo.enable(flags)
@@ -2327,14 +2319,10 @@ class Context:
         '''
             Disable flags.
 
-            Valid flags are:
-
-                - :py:data:`ModernGL.BLEND`
-                - :py:data:`ModernGL.DEPTH_TEST`
-                - :py:data:`ModernGL.CULL_FACE`
+            For valid flags, please see :py:meth:`enable_only`.
 
             Args:
-                flag (EnableFlag): The flag to disable.
+                flag (int): The flags to disable.
         '''
 
         self.mglo.disable(flags)
@@ -2351,13 +2339,13 @@ class Context:
             Copy buffer content.
 
             Args:
-                dst (Buffer): Destination buffer.
-                src (Buffer): Source buffer.
-                size (int): Size to copy.
+                dst (Buffer): The destination buffer.
+                src (Buffer): The source buffer.
+                size (int): The number of bytes to copy.
 
             Keyword Args:
-                read_offset (int): Read offset.
-                write_offset (int): Write offset.
+                read_offset (int): The read offset.
+                write_offset (int): The write offset.
         '''
 
         self.mglo.copy_buffer(dst.mglo, src.mglo, size, read_offset, write_offset)
@@ -2397,7 +2385,7 @@ class Context:
 
     def buffer(self, data=None, *, reserve=0, dynamic=False) -> Buffer:
         '''
-            Create a :py:class:`Buffer`.
+            Create a :py:class:`Buffer` object.
 
             Args:
                 data (bytes): Content of the new buffer.
@@ -2420,7 +2408,7 @@ class Context:
 
     def texture(self, size, components, data=None, *, samples=0, alignment=1, dtype='f1') -> 'Texture':
         '''
-            Create a :py:class:`Texture`.
+            Create a :py:class:`Texture` object.
 
             Args:
                 size (tuple): The width and height of the texture.
@@ -2428,7 +2416,7 @@ class Context:
                 data (bytes): Content of the texture.
 
             Keyword Args:
-                samples (int): The number of samples. Value `0` means no multisample format.
+                samples (int): The number of samples. Value 0 means no multisample format.
                 alignment (int): The byte alignment 1, 2, 4 or 8.
                 dtype (str): Data type.
 
@@ -2447,7 +2435,7 @@ class Context:
 
     def texture3d(self, size, components, data=None, *, alignment=1, dtype='f1') -> 'Texture3D':
         '''
-            Create a :py:class:`Texture3D`.
+            Create a :py:class:`Texture3D` object.
 
             Args:
                 size (tuple): The width, height and depth of the texture.
@@ -2468,7 +2456,7 @@ class Context:
 
     def texture_cube(self, size, components, data=None, *, alignment=1, dtype='f1') -> 'TextureCube':
         '''
-            Create a :py:class:`TextureCube`.
+            Create a :py:class:`TextureCube` object.
 
             Args:
                 size (tuple): The width, height and depth of the texture.
@@ -2492,14 +2480,14 @@ class Context:
 
     def depth_texture(self, size, data=None, *, samples=0, alignment=4) -> 'Texture':
         '''
-            Create a :py:class:`Texture`.
+            Create a :py:class:`Texture` object.
 
             Args:
                 size (tuple): The width and height of the texture.
                 data (bytes): Content of the texture.
 
             Keyword Args:
-                samples (int): The number of samples. Value `0` means no multisample format.
+                samples (int): The number of samples. Value 0 means no multisample format.
                 alignment (int): The byte alignment 1, 2, 4 or 8.
 
             Returns:
@@ -2517,7 +2505,7 @@ class Context:
 
     def vertex_array(self, program, content, index_buffer=None) -> 'VertexArray':
         '''
-            Create a :py:class:`VertexArray`.
+            Create a :py:class:`VertexArray` object.
 
             Args:
                 program (Program): The program used when rendering.
@@ -2540,12 +2528,7 @@ class Context:
 
     def simple_vertex_array(self, program, buffer, *attributes, index_buffer=None) -> 'VertexArray':
         '''
-            Create a :py:class:`VertexArray`.
-
-            This is an alias for::
-
-                format = moderngl.detect_format(program, attributes)
-                vertex_array(program, [(buffer, format, attributes)])
+            Create a :py:class:`VertexArray` object.
 
             Args:
                 program (Program): The program used when rendering.
@@ -2627,10 +2610,10 @@ class Context:
             Create a :py:class:`Query` object.
 
             Keyword Args:
-                samples (bool): Query ``GL_SAMPLES_PASSED``?
-                any_samples (bool): Query ``GL_ANY_SAMPLES_PASSED``?
-                time (bool): Query ``GL_TIME_ELAPSED``?
-                primitives (bool): Query ``GL_PRIMITIVES_GENERATED``?
+                samples (bool): Query ``GL_SAMPLES_PASSED`` or not.
+                any_samples (bool): Query ``GL_ANY_SAMPLES_PASSED`` or not.
+                time (bool): Query ``GL_TIME_ELAPSED`` or not.
+                primitives (bool): Query ``GL_PRIMITIVES_GENERATED`` or not.
         '''
 
         res = Query.__new__(Query)
@@ -2646,6 +2629,15 @@ class Context:
     def scope(self, framebuffer, enable_only, *, textures, uniform_buffers, shader_storage_buffers) -> 'Scope':
         '''
             Create a :py:class:`Scope` object.
+
+            Args:
+                framebuffer (Framebuffer): The framebuffer to use when entering.
+                enable_only (int): The enable_only flags to set when entering.
+
+            Keyword Args:
+                textures (list): List of (texture, binding) tuples.
+                uniform_buffers (list): List of (buffer, binding) tuples.
+                shader_storage_buffers (list): List of (buffer, binding) tuples.
         '''
 
         textures = tuple((tex.mglo, idx) for tex, idx in textures)
@@ -2670,20 +2662,6 @@ class Context:
 
             Returns:
                 :py:class:`Shader` object
-
-            Examples:
-
-                Create a simple vertex shader::
-
-                    >>> my_vertex_shader = ctx.vertex_shader(\'\'\'
-                    ...     #version 330
-                    ...
-                    ...     in vec2 vert;
-                    ...
-                    ...     void main() {
-                    ...         gl_Position = vec4(vert, 0.0, 1.0);
-                    ...     }
-                    ... \'\'\')
         '''
 
         res = Shader.__new__(Shader)
@@ -2702,20 +2680,6 @@ class Context:
 
             Returns:
                 :py:class:`Shader` object
-
-            Examples:
-
-                Create a simple fragment shader::
-
-                    >>> my_fragment_shader = ctx.fragment_shader(\'\'\'
-                    ...     #version 330
-                    ...
-                    ...     out vec4 color;
-                    ...
-                    ...     void main() {
-                    ...         color = vec4(0.3, 0.5, 1.0, 1.0);
-                    ...     }
-                    ... \'\'\')
         '''
 
         res = Shader.__new__(Shader)
@@ -2795,7 +2759,7 @@ class Context:
                 components (int): The number of components 1, 2, 3 or 4.
 
             Keyword Args:
-                samples (int): The number of samples. Value `0` means no multisample format.
+                samples (int): The number of samples. Value 0 means no multisample format.
                 dtype (str): Data type.
 
             Returns:
@@ -2813,8 +2777,8 @@ class Context:
             The buffers for Framebuffer objects reference images from either Textures or Renderbuffers.
 
             Args:
-                color_attachments (list): A list of `Texture` or `Renderbuffer` objects.
-                depth_attachment (Renderbuffer or Texture): A `Texture` or `Renderbuffer` object.
+                color_attachments (list): A list of :py:class:`Texture` or :py:class:`Renderbuffer` objects.
+                depth_attachment (Renderbuffer or Texture): The depth attachment.
 
             Returns:
                 :py:class:`Framebuffer` object
@@ -2842,7 +2806,7 @@ class Context:
                 components (int): The number of components 1, 2, 3 or 4.
 
             Keyword Args:
-                samples (int): The number of samples. Value `0` means no multisample format.
+                samples (int): The number of samples. Value 0 means no multisample format.
                 dtype (str): Data type.
 
             Returns:
@@ -2867,7 +2831,7 @@ class Context:
                 size (tuple): The width and height of the renderbuffer.
 
             Keyword Args:
-                samples (int): The number of samples. Value `0` means no multisample format.
+                samples (int): The number of samples. Value 0 means no multisample format.
 
             Returns:
                 :py:class:`Renderbuffer` object

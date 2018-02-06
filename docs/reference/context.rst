@@ -54,16 +54,16 @@ Attributes
 .. autoattribute:: Context.line_width
 .. autoattribute:: Context.point_size
 .. autoattribute:: Context.viewport
+.. autoattribute:: Context.version_code
+.. autoattribute:: Context.screen
+.. autoattribute:: Context.front_face
+.. autoattribute:: Context.wireframe
 .. autoattribute:: Context.max_samples
 .. autoattribute:: Context.max_integer_samples
 .. autoattribute:: Context.max_texture_units
 .. autoattribute:: Context.default_texture_unit
-.. autoattribute:: Context.screen
-.. autoattribute:: Context.wireframe
 .. autoattribute:: Context.error
-.. autoattribute:: Context.version_code
 .. autoattribute:: Context.info
-.. autoattribute:: Context.front_face
 
 Examples
 --------

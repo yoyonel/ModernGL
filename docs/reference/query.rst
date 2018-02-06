@@ -4,6 +4,8 @@ Query
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
 
+.. autoclass:: moderngl.Query
+
 Create
 ------
 

@@ -4,6 +4,8 @@ Texture3D
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
 
+.. autoclass:: moderngl.Texture3D
+
 Create
 ------
 
