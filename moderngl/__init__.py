@@ -5,7 +5,7 @@
 # pylint: disable=C0123, W0212
 
 import os
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Union
 
 if os.environ.get('READTHEDOCS') != 'True':
     from . import mgl
@@ -164,8 +164,9 @@ class Buffer:
 
     def write_chunks(self, data, start, step, count) -> None:
         '''
-            Split `data` to `count` equal parts.
-            Write the chunks using offsets calculated from `start`, `step` and `stop`.
+            Split data to count equal parts.
+
+            Write the chunks using offsets calculated from start, step and stop.
 
             Args:
                 data (bytes): The data.
@@ -187,7 +188,7 @@ class Buffer:
                 offset (int): The offset.
 
             Returns:
-                The content of the buffer.
+                bytes
         '''
 
         return self.mglo.read(size, offset)
@@ -203,9 +204,6 @@ class Buffer:
             Keyword Args:
                 offset (int): The read offset.
                 write_offset (int): The write offset.
-
-            Returns:
-                The content of the buffer.
         '''
 
         return self.mglo.read_into(buffer, size, offset, write_offset)
@@ -214,6 +212,9 @@ class Buffer:
         '''
             Read the content.
 
+            Read and concatenate the chunks of size chunk_size
+            using offsets calculated from start, step and stop.
+
             Args:
                 chunk_size (int): The chunk size.
                 start (int): First offset.
@@ -221,7 +222,7 @@ class Buffer:
                 count (int): The number of offsets.
 
             Returns:
-                binary data
+                bytes
         '''
 
         return self.mglo.read_chunks(chunk_size, start, step, count)
@@ -229,6 +230,9 @@ class Buffer:
     def read_chunks_into(self, buffer, chunk_size, start, step, count, *, write_offset=0) -> None:
         '''
             Read the content.
+
+            Read and concatenate the chunks of size chunk_size
+            using offsets calculated from start, step and stop.
 
             Args:
                 buffer (bytarray): The buffer that will receive the content.
@@ -239,9 +243,6 @@ class Buffer:
 
             Keyword Args:
                 write_offset (int): The write offset.
-
-            Returns:
-                binary data
         '''
 
         return self.mglo.read(buffer, chunk_size, start, step, count, write_offset)
@@ -295,31 +296,6 @@ class Buffer:
             It is likely that the GL driver will not be doing any allocation at all,
             but will just be pulling an old free block off the unused buffer queue and use it,
             so it is likely to be very efficient.
-
-            Examples:
-
-                Simple orphaning example::
-
-                    # For simplicity the VertexArray creation is omitted
-
-                    >>> vbo = ctx.buffer(reserve=1024)
-
-                    # Fill the buffer
-
-                    >>> vbo.write(some_temorary_data)
-
-                    # Issue a render call that uses the vbo
-
-                    >>> vao.render(...)
-
-                    # Orphan the buffer
-
-                    >>> vbo.orphan()
-
-                    # Issue another render call without waiting for the previous one
-
-                    >>> vbo.write(some_temorary_data)
-                    >>> vao.render(...)
         '''
 
         self.mglo.orphan()
@@ -950,7 +926,7 @@ class Texture:
                 alignment (int): The byte alignment of the pixels.
 
             Returns:
-                the pixels
+                bytes
         '''
 
         return self.mglo.read(alignment)
@@ -1171,7 +1147,7 @@ class Texture3D:
                 alignment (int): The byte alignment of the pixels.
 
             Returns:
-                the pixels
+                bytes
         '''
 
         return self.mglo.read(alignment)
@@ -1493,13 +1469,6 @@ class Shader:
     def typename(self) -> str:
         '''
             str: The type of the shader.
-            The return value is a string.
-
-            - ``'vertex_shader'``
-            - ``'fragment_shader'``
-            - ``'geometry_shader'``
-            - ``'tess_evaluation_shader'``
-            - ``'tess_control_shader'``
         '''
 
         return self._typename
@@ -1553,7 +1522,7 @@ class Program:
     def __eq__(self, other):
         return type(self) is type(other) and self.mglo is other.mglo
 
-    def __getitem__(self, key):
+    def __getitem__(self, key) -> Union[Uniform, UniformBlock, Subroutine, Attribute, Varying]:
         return self._members[key]
 
     def __iter__(self):
@@ -1581,7 +1550,7 @@ class Program:
     @property
     def geometry_vertices(self) -> int:
         '''
-            :obj:`int`: The maximum number of vertices that
+            int: The maximum number of vertices that
             the geometry shader will output.
         '''
 
@@ -1603,6 +1572,20 @@ class Program:
         '''
 
         return self._glo
+
+    def get(self, key, default) -> Union[Uniform, UniformBlock, Subroutine, Attribute, Varying]:
+        '''
+            Returns a Uniform, UniformBlock, Subroutine, Attribute or Varying.
+
+            Args:
+                default: This is the value to be returned in case key does not exist.
+
+            Returns:
+                :py:class:`Uniform`, :py:class:`UniformBlock`, :py:class:`Subroutine`,
+                :py:class:`Attribute` or :py:class:`Varying`
+        '''
+
+        return self._members.get(key, default)
 
     def release(self) -> None:
         '''
@@ -1761,13 +1744,13 @@ class VertexArray:
 
         return self._glo
 
-    def render(self, mode=TRIANGLES, vertices=-1, *, first=0, instances=1) -> None:
+    def render(self, mode=None, vertices=-1, *, first=0, instances=1) -> None:
         '''
             The render primitive (mode) must be the same as
             the input primitive of the GeometryShader.
 
             Args:
-                mode (int): By default `TRIANGLES` will be used.
+                mode (int): By default :py:data:`TRIANGLES` will be used.
                 vertices (int): The number of vertices to transform.
 
             Keyword Args:
@@ -1775,9 +1758,12 @@ class VertexArray:
                 instances (int): The number of instances.
         '''
 
+        if mode is None:
+            mode = TRIANGLES
+
         self.mglo.render(mode, vertices, first, instances)
 
-    def transform(self, buffer, mode=POINTS, vertices=-1, *, first=0, instances=1) -> None:
+    def transform(self, buffer, mode=None, vertices=-1, *, first=0, instances=1) -> None:
         '''
             Transform vertices.
             Stores the output in a single buffer.
@@ -1786,7 +1772,7 @@ class VertexArray:
 
             Args:
                 buffer (Buffer): The buffer to store the output.
-                mode (int): By default `TRIANGLES` will be used.
+                mode (int): By default :py:data:`POINTS` will be used.
                 vertices (int): The number of vertices to transform.
 
             Keyword Args:
@@ -1794,12 +1780,29 @@ class VertexArray:
                 instances (int): The number of instances.
         '''
 
+        if mode is None:
+            mode = POINTS
+
         self.mglo.transform(buffer.mglo, mode, vertices, first, instances)
 
     def bind(self, attribute, buffer, *, offset, stride, divisor) -> None:
+        '''
+            Bind individual attributes to buffers.
+
+            Args:
+                attribute (str): The name of the attribute.
+                buffer (Buffer): The buffer.
+
+            Keyword Args:
+                offset (int): The offset.
+                stride (int): The stride.
+                divisor (int): The divisor.
+        '''
+
         attr = self._program._members.get(attribute)
         if type(attr) is not Attribute:
             raise KeyError(attribute)
+
         self.mglo.bind(attr.mglo, buffer.mglo, offset, stride, divisor)
 
     def release(self) -> None:
@@ -1970,7 +1973,7 @@ class Framebuffer:
         return self.mglo.bits
 
     @property
-    def color_attachments(self) -> Tuple[object, ...]:
+    def color_attachments(self) -> Tuple[Union[Texture, Renderbuffer], ...]:
         '''
             tuple: The color attachments of the framebuffer.
         '''
@@ -1978,9 +1981,9 @@ class Framebuffer:
         return self._color_attachments
 
     @property
-    def depth_attachment(self) -> object:
+    def depth_attachment(self) -> Union[Texture, Renderbuffer]:
         '''
-            object: The depth attachment of the framebuffer.
+            Texture or Renderbuffer: The depth attachment of the framebuffer.
         '''
 
         return self._depth_attachment
@@ -1998,7 +2001,6 @@ class Framebuffer:
         '''
             Clear the framebuffer.
 
-            Values must be in ``[0.0, 1.0]`` range.
             If the `viewport` is not ``None`` then scrissor test
             will be used to clear the given viewport.
 
@@ -2025,8 +2027,7 @@ class Framebuffer:
 
     def use(self) -> None:
         '''
-            Bind the framebuffer. Set the target for the
-            `VertexArray.render` or `VertexArray.transform` methods.
+            Bind the framebuffer. Set the target for the :py:meth:`VertexArray.render`.
         '''
 
         self.mglo.use()
@@ -2045,7 +2046,7 @@ class Framebuffer:
                 dtype (str): Data type.
 
             Returns:
-                the pixels
+                bytes
         '''
 
         return self.mglo.read(viewport, components, attachment, alignment, dtype)
@@ -2930,7 +2931,7 @@ def detect_format(program, attributes) -> str:
             attributes (list): A list of attribute names.
 
         Returns:
-            The tightly packed format for the attributes.
+            str
     '''
 
     def fmt(attr):

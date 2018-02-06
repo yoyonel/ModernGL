@@ -398,7 +398,12 @@ PyObject * MGLContext_buffer(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	if ((data != Py_None && reserve) || (data == Py_None && !reserve)) {
+	if (data == Py_None && !reserve) {
+		MGLError_Set("missing data or reserve");
+		return 0;
+	}
+
+	if (data != Py_None && reserve) {
 		MGLError_Set("data and reserve are mutually exclusive");
 		return 0;
 	}

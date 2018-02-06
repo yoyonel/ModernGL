@@ -12,6 +12,11 @@ Create
 .. automethod:: Context.program(shaders, varyings=()) -> Program
     :noindex:
 
+Methods
+-------
+
+.. automethod:: Program.get(key, default) -> Union[Uniform, UniformBlock, Subroutine, Attribute, Varying]
+
 Attributes
 ----------
 
