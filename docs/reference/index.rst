@@ -2,7 +2,7 @@ Reference
 =========
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
 
     context.rst
     buffer.rst
