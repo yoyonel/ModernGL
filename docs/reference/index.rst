@@ -15,4 +15,5 @@ Reference
     framebuffer.rst
     renderbuffer.rst
     query.rst
+    scope.rst
     compute_shader.rst
