@@ -2682,7 +2682,7 @@ class Context:
 
         return res
 
-    def scope(self, framebuffer, enable_only, *, textures, uniform_buffers, shader_storage_buffers) -> 'Scope':
+    def scope(self, framebuffer, enable_only, *, textures, uniform_buffers, storage_buffers) -> 'Scope':
         '''
             Create a :py:class:`Scope` object.
 
@@ -2693,15 +2693,15 @@ class Context:
             Keyword Args:
                 textures (list): List of (texture, binding) tuples.
                 uniform_buffers (list): List of (buffer, binding) tuples.
-                shader_storage_buffers (list): List of (buffer, binding) tuples.
+                storage_buffers (list): List of (buffer, binding) tuples.
         '''
 
         textures = tuple((tex.mglo, idx) for tex, idx in textures)
         uniform_buffers = tuple((buf.mglo, idx) for buf, idx in uniform_buffers)
-        shader_storage_buffers = tuple((buf.mglo, idx) for buf, idx in shader_storage_buffers)
+        storage_buffers = tuple((buf.mglo, idx) for buf, idx in storage_buffers)
 
         res = Scope.__new__(Scope)
-        res.mglo = self.mglo.scope(framebuffer.mglo, enable_only, textures, uniform_buffers, shader_storage_buffers)
+        res.mglo = self.mglo.scope(framebuffer.mglo, enable_only, textures, uniform_buffers, storage_buffers)
         return res
 
     def vertex_shader(self, source) -> 'Shader':

@@ -9,7 +9,7 @@ Scope
 Create
 ------
 
-.. automethod:: Context.scope(framebuffer, enable_only, textures, uniform_buffers, shader_storage_buffers) -> Scope
+.. automethod:: Context.scope(framebuffer, enable_only, textures, uniform_buffers, storage_buffers) -> Scope
     :noindex:
 
 Examples
@@ -55,7 +55,7 @@ Examples
             (buffer1, 6),
             (buffer2, 5),
         ],
-        shader_storage_buffers=[
+        storage_buffers=[
             (buffer3, 8),
         ],
     )
