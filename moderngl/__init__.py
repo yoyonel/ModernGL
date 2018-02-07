@@ -1660,7 +1660,7 @@ class Query:
 
     def __init__(self):
         self.mglo = None
-        self.crender = None  #: ConditionalRender: Can be used in a with statement.
+        self.crender = None  #: ConditionalRender: Can be used in a ``with`` statement.
         self.extra = None
         raise TypeError()
 
