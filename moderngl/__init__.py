@@ -1652,11 +1652,15 @@ class ConditionalRender:
 
 
 class Query:
+    '''
+        This class represents a query objects.
+    '''
+
     __slots__ = ['mglo', 'crender', 'extra']
 
     def __init__(self):
         self.mglo = None
-        self.crender = None
+        self.crender = None  #: ConditionalRender: Can be used in a with statement.
         self.extra = None
         raise TypeError()
 
@@ -1672,14 +1676,26 @@ class Query:
 
     @property
     def samples(self) -> int:
+        '''
+            int: The number of samples passed.
+        '''
+
         return self.mglo.samples
 
     @property
     def primitives(self) -> int:
+        '''
+            int: The number of primitives generated.
+        '''
+
         return self.mglo.primitives
 
     @property
     def elapsed(self) -> int:
+        '''
+            int: The time elapsed in nanoseconds.
+        '''
+
         return self.mglo.elapsed
 
 
