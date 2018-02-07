@@ -14,6 +14,7 @@ Reference
     texture_cube.rst
     framebuffer.rst
     renderbuffer.rst
-    query.rst
     scope.rst
+    query.rst
+    conditional_render.rst
     compute_shader.rst

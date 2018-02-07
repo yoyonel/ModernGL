@@ -6,8 +6,8 @@ Context
 
 .. autoclass:: moderngl.Context
 
-Context Creation
-----------------
+Create
+------
 
 .. autofunction:: moderngl.create_context(require=None) -> Context
 .. autofunction:: moderngl.create_standalone_context(require=None) -> Context

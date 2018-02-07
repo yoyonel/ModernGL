@@ -1634,6 +1634,12 @@ class Program:
 
 
 class ConditionalRender:
+    '''
+        This class represents a ConditionalRender object.
+
+        ConditionalRender objects can only be accessed from :py:class:`Query` objects.
+    '''
+
     __slots__ = ['mglo']
 
     def __init__(self):
@@ -1653,7 +1659,7 @@ class ConditionalRender:
 
 class Query:
     '''
-        This class represents a query objects.
+        This class represents a Query object.
     '''
 
     __slots__ = ['mglo', 'crender', 'extra']
@@ -1701,7 +1707,7 @@ class Query:
 
 class Scope:
     '''
-        This class represents a scope objects.
+        This class represents a Scope object.
 
         Responsibilities on enter:
 
