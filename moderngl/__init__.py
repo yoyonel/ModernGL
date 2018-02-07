@@ -1684,6 +1684,23 @@ class Query:
 
 
 class Scope:
+    '''
+        This class represents a scope objects.
+
+        Responsibilities on enter:
+
+        - Set the enable flags.
+        - Bind the framebuffer.
+        - Assing textures to texture locations.
+        - Assing buffers to uniform buffers.
+        - Assing buffers to shader storage buffers.
+
+        Responsibilities on exit:
+
+        - Restore the enable flags.
+        - Restore the framebuffer.
+    '''
+
     __slots__ = ['mglo', 'extra']
 
     def __init__(self):
