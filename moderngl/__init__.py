@@ -2171,7 +2171,7 @@ class Context:
             int: Set the default depth func.
         '''
 
-        raise Exception()
+        raise NotImplementedError()
 
     @depth_func.setter
     def depth_func(self, value):
@@ -2183,7 +2183,7 @@ class Context:
             int: Set the default depth func.
         '''
 
-        raise Exception()
+        raise NotImplementedError()
 
     @blend_func.setter
     def blend_func(self, value):
@@ -2195,7 +2195,7 @@ class Context:
             bool: Multisample.
         '''
 
-        raise Exception()
+        raise NotImplementedError()
 
     @multisample.setter
     def multisample(self, value):
@@ -2928,7 +2928,7 @@ def create_context(require=None) -> Context:
     ctx._info = None
 
     if require is not None and ctx.version_code < require:
-        raise Exception('The version required is not provided')
+        raise ValueError('The version required is not provided')
 
     return ctx
 
@@ -2954,7 +2954,7 @@ def create_standalone_context(require=None, **settings) -> 'Context':
     ctx._info = None
 
     if require is not None and ctx.version_code < require:
-        raise Exception('The version required is not provided')
+        raise ValueError('The version required is not provided')
 
     return ctx
 
