@@ -40,7 +40,7 @@ Examples
 
     print(query.samples)
 
-.. rubric:: Understanding what scope object do
+.. rubric:: Understanding what scope objects do
 
 .. code-block:: python
 
