@@ -12,8 +12,6 @@ class TestCase(unittest.TestCase):
         check = style.check_files([
             os.path.join(os.path.dirname(__file__), '../moderngl/__init__.py'),
             os.path.join(os.path.dirname(__file__), '../moderngl/__main__.py'),
-            os.path.join(os.path.dirname(__file__), '../moderngl/ext/__init__.py'),
-            os.path.join(os.path.dirname(__file__), '../moderngl/ext/__main__.py'),
         ])
         self.assertEqual(check.total_errors, 0)
 
