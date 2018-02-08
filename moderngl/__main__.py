@@ -1,5 +1,5 @@
 '''
-    ModernGL main
+    moderngl main
 '''
 
 import argparse
@@ -30,11 +30,11 @@ def main(argv=None):
         install = '(git repository)' if repo else '(installed)'
 
         print('moderngl:', moderngl.__version__, install)
-        print('Vendor:', ctx.info['GL_VENDOR'])
-        print('Renderer:', ctx.info['GL_RENDERER'])
-        print('Version:', ctx.info['GL_VERSION'])
-        print('Python:', sys.version)
-        print('Platform:', sys.platform)
+        print('vendor:', ctx.info['GL_VENDOR'])
+        print('renderer:', ctx.info['GL_RENDERER'])
+        print('version:', ctx.info['GL_VERSION'])
+        print('python:', sys.version)
+        print('platform:', sys.platform)
 
 
 if __name__ == '__main__':
