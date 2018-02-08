@@ -2782,7 +2782,7 @@ int MGLContext_set_blend_func(MGLContext * self, PyObject * value) {
 	return 0;
 }
 
-#define MGLContext_func_cvt(x) (x[0] * 256 + x[1])
+#define MGLContext_func_cvt(x) (((const char *)x)[0] * 256 + ((const char *)x)[1])
 
 int MGLContext_set_depth_func(MGLContext * self, PyObject * val) {
 	const char * fun = PyUnicode_AsUTF8(val);
