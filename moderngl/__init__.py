@@ -2596,7 +2596,7 @@ class Context:
 
         index_buffer_mglo = None if index_buffer is None else index_buffer.mglo
 
-        content = tuple((a.mglo, b, *(program._members[x].mglo for x in c)) for a, b, *c in content)
+        content = tuple((a.mglo, b) + tuple(program._members[x].mglo for x in c) for a, b, *c in content)
 
         res = VertexArray.__new__(VertexArray)
         res.mglo, res._glo = self.mglo.vertex_array(program.mglo, content, index_buffer_mglo)
