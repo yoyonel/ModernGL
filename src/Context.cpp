@@ -3,6 +3,22 @@
 #include "BufferFormat.hpp"
 #include "InlineMethods.hpp"
 
+const char * SHADER_NAME[] = {
+	"vertex_shader",
+	"fragment_shader",
+	"geometry_shader",
+	"tess_evaluation_shader",
+	"tess_control_shader",
+};
+
+const char * SHADER_NAME_UNDERLINE[] = {
+	"=============",
+	"===============",
+	"===============",
+	"======================",
+	"===================",
+};
+
 PyObject * MGLContext_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLContext * self = (MGLContext *)type->tp_alloc(type, 0);
 
@@ -1273,8 +1289,6 @@ PyObject * MGLContext_program(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	MGLShader * mgl_shaders[NUM_SHADER_SLOTS] = {};
-
 	for (int i = 0; i < num_shaders; ++i) {
 		MGLShader * shader = (MGLShader *)PyTuple_GET_ITEM(shaders, i);
 		gl.AttachShader(program_obj, shader->shader_obj);
@@ -1597,9 +1611,7 @@ PyObject * MGLContext_program(MGLContext * self, PyObject * args) {
 	for (int i = 0; i < num_attributes; ++i) {
 		int type = 0;
 		int array_length = 0;
-		int dimension = 0;
 		int name_len = 0;
-		char shape = 0;
 		char name[256];
 
 		gl.GetActiveAttrib(program->program_obj, i, 256, &name_len, &array_length, (GLenum *)&type, name);
@@ -1646,7 +1658,6 @@ PyObject * MGLContext_program(MGLContext * self, PyObject * args) {
 	int uniform_counter = 0;
 	for (int i = 0; i < num_uniforms; ++i) {
 		int type = 0;
-		int dimension = 0;
 		int array_length = 0;
 		int name_len = 0;
 		char name[256];
@@ -2419,7 +2430,6 @@ PyObject * MGLContext_compute_shader(MGLContext * self, PyObject * args) {
 	int uniform_counter = 0;
 	for (int i = 0; i < num_uniforms; ++i) {
 		int type = 0;
-		int dimension = 0;
 		int array_length = 0;
 		int name_len = 0;
 		char name[256];
@@ -2649,6 +2659,7 @@ PyObject * MGLContext_scope(MGLContext * self, PyObject * args) {
 			texture_obj = texture->texture_obj;
 		} else {
 			// TODO: fail
+			return 0;
 		}
 
 		int binding = PyLong_AsLong(PyTuple_GET_ITEM(tup, 1));

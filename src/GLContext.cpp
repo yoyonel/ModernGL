@@ -77,9 +77,6 @@ my_XCreateColormap_type my_XCreateColormap;
 
 // EGL
 
-#define EGLAPI
-#define EGLAPIENTRY
-
 typedef Display * EGLNativeDisplayType;
 typedef Pixmap EGLNativePixmapType;
 typedef Window EGLNativeWindowType;
@@ -110,12 +107,12 @@ typedef void * EGLContext;
 typedef unsigned int EGLBoolean;
 typedef int EGLint;
 
-typedef EGLAPI EGLDisplay (EGLAPIENTRY * my_eglGetDisplay_type)(EGLNativeDisplayType display_id);
-typedef EGLAPI EGLBoolean (EGLAPIENTRY * my_eglInitialize_type)(EGLDisplay dpy, EGLint * major, EGLint * minor);
-typedef EGLAPI EGLBoolean (EGLAPIENTRY * my_eglChooseConfig_type)(EGLDisplay dpy, const EGLint * attrib_list, EGLConfig * configs, EGLint config_size, EGLint * num_config);
-typedef EGLAPI EGLContext (EGLAPIENTRY * my_eglCreateContext_type)(EGLDisplay dpy, EGLConfig config, EGLContext share_context, const EGLint * attrib_list);
-typedef EGLAPI EGLint (EGLAPIENTRY * my_eglGetError_type)(void);
-typedef EGLAPI EGLBoolean (EGLAPIENTRY * my_eglMakeCurrent_type)(EGLDisplay dpy, EGLSurface draw, EGLSurface read, EGLContext ctx);
+typedef EGLDisplay (* my_eglGetDisplay_type)(EGLNativeDisplayType display_id);
+typedef EGLBoolean (* my_eglInitialize_type)(EGLDisplay dpy, EGLint * major, EGLint * minor);
+typedef EGLBoolean (* my_eglChooseConfig_type)(EGLDisplay dpy, const EGLint * attrib_list, EGLConfig * configs, EGLint config_size, EGLint * num_config);
+typedef EGLContext (* my_eglCreateContext_type)(EGLDisplay dpy, EGLConfig config, EGLContext share_context, const EGLint * attrib_list);
+typedef EGLint (* my_eglGetError_type)(void);
+typedef EGLBoolean (* my_eglMakeCurrent_type)(EGLDisplay dpy, EGLSurface draw, EGLSurface read, EGLContext ctx);
 
 my_eglGetDisplay_type my_eglGetDisplay;
 my_eglInitialize_type my_eglInitialize;
@@ -138,10 +135,10 @@ my_eglMakeCurrent_type my_eglMakeCurrent;
 
 typedef struct osmesa_context * OSMesaContext;
 
-typedef GLAPI OSMesaContext (GLAPIENTRY * my_OSMesaCreateContextExt_type)(GLenum format, GLint depthBits, GLint stencilBits, GLint accumBits, OSMesaContext sharelist);
-typedef GLAPI GLboolean (GLAPIENTRY * my_OSMesaMakeCurrent_type)(OSMesaContext ctx, void * buffer, GLenum type, GLsizei width, GLsizei height);
-typedef GLAPI void (GLAPIENTRY * my_OSMesaDestroyContext_type)(OSMesaContext ctx);
-typedef GLAPI OSMesaContext (GLAPIENTRY * my_OSMesaCreateContextAttribs_type)(const int * attribList, OSMesaContext sharelist);
+typedef OSMesaContext (* my_OSMesaCreateContextExt_type)(GLenum format, GLint depthBits, GLint stencilBits, GLint accumBits, OSMesaContext sharelist);
+typedef GLboolean (* my_OSMesaMakeCurrent_type)(OSMesaContext ctx, void * buffer, GLenum type, GLsizei width, GLsizei height);
+typedef void (* my_OSMesaDestroyContext_type)(OSMesaContext ctx);
+typedef OSMesaContext (* my_OSMesaCreateContextAttribs_type)(const int * attribList, OSMesaContext sharelist);
 
 my_OSMesaCreateContextExt_type my_OSMesaCreateContextExt;
 my_OSMesaMakeCurrent_type my_OSMesaMakeCurrent;

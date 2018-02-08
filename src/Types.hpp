@@ -32,22 +32,6 @@ static const int SHADER_TYPE[] = {
 	GL_TESS_CONTROL_SHADER,
 };
 
-static const char * SHADER_NAME[] = {
-	"vertex_shader",
-	"fragment_shader",
-	"geometry_shader",
-	"tess_evaluation_shader",
-	"tess_control_shader",
-};
-
-static const char * SHADER_NAME_UNDERLINE[] = {
-	"=============",
-	"===============",
-	"===============",
-	"======================",
-	"===================",
-};
-
 struct MGLAttribute;
 struct MGLBuffer;
 struct MGLComputeShader;

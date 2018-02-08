@@ -169,7 +169,7 @@ void MGLScope_Invalidate(MGLScope * scope) {
 
 	// TODO: decref
 
-	const GLMethods & gl = scope->context->gl;
+	// const GLMethods & gl = scope->context->gl;
 
 	// TODO: release
 
