@@ -2782,8 +2782,6 @@ int MGLContext_set_blend_func(MGLContext * self, PyObject * value) {
 	return 0;
 }
 
-#define MGLContext_func_cvt(x) (((const char *)x)[0] * 256 + ((const char *)x)[1])
-
 int MGLContext_set_depth_func(MGLContext * self, PyObject * val) {
 	const char * fun = PyUnicode_AsUTF8(val);
 
@@ -2791,43 +2789,43 @@ int MGLContext_set_depth_func(MGLContext * self, PyObject * val) {
 		return -1;
 	}
 
-	switch (MGLContext_func_cvt(fun)) {
-		case MGLContext_func_cvt("<="): {
+	switch (fun[0] * 255 + fun[1]) {
+		case ('<' * 256 + '='): {
 			self->gl.DepthFunc(GL_LEQUAL);
 			break;
 		}
 
-		case MGLContext_func_cvt("<"): {
+		case ('<' * 256): {
 			self->gl.DepthFunc(GL_LESS);
 			break;
 		}
 
-		case MGLContext_func_cvt(">="): {
+		case ('>' * 256 + '='): {
 			self->gl.DepthFunc(GL_GEQUAL);
 			break;
 		}
 
-		case MGLContext_func_cvt(">"): {
+		case ('>' * 256): {
 			self->gl.DepthFunc(GL_GREATER);
 			break;
 		}
 
-		case MGLContext_func_cvt("=="): {
+		case ('=' * 256 + '='): {
 			self->gl.DepthFunc(GL_EQUAL);
 			break;
 		}
 
-		case MGLContext_func_cvt("!="): {
+		case ('!' * 256 + '='): {
 			self->gl.DepthFunc(GL_NOTEQUAL);
 			break;
 		}
 
-		case MGLContext_func_cvt("0"): {
+		case ('0' * 256): {
 			self->gl.DepthFunc(GL_NEVER);
 			break;
 		}
 
-		case MGLContext_func_cvt("1"): {
+		case ('1' * 256): {
 			self->gl.DepthFunc(GL_ALWAYS);
 			break;
 		}
