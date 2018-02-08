@@ -45,11 +45,12 @@ addons:
 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start; fi
+  - python -m pip install -r tests/requirements.txt
   - python -c "from distutils import sysconfig; import json; print(json.dumps(sysconfig.get_config_vars(), indent=4))"
   - python setup.py build_ext --inplace
   - python -m pip install -e .
 
 script:
   - python -m moderngl
-  - python -m pytest tests/test_local.py tests/test_module_integrity.py tests/test_documentation.py
+  - python -m pytest tests/test_local.py tests/test_module_integrity.py tests/test_pep8.py tests/test_documentation.py
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then python -m pytest; fi
