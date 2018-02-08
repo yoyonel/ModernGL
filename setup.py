@@ -155,7 +155,7 @@ args = {
     'license': 'MIT',
     'classifiers': classifiers,
     'keywords': keywords,
-    'packages': ['moderngl', 'moderngl.ext'],
+    'packages': ['moderngl'],
     'install_requires': install_requires,
     'ext_modules': [ModernGL],
     'platforms': ['any'],
