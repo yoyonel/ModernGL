@@ -6,8 +6,8 @@ Varying
 
 .. autoclass:: moderngl.Varying
 
-..autoattribute:: Varying.index
-..autoattribute:: Varying.name
+.. autoattribute:: Varying.name
+.. autoattribute:: Varying.number
 
 .. toctree::
     :maxdepth: 2

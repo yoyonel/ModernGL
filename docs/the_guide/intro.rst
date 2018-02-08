@@ -24,4 +24,4 @@ All of the objects above can only be created from a :py:class:`Context` object.
 3. Create a Program object.
 4. Create a VertexArray object.
 
-Proceede to the :doc:`next step <first_install>`.
+Proceede to the :doc:`next step <install>`.

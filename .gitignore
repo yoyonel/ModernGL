@@ -5,14 +5,12 @@ ModernGL/ext/**/*
 
 **/python-embed
 **/__pycache__
-**/Temp
+**/temp
 **/build
 **/dist
 
 venv
 temp_*
-
-build.py
 
 .tox
 .cache

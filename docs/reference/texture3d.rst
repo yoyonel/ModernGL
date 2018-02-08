@@ -33,6 +33,7 @@ Attributes
 .. autoattribute:: Texture3D.height
 .. autoattribute:: Texture3D.depth
 .. autoattribute:: Texture3D.size
+.. autoattribute:: Texture3D.dtype
 .. autoattribute:: Texture3D.components
 .. autoattribute:: Texture3D.glo
 

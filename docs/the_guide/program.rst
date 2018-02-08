@@ -1,5 +1,5 @@
-Our First Program
-=================
+Program
+=======
 
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
@@ -8,4 +8,4 @@ Our First Program
     :emphasize-lines: 5-
     :linenos:
 
-Proceede to the :doc:`next step <first_vertex_array>`.
+Proceed to the :doc:`next step <vertex_array>`.

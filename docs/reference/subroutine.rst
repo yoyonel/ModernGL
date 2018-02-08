@@ -6,8 +6,8 @@ Subroutine
 
 .. autoclass:: moderngl.Subroutine
 
-..autoattribute:: Subroutine.number
-..autoattribute:: Subroutine.name
+.. autoattribute:: Subroutine.index
+.. autoattribute:: Subroutine.name
 
 .. toctree::
     :maxdepth: 2

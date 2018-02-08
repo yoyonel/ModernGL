@@ -1,5 +1,5 @@
-Our First Context
-=================
+Context
+=======
 
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
@@ -11,4 +11,4 @@ Later you can reuse this code to render directly to a window.
 .. literalinclude:: first.1.py
     :linenos:
 
-Proceede to the :doc:`next step <first_program>`.
+Proceed to the :doc:`next step <program>`.

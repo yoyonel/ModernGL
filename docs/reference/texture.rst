@@ -34,6 +34,7 @@ Attributes
 .. autoattribute:: Texture.width
 .. autoattribute:: Texture.height
 .. autoattribute:: Texture.size
+.. autoattribute:: Texture.dtype
 .. autoattribute:: Texture.components
 .. autoattribute:: Texture.samples
 .. autoattribute:: Texture.depth

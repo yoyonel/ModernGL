@@ -6,10 +6,10 @@ UniformBlock
 
 .. autoclass:: moderngl.UniformBlock
 
-..autoattribute:: UniformBlock.binding
-..autoattribute:: UniformBlock.name
-..autoattribute:: UniformBlock.index
-..autoattribute:: UniformBlock.size
+.. autoattribute:: UniformBlock.binding
+.. autoattribute:: UniformBlock.name
+.. autoattribute:: UniformBlock.index
+.. autoattribute:: UniformBlock.size
 
 .. toctree::
     :maxdepth: 2

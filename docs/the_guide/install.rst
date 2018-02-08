@@ -14,4 +14,4 @@ This tutorial will also use ``numpy`` to generate data and ``Pillow`` to save th
 
     $ pip install --upgrade numpy Pillow
 
-Proceede to the :doc:`next step <first_context>`.
+Proceed to the :doc:`next step <context>`.

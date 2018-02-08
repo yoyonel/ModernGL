@@ -1,5 +1,5 @@
-Our First Render
-================
+Rendering
+=========
 
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl

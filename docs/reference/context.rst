@@ -53,6 +53,8 @@ Attributes
 
 .. autoattribute:: Context.line_width
 .. autoattribute:: Context.point_size
+.. autoattribute:: Context.depth_func
+.. autoattribute:: Context.blend_func
 .. autoattribute:: Context.viewport
 .. autoattribute:: Context.version_code
 .. autoattribute:: Context.screen
@@ -62,6 +64,7 @@ Attributes
 .. autoattribute:: Context.max_integer_samples
 .. autoattribute:: Context.max_texture_units
 .. autoattribute:: Context.default_texture_unit
+.. autoattribute:: Context.multisample
 .. autoattribute:: Context.error
 .. autoattribute:: Context.info
 

@@ -1,5 +1,5 @@
-Our First VertexArray
-=====================
+VertexArray
+===========
 
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
@@ -8,4 +8,4 @@ Our First VertexArray
     :emphasize-lines: 2,33-
     :linenos:
 
-Proceede to the :doc:`next step <first_result>`.
+Proceed to the :doc:`next step <rendering>`.
