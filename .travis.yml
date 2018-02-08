@@ -50,6 +50,6 @@ install:
   - python -m pip install -e .
 
 script:
-  - python -m ModernGL
+  - python -m moderngl
   - python -m pytest tests/test_local.py tests/test_module_integrity.py tests/test_documentation.py
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then python -m pytest; fi
