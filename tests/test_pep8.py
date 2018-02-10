@@ -8,7 +8,7 @@ import pep8
 class TestCase(unittest.TestCase):
     def test_style(self):
         config_file = os.path.join(os.path.dirname(__file__), '..', 'tox.ini')
-        style = pep8.StyleGuide(config_file=config_file)
+        style = pep8.StyleGuide(config_file=config_file, ignore='E402')
         check = style.check_files([
             os.path.join(os.path.dirname(__file__), '../moderngl/__init__.py'),
             os.path.join(os.path.dirname(__file__), '../moderngl/__main__.py'),
