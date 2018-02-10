@@ -1,14 +1,15 @@
 #pragma once
 
 struct FormatNode {
-	int count;
 	int size;
-	char shape;
+	int count;
+	int type;
+	bool normalize;
 };
 
 struct FormatInfo {
-	int nodes;
 	int size;
+	int nodes;
 	int divisor;
 	bool valid;
 };

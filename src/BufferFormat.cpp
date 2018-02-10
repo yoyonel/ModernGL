@@ -1,5 +1,7 @@
 #include "BufferFormat.hpp"
 
+#include "OpenGL.hpp"
+
 FormatNode * InvalidFormat = (FormatNode *)(-1);
 
 FormatIterator::FormatIterator(const char * str) : ptr(str) {
@@ -15,11 +17,14 @@ FormatInfo FormatIterator::info() {
 	FormatIterator it = FormatIterator(ptr);
 	while (FormatNode * node = it.next()) {
 		if (node == InvalidFormat) {
+			info.nodes = 0;
+			info.size = 0;
+			info.divisor = 0;
 			info.valid = false;
 			break;
 		}
-		info.size += node->count * node->size;
-		if (node->shape != 'x') {
+		info.size += node->size;
+		if (node->type) {
 			++info.nodes;
 		}
 	}
@@ -76,41 +81,162 @@ FormatNode * FormatIterator::next() {
 				if (node.count == 0) {
 					node.count = 1;
 				}
-				node.size = 4;
-				node.shape = 'f';
-				return &node;
-
-			case 'd':
-				if (node.count == 0) {
-					node.count = 1;
+				switch (*ptr++) {
+					case '1':
+						if (*ptr && *ptr != ' ') {
+							return InvalidFormat;
+						}
+						node.size = 1 * node.count;
+						node.type = GL_UNSIGNED_BYTE;
+						node.normalize = true;
+						break;
+					case '2':
+						if (*ptr && *ptr != ' ') {
+							return InvalidFormat;
+						}
+						node.size = 2 * node.count;
+						node.type = GL_HALF_FLOAT;
+						node.normalize = false;
+						break;
+					case '4':
+						if (*ptr && *ptr != ' ') {
+							return InvalidFormat;
+						}
+						node.size = 4 * node.count;
+						node.type = GL_FLOAT;
+						node.normalize = false;
+						break;
+					case '8':
+						if (*ptr && *ptr != ' ') {
+							return InvalidFormat;
+						}
+						node.size = 8 * node.count;
+						node.type = GL_DOUBLE;
+						node.normalize = false;
+						break;
+					case 0:
+						--ptr;
+					case ' ':
+						node.size = 4 * node.count;
+						node.type = GL_FLOAT;
+						node.normalize = false;
+						break;
 				}
-				node.size = 8;
-				node.shape = 'd';
 				return &node;
 
 			case 'i':
 				if (node.count == 0) {
 					node.count = 1;
 				}
-				node.size = 4;
-				node.shape = 'i';
+				node.normalize = false;
+				switch (*ptr++) {
+					case '1':
+						if (*ptr && *ptr != ' ') {
+							return InvalidFormat;
+						}
+						node.size = 1 * node.count;
+						node.type = GL_BYTE;
+						break;
+					case '2':
+						if (*ptr && *ptr != ' ') {
+							return InvalidFormat;
+						}
+						node.size = 2 * node.count;
+						node.type = GL_SHORT;
+						break;
+					case '4':
+						if (*ptr && *ptr != ' ') {
+							return InvalidFormat;
+						}
+						node.size = 4 * node.count;
+						node.type = GL_INT;
+						break;
+					case 0:
+						--ptr;
+					case ' ':
+						node.size = 4 * node.count;
+						node.type = GL_INT;
+						break;
+				}
 				return &node;
 
-			case 'I':
+			case 'u':
 				if (node.count == 0) {
 					node.count = 1;
 				}
-				node.size = 4;
-				node.shape = 'I';
+				node.normalize = false;
+				switch (*ptr++) {
+					case '1':
+						if (*ptr && *ptr != ' ') {
+							return InvalidFormat;
+						}
+						node.size = 1 * node.count;
+						node.type = GL_UNSIGNED_BYTE;
+						break;
+					case '2':
+						if (*ptr && *ptr != ' ') {
+							return InvalidFormat;
+						}
+						node.size = 2 * node.count;
+						node.type = GL_UNSIGNED_SHORT;
+						break;
+					case '4':
+						if (*ptr && *ptr != ' ') {
+							return InvalidFormat;
+						}
+						node.size = 4 * node.count;
+						node.type = GL_UNSIGNED_INT;
+						break;
+					case 0:
+						--ptr;
+					case ' ':
+						node.size = 4 * node.count;
+						node.type = GL_UNSIGNED_INT;
+						break;
+				}
 				return &node;
 
 			case 'x':
 				if (node.count == 0) {
 					node.count = 1;
 				}
-				node.size = 1;
-				node.shape = 'x';
+				node.type = 0;
+				node.normalize = false;
+				switch (*ptr++) {
+					case '1':
+						if (*ptr && *ptr != ' ') {
+							return InvalidFormat;
+						}
+						node.size = 1 * node.count;
+						break;
+					case '2':
+						if (*ptr && *ptr != ' ') {
+							return InvalidFormat;
+						}
+						node.size = 2 * node.count;
+						break;
+					case '4':
+						if (*ptr && *ptr != ' ') {
+							return InvalidFormat;
+						}
+						node.size = 4 * node.count;
+						break;
+					case '8':
+						if (*ptr && *ptr != ' ') {
+							return InvalidFormat;
+						}
+						node.size = 8 * node.count;
+						break;
+					case 0:
+						--ptr;
+					case ' ':
+						node.size = 1 * node.count;
+						break;
+				}
 				return &node;
+
+			case ' ':
+				break;
 
 			case 0:
 			case '/':

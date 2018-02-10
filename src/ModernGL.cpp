@@ -1,4 +1,5 @@
 #include "Types.hpp"
+#include "BufferFormat.hpp"
 
 #include "GLContext.hpp"
 
@@ -56,6 +57,41 @@ PyObject * strsize(PyObject * self, PyObject * args) {
 	}
 
 	return PyLong_FromLongLong(value);
+}
+
+PyObject * fmtdebug(PyObject * self, PyObject * args) {
+	const char * str;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"s",
+		&str
+	);
+
+	FormatIterator it = FormatIterator(str);
+	FormatInfo format_info = it.info();
+
+	PyObject * nodes = PyList_New(0);
+
+	if (format_info.valid) {
+		while (FormatNode * node = it.next()) {
+			PyObject * obj = PyTuple_New(4);
+			PyTuple_SET_ITEM(obj, 0, PyLong_FromLong(node->size));
+			PyTuple_SET_ITEM(obj, 1, PyLong_FromLong(node->count));
+			PyTuple_SET_ITEM(obj, 2, PyLong_FromLong(node->type));
+			PyTuple_SET_ITEM(obj, 3, PyBool_FromLong(node->normalize));
+			PyList_Append(nodes, obj);
+		}
+	}
+
+	PyObject * res = PyTuple_New(5);
+	PyTuple_SET_ITEM(res, 0, PyLong_FromLong(format_info.size));
+	PyTuple_SET_ITEM(res, 1, PyLong_FromLong(format_info.nodes));
+	PyTuple_SET_ITEM(res, 2, PyLong_FromLong(format_info.divisor));
+	PyTuple_SET_ITEM(res, 3, PyBool_FromLong(format_info.valid));
+	PyTuple_SET_ITEM(res, 4, PyList_AsTuple(nodes));
+	Py_DECREF(nodes);
+	return res;
 }
 
 PyObject * set_error_class(PyObject * self, PyObject * args) {
@@ -141,10 +177,11 @@ PyObject * create_context(PyObject * self) {
 }
 
 PyMethodDef MGL_module_methods[] = {
+	{"strsize", (PyCFunction)strsize, METH_VARARGS, 0},
 	{"create_standalone_context", (PyCFunction)create_standalone_context, METH_VARARGS, 0},
 	{"create_context", (PyCFunction)create_context, METH_NOARGS, 0},
 	{"set_error_class", (PyCFunction)set_error_class, METH_VARARGS, 0},
-	{"strsize", (PyCFunction)strsize, METH_VARARGS, 0},
+	{"fmtdebug", (PyCFunction)fmtdebug, METH_VARARGS, 0},
 	{0},
 };
 

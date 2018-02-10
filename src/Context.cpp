@@ -1102,28 +1102,6 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 				MGLError_Set("content[%d][%d] must be an attribute not %s", i, j + 2, Py_TYPE(attribute)->tp_name);
 				return 0;
 			}
-
-			{
-				FormatNode * node = it.next();
-
-				while (node->shape == 'x') {
-					node = it.next();
-				}
-
-				int scalars = attribute->dimension * attribute->array_length;
-
-				// TODO: restore errors
-
-				if (scalars != node->count) {
-					// MGLError_Set("%s size is %d not %d", name, scalars, node->count);
-					return 0;
-				}
-
-				if (attribute->shape != node->shape) {
-					// MGLError_Set("%s shape is '%c' not '%c'", name, attribute->shape, node->shape);
-					return 0;
-				}
-			}
 		}
 	}
 
@@ -1166,7 +1144,6 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 		MGLBuffer * buffer = (MGLBuffer *)PyTuple_GET_ITEM(tuple, 0);
 		const char * format = PyUnicode_AsUTF8(PyTuple_GET_ITEM(tuple, 1));
-		// PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
 
 		FormatIterator it = FormatIterator(format);
 		FormatInfo format_info = it.info();
@@ -1186,8 +1163,8 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		for (int j = 0; j < attributes_len; ++j) {
 			FormatNode * node = it.next();
 
-			while (node->shape == 'x') {
-				ptr += node->count * node->size;
+			while (!node->type) {
+				ptr += node->size;
 				node = it.next();
 			}
 
@@ -1197,9 +1174,9 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 				int location = attribute->location + r;
 
 				if (attribute->normalizable) {
-					((gl_attribute_normal_ptr_proc)attribute->gl_attrib_ptr_proc)(location, attribute->row_length, attribute->scalar_type, false, format_info.size, ptr);
+					((gl_attribute_normal_ptr_proc)attribute->gl_attrib_ptr_proc)(location, node->count, node->type, node->normalize, format_info.size, ptr);
 				} else {
-					((gl_attribute_ptr_proc)attribute->gl_attrib_ptr_proc)(location, attribute->row_length, attribute->scalar_type, format_info.size, ptr);
+					((gl_attribute_ptr_proc)attribute->gl_attrib_ptr_proc)(location, node->count, node->type, format_info.size, ptr);
 				}
 
 				gl.VertexAttribDivisor(location, format_info.divisor);
