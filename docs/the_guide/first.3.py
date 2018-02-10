@@ -3,8 +3,8 @@ import numpy as np
 
 ctx = moderngl.create_standalone_context()
 
-prog = ctx.program([
-    ctx.vertex_shader('''
+prog = ctx.program(
+    vertex_shader='''
         #version 330
 
         in vec2 in_vert;
@@ -16,8 +16,8 @@ prog = ctx.program([
             v_color = in_color;
             gl_Position = vec4(in_vert, 0.0, 1.0);
         }
-    '''),
-    ctx.fragment_shader('''
+    ''',
+    fragment_shader='''
         #version 330
 
         in vec3 v_color;
@@ -27,8 +27,8 @@ prog = ctx.program([
         void main() {
             f_color = v_color;
         }
-    '''),
-])
+    ''',
+)
 
 x = np.linspace(-1.0, 1.0)
 y = np.random.rand(50) - 0.5

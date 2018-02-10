@@ -32,8 +32,8 @@ Examples
     import numpy as np
 
     ctx = moderngl.create_standalone_context()
-    prog = ctx.program([
-        ctx.vertex_shader('''
+    prog = ctx.program(
+        vertex_shader='''
             #version 330
 
             in vec2 in_vert;
@@ -41,8 +41,8 @@ Examples
             void main() {
                 gl_Position = vec4(in_vert, 0.0, 1.0);
             }
-        '''),
-        ctx.fragment_shader('''
+        ''',
+        fragment_shader='''
             #version 330
 
             out vec4 color;
@@ -50,8 +50,8 @@ Examples
             void main() {
                 color = vec4(1.0, 0.0, 0.0, 1.0);
             }
-        '''),
-    ])
+        ''',
+    )
 
     vertices = np.array([
         0.0, 0.0,

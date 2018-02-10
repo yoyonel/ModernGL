@@ -34,8 +34,8 @@ Examples
 .. code-block:: python
     :linenos:
 
-    my_render_program = ctx.program([
-        ctx.vertex_shader('''
+    my_render_program = ctx.program(
+        vertex_shader='''
             #version 330
 
             in vec2 vert;
@@ -43,8 +43,8 @@ Examples
             void main() {
                 gl_Position = vec4(vert, 0.0, 1.0);
             }
-        '''),
-        ctx.fragment_shader('''
+        ''',
+        fragment_shader='''
             #version 330
 
             out vec4 color;
@@ -52,26 +52,27 @@ Examples
             void main() {
                 color = vec4(0.3, 0.5, 1.0, 1.0);
             }
-        '''),
-    ])
+        ''',
+    )
 
 .. rubric:: A simple program designed for transforming
 
 .. code-block:: python
     :linenos:
 
-    my_vertex_shader = ctx.vertex_shader('''
-        #version 330
+    my_transform_program = ctx.program(
+        vertex_shader='''
+            #version 330
 
-        in vec4 vert;
-        out float vert_length;
+            in vec4 vert;
+            out float vert_length;
 
-        void main() {
-            vert_length = length(vert);
-        }
-    ''')
-
-    my_transform_program = ctx.program(my_vertex_shader, varyings=['vert_length'])
+            void main() {
+                vert_length = length(vert);
+            }
+        ''',
+        varyings=['vert_length']
+    )
 
 .. toctree::
     :maxdepth: 2
