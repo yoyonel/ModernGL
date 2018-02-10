@@ -2512,14 +2512,14 @@ PyObject * MGLContext_query(MGLContext * self, PyObject * args) {
 
 PyObject * MGLContext_scope(MGLContext * self, PyObject * args) {
 	MGLFramebuffer * framebuffer;
-	int enable_flags;
+	PyObject * enable_flags;
 	PyObject * textures;
 	PyObject * uniform_buffers;
 	PyObject * shader_storage_buffers;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O!iOOO",
+		"O!OOOO",
 		&MGLFramebuffer_Type,
 		&framebuffer,
 		&enable_flags,
@@ -2532,12 +2532,21 @@ PyObject * MGLContext_scope(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
+	int flags = MGL_INVALID;
+	if (enable_flags != Py_None) {
+		flags = PyLong_AsLong(enable_flags);
+		if (PyErr_Occurred()) {
+			MGLError_Set("invalid enable_flags");
+			return 0;
+		}
+	}
+
 	MGLScope * scope = (MGLScope *)MGLScope_Type.tp_alloc(&MGLScope_Type, 0);
 
 	Py_INCREF(self);
 	scope->context = self;
 
-	scope->enable_flags = enable_flags;
+	scope->enable_flags = flags;
 	scope->framebuffer_obj = framebuffer->framebuffer_obj;
 
 	int num_textures = PyTuple_Size(textures);
@@ -2640,6 +2649,7 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"depth_renderbuffer", (PyCFunction)MGLContext_depth_renderbuffer, METH_VARARGS, 0},
 	{"compute_shader", (PyCFunction)MGLContext_compute_shader, METH_VARARGS, 0},
 	{"query", (PyCFunction)MGLContext_query, METH_VARARGS, 0},
+	{"scope", (PyCFunction)MGLContext_scope, METH_VARARGS, 0},
 
 	{"release", (PyCFunction)MGLContext_release, METH_NOARGS, 0},
 

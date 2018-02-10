@@ -2640,7 +2640,7 @@ class Context:
 
         return res
 
-    def scope(self, framebuffer, enable_only, *, textures, uniform_buffers, storage_buffers) -> 'Scope':
+    def scope(self, framebuffer, enable_only=None, *, textures=(), uniform_buffers=(), storage_buffers=()) -> 'Scope':
         '''
             Create a :py:class:`Scope` object.
 
