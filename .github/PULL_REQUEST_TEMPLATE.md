@@ -1,3 +1,5 @@
+<!-- If you fill these, we can update the CHANGELOG.md easily -->
+
 ### Description
 
 Write here.
@@ -13,3 +15,5 @@ Write here.
 
 - Please use 4 spaces (not tabs).
 - Please follow the pep8 style guide.
+
+<!-- Please add yourself to the README.md too! -->
