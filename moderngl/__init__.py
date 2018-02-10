@@ -348,7 +348,7 @@ class Buffer:
 
 class Attribute:
     '''
-        Attribute
+        This class represents a program attribute.
     '''
 
     __slots__ = ['mglo', '_location', '_array_length', '_dimension', '_shape', '_name', 'extra']
@@ -746,7 +746,7 @@ class UniformBlock:
 
 class Varying:
     '''
-        Varying
+        This class represents a program varying.
     '''
 
     __slots__ = ['_number', '_array_length', '_dimension', '_name', 'extra']
@@ -781,7 +781,7 @@ class Varying:
 
 class Subroutine:
     '''
-        Subroutine
+        This class represents a program subroutine.
     '''
 
     __slots__ = ['_index', '_name', 'extra']
