@@ -2853,4 +2853,4 @@ def detect_format(program, attributes) -> str:
 
         return attr.array_length * attr.dimension, attr.shape
 
-    return ''.join('%d%s' % fmt(program[a]) for a in attributes)
+    return ' '.join('%d%s' % fmt(program[a]) for a in attributes)
