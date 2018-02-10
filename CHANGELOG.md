@@ -7,10 +7,35 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-### Fixed
+## [5.0.0] - 2018-mm-dd
+<!-- TODO date -->
 
-- Missing TextureCube class
-- Buffer.clear return type hint
+For more information please see: [Differneces between ModernGL5 and ModernGL4](http://moderngl.readthedocs.io/)
+<!-- TODO link -->
+
+### Added
+
+- Query objects
+- Scope objects
+- Conditional Rendering
+- RASTERIZER_DISCARD enable flag
+
+### Changed
+
+- Most of the constants became integers
+- Renamed `default_framebuffer` to `screen` and always points to framebuffer 0
+- VertexArray's buffer formats
+- Program creation
+- Program members
+- Replace floats parameter with dtype
+
+### Removed
+
+- Classes and methods that are no longer needed
+
+<!-- TODO link -->
+### [How to upgrade from 4.2.x to 5.0.x](http://moderngl.readthedocs.io/)
+---
 
 ## [4.2.0] - 2017-10-17
 
