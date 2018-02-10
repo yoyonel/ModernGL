@@ -115,6 +115,7 @@ FormatNode * FormatIterator::next() {
 						node.normalize = false;
 						break;
 					case 0:
+					case '/':
 						--ptr;
 					case ' ':
 						node.size = 4 * node.count;
@@ -154,6 +155,7 @@ FormatNode * FormatIterator::next() {
 						node.type = GL_INT;
 						break;
 					case 0:
+					case '/':
 						--ptr;
 					case ' ':
 						node.size = 4 * node.count;
@@ -192,6 +194,7 @@ FormatNode * FormatIterator::next() {
 						node.type = GL_UNSIGNED_INT;
 						break;
 					case 0:
+					case '/':
 						--ptr;
 					case ' ':
 						node.size = 4 * node.count;
@@ -234,6 +237,7 @@ FormatNode * FormatIterator::next() {
 						node.size = 8 * node.count;
 						break;
 					case 0:
+					case '/':
 						--ptr;
 					case ' ':
 						node.size = 1 * node.count;
