@@ -116,7 +116,7 @@ class TestCase(unittest.TestCase):
                     warnings.warn('skipping version %s' % vtype['version'])
                     continue
 
-                prog = self.ctx.program(self.ctx.vertex_shader(vert_src % vtype), ['v_out'])
+                prog = self.ctx.program(vertex_shader=vert_src % vtype, varyings=['v_out'])
 
                 if 'v_in' not in prog.attributes:
                     warnings.warn('skipping %s' % vtype['type'])
@@ -150,7 +150,7 @@ class TestCase(unittest.TestCase):
                     warnings.warn('skipping version %s' % vtype['version'])
                     continue
 
-                prog = self.ctx.program(self.ctx.vertex_shader(vert_src % vtype), ['v_out'])
+                prog = self.ctx.program(vertex_shader=vert_src % vtype, varyings=['v_out'])
 
                 if 'v_in' not in prog.attributes:
                     warnings.warn('skipping %s' % vtype['type'])

@@ -4,7 +4,7 @@ import struct
 import moderngl
 import numpy as np
 import pymunk
-from moderngl.ext.examples import run_example
+from moderngl_ext_examples import run_example
 from PIL import Image
 from pymunk import Vec2d
 
@@ -18,8 +18,8 @@ class Example:
         self.wnd = wnd
         self.ctx = moderngl.create_context()
 
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        self.prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 uniform vec4 Camera;
@@ -47,8 +47,8 @@ class Example:
                     v_texture = in_texture;
                     v_tint = in_tint;
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 uniform sampler2D Texture;
@@ -64,8 +64,8 @@ class Example:
                     vec3 color = tex.rgb * (1.0 - v_tint.a) + v_tint.rgb * v_tint.a;
                     f_color = vec4(color, tex.a);
             }
-            '''),
-        ])
+            ''',
+        )
 
         img = Image.open(local('data', 'crate.png')).convert('RGBA')
         self.tex1 = self.ctx.texture(img.size, 4, img.tobytes())

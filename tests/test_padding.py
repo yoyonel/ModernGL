@@ -12,28 +12,29 @@ class TestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.ctx = get_context()
 
-        cls.vert = cls.ctx.vertex_shader('''
-            #version 330
+        cls.prog = cls.ctx.program(
+            vertex_shader='''
+                #version 330
 
-            in int a_in;
-            in int b_in;
-            in int c_in;
-            in int d_in;
+                in int a_in;
+                in int b_in;
+                in int c_in;
+                in int d_in;
 
-            out int a_out;
-            out int b_out;
-            out int c_out;
-            out int d_out;
+                out int a_out;
+                out int b_out;
+                out int c_out;
+                out int d_out;
 
-            void main() {
-                a_out = a_in * 2;
-                b_out = b_in * 2;
-                c_out = c_in * 2;
-                d_out = d_in * 2;
-            }
-        ''')
-
-        cls.prog = cls.ctx.program(cls.vert, ['a_out', 'b_out', 'c_out', 'd_out'])
+                void main() {
+                    a_out = a_in * 2;
+                    b_out = b_in * 2;
+                    c_out = c_in * 2;
+                    d_out = d_in * 2;
+                }
+            ''',
+            varyings=['a_out', 'b_out', 'c_out', 'd_out']
+        )
 
     def test_padding_1(self):
         buf = self.ctx.buffer(struct.pack('=ixi12xii', 1, 2, 3, 4))

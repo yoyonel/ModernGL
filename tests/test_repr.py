@@ -34,21 +34,6 @@ class TestCase(unittest.TestCase):
             fbo = self.ctx.framebuffer(rbo)
             self.assertRegex(repr(fbo), r'<Framebuffer: \d+>')
 
-    def test_shader_and_program_repr(self):
-        vertex_shader = self.ctx.vertex_shader('''
-            #version 330
-            in vec4 vertex;
-            void main() {
-                gl_Position = vertex;
-            }
-        ''')
-
-        self.assertRegex(repr(vertex_shader), r'<Shader: \d+>')
-
-        with self.subTest(vertex_shader=vertex_shader):
-            prog = self.ctx.program(vertex_shader)
-            self.assertRegex(repr(prog), r'<Program: \d+>')
-
     def test_texture_repr(self):
         texture = self.ctx.texture((4, 4), 3)
         self.assertRegex(repr(texture), r'<Texture: \d+>')

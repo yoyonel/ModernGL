@@ -11,18 +11,19 @@ class TestCase(unittest.TestCase):
 
     def test_transform(self):
 
-        vertex_shader = self.ctx.vertex_shader('''
-            #version 330
+        program = self.ctx.program(
+            vertex_shader='''
+                #version 330
 
-            in vec4 vert;
-            out float vert_length;
+                in vec4 vert;
+                out float vert_length;
 
-            void main() {
-                vert_length = length(vert);
-            }
-        ''')
-
-        program = self.ctx.program(vertex_shader, ['vert_length'])
+                void main() {
+                    vert_length = length(vert);
+                }
+            ''',
+            varyings=['vert_length']
+        )
 
         self.assertIs(program.geometry_input, None)
         self.assertIs(program.geometry_output, None)

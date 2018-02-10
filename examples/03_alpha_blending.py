@@ -1,6 +1,6 @@
 import moderngl
 import numpy as np
-from moderngl.ext.examples import run_example
+from moderngl_ext_examples import run_example
 
 
 class Example:
@@ -8,34 +8,34 @@ class Example:
         self.wnd = wnd
         self.ctx = moderngl.create_context()
 
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
-                    #version 330
+        self.prog = self.ctx.program(
+            vertex_shader='''
+                #version 330
 
-                    in vec2 vert;
+                in vec2 vert;
 
-                    in vec4 vert_color;
-                    out vec4 frag_color;
+                in vec4 vert_color;
+                out vec4 frag_color;
 
-                    uniform vec2 scale;
-                    uniform float rotation;
+                uniform vec2 scale;
+                uniform float rotation;
 
-                    void main() {
-                        frag_color = vert_color;
-                        float r = rotation * (0.5 + gl_InstanceID * 0.05);
-                        mat2 rot = mat2(cos(r), sin(r), -sin(r), cos(r));
-                        gl_Position = vec4((rot * vert) * scale, 0.0, 1.0);
-                    }
-                '''),
-            self.ctx.fragment_shader('''
-                    #version 330
-                    in vec4 frag_color;
-                    out vec4 color;
-                    void main() {
-                        color = vec4(frag_color);
-                    }
-                '''),
-        ])
+                void main() {
+                    frag_color = vert_color;
+                    float r = rotation * (0.5 + gl_InstanceID * 0.05);
+                    mat2 rot = mat2(cos(r), sin(r), -sin(r), cos(r));
+                    gl_Position = vec4((rot * vert) * scale, 0.0, 1.0);
+                }
+            ''',
+            fragment_shader='''
+                #version 330
+                in vec4 frag_color;
+                out vec4 color;
+                void main() {
+                    color = vec4(frag_color);
+                }
+            ''',
+        )
 
         self.scale = self.prog['scale']
         self.rotation = self.prog['rotation']

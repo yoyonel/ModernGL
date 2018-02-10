@@ -7,7 +7,7 @@ from pyrr import Matrix44
 wnd = pyglet.window.Window(1280, 720)
 ctx = ModernGL.create_context()
 
-prog = ctx.program([
+prog = ctx.program(
     ctx.vertex_shader('''
         #version 330
 

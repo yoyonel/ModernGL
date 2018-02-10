@@ -47,7 +47,7 @@ frag = ctx.fragment_shader('''
     }
 ''')
 
-prog = ctx.program([vert, frag])
+prog = ctx.program(vert, frag])
 
 transform = ctx.program(tvert, ['out_pos', 'out_prev'])
 

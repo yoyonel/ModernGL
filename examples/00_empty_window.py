@@ -1,5 +1,5 @@
 import moderngl
-from moderngl.ext.examples import run_example
+from moderngl_ext_examples import run_example
 
 
 class Example:

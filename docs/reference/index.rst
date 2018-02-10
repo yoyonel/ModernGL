@@ -8,7 +8,6 @@ Reference
     buffer.rst
     vertex_array.rst
     program.rst
-    shader.rst
     texture.rst
     texture3d.rst
     texture_cube.rst

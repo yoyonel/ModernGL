@@ -26,8 +26,8 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
         texture.swizzle = '111R'
         texture.use()
 
-        prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 in vec2 vert;
@@ -46,7 +46,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
                     v_tex_coord = tex_coord;
                 }
             '''),
-            self.ctx.fragment_shader('''
+            fragment_shader='''
                 #version 330
 
                 uniform sampler2D Texture;

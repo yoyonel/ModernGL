@@ -5,8 +5,8 @@ from random import uniform
 
 import moderngl
 import numpy as np
-from moderngl.ext.obj import Obj
-from moderngl.ext.examples import run_example
+from moderngl_ext_obj import Obj
+from moderngl_ext_examples import run_example
 from pyrr import Matrix44
 
 
@@ -28,8 +28,8 @@ class Example:
         self.wnd = wnd
         self.ctx = moderngl.create_context()
 
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        self.prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 uniform mat4 Mvp;
@@ -51,8 +51,8 @@ class Example:
                     v_color = in_color;
                     gl_Position = Mvp * vec4(v_vert, 1.0);
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 uniform vec3 Light;
@@ -68,8 +68,8 @@ class Example:
                     float lum = clamp(dot(normalize(Light - v_vert), normalize(v_norm)), 0.0, 1.0) * 0.8 + 0.2;
                     f_color = vec4(v_color * lum, 1.0);
                 }
-            '''),
-        ])
+            ''',
+        )
 
         self.mvp = self.prog['Mvp']
         self.light = self.prog['Light']

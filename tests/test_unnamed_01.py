@@ -12,22 +12,23 @@ class TestBuffer(unittest.TestCase):
     def setUpClass(cls):
         cls.ctx = get_context()
 
-        cls.vert = cls.ctx.vertex_shader('''
-            #version 330
+        cls.prog = cls.ctx.program(
+            vertex_shader='''
+                #version 330
 
-            in mat2 in_m;
-            in vec2 in_v;
+                in mat2 in_m;
+                in vec2 in_v;
 
-            out vec2 out_v;
+                out vec2 out_v;
 
-            uniform float mult;
+                uniform float mult;
 
-            void main() {
-                out_v = in_m * in_v * mult;
-            }
-        ''')
-
-        cls.prog = cls.ctx.program(cls.vert, ['out_v'])
+                void main() {
+                    out_v = in_m * in_v * mult;
+                }
+            ''',
+            varyings=['out_v']
+        )
 
     def test_1(self):
         buf_m = self.ctx.buffer(struct.pack('4f', 1, 1, 1, 2))

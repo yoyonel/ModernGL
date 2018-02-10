@@ -40,7 +40,6 @@ struct MGLFramebuffer;
 struct MGLInvalidObject;
 struct MGLProgram;
 struct MGLRenderbuffer;
-struct MGLShader;
 struct MGLTexture;
 struct MGLTexture3D;
 struct MGLTextureCube;
@@ -223,16 +222,6 @@ struct MGLScope {
 	int old_enable_flags;
 };
 
-struct MGLShader {
-	PyObject_HEAD
-
-	MGLContext * context;
-
-	int shader_obj;
-	int shader_type;
-	int shader_slot;
-};
-
 struct MGLTexture {
 	PyObject_HEAD
 
@@ -359,7 +348,6 @@ void MGLContext_Invalidate(MGLContext * context);
 void MGLFramebuffer_Invalidate(MGLFramebuffer * framebuffer);
 void MGLProgram_Invalidate(MGLProgram * program);
 void MGLRenderbuffer_Invalidate(MGLRenderbuffer * renderbuffer);
-void MGLShader_Invalidate(MGLShader * shader);
 void MGLTexture3D_Invalidate(MGLTexture3D * texture);
 void MGLTextureCube_Invalidate(MGLTextureCube * texture);
 void MGLTexture_Invalidate(MGLTexture * texture);
@@ -371,7 +359,6 @@ void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl);
 void MGLUniformBlock_Complete(MGLUniformBlock * uniform_block, const GLMethods & gl);
 void MGLVertexArray_Complete(MGLVertexArray * vertex_array);
 
-void MGLShader_Compile(MGLShader * shader);
 void MGLContext_Initialize(MGLContext * self);
 
 extern PyTypeObject MGLAttribute_Type;
@@ -384,7 +371,6 @@ extern PyTypeObject MGLProgram_Type;
 extern PyTypeObject MGLQuery_Type;
 extern PyTypeObject MGLRenderbuffer_Type;
 extern PyTypeObject MGLScope_Type;
-extern PyTypeObject MGLShader_Type;
 extern PyTypeObject MGLTexture3D_Type;
 extern PyTypeObject MGLTextureCube_Type;
 extern PyTypeObject MGLTexture_Type;

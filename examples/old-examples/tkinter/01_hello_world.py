@@ -8,7 +8,7 @@ ctx = ModernGL.create_standalone_context()
 
 fbo = ctx.framebuffer(ctx.renderbuffer((512, 512)))
 
-prog = ctx.program([
+prog = ctx.program(
     ctx.vertex_shader('''
         #version 330
 

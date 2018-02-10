@@ -15,8 +15,8 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
     def initializeGL(self):
         self.ctx = ModernGL.create_context()
 
-        prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        prog = self.ctx.program(
+            vertex_shader='''
     #version 330
 
     in vec3 vert;
@@ -59,7 +59,7 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
         gl_Position = perspective() * lookat() * vec4(vert, 1.0);
     }
 '''),
-            self.ctx.fragment_shader('''
+            fragment_shader='''
     #version 330
 
     out vec4 color;

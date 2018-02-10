@@ -64,7 +64,7 @@ frag = ctx.fragment_shader('''
 
 width, height = wnd.size
 
-prog = ctx.program([vert, frag])
+prog = ctx.program(vert, frag])
 
 prog.uniforms['znear'].value = 0.1
 prog.uniforms['zfar'].value = 1000.0

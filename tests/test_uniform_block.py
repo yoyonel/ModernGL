@@ -10,30 +10,31 @@ class TestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.ctx = get_context()
 
-        cls.vert = cls.ctx.vertex_shader('''
-            #version 330
+        cls.prog = cls.ctx.program(
+            vertex_shader='''
+                #version 330
 
-            in vec2 in_v;
-            out vec2 out_v;
+                in vec2 in_v;
+                out vec2 out_v;
 
-            uniform Block1 {
-                float x;
-            };
+                uniform Block1 {
+                    float x;
+                };
 
-            uniform Block2 {
-                float y;
-            };
+                uniform Block2 {
+                    float y;
+                };
 
-            uniform Block3 {
-                float z;
-            };
+                uniform Block3 {
+                    float z;
+                };
 
-            void main() {
-                out_v = in_v * z + vec2(x, y);
-            }
-        ''')
-
-        cls.prog = cls.ctx.program(cls.vert, ['out_v'])
+                void main() {
+                    out_v = in_v * z + vec2(x, y);
+                }
+            ''',
+            varyings=['out_v']
+        )
 
     def test_1(self):
         buf_v = self.ctx.buffer(struct.pack('2f', 100.0, 1000.0))

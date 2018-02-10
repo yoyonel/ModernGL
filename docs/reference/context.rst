@@ -15,14 +15,9 @@ Create
 ModernGL Objects
 ----------------
 
-.. automethod:: Context.program(shaders, varyings=()) -> Program
+.. automethod:: Context.program(vertex_shader, fragment_shader=None, geometry_shader=None, tess_control_shader=None, tess_evaluation_shader=None, varyings=()) -> Program
 .. automethod:: Context.simple_vertex_array(program, buffer, *attributes, index_buffer=None) -> VertexArray
 .. automethod:: Context.vertex_array(program, content, index_buffer=None) -> VertexArray
-.. automethod:: Context.vertex_shader(source) -> Shader
-.. automethod:: Context.fragment_shader(source) -> Shader
-.. automethod:: Context.geometry_shader(source) -> Shader
-.. automethod:: Context.tess_evaluation_shader(source) -> Shader
-.. automethod:: Context.tess_control_shader(source) -> Shader
 .. automethod:: Context.buffer(data=None, reserve=0, dynamic=False) -> Buffer
 .. automethod:: Context.texture(size, components, data=None, samples=0, alignment=1, dtype='f1') -> Texture
 .. automethod:: Context.depth_texture(size, data=None, samples=0, alignment=4) -> Texture

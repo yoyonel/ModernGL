@@ -1,6 +1,6 @@
 import moderngl
 import numpy as np
-from moderngl.ext.examples import run_example
+from moderngl_ext_examples import run_example
 from pyrr import Matrix44
 
 
@@ -16,8 +16,8 @@ class Example:
         self.wnd = wnd
         self.ctx = moderngl.create_context()
 
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        self.prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 uniform mat4 Mvp;
@@ -27,8 +27,8 @@ class Example:
                 void main() {
                     gl_Position = Mvp * vec4(in_vert, 1.0);
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 out vec4 f_color;
@@ -36,8 +36,8 @@ class Example:
                 void main() {
                     f_color = vec4(0.1, 0.1, 0.1, 1.0);
                 }
-            '''),
-        ])
+            ''',
+        )
 
         self.mvp = self.prog['Mvp']
 

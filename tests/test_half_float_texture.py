@@ -15,8 +15,8 @@ class TestCase(unittest.TestCase):
         cls.ctx = get_context()
 
     def test_1(self):
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        self.prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 in vec2 in_vert;
@@ -26,8 +26,8 @@ class TestCase(unittest.TestCase):
                     v_text = in_vert / 2.0 + 0.5;
                     gl_Position = vec4(in_vert, 0.0, 1.0);
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 uniform sampler2D Texture;
@@ -38,8 +38,8 @@ class TestCase(unittest.TestCase):
                 void main() {
                     f_color = texture(Texture, v_text);
                 }
-            '''),
-        ])
+            ''',
+        )
 
         pixels = np.tile([0.0, 0.5, 1.0], 4 * 4).astype('f2')
         self.tex = self.ctx.texture((4, 4), 3, pixels, dtype='f2')

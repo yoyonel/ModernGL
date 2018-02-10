@@ -5,7 +5,7 @@ from PIL import Image
 
 ctx = ModernGL.create_standalone_context()
 
-prog = ctx.program([
+prog = ctx.program(
     ctx.vertex_shader('''
         #version 330
         in vec2 vert;

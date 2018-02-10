@@ -9,7 +9,7 @@ Program
 Create
 ------
 
-.. automethod:: Context.program(shaders, varyings=()) -> Program
+.. automethod:: Context.program(vertex_shader, fragment_shader=None, geometry_shader=None, tess_control_shader=None, tess_evaluation_shader=None, varyings=()) -> Program
     :noindex:
 
 Methods

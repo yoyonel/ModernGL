@@ -1,5 +1,5 @@
 import moderngl
-from moderngl.ext.examples import run_example
+from moderngl_ext_examples import run_example
 import numpy as np
 
 """
@@ -12,8 +12,8 @@ class Example:
         self.wnd = wnd
         self.ctx = moderngl.create_context()
 
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        self.prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 in vec3 vert;
@@ -56,8 +56,8 @@ class Example:
                 void main() {
                     gl_Position = perspective() * lookat() * vec4(vert, 1.0);
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 out vec4 color;
@@ -66,8 +66,8 @@ class Example:
                     color = vec4(0.04, 0.04, 0.04, 1.0);
 
                 }
-            '''),
-        ])
+            ''',
+        )
 
         width, height = self.wnd.size
         self.prog['z_near'].value = 0.1

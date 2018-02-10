@@ -12,8 +12,8 @@ class TestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.ctx = get_context()
 
-        prog = cls.ctx.program([
-            cls.ctx.vertex_shader('''
+        prog = cls.ctx.program(
+            vertex_shader='''
                 #version 330
                 in vec2 vert;
                 out vec2 text;
@@ -21,8 +21,8 @@ class TestCase(unittest.TestCase):
                     gl_Position = vec4(vert * 2.0 - 1.0, 0.0, 1.0);
                     text = vert;
                 }
-            '''),
-            cls.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
                 uniform sampler2D Texture;
                 in vec2 text;
@@ -30,8 +30,8 @@ class TestCase(unittest.TestCase):
                 void main() {
                     color = texture(Texture, text);
                 }
-            '''),
-        ])
+            ''',
+        )
 
         vbo = cls.ctx.buffer(struct.pack('8f', 0, 0, 0, 1, 1, 0, 1, 1))
         cls.vao = cls.ctx.simple_vertex_array(prog, vbo, 'vert')

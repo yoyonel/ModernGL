@@ -14,18 +14,19 @@ class TestCase(unittest.TestCase):
 
     def test_vao_attribs(self):
 
-        vertex_shader = self.ctx.vertex_shader('''
-            #version 330
+        program = self.ctx.program(
+            vertex_shader='''
+                #version 330
 
-            in vec4 in_vert;
-            out vec4 out_vert;
+                in vec4 in_vert;
+                out vec4 out_vert;
 
-            void main() {
-                out_vert = in_vert;
-            }
-        ''')
-
-        program = self.ctx.program(vertex_shader, varyings=['out_vert'])
+                void main() {
+                    out_vert = in_vert;
+                }
+            ''',
+            varyings=['out_vert']
+        )
 
         vbo = self.ctx.buffer(struct.pack('12f', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12))
         res = self.ctx.buffer(reserve=struct.calcsize('8f'))

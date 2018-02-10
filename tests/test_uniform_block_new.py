@@ -12,8 +12,8 @@ class TestCase(unittest.TestCase):
         cls.ctx = get_context()
 
     def test_1(self):
-        prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 in vec2 in_vert;
@@ -30,8 +30,8 @@ class TestCase(unittest.TestCase):
                     v_vert = Position + in_vert * Scale;
                     gl_Position = vec4(Mvp * v_vert, 0.0, 1.0);
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 uniform bool UseTexture;
@@ -54,8 +54,8 @@ class TestCase(unittest.TestCase):
                         f_color = vec4(Color, Alpha);
                     }
                 }
-            '''),
-        ])
+            ''',
+        )
 
         self.assertIn('in_vert', prog)
         self.assertNotIn('Position', prog)

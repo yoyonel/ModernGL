@@ -12,7 +12,7 @@ fbo = ctx.framebuffer(color_rbo, depth_rbo)
 
 fbo.use()
 
-prog = ctx.program([
+prog = ctx.program(
     ctx.vertex_shader('''
         #version 330
 

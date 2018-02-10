@@ -14,7 +14,7 @@ grid = numpy.dstack(numpy.mgrid[0:height, 0:width][::-1]).astype('int32')
 wnd = GLWindow.create_window(width, height)
 ctx = ModernGL.create_context()
 
-prog = ctx.program([
+prog = ctx.program(
     ctx.vertex_shader('''
         #version 330
 

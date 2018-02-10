@@ -15,15 +15,15 @@ class QGLControllerWidget(QtOpenGL.QGLWidget):
     def initializeGL(self):
         self.ctx = ModernGL.create_context()
 
-        prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
                 in vec2 vert;
                 void main() {
                     gl_Position = vec4(vert, 0.0, 1.0);
                 }
             '''),
-            self.ctx.fragment_shader('''
+            fragment_shader='''
                 #version 330
                 out vec4 color;
                 void main() {

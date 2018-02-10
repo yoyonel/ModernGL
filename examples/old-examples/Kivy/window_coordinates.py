@@ -14,8 +14,8 @@ class CustomWidget(Widget):
         with self.canvas:
             self.ctx = ModernGL.create_context()
 
-            self.prog = self.ctx.program([
-                self.ctx.vertex_shader('''
+            self.prog = self.ctx.program(
+                vertex_shader='''
                     #version 330
 
                     uniform vec2 WindowSize;
@@ -30,7 +30,7 @@ class CustomWidget(Widget):
                         gl_Position = vec4(in_vert / WindowSize * 2.0, 0.0, 1.0);
                     }
                 '''),
-                self.ctx.fragment_shader('''
+                fragment_shader='''
                     #version 330
 
                     in vec3 v_color;

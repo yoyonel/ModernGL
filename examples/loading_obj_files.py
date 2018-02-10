@@ -1,8 +1,8 @@
 import os
 
 import moderngl
-from moderngl.ext.examples import run_example
-from moderngl.ext.obj import Obj
+from moderngl_ext_examples import run_example
+from moderngl_ext_obj import Obj
 from PIL import Image
 from pyrr import Matrix44
 
@@ -15,8 +15,8 @@ class Example:
         self.obj = Obj.open(os.path.join(os.path.dirname(__file__), 'data', 'sitting_dummy.obj'))
         self.wood = Image.open(os.path.join(os.path.dirname(__file__), 'data', 'wood.jpg'))
 
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        self.prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 uniform mat4 Mvp;
@@ -35,8 +35,8 @@ class Example:
                     v_text = in_text;
                     gl_Position = Mvp * vec4(v_vert, 1.0);
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 uniform sampler2D Texture;
@@ -62,9 +62,8 @@ class Example:
                     color = color * (1.0 - Color.a) + Color.rgb * Color.a;
                     f_color = vec4(color * lum, 1.0);
                 }
-
-            '''),
-        ])
+            ''',
+        )
 
         self.light = self.prog['Light']
         self.color = self.prog['Color']

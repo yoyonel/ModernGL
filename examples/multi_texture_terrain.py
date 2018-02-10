@@ -2,7 +2,7 @@ import os
 
 import moderngl
 import numpy as np
-from moderngl.ext.examples import run_example
+from moderngl_ext_examples import run_example
 from PIL import Image
 from pyrr import Matrix44
 
@@ -23,8 +23,8 @@ class Example:
         self.wnd = wnd
         self.ctx = moderngl.create_context()
 
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        self.prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 uniform mat4 Mvp;
@@ -38,8 +38,8 @@ class Example:
                     gl_Position = Mvp * vertex;
                     v_text = in_vert;
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 uniform sampler2D Heightmap;
@@ -69,8 +69,8 @@ class Example:
 
                     f_color = vec4(color, 1.0);
                 }
-            '''),
-        ])
+            ''',
+        )
 
         self.mvp = self.prog['Mvp']
 

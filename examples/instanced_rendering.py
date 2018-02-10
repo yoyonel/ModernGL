@@ -1,5 +1,5 @@
 import moderngl
-from moderngl.ext.examples import run_example
+from moderngl_ext_examples import run_example
 import numpy as np
 
 
@@ -8,8 +8,8 @@ class Example:
         self.wnd = wnd
         self.ctx = moderngl.create_context()
 
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        self.prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 in vec2 in_vert;
@@ -26,8 +26,8 @@ class Example:
                     mat2 rot = mat2(cos(r), sin(r), -sin(r), cos(r));
                     gl_Position = vec4((rot * in_vert) * Scale, 0.0, 1.0);
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 in vec4 v_color;
@@ -36,8 +36,8 @@ class Example:
                 void main() {
                     f_color = v_color;
                 }
-            '''),
-        ])
+            ''',
+        )
 
         self.scale = self.prog['Scale']
         self.rotation = self.prog['Rotation']

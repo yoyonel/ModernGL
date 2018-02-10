@@ -12,7 +12,7 @@ pygame.display.set_mode((width, height), DOUBLEBUF | OPENGL)
 
 ctx = ModernGL.create_context()
 
-prog = ctx.program([
+prog = ctx.program(
     ctx.vertex_shader('''
         #version 330
 

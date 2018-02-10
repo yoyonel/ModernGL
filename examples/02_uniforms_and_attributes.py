@@ -1,5 +1,5 @@
 import moderngl
-from moderngl.ext.examples import run_example
+from moderngl_ext_examples import run_example
 import numpy as np
 
 """
@@ -12,32 +12,32 @@ class Example:
         self.wnd = wnd
         self.ctx = moderngl.create_context()
 
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
-                    #version 330
-                    in vec2 vert;
+        self.prog = self.ctx.program(
+            vertex_shader='''
+                #version 330
+                in vec2 vert;
 
-                    uniform vec2 scale;
-                    uniform float rotation;
+                uniform vec2 scale;
+                uniform float rotation;
 
-                    void main() {
+                void main() {
 
-                        mat2 rot = mat2(
-                            cos(rotation), sin(rotation),
-                            -sin(rotation), cos(rotation)
-                        );
-                        gl_Position = vec4((rot * vert) * scale, 0.0, 1.0);
-                    }
-                '''),
-            self.ctx.fragment_shader('''
-                    #version 330
+                    mat2 rot = mat2(
+                        cos(rotation), sin(rotation),
+                        -sin(rotation), cos(rotation)
+                    );
+                    gl_Position = vec4((rot * vert) * scale, 0.0, 1.0);
+                }
+            ''',
+            fragment_shader='''
+                #version 330
 
-                    out vec4 color;
-                    void main() {
-                        color = vec4(0.3, 0.5, 1.0, 1.0);
-                    }
-                '''),
-        ])
+                out vec4 color;
+                void main() {
+                    color = vec4(0.3, 0.5, 1.0, 1.0);
+                }
+            ''',
+        )
 
         self.scale = self.prog['scale']
         self.rotation = self.prog['rotation']

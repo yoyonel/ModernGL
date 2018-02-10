@@ -3,8 +3,8 @@ import struct
 
 import moderngl
 import numpy as np
-from moderngl.ext.examples import run_example
-from moderngl.ext.obj import Obj
+from moderngl_ext_examples import run_example
+from moderngl_ext_obj import Obj
 from PIL import Image
 from pyrr import Matrix44
 
@@ -18,8 +18,8 @@ class Example:
         self.wnd = wnd
         self.ctx = moderngl.create_context()
 
-        self.canvas_prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        self.canvas_prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 in vec2 in_vert;
@@ -29,8 +29,8 @@ class Example:
                     gl_Position = vec4(in_vert * 2.0 - 1.0, 0.0, 1.0);
                     v_vert = in_vert;
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 uniform sampler2D Texture;
@@ -42,11 +42,11 @@ class Example:
                 void main() {
                     f_color = texture(Texture, v_vert);
                 }
-            '''),
-        ])
+            ''',
+        )
 
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        self.prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 uniform mat4 Mvp;
@@ -65,8 +65,8 @@ class Example:
                     v_norm = in_norm;
                     v_text = in_text;
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 uniform vec3 Light;
@@ -85,8 +85,8 @@ class Example:
                     vec4 tex = texture(Texture, v_text);
                     f_color = vec4(base * 0.1 + tex.rgb * lum + spec, tex.a);
                 }
-            '''),
-        ])
+            ''',
+        )
 
         self.canvas_vbo = self.ctx.buffer(np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0], dtype='f4').tobytes())
         self.canvas_vao = self.ctx.simple_vertex_array(self.canvas_prog, self.canvas_vbo, 'in_vert')

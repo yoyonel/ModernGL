@@ -48,9 +48,6 @@ class TestCase(unittest.TestCase):
     def test_program_docs(self):
         self.validate('program.rst', 'Program', ['release', 'mglo', 'glo', 'extra'])
 
-    def test_shader_docs(self):
-        self.validate('shader.rst', 'Shader', ['release', 'mglo', 'glo', 'extra'])
-
     def test_renderbuffer_docs(self):
         self.validate('renderbuffer.rst', 'Renderbuffer', ['release', 'mglo', 'glo', 'extra'])
 

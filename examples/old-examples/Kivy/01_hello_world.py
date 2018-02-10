@@ -14,7 +14,7 @@ class CustomWidget(Widget):
 
             self.ctx = ModernGL.create_context()
 
-            self.vert = self.ctx.vertex_shader('''
+            self.vert = vertex_shader='''
                 #version 330
 
                 in vec2 vert;
@@ -24,7 +24,7 @@ class CustomWidget(Widget):
                 }
             ''')
 
-            self.frag = self.ctx.fragment_shader('''
+            self.frag = fragment_shader='''
                 #version 330
 
                 out vec4 color;
@@ -34,7 +34,7 @@ class CustomWidget(Widget):
                 }
             ''')
 
-            self.prog = self.ctx.program([self.vert, self.frag])
+            self.prog = self.ctx.program(self.vert, self.frag])
 
             self.vbo = self.ctx.buffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
             self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, ['vert'])

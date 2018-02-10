@@ -11,34 +11,32 @@ class TestCase(unittest.TestCase):
         cls.ctx = get_context()
 
     def test_program(self):
+        program = self.ctx.program(
+            vertex_shader='''
+                #version 330
 
-        vertex_shader = self.ctx.vertex_shader('''
-            #version 330
+                uniform vec2 pos;
+                uniform float scale;
 
-            uniform vec2 pos;
-            uniform float scale;
+                in vec2 vert;
+                out vec2 v_vert;
 
-            in vec2 vert;
-            out vec2 v_vert;
+                void main() {
+                    gl_Position = vec4(pos + vert * scale, 0.0, 1.0);
+                    v_vert = vert;
+                }
+            ''',
+            fragment_shader='''
+                #version 330
 
-            void main() {
-                gl_Position = vec4(pos + vert * scale, 0.0, 1.0);
-                v_vert = vert;
-            }
-        ''')
+                in vec2 v_vert;
+                out vec4 color;
 
-        fragment_shader = self.ctx.fragment_shader('''
-            #version 330
-
-            in vec2 v_vert;
-            out vec4 color;
-
-            void main() {
-                color = vec4(v_vert, 0.0, 1.0);
-            }
-        ''')
-
-        program = self.ctx.program([vertex_shader, fragment_shader])
+                void main() {
+                    color = vec4(v_vert, 0.0, 1.0);
+                }
+            ''',
+        )
 
         self.assertIn('vert', program)
         self.assertIn('pos', program)

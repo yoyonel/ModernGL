@@ -12,8 +12,8 @@ class TestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.ctx = get_context()
 
-        prog = cls.ctx.program([
-            cls.ctx.vertex_shader('''
+        prog = cls.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 in float v_in_1;
@@ -24,8 +24,9 @@ class TestCase(unittest.TestCase):
                 void main() {
                     v_out = v_in_1 + v_in_2 + v_in_3;
                 }
-            '''),
-        ], varyings=['v_out'])
+            ''',
+            varyings=['v_out']
+        )
 
         vbo1 = cls.ctx.buffer(struct.pack('4f', 1.0, 2.0, 3.0, 4.0))
         vbo2 = cls.ctx.buffer(struct.pack('4f', 10.0, 20.0, 30.0, 40.0))

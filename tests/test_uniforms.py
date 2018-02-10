@@ -24,7 +24,8 @@ class TestCase(unittest.TestCase):
         '''
 
     def test_float_uniform(self):
-        vertex_shader = self.ctx.vertex_shader('''
+        prog = self.ctx.program(
+            vertex_shader='''
             #version 330
             uniform float Uniform;
             in float v_in;
@@ -32,9 +33,9 @@ class TestCase(unittest.TestCase):
             void main() {
                 v_out = Uniform * v_in;
             }
-        ''')
-
-        prog = self.ctx.program(vertex_shader, varyings=['v_out'])
+        ''',
+            varyings=['v_out']
+        )
         vbo = self.ctx.buffer(struct.pack('f', 1.0))
         vao = self.ctx.simple_vertex_array(prog, vbo, 'v_in')
 
@@ -45,17 +46,18 @@ class TestCase(unittest.TestCase):
         self.assertAlmostEqual(val, 7.0)
 
     def test_int_uniform(self):
-        vertex_shader = self.ctx.vertex_shader('''
-            #version 330
-            uniform int Uniform;
-            in int v_in;
-            out int v_out;
-            void main() {
-                v_out = Uniform * v_in;
-            }
-        ''')
-
-        prog = self.ctx.program(vertex_shader, varyings=['v_out'])
+        prog = self.ctx.program(
+            vertex_shader='''
+                #version 330
+                uniform int Uniform;
+                in int v_in;
+                out int v_out;
+                void main() {
+                    v_out = Uniform * v_in;
+                }
+            ''',
+            varyings=['v_out']
+        )
         vbo = self.ctx.buffer(struct.pack('i', 1))
         vao = self.ctx.simple_vertex_array(prog, vbo, 'v_in')
 
@@ -66,17 +68,19 @@ class TestCase(unittest.TestCase):
         self.assertAlmostEqual(val, -2)
 
     def test_vec_uniform(self):
-        vertex_shader = self.ctx.vertex_shader('''
-            #version 330
-            uniform vec3 Uniform;
-            in vec3 v_in;
-            out vec3 v_out;
-            void main() {
-                v_out = Uniform * v_in;
-            }
-        ''')
+        prog = self.ctx.program(
+            vertex_shader='''
+                #version 330
+                uniform vec3 Uniform;
+                in vec3 v_in;
+                out vec3 v_out;
+                void main() {
+                    v_out = Uniform * v_in;
+                }
+            ''',
+            varyings=['v_out']
+        )
 
-        prog = self.ctx.program(vertex_shader, varyings=['v_out'])
         vbo = self.ctx.buffer(struct.pack('3f', 1.0, 1.0, 1.0))
         vao = self.ctx.simple_vertex_array(prog, vbo, 'v_in')
 
@@ -89,17 +93,19 @@ class TestCase(unittest.TestCase):
         self.assertAlmostEqual(z, 1.5)
 
     def test_mat_uniform(self):
-        vertex_shader = self.ctx.vertex_shader('''
-            #version 330
-            uniform mat2x3 Uniform;
-            in float v_in;
-            out mat2x3 v_out;
-            void main() {
-                v_out = Uniform * v_in;
-            }
-        ''')
+        prog = self.ctx.program(
+            vertex_shader='''
+                #version 330
+                uniform mat2x3 Uniform;
+                in float v_in;
+                out mat2x3 v_out;
+                void main() {
+                    v_out = Uniform * v_in;
+                }
+            ''',
+            varyings=['v_out']
+        )
 
-        prog = self.ctx.program(vertex_shader, varyings=['v_out'])
         vbo = self.ctx.buffer(struct.pack('f', 1.0))
         vao = self.ctx.simple_vertex_array(prog, vbo, 'v_in')
 

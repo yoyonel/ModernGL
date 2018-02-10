@@ -15,8 +15,8 @@ class TestCase(unittest.TestCase):
         cls.ctx = get_context()
 
     def test_1(self):
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        self.prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 in vec2 in_vert;
@@ -24,8 +24,8 @@ class TestCase(unittest.TestCase):
                 void main() {
                     gl_Position = vec4(in_vert, 0.0, 1.0);
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 out vec4 f_color;
@@ -33,8 +33,8 @@ class TestCase(unittest.TestCase):
                 void main() {
                     f_color = vec4(0.0, 0.5, 1.0, 1.0);
                 }
-            '''),
-        ])
+            ''',
+        )
 
         self.vbo = self.ctx.buffer(np.array([-1, -1, -1, 1, 1, -1, 1, 1], dtype='f4'))
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert')

@@ -34,7 +34,7 @@ Multiple instance rendering
 ## Dependencies
 
 ```
-pip install moderngl moderngl.ext.examples moderngl.ext.obj
+pip install moderngl moderngl_ext_examples moderngl_ext_obj
 ```
 
 ### Window backends

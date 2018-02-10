@@ -12,7 +12,8 @@ class TestBuffer(unittest.TestCase):
     def setUpClass(cls):
         cls.ctx = get_context()
 
-        cls.vert = cls.ctx.vertex_shader('''
+        cls.prog = cls.ctx.program(
+            vertex_shader='''
             #version 330
 
             in vec2 in_v1;
@@ -23,9 +24,9 @@ class TestBuffer(unittest.TestCase):
             void main() {
                 out_v = in_v1 + in_v2;
             }
-        ''')
-
-        cls.prog = cls.ctx.program(cls.vert, ['out_v'])
+        ''',
+        varyings=['out_v']
+    )
 
     def test_1(self):
         buf_v1 = self.ctx.buffer(struct.pack('8f', 1, 2, 3, 4, 5, 6, 7, 8))

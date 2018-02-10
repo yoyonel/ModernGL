@@ -17,7 +17,7 @@ glutCreateWindow(b'Alpha Blending')
 
 ctx = ModernGL.create_context()
 
-prog = ctx.program([
+prog = ctx.program(
     ctx.vertex_shader('''
         #version 330
 

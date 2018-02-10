@@ -25,7 +25,7 @@ frag = ctx.fragment_shader('''
     }
 ''')
 
-prog = ctx.program([vert, frag])
+prog = ctx.program(vert, frag])
 
 vbo = ctx.buffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
 vao = ctx.simple_vertex_array(prog, vbo, ['vert'])

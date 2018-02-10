@@ -1,6 +1,6 @@
 import moderngl
 import numpy as np
-from moderngl.ext.examples import run_example
+from moderngl_ext_examples import run_example
 
 
 class Example:
@@ -13,8 +13,8 @@ class Example:
         pixels = np.round(np.random.rand(width, height)).astype('f4')
         grid = np.dstack(np.mgrid[0:height, 0:width][::-1]).astype('i4')
 
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        self.prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 in vec2 in_vert;
@@ -24,8 +24,8 @@ class Example:
                     v_text = in_vert;
                     gl_Position = vec4(in_vert * 2.0 - 1.0, 0.0, 1.0);
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 uniform sampler2D Texture;
@@ -36,11 +36,11 @@ class Example:
                 void main() {
                     f_color = texture(Texture, v_text);
                 }
-            '''),
-        ])
+            ''',
+        )
 
         self.transform = self.ctx.program(
-            self.ctx.vertex_shader('''
+            vertex_shader='''
                 #version 330
 
                 uniform sampler2D Texture;
@@ -76,7 +76,7 @@ class Example:
                         out_vert = (neighbours == 3) ? LIVING : DEAD;
                     }
                 }
-            '''),
+            ''',
             varyings=['out_vert']
         )
 
@@ -84,7 +84,7 @@ class Example:
         self.transform['Height'].value = height
 
         self.texture = self.ctx.texture((width, height), 1, pixels.tobytes(), dtype='f4')
-        self.texture.filter = moderngl.NEAREST
+        self.texture.filter = (moderngl.NEAREST, moderngl.NEAREST)
         self.texture.swizzle = 'RRR1'
         self.texture.use()
 

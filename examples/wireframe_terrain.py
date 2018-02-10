@@ -2,7 +2,7 @@ import os
 
 import moderngl
 import numpy as np
-from moderngl.ext.examples import run_example
+from moderngl_ext_examples import run_example
 from PIL import Image
 from pyrr import Matrix44
 
@@ -23,8 +23,8 @@ class Example:
         self.wnd = wnd
         self.ctx = moderngl.create_context()
 
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        self.prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 uniform mat4 Mvp;
@@ -40,8 +40,8 @@ class Example:
                     float height = texture(Heightmap, in_vert.xy).r * 0.5;
                     gl_Position = Mvp * vec4(in_vert.xy - 0.5, height, 1.0);
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 in vec3 v_color;
@@ -50,8 +50,8 @@ class Example:
                 void main() {
                     f_color = vec4(v_color, 1.0);
                 }
-            '''),
-        ])
+            ''',
+        )
 
         self.mvp = self.prog['Mvp']
 

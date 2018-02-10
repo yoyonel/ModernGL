@@ -2,7 +2,7 @@ import os
 
 import moderngl
 import numpy as np
-from moderngl.ext.examples import run_example
+from moderngl_ext_examples import run_example
 from PIL import Image
 
 
@@ -15,8 +15,8 @@ class Example:
         self.wnd = wnd
         self.ctx = moderngl.create_context()
 
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        self.prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 in vec2 in_vert;
@@ -26,8 +26,8 @@ class Example:
                     gl_Position = vec4(in_vert, 0.0, 1.0);
                     v_text = in_vert;
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 in vec2 v_text;
@@ -57,9 +57,8 @@ class Example:
 
                     f_color = texture(Texture, vec2((i == Iter ? 0.0 : float(i)) / 100.0, 0.0));
                 }
-
-            ''')
-        ])
+            ''',
+        )
 
         self.seed = self.prog['Seed']
         self.iter = self.prog['Iter']

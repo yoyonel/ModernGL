@@ -1,5 +1,5 @@
 import moderngl
-from moderngl.ext.examples import run_example
+from moderngl_ext_examples import run_example
 import numpy as np
 
 
@@ -14,8 +14,8 @@ class Example:
         self.wnd = wnd
         self.ctx = moderngl.create_context()
 
-        self.prog = self.ctx.program([
-            self.ctx.vertex_shader('''
+        self.prog = self.ctx.program(
+            vertex_shader='''
                 #version 330
 
                 in vec2 in_vert;
@@ -23,8 +23,8 @@ class Example:
                 void main() {
                     gl_Position = vec4(in_vert, 0.0, 1.0);
                 }
-            '''),
-            self.ctx.fragment_shader('''
+            ''',
+            fragment_shader='''
                 #version 330
 
                 out vec4 f_color;
@@ -32,10 +32,11 @@ class Example:
                 void main() {
                     f_color = vec4(0.30, 0.50, 1.00, 1.0);
                 }
-            '''),
-        ])
+            ''',
+        )
 
-        self.tvert = self.ctx.vertex_shader('''
+        self.transform = self.ctx.program(
+            vertex_shader='''
             #version 330
 
             uniform vec2 Acc;
@@ -50,9 +51,10 @@ class Example:
                 out_pos = in_pos * 2.0 - in_prev + Acc;
                 out_prev = in_pos;
             }
-        ''')
+        ''',
+            varyings=['out_pos', 'out_prev']
+        )
 
-        self.transform = self.ctx.program(self.tvert, varyings=['out_pos', 'out_prev'])
         self.acc = self.transform['Acc']
         self.acc.value = (0.0, -0.0001)
 
