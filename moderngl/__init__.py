@@ -7,11 +7,12 @@
 import os
 from typing import Dict, Tuple, Union
 
-if os.environ.get('READTHEDOCS') != 'True':
-    from . import mgl
-
-else:
+if os.environ.get('READTHEDOCS') == 'True':
+    import sys
     from .mock import mgl
+    sys.modules['moderngl.mgl'] = mgl
+
+from . import mgl
 
 __version__ = '5.0.0'
 

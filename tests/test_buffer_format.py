@@ -1,6 +1,6 @@
 import unittest
 
-import moderngl
+from moderngl.mgl import fmtdebug
 
 
 GL_BYTE = 0x1400
@@ -17,7 +17,7 @@ GL_HALF_FLOAT = 0x140B
 class TestBuffer(unittest.TestCase):
 
     def check(self, fmt, res):
-        self.assertEqual(moderngl.mgl.fmtdebug(fmt), res)
+        self.assertEqual(fmtdebug(fmt), res)
 
     def test_format_1(self):
         self.check('1f', (4, 1, 0, True, ((4, 1, GL_FLOAT, False),)))
