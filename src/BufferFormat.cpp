@@ -121,6 +121,8 @@ FormatNode * FormatIterator::next() {
 						node.type = GL_FLOAT;
 						node.normalize = false;
 						break;
+					default:
+						return InvalidFormat;
 				}
 				return &node;
 
@@ -157,6 +159,8 @@ FormatNode * FormatIterator::next() {
 						node.size = 4 * node.count;
 						node.type = GL_INT;
 						break;
+					default:
+						return InvalidFormat;
 				}
 				return &node;
 
@@ -193,6 +197,8 @@ FormatNode * FormatIterator::next() {
 						node.size = 4 * node.count;
 						node.type = GL_UNSIGNED_INT;
 						break;
+					default:
+						return InvalidFormat;
 				}
 				return &node;
 
@@ -232,6 +238,8 @@ FormatNode * FormatIterator::next() {
 					case ' ':
 						node.size = 1 * node.count;
 						break;
+					default:
+						return InvalidFormat;
 				}
 				return &node;
 

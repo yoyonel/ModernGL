@@ -88,6 +88,9 @@ class TestBuffer(unittest.TestCase):
             )
         )
 
+    def test_format_6(self):
+        self.check('2f/i', (0, 0, 0, False, ()))
+
 
 if __name__ == '__main__':
     unittest.main()
