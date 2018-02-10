@@ -74,7 +74,14 @@ Examples
         varyings=['vert_length']
     )
 
+Program Members
+---------------
+
 .. toctree::
     :maxdepth: 2
 
-    program_members.rst
+    uniform.rst
+    uniform_block.rst
+    subroutine.rst
+    attribute.rst
+    varying.rst
