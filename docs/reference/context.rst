@@ -90,7 +90,7 @@ ContextManager
 
 .. rubric:: context_manager.py
 
-.. literalinclude:: examples/context_manager.py
+.. literalinclude:: ../../examples/context_manager.py
     :linenos:
 
 .. rubric:: example.py
