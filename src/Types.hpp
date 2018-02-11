@@ -101,7 +101,7 @@ struct MGLComputeShader {
 struct MGLContext {
 	PyObject_HEAD
 
-	MGLFramebuffer * screen;
+	MGLFramebuffer * default_framebuffer;
 	MGLFramebuffer * bound_framebuffer;
 
 	GLContext gl_context;

@@ -141,12 +141,10 @@ PyObject * create_standalone_context(PyObject * self, PyObject * args) {
 	}
 
 	Py_INCREF(ctx);
-	Py_INCREF(ctx->screen);
 
-	PyObject * result = PyTuple_New(3);
+	PyObject * result = PyTuple_New(2);
 	PyTuple_SET_ITEM(result, 0, (PyObject *)ctx);
-	PyTuple_SET_ITEM(result, 1, (PyObject *)ctx->screen);
-	PyTuple_SET_ITEM(result, 2, PyLong_FromLong(ctx->version_code));
+	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(ctx->version_code));
 	return result;
 }
 
@@ -167,12 +165,10 @@ PyObject * create_context(PyObject * self) {
 	}
 
 	Py_INCREF(ctx);
-	Py_INCREF(ctx->screen);
 
-	PyObject * result = PyTuple_New(3);
+	PyObject * result = PyTuple_New(2);
 	PyTuple_SET_ITEM(result, 0, (PyObject *)ctx);
-	PyTuple_SET_ITEM(result, 1, (PyObject *)ctx->screen);
-	PyTuple_SET_ITEM(result, 2, PyLong_FromLong(ctx->version_code));
+	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(ctx->version_code));
 	return result;
 }
 

@@ -2829,11 +2829,6 @@ PyObject * MGLContext_get_max_texture_units(MGLContext * self) {
 	return PyLong_FromLong(self->max_texture_units);
 }
 
-MGLFramebuffer * MGLContext_get_screen(MGLContext * self) {
-	Py_INCREF(self->screen);
-	return self->screen;
-}
-
 MGLFramebuffer * MGLContext_get_fbo(MGLContext * self) {
 	Py_INCREF(self->bound_framebuffer);
 	return self->bound_framebuffer;
@@ -3568,7 +3563,7 @@ void MGLContext_Initialize(MGLContext * self) {
 		framebuffer->width = scrissor_box[2];
 		framebuffer->height = scrissor_box[3];
 
-		self->screen = framebuffer;
+		self->default_framebuffer = framebuffer;
 	}
 
 	if (bound_framebuffer) {
@@ -3586,8 +3581,8 @@ void MGLContext_Initialize(MGLContext * self) {
 
 		self->bound_framebuffer = framebuffer;
 	} else {
-		Py_INCREF(self->screen);
-		self->bound_framebuffer = self->screen;
+		Py_INCREF(self->default_framebuffer);
+		self->bound_framebuffer = self->default_framebuffer;
 	}
 
 	self->enable_flags = 0;

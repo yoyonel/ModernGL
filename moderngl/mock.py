@@ -25,14 +25,14 @@ class Implementation:
             create_context
         '''
 
-        return (None, None, 0)
+        return (None, 0)
 
     def create_standalone_context(self, *args) -> 'Context':
         '''
             create_standalone_context
         '''
 
-        return (None, None, 0)
+        return (None, 0)
 
 
 mgl = Implementation()

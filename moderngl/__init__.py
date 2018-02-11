@@ -2799,8 +2799,8 @@ def create_context(require=None) -> Context:
     '''
 
     ctx = Context.__new__(Context)
-    ctx._screen = Framebuffer.__new__(Framebuffer)
-    ctx.mglo, ctx._screen.mglo, ctx.version_code = mgl.create_context()
+    ctx.mglo, ctx.version_code = mgl.create_context()
+    ctx._screen = ctx.detect_framebuffer(0)
     ctx._info = None
 
     if require is not None and ctx.version_code < require:
@@ -2826,7 +2826,8 @@ def create_standalone_context(require=None, **settings) -> 'Context':
 
     ctx = Context.__new__(Context)
     ctx._screen = Framebuffer.__new__(Framebuffer)
-    ctx.mglo, ctx._screen.mglo, ctx.version_code = mgl.create_standalone_context(settings)
+    ctx.mglo, ctx.version_code = mgl.create_standalone_context(settings)
+    ctx._screen = None
     ctx._info = None
 
     if require is not None and ctx.version_code < require:
