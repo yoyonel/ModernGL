@@ -2547,7 +2547,12 @@ PyObject * MGLContext_scope(MGLContext * self, PyObject * args) {
 	scope->context = self;
 
 	scope->enable_flags = flags;
-	scope->framebuffer_obj = framebuffer->framebuffer_obj;
+
+	Py_INCREF(framebuffer);
+	scope->framebuffer = framebuffer;
+
+	Py_INCREF(self->bound_framebuffer);
+	scope->old_framebuffer = self->bound_framebuffer;
 
 	int num_textures = PyTuple_Size(textures);
 	int num_uniform_buffers = PyTuple_Size(uniform_buffers);

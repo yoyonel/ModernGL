@@ -209,6 +209,8 @@ struct MGLScope {
 	PyObject_HEAD
 
 	MGLContext * context;
+	MGLFramebuffer * framebuffer;
+	MGLFramebuffer * old_framebuffer;
 
 	int * textures;
 	int * buffers;
@@ -216,10 +218,7 @@ struct MGLScope {
 	int num_textures;
 	int num_buffers;
 
-	int framebuffer_obj;
 	int enable_flags;
-
-	int old_framebuffer_obj;
 	int old_enable_flags;
 };
 

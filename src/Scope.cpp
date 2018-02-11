@@ -17,6 +17,8 @@ void MGLScope_tp_dealloc(MGLScope * self) {
 	MGLScope_Type.tp_free((PyObject *)self);
 }
 
+extern PyObject * MGLFramebuffer_use(MGLFramebuffer * self);
+
 PyObject * MGLScope_begin(MGLScope * self, PyObject * args) {
 	int args_ok = PyArg_ParseTuple(
 		args,
@@ -30,7 +32,7 @@ PyObject * MGLScope_begin(MGLScope * self, PyObject * args) {
 	const GLMethods & gl = self->context->gl;
 	const int & flags = self->enable_flags;
 
-	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
+	MGLFramebuffer_use(self->framebuffer);
 
 	for (int i = 0; i < self->num_textures; ++i) {
 		gl.ActiveTexture(self->textures[i * 3]);
@@ -81,7 +83,7 @@ PyObject * MGLScope_end(MGLScope * self, PyObject * args) {
 	const GLMethods & gl = self->context->gl;
 	const int & flags = self->old_enable_flags;
 
-	gl.BindFramebuffer(GL_FRAMEBUFFER, self->old_framebuffer_obj);
+	MGLFramebuffer_use(self->old_framebuffer);
 
 	if (flags & MGL_BLEND) {
 		gl.Enable(GL_BLEND);
