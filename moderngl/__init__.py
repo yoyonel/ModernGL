@@ -2825,7 +2825,6 @@ def create_standalone_context(require=None, **settings) -> 'Context':
         settings['backend'] = backend
 
     ctx = Context.__new__(Context)
-    ctx._screen = Framebuffer.__new__(Framebuffer)
     ctx.mglo, ctx.version_code = mgl.create_standalone_context(settings)
     ctx._screen = None
     ctx._info = None

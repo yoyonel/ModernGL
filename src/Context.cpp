@@ -316,11 +316,19 @@ PyObject * MGLContext_detect_framebuffer(MGLContext * self, PyObject * args) {
 		}
 	}
 
-	// TODO:
-	// if (!framebuffer_obj) {
-	// 	Py_INCREF(self->screen);
-	// 	return self->screen;
-	// }
+	if (!framebuffer_obj) {
+		PyObject * size = PyTuple_New(2);
+		PyTuple_SET_ITEM(size, 0, PyLong_FromLong(self->default_framebuffer->width));
+		PyTuple_SET_ITEM(size, 1, PyLong_FromLong(self->default_framebuffer->height));
+
+		Py_INCREF(self->default_framebuffer);
+		PyObject * result = PyTuple_New(4);
+		PyTuple_SET_ITEM(result, 0, (PyObject *)self->default_framebuffer);
+		PyTuple_SET_ITEM(result, 1, size);
+		PyTuple_SET_ITEM(result, 2, PyLong_FromLong(self->default_framebuffer->samples));
+		PyTuple_SET_ITEM(result, 3, PyLong_FromLong(self->default_framebuffer->framebuffer_obj));
+		return result;
+	}
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, framebuffer_obj);
 
