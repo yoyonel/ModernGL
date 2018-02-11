@@ -290,7 +290,7 @@ PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-MGLFramebuffer * MGLContext_detect_framebuffer(MGLContext * self, PyObject * args) {
+PyObject * MGLContext_detect_framebuffer(MGLContext * self, PyObject * args) {
 	PyObject * glo;
 
 	int args_ok = PyArg_ParseTuple(
@@ -316,10 +316,11 @@ MGLFramebuffer * MGLContext_detect_framebuffer(MGLContext * self, PyObject * arg
 		}
 	}
 
-	if (!framebuffer_obj) {
-		Py_INCREF(self->screen);
-		return self->screen;
-	}
+	// TODO:
+	// if (!framebuffer_obj) {
+	// 	Py_INCREF(self->screen);
+	// 	return self->screen;
+	// }
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, framebuffer_obj);
 
@@ -394,7 +395,19 @@ MGLFramebuffer * MGLContext_detect_framebuffer(MGLContext * self, PyObject * arg
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->bound_framebuffer->framebuffer_obj);
 
-	return framebuffer; // TODO:
+	Py_INCREF(framebuffer);
+
+	PyObject * size = PyTuple_New(2);
+	PyTuple_SET_ITEM(size, 0, PyLong_FromLong(framebuffer->width));
+	PyTuple_SET_ITEM(size, 1, PyLong_FromLong(framebuffer->height));
+
+	Py_INCREF(framebuffer);
+	PyObject * result = PyTuple_New(4);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)framebuffer);
+	PyTuple_SET_ITEM(result, 1, size);
+	PyTuple_SET_ITEM(result, 2, PyLong_FromLong(framebuffer->samples));
+	PyTuple_SET_ITEM(result, 3, PyLong_FromLong(framebuffer->framebuffer_obj));
+	return result;
 }
 
 PyObject * MGLContext_buffer(MGLContext * self, PyObject * args) {
@@ -2075,6 +2088,7 @@ PyObject * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	PyTuple_SET_ITEM(size, 0, PyLong_FromLong(framebuffer->width));
 	PyTuple_SET_ITEM(size, 1, PyLong_FromLong(framebuffer->height));
 
+	Py_INCREF(framebuffer);
 	PyObject * result = PyTuple_New(4);
 	PyTuple_SET_ITEM(result, 0, (PyObject *)framebuffer);
 	PyTuple_SET_ITEM(result, 1, size);
@@ -3565,7 +3579,11 @@ void MGLContext_Initialize(MGLContext * self) {
 		self->bound_framebuffer = &temp_bound_framebuffer;
 		temp_bound_framebuffer.framebuffer_obj = bound_framebuffer;
 
-		MGLFramebuffer * framebuffer = MGLContext_detect_framebuffer(self, args);
+		PyObject * temp = MGLContext_detect_framebuffer(self, args);
+		MGLFramebuffer * framebuffer = (MGLFramebuffer *)PyTuple_GET_ITEM(temp, 0);
+		Py_INCREF(framebuffer);
+		Py_DECREF(temp);
+
 		self->bound_framebuffer = framebuffer;
 	} else {
 		Py_INCREF(self->screen);

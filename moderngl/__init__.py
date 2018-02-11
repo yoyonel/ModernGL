@@ -2395,7 +2395,9 @@ class Context:
         '''
 
         res = Framebuffer.__new__(Framebuffer)
-        res.mglo, res._glo = self.mglo.detect_framebuffer(glo)
+        res.mglo, res._size, res._samples, res._glo = self.mglo.detect_framebuffer(glo)
+        res._color_attachments = None
+        res._depth_attachment = None
         return res
 
     def buffer(self, data=None, *, reserve=0, dynamic=False) -> Buffer:
