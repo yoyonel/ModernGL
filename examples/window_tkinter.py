@@ -36,7 +36,7 @@ prog = ctx.program(
 
 
 def vertices():
-    x = np.linspace(-1.0, 1.0)
+    x = np.linspace(-1.0, 1.0, 50)
     y = np.random.rand(50) - 0.5
     r = np.ones(50)
     g = np.zeros(50)
@@ -60,9 +60,10 @@ root = tk.Tk()
 tkfbo = FramebufferImage(root, ctx, (512, 512))
 
 lbl = tk.Label(root, image=tkfbo)
-lbl.pack()
-lbl.bind("<Button-1>", update)
+lbl.bind("<ButtonPress-1>", update)
+lbl.bind("<ButtonRelease-1>", update)
 lbl.bind('<Motion>', update)
+lbl.pack()
 
 btn = tk.Button(root, text='Hello', command=update)
 btn.pack()

@@ -30,7 +30,7 @@ prog = ctx.program(
     ''',
 )
 
-x = np.linspace(-1.0, 1.0)
+x = np.linspace(-1.0, 1.0, 50)
 y = np.random.rand(50) - 0.5
 r = np.ones(50)
 g = np.zeros(50)
