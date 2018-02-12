@@ -68,6 +68,10 @@ PyObject * fmtdebug(PyObject * self, PyObject * args) {
 		&str
 	);
 
+	if (!args_ok) {
+		return 0;
+	}
+
 	FormatIterator it = FormatIterator(str);
 	FormatInfo format_info = it.info();
 
