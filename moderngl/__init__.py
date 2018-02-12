@@ -2559,7 +2559,7 @@ class Context:
                 :py:class:`VertexArray` object
         '''
 
-        content = [(buffer, detect_format(program, attributes), *attributes)]
+        content = [(buffer, detect_format(program, attributes)) + attributes]
         return self.vertex_array(program, content, index_buffer)
 
     def program(self, *, vertex_shader, fragment_shader=None, geometry_shader=None,
