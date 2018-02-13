@@ -20,6 +20,7 @@ def vertices():
     a = np.ones(50)
     return np.dstack([x, y, r, g, b, a])
 
+
 verts = vertices()
 pan_tool = PanTool()
 

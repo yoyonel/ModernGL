@@ -42,50 +42,58 @@ class TestBuffer(unittest.TestCase):
     def test_format_3(self):
         self.check('1f1f', (0, 0, 0, False, ()))
         self.check('3f3f4i', (0, 0, 0, False, ()))
-        self.check('3f 3f 4i', (40, 3, 0, True, ((12, 3, GL_FLOAT, False), (12, 3, GL_FLOAT, False), (16, 4, GL_INT, False))))
+        self.check(
+            '3f 3f 4i',
+            (40, 3, 0, True, (
+                (12, 3, GL_FLOAT, False),
+                (12, 3, GL_FLOAT, False),
+                (16, 4, GL_INT, False)
+            ))
+        )
 
     def test_format_4(self):
         self.check('3f 3f /v', (24, 2, 0, True, ((12, 3, GL_FLOAT, False), (12, 3, GL_FLOAT, False))))
-        self.check('3f 12x 3f /v', (36, 2, 0, True, ((12, 3, GL_FLOAT, False), (12, 12, 0, False), (12, 3, GL_FLOAT, False))))
+        self.check(
+            '3f 12x 3f /v',
+            (36, 2, 0, True, (
+                (12, 3, GL_FLOAT, False),
+                (12, 12, 0, False),
+                (12, 3, GL_FLOAT, False)
+            ))
+        )
 
     def test_format_5(self):
         # vert, norm, text, color
         self.check(
             '3f 3f 2f 4f1',
-            (36, 4, 0, True,
-                (
-                    (12, 3, GL_FLOAT, False),
-                    (12, 3, GL_FLOAT, False),
-                    (8, 2, GL_FLOAT, False),
-                    (4, 4, GL_UNSIGNED_BYTE, True),
-                )
-            )
+            (36, 4, 0, True, (
+                (12, 3, GL_FLOAT, False),
+                (12, 3, GL_FLOAT, False),
+                (8, 2, GL_FLOAT, False),
+                (4, 4, GL_UNSIGNED_BYTE, True),
+            ))
         )
 
         # vert, norm, text, color
         self.check(
             '3f4 3f4 2f4 4f1',
-            (36, 4, 0, True,
-                (
-                    (12, 3, GL_FLOAT, False),
-                    (12, 3, GL_FLOAT, False),
-                    (8, 2, GL_FLOAT, False),
-                    (4, 4, GL_UNSIGNED_BYTE, True),
-                )
-            )
+            (36, 4, 0, True, (
+                (12, 3, GL_FLOAT, False),
+                (12, 3, GL_FLOAT, False),
+                (8, 2, GL_FLOAT, False),
+                (4, 4, GL_UNSIGNED_BYTE, True),
+            ))
         )
 
         # vert, norm, padding, color
         self.check(
             '3f 3f 2x4 4f1',
-            (36, 3, 0, True,
-                (
-                    (12, 3, GL_FLOAT, False),
-                    (12, 3, GL_FLOAT, False),
-                    (8, 2, 0, False),
-                    (4, 4, GL_UNSIGNED_BYTE, True),
-                )
-            )
+            (36, 3, 0, True, (
+                (12, 3, GL_FLOAT, False),
+                (12, 3, GL_FLOAT, False),
+                (8, 2, 0, False),
+                (4, 4, GL_UNSIGNED_BYTE, True),
+            ))
         )
 
     def test_format_6(self):

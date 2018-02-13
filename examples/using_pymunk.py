@@ -87,8 +87,8 @@ class Example:
         self.vbo2 = self.ctx.buffer(reserve=1024 * 1024)
 
         vao_content = [
-            (vbo1, '2f2f', 'in_vert', 'in_texture'),
-            (self.vbo2, '3f2f4f/i', 'in_pos', 'in_size', 'in_tint'),
+            (vbo1, '2f 2f', 'in_vert', 'in_texture'),
+            (self.vbo2, '3f 2f 4f/i', 'in_pos', 'in_size', 'in_tint'),
         ]
 
         self.vao = self.ctx.vertex_array(self.prog, vao_content)
@@ -142,13 +142,15 @@ class Example:
 
         self.prog['Camera'].value = (200, 300, width / 2, height / 2)
 
-        self.vbo2.write(b''.join(struct.pack('3f2f4f', b.position.x, b.position.y, b.angle, 10, 10, 1, 1, 1, 0) for b in self.bodies))
+        bodies = np.array([(b.position.x, b.position.y, b.angle, 10, 10, 1, 1, 1, 0) for b in self.bodies], dtype='f4')
+        self.vbo2.write(bodies.tobytes())
         self.prog['Texture'].value = 0
         self.vao.render(moderngl.TRIANGLE_STRIP, instances=len(self.bodies))
 
         self.vbo2.orphan()
 
-        self.vbo2.write(b''.join(struct.pack('3f2f4f', b.position.x, b.position.y, b.angle, 15, 15, 1, 1, 1, 0) for b in self.balls))
+        balls = np.array([(b.position.x, b.position.y, b.angle, 15, 15, 1, 1, 1, 0) for b in self.balls], dtype='f4')
+        self.vbo2.write(balls.tobytes())
         self.prog['Texture'].value = 1
         self.vao.render(moderngl.TRIANGLE_STRIP, instances=len(self.balls))
 

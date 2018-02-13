@@ -14,19 +14,19 @@ class TestBuffer(unittest.TestCase):
 
         cls.prog = cls.ctx.program(
             vertex_shader='''
-            #version 330
+                #version 330
 
-            in vec2 in_v1;
-            in vec2 in_v2;
+                in vec2 in_v1;
+                in vec2 in_v2;
 
-            out vec2 out_v;
+                out vec2 out_v;
 
-            void main() {
-                out_v = in_v1 + in_v2;
-            }
-        ''',
-        varyings=['out_v']
-    )
+                void main() {
+                    out_v = in_v1 + in_v2;
+                }
+            ''',
+            varyings=['out_v']
+        )
 
     def test_1(self):
         buf_v1 = self.ctx.buffer(struct.pack('8f', 1, 2, 3, 4, 5, 6, 7, 8))

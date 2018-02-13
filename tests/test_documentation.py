@@ -19,7 +19,6 @@ def read_docs(filename, classname):
     return set(res)
 
 
-
 def detect_impl(classname):
     return set(classname + '.' + x for x in dir(getattr(moderngl, classname)) if not x.startswith('_'))
 

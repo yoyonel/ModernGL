@@ -21,7 +21,9 @@ def vertices():
     a = np.ones(50)
     return np.dstack([x, y, r, g, b, a])
 
+
 verts = vertices()
+
 
 def update(evt):
     if evt.type == tk.EventType.ButtonPress:

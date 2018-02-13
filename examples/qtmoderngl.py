@@ -4,6 +4,7 @@ import moderngl
 
 # pylint: disable=E0202
 
+
 class QModernGLWidget(QtOpenGL.QGLWidget):
     def __init__(self):
         fmt = QtOpenGL.QGLFormat()
