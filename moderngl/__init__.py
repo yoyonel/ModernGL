@@ -146,13 +146,14 @@ class Buffer:
         Copy buffer content using :py:meth:`Context.copy_buffer`.
     '''
 
-    __slots__ = ['mglo', '_size', '_dynamic', '_glo', 'extra']
+    __slots__ = ['mglo', '_size', '_dynamic', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
         self._size = None
         self._dynamic = None
         self._glo = None
+        self.ctx = None
         self.extra = None
         raise TypeError()
 
@@ -824,7 +825,7 @@ class Texture:
         to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_depth', '_glo', 'extra']
+    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_depth', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -834,6 +835,7 @@ class Texture:
         self._dtype = None
         self._depth = None
         self._glo = None
+        self.ctx = None
         self.extra = None
         raise TypeError()
 
@@ -1042,7 +1044,7 @@ class Texture3D:
         Use :py:meth:`Context.texture3d` to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_glo', 'extra']
+    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -1051,6 +1053,7 @@ class Texture3D:
         self._samples = None
         self._dtype = None
         self._glo = None
+        self.ctx = None
         self.extra = None
         raise TypeError()
 
@@ -1263,7 +1266,7 @@ class TextureCube:
         Use :py:meth:`Context.texture_cube` to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_dtype', '_glo', 'extra']
+    __slots__ = ['mglo', '_size', '_components', '_dtype', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -1271,6 +1274,7 @@ class TextureCube:
         self._components = None
         self._dtype = None
         self._glo = None
+        self.ctx = None
         self.extra = None
         raise TypeError()
 
@@ -1373,7 +1377,7 @@ class Renderbuffer:
         to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_samples', '_depth', '_dtype', '_glo', 'extra']
+    __slots__ = ['mglo', '_size', '_components', '_samples', '_depth', '_dtype', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -1383,6 +1387,7 @@ class Renderbuffer:
         self._depth = None
         self._dtype = None
         self._glo = None
+        self.ctx = None
         self.extra = None
         raise TypeError()
 
@@ -1480,7 +1485,7 @@ class Program:
         Use :py:meth:`Context.program` to create one.
     '''
 
-    __slots__ = ['mglo', '_members', '_subroutines', '_geom', '_glo', 'extra']
+    __slots__ = ['mglo', '_members', '_subroutines', '_geom', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -1488,6 +1493,7 @@ class Program:
         self._subroutines = None
         self._geom = (None, None, None)
         self._glo = None
+        self.ctx = None
         self.extra = None
         raise TypeError()
 
@@ -1599,11 +1605,12 @@ class Query:
         This class represents a Query object.
     '''
 
-    __slots__ = ['mglo', 'crender', 'extra']
+    __slots__ = ['mglo', 'crender', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
         self.crender = None  #: ConditionalRender: Can be used in a ``with`` statement.
+        self.ctx = None
         self.extra = None
         raise TypeError()
 
@@ -1660,10 +1667,11 @@ class Scope:
         - Restore the framebuffer.
     '''
 
-    __slots__ = ['mglo', 'extra']
+    __slots__ = ['mglo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
+        self.ctx = None
         self.extra = None
         raise TypeError()
 
@@ -1692,13 +1700,14 @@ class VertexArray:
         to create one.
     '''
 
-    __slots__ = ['mglo', '_program', '_index_buffer', '_glo', 'extra']
+    __slots__ = ['mglo', '_program', '_index_buffer', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
         self._program = None
         self._index_buffer = None
         self._glo = None
+        self.ctx = None
         self.extra = None
         raise TypeError()
 
@@ -1799,25 +1808,24 @@ class VertexArray:
 
         self.mglo.transform(buffer.mglo, mode, vertices, first, instances)
 
-    def bind(self, attribute, buffer, *, offset, stride, divisor) -> None:
+    def bind(self, attribute, cls, buffer, fmt, *, offset=0, stride=0, divisor=0, normalize=False) -> None:
         '''
             Bind individual attributes to buffers.
 
             Args:
-                attribute (str): The name of the attribute.
+                location (int): The attribute location.
+                cls (str): The attribute class. Valid values are ``f``, ``i`` or ``d``.
                 buffer (Buffer): The buffer.
+                format (str): The buffer format.
 
             Keyword Args:
                 offset (int): The offset.
                 stride (int): The stride.
                 divisor (int): The divisor.
+                normalize (bool): The normalize parameter, if applicable.
         '''
 
-        attr = self._program._members.get(attribute)
-        if type(attr) is not Attribute:
-            raise KeyError(attribute)
-
-        self.mglo.bind(attr.mglo, buffer.mglo, offset, stride, divisor)
+        self.mglo.bind(attribute, cls, buffer.mglo, fmt, offset, stride, divisor, normalize)
 
     def release(self) -> None:
         '''
@@ -1833,11 +1841,12 @@ class ComputeShader:
         While it can do rendering, it is generally used for tasks not directly related to drawing.
     '''
 
-    __slots__ = ['mglo', '_glo', 'extra']
+    __slots__ = ['mglo', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
         self._glo = None
+        self.ctx = None
         self.extra = None
         raise TypeError()
 
@@ -1892,7 +1901,7 @@ class Framebuffer:
         Create a :py:class:`Framebuffer` using :py:meth:`Context.framebuffer`.
     '''
 
-    __slots__ = ['mglo', '_color_attachments', '_depth_attachment', '_size', '_samples', '_glo', 'extra']
+    __slots__ = ['mglo', '_color_attachments', '_depth_attachment', '_size', '_samples', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -1901,6 +1910,7 @@ class Framebuffer:
         self._size = (None, None)
         self._samples = None
         self._glo = None
+        self.ctx = None
         self.extra = None
         raise TypeError()
 
@@ -2044,6 +2054,7 @@ class Framebuffer:
             Bind the framebuffer. Set the target for the :py:meth:`VertexArray.render`.
         '''
 
+        self.ctx.fbo = self
         self.mglo.use()
 
     def read(self, viewport=None, components=3, *, attachment=0, alignment=1, dtype='f1') -> bytes:
@@ -2101,13 +2112,14 @@ class Context:
         ModernGL objects can be created from this class.
     '''
 
-    __slots__ = ['mglo', '_screen', '_info', 'version_code', 'extra']
+    __slots__ = ['mglo', '_screen', '_info', 'version_code', 'fbo', 'extra']
 
     def __init__(self):
         self.mglo = None
         self._screen = None
         self._info = None
         self.version_code = None  #: int: The OpenGL version code.
+        self.fbo = None  #: Framebuffer: The active framebuffer.
         self.extra = None
         raise TypeError()
 
@@ -2398,6 +2410,7 @@ class Context:
         res.mglo, res._size, res._samples, res._glo = self.mglo.detect_framebuffer(glo)
         res._color_attachments = None
         res._depth_attachment = None
+        res.ctx = self
         return res
 
     def buffer(self, data=None, *, reserve=0, dynamic=False) -> Buffer:
@@ -2421,6 +2434,7 @@ class Context:
         res = Buffer.__new__(Buffer)
         res.mglo, res._size, res._glo = self.mglo.buffer(data, reserve, dynamic)
         res._dynamic = dynamic
+        res.ctx = self
         return res
 
     def texture(self, size, components, data=None, *, samples=0, alignment=1, dtype='f1') -> 'Texture':
@@ -2448,6 +2462,7 @@ class Context:
         res._samples = samples
         res._dtype = dtype
         res._depth = False
+        res.ctx = self
         return res
 
     def texture3d(self, size, components, data=None, *, alignment=1, dtype='f1') -> 'Texture3D':
@@ -2469,6 +2484,7 @@ class Context:
 
         res = Texture3D.__new__(Texture3D)
         res.mglo, res._glo = self.mglo.texture3d(size, components, data, alignment, dtype)
+        res.ctx = self
         return res
 
     def texture_cube(self, size, components, data=None, *, alignment=1, dtype='f1') -> 'TextureCube':
@@ -2493,6 +2509,7 @@ class Context:
         res._size = size
         res._components = components
         res._dtype = dtype
+        res.ctx = self
         return res
 
     def depth_texture(self, size, data=None, *, samples=0, alignment=4) -> 'Texture':
@@ -2518,6 +2535,7 @@ class Context:
         res._samples = samples
         res._dtype = 'f4'
         res._depth = True
+        res.ctx = self
         return res
 
     def vertex_array(self, program, content, index_buffer=None) -> 'VertexArray':
@@ -2541,6 +2559,7 @@ class Context:
         res.mglo, res._glo = self.mglo.vertex_array(program.mglo, content, index_buffer_mglo)
         res._program = program
         res._index_buffer = index_buffer
+        res.ctx = self
         return res
 
     def simple_vertex_array(self, program, buffer, *attributes, index_buffer=None) -> 'VertexArray':
@@ -2619,6 +2638,7 @@ class Context:
             members[obj.name] = obj
 
         res._members = members
+        res.ctx = self
         return res
 
     def query(self, *, samples=False, any_samples=False, time=False, primitives=False) -> 'Query':
@@ -2640,6 +2660,7 @@ class Context:
             res.crender = ConditionalRender.__new__(ConditionalRender)
             res.crender.mglo = res.mglo
 
+        res.ctx = self
         return res
 
     def scope(self, framebuffer, enable_only=None, *, textures=(), uniform_buffers=(), storage_buffers=()) -> 'Scope':
@@ -2662,6 +2683,7 @@ class Context:
 
         res = Scope.__new__(Scope)
         res.mglo = self.mglo.scope(framebuffer.mglo, enable_only, textures, uniform_buffers, storage_buffers)
+        res.ctx = self
         return res
 
     def simple_framebuffer(self, size, components=4, *, samples=0, dtype='f1') -> 'Framebuffer':
@@ -2709,6 +2731,7 @@ class Context:
         res.mglo, res._size, res._samples, res._glo = self.mglo.framebuffer(ca_mglo, da_mglo)
         res._color_attachments = tuple(color_attachments)
         res._depth_attachment = depth_attachment
+        res.ctx = self
         return res
 
     def renderbuffer(self, size, components=4, *, samples=0, dtype='f1') -> 'Renderbuffer':
@@ -2735,6 +2758,7 @@ class Context:
         res._samples = samples
         res._depth = False
         res._dtype = dtype
+        res.ctx = self
         return res
 
     def depth_renderbuffer(self, size, *, samples=0) -> 'Renderbuffer':
@@ -2759,6 +2783,7 @@ class Context:
         res._samples = samples
         res._depth = True
         res._dtype = True
+        res.ctx = self
         return res
 
     def compute_shader(self, source) -> 'ComputeShader':
@@ -2775,6 +2800,7 @@ class Context:
 
         res = ComputeShader.__new__(ComputeShader)
         res.mglo, res._glo = self.mglo.compute_shader(source)
+        res.ctx = self
         return res
 
     def release(self) -> None:
@@ -2801,6 +2827,7 @@ def create_context(require=None) -> Context:
     ctx = Context.__new__(Context)
     ctx.mglo, ctx.version_code = mgl.create_context()
     ctx._screen = ctx.detect_framebuffer(0)
+    ctx.fbo = ctx._screen
     ctx._info = None
 
     if require is not None and ctx.version_code < require:
@@ -2827,6 +2854,7 @@ def create_standalone_context(require=None, **settings) -> 'Context':
     ctx = Context.__new__(Context)
     ctx.mglo, ctx.version_code = mgl.create_standalone_context(settings)
     ctx._screen = None
+    ctx.fbo = None
     ctx._info = None
 
     if require is not None and ctx.version_code < require:
