@@ -160,18 +160,19 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 			for (int r = 0; r < attribute->rows_length; ++r) {
 				int location = attribute->location + r;
+				int count = node->count / attribute->rows_length; // TODO: check modulo
 
 				if (attribute->normalizable) {
-					((gl_attribute_normal_ptr_proc)attribute->gl_attrib_ptr_proc)(location, node->count, node->type, node->normalize, format_info.size, ptr);
+					((gl_attribute_normal_ptr_proc)attribute->gl_attrib_ptr_proc)(location, count, node->type, node->normalize, format_info.size, ptr);
 				} else {
-					((gl_attribute_ptr_proc)attribute->gl_attrib_ptr_proc)(location, node->count, node->type, format_info.size, ptr);
+					((gl_attribute_ptr_proc)attribute->gl_attrib_ptr_proc)(location, count, node->type, format_info.size, ptr);
 				}
 
 				gl.VertexAttribDivisor(location, format_info.divisor);
 
 				gl.EnableVertexAttribArray(location);
 
-				ptr += attribute->row_size;
+				ptr += node->size / attribute->rows_length;
 			}
 		}
 	}
@@ -355,25 +356,50 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 }
 
 PyObject * MGLVertexArray_bind(MGLVertexArray * self, PyObject * args) {
-	MGLAttribute * attribute;
+	int location;
+	const char * type;
 	MGLBuffer * buffer;
+	const char * format;
 	Py_ssize_t offset;
 	int stride;
 	int divisor;
+	int normalize;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O!O!nII",
-		&MGLAttribute_Type,
-		&attribute,
+		"IsO!snIIp",
+		&location,
+		&type,
 		&MGLBuffer_Type,
 		&buffer,
+		&format,
 		&offset,
 		&stride,
-		&divisor
+		&divisor,
+		&normalize
 	);
 
 	if (!args_ok) {
+		return 0;
+	}
+
+	FormatIterator it = FormatIterator(format);
+	FormatInfo format_info = it.info();
+
+	if (type[0] == 'f' && normalize) {
+		MGLError_Set("invalid normalize");
+		return 0;
+	}
+
+	if (!format_info.valid || format_info.divisor || format_info.nodes != 1) {
+		MGLError_Set("invalid format");
+		return 0;
+	}
+
+	FormatNode * node = it.next();
+
+	if (!node->type) {
+		MGLError_Set("invalid format");
 		return 0;
 	}
 
@@ -384,21 +410,24 @@ PyObject * MGLVertexArray_bind(MGLVertexArray * self, PyObject * args) {
 	gl.BindVertexArray(self->vertex_array_obj);
 	gl.BindBuffer(GL_ARRAY_BUFFER, buffer->buffer_obj);
 
-	for (int r = 0; r < attribute->rows_length; ++r) {
-		int location = attribute->location + r;
-
-		if (attribute->normalizable) {
-			((gl_attribute_normal_ptr_proc)attribute->gl_attrib_ptr_proc)(location, attribute->row_length, attribute->scalar_type, false, stride, ptr);
-		} else {
-			((gl_attribute_ptr_proc)attribute->gl_attrib_ptr_proc)(location, attribute->row_length, attribute->scalar_type, stride, ptr);
-		}
-
-		gl.VertexAttribDivisor(location, divisor);
-
-		gl.EnableVertexAttribArray(location);
-
-		ptr += attribute->row_size;
+	switch (type[0]) {
+		case 'f':
+			gl.VertexAttribPointer(location, node->count, node->type, normalize, stride, ptr);
+			break;
+		case 'i':
+			gl.VertexAttribIPointer(location, node->count, node->type, stride, ptr);
+			break;
+		case 'd':
+			gl.VertexAttribLPointer(location, node->count, node->type, stride, ptr);
+			break;
+		default:
+			MGLError_Set("invalid type");
+			return 0;
 	}
+
+	gl.VertexAttribDivisor(location, divisor);
+
+	gl.EnableVertexAttribArray(location);
 
 	Py_RETURN_NONE;
 }

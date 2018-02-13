@@ -74,7 +74,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 1;
-			self->row_size = 4;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 
@@ -89,7 +88,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 2;
-			self->row_size = 8;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 
@@ -104,7 +102,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 3;
-			self->row_size = 12;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 
@@ -119,7 +116,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 4;
-			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 
@@ -134,7 +130,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 1;
-			self->row_size = 4;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 
@@ -149,7 +144,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 2;
-			self->row_size = 8;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 
@@ -164,7 +158,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 3;
-			self->row_size = 12;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 
@@ -179,7 +172,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 4;
-			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribIPointer;
 
@@ -194,7 +186,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 1;
-			self->row_size = 4;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 
@@ -209,7 +200,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 2;
-			self->row_size = 8;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 
@@ -224,7 +214,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 3;
-			self->row_size = 12;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 
@@ -239,7 +228,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 4;
-			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 
@@ -254,7 +242,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 1;
-			self->row_size = 8;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 
@@ -269,7 +256,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 2;
-			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 
@@ -284,7 +270,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 3;
-			self->row_size = 24;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 
@@ -299,7 +284,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 4;
-			self->row_size = 32;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 
@@ -314,7 +298,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 2;
 			self->row_length = 2;
-			self->row_size = 8;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 
@@ -329,7 +312,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 2;
 			self->row_length = 3;
-			self->row_size = 12;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 
@@ -344,7 +326,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 2;
 			self->row_length = 4;
-			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 
@@ -359,7 +340,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 3;
 			self->row_length = 2;
-			self->row_size = 8;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 
@@ -374,7 +354,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 3;
 			self->row_length = 3;
-			self->row_size = 12;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 
@@ -389,7 +368,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 3;
 			self->row_length = 4;
-			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 
@@ -404,7 +382,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 4;
 			self->row_length = 2;
-			self->row_size = 8;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 
@@ -419,7 +396,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 4;
 			self->row_length = 3;
-			self->row_size = 12;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 
@@ -434,7 +410,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 4;
 			self->row_length = 4;
-			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 
@@ -449,7 +424,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 2;
 			self->row_length = 2;
-			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 
@@ -464,7 +438,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 2;
 			self->row_length = 3;
-			self->row_size = 24;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 
@@ -479,7 +452,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 2;
 			self->row_length = 4;
-			self->row_size = 32;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 
@@ -494,7 +466,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 3;
 			self->row_length = 2;
-			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 
@@ -509,7 +480,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 3;
 			self->row_length = 3;
-			self->row_size = 24;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 
@@ -524,7 +494,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 3;
 			self->row_length = 4;
-			self->row_size = 32;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 
@@ -539,7 +508,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 4;
 			self->row_length = 2;
-			self->row_size = 16;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 
@@ -554,7 +522,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 4;
 			self->row_length = 3;
-			self->row_size = 24;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 
@@ -569,7 +536,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 4;
 			self->row_length = 4;
-			self->row_size = 32;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribLPointer;
 
@@ -584,7 +550,6 @@ void MGLAttribute_Complete(MGLAttribute * self, const GLMethods & gl) {
 
 			self->rows_length = self->array_length * 1;
 			self->row_length = 1;
-			self->row_size = 4;
 
 			self->gl_attrib_ptr_proc = (void *)gl.VertexAttribPointer;
 

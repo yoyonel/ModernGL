@@ -72,7 +72,6 @@ struct MGLAttribute {
 
 	int rows_length;
 	int row_length;
-	int row_size;
 
 	char shape;
 	bool normalizable;
