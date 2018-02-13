@@ -1,15 +1,25 @@
-import glob
 import platform
 import sys
 
 from setuptools import Extension, setup
 
+# pylint: disable=C0103, W0212
+
+if sys.version_info < (3, 0):
+    raise Exception('Python 2 is not supported!')
+
+PLATFORMS = {'windows', 'linux', 'darwin', 'cygwin'}
+
 target = platform.system().lower()
 
-if target.startswith('cygwin'):
-    target = 'cygwin'
+for known in PLATFORMS:
+    if target.startswith(known):
+        target = known
 
-if target == 'linux' or target == 'cygwin':
+if target not in PLATFORMS:
+    target = 'linux'
+
+if target in ['linux', 'cygwin']:
     from distutils import sysconfig
     cvars = sysconfig.get_config_vars()
 
@@ -22,9 +32,6 @@ if target == 'linux' or target == 'cygwin':
         sysconfig._config_vars['CFLAGS'] = cvars['CFLAGS'].replace('-Wimplicit-function-declaration', '')
 
 install_requires = []
-
-if sys.version_info < (3, 0):
-    raise Exception('Python 2 is not supported!')
 
 if sys.version_info < (3, 5):
     install_requires.append('typing')
@@ -50,27 +57,49 @@ extra_linker_args = {
     'darwin': ['-framework', 'OpenGL', '-Wno-deprecated'],
 }
 
-ModernGL = Extension(
+mgl = Extension(
     name='moderngl.mgl',
     include_dirs=['src'],
-    define_macros=[
-        # ('MGL_DEBUG', None),
-        # ('MGL_VERBOSE', None),
-    ],
+    define_macros=[],
     libraries=libraries[target],
     extra_compile_args=extra_compile_args[target],
     extra_link_args=extra_linker_args[target],
-    sources=glob.glob('src/*.cpp'),
+    sources=[
+        'src/Attribute.cpp',
+        'src/Buffer.cpp',
+        'src/BufferFormat.cpp',
+        'src/ComputeShader.cpp',
+        'src/Context.cpp',
+        'src/DataType.cpp',
+        'src/Error.cpp',
+        'src/Framebuffer.cpp',
+        'src/GLContext.cpp',
+        'src/GLMethods.cpp',
+        'src/InvalidObject.cpp',
+        'src/ModernGL.cpp',
+        'src/Program.cpp',
+        'src/Query.cpp',
+        'src/Renderbuffer.cpp',
+        'src/Scope.cpp',
+        'src/Texture.cpp',
+        'src/Texture3D.cpp',
+        'src/TextureCube.cpp',
+        'src/Uniform.cpp',
+        'src/UniformBlock.cpp',
+        'src/UniformGetters.cpp',
+        'src/UniformSetters.cpp',
+        'src/VertexArray.cpp',
+    ],
 )
 
-short_description = 'ModernGL: PyOpenGL alternative'
+short_description = 'ModernGL: High performance rendering for Python 3'
 
 long_description = '''
-`ModernGL on github <https://github.com/cprogrammer1994/ModernGL>`_
-
 `Documentation <https://moderngl.readthedocs.io/>`_
 
-`Examples <https://moderngl.github.io/Examples.html>`_
+`ModernGL on github <https://github.com/cprogrammer1994/ModernGL>`_
+
+`Examples <https://github.com/cprogrammer1994/ModernGL/tree/master/examples>`_
 
 OpenGL is a great environment for developing portable, platform independent,
 interactive 2D and 3D graphics applications. The API implementation in Python
@@ -85,83 +114,42 @@ with less code written.
 
 keywords = [
     'ModernGL',
-    'modern OpenGL',
     'OpenGL',
     'PyOpenGL',
-    'visualization',
-    'ray-tracing',
-    'compute shader',
-    'shader',
-    'documentation',
+    'rendering',
     'graphics',
+    'shader',
     'GLSL',
     'GPU',
-    'GPGPU',
-    'nvidia',
-    'amd',
-    'GL',
-    'GLU',
-    'GLEXT',
-    'WGL',
-    'WGLEXT',
-    'ARB',
-    'GLX',
+    'visualization',
     '2D',
     '3D',
-    'CAD',
-    'design',
-    'video',
 ]
 
 classifiers = [
     'Development Status :: 5 - Production/Stable',
-    'Environment :: MacOS X',
-    'Environment :: Win32 (MS Windows)',
-    'Environment :: X11 Applications',
-    'Intended Audience :: Developers',
-    'Intended Audience :: Education',
-    'Intended Audience :: Science/Research',
     'License :: OSI Approved :: MIT License',
-    'Operating System :: MacOS :: MacOS X',
-    'Operating System :: Microsoft :: Windows',
     'Operating System :: OS Independent',
-    'Operating System :: Unix',
-    'Topic :: Artistic Software',
-    'Topic :: Desktop Environment',
-    'Topic :: Documentation :: Sphinx',
     'Topic :: Games/Entertainment',
-    'Topic :: Multimedia',
     'Topic :: Multimedia :: Graphics',
-    'Topic :: Multimedia :: Graphics :: 3D Modeling',
     'Topic :: Multimedia :: Graphics :: 3D Rendering',
-    'Topic :: Multimedia :: Video :: Display',
     'Topic :: Scientific/Engineering :: Visualization',
-    'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.4',
-    'Programming Language :: Python :: 3.5',
-    'Programming Language :: Python :: 3.6',
     'Programming Language :: Python :: 3 :: Only',
 ]
 
-args = {
-    'name': 'moderngl',
-    'version': '5.0.0',
-    'description': short_description,
-    'long_description': long_description.strip(),
-    'url': 'https://github.com/cprogrammer1994/ModernGL',
-    'download_url': 'https://github.com/cprogrammer1994/ModernGL/releases',
-    'author': 'Szabolcs Dombi',
-    'author_email': 'cprogrammer1994@gmail.com',
-    'license': 'MIT',
-    'classifiers': classifiers,
-    'keywords': keywords,
-    'packages': ['moderngl'],
-    'install_requires': install_requires,
-    'ext_modules': [ModernGL],
-    'platforms': ['any'],
-}
-
-if target == 'windows':
-    args['zip_safe'] = False
-
-setup(**args)
+setup(
+    name='moderngl',
+    version='5.0.0',
+    description=short_description,
+    long_description=long_description.strip(),
+    url='https://github.com/cprogrammer1994/ModernGL',
+    author='Szabolcs Dombi',
+    author_email='cprogrammer1994@gmail.com',
+    license='MIT',
+    classifiers=classifiers,
+    keywords=keywords,
+    packages=['moderngl'],
+    install_requires=install_requires,
+    ext_modules=[mgl],
+    platforms=['any'],
+)
