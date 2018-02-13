@@ -37,31 +37,31 @@ class TestCase(unittest.TestCase):
         self.validate('context.rst', 'Context', ['release', 'mglo', 'extra'])
 
     def test_buffer_docs(self):
-        self.validate('buffer.rst', 'Buffer', ['release', 'mglo', 'glo', 'extra'])
+        self.validate('buffer.rst', 'Buffer', ['release', 'mglo', 'glo', 'ctx', 'extra'])
 
     def test_compute_shader_docs(self):
-        self.validate('compute_shader.rst', 'ComputeShader', ['release', 'mglo', 'glo', 'extra'])
+        self.validate('compute_shader.rst', 'ComputeShader', ['release', 'mglo', 'glo', 'ctx', 'extra'])
 
     def test_framebuffer_docs(self):
-        self.validate('framebuffer.rst', 'Framebuffer', ['release', 'mglo', 'glo', 'extra'])
+        self.validate('framebuffer.rst', 'Framebuffer', ['release', 'mglo', 'glo', 'ctx', 'extra'])
 
     def test_program_docs(self):
-        self.validate('program.rst', 'Program', ['release', 'mglo', 'glo', 'extra'])
+        self.validate('program.rst', 'Program', ['release', 'mglo', 'glo', 'ctx', 'extra'])
 
     def test_renderbuffer_docs(self):
-        self.validate('renderbuffer.rst', 'Renderbuffer', ['release', 'mglo', 'glo', 'extra'])
+        self.validate('renderbuffer.rst', 'Renderbuffer', ['release', 'mglo', 'glo', 'ctx', 'extra'])
 
     def test_subroutine_docs(self):
-        self.validate('subroutine.rst', 'Subroutine', ['mglo', 'extra'])
+        self.validate('subroutine.rst', 'Subroutine', ['mglo', 'ctx', 'extra'])
 
     def test_texture_docs(self):
-        self.validate('texture.rst', 'Texture', ['release', 'mglo', 'glo', 'extra'])
+        self.validate('texture.rst', 'Texture', ['release', 'mglo', 'glo', 'ctx', 'extra'])
 
     def test_texture3d_docs(self):
-        self.validate('texture3d.rst', 'Texture3D', ['release', 'mglo', 'glo', 'extra'])
+        self.validate('texture3d.rst', 'Texture3D', ['release', 'mglo', 'glo', 'ctx', 'extra'])
 
     def test_texture_cube_docs(self):
-        self.validate('texture_cube.rst', 'TextureCube', ['release', 'mglo', 'glo', 'extra'])
+        self.validate('texture_cube.rst', 'TextureCube', ['release', 'mglo', 'glo', 'ctx', 'extra'])
 
     def test_uniform_docs(self):
         self.validate('uniform.rst', 'Uniform', ['mglo', 'extra'])
@@ -73,7 +73,7 @@ class TestCase(unittest.TestCase):
         self.validate('varying.rst', 'Varying', ['mglo', 'extra'])
 
     def test_vertex_array_docs(self):
-        self.validate('vertex_array.rst', 'VertexArray', ['release', 'mglo', 'glo', 'extra'])
+        self.validate('vertex_array.rst', 'VertexArray', ['release', 'mglo', 'glo', 'ctx', 'extra'])
 
 
 if __name__ == '__main__':
