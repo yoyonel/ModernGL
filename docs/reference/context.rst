@@ -53,6 +53,7 @@ Attributes
 .. autoattribute:: Context.viewport
 .. autoattribute:: Context.version_code
 .. autoattribute:: Context.screen
+.. autoattribute:: Context.fbo
 .. autoattribute:: Context.front_face
 .. autoattribute:: Context.wireframe
 .. autoattribute:: Context.max_samples
