@@ -2,6 +2,274 @@
 
 #include "InlineMethods.hpp"
 
+PyObject * MGLContext_texture(MGLContext * self, PyObject * args) {
+	int width;
+	int height;
+
+	int components;
+
+	PyObject * data;
+
+	int samples;
+	int alignment;
+
+	const char * dtype;
+	int dtype_size;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"(II)IOIIs#",
+		&width,
+		&height,
+		&components,
+		&data,
+		&samples,
+		&alignment,
+		&dtype,
+		&dtype_size
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (components < 1 || components > 4) {
+		MGLError_Set("the components must be 1, 2, 3 or 4");
+		return 0;
+	}
+
+	if ((samples & (samples - 1)) || samples > self->max_samples) {
+		MGLError_Set("the number of samples is invalid");
+		return 0;
+	}
+
+	if (alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8) {
+		MGLError_Set("the alignment must be 1, 2, 4 or 8");
+		return 0;
+	}
+
+	if (data != Py_None && samples) {
+		MGLError_Set("multisample textures are not writable directly");
+		return 0;
+	}
+
+	if (dtype_size != 2) {
+		MGLError_Set("invalid dtype");
+		return 0;
+	}
+
+	MGLDataType data_type = from_dtype(dtype);
+
+	int expected_size = width * components * data_type.size;
+	expected_size = (expected_size + alignment - 1) / alignment * alignment;
+	expected_size = expected_size * height;
+
+	Py_buffer buffer_view;
+
+	if (data != Py_None) {
+		int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
+		if (get_buffer < 0) {
+			MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+			return 0;
+		}
+	} else {
+		buffer_view.len = expected_size;
+		buffer_view.buf = 0;
+	}
+
+	if (buffer_view.len != expected_size) {
+		MGLError_Set("data size mismatch %d != %d", buffer_view.len, expected_size);
+		if (data != Py_None) {
+			PyBuffer_Release(&buffer_view);
+		}
+		return 0;
+	}
+
+	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
+
+	int texture_target = samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+	int pixel_type = data_type.gl_type;
+	int base_format = base_formats[components];
+	int internal_format = data_type.internal_format[components];
+
+	const GLMethods & gl = self->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->default_texture_unit);
+
+	MGLTexture * texture = (MGLTexture *)MGLTexture_Type.tp_alloc(&MGLTexture_Type, 0);
+
+	texture->texture_obj = 0;
+	gl.GenTextures(1, (GLuint *)&texture->texture_obj);
+
+	if (!texture->texture_obj) {
+		MGLError_Set("cannot create texture");
+		Py_DECREF(texture);
+		return 0;
+	}
+
+	gl.BindTexture(texture_target, texture->texture_obj);
+
+	if (samples) {
+		gl.TexImage2DMultisample(texture_target, samples, internal_format, width, height, true);
+	} else {
+		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+		gl.TexImage2D(texture_target, 0, internal_format, width, height, 0, base_format, pixel_type, buffer_view.buf);
+		gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
+
+	if (data != Py_None) {
+		PyBuffer_Release(&buffer_view);
+	}
+
+	texture->width = width;
+	texture->height = height;
+	texture->components = components;
+	texture->samples = samples;
+	texture->data_type = data_type;
+	texture->depth = false;
+
+	texture->min_filter = GL_LINEAR;
+	texture->mag_filter = GL_LINEAR;
+
+	texture->repeat_x = true;
+	texture->repeat_y = true;
+
+	Py_INCREF(self);
+	texture->context = self;
+
+	Py_INCREF(texture);
+
+	PyObject * result = PyTuple_New(2);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)texture);
+	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(texture->texture_obj));
+	return result;
+}
+
+PyObject * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
+	int width;
+	int height;
+
+	PyObject * data;
+
+	int samples;
+	int alignment;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"(II)OII",
+		&width,
+		&height,
+		&data,
+		&samples,
+		&alignment
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	if ((samples & (samples - 1)) || samples > self->max_samples) {
+		MGLError_Set("the number of samples is invalid");
+		return 0;
+	}
+
+	if (data != Py_None && samples) {
+		MGLError_Set("multisample textures are not writable directly");
+		return 0;
+	}
+
+	int expected_size = width * 4;
+	expected_size = (expected_size + alignment - 1) / alignment * alignment;
+	expected_size = expected_size * height;
+
+	Py_buffer buffer_view;
+
+	if (data != Py_None) {
+		int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
+		if (get_buffer < 0) {
+			MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+			return 0;
+		}
+	} else {
+		buffer_view.len = expected_size;
+		buffer_view.buf = 0;
+	}
+
+	if (buffer_view.len != expected_size) {
+		MGLError_Set("data size mismatch %d != %d", buffer_view.len, expected_size);
+		if (data != Py_None) {
+			PyBuffer_Release(&buffer_view);
+		}
+		return 0;
+	}
+
+	int texture_target = samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+	int pixel_type = GL_FLOAT;
+
+	const GLMethods & gl = self->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->default_texture_unit);
+
+	MGLTexture * texture = (MGLTexture *)MGLTexture_Type.tp_alloc(&MGLTexture_Type, 0);
+
+	texture->texture_obj = 0;
+	gl.GenTextures(1, (GLuint *)&texture->texture_obj);
+
+	if (!texture->texture_obj) {
+		MGLError_Set("cannot create texture");
+		Py_DECREF(texture);
+		return 0;
+	}
+
+	gl.BindTexture(texture_target, texture->texture_obj);
+
+	// TODO: check depth texture parametering they cause GL_INVALID_ENUM
+
+	// gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	// gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// gl.TexParameteri(texture_target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	// gl.TexParameteri(texture_target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	if (samples) {
+		gl.TexImage2DMultisample(texture_target, samples, GL_DEPTH_COMPONENT24, width, height, true);
+	} else {
+		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+		gl.TexImage2D(texture_target, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, pixel_type, buffer_view.buf);
+	}
+
+	gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);  // TODO: test this
+
+	if (data != Py_None) {
+		PyBuffer_Release(&buffer_view);
+	}
+
+	texture->width = width;
+	texture->height = height;
+	texture->components = 1;
+	texture->samples = samples;
+	texture->data_type = from_dtype("f4");
+	texture->depth = true;
+
+	texture->min_filter = GL_LINEAR;
+	texture->mag_filter = GL_LINEAR;
+
+	texture->repeat_x = false;
+	texture->repeat_y = false;
+
+	Py_INCREF(self);
+	texture->context = self;
+
+	Py_INCREF(texture);
+
+	PyObject * result = PyTuple_New(2);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)texture);
+	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(texture->texture_obj));
+	return result;
+}
+
 PyObject * MGLTexture_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLTexture * self = (MGLTexture *)type->tp_alloc(type, 0);
 

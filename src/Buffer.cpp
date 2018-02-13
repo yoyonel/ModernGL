@@ -1,5 +1,88 @@
 #include "Types.hpp"
 
+PyObject * MGLContext_buffer(MGLContext * self, PyObject * args) {
+	PyObject * data;
+	int reserve;
+	int dynamic;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"OIp",
+		&data,
+		&reserve,
+		&dynamic
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (data == Py_None && !reserve) {
+		MGLError_Set("missing data or reserve");
+		return 0;
+	}
+
+	if (data != Py_None && reserve) {
+		MGLError_Set("data and reserve are mutually exclusive");
+		return 0;
+	}
+
+	Py_buffer buffer_view;
+
+	if (data != Py_None) {
+		int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
+		if (get_buffer < 0) {
+			MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+			return 0;
+		}
+	} else {
+		buffer_view.len = reserve;
+		buffer_view.buf = 0;
+	}
+
+	if (!buffer_view.len) {
+		MGLError_Set("the buffer cannot be empty");
+		if (data != Py_None) {
+			PyBuffer_Release(&buffer_view);
+		}
+		return 0;
+	}
+
+	MGLBuffer * buffer = (MGLBuffer *)MGLBuffer_Type.tp_alloc(&MGLBuffer_Type, 0);
+
+	buffer->size = (int)buffer_view.len;
+	buffer->dynamic = dynamic ? true : false;
+
+	const GLMethods & gl = self->gl;
+
+	buffer->buffer_obj = 0;
+	gl.GenBuffers(1, (GLuint *)&buffer->buffer_obj);
+
+	if (!buffer->buffer_obj) {
+		MGLError_Set("cannot create buffer");
+		Py_DECREF(buffer);
+		return 0;
+	}
+
+	gl.BindBuffer(GL_ARRAY_BUFFER, buffer->buffer_obj);
+	gl.BufferData(GL_ARRAY_BUFFER, buffer->size, buffer_view.buf, dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+
+	Py_INCREF(self);
+	buffer->context = self;
+
+	if (data != Py_None) {
+		PyBuffer_Release(&buffer_view);
+	}
+
+	Py_INCREF(buffer);
+
+	PyObject * result = PyTuple_New(3);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)buffer);
+	PyTuple_SET_ITEM(result, 1, PyLong_FromSsize_t(buffer->size));
+	PyTuple_SET_ITEM(result, 2, PyLong_FromLong(buffer->buffer_obj));
+	return result;
+}
+
 PyObject * MGLBuffer_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLBuffer * self = (MGLBuffer *)type->tp_alloc(type, 0);
 

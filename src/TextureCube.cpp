@@ -2,6 +2,143 @@
 
 #include "InlineMethods.hpp"
 
+PyObject * MGLContext_texture_cube(MGLContext * self, PyObject * args) {
+	int width;
+	int height;
+
+	int components;
+
+	PyObject * data;
+
+	int alignment;
+
+	const char * dtype;
+	int dtype_size;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"(II)IOIs#",
+		&width,
+		&height,
+		&components,
+		&data,
+		&alignment,
+		&dtype,
+		&dtype_size
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (components < 1 || components > 4) {
+		MGLError_Set("the components must be 1, 2, 3 or 4");
+		return 0;
+	}
+
+	if (alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8) {
+		MGLError_Set("the alignment must be 1, 2, 4 or 8");
+		return 0;
+	}
+
+	if (dtype_size != 2) {
+		MGLError_Set("invalid dtype");
+		return 0;
+	}
+
+	MGLDataType data_type = from_dtype(dtype);
+
+	int expected_size = width * components * data_type.size;
+	expected_size = (expected_size + alignment - 1) / alignment * alignment;
+	expected_size = expected_size * height * 6;
+
+	Py_buffer buffer_view;
+
+	if (data != Py_None) {
+		int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
+		if (get_buffer < 0) {
+			MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+			return 0;
+		}
+	} else {
+		buffer_view.len = expected_size;
+		buffer_view.buf = 0;
+	}
+
+	if (buffer_view.len != expected_size) {
+		MGLError_Set("data size mismatch %d != %d", buffer_view.len, expected_size);
+		if (data != Py_None) {
+			PyBuffer_Release(&buffer_view);
+		}
+		return 0;
+	}
+
+	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
+
+	int pixel_type = data_type.gl_type;
+	int base_format = base_formats[components];
+	int internal_format = data_type.internal_format[components];
+
+	const GLMethods & gl = self->gl;
+
+	MGLTextureCube * texture = (MGLTextureCube *)MGLTextureCube_Type.tp_alloc(&MGLTextureCube_Type, 0);
+
+	texture->texture_obj = 0;
+	gl.GenTextures(1, (GLuint *)&texture->texture_obj);
+
+	if (!texture->texture_obj) {
+		MGLError_Set("cannot create texture");
+		Py_DECREF(texture);
+		return 0;
+	}
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->default_texture_unit);
+	gl.BindTexture(GL_TEXTURE_CUBE_MAP, texture->texture_obj);
+
+	if (data == Py_None) {
+		expected_size = 0;
+	}
+
+	const char * ptr[6] = {
+		(const char *)buffer_view.buf + expected_size * 0 / 6,
+		(const char *)buffer_view.buf + expected_size * 1 / 6,
+		(const char *)buffer_view.buf + expected_size * 2 / 6,
+		(const char *)buffer_view.buf + expected_size * 3 / 6,
+		(const char *)buffer_view.buf + expected_size * 4 / 6,
+		(const char *)buffer_view.buf + expected_size * 5 / 6,
+	};
+
+	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
+	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[0]);
+	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[1]);
+	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[2]);
+	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[3]);
+	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[4]);
+	gl.TexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, internal_format, width, height, 0, base_format, pixel_type, ptr[5]);
+	gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	if (data != Py_None) {
+		PyBuffer_Release(&buffer_view);
+	}
+
+	texture->width = width;
+	texture->height = height;
+	texture->components = components;
+	texture->data_type = data_type;
+
+	Py_INCREF(self);
+	texture->context = self;
+
+	Py_INCREF(texture);
+
+	PyObject * result = PyTuple_New(2);
+	PyTuple_SET_ITEM(result, 0, (PyObject *)texture);
+	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(texture->texture_obj));
+	return result;
+}
+
 PyObject * MGLTextureCube_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLTextureCube * self = (MGLTextureCube *)type->tp_alloc(type, 0);
 

@@ -170,21 +170,6 @@ int versions = sizeof(version) / sizeof(GLVersion);
 
 #if defined(_WIN32) || defined(_WIN64)
 
-#include <Windows.h>
-
-#define WGL_ACCELERATION                0x2003
-#define WGL_FULL_ACCELERATION           0x2027
-#define WGL_CONTEXT_MAJOR_VERSION       0x2091
-#define WGL_CONTEXT_MINOR_VERSION       0x2092
-#define WGL_CONTEXT_PROFILE_MASK        0x9126
-#define WGL_CONTEXT_CORE_PROFILE_BIT    0x0001
-
-typedef int (WINAPI * mglChoosePixelFormatProc)(HDC hdc, const int * piAttribIList, const float * pfAttribFList, unsigned nMaxFormats, int * piFormats, unsigned * nNumFormats);
-typedef HGLRC (WINAPI * mglCreateContextAttribsProc)(HDC hdc, HGLRC hglrc, const int * attribList);
-
-mglChoosePixelFormatProc mglChoosePixelFormat;
-mglCreateContextAttribsProc mglCreateContextAttribs;
-
 PIXELFORMATDESCRIPTOR pfd = {
 	sizeof(PIXELFORMATDESCRIPTOR),  // nSize
 	1,                              // nVersion
@@ -325,15 +310,15 @@ void InitModernContext() {
 		return;
 	}
 
-	mglCreateContextAttribs = (mglCreateContextAttribsProc)wglGetProcAddress("wglCreateContextAttribsARB");
+	my_CreateContextAttribs = (my_CreateContextAttribs_type)wglGetProcAddress("wglCreateContextAttribsARB");
 
-	if (!mglCreateContextAttribs) {
+	if (!my_CreateContextAttribs) {
 		return;
 	}
 
-	mglChoosePixelFormat = (mglChoosePixelFormatProc)wglGetProcAddress("wglChoosePixelFormatARB");
+	my_ChoosePixelFormat = (my_ChoosePixelFormat_type)wglGetProcAddress("wglChoosePixelFormatARB");
 
-	if (!mglChoosePixelFormat) {
+	if (!my_ChoosePixelFormat) {
 		return;
 	}
 
@@ -434,14 +419,12 @@ GLContext CreateGLContext(PyObject * settings) {
 
 	HGLRC hrc = 0;
 
-	if (mglCreateContextAttribs && mglChoosePixelFormat) {
+	if (my_CreateContextAttribs && my_ChoosePixelFormat) {
 
 		int pixelformat = 0;
 		unsigned num_formats = 0;
 
-		// WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB
-
-		if (!mglChoosePixelFormat(hdc, 0, 0, 1, &pixelformat, &num_formats)) {
+		if (!my_ChoosePixelFormat(hdc, 0, 0, 1, &pixelformat, &num_formats)) {
 			MGLError_Set("cannot choose pixel format");
 			return context;
 		}
@@ -464,7 +447,7 @@ GLContext CreateGLContext(PyObject * settings) {
 				0, 0,
 			};
 
-			hrc = mglCreateContextAttribs(hdc, 0, attribs);
+			hrc = my_CreateContextAttribs(hdc, 0, attribs);
 
 			if (hrc) {
 				break;

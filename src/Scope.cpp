@@ -2,6 +2,122 @@
 
 #include "InlineMethods.hpp"
 
+PyObject * MGLContext_scope(MGLContext * self, PyObject * args) {
+	MGLFramebuffer * framebuffer;
+	PyObject * enable_flags;
+	PyObject * textures;
+	PyObject * uniform_buffers;
+	PyObject * shader_storage_buffers;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"O!OOOO",
+		&MGLFramebuffer_Type,
+		&framebuffer,
+		&enable_flags,
+		&textures,
+		&uniform_buffers,
+		&shader_storage_buffers
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	int flags = MGL_INVALID;
+	if (enable_flags != Py_None) {
+		flags = PyLong_AsLong(enable_flags);
+		if (PyErr_Occurred()) {
+			MGLError_Set("invalid enable_flags");
+			return 0;
+		}
+	}
+
+	MGLScope * scope = (MGLScope *)MGLScope_Type.tp_alloc(&MGLScope_Type, 0);
+
+	Py_INCREF(self);
+	scope->context = self;
+
+	scope->enable_flags = flags;
+
+	Py_INCREF(framebuffer);
+	scope->framebuffer = framebuffer;
+
+	Py_INCREF(self->bound_framebuffer);
+	scope->old_framebuffer = self->bound_framebuffer;
+
+	int num_textures = PyTuple_Size(textures);
+	int num_uniform_buffers = PyTuple_Size(uniform_buffers);
+	int num_shader_storage_buffers = PyTuple_Size(shader_storage_buffers);
+
+	scope->num_textures = num_textures;
+	scope->textures = new int[scope->num_textures * 3];
+	scope->num_buffers = num_uniform_buffers + num_shader_storage_buffers;
+	scope->buffers = new int[scope->num_buffers * 3];
+
+	for (int i = 0; i < num_textures; ++i) {
+		PyObject * tup = PyTuple_GET_ITEM(textures, i);
+		PyObject * item = PyTuple_GET_ITEM(tup, 0);
+
+		int texture_type;
+		int texture_obj;
+
+		if (Py_TYPE(item) == &MGLTexture_Type) {
+			MGLTexture * texture = (MGLTexture *)item;
+			texture_type = texture->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+			texture_obj = texture->texture_obj;
+		} else if (Py_TYPE(item) == &MGLTexture3D_Type) {
+			MGLTexture3D * texture = (MGLTexture3D *)item;
+			texture_type = GL_TEXTURE_3D;
+			texture_obj = texture->texture_obj;
+		} else if (Py_TYPE(item) == &MGLTextureCube_Type) {
+			MGLTextureCube * texture = (MGLTextureCube *)item;
+			texture_type = GL_TEXTURE_CUBE_MAP;
+			texture_obj = texture->texture_obj;
+		} else {
+			// TODO: fail
+			return 0;
+		}
+
+		int binding = PyLong_AsLong(PyTuple_GET_ITEM(tup, 1));
+		scope->textures[i * 3 + 0] = GL_TEXTURE0 + binding;
+		scope->textures[i * 3 + 1] = texture_type;
+		scope->textures[i * 3 + 2] = texture_obj;
+	}
+
+	for (int i = 0; i < num_uniform_buffers; ++i) {
+		PyObject * tup = PyTuple_GET_ITEM(uniform_buffers, i);
+		MGLBuffer * buffer = (MGLBuffer *)PyTuple_GET_ITEM(tup, 0);
+
+		if (Py_TYPE(buffer) == &MGLBuffer_Type) {
+			int binding = PyLong_AsLong(PyTuple_GET_ITEM(tup, 1));
+			scope->buffers[i * 3 + 0] = GL_UNIFORM_BUFFER;
+			scope->buffers[i * 3 + 1] = buffer->buffer_obj;
+			scope->buffers[i * 3 + 2] = binding;
+		} else {
+			// TODO: fail
+		}
+	}
+
+	int base = num_uniform_buffers * 3;
+
+	for (int i = 0; i < num_shader_storage_buffers; ++i) {
+		PyObject * tup = PyTuple_GET_ITEM(shader_storage_buffers, i);
+		MGLBuffer * buffer = (MGLBuffer *)PyTuple_GET_ITEM(tup, 0);
+
+		if (Py_TYPE(buffer) == &MGLBuffer_Type) {
+			int binding = PyLong_AsLong(PyTuple_GET_ITEM(tup, 1));
+			scope->buffers[base + i * 3 + 0] = GL_SHADER_STORAGE_BUFFER;
+			scope->buffers[base + i * 3 + 1] = buffer->buffer_obj;
+			scope->buffers[base + i * 3 + 2] = binding;
+		} else {
+			// TODO: fail
+		}
+	}
+
+	return (PyObject *)scope;
+}
+
 PyObject * MGLScope_tp_new(PyTypeObject * type, PyObject * args, PyObject * kwargs) {
 	MGLScope * self = (MGLScope *)type->tp_alloc(type, 0);
 
