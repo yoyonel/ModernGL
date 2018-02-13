@@ -1,5 +1,6 @@
-import re
+import inspect
 import os
+import re
 import unittest
 
 import moderngl
@@ -11,13 +12,21 @@ class TestCase(unittest.TestCase):
         root = os.path.dirname(os.path.dirname(__file__))
         with open(os.path.normpath(os.path.join(root, 'docs', 'reference', filename))) as f:
             docs = f.read()
-        methods = re.findall(r'^\.\. automethod:: ([^\(\n]+)', docs, flags=re.M)
-        attributes = re.findall(r'^\.\. autoattribute:: ([^\(\n]+)', docs, flags=re.M)
-        documented = set(filter(lambda x: x.startswith(classname), methods + attributes))
+        methods = re.findall(r'^\.\. automethod:: ([^\(\n]+)([^\n]+)', docs, flags=re.M)
+        attributes = re.findall(r'^\.\. autoattribute:: ([^\n]+)', docs, flags=re.M)
+        documented = set(filter(lambda x: x.startswith(classname), [a for a, b in methods] + attributes))
         implemented = set(classname + '.' + x for x in dir(getattr(moderngl, classname)) if not x.startswith('_'))
         ignored = set(classname + '.' + x for x in ignore)
         self.assertSetEqual(implemented - documented - ignored, set(), msg='Implemented but not Documented')
         self.assertSetEqual(documented - implemented, set(), msg='Documented but not Implemented')
+
+        for method, docsig in methods:
+            classname, methodname = method.split('.')
+            sig = str(inspect.signature(getattr(getattr(moderngl, classname), methodname)))
+            sig = sig.replace('self, ', '').replace('moderngl.', '').replace(' -> None', '')
+            sig = sig.replace('(self)', '()').replace(', *,', ',').replace('(*, ', '(')
+            sig = re.sub(r'-> \'(\w+)\'', r'-> \1', sig)
+            self.assertEqual(docsig, sig, msg=filename + '::' + method)
 
     def test_context_docs(self):
         self.validate('context.rst', 'Context', ['release', 'mglo', 'extra'])
