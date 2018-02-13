@@ -26,7 +26,7 @@ Methods
 
 .. automethod:: VertexArray.render(mode=None, vertices=-1, first=0, instances=1)
 .. automethod:: VertexArray.transform(buffer, mode=None, vertices=-1, first=0, instances=1)
-.. automethod:: VertexArray.bind(self, attribute, cls, buffer, fmt, offset=0, stride=0, divisor=0, normalize=False)
+.. automethod:: VertexArray.bind(attribute, cls, buffer, fmt, offset=0, stride=0, divisor=0, normalize=False)
 
 Attributes
 ----------

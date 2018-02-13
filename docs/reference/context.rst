@@ -24,10 +24,10 @@ ModernGL Objects
 .. automethod:: Context.texture3d(size, components, data=None, alignment=1, dtype='f1') -> Texture3D
 .. automethod:: Context.texture_cube(size, components, data=None, alignment=1, dtype='f1') -> TextureCube
 .. automethod:: Context.simple_framebuffer(size, components=4, samples=0, dtype='f1') -> Framebuffer
-.. automethod:: Context.framebuffer(color_attachments, depth_attachment=None) -> Framebuffer
+.. automethod:: Context.framebuffer(color_attachments=(), depth_attachment=None) -> Framebuffer
 .. automethod:: Context.renderbuffer(size, components=4, samples=0, dtype='f1') -> Renderbuffer
 .. automethod:: Context.depth_renderbuffer(size, samples=0) -> Renderbuffer
-.. automethod:: Context.scope(framebuffer, enable_only=None, *, textures=(), uniform_buffers=(), storage_buffers=()) -> Scope
+.. automethod:: Context.scope(framebuffer, enable_only=None, textures=(), uniform_buffers=(), storage_buffers=()) -> Scope
 .. automethod:: Context.query(samples=False, any_samples=False, time=False, primitives=False) -> Query
 .. automethod:: Context.compute_shader(source) -> ComputeShader
 
