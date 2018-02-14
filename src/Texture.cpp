@@ -128,6 +128,8 @@ PyObject * MGLContext_texture(MGLContext * self, PyObject * args) {
 	texture->components = components;
 	texture->samples = samples;
 	texture->data_type = data_type;
+
+	texture->compare_func = 0;
 	texture->depth = false;
 
 	texture->min_filter = GL_LINEAR;
@@ -241,6 +243,7 @@ PyObject * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	}
 
 	gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);  // TODO: test this
+	gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);  // TODO: test this
 
 	if (data != Py_None) {
 		PyBuffer_Release(&buffer_view);
@@ -251,6 +254,8 @@ PyObject * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	texture->components = 1;
 	texture->samples = samples;
 	texture->data_type = from_dtype("f4");
+
+	texture->compare_func = GL_LEQUAL;
 	texture->depth = true;
 
 	texture->min_filter = GL_LINEAR;
@@ -794,11 +799,42 @@ int MGLTexture_set_swizzle(MGLTexture * self, PyObject * value, void * closure) 
 	return 0;
 }
 
+PyObject * MGLTexture_get_depth_func(MGLTexture * self) {
+	if (!self->depth) {
+		MGLError_Set("only depth textures have compare_func");
+		return 0;
+	}
+
+	return compare_func_to_string(self->compare_func);
+}
+
+int MGLTexture_set_compare_func(MGLTexture * self, PyObject * value) {
+	if (!self->depth) {
+		MGLError_Set("only depth textures have compare_func");
+		return -1;
+	}
+
+	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+	const char * func = PyUnicode_AsUTF8(value);
+
+	if (PyErr_Occurred()) {
+		return -1;
+	}
+
+	const GLMethods & gl = self->context->gl;
+	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+	gl.BindTexture(texture_target, self->texture_obj);
+	gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_FUNC, compare_func_from_string(func));
+
+	return 0;
+}
+
 PyGetSetDef MGLTexture_tp_getseters[] = {
 	{(char *)"repeat_x", (getter)MGLTexture_get_repeat_x, (setter)MGLTexture_set_repeat_x, 0, 0},
 	{(char *)"repeat_y", (getter)MGLTexture_get_repeat_y, (setter)MGLTexture_set_repeat_y, 0, 0},
 	{(char *)"filter", (getter)MGLTexture_get_filter, (setter)MGLTexture_set_filter, 0, 0},
 	{(char *)"swizzle", (getter)MGLTexture_get_swizzle, (setter)MGLTexture_set_swizzle, 0, 0},
+	{(char *)"compare_funct", (getter)MGLTexture_get_depth_func, (setter)MGLTexture_set_compare_func, 0, 0},
 	{0},
 };
 

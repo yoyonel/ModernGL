@@ -492,87 +492,65 @@ int MGLContext_set_point_size(MGLContext * self, PyObject * value) {
 	return 0;
 }
 
-int MGLContext_set_blend_func(MGLContext * self, PyObject * value) {
+PyObject * MGLContext_get_blend_func(MGLContext * self) {
+	PyObject * res = PyTuple_New(2);
+	PyTuple_SET_ITEM(res, 0, PyLong_FromLong(self->blend_func_src));
+	PyTuple_SET_ITEM(res, 1, PyLong_FromLong(self->blend_func_dst));
+	return res;
+}
 
+int MGLContext_set_blend_func(MGLContext * self, PyObject * value) {
 	if (PyTuple_GET_SIZE(value) != 2) {
 		return -1;
 	}
 
-	int sfract = (int)PyLong_AsLong(PyTuple_GET_ITEM(value, 0));
-	int dfract = (int)PyLong_AsLong(PyTuple_GET_ITEM(value, 1));
+	int sfact = (int)PyLong_AsLong(PyTuple_GET_ITEM(value, 0));
+	int dfact = (int)PyLong_AsLong(PyTuple_GET_ITEM(value, 1));
 
 	if (PyErr_Occurred()) {
 		return -1;
 	}
 
-	self->gl.BlendFunc(sfract, dfract);
+	self->gl.BlendFunc(sfact, dfact);
 
 	return 0;
 }
 
-int MGLContext_set_depth_func(MGLContext * self, PyObject * val) {
-	const char * fun = PyUnicode_AsUTF8(val);
+PyObject * MGLContext_get_depth_func(MGLContext * self) {
+	return compare_func_to_string(self->depth_func);
+}
+
+int MGLContext_set_depth_func(MGLContext * self, PyObject * value) {
+	const char * func = PyUnicode_AsUTF8(value);
 
 	if (PyErr_Occurred()) {
 		return -1;
 	}
 
-	switch (fun[0] * 255 + fun[1]) {
-		case ('<' * 256 + '='): {
-			self->gl.DepthFunc(GL_LEQUAL);
-			break;
-		}
+	int depth_func = compare_func_from_string(func);
 
-		case ('<' * 256): {
-			self->gl.DepthFunc(GL_LESS);
-			break;
-		}
-
-		case ('>' * 256 + '='): {
-			self->gl.DepthFunc(GL_GEQUAL);
-			break;
-		}
-
-		case ('>' * 256): {
-			self->gl.DepthFunc(GL_GREATER);
-			break;
-		}
-
-		case ('=' * 256 + '='): {
-			self->gl.DepthFunc(GL_EQUAL);
-			break;
-		}
-
-		case ('!' * 256 + '='): {
-			self->gl.DepthFunc(GL_NOTEQUAL);
-			break;
-		}
-
-		case ('0' * 256): {
-			self->gl.DepthFunc(GL_NEVER);
-			break;
-		}
-
-		case ('1' * 256): {
-			self->gl.DepthFunc(GL_ALWAYS);
-			break;
-		}
-
-		default: {
-			// TODO: error
-			return -1;
-		}
+	if (!depth_func) {
+		return -1;
 	}
 
+	self->depth_func = depth_func;
+	self->gl.DepthFunc(self->depth_func);
+
 	return 0;
+}
+
+PyObject * MGLContext_get_multisample(MGLContext * self) {
+	return PyBool_FromLong(self->multisample);
 }
 
 int MGLContext_set_multisample(MGLContext * self, PyObject * value) {
 	if (value == Py_True) {
 		self->gl.Enable(GL_MULTISAMPLE);
+		self->multisample = true;
 		return 0;
 	} else if (value == Py_False) {
 		self->gl.Disable(GL_MULTISAMPLE);
+		self->multisample = false;
 		return 0;
 	}
 	return -1;
@@ -641,20 +619,22 @@ int MGLContext_set_wireframe(MGLContext * self, PyObject * value) {
 
 PyObject * MGLContext_get_front_face(MGLContext * self) {
 	if (self->front_face == GL_CW) {
-		return PyUnicode_FromString("CW");
+		static PyObject * cw = PyUnicode_FromString("cw");
+		return cw;
 	}
-	return PyUnicode_FromString("CCW");
+	static PyObject * ccw = PyUnicode_FromString("cw");
+	return ccw;
 }
 
 int MGLContext_set_front_face(MGLContext * self, PyObject * value) {
 	const char * str = PyUnicode_AsUTF8(value);
 
-	if (!strcmp(str, "CW")) {
+	if (!strcmp(str, "cw")) {
 		self->front_face = GL_CW;
-	} else if (!strcmp(str, "CCW")) {
+	} else if (!strcmp(str, "ccw")) {
 		self->front_face = GL_CCW;
 	} else {
-		MGLError_Set("invalid value for front_face");
+		MGLError_Set("invalid front_face");
 		return -1;
 	}
 
@@ -1199,9 +1179,9 @@ PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"line_width", (getter)MGLContext_get_line_width, (setter)MGLContext_set_line_width, 0, 0},
 	{(char *)"point_size", (getter)MGLContext_get_point_size, (setter)MGLContext_set_point_size, 0, 0},
 
-	{(char *)"depth_func", 0, (setter)MGLContext_set_depth_func, 0, 0},
-	{(char *)"blend_func", 0, (setter)MGLContext_set_blend_func, 0, 0},
-	{(char *)"multisample", 0, (setter)MGLContext_set_multisample, 0, 0},
+	{(char *)"depth_func", (getter)MGLContext_get_blend_func, (setter)MGLContext_set_depth_func, 0, 0},
+	{(char *)"blend_func", (getter)MGLContext_get_depth_func, (setter)MGLContext_set_blend_func, 0, 0},
+	{(char *)"multisample", (getter)MGLContext_get_multisample, (setter)MGLContext_set_multisample, 0, 0},
 
 	{(char *)"fbo", (getter)MGLContext_get_fbo, (setter)MGLContext_set_fbo, 0, 0},
 
@@ -1358,7 +1338,13 @@ void MGLContext_Initialize(MGLContext * self) {
 
 	self->enable_flags = 0;
 	self->front_face = GL_CCW;
+
+	self->depth_func = GL_LEQUAL;
+	self->blend_func_src = GL_SRC_ALPHA;
+	self->blend_func_dst = GL_ONE_MINUS_SRC_ALPHA;
+
 	self->wireframe = false;
+	self->multisample = true;
 
 	// TODO: multisample getter setter (bool)
 }

@@ -116,7 +116,13 @@ struct MGLContext {
 
 	int enable_flags;
 	int front_face;
+
+	int depth_func;
+	int blend_func_src;
+	int blend_func_dst;
+
 	bool wireframe;
+	bool multisample;
 
 	GLMethods gl;
 };
@@ -239,6 +245,8 @@ struct MGLTexture {
 
 	int min_filter;
 	int mag_filter;
+
+	int compare_func;
 
 	MGLDataType data_type;
 	bool depth;

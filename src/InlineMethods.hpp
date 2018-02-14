@@ -61,3 +61,78 @@ inline char char_from_swizzle(int c) {
 
 	return '?';
 }
+
+inline int compare_func_from_string(const char * str) {
+	if (!str[0] || (str[1] && str[2])) {
+		return 0;
+	}
+
+	switch (str[0] * 255 + str[1]) {
+		case ('<' * 256 + '='):
+			return GL_LEQUAL;
+
+		case ('<' * 256):
+			return GL_LESS;
+
+		case ('>' * 256 + '='):
+			return GL_GEQUAL;
+
+		case ('>' * 256):
+			return GL_GREATER;
+
+		case ('=' * 256 + '='):
+			return GL_EQUAL;
+
+		case ('!' * 256 + '='):
+			return GL_NOTEQUAL;
+
+		case ('0' * 256):
+			return GL_NEVER;
+
+		case ('1' * 256):
+			return GL_ALWAYS;
+
+		default:
+			return 0;
+	}
+}
+
+inline PyObject * compare_func_to_string(int func) {
+	switch (func) {
+		case GL_LEQUAL:
+			static PyObject * lequal = PyUnicode_FromString("<=");
+			return lequal;
+
+		case GL_LESS:
+			static PyObject * less = PyUnicode_FromString("<");
+			return less;
+
+		case GL_GEQUAL:
+			static PyObject * gequal = PyUnicode_FromString(">=");
+			return gequal;
+
+		case GL_GREATER:
+			static PyObject * greater = PyUnicode_FromString(">");
+			return greater;
+
+		case GL_EQUAL:
+			static PyObject * equal = PyUnicode_FromString("==");
+			return equal;
+
+		case GL_NOTEQUAL:
+			static PyObject * notequal = PyUnicode_FromString("!=");
+			return notequal;
+
+		case GL_NEVER:
+			static PyObject * never = PyUnicode_FromString("0");
+			return never;
+
+		case GL_ALWAYS:
+			static PyObject * always = PyUnicode_FromString("1");
+			return always;
+
+		default:
+			static PyObject * unk = PyUnicode_FromString("?");
+			return unk;
+	}
+}

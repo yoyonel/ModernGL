@@ -31,6 +31,7 @@ Attributes
 .. autoattribute:: Texture.repeat_y
 .. autoattribute:: Texture.filter
 .. autoattribute:: Texture.swizzle
+.. autoattribute:: Texture.compare_func
 .. autoattribute:: Texture.width
 .. autoattribute:: Texture.height
 .. autoattribute:: Texture.size

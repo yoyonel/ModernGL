@@ -894,6 +894,18 @@ class Texture:
         self.mglo.swizzle = value
 
     @property
+    def compare_func(self) -> str:
+        '''
+            tuple: The compare function of the depth texture.
+        '''
+
+        return self.mglo.compare_func
+
+    @compare_func.setter
+    def compare_func(self, value):
+        self.mglo.compare_func = value
+
+    @property
     def width(self) -> int:
         '''
             int: The width of the texture.
@@ -2166,9 +2178,9 @@ class Context:
         self.mglo.depth_func = value
 
     @property
-    def blend_func(self) -> int:
+    def blend_func(self) -> Tuple[int, int]:
         '''
-            int: Set the default depth func.
+            tuple: Set the blend depth func.
         '''
 
         raise NotImplementedError()
