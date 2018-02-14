@@ -2827,7 +2827,8 @@ def create_context(require=None) -> Context:
     ctx = Context.__new__(Context)
     ctx.mglo, ctx.version_code = mgl.create_context()
     ctx._screen = ctx.detect_framebuffer(0)
-    ctx.fbo = ctx._screen
+    ctx.fbo = ctx.detect_framebuffer()
+    ctx.mglo.fbo = ctx.fbo.mglo
     ctx._info = None
 
     if require is not None and ctx.version_code < require:
