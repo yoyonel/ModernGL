@@ -493,14 +493,14 @@ int MGLContext_set_point_size(MGLContext * self, PyObject * value) {
 
 int MGLContext_set_blend_func(MGLContext * self, PyObject * value) {
 
-	if(PyTuple_GET_SIZE(value) != 2){
+	if (PyTuple_GET_SIZE(value) != 2) {
 		return -1;
 	}
 
 	int sfract = (int)PyLong_AsLong(PyTuple_GET_ITEM(value, 0));
 	int dfract = (int)PyLong_AsLong(PyTuple_GET_ITEM(value, 1));
 
-	if(PyErr_Occurred()) {
+	if (PyErr_Occurred()) {
 		return -1;
 	}
 

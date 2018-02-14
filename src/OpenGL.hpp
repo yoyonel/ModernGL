@@ -7,11 +7,11 @@
 #endif
 
 #if defined(__x86_64__) || defined(_WIN64)
-	typedef long long int GLsizeiptr;
-	typedef long long int GLintptr;
+typedef long long int GLsizeiptr;
+typedef long long int GLintptr;
 #else
-	typedef int GLsizeiptr;
-	typedef int GLintptr;
+typedef int GLsizeiptr;
+typedef int GLintptr;
 #endif
 
 typedef char GLbyte;
@@ -114,7 +114,7 @@ typedef GLvoid (GLAPI * PROC_glCompressedTexSubImage1D)(GLenum target, GLint lev
 typedef GLvoid (GLAPI * PROC_glGetCompressedTexImage)(GLenum target, GLint level, GLvoid * img);
 typedef GLvoid (GLAPI * PROC_glBlendFuncSeparate)(GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha);
 typedef GLvoid (GLAPI * PROC_glMultiDrawArrays)(GLenum mode, const GLint * first, const GLsizei * count, GLsizei drawcount);
-typedef GLvoid (GLAPI * PROC_glMultiDrawElements)(GLenum mode, const GLsizei * count, GLenum type, const GLvoid * const* indices, GLsizei drawcount);
+typedef GLvoid (GLAPI * PROC_glMultiDrawElements)(GLenum mode, const GLsizei * count, GLenum type, const GLvoid * const * indices, GLsizei drawcount);
 typedef GLvoid (GLAPI * PROC_glPointParameterf)(GLenum pname, GLfloat param);
 typedef GLvoid (GLAPI * PROC_glPointParameterfv)(GLenum pname, const GLfloat * params);
 typedef GLvoid (GLAPI * PROC_glPointParameteri)(GLenum pname, GLint param);
@@ -174,7 +174,7 @@ typedef GLvoid (GLAPI * PROC_glGetVertexAttribPointerv)(GLuint index, GLenum pna
 typedef GLboolean (GLAPI * PROC_glIsProgram)(GLuint program);
 typedef GLboolean (GLAPI * PROC_glIsShader)(GLuint shader);
 typedef GLvoid (GLAPI * PROC_glLinkProgram)(GLuint program);
-typedef GLvoid (GLAPI * PROC_glShaderSource)(GLuint shader, GLsizei count, const GLchar * const* string, const GLint * length);
+typedef GLvoid (GLAPI * PROC_glShaderSource)(GLuint shader, GLsizei count, const GLchar * const * string, const GLint * length);
 typedef GLvoid (GLAPI * PROC_glUseProgram)(GLuint program);
 typedef GLvoid (GLAPI * PROC_glUniform1f)(GLint location, GLfloat v0);
 typedef GLvoid (GLAPI * PROC_glUniform2f)(GLint location, GLfloat v0, GLfloat v1);
@@ -249,7 +249,7 @@ typedef GLvoid (GLAPI * PROC_glBeginTransformFeedback)(GLenum primitiveMode);
 typedef GLvoid (GLAPI * PROC_glEndTransformFeedback)();
 typedef GLvoid (GLAPI * PROC_glBindBufferRange)(GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size);
 typedef GLvoid (GLAPI * PROC_glBindBufferBase)(GLenum target, GLuint index, GLuint buffer);
-typedef GLvoid (GLAPI * PROC_glTransformFeedbackVaryings)(GLuint program, GLsizei count, const GLchar * const* varyings, GLenum bufferMode);
+typedef GLvoid (GLAPI * PROC_glTransformFeedbackVaryings)(GLuint program, GLsizei count, const GLchar * const * varyings, GLenum bufferMode);
 typedef GLvoid (GLAPI * PROC_glGetTransformFeedbackVarying)(GLuint program, GLuint index, GLsizei bufSize, GLsizei * length, GLsizei * size, GLenum * type, GLchar * name);
 typedef GLvoid (GLAPI * PROC_glClampColor)(GLenum target, GLenum clamp);
 typedef GLvoid (GLAPI * PROC_glBeginConditionalRender)(GLuint id, GLenum mode);
@@ -328,7 +328,7 @@ typedef GLvoid (GLAPI * PROC_glDrawElementsInstanced)(GLenum mode, GLsizei count
 typedef GLvoid (GLAPI * PROC_glTexBuffer)(GLenum target, GLenum internalformat, GLuint buffer);
 typedef GLvoid (GLAPI * PROC_glPrimitiveRestartIndex)(GLuint index);
 typedef GLvoid (GLAPI * PROC_glCopyBufferSubData)(GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size);
-typedef GLvoid (GLAPI * PROC_glGetUniformIndices)(GLuint program, GLsizei uniformCount, const GLchar * const* uniformNames, GLuint * uniformIndices);
+typedef GLvoid (GLAPI * PROC_glGetUniformIndices)(GLuint program, GLsizei uniformCount, const GLchar * const * uniformNames, GLuint * uniformIndices);
 typedef GLvoid (GLAPI * PROC_glGetActiveUniformsiv)(GLuint program, GLsizei uniformCount, const GLuint * uniformIndices, GLenum pname, GLint * params);
 typedef GLvoid (GLAPI * PROC_glGetActiveUniformName)(GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei * length, GLchar * uniformName);
 typedef GLuint (GLAPI * PROC_glGetUniformBlockIndex)(GLuint program, const GLchar * uniformBlockName);
@@ -338,7 +338,7 @@ typedef GLvoid (GLAPI * PROC_glUniformBlockBinding)(GLuint program, GLuint unifo
 typedef GLvoid (GLAPI * PROC_glDrawElementsBaseVertex)(GLenum mode, GLsizei count, GLenum type, const GLvoid * indices, GLint basevertex);
 typedef GLvoid (GLAPI * PROC_glDrawRangeElementsBaseVertex)(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid * indices, GLint basevertex);
 typedef GLvoid (GLAPI * PROC_glDrawElementsInstancedBaseVertex)(GLenum mode, GLsizei count, GLenum type, const GLvoid * indices, GLsizei instancecount, GLint basevertex);
-typedef GLvoid (GLAPI * PROC_glMultiDrawElementsBaseVertex)(GLenum mode, const GLsizei * count, GLenum type, const GLvoid * const* indices, GLsizei drawcount, const GLint * basevertex);
+typedef GLvoid (GLAPI * PROC_glMultiDrawElementsBaseVertex)(GLenum mode, const GLsizei * count, GLenum type, const GLvoid * const * indices, GLsizei drawcount, const GLint * basevertex);
 typedef GLvoid (GLAPI * PROC_glProvokingVertex)(GLenum mode);
 typedef GLsync (GLAPI * PROC_glFenceSync)(GLenum condition, GLbitfield flags);
 typedef GLboolean (GLAPI * PROC_glIsSync)(GLsync sync);
@@ -438,7 +438,7 @@ typedef GLvoid (GLAPI * PROC_glProgramBinary)(GLuint program, GLenum binaryForma
 typedef GLvoid (GLAPI * PROC_glProgramParameteri)(GLuint program, GLenum pname, GLint value);
 typedef GLvoid (GLAPI * PROC_glUseProgramStages)(GLuint pipeline, GLbitfield stages, GLuint program);
 typedef GLvoid (GLAPI * PROC_glActiveShaderProgram)(GLuint pipeline, GLuint program);
-typedef GLuint (GLAPI * PROC_glCreateShaderProgramv)(GLenum type, GLsizei count, const GLchar * const* strings);
+typedef GLuint (GLAPI * PROC_glCreateShaderProgramv)(GLenum type, GLsizei count, const GLchar * const * strings);
 typedef GLvoid (GLAPI * PROC_glBindProgramPipeline)(GLuint pipeline);
 typedef GLvoid (GLAPI * PROC_glDeleteProgramPipelines)(GLsizei n, const GLuint * pipelines);
 typedef GLvoid (GLAPI * PROC_glGenProgramPipelines)(GLsizei n, GLuint * pipelines);

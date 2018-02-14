@@ -531,10 +531,10 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
 	// if (self->framebuffer_obj) {
-		gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
+	gl.ReadBuffer(GL_COLOR_ATTACHMENT0 + attachment);
 	// } else {
-		// gl.ReadBuffer(GL_BACK_LEFT);
-		// gl.ReadBuffer(self->draw_buffers[0]);
+	// gl.ReadBuffer(GL_BACK_LEFT);
+	// gl.ReadBuffer(self->draw_buffers[0]);
 	// }
 	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
