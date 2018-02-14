@@ -23,7 +23,7 @@ class TestCase(unittest.TestCase):
         for method, docsig in methods:
             classname, methodname = method.split('.')
             sig = str(inspect.signature(getattr(getattr(moderngl, classname), methodname)))
-            sig = sig.replace('self, ', '').replace('moderngl.', '').replace(' -> None', '')
+            sig = sig.replace('self, ', '').replace('moderngl.', '').replace('typing.', '').replace(' -> None', '')
             sig = sig.replace('(self)', '()').replace(', *,', ',').replace('(*, ', '(')
             sig = re.sub(r'-> \'(\w+)\'', r'-> \1', sig)
             self.assertEqual(docsig, sig, msg=filename + '::' + method)
