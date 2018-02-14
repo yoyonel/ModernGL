@@ -194,6 +194,7 @@ struct MGLRenderbuffer {
 	PyObject_HEAD
 
 	MGLContext * context;
+	MGLDataType * data_type;
 
 	union {
 		int renderbuffer_obj;
@@ -205,8 +206,6 @@ struct MGLRenderbuffer {
 	int components;
 
 	int samples;
-
-	MGLDataType data_type;
 	bool depth;
 };
 
@@ -231,6 +230,7 @@ struct MGLTexture {
 	PyObject_HEAD
 
 	MGLContext * context;
+	MGLDataType * data_type;
 
 	union {
 		int renderbuffer_obj;
@@ -248,7 +248,6 @@ struct MGLTexture {
 
 	int compare_func;
 
-	MGLDataType data_type;
 	bool depth;
 
 	bool repeat_x;
@@ -259,6 +258,7 @@ struct MGLTexture3D {
 	PyObject_HEAD
 
 	MGLContext * context;
+	MGLDataType * data_type;
 
 	int texture_obj;
 
@@ -273,8 +273,6 @@ struct MGLTexture3D {
 	int min_filter;
 	int mag_filter;
 
-	MGLDataType data_type;
-
 	bool repeat_x;
 	bool repeat_y;
 	bool repeat_z;
@@ -284,6 +282,7 @@ struct MGLTextureCube {
 	PyObject_HEAD
 
 	MGLContext * context;
+	MGLDataType * data_type;
 
 	int texture_obj;
 
@@ -295,8 +294,6 @@ struct MGLTextureCube {
 
 	int min_filter;
 	int mag_filter;
-
-	MGLDataType data_type;
 };
 
 struct MGLUniform {
@@ -346,7 +343,7 @@ struct MGLVertexArray {
 	int num_vertices;
 };
 
-MGLDataType from_dtype(const char * dtype);
+MGLDataType * from_dtype(const char * dtype);
 
 void MGLAttribute_Invalidate(MGLAttribute * attribute);
 void MGLBuffer_Invalidate(MGLBuffer * buffer);

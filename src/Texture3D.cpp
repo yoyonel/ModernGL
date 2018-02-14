@@ -48,14 +48,14 @@ PyObject * MGLContext_texture3d(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	MGLDataType data_type = from_dtype(dtype);
+	MGLDataType * data_type = from_dtype(dtype);
 
-	if (!data_type.internal_format) {
+	if (!data_type) {
 		MGLError_Set("invalid dtype");
 		return 0;
 	}
 
-	int expected_size = width * components * data_type.size;
+	int expected_size = width * components * data_type->size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height * depth;
 
@@ -82,9 +82,9 @@ PyObject * MGLContext_texture3d(MGLContext * self, PyObject * args) {
 
 	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
-	int pixel_type = data_type.gl_type;
+	int pixel_type = data_type->gl_type;
 	int base_format = base_formats[components];
-	int internal_format = data_type.internal_format[components];
+	int internal_format = data_type->internal_format[components];
 
 	const GLMethods & gl = self->gl;
 
@@ -172,7 +172,7 @@ PyObject * MGLTexture3D_read(MGLTexture3D * self, PyObject * args) {
 		return 0;
 	}
 
-	int expected_size = self->width * self->components * self->data_type.size;
+	int expected_size = self->width * self->components * self->data_type->size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * self->height * self->depth;
 
@@ -181,7 +181,7 @@ PyObject * MGLTexture3D_read(MGLTexture3D * self, PyObject * args) {
 
 	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
-	int pixel_type = self->data_type.gl_type;
+	int pixel_type = self->data_type->gl_type;
 	int base_format = base_formats[self->components];
 
 	const GLMethods & gl = self->context->gl;
@@ -223,13 +223,13 @@ PyObject * MGLTexture3D_read_into(MGLTexture3D * self, PyObject * args) {
 		return 0;
 	}
 
-	int expected_size = self->width * self->components * self->data_type.size;
+	int expected_size = self->width * self->components * self->data_type->size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * self->height * self->depth;
 
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
-	int pixel_type = self->data_type.gl_type;
+	int pixel_type = self->data_type->gl_type;
 	int format = formats[self->components];
 
 	if (Py_TYPE(data) == &MGLBuffer_Type) {
@@ -349,13 +349,13 @@ PyObject * MGLTexture3D_write(MGLTexture3D * self, PyObject * args) {
 
 	}
 
-	int expected_size = width * self->components * self->data_type.size;
+	int expected_size = width * self->components * self->data_type->size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height * depth;
 
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
-	int pixel_type = self->data_type.gl_type;
+	int pixel_type = self->data_type->gl_type;
 	int format = formats[self->components];
 
 	if (Py_TYPE(data) == &MGLBuffer_Type) {

@@ -20,43 +20,40 @@ static MGLDataType i1 = {i1_internal_format, GL_BYTE, 1};
 static MGLDataType i2 = {i2_internal_format, GL_SHORT, 2};
 static MGLDataType i4 = {i4_internal_format, GL_INT, 4};
 
-// static int invalid_internal_format[5] = {0, 0, 0, 0, 0};
-static MGLDataType invalid_data_type = {0, 0, 0};
-
-MGLDataType from_dtype(const char * dtype) {
+MGLDataType * from_dtype(const char * dtype) {
 	if (!dtype[0] || (dtype[1] && dtype[2])) {
-		return invalid_data_type;
+		return 0;
 	}
 
 	switch (dtype[0] * 256 + dtype[1]) {
-		case 'f' * 256 + '1':
-			return f1;
+		case ('f' * 256 + '1'):
+			return &f1;
 
-		case 'f' * 256 + '2':
-			return f2;
+		case ('f' * 256 + '2'):
+			return &f2;
 
-		case 'f' * 256 + '4':
-			return f4;
+		case ('f' * 256 + '4'):
+			return &f4;
 
-		case 'u' * 256 + '1':
-			return u1;
+		case ('u' * 256 + '1'):
+			return &u1;
 
-		case 'u' * 256 + '2':
-			return u2;
+		case ('u' * 256 + '2'):
+			return &u2;
 
-		case 'u' * 256 + '4':
-			return u4;
+		case ('u' * 256 + '4'):
+			return &u4;
 
-		case 'i' * 256 + '1':
-			return i1;
+		case ('i' * 256 + '1'):
+			return &i1;
 
-		case 'i' * 256 + '2':
-			return i2;
+		case ('i' * 256 + '2'):
+			return &i2;
 
-		case 'i' * 256 + '4':
-			return i4;
+		case ('i' * 256 + '4'):
+			return &i4;
 
 		default:
-			return invalid_data_type;
+			return 0;
 	}
 }

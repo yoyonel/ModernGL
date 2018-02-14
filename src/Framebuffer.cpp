@@ -476,9 +476,9 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 		return 0;
 	}
 
-	MGLDataType data_type = from_dtype(dtype);
+	MGLDataType * data_type = from_dtype(dtype);
 
-	if (!data_type.internal_format) {
+	if (!data_type) {
 		MGLError_Set("invalid dtype");
 		return 0;
 	}
@@ -520,11 +520,11 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 
 	}
 
-	int expected_size = width * components * data_type.size;
+	int expected_size = width * components * data_type->size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 
-	int pixel_type = data_type.gl_type;
+	int pixel_type = data_type->gl_type;
 
 	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 	int base_format = base_formats[components];
@@ -586,9 +586,9 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 		return 0;
 	}
 
-	MGLDataType data_type = from_dtype(dtype);
+	MGLDataType * data_type = from_dtype(dtype);
 
-	if (!data_type.internal_format) {
+	if (!data_type) {
 		MGLError_Set("invalid dtype");
 		return 0;
 	}
@@ -630,11 +630,11 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 
 	}
 
-	int expected_size = width * components * data_type.size;
+	int expected_size = width * components * data_type->size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 
-	int pixel_type = data_type.gl_type;
+	int pixel_type = data_type->gl_type;
 
 	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 	int base_format = base_formats[components];
