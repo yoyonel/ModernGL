@@ -43,6 +43,11 @@ PyObject * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 
 	MGLDataType data_type = from_dtype(dtype);
 
+	if (!data_type.internal_format) {
+		MGLError_Set("invalid dtype");
+		return 0;
+	}
+
 	int format = data_type.internal_format[components];
 
 	const GLMethods & gl = self->gl;

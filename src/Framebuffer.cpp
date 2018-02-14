@@ -478,6 +478,11 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 
 	MGLDataType data_type = from_dtype(dtype);
 
+	if (!data_type.internal_format) {
+		MGLError_Set("invalid dtype");
+		return 0;
+	}
+
 	int x = 0;
 	int y = 0;
 	int width = self->width;
@@ -582,6 +587,11 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 	}
 
 	MGLDataType data_type = from_dtype(dtype);
+
+	if (!data_type.internal_format) {
+		MGLError_Set("invalid dtype");
+		return 0;
+	}
 
 	int x = 0;
 	int y = 0;

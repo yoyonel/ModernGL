@@ -50,6 +50,11 @@ PyObject * MGLContext_texture3d(MGLContext * self, PyObject * args) {
 
 	MGLDataType data_type = from_dtype(dtype);
 
+	if (!data_type.internal_format) {
+		MGLError_Set("invalid dtype");
+		return 0;
+	}
+
 	int expected_size = width * components * data_type.size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height * depth;
