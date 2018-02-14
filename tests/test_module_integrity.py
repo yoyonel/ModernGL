@@ -21,7 +21,7 @@ class TestCase(unittest.TestCase):
         init = readfile(os.path.join(repo, 'moderngl', '__init__.py'))
         docs = readfile(os.path.join(repo, 'docs', 'conf.py'))
 
-        match0 = re.search(r'\'version\': \'(\d+\.\d+\.\d+)\'', setup, flags=re.M)
+        match0 = re.search(r'version=\'(\d+\.\d+\.\d+)\'', setup, flags=re.M)
 
         match1 = re.search(r'__version__ = \'(\d+\.\d+\.\d+)\'', init, flags=re.M)
         match2 = re.search(r'version = \'(\d+\.\d+\.\d+)\'', docs, flags=re.M)
