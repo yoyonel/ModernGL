@@ -28,7 +28,7 @@ MGLDataType from_dtype(const char * dtype) {
 		return invalid_data_type;
 	}
 
-	switch (dtype[0] * 255 + dtype[1]) {
+	switch (dtype[0] * 256 + dtype[1]) {
 		case 'f' * 256 + '1':
 			return f1;
 
