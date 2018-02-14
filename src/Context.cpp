@@ -640,25 +640,18 @@ int MGLContext_set_wireframe(MGLContext * self, PyObject * value) {
 }
 
 PyObject * MGLContext_get_front_face(MGLContext * self) {
-	if (self->front_face == GL_CW) {
-		return PyUnicode_FromString("CW");
-	}
-	return PyUnicode_FromString("CCW");
+	return PyLong_FromLong(self->front_face);
 }
 
 int MGLContext_set_front_face(MGLContext * self, PyObject * value) {
-	const char * str = PyUnicode_AsUTF8(value);
-
-	if (!strcmp(str, "CW")) {
-		self->front_face = GL_CW;
-	} else if (!strcmp(str, "CCW")) {
-		self->front_face = GL_CCW;
-	} else {
-		MGLError_Set("invalid value for front_face");
+	int front_face = PyLong_AsLong(value);
+	if (front_face != GL_CW || front_face != GL_CCW) {
+		MGLError_Set("invalid front_face");
 		return -1;
 	}
 
-	self->gl.FrontFace(self->front_face);
+	self->front_face = front_face;
+	self->gl.FrontFace(front_face);
 	return 0;
 }
 

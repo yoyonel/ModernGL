@@ -51,6 +51,8 @@ __all__ = [
     'LINEAR_MIPMAP_NEAREST',
     'NEAREST_MIPMAP_LINEAR',
     'LINEAR_MIPMAP_LINEAR',
+    'CW',
+    'CCW',
     'Error',
     'Buffer',
     'Attribute',
@@ -94,6 +96,10 @@ BLEND = 1
 DEPTH_TEST = 2
 CULL_FACE = 4
 RASTERIZER_DISCARD = 8
+
+
+CW = 0x0900
+CCW = 0x0901
 
 
 ZERO = 0x0000
@@ -2258,16 +2264,16 @@ class Context:
         self.mglo.wireframe = value
 
     @property
-    def front_face(self) -> str:
+    def front_face(self) -> int:
         '''
-            str: The front_face.
+            int: The front_face.
         '''
 
         return self.mglo.front_face
 
     @front_face.setter
     def front_face(self, value):
-        self.mglo.front_face = str(value)
+        self.mglo.front_face = value
 
     @property
     def error(self) -> str:
