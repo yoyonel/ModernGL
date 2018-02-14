@@ -227,8 +227,6 @@ PyObject * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 
 	gl.BindTexture(texture_target, texture->texture_obj);
 
-	// TODO: check depth texture parametering they cause GL_INVALID_ENUM
-
 	// gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	// gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	// gl.TexParameteri(texture_target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -242,8 +240,8 @@ PyObject * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 		gl.TexImage2D(texture_target, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, pixel_type, buffer_view.buf);
 	}
 
-	gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);  // TODO: test this
-	gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);  // TODO: test this
+	gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+	gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 
 	if (data != Py_None) {
 		PyBuffer_Release(&buffer_view);
@@ -614,7 +612,8 @@ PyObject * MGLTexture_build_mipmaps(MGLTexture * self, PyObject * args) {
 	gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	// TODO: filter attrib
+	self->min_filter = GL_LINEAR_MIPMAP_LINEAR;
+	self->mag_filter = GL_LINEAR;
 
 	Py_RETURN_NONE;
 }
@@ -695,7 +694,7 @@ PyObject * MGLTexture_get_filter(MGLTexture * self) {
 
 int MGLTexture_set_filter(MGLTexture * self, PyObject * value) {
 	if (PyTuple_GET_SIZE(value) != 2) {
-		// TODO: error
+		MGLError_Set("invalid filter");
 		return -1;
 	}
 

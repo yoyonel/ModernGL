@@ -24,33 +24,39 @@ static MGLDataType i4 = {i4_internal_format, GL_INT, 4};
 static MGLDataType invalid_data_type = {0, 0, 0};
 
 MGLDataType from_dtype(const char * dtype) {
-	// TODO: add switch case with unsigned shorts
-	if (!strcmp(dtype, "f1")) {
-		return f1;
+	if (!dtype[0] || (dtype[1] && dtype[2])) {
+		return invalid_data_type;
 	}
-	if (!strcmp(dtype, "f2")) {
-		return f2;
+
+	switch (dtype[0] * 255 + dtype[1]) {
+		case 'f' * 256 + '1':
+			return f1;
+
+		case 'f' * 256 + '2':
+			return f2;
+
+		case 'f' * 256 + '4':
+			return f4;
+
+		case 'u' * 256 + '1':
+			return u1;
+
+		case 'u' * 256 + '2':
+			return u2;
+
+		case 'u' * 256 + '4':
+			return u4;
+
+		case 'i' * 256 + '1':
+			return i1;
+
+		case 'i' * 256 + '2':
+			return i2;
+
+		case 'i' * 256 + '4':
+			return i4;
+
+		default:
+			return invalid_data_type;
 	}
-	if (!strcmp(dtype, "f4")) {
-		return f4;
-	}
-	if (!strcmp(dtype, "u1")) {
-		return u1;
-	}
-	if (!strcmp(dtype, "u2")) {
-		return u2;
-	}
-	if (!strcmp(dtype, "u4")) {
-		return u4;
-	}
-	if (!strcmp(dtype, "i1")) {
-		return i1;
-	}
-	if (!strcmp(dtype, "i2")) {
-		return i2;
-	}
-	if (!strcmp(dtype, "i4")) {
-		return i4;
-	}
-	return invalid_data_type;
 }

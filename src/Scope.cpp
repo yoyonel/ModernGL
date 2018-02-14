@@ -75,7 +75,7 @@ PyObject * MGLContext_scope(MGLContext * self, PyObject * args) {
 			texture_type = GL_TEXTURE_CUBE_MAP;
 			texture_obj = texture->texture_obj;
 		} else {
-			// TODO: fail
+			MGLError_Set("invalid texture");
 			return 0;
 		}
 
@@ -95,7 +95,8 @@ PyObject * MGLContext_scope(MGLContext * self, PyObject * args) {
 			scope->buffers[i * 3 + 1] = buffer->buffer_obj;
 			scope->buffers[i * 3 + 2] = binding;
 		} else {
-			// TODO: fail
+			MGLError_Set("invalid buffer");
+			return 0;
 		}
 	}
 
@@ -111,7 +112,8 @@ PyObject * MGLContext_scope(MGLContext * self, PyObject * args) {
 			scope->buffers[base + i * 3 + 1] = buffer->buffer_obj;
 			scope->buffers[base + i * 3 + 2] = binding;
 		} else {
-			// TODO: fail
+			MGLError_Set("invalid buffer");
+			return 0;
 		}
 	}
 

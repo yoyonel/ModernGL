@@ -274,9 +274,6 @@ PyObject * MGLTexture3D_read_into(MGLTexture3D * self, PyObject * args) {
 }
 
 PyObject * MGLTexture3D_write(MGLTexture3D * self, PyObject * args) {
-
-	// TODO: test this method
-
 	PyObject * data;
 	PyObject * viewport;
 	int alignment;
@@ -403,9 +400,6 @@ PyObject * MGLTexture3D_write(MGLTexture3D * self, PyObject * args) {
 }
 
 PyObject * MGLTexture3D_use(MGLTexture3D * self, PyObject * args) {
-
-	// TODO: test this method
-
 	int index;
 
 	int args_ok = PyArg_ParseTuple(
@@ -426,9 +420,6 @@ PyObject * MGLTexture3D_use(MGLTexture3D * self, PyObject * args) {
 }
 
 PyObject * MGLTexture3D_build_mipmaps(MGLTexture3D * self, PyObject * args) {
-
-	// TODO: test this method
-
 	int base = 0;
 	int max = 1000;
 
@@ -457,7 +448,8 @@ PyObject * MGLTexture3D_build_mipmaps(MGLTexture3D * self, PyObject * args) {
 	gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	gl.TexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	// TODO: filter attrib
+	self->min_filter = GL_LINEAR_MIPMAP_LINEAR;
+	self->mag_filter = GL_LINEAR;
 
 	Py_RETURN_NONE;
 }
@@ -561,7 +553,7 @@ PyObject * MGLTexture3D_get_filter(MGLTexture3D * self) {
 
 int MGLTexture3D_set_filter(MGLTexture3D * self, PyObject * value) {
 	if (PyTuple_GET_SIZE(value) != 2) {
-		// TODO: error
+		MGLError_Set("invalid filter");
 		return -1;
 	}
 

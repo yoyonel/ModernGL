@@ -136,3 +136,18 @@ inline PyObject * compare_func_to_string(int func) {
 			return unk;
 	}
 }
+
+inline PyObject * tuple2(PyObject * a, PyObject * b) {
+	PyObject * res = PyTuple_New(2);
+	PyTuple_SET_ITEM(res, 0, a);
+	PyTuple_SET_ITEM(res, 1, b);
+	return res;
+}
+
+inline PyObject * tuple3(PyObject * a, PyObject * b, PyObject * c) {
+	PyObject * res = PyTuple_New(3);
+	PyTuple_SET_ITEM(res, 0, a);
+	PyTuple_SET_ITEM(res, 1, b);
+	PyTuple_SET_ITEM(res, 2, c);
+	return res;
+}

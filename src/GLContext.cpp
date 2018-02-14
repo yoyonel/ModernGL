@@ -509,12 +509,6 @@ void DestroyGLContext(const GLContext & context) {
 
 #elif defined(__APPLE__)
 
-#include <OpenGL/OpenGL.h>
-#include <ApplicationServices/ApplicationServices.h>
-
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
-
 GLContext LoadCurrentGLContext() {
 	GLContext context = {};
 	context.standalone = false;
@@ -682,16 +676,6 @@ void DestroyGLContext(const GLContext & context) {
 }
 
 #else
-
-#include <GL/glx.h> // TODO: this should be optional
-#include <GL/gl.h>
-
-#define GLX_CONTEXT_MAJOR_VERSION 0x2091
-#define GLX_CONTEXT_MINOR_VERSION 0x2092
-#define GLX_CONTEXT_PROFILE_MASK 0x9126
-#define GLX_CONTEXT_CORE_PROFILE_BIT 0x0001
-
-typedef GLXContext (* GLXCREATECONTEXTATTRIBSARBPROC)(Display * display, GLXFBConfig config, GLXContext context, Bool direct, const int * attribs);
 
 GLContext LoadCurrentGLContext() {
 	GLContext context = {};

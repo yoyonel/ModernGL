@@ -352,10 +352,6 @@ PyObject * MGLContext_detect_framebuffer(MGLContext * self, PyObject * args) {
 			gl.GetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
 			break;
 		}
-		default: {
-			// TODO:
-			break;
-		}
 	}
 
 	MGLFramebuffer * framebuffer = (MGLFramebuffer *)MGLFramebuffer_Type.tp_alloc(&MGLFramebuffer_Type, 0);
@@ -701,9 +697,8 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(
 			info,
 			"GL_POINT_SIZE_RANGE",
-			PyTuple_Pack(
-				2,
-				PyFloat_FromDouble(gl_point_size_range[0]), // TODO: PyTuple_Pack and decref
+			tuple2(
+				PyFloat_FromDouble(gl_point_size_range[0]),
 				PyFloat_FromDouble(gl_point_size_range[1])
 			)
 		);
@@ -714,8 +709,7 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(
 			info,
 			"GL_SMOOTH_LINE_WIDTH_RANGE",
-			PyTuple_Pack(
-				2,
+			tuple2(
 				PyFloat_FromDouble(gl_smooth_line_width_range[0]),
 				PyFloat_FromDouble(gl_smooth_line_width_range[1])
 			)
@@ -727,8 +721,7 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(
 			info,
 			"GL_ALIASED_LINE_WIDTH_RANGE",
-			PyTuple_Pack(
-				2,
+			tuple2(
 				PyFloat_FromDouble(gl_aliased_line_width_range[0]),
 				PyFloat_FromDouble(gl_aliased_line_width_range[1])
 			)
@@ -793,8 +786,7 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(
 			info,
 			"GL_MAX_VIEWPORT_DIMS",
-			PyTuple_Pack(
-				2,
+			tuple2(
 				PyLong_FromLong(gl_max_viewport_dims[0]),
 				PyLong_FromLong(gl_max_viewport_dims[1])
 			)
@@ -890,9 +882,11 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		int gl_max_sample_mask_words = 0;
 		gl.GetIntegerv(GL_MAX_SAMPLE_MASK_WORDS, &gl_max_sample_mask_words);
 
-		// TODO: 64-bit integer
-		int gl_max_server_wait_timeout = 0;
-		gl.GetIntegerv(GL_MAX_SERVER_WAIT_TIMEOUT, &gl_max_server_wait_timeout);
+		long long gl_max_server_wait_timeout = 0;
+
+		if (gl.GetInteger64v) {
+			gl.GetInteger64v(GL_MAX_SERVER_WAIT_TIMEOUT, &gl_max_server_wait_timeout);
+		}
 
 		int gl_max_texture_buffer_size = 0;
 		gl.GetIntegerv(GL_MAX_TEXTURE_BUFFER_SIZE, &gl_max_texture_buffer_size);
@@ -975,7 +969,7 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(info, "GL_MAX_RECTANGLE_TEXTURE_SIZE", PyLong_FromLong(gl_max_rectangle_texture_size));
 		PyDict_SetItemString(info, "GL_MAX_RENDERBUFFER_SIZE", PyLong_FromLong(gl_max_renderbuffer_size));
 		PyDict_SetItemString(info, "GL_MAX_SAMPLE_MASK_WORDS", PyLong_FromLong(gl_max_sample_mask_words));
-		PyDict_SetItemString(info, "GL_MAX_SERVER_WAIT_TIMEOUT", PyLong_FromLong(gl_max_server_wait_timeout));
+		PyDict_SetItemString(info, "GL_MAX_SERVER_WAIT_TIMEOUT", PyLong_FromLongLong(gl_max_server_wait_timeout));
 		PyDict_SetItemString(info, "GL_MAX_TEXTURE_BUFFER_SIZE", PyLong_FromLong(gl_max_texture_buffer_size));
 		PyDict_SetItemString(info, "GL_MAX_TEXTURE_IMAGE_UNITS", PyLong_FromLong(gl_max_texture_image_units));
 		PyDict_SetItemString(info, "GL_MAX_TEXTURE_LOD_BIAS", PyLong_FromLong(gl_max_texture_lod_bias));
@@ -1002,8 +996,7 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(
 			info,
 			"GL_VIEWPORT_BOUNDS_RANGE",
-			PyTuple_Pack(
-				2,
+			tuple2(
 				PyLong_FromLong(gl_viewport_bounds_range[0]),
 				PyLong_FromLong(gl_viewport_bounds_range[1])
 			)
@@ -1064,8 +1057,7 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(
 			info,
 			"GL_MAX_COMPUTE_WORK_GROUP_COUNT",
-			PyTuple_Pack(
-				3,
+			tuple3(
 				PyLong_FromLong(gl_max_compute_work_group_count[0]),
 				PyLong_FromLong(gl_max_compute_work_group_count[1]),
 				PyLong_FromLong(gl_max_compute_work_group_count[2])
@@ -1075,8 +1067,7 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(
 			info,
 			"GL_MAX_COMPUTE_WORK_GROUP_SIZE",
-			PyTuple_Pack(
-				3,
+			tuple3(
 				PyLong_FromLong(gl_max_compute_work_group_size[0]),
 				PyLong_FromLong(gl_max_compute_work_group_size[1]),
 				PyLong_FromLong(gl_max_compute_work_group_size[2])
@@ -1143,11 +1134,17 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		int gl_max_uniform_locations = 0;
 		gl.GetIntegerv(GL_MAX_UNIFORM_LOCATIONS, &gl_max_uniform_locations);
 
-		// TODO: 64-bit integer
-		int gl_max_element_index = 0;
-		gl.GetIntegerv(GL_MAX_ELEMENT_INDEX, &gl_max_element_index);
+		long long gl_max_element_index = 0;
 
-		// TODO: GL_MAX_SHADER_STORAGE_BLOCK_SIZE
+		if (gl.GetInteger64v) {
+			gl.GetInteger64v(GL_MAX_ELEMENT_INDEX, &gl_max_element_index);
+		}
+
+		long long gl_max_shader_storage_block_size = 0;
+
+		if (gl.GetInteger64v) {
+			gl.GetInteger64v(GL_MAX_SHADER_STORAGE_BLOCK_SIZE, &gl_max_shader_storage_block_size);
+		}
 
 		PyDict_SetItemString(info, "GL_MAX_SHADER_STORAGE_BUFFER_BINDINGS", PyLong_FromLong(gl_max_shader_storage_buffer_bindings));
 		PyDict_SetItemString(info, "GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS", PyLong_FromLong(gl_max_combined_shader_storage_blocks));
@@ -1169,7 +1166,8 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(info, "GL_MAX_FRAMEBUFFER_LAYERS", PyLong_FromLong(gl_max_framebuffer_layers));
 		PyDict_SetItemString(info, "GL_MAX_FRAMEBUFFER_SAMPLES", PyLong_FromLong(gl_max_framebuffer_samples));
 		PyDict_SetItemString(info, "GL_MAX_UNIFORM_LOCATIONS", PyLong_FromLong(gl_max_uniform_locations));
-		PyDict_SetItemString(info, "GL_MAX_ELEMENT_INDEX", PyLong_FromLong(gl_max_element_index));
+		PyDict_SetItemString(info, "GL_MAX_ELEMENT_INDEX", PyLong_FromLongLong(gl_max_element_index));
+		PyDict_SetItemString(info, "GL_MAX_SHADER_STORAGE_BLOCK_SIZE", PyLong_FromLongLong(gl_max_shader_storage_block_size));
 	}
 
 	return info;
@@ -1345,6 +1343,4 @@ void MGLContext_Initialize(MGLContext * self) {
 
 	self->wireframe = false;
 	self->multisample = true;
-
-	// TODO: multisample getter setter (bool)
 }

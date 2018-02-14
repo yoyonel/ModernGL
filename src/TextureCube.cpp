@@ -456,7 +456,7 @@ PyObject * MGLTextureCube_get_filter(MGLTextureCube * self) {
 
 int MGLTextureCube_set_filter(MGLTextureCube * self, PyObject * value) {
 	if (PyTuple_GET_SIZE(value) != 2) {
-		// TODO: error
+		MGLError_Set("invalid filter");
 		return -1;
 	}
 

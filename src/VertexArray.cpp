@@ -41,7 +41,6 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		PyObject * tuple = PyTuple_GET_ITEM(content, i);
 		PyObject * buffer = PyTuple_GET_ITEM(tuple, 0);
 		PyObject * format = PyTuple_GET_ITEM(tuple, 1);
-		// PyObject * attributes = PyTuple_GET_ITEM(tuple, 2);
 
 		if (Py_TYPE(buffer) != &MGLBuffer_Type) {
 			MGLError_Set("content[%d][0] must be a Buffer not %s", i, Py_TYPE(buffer)->tp_name);
@@ -84,10 +83,21 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		}
 
 		for (int j = 0; j < attributes_len; ++j) {
+			FormatNode * node = it.next();
+
+			while (!node->type) {
+				node = it.next();
+			}
+
 			MGLAttribute * attribute = (MGLAttribute *)PyTuple_GET_ITEM(tuple, j + 2);
 
 			if (Py_TYPE(attribute) != &MGLAttribute_Type) {
 				MGLError_Set("content[%d][%d] must be an attribute not %s", i, j + 2, Py_TYPE(attribute)->tp_name);
+				return 0;
+			}
+
+			if (node->count % attribute->rows_length) {
+				MGLError_Set("invalid format");
 				return 0;
 			}
 		}
@@ -115,7 +125,6 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	}
 
 	gl.BindVertexArray(array->vertex_array_obj);
-	gl.UseProgram(program->program_obj); // TODO: check why?
 
 	Py_INCREF(index_buffer);
 	array->index_buffer = index_buffer;
@@ -160,7 +169,7 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 			for (int r = 0; r < attribute->rows_length; ++r) {
 				int location = attribute->location + r;
-				int count = node->count / attribute->rows_length; // TODO: check modulo
+				int count = node->count / attribute->rows_length;
 
 				if (attribute->normalizable) {
 					((gl_attribute_normal_ptr_proc)attribute->gl_attrib_ptr_proc)(location, count, node->type, node->normalize, format_info.size, ptr);

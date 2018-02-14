@@ -326,7 +326,7 @@ PyObject * MGLBuffer_read_chunks(MGLBuffer * self, PyObject * args) {
 	}
 
 	if (start < 0 || chunk_size < 0 || chunk_size > abs_step || start + chunk_size > self->size || start + count * step - step < 0 || start + count * step - step + chunk_size > self->size) {
-		MGLError_Set("size error"); // TODO: error message
+		MGLError_Set("size error");
 		return 0;
 	}
 
