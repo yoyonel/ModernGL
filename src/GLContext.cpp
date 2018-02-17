@@ -36,9 +36,10 @@ my_CreateContextAttribs_type my_CreateContextAttribs;
 // Linux
 
 #include <dlfcn.h>
+#include <GL/glx.h>
 #include <GL/gl.h>
-#include <X11/Xlib.h>
-#include <X11/X.h>
+// #include <X11/Xlib.h>
+// #include <X11/X.h>
 
 #define Bool int
 
