@@ -1328,6 +1328,7 @@ void MGLContext_Initialize(MGLContext * self) {
 		framebuffer->width = scrissor_box[2];
 		framebuffer->height = scrissor_box[3];
 
+		Py_INCREF(framebuffer);
 		self->default_framebuffer = framebuffer;
 	}
 
