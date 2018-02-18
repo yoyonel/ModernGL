@@ -99,50 +99,59 @@ inline int compare_func_from_string(const char * str) {
 
 inline PyObject * compare_func_to_string(int func) {
 	switch (func) {
-		case GL_LEQUAL:
+		case GL_LEQUAL: {
 			static PyObject * res_lequal = PyUnicode_FromString("<=");
 			Py_INCREF(res_lequal);
 			return res_lequal;
+		}
 
-		case GL_LESS:
+		case GL_LESS: {
 			static PyObject * res_less = PyUnicode_FromString("<");
 			Py_INCREF(res_less);
 			return res_less;
+		}
 
-		case GL_GEQUAL:
+		case GL_GEQUAL: {
 			static PyObject * res_gequal = PyUnicode_FromString(">=");
 			Py_INCREF(res_gequal);
 			return res_gequal;
+		}
 
-		case GL_GREATER:
+		case GL_GREATER: {
 			static PyObject * res_greater = PyUnicode_FromString(">");
 			Py_INCREF(res_greater);
 			return res_greater;
+		}
 
-		case GL_EQUAL:
+		case GL_EQUAL: {
 			static PyObject * res_equal = PyUnicode_FromString("==");
 			Py_INCREF(res_equal);
 			return res_equal;
+		}
 
-		case GL_NOTEQUAL:
+		case GL_NOTEQUAL: {
 			static PyObject * res_notequal = PyUnicode_FromString("!=");
 			Py_INCREF(res_notequal);
 			return res_notequal;
+		}
 
-		case GL_NEVER:
+		case GL_NEVER: {
 			static PyObject * res_never = PyUnicode_FromString("0");
 			Py_INCREF(res_never);
 			return res_never;
+		}
 
-		case GL_ALWAYS:
+		case GL_ALWAYS: {
 			static PyObject * res_always = PyUnicode_FromString("1");
 			Py_INCREF(res_always);
 			return res_always;
+		}
 
-		default:
+		default: {
 			static PyObject * res_unk = PyUnicode_FromString("?");
 			Py_INCREF(res_unk);
 			return res_unk;
+		}
 	}
 }
 
