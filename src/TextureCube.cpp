@@ -13,7 +13,7 @@ PyObject * MGLContext_texture_cube(MGLContext * self, PyObject * args) {
 	int alignment;
 
 	const char * dtype;
-	int dtype_size;
+	Py_ssize_t dtype_size;
 
 	int args_ok = PyArg_ParseTuple(
 		args,

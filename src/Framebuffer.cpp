@@ -449,7 +449,7 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	int attachment;
 
 	const char * dtype;
-	int dtype_size;
+	Py_ssize_t dtype_size;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
@@ -556,7 +556,7 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 	int attachment;
 	int alignment;
 	const char * dtype;
-	int dtype_size;
+	Py_ssize_t dtype_size;
 	Py_ssize_t write_offset;
 
 	int args_ok = PyArg_ParseTuple(
