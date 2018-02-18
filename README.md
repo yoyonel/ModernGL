@@ -1,5 +1,23 @@
 # ModernGL
 
+```sh
+pip install ModernGL
+```
+
+- [Documentation](https://moderngl.readthedocs.io/)
+
+## Backward compatibility
+
+Install ModernGL 4.x
+
+```
+pip install ModernGL<5.0.0
+```
+
+Please write an [issue](https://github.com/cprogrammer1994/ModernGL/issues) if your build is still broken.
+
+---
+
 [![docs](https://readthedocs.org/projects/moderngl/badge/?version=stable)](https://moderngl.readthedocs.io/)
 [![build](https://img.shields.io/travis/cprogrammer1994/ModernGL/master.svg?label=build)](https://travis-ci.org/cprogrammer1994/ModernGL)
 [![build](https://img.shields.io/appveyor/ci/cprogrammer1994/ModernGL/master.svg?label=build)](https://ci.appveyor.com/project/cprogrammer1994/ModernGL)

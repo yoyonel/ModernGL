@@ -2,7 +2,7 @@ import os
 
 import moderngl
 import numpy as np
-from moderngl_ext_examples import run_example
+from moderngl_examples import run_example
 from PIL import Image
 
 

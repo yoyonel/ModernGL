@@ -1,5 +1,5 @@
 import moderngl
-from moderngl_ext_examples import run_example
+from moderngl_examples import run_example
 import numpy as np
 
 
@@ -65,7 +65,7 @@ class Example:
         self.vao2 = self.ctx.simple_vertex_array(self.transform, self.vbo2, 'in_pos', 'in_prev')
 
         self.render_vao = self.ctx.vertex_array(self.prog, [
-            (self.vbo1, '2f8x', 'in_vert'),
+            (self.vbo1, '2f 2x4', 'in_vert'),
         ])
 
         self.idx = 0

@@ -1,5 +1,5 @@
 import moderngl
-from moderngl_ext_examples import run_example
+from moderngl_examples import run_example
 import numpy as np
 
 """
@@ -100,7 +100,7 @@ class Example:
         vao_content = [
             (self.position_vertex_buffer, '2f', 'in_vert'),
             (self.color_buffer, '3f', 'in_color'),
-            (self.pos_scale_buffer, '2f1f/i', 'in_pos', 'in_scale'),
+            (self.pos_scale_buffer, '2f 1f/i', 'in_pos', 'in_scale'),
         ]
 
         self.vao = self.ctx.vertex_array(self.prog, vao_content, self.index_buffer)

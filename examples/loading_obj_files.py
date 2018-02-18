@@ -1,8 +1,8 @@
 import os
 
 import moderngl
-from moderngl_ext_examples import run_example
-from moderngl_ext_obj import Obj
+from moderngl_examples import run_example
+from moderngl_obj import Obj
 from PIL import Image
 from pyrr import Matrix44
 

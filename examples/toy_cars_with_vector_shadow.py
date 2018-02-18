@@ -5,8 +5,8 @@ from random import uniform
 
 import moderngl
 import numpy as np
-from moderngl_ext_obj import Obj
-from moderngl_ext_examples import run_example
+from moderngl_obj import Obj
+from moderngl_examples import run_example
 from pyrr import Matrix44
 
 
@@ -86,8 +86,8 @@ class Example:
             0.0, 0.0, 1.0,
         ) * len(cars))
         self.vao = self.ctx.vertex_array(self.prog, [
-            (self.vbo1, '3f3f', 'in_vert', 'in_norm'),
-            (self.vbo2, '3f3f9f/i', 'in_color', 'in_origin', 'in_basis'),
+            (self.vbo1, '3f 3f', 'in_vert', 'in_norm'),
+            (self.vbo2, '3f 3f 9f/i', 'in_color', 'in_origin', 'in_basis'),
         ])
 
     def render(self):

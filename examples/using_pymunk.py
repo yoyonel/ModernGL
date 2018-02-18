@@ -4,7 +4,7 @@ import struct
 import moderngl
 import numpy as np
 import pymunk
-from moderngl_ext_examples import run_example
+from moderngl_examples import run_example
 from PIL import Image
 from pymunk import Vec2d
 

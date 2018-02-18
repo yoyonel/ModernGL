@@ -2,8 +2,8 @@ import os
 
 import moderngl
 import numpy as np
-from moderngl_ext_obj import Obj
-from moderngl_ext_examples import run_example
+from moderngl_obj import Obj
+from moderngl_examples import run_example
 from PIL import Image
 from pyrr import Matrix44
 
@@ -77,7 +77,7 @@ class InstancedCrates:
         self.vbo1 = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
         self.vbo2 = self.ctx.buffer(reserve=12 * 1024)
         self.vao = self.ctx.vertex_array(self.prog, [
-            (self.vbo1, '3f3f2f', 'in_vert', 'in_norm', 'in_text'),
+            (self.vbo1, '3f 3f 2f', 'in_vert', 'in_norm', 'in_text'),
             (self.vbo2, '3f/i', 'in_move'),
         ])
 

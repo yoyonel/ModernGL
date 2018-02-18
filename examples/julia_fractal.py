@@ -1,5 +1,5 @@
 import moderngl
-from moderngl_ext_examples import run_example
+from moderngl_examples import run_example
 import numpy as np
 
 
