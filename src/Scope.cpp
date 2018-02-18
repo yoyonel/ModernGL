@@ -46,9 +46,9 @@ PyObject * MGLContext_scope(MGLContext * self, PyObject * args) {
 	Py_INCREF(self->bound_framebuffer);
 	scope->old_framebuffer = self->bound_framebuffer;
 
-	int num_textures = PyTuple_Size(textures);
-	int num_uniform_buffers = PyTuple_Size(uniform_buffers);
-	int num_shader_storage_buffers = PyTuple_Size(shader_storage_buffers);
+	int num_textures = (int)PyTuple_Size(textures);
+	int num_uniform_buffers = (int)PyTuple_Size(uniform_buffers);
+	int num_shader_storage_buffers = (int)PyTuple_Size(shader_storage_buffers);
 
 	scope->num_textures = num_textures;
 	scope->textures = new int[scope->num_textures * 3];
