@@ -2768,8 +2768,8 @@ class Context:
         res._size = size
         res._components = components
         res._samples = samples
-        res._depth = False
         res._dtype = dtype
+        res._depth = False
         res.ctx = self
         return res
 
@@ -2793,8 +2793,8 @@ class Context:
         res._size = size
         res._components = 1
         res._samples = samples
+        res._dtype = 'f4'
         res._depth = True
-        res._dtype = True
         res.ctx = self
         return res
 
