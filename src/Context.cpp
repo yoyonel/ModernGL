@@ -615,11 +615,13 @@ int MGLContext_set_wireframe(MGLContext * self, PyObject * value) {
 
 PyObject * MGLContext_get_front_face(MGLContext * self) {
 	if (self->front_face == GL_CW) {
-		static PyObject * cw = PyUnicode_FromString("cw");
-		return cw;
+		static PyObject * res_cw = PyUnicode_FromString("cw");
+		Py_INCREF(res_cw);
+		return res_cw;
 	}
-	static PyObject * ccw = PyUnicode_FromString("cw");
-	return ccw;
+	static PyObject * res_ccw = PyUnicode_FromString("ccw");
+	Py_INCREF(res_ccw);
+	return res_ccw;
 }
 
 int MGLContext_set_front_face(MGLContext * self, PyObject * value) {
