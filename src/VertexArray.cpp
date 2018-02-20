@@ -245,6 +245,8 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 	gl.UseProgram(self->program->program_obj);
 	gl.BindVertexArray(self->vertex_array_obj);
 
+	// TODO: subroutines
+
 	if (self->index_buffer != (MGLBuffer *)Py_None) {
 		const void * ptr = (const void *)((GLintptr)first * 4);
 		gl.DrawElementsInstanced(mode, vertices, GL_UNSIGNED_INT, ptr, instances);
@@ -279,6 +281,8 @@ PyObject * MGLVertexArray_render_indirect(MGLVertexArray * self, PyObject * args
 
 	gl.UseProgram(self->program->program_obj);
 	gl.BindVertexArray(self->vertex_array_obj);
+
+	// TODO: subroutines
 
 	const void * ptr = (const void *)((GLintptr)first * 20);
 
