@@ -970,20 +970,21 @@ class Texture:
 
         return self._glo
 
-    def read(self, *, alignment=1) -> bytes:
+    def read(self, *, level=0, alignment=1) -> bytes:
         '''
             Read the content of the texture into a buffer.
 
             Keyword Args:
+                level (int): The mipmap level.
                 alignment (int): The byte alignment of the pixels.
 
             Returns:
                 bytes
         '''
 
-        return self.mglo.read(alignment)
+        return self.mglo.read(level, alignment)
 
-    def read_into(self, buffer, *, alignment=1, write_offset=0) -> None:
+    def read_into(self, buffer, *, level=0, alignment=1, write_offset=0) -> None:
         '''
             Read the content of the texture into a buffer.
 
@@ -991,6 +992,7 @@ class Texture:
                 buffer (bytearray): The buffer that will receive the pixels.
 
             Keyword Args:
+                level (int): The mipmap level.
                 alignment (int): The byte alignment of the pixels.
                 write_offset (int): The write offset.
         '''
@@ -998,7 +1000,7 @@ class Texture:
         if type(buffer) is Buffer:
             buffer = buffer.mglo
 
-        return self.mglo.read_into(buffer, alignment, write_offset)
+        return self.mglo.read_into(buffer, level, alignment, write_offset)
 
     def write(self, data, viewport=None, *, level=0, alignment=1) -> None:
         '''

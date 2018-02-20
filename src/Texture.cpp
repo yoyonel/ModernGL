@@ -294,11 +294,13 @@ void MGLTexture_tp_dealloc(MGLTexture * self) {
 }
 
 PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
+	int level;
 	int alignment;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"I",
+		"II",
+		&level,
 		&alignment
 	);
 
@@ -311,14 +313,25 @@ PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
 		return 0;
 	}
 
+	if (level > self->max_level) {
+		MGLError_Set("invalid level");
+		return 0;
+	}
+
 	if (self->samples) {
 		MGLError_Set("multisample textures cannot be read directly");
 		return 0;
 	}
 
-	int expected_size = self->width * self->components * self->data_type->size;
+	int width = self->width / (1 << level);
+	int height = self->height / (1 << level);
+
+	width = width > 1 ? width : 1;
+	height = height > 1 ? height : 1;
+
+	int expected_size = width * self->components * self->data_type->size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
-	expected_size = expected_size * self->height;
+	expected_size = expected_size * height;
 
 	PyObject * result = PyBytes_FromStringAndSize(0, expected_size);
 	char * data = PyBytes_AS_STRING(result);
@@ -357,20 +370,22 @@ PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
 	// printf("level_width: %d\n", level_width);
 	// printf("level_height: %d\n", level_height);
 
-	gl.GetTexImage(texture_target, 0, base_format, pixel_type, data);
+	gl.GetTexImage(texture_target, level, base_format, pixel_type, data);
 
 	return result;
 }
 
 PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 	PyObject * data;
+	int level;
 	int alignment;
 	Py_ssize_t write_offset;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OIn",
+		"OIIn",
 		&data,
+		&level,
 		&alignment,
 		&write_offset
 	);
@@ -384,14 +399,25 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 		return 0;
 	}
 
+	if (level > self->max_level) {
+		MGLError_Set("invalid level");
+		return 0;
+	}
+
 	if (self->samples) {
 		MGLError_Set("multisample textures cannot be read directly");
 		return 0;
 	}
 
-	int expected_size = self->width * self->components * self->data_type->size;
+	int width = self->width / (1 << level);
+	int height = self->height / (1 << level);
+
+	width = width > 1 ? width : 1;
+	height = height > 1 ? height : 1;
+
+	int expected_size = width * self->components * self->data_type->size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
-	expected_size = expected_size * self->height;
+	expected_size = expected_size * height;
 
 	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
@@ -410,7 +436,7 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 		gl.BindTexture(texture_target, self->texture_obj);
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-		gl.GetTexImage(texture_target, 0, format, pixel_type, (void *)write_offset);
+		gl.GetTexImage(texture_target, level, format, pixel_type, (void *)write_offset);
 		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
 	} else {
@@ -437,7 +463,7 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 		gl.BindTexture(texture_target, self->texture_obj);
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-		gl.GetTexImage(texture_target, 0, format, pixel_type, ptr);
+		gl.GetTexImage(texture_target, level, format, pixel_type, ptr);
 
 		PyBuffer_Release(&buffer_view);
 
