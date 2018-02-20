@@ -265,7 +265,7 @@ PyObject * MGLVertexArray_render_indirect(MGLVertexArray * self, PyObject * args
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"IO!I",
+		"IO!II",
 		&mode,
 		&MGLBuffer_Type,
 		&buffer,
@@ -281,6 +281,7 @@ PyObject * MGLVertexArray_render_indirect(MGLVertexArray * self, PyObject * args
 
 	gl.UseProgram(self->program->program_obj);
 	gl.BindVertexArray(self->vertex_array_obj);
+	gl.BindBuffer(GL_DRAW_INDIRECT_BUFFER, buffer->buffer_obj);
 
 	// TODO: subroutines
 
@@ -488,6 +489,7 @@ PyObject * MGLVertexArray_release(MGLVertexArray * self) {
 
 PyMethodDef MGLVertexArray_tp_methods[] = {
 	{"render", (PyCFunction)MGLVertexArray_render, METH_VARARGS, 0},
+	{"render_indirect", (PyCFunction)MGLVertexArray_render_indirect, METH_VARARGS, 0},
 	{"transform", (PyCFunction)MGLVertexArray_transform, METH_VARARGS, 0},
 	{"bind", (PyCFunction)MGLVertexArray_bind, METH_VARARGS, 0},
 	{"release", (PyCFunction)MGLVertexArray_release, METH_NOARGS, 0},
