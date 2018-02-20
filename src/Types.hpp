@@ -246,6 +246,8 @@ struct MGLTexture {
 	int min_filter;
 	int mag_filter;
 
+	int max_level;
+
 	int compare_func;
 
 	bool depth;

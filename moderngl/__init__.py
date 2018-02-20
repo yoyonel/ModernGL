@@ -1000,7 +1000,7 @@ class Texture:
 
         return self.mglo.read_into(buffer, alignment, write_offset)
 
-    def write(self, data, viewport=None, *, alignment=1) -> None:
+    def write(self, data, viewport=None, *, level=0, alignment=1) -> None:
         '''
             Update the content of the texture.
 
@@ -1009,13 +1009,14 @@ class Texture:
                 viewport (tuple): The viewport.
 
             Keyword Args:
+                level (int): The mipmap level.
                 alignment (int): The byte alignment of the pixels.
         '''
 
         if type(data) is Buffer:
             data = data.mglo
 
-        self.mglo.write(data, viewport, alignment)
+        self.mglo.write(data, viewport, level, alignment)
 
     def build_mipmaps(self, base=0, max_level=1000) -> None:
         '''

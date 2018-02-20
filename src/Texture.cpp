@@ -134,6 +134,7 @@ PyObject * MGLContext_texture(MGLContext * self, PyObject * args) {
 	texture->samples = samples;
 	texture->data_type = data_type;
 
+	texture->max_level = 0;
 	texture->compare_func = 0;
 	texture->depth = false;
 
@@ -258,6 +259,7 @@ PyObject * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	texture->samples = samples;
 	texture->data_type = from_dtype("f4");
 
+	texture->max_level = 0;
 	texture->compare_func = GL_LEQUAL;
 	texture->depth = true;
 
@@ -447,13 +449,15 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 	PyObject * data;
 	PyObject * viewport;
+	int level;
 	int alignment;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OOI",
+		"OOII",
 		&data,
 		&viewport,
+		&level,
 		&alignment
 	);
 
@@ -466,6 +470,11 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 		return 0;
 	}
 
+	if (level > self->max_level) {
+		MGLError_Set("invalid level");
+		return 0;
+	}
+
 	if (self->samples) {
 		MGLError_Set("multisample textures cannot be written directly");
 		return 0;
@@ -473,8 +482,11 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 
 	int x = 0;
 	int y = 0;
-	int width = self->width;
-	int height = self->height;
+	int width = self->width / (1 << level);
+	int height = self->height / (1 << level);
+
+	width = width > 1 ? width : 1;
+	height = height > 1 ? height : 1;
 
 	Py_buffer buffer_view;
 
@@ -531,7 +543,7 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 		gl.BindTexture(texture_target, self->texture_obj);
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-		gl.TexSubImage2D(texture_target, 0, x, y, width, height, format, pixel_type, 0);
+		gl.TexSubImage2D(texture_target, level, x, y, width, height, format, pixel_type, 0);
 		gl.BindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
 	} else {
@@ -556,7 +568,7 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 		gl.BindTexture(texture_target, self->texture_obj);
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-		gl.TexSubImage2D(texture_target, 0, x, y, width, height, format, pixel_type, buffer_view.buf);
+		gl.TexSubImage2D(texture_target, level, x, y, width, height, format, pixel_type, buffer_view.buf);
 
 		PyBuffer_Release(&buffer_view);
 
@@ -602,6 +614,11 @@ PyObject * MGLTexture_build_mipmaps(MGLTexture * self, PyObject * args) {
 		return 0;
 	}
 
+	if (base > self->max_level) {
+		MGLError_Set("invalid base");
+		return 0;
+	}
+
 	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 
 	const GLMethods & gl = self->context->gl;
@@ -619,6 +636,7 @@ PyObject * MGLTexture_build_mipmaps(MGLTexture * self, PyObject * args) {
 
 	self->min_filter = GL_LINEAR_MIPMAP_LINEAR;
 	self->mag_filter = GL_LINEAR;
+	self->max_level = max;
 
 	Py_RETURN_NONE;
 }

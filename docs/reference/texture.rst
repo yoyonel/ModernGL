@@ -20,7 +20,7 @@ Methods
 
 .. automethod:: Texture.read(alignment=1) -> bytes
 .. automethod:: Texture.read_into(buffer, alignment=1, write_offset=0)
-.. automethod:: Texture.write(data, viewport=None, alignment=1)
+.. automethod:: Texture.write(data, viewport=None, level=0, alignment=1)
 .. automethod:: Texture.build_mipmaps(base=0, max_level=1000)
 .. automethod:: Texture.use(location=0)
 
