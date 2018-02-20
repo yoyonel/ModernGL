@@ -308,6 +308,17 @@ bool MGL_InitializeModule(PyObject * module) {
 	}
 
 	{
+		if (PyType_Ready(&MGLTextureArray_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register TextureArray in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return false;
+		}
+
+		Py_INCREF(&MGLTextureArray_Type);
+
+		PyModule_AddObject(module, "TextureArray", (PyObject *)&MGLTextureArray_Type);
+	}
+
+	{
 		if (PyType_Ready(&MGLTextureCube_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register TextureCube in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return false;

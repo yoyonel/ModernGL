@@ -280,6 +280,31 @@ struct MGLTexture3D {
 	bool repeat_z;
 };
 
+struct MGLTextureArray {
+	PyObject_HEAD
+
+	MGLContext * context;
+	MGLDataType * data_type;
+
+	union {
+		int renderbuffer_obj;
+		int texture_obj;
+	};
+
+	int width;
+	int height;
+	int layers;
+	int components;
+
+	int samples;
+
+	int min_filter;
+	int mag_filter;
+
+	bool repeat_x;
+	bool repeat_y;
+};
+
 struct MGLTextureCube {
 	PyObject_HEAD
 
@@ -357,6 +382,7 @@ void MGLRenderbuffer_Invalidate(MGLRenderbuffer * renderbuffer);
 void MGLTexture3D_Invalidate(MGLTexture3D * texture);
 void MGLTextureCube_Invalidate(MGLTextureCube * texture);
 void MGLTexture_Invalidate(MGLTexture * texture);
+void MGLTextureArray_Invalidate(MGLTextureArray * texture);
 void MGLUniform_Invalidate(MGLUniform * uniform);
 void MGLVertexArray_Invalidate(MGLVertexArray * vertex_array);
 
@@ -380,6 +406,7 @@ extern PyTypeObject MGLScope_Type;
 extern PyTypeObject MGLTexture3D_Type;
 extern PyTypeObject MGLTextureCube_Type;
 extern PyTypeObject MGLTexture_Type;
+extern PyTypeObject MGLTextureArray_Type;
 extern PyTypeObject MGLUniformBlock_Type;
 extern PyTypeObject MGLUniform_Type;
 extern PyTypeObject MGLVertexArray_Type;

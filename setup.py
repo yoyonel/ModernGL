@@ -83,6 +83,7 @@ mgl = Extension(
         'src/Scope.cpp',
         'src/Texture.cpp',
         'src/Texture3D.cpp',
+        'src/TextureArray.cpp',
         'src/TextureCube.cpp',
         'src/Uniform.cpp',
         'src/UniformBlock.cpp',
