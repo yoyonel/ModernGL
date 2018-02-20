@@ -255,6 +255,42 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
+PyObject * MGLVertexArray_render_indirect(MGLVertexArray * self, PyObject * args) {
+	int mode;
+	MGLBuffer * buffer;
+	int first;
+	int count;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"IO!I",
+		&mode,
+		&MGLBuffer_Type,
+		&buffer,
+		&first,
+		&count
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.UseProgram(self->program->program_obj);
+	gl.BindVertexArray(self->vertex_array_obj);
+
+	const void * ptr = (const void *)((GLintptr)first * 20);
+
+	if (self->index_buffer != (MGLBuffer *)Py_None) {
+		gl.MultiDrawElementsIndirect(mode, GL_UNSIGNED_INT, ptr, count, 20);
+	} else {
+		gl.MultiDrawArraysIndirect(mode, ptr, count, 20);
+	}
+
+	Py_RETURN_NONE;
+}
+
 PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	MGLBuffer * output;
 	int mode;
