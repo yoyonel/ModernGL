@@ -212,6 +212,8 @@ void MGLVertexArray_tp_dealloc(MGLVertexArray * self) {
 	MGLVertexArray_Type.tp_free((PyObject *)self);
 }
 
+inline void MGLVertexArray_SET_SUBROUTINES(MGLVertexArray * self, const GLMethods & gl);
+
 PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 	int mode;
 	int vertices;
@@ -258,23 +260,27 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 }
 
 PyObject * MGLVertexArray_render_indirect(MGLVertexArray * self, PyObject * args) {
-	int mode;
 	MGLBuffer * buffer;
-	int first;
+	int mode;
 	int count;
+	int first;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"IO!II",
-		&mode,
+		"O!III",
 		&MGLBuffer_Type,
 		&buffer,
-		&first,
-		&count
+		&mode,
+		&count,
+		&first
 	);
 
 	if (!args_ok) {
 		return 0;
+	}
+
+	if (count < 0) {
+		count = buffer->size / 20 - first;
 	}
 
 	const GLMethods & gl = self->context->gl;

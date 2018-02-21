@@ -2012,6 +2012,27 @@ class VertexArray:
 
         self.mglo.render(mode, vertices, first, instances)
 
+    def render_indirect(self, buffer, mode=None, count=-1, *, first=0) -> None:
+        '''
+            The render primitive (mode) must be the same as
+            the input primitive of the GeometryShader.
+
+            The draw commands are 5 integers: (count, instanceCount, firstIndex, baseVertex, baseInstance).
+
+            Args:
+                buffer (Buffer): Indirect drawing commands.
+                mode (int): By default :py:data:`TRIANGLES` will be used.
+                count (int): The number of draws.
+
+            Keyword Args:
+                first (int): The index of the first indirect draw command.
+        '''
+
+        if mode is None:
+            mode = TRIANGLES
+
+        self.mglo.render_indirect(buffer.mglo, mode, count, first)
+
     def transform(self, buffer, mode=None, vertices=-1, *, first=0, instances=1) -> None:
         '''
             Transform vertices.

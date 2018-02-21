@@ -68,8 +68,8 @@ images = [
 
 merged = b''.join(img.tobytes() for img in images)
 
-tex = ctx.mglo.texture_array((256, 256, 3), 3, merged, 1, 'f1')[0]
-tex.use(0)
+tex = ctx.texture_array((256, 256, 3), 3, merged)
+tex.use()
 
 vao = ctx.simple_vertex_array(prog, vbo, 'in_vert', 'in_text')
 
@@ -78,4 +78,4 @@ while wnd.update():
     # vao.mglo.render(moderngl.TRIANGLE_FAN, 3, 0, 1)
     # vao.mglo.render(moderngl.TRIANGLE_FAN, 4, 3, 1)
     # vao.mglo.render(moderngl.TRIANGLE_FAN, 5, 7, 1)
-    vao.mglo.render_indirect(moderngl.TRIANGLE_FAN, dbo.mglo, 0, 3)
+    vao.render_indirect(dbo, moderngl.TRIANGLE_FAN)
