@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Properly set subroutines in VertexArray render
+
 ## [5.0.2] - 2018-02-20
 
 ### Fixed

@@ -245,7 +245,7 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 	gl.UseProgram(self->program->program_obj);
 	gl.BindVertexArray(self->vertex_array_obj);
 
-	// TODO: subroutines
+	MGLVertexArray_SET_SUBROUTINES(self, gl);
 
 	if (self->index_buffer != (MGLBuffer *)Py_None) {
 		const void * ptr = (const void *)((GLintptr)first * 4);
@@ -283,7 +283,7 @@ PyObject * MGLVertexArray_render_indirect(MGLVertexArray * self, PyObject * args
 	gl.BindVertexArray(self->vertex_array_obj);
 	gl.BindBuffer(GL_DRAW_INDIRECT_BUFFER, buffer->buffer_obj);
 
-	// TODO: subroutines
+	MGLVertexArray_SET_SUBROUTINES(self, gl);
 
 	const void * ptr = (const void *)((GLintptr)first * 20);
 
@@ -342,54 +342,7 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	gl.Enable(GL_RASTERIZER_DISCARD);
 	gl.BeginTransformFeedback(mode);
 
-	if (self->subroutines) {
-
-		unsigned * subroutines = self->subroutines;
-
-		if (self->program->num_vertex_shader_subroutines) {
-			gl.UniformSubroutinesuiv(
-				GL_VERTEX_SHADER,
-				self->program->num_vertex_shader_subroutines,
-				subroutines
-			);
-			subroutines += self->program->num_vertex_shader_subroutines;
-		}
-
-		if (self->program->num_fragment_shader_subroutines) {
-			gl.UniformSubroutinesuiv(
-				GL_FRAGMENT_SHADER,
-				self->program->num_fragment_shader_subroutines,
-				subroutines
-			);
-			subroutines += self->program->num_fragment_shader_subroutines;
-		}
-
-		if (self->program->num_geometry_shader_subroutines) {
-			gl.UniformSubroutinesuiv(
-				GL_GEOMETRY_SHADER,
-				self->program->num_geometry_shader_subroutines,
-				subroutines
-			);
-			subroutines += self->program->num_geometry_shader_subroutines;
-		}
-
-		if (self->program->num_tess_evaluation_shader_subroutines) {
-			gl.UniformSubroutinesuiv(
-				GL_TESS_EVALUATION_SHADER,
-				self->program->num_tess_evaluation_shader_subroutines,
-				subroutines
-			);
-			subroutines += self->program->num_tess_evaluation_shader_subroutines;
-		}
-
-		if (self->program->num_tess_control_shader_subroutines) {
-			gl.UniformSubroutinesuiv(
-				GL_TESS_CONTROL_SHADER,
-				self->program->num_tess_control_shader_subroutines,
-				subroutines
-			);
-		}
-	}
+	MGLVertexArray_SET_SUBROUTINES(self, gl);
 
 	if (self->index_buffer != (MGLBuffer *)Py_None) {
 		const void * ptr = (const void *)((GLintptr)first * 4);
@@ -632,5 +585,55 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array) {
 		vertex_array->subroutines = new unsigned[vertex_array->num_subroutines];
 	} else {
 		vertex_array->subroutines = 0;
+	}
+}
+
+inline void MGLVertexArray_SET_SUBROUTINES(MGLVertexArray * self, const GLMethods & gl) {
+		if (self->subroutines) {
+		unsigned * subroutines = self->subroutines;
+
+		if (self->program->num_vertex_shader_subroutines) {
+			gl.UniformSubroutinesuiv(
+				GL_VERTEX_SHADER,
+				self->program->num_vertex_shader_subroutines,
+				subroutines
+			);
+			subroutines += self->program->num_vertex_shader_subroutines;
+		}
+
+		if (self->program->num_fragment_shader_subroutines) {
+			gl.UniformSubroutinesuiv(
+				GL_FRAGMENT_SHADER,
+				self->program->num_fragment_shader_subroutines,
+				subroutines
+			);
+			subroutines += self->program->num_fragment_shader_subroutines;
+		}
+
+		if (self->program->num_geometry_shader_subroutines) {
+			gl.UniformSubroutinesuiv(
+				GL_GEOMETRY_SHADER,
+				self->program->num_geometry_shader_subroutines,
+				subroutines
+			);
+			subroutines += self->program->num_geometry_shader_subroutines;
+		}
+
+		if (self->program->num_tess_evaluation_shader_subroutines) {
+			gl.UniformSubroutinesuiv(
+				GL_TESS_EVALUATION_SHADER,
+				self->program->num_tess_evaluation_shader_subroutines,
+				subroutines
+			);
+			subroutines += self->program->num_tess_evaluation_shader_subroutines;
+		}
+
+		if (self->program->num_tess_control_shader_subroutines) {
+			gl.UniformSubroutinesuiv(
+				GL_TESS_CONTROL_SHADER,
+				self->program->num_tess_control_shader_subroutines,
+				subroutines
+			);
+		}
 	}
 }
