@@ -399,7 +399,9 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	}
 
 	gl.EndTransformFeedback();
-	gl.Disable(GL_RASTERIZER_DISCARD);
+	if (~self->context->enable_flags & MGL_RASTERIZER_DISCARD) {
+		gl.Disable(GL_RASTERIZER_DISCARD);
+	}
 	gl.Flush();
 
 	Py_RETURN_NONE;
