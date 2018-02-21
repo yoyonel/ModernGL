@@ -847,7 +847,7 @@ int MGLTexture_set_swizzle(MGLTexture * self, PyObject * value, void * closure) 
 	return 0;
 }
 
-PyObject * MGLTexture_get_depth_func(MGLTexture * self) {
+PyObject * MGLTexture_get_compare_func(MGLTexture * self) {
 	if (!self->depth) {
 		MGLError_Set("only depth textures have compare_func");
 		return 0;
@@ -882,7 +882,7 @@ PyGetSetDef MGLTexture_tp_getseters[] = {
 	{(char *)"repeat_y", (getter)MGLTexture_get_repeat_y, (setter)MGLTexture_set_repeat_y, 0, 0},
 	{(char *)"filter", (getter)MGLTexture_get_filter, (setter)MGLTexture_set_filter, 0, 0},
 	{(char *)"swizzle", (getter)MGLTexture_get_swizzle, (setter)MGLTexture_set_swizzle, 0, 0},
-	{(char *)"compare_funct", (getter)MGLTexture_get_depth_func, (setter)MGLTexture_set_compare_func, 0, 0},
+	{(char *)"compare_func", (getter)MGLTexture_get_compare_func, (setter)MGLTexture_set_compare_func, 0, 0},
 	{0},
 };
 
