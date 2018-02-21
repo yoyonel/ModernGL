@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- TextureArray objects
+- Indirect drawing
+
 ### Fixed
 
 - Properly set subroutines in VertexArray render
