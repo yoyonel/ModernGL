@@ -167,11 +167,6 @@ PyObject * MGLTextureArray_read(MGLTextureArray * self, PyObject * args) {
 		return 0;
 	}
 
-	if (self->samples) {
-		MGLError_Set("multisample textures cannot be read directly");
-		return 0;
-	}
-
 	int expected_size = self->width * self->components * self->data_type->size;
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * self->height * self->layers;
@@ -236,11 +231,6 @@ PyObject * MGLTextureArray_read_into(MGLTextureArray * self, PyObject * args) {
 
 	if (alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8) {
 		MGLError_Set("the alignment must be 1, 2, 4 or 8");
-		return 0;
-	}
-
-	if (self->samples) {
-		MGLError_Set("multisample textures cannot be read directly");
 		return 0;
 	}
 
@@ -319,11 +309,6 @@ PyObject * MGLTextureArray_write(MGLTextureArray * self, PyObject * args) {
 
 	if (alignment != 1 && alignment != 2 && alignment != 4 && alignment != 8) {
 		MGLError_Set("the alignment must be 1, 2, 4 or 8");
-		return 0;
-	}
-
-	if (self->samples) {
-		MGLError_Set("multisample textures cannot be written directly");
 		return 0;
 	}
 
@@ -461,6 +446,10 @@ PyObject * MGLTextureArray_build_mipmaps(MGLTextureArray * self, PyObject * args
 		return 0;
 	}
 
+	if (base > self->max_level) {
+		MGLError_Set("invalid base");
+		return 0;
+	}
 
 	const GLMethods & gl = self->context->gl;
 
@@ -477,6 +466,7 @@ PyObject * MGLTextureArray_build_mipmaps(MGLTextureArray * self, PyObject * args
 
 	self->min_filter = GL_LINEAR_MIPMAP_LINEAR;
 	self->mag_filter = GL_LINEAR;
+	self->max_level = max;
 
 	Py_RETURN_NONE;
 }

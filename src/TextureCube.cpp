@@ -133,6 +133,10 @@ PyObject * MGLContext_texture_cube(MGLContext * self, PyObject * args) {
 	texture->components = components;
 	texture->data_type = data_type;
 
+	texture->min_filter = GL_LINEAR;
+	texture->mag_filter = GL_LINEAR;
+	texture->max_level = 0;
+
 	Py_INCREF(self);
 	texture->context = self;
 

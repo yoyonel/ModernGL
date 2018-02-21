@@ -259,12 +259,12 @@ PyObject * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 	texture->samples = samples;
 	texture->data_type = from_dtype("f4");
 
-	texture->max_level = 0;
 	texture->compare_func = GL_LEQUAL;
 	texture->depth = true;
 
 	texture->min_filter = GL_LINEAR;
 	texture->mag_filter = GL_LINEAR;
+	texture->max_level = 0;
 
 	texture->repeat_x = false;
 	texture->repeat_y = false;

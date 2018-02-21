@@ -43,6 +43,7 @@ struct MGLProgram;
 struct MGLRenderbuffer;
 struct MGLTexture;
 struct MGLTexture3D;
+struct MGLTextureArray;
 struct MGLTextureCube;
 struct MGLUniform;
 struct MGLUniformBlock;
@@ -245,7 +246,6 @@ struct MGLTexture {
 
 	int min_filter;
 	int mag_filter;
-
 	int max_level;
 
 	int compare_func;
@@ -270,10 +270,9 @@ struct MGLTexture3D {
 
 	int components;
 
-	int samples;
-
 	int min_filter;
 	int mag_filter;
+	int max_level;
 
 	bool repeat_x;
 	bool repeat_y;
@@ -296,10 +295,9 @@ struct MGLTextureArray {
 	int layers;
 	int components;
 
-	int samples;
-
 	int min_filter;
 	int mag_filter;
+	int max_level;
 
 	bool repeat_x;
 	bool repeat_y;
@@ -321,6 +319,7 @@ struct MGLTextureCube {
 
 	int min_filter;
 	int mag_filter;
+	int max_level;
 };
 
 struct MGLUniform {
