@@ -7,18 +7,31 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [5.0.0] - 2018-mm-dd
-<!-- TODO date -->
+## [5.0.2] - 2018-02-20
 
-For more information please see: [Differneces between ModernGL5 and ModernGL4](http://moderngl.readthedocs.io/)
-<!-- TODO link -->
+### Fixed
+
+- Wrong module name in some windows based wheel files
+
+## [5.0.1] - 2018-02-19
+
+### Fixed
+
+- Build errors and warnings for older python versions
+
+## [5.0.0] - 2018-02-18
+
+For more information please see: [Differneces between ModernGL5 and ModernGL4](https://moderngl.readthedocs.io/en/stable/misc/mgl5_vs_mgl4.html)
 
 ### Added
 
 - Query objects
 - Scope objects
 - Conditional Rendering
-- RASTERIZER_DISCARD enable flag
+- New `RASTERIZER_DISCARD` enable flag
+- Context fbo attribute
+- Context depth_func and blend_func
+- Depth Texture compare_func
 
 ### Changed
 
@@ -33,9 +46,23 @@ For more information please see: [Differneces between ModernGL5 and ModernGL4](h
 
 - Classes and methods that are no longer needed
 
-<!-- TODO link -->
-### [How to upgrade from 4.2.x to 5.0.x](http://moderngl.readthedocs.io/)
----
+## [4.2.2] - 2018-01-06
+
+### Added
+
+- Program.\_\_getitem\_\_ returns Uniforms, UniformBuffers, Attributes and Varyings
+
+## [4.2.1] - 2017-11-25
+
+### Added
+
+- UniformMap.get, AttributeMap.get, ... methods
+
+### Fixed
+
+- Contex.info `GL_MAX_COMPUTE_WORK_GROUP_COUNT` value
+- Missing TextureCube class
+- Buffer.clear return type hint
 
 ## [4.2.0] - 2017-10-17
 
@@ -311,7 +338,12 @@ For more information please see: [Differneces between ModernGL5 and ModernGL4](h
 
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/4.2.0...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.2...master
+[4.2.2]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.1...5.0.2
+[4.2.2]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.0...5.0.1
+[5.0.0]: https://github.com/cprogrammer1994/ModernGL/tree/5.0.0
+[4.2.2]: https://github.com/cprogrammer1994/ModernGL/compare/4.2.1...4.2.2
+[4.2.1]: https://github.com/cprogrammer1994/ModernGL/compare/4.2.0...4.2.1
 [4.2.0]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.12...4.2.0
 [4.1.12]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.11...4.1.12
 [4.1.11]: https://github.com/cprogrammer1994/ModernGL/compare/4.1.10...4.1.11
