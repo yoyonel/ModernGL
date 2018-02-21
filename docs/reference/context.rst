@@ -22,6 +22,7 @@ ModernGL Objects
 .. automethod:: Context.texture(size, components, data=None, samples=0, alignment=1, dtype='f1') -> Texture
 .. automethod:: Context.depth_texture(size, data=None, samples=0, alignment=4) -> Texture
 .. automethod:: Context.texture3d(size, components, data=None, alignment=1, dtype='f1') -> Texture3D
+.. automethod:: Context.texture_array(size, components, data=None, alignment=1, dtype='f1') -> TextureArray
 .. automethod:: Context.texture_cube(size, components, data=None, alignment=1, dtype='f1') -> TextureCube
 .. automethod:: Context.simple_framebuffer(size, components=4, samples=0, dtype='f1') -> Framebuffer
 .. automethod:: Context.framebuffer(color_attachments=(), depth_attachment=None) -> Framebuffer

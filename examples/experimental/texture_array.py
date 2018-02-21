@@ -51,8 +51,8 @@ images = [
 
 merged = b''.join(img.tobytes() for img in images)
 
-tex = ctx.mglo.texture_array((256, 256, 3), 3, merged, 1, 'f1')[0]
-tex.use(0)
+tex = ctx.texture_array((256, 256, 3), 3, merged)
+tex.use()
 
 vao = ctx.simple_vertex_array(prog, vbo, 'in_vert', 'in_text')
 
