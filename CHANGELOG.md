@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.0.3] - 2018-02-28
+
 ### Added
 
 - TextureArray objects
 - Indirect drawing
+
+### Changed
+
+- Restored Error class from ModernGL4
 
 ### Fixed
 
@@ -347,9 +353,10 @@ For more information please see: [Differneces between ModernGL5 and ModernGL4](h
 
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.2...master
-[4.2.2]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.1...5.0.2
-[4.2.2]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.0...5.0.1
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.3...master
+[5.0.3]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.2...5.0.3
+[5.0.2]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.1...5.0.2
+[5.0.1]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.0...5.0.1
 [5.0.0]: https://github.com/cprogrammer1994/ModernGL/tree/5.0.0
 [4.2.2]: https://github.com/cprogrammer1994/ModernGL/compare/4.2.1...4.2.2
 [4.2.1]: https://github.com/cprogrammer1994/ModernGL/compare/4.2.0...4.2.1

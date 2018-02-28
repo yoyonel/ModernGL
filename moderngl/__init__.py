@@ -14,7 +14,7 @@ if os.environ.get('READTHEDOCS') == 'True':
 
 from . import mgl
 
-__version__ = '5.0.2'
+__version__ = '5.0.3'
 
 __all__ = [
     'NOTHING',
