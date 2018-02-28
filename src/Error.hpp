@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Python.hpp"
+#include "Types.hpp"
 
 #define MGLError_Set(...) MGLError_SetTrace(__FILE__, __FUNCTION__, __LINE__, __VA_ARGS__)
 

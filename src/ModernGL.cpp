@@ -98,24 +98,6 @@ PyObject * fmtdebug(PyObject * self, PyObject * args) {
 	return res;
 }
 
-PyObject * set_error_class(PyObject * self, PyObject * args) {
-	PyObject * error_class;
-
-	int args_ok = PyArg_ParseTuple(
-		args,
-		"O",
-		&error_class
-	);
-
-	if (!args_ok) {
-		return 0;
-	}
-
-	Py_INCREF(error_class);
-	MGLError_TypePtr = error_class;
-	Py_RETURN_NONE;
-}
-
 PyObject * create_standalone_context(PyObject * self, PyObject * args) {
 	PyObject * settings;
 
@@ -180,12 +162,22 @@ PyMethodDef MGL_module_methods[] = {
 	{"strsize", (PyCFunction)strsize, METH_VARARGS, 0},
 	{"create_standalone_context", (PyCFunction)create_standalone_context, METH_VARARGS, 0},
 	{"create_context", (PyCFunction)create_context, METH_NOARGS, 0},
-	{"set_error_class", (PyCFunction)set_error_class, METH_VARARGS, 0},
 	{"fmtdebug", (PyCFunction)fmtdebug, METH_VARARGS, 0},
 	{0},
 };
 
 bool MGL_InitializeModule(PyObject * module) {
+	{
+		if (PyType_Ready(&MGLError_Type) < 0) {
+			PyErr_Format(PyExc_ImportError, "Cannot register Error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return false;
+		}
+
+		Py_INCREF(&MGLError_Type);
+
+		PyModule_AddObject(module, "Error", (PyObject *)&MGLError_Type);
+	}
+
 	{
 		if (PyType_Ready(&MGLAttribute_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Attribute in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);

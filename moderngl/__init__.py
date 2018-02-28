@@ -77,17 +77,7 @@ __all__ = [
 ]
 
 
-class Error(Exception):
-    '''
-        ModernGL Error
-    '''
-
-    filename = None
-    function = None
-    line = None
-
-
-mgl.set_error_class(Error)
+Error = mgl.Error
 
 
 NOTHING = 0

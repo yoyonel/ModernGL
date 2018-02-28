@@ -55,6 +55,14 @@ struct MGLDataType {
 	int size;
 };
 
+struct MGLError {
+	PyException_HEAD
+
+	const char * filename;
+	const char * function;
+	int line;
+};
+
 struct MGLAttribute {
 	PyObject_HEAD
 
@@ -392,6 +400,7 @@ void MGLVertexArray_Complete(MGLVertexArray * vertex_array);
 
 void MGLContext_Initialize(MGLContext * self);
 
+extern PyTypeObject MGLError_Type;
 extern PyTypeObject MGLAttribute_Type;
 extern PyTypeObject MGLBuffer_Type;
 extern PyTypeObject MGLComputeShader_Type;
@@ -409,5 +418,3 @@ extern PyTypeObject MGLTextureArray_Type;
 extern PyTypeObject MGLUniformBlock_Type;
 extern PyTypeObject MGLUniform_Type;
 extern PyTypeObject MGLVertexArray_Type;
-
-extern PyObject * MGLError_TypePtr;

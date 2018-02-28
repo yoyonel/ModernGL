@@ -8,10 +8,14 @@ __all__ = ['mgl']
 
 
 class Implementation:
-    def set_error_class(self, *args) -> None:
+    class Error(Exception):
         '''
-            set_error_class
+            ModernGL Error
         '''
+
+        filename = None
+        function = None
+        line = None
 
     def strsize(self, *args) -> int:
         '''
