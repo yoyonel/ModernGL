@@ -1,4 +1,6 @@
 #include "Types.hpp"
+#include "Error.hpp"
+
 #include "BufferFormat.hpp"
 
 #include "GLContext.hpp"
