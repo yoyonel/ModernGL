@@ -425,7 +425,10 @@ GLContext CreateGLContext(PyObject * settings) {
 		int pixelformat = 0;
 		unsigned num_formats = 0;
 
-		if (!my_ChoosePixelFormat(hdc, 0, 0, 1, &pixelformat, &num_formats)) {
+		int zeroes1[4] = {};
+		float zeroes2[4] = {};
+
+		if (!my_ChoosePixelFormat(hdc, zeroes1, zeroes2, 1, &pixelformat, &num_formats)) {
 			MGLError_Set("cannot choose pixel format");
 			return context;
 		}
