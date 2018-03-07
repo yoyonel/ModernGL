@@ -17,7 +17,7 @@ ModernGL Objects
 
 .. automethod:: Context.program(vertex_shader, fragment_shader=None, geometry_shader=None, tess_control_shader=None, tess_evaluation_shader=None, varyings=()) -> Program
 .. automethod:: Context.simple_vertex_array(program, buffer, *attributes, index_buffer=None) -> VertexArray
-.. automethod:: Context.vertex_array(program, content, index_buffer=None) -> VertexArray
+.. automethod:: Context.vertex_array(program, content, index_buffer=None, skip_errors=False) -> VertexArray
 .. automethod:: Context.buffer(data=None, reserve=0, dynamic=False) -> Buffer
 .. automethod:: Context.texture(size, components, data=None, samples=0, alignment=1, dtype='f1') -> Texture
 .. automethod:: Context.depth_texture(size, data=None, samples=0, alignment=4) -> Texture

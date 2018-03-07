@@ -2797,7 +2797,7 @@ class Context:
         res.ctx = self
         return res
 
-    def vertex_array(self, program, content, index_buffer=None) -> 'VertexArray':
+    def vertex_array(self, program, content, index_buffer=None, *, skip_errors=False) -> 'VertexArray':
         '''
             Create a :py:class:`VertexArray` object.
 
@@ -2806,16 +2806,19 @@ class Context:
                 content (list): A list of (buffer, format, attributes).
                 index_buffer (Buffer): An index buffer.
 
+            Keyword Args:
+                skip_errors (bool): Ignore skip_errors varyings.
+
             Returns:
                 :py:class:`VertexArray` object
         '''
 
+        members = program._members
         index_buffer_mglo = None if index_buffer is None else index_buffer.mglo
-
-        content = tuple((a.mglo, b) + tuple(program._members[x].mglo for x in c) for a, b, *c in content)
+        content = tuple((a.mglo, b) + tuple(getattr(members.get(x), 'mglo', None) for x in c) for a, b, *c in content)
 
         res = VertexArray.__new__(VertexArray)
-        res.mglo, res._glo = self.mglo.vertex_array(program.mglo, content, index_buffer_mglo)
+        res.mglo, res._glo = self.mglo.vertex_array(program.mglo, content, index_buffer_mglo, skip_errors)
         res._program = program
         res._index_buffer = index_buffer
         res.ctx = self
@@ -2836,6 +2839,9 @@ class Context:
             Returns:
                 :py:class:`VertexArray` object
         '''
+
+        if type(buffer) is list:
+            raise SyntaxError('Change simple_vertex_array to vertex_array')
 
         content = [(buffer, detect_format(program, attributes)) + attributes]
         return self.vertex_array(program, content, index_buffer)

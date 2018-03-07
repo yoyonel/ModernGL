@@ -18,7 +18,7 @@ Create
 .. automethod:: Context.simple_vertex_array(program, buffer, *attributes, index_buffer=None) -> VertexArray
     :noindex:
 
-.. automethod:: Context.vertex_array(program, content, index_buffer=None) -> VertexArray
+.. automethod:: Context.vertex_array(program, content, index_buffer=None, skip_errors=False) -> VertexArray
     :noindex:
 
 Methods

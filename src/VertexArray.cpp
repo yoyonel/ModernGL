@@ -6,14 +6,16 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	MGLProgram * program;
 	PyObject * content;
 	MGLBuffer * index_buffer;
+	int skip_errors;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O!OO",
+		"O!OOp",
 		&MGLProgram_Type,
 		&program,
 		&content,
-		&index_buffer
+		&index_buffer,
+		&skip_errors
 	);
 
 	if (!args_ok) {
@@ -91,14 +93,16 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 			MGLAttribute * attribute = (MGLAttribute *)PyTuple_GET_ITEM(tuple, j + 2);
 
-			if (Py_TYPE(attribute) != &MGLAttribute_Type) {
-				MGLError_Set("content[%d][%d] must be an attribute not %s", i, j + 2, Py_TYPE(attribute)->tp_name);
-				return 0;
-			}
+			if (!skip_errors) {
+				if (Py_TYPE(attribute) != &MGLAttribute_Type) {
+					MGLError_Set("content[%d][%d] must be an attribute not %s", i, j + 2, Py_TYPE(attribute)->tp_name);
+					return 0;
+				}
 
-			if (node->count % attribute->rows_length) {
-				MGLError_Set("invalid format");
-				return 0;
+				if (node->count % attribute->rows_length) {
+					MGLError_Set("invalid format");
+					return 0;
+				}
 			}
 		}
 	}
@@ -166,6 +170,11 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 			}
 
 			MGLAttribute * attribute = (MGLAttribute *)PyTuple_GET_ITEM(tuple, j + 2);
+
+			if (attribute == (MGLAttribute *)Py_None) {
+				ptr += node->size;
+				continue;
+			}
 
 			for (int r = 0; r < attribute->rows_length; ++r) {
 				int location = attribute->location + r;
