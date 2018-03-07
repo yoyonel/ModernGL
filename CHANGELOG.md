@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.0.4] - 2018-03-07
+
+### Fixed
+
+- Standalone context on windows fails when old GPU driver is installed.
+
 ## [5.0.3] - 2018-02-28
 
 ### Added
@@ -353,8 +359,9 @@ For more information please see: [Differneces between ModernGL5 and ModernGL4](h
 
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.3...master
-[5.0.3]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.2...5.0.3
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.4...master
+[5.0.4]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.3...master
+[5.0.3]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.3...5.0.4
 [5.0.2]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.1...5.0.2
 [5.0.1]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.0...5.0.1
 [5.0.0]: https://github.com/cprogrammer1994/ModernGL/tree/5.0.0
