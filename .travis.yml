@@ -26,14 +26,14 @@ matrix:
       env:
         - CC=gcc-4.9
         - CXX=g++-4.9
-    - os: osx
-      language: generic
-      before_install:
-        - brew update
-        - brew upgrade python
-        - virtualenv env -p python3
-        - source env/bin/activate
-        - python -m pip install pytest
+#    - os: osx
+#      language: generic
+#      before_install:
+#        - brew update
+#        - brew upgrade python
+#        - virtualenv env -p python3
+#        - source env/bin/activate
+#        - python -m pip install pytest
 
 addons:
   apt:
@@ -53,4 +53,4 @@ install:
 script:
   - python -m moderngl
   - python -m pytest tests/test_local.py tests/test_module_integrity.py tests/test_code_style.py tests/test_documentation.py
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then python -m pytest; fi
+#  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then python -m pytest; fi
