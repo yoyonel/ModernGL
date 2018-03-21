@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.0.5] - 2018-03-21
+
+### Fixed
+
+- Standalone context on linux fails when the default display is nonzero.
+
 ## [5.0.4] - 2018-03-07
 
 ### Fixed
@@ -359,8 +365,9 @@ For more information please see: [Differneces between ModernGL5 and ModernGL4](h
 
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.4...master
-[5.0.4]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.3...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.5...master
+[5.0.5]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.5...master
+[5.0.4]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.4...5.0.5
 [5.0.3]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.3...5.0.4
 [5.0.2]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.1...5.0.2
 [5.0.1]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.0...5.0.1
