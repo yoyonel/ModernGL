@@ -98,6 +98,11 @@ class TestBuffer(unittest.TestCase):
 
     def test_format_6(self):
         self.check('2f/i', (8, 1, 1, True, ((8, 2, GL_FLOAT, False),)))
+        self.check('2f /i', (8, 1, 1, True, ((8, 2, GL_FLOAT, False),)))
+
+    def test_format_7(self):
+        self.check('2f 2x4/i', (16, 1, 1, True, ((8, 2, GL_FLOAT, False), (8, 2, 0, False))))
+        self.check('2f 2x4 /i', (16, 1, 1, True, ((8, 2, GL_FLOAT, False), (8, 2, 0, False))))
 
 
 if __name__ == '__main__':

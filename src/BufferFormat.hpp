@@ -12,6 +12,15 @@ struct FormatInfo {
 	int nodes;
 	int divisor;
 	bool valid;
+
+	static FormatInfo invalid() {
+		FormatInfo invalid;
+		invalid.size = 0;
+		invalid.nodes = 0;
+		invalid.divisor = 0;
+		invalid.valid = false;
+		return invalid;
+	}
 };
 
 struct FormatIterator {

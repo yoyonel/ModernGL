@@ -9,19 +9,15 @@ FormatIterator::FormatIterator(const char * str) : ptr(str) {
 
 FormatInfo FormatIterator::info() {
 	FormatInfo info;
-	info.nodes = 0;
 	info.size = 0;
-	info.valid = true;
+	info.nodes = 0;
 	info.divisor = 0;
+	info.valid = true;
 
 	FormatIterator it = FormatIterator(ptr);
 	while (FormatNode * node = it.next()) {
 		if (node == InvalidFormat) {
-			info.nodes = 0;
-			info.size = 0;
-			info.divisor = 0;
-			info.valid = false;
-			break;
+			return FormatInfo::invalid();
 		}
 		info.size += node->size;
 		if (node->type) {
@@ -47,12 +43,11 @@ FormatInfo FormatIterator::info() {
 				break;
 
 			default:
-				info.valid = false;
-				break;
+				return FormatInfo::invalid();
 		}
 
 		if (*it.ptr) {
-			info.valid = false;
+			return FormatInfo::invalid();
 		}
 	}
 
@@ -83,7 +78,7 @@ FormatNode * FormatIterator::next() {
 				}
 				switch (*ptr++) {
 					case '1':
-						if (*ptr && *ptr != ' ') {
+						if (*ptr && *ptr != ' ' && *ptr != '/') {
 							return InvalidFormat;
 						}
 						node.size = 1 * node.count;
@@ -91,7 +86,7 @@ FormatNode * FormatIterator::next() {
 						node.normalize = true;
 						break;
 					case '2':
-						if (*ptr && *ptr != ' ') {
+						if (*ptr && *ptr != ' ' && *ptr != '/') {
 							return InvalidFormat;
 						}
 						node.size = 2 * node.count;
@@ -99,7 +94,7 @@ FormatNode * FormatIterator::next() {
 						node.normalize = false;
 						break;
 					case '4':
-						if (*ptr && *ptr != ' ') {
+						if (*ptr && *ptr != ' ' && *ptr != '/') {
 							return InvalidFormat;
 						}
 						node.size = 4 * node.count;
@@ -107,7 +102,7 @@ FormatNode * FormatIterator::next() {
 						node.normalize = false;
 						break;
 					case '8':
-						if (*ptr && *ptr != ' ') {
+						if (*ptr && *ptr != ' ' && *ptr != '/') {
 							return InvalidFormat;
 						}
 						node.size = 8 * node.count;
@@ -134,21 +129,21 @@ FormatNode * FormatIterator::next() {
 				node.normalize = false;
 				switch (*ptr++) {
 					case '1':
-						if (*ptr && *ptr != ' ') {
+						if (*ptr && *ptr != ' ' && *ptr != '/') {
 							return InvalidFormat;
 						}
 						node.size = 1 * node.count;
 						node.type = GL_BYTE;
 						break;
 					case '2':
-						if (*ptr && *ptr != ' ') {
+						if (*ptr && *ptr != ' ' && *ptr != '/') {
 							return InvalidFormat;
 						}
 						node.size = 2 * node.count;
 						node.type = GL_SHORT;
 						break;
 					case '4':
-						if (*ptr && *ptr != ' ') {
+						if (*ptr && *ptr != ' ' && *ptr != '/') {
 							return InvalidFormat;
 						}
 						node.size = 4 * node.count;
@@ -173,21 +168,21 @@ FormatNode * FormatIterator::next() {
 				node.normalize = false;
 				switch (*ptr++) {
 					case '1':
-						if (*ptr && *ptr != ' ') {
+						if (*ptr && *ptr != ' ' && *ptr != '/') {
 							return InvalidFormat;
 						}
 						node.size = 1 * node.count;
 						node.type = GL_UNSIGNED_BYTE;
 						break;
 					case '2':
-						if (*ptr && *ptr != ' ') {
+						if (*ptr && *ptr != ' ' && *ptr != '/') {
 							return InvalidFormat;
 						}
 						node.size = 2 * node.count;
 						node.type = GL_UNSIGNED_SHORT;
 						break;
 					case '4':
-						if (*ptr && *ptr != ' ') {
+						if (*ptr && *ptr != ' ' && *ptr != '/') {
 							return InvalidFormat;
 						}
 						node.size = 4 * node.count;
@@ -213,25 +208,25 @@ FormatNode * FormatIterator::next() {
 				node.normalize = false;
 				switch (*ptr++) {
 					case '1':
-						if (*ptr && *ptr != ' ') {
+						if (*ptr && *ptr != ' ' && *ptr != '/') {
 							return InvalidFormat;
 						}
 						node.size = 1 * node.count;
 						break;
 					case '2':
-						if (*ptr && *ptr != ' ') {
+						if (*ptr && *ptr != ' ' && *ptr != '/') {
 							return InvalidFormat;
 						}
 						node.size = 2 * node.count;
 						break;
 					case '4':
-						if (*ptr && *ptr != ' ') {
+						if (*ptr && *ptr != ' ' && *ptr != '/') {
 							return InvalidFormat;
 						}
 						node.size = 4 * node.count;
 						break;
 					case '8':
-						if (*ptr && *ptr != ' ') {
+						if (*ptr && *ptr != ' ' && *ptr != '/') {
 							return InvalidFormat;
 						}
 						node.size = 8 * node.count;
