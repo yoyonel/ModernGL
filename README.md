@@ -1,6 +1,8 @@
 # ModernGL
 
+<div align="center">
 [![preview](.github/preview.png)](#)
+</div>
 
 ```sh
 pip install ModernGL
