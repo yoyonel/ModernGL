@@ -1,9 +1,0 @@
-{
-    "python.envFile": "${workspaceFolder}/.vscode/.env",
-    "files.exclude": {
-        "ModernGL/ext/**/*": true,
-        "ModernGL.egg-info": true,
-        ".cache": true,
-        ".tox": true
-    }
-}
