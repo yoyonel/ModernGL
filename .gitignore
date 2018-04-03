@@ -18,6 +18,7 @@ temp_*
 
 .vscode/*
 !.vscode/extensions.json
+!.vscode/snippets
 
 *.egg-info
 *.log
