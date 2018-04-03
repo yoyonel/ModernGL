@@ -1,65 +1,50 @@
 # ModernGL
 
+[![preview](.github/preview.png)](#)
+
 ```sh
 pip install ModernGL
 ```
 
 - [Documentation](https://moderngl.readthedocs.io/)
-
-## Backward compatibility
-
-Install ModernGL 4.x
-
-```
-pip install ModernGL<5.0.0
-```
-
-Please write an [issue](https://github.com/cprogrammer1994/ModernGL/issues) if your build is still broken.
-
----
-
-[![docs](https://readthedocs.org/projects/moderngl/badge/?version=stable)](https://moderngl.readthedocs.io/)
-[![build](https://img.shields.io/travis/cprogrammer1994/ModernGL/master.svg?label=build)](https://travis-ci.org/cprogrammer1994/ModernGL)
-[![build](https://img.shields.io/appveyor/ci/cprogrammer1994/ModernGL/master.svg?label=build)](https://ci.appveyor.com/project/cprogrammer1994/ModernGL)
-[![health](https://landscape.io/github/cprogrammer1994/ModernGL/master/landscape.svg?style=flat)](https://landscape.io/github/cprogrammer1994/ModernGL/master)
-[![pypi](https://img.shields.io/pypi/v/ModernGL.svg)](https://pypi.python.org/pypi/ModernGL/)
-[![license](https://img.shields.io/github/license/cprogrammer1994/ModernGL.svg)](https://github.com/cprogrammer1994/ModernGL/blob/master/LICENSE)
-[![platforms](https://img.shields.io/badge/platforms-windows%2C%20mac%2C%20linux-blue.svg)](https://pypi.python.org/pypi/ModernGL/)
-
-## Pythonic OpenGL and GLSL support
-
+- [Examples](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/#readme)
+- [ModernGL on Github](https://github.com/cprogrammer1994/ModernGL/)
 - [ModernGL on PyPI](https://pypi.python.org/pypi/ModernGL/)
-- [Documentation](https://moderngl.readthedocs.io/)
-- [Examples](https://github.com/cprogrammer1994/ModernGL/tree/master/examples)
-- [Changelog](https://github.com/cprogrammer1994/ModernGL/blob/master/CHANGELOG.md)
 
-## Installation
+## Features
 
-```sh
-pip install ModernGL
+- GPU accelerated high quality graphics
+- Rendering modern OpenGL scenes with less headache
+- Simpler and faster than PyOpenGL
+- Can render without a window
+- 100% Pythonic
+
+## Sample usage
+
+```py
+>>> import moderngl
+>>> ctx = moderngl.create_standalone_context()
+>>> buf = ctx.buffer(b'Hello World!')  # allocated on the GPU
+>>> buf.read()
+b'Hello World!'
 ```
 
-<!-- ![sample](https://github.com/cprogrammer1994/ModernGL/raw/master/docs/Examples/images/sample.gif) -->
+For complete examples please visit the [Examples](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/#readme).
 
-## Description
+## Easy to use with Pillow and Numpy
 
-### Why ModernGL?
+```py
+>>> img = Image.open('texture.jpg')
+>>> ctx.texture(img.size, 3, img.tobytes())
+<Texture: 1>
+```
 
-If you prefer **GPU accelerated high quality graphics** then you should develop your applications using ModernGL.
-It is much simpler than PyOpenGL and capable of rendering with the same quality and performace.
+```py
+>>> ctx.buffer(np.array([0.0, 0.0, 1.0, 1.0], dtype='f4'))
+<Buffer: 1>
+```
 
-- Full linting support - (using [vscode] and [pylint])
-- Create GLSL shaders with only a few lines of code
-- Create framebuffers and validate them with a single call
-- Access cool OpenGL features by writing clean and self-explaining code
-- [vscode snippets] for fast prototyping
-- Render to pillow image - (no window required)
-
-[vscode]: https://code.visualstudio.com/
-[vscode snippets]: https://github.com/cprogrammer1994/ModernGL/blob/master/extras/vscode/snippets/python.json
-[pylint]: https://www.pylint.org/
-
-### Why is it simpler?
+## Compared to PyOpenGL
 
 With the original OpenGL API you have to write a couple of lines to achieve a **simple task** like compiling a shader or running a computation on the GPU. With ModernGL you will need just a **few lines** to achieve the same result.
 
@@ -82,23 +67,16 @@ vbo1 = ctx.buffer(b'Hello World!')
 vbo2 = ctx.buffer(reserve=1024, dynamic=True)
 ```
 
-#### Some cool features
+## Build
 
-```py
-# Read the content
->>> vbo1.read()
-b'Hello World!'
+[![build](https://img.shields.io/travis/cprogrammer1994/ModernGL/master.svg?label=build)](https://travis-ci.org/cprogrammer1994/ModernGL)
+[![build](https://img.shields.io/appveyor/ci/cprogrammer1994/ModernGL/master.svg?label=build)](https://ci.appveyor.com/project/cprogrammer1994/ModernGL)
 
-# Copy between buffers
->>> ctx.copy_buffer(vbo2, vbo1)
-
->>> vbo2.read(5)
-b'Hello'
-
-# Buffer re-specification
->>> vbo2.orphan()
->>> vbo2.write(b'Some other data')
+```sh
+python setup.py build_ext --inplace
 ```
+
+## FAQ
 
 ### Is ModernGL faster than PyOpenGL?
 
@@ -111,76 +89,6 @@ Most of the calls only require **OpenGL 3.3** but Subroutines and Compute Shader
 ### Is my old PC supported?
 
 OpenGL 3.3 came out in February 2010. With **up to date drivers** you will be able to use the most of the ModernGL functions, even on integrated graphics cards. _(No, Compute Shaders won't work)_
-
-### Render to pillow image
-
-```py
-size = (256, 256)
-fbo = ctx.framebuffer(ctx.renderbuffer(size))
-fbo.use()
-
-# Render scene
-
-Image.frombytes('RGB', size, fbo.read(components=3))
-```
-
-### Render to pillow image (multisample)
-
-```py
-size = (256, 256)
-fbo1 = ctx.framebuffer(ctx.renderbuffer(size, samples=8))
-fbo2 = ctx.framebuffer(ctx.renderbuffer(size))
-fbo1.use()
-
-# Render scene
-
-ctx.copy_framebuffer(fbo2, fbo1)
-Image.frombytes('RGB', size, fbo1.read(components=3))
-```
-
-## Render to pillow image (larger than screen)
-
-Just change the size to `(4096, 4096)`<br>
-
-> This will require much more video ram.
-
-## Working with uniforms and attributes
-
-```py
-# The declaration of the program is omitted.
-
->>> prog.uniforms
-{
-    'Matrix': <Uniform: 0>,
-    'Lights': <Uniform: 1>,
-    'Color': <Uniform: 2>,
-}
-
->>> prog.uniforms['Lights'].value
-[(0.0, 0.0, 100.0), [(10.0, 10.0, 90.0)]
-
->>> prog.attributes
-{
-    'vertex': <Attribute: 0>,
-    'normal': <Attribute: 1>,
-    'texcoord': <Attribute: 2>,
-}
-
->>> ctx.detect_format(prog, ['vertex', 'normal'])
-'4f3f'
-
->>> color_uniform = prog.uniforms['Color']
->>> color_uniform.value = (0.0, 1.0, 0.0)
-```
-
-> Don't read uniform values too often they force some GPUs to sync.
-
-### How can I start using ModernGL?
-
-Take a look at the [examples] and [docs].
-
-[examples]: https://github.com/cprogrammer1994/ModernGL/tree/master/examples
-[docs]: https://moderngl.readthedocs.io/
 
 ### Where can I use ModernGL?
 
