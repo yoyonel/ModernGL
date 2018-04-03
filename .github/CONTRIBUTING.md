@@ -28,7 +28,6 @@ If you are not sure about the style, we will format the code later.
 
 ## Useful links
 
-- [Structure of ModernGL](https://github.com/cprogrammer1994/ModernGL/blob/master/STRUCTURE.md).
 - [Changelog](https://github.com/cprogrammer1994/ModernGL/blob/master/CHANGELOG.md).
 - [Readme](https://github.com/cprogrammer1994/ModernGL/blob/master/README.md).
 - [License](https://github.com/cprogrammer1994/ModernGL/blob/master/LICENSE).

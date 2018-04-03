@@ -1,21 +1,11 @@
-<!-- If the structure does not apply: Select all and delete it. -->
-
-### Expected behavior
-
-Write here.
-
-### Actual behavior
-
-Write here.
-
-### Steps to reproduce behavior
+### Issue / Question / Feature request
 
 Write here.
 
 ### Version info
 
 ```
-python -m ModernGL
+python -m moderngl
 ```
 
 ```
