@@ -1,7 +1,9 @@
 # ModernGL
 
 <div align="center">
-[![preview](.github/preview.png)](#)
+
+  [![preview](.github/preview.png)](#)
+
 </div>
 
 ```sh
