@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.0.6] - 2018-03-22
+
 ### Fixed
 
 - minor bugs in Buffer Format
@@ -370,10 +372,11 @@ For more information please see: [Differneces between ModernGL5 and ModernGL4](h
 
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.5...master
-[5.0.5]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.5...master
-[5.0.4]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.4...5.0.5
-[5.0.3]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.3...5.0.4
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.6...master
+[5.0.6]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.5...5.0.6
+[5.0.5]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.4...5.0.5
+[5.0.4]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.3...5.0.4
+[5.0.3]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.2...5.0.3
 [5.0.2]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.1...5.0.2
 [5.0.1]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.0...5.0.1
 [5.0.0]: https://github.com/cprogrammer1994/ModernGL/tree/5.0.0
