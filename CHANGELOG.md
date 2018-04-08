@@ -7,11 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [5.0.6] - 2018-03-22
+## [5.0.7] - 2018-04-08
 
 ### Fixed
 
 - minor bugs in Buffer Format
+
+## [5.0.6] - 2018-03-22
+
+### Fixed
+
 - `standalone_context` on linux [issue #173](https://github.com/cprogrammer1994/ModernGL/issues/173)
 
 ## [5.0.5] - 2018-03-21
@@ -372,7 +377,8 @@ For more information please see: [Differneces between ModernGL5 and ModernGL4](h
 
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.6...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.7...master
+[5.0.7]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.6...5.0.7
 [5.0.6]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.5...5.0.6
 [5.0.5]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.4...5.0.5
 [5.0.4]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.3...5.0.4

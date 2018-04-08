@@ -268,7 +268,7 @@ classifiers = [
 
 setup(
     name='moderngl',
-    version='5.0.6',
+    version='5.0.7',
     description=short_description,
     long_description=long_description.strip(),
     url='https://github.com/cprogrammer1994/ModernGL',
