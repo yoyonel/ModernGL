@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- minor bugs in Buffer Format
+- `standalone_context` on linux [issue #173](https://github.com/cprogrammer1994/ModernGL/issues/173)
+
 ## [5.0.5] - 2018-03-21
 
 ### Fixed
