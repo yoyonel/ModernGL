@@ -489,19 +489,27 @@ PyObject * MGLBuffer_orphan(MGLBuffer * self) {
 
 PyObject * MGLBuffer_bind_to_uniform_block(MGLBuffer * self, PyObject * args) {
 	int binding;
+	Py_ssize_t offset;
+	Py_ssize_t size;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"I",
-		&binding
+		"Inn",
+		&binding,
+		&offset,
+		&size
 	);
 
 	if (!args_ok) {
 		return 0;
 	}
 
+	if (size < 0) {
+		size = self->size - offset;
+	}
+
 	const GLMethods & gl = self->context->gl;
-	gl.BindBufferBase(GL_UNIFORM_BUFFER, binding, self->buffer_obj);
+	gl.BindBufferRange(GL_UNIFORM_BUFFER, binding, self->buffer_obj, offset, size);
 	Py_RETURN_NONE;
 }
 
