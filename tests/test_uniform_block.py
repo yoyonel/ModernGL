@@ -76,6 +76,41 @@ class TestCase(unittest.TestCase):
         self.assertAlmostEqual(a, 309.5)
         self.assertAlmostEqual(b, 3004.0)
 
+    def test_2(self):
+        min_offset: int = self.ctx.info['GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT']
+        u3_len = (min_offset // 4) + 1
+        u3_data = list(range(u3_len))
+
+        buf_v = self.ctx.buffer(struct.pack('2f', 100.0, 1000.0))
+        buf_u1 = self.ctx.buffer(struct.pack('f', 9.5))
+        buf_u2 = self.ctx.buffer(struct.pack('f', 4.0))
+        buf_u3 = self.ctx.buffer(struct.pack('{:d}f'.format(u3_len), *u3_data))
+        buf_r = self.ctx.buffer(reserve=buf_v.size)
+
+        vao = self.ctx.vertex_array(self.prog, [
+            (buf_v, '2f', 'in_v'),
+        ])
+
+        self.prog['Block1'].binding = 2
+        self.prog['Block2'].binding = 4
+        self.prog['Block3'].binding = 1
+
+        buf_u1.bind_to_uniform_block(2)
+        buf_u2.bind_to_uniform_block(4)
+        buf_u3.bind_to_uniform_block(1, offset=min_offset)
+
+        vao.transform(buf_r)
+        a, b = struct.unpack('2f', buf_r.read())
+        self.assertAlmostEqual(a, u3_data[-1] * 100 + 9.5)
+        self.assertAlmostEqual(b, u3_data[-1] * 1000 + 4.0)
+
+        buf_u3.bind_to_uniform_block(1, offset=0)
+
+        vao.transform(buf_r)
+        a, b = struct.unpack('2f', buf_r.read())
+        self.assertAlmostEqual(a, 9.5)
+        self.assertAlmostEqual(b, 4.0)
+
 
 if __name__ == '__main__':
     unittest.main()
