@@ -23,7 +23,7 @@ Methods
 .. automethod:: Buffer.read_chunks_into(buffer, chunk_size, start, step, count, write_offset=0)
 .. automethod:: Buffer.clear(size=-1, offset=0, chunk=None)
 .. automethod:: Buffer.bind_to_uniform_block(binding=0, offset=0, size=-1)
-.. automethod:: Buffer.bind_to_storage_buffer(binding=0)
+.. automethod:: Buffer.bind_to_storage_buffer(binding=0, offset=0, size=-1)
 
 .. automethod:: Buffer.orphan()
 
