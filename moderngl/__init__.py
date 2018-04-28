@@ -291,25 +291,33 @@ class Buffer:
 
         self.mglo.clear(size, offset, chunk)
 
-    def bind_to_uniform_block(self, binding=0) -> None:
+    def bind_to_uniform_block(self, binding=0, *, offset=0, size=-1) -> None:
         '''
             Bind the buffer to a uniform block.
 
             Args:
                 binding (int): The uniform block binding.
+
+            Keyword Args:
+                offset (int): The offset.
+                size (int): The size. Value ``-1`` means all.
         '''
 
-        self.mglo.bind_to_uniform_block(binding)
+        self.mglo.bind_to_uniform_block(binding, offset, size)
 
-    def bind_to_storage_buffer(self, binding=0) -> None:
+    def bind_to_storage_buffer(self, binding=0, *, offset=0, size=-1) -> None:
         '''
             Bind the buffer to a shader storage buffer.
 
             Args:
                 binding (int): The shader storage binding.
+
+            Keyword Args:
+                offset (int): The offset.
+                size (int): The size. Value ``-1`` means all.
         '''
 
-        self.mglo.bind_to_storage_buffer(binding)
+        self.mglo.bind_to_storage_buffer(binding, offset, size)
 
     def orphan(self) -> None:
         '''
