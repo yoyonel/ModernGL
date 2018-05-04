@@ -2870,7 +2870,7 @@ class Context:
         return self.vertex_array(program, content, index_buffer)
 
     def program(self, *, vertex_shader, fragment_shader=None, geometry_shader=None,
-                tess_control_shader=None, tess_evaluation_shader=None, varyings=()) -> 'Program':
+                tess_evaluation_shader=None, tess_control_shader=None, varyings=()) -> 'Program':
         '''
             Create a :py:class:`Program` object.
 
@@ -2894,7 +2894,7 @@ class Context:
 
         res = Program.__new__(Program)
         res.mglo, ls1, ls2, ls3, ls4, ls5, res._subroutines, res._geom, res._glo = self.mglo.program(
-            vertex_shader, fragment_shader, geometry_shader, tess_control_shader, tess_evaluation_shader,
+            vertex_shader, fragment_shader, geometry_shader, tess_evaluation_shader, tess_control_shader,
             varyings
         )
 
