@@ -2517,6 +2517,19 @@ class Context:
         self.mglo.front_face = str(value)
 
     @property
+    def patch_vertices(self) -> int:
+        '''
+            int: The number of vertices that will be used to make up a single patch
+                 primitive.
+        '''
+
+        return self.mglo.patch_vertices
+
+    @patch_vertices.setter
+    def patch_vertices(self, value):
+        self.mglo.patch_vertices = value
+
+    @property
     def error(self) -> str:
         '''
             str: The result of glGetError() but human readable.
