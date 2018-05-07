@@ -29,7 +29,7 @@ class TestCase(unittest.TestCase):
             self.assertEqual(docsig, sig, msg=filename + '::' + method)
 
     def test_context_docs(self):
-        self.validate('context.rst', 'Context', ['release', 'mglo', 'extra'])
+        self.validate('context.rst', 'Context', ['release', 'mglo', 'extra', 'core_profile_check'])
 
     def test_program_docs(self):
         self.validate('program.rst', 'Program', ['release', 'mglo', 'glo', 'ctx', 'extra'])

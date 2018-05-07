@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- `Context.core_profile_check` method
+- `GL_CONTEXT_PROFILE_MASK` to `Context.info`
+
 ## [5.1.0] - 2018-04-28
 
 ### Added
