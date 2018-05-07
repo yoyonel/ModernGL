@@ -45,6 +45,7 @@ __all__ = [
     'LINE_STRIP_ADJACENCY',
     'TRIANGLES_ADJACENCY',
     'TRIANGLE_STRIP_ADJACENCY',
+    'PATCHES',
     'NEAREST',
     'LINEAR',
     'NEAREST_MIPMAP_NEAREST',
@@ -114,6 +115,7 @@ LINES_ADJACENCY = 0x000A
 LINE_STRIP_ADJACENCY = 0x000B
 TRIANGLES_ADJACENCY = 0x000C
 TRIANGLE_STRIP_ADJACENCY = 0x000D
+PATCHES = 0x000E
 
 
 NEAREST = 0x2600
@@ -2513,6 +2515,19 @@ class Context:
     @front_face.setter
     def front_face(self, value):
         self.mglo.front_face = str(value)
+
+    @property
+    def patch_vertices(self) -> int:
+        '''
+            int: The number of vertices that will be used to make up a single patch
+                 primitive.
+        '''
+
+        return self.mglo.patch_vertices
+
+    @patch_vertices.setter
+    def patch_vertices(self, value):
+        self.mglo.patch_vertices = value
 
     @property
     def error(self) -> str:

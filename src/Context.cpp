@@ -642,6 +642,30 @@ int MGLContext_set_front_face(MGLContext * self, PyObject * value) {
 	return 0;
 }
 
+PyObject * MGLContext_get_patch_vertices(MGLContext * self) {
+	int patch_vertices = 0;
+
+	self->gl.GetIntegerv(GL_PATCH_VERTICES, &patch_vertices);
+
+	return PyLong_FromLong(patch_vertices);
+}
+
+int MGLContext_set_patch_vertices(MGLContext * self, PyObject * value) {
+	int patch_vertices = PyLong_AsLong(value);
+
+	if (PyErr_Occurred()) {
+		return -1;
+	}
+
+	if (!patch_vertices) {
+		return -1;
+	}
+
+	self->gl.PatchParameteri(GL_PATCH_VERTICES, patch_vertices);
+
+	return 0;
+}
+
 PyObject * MGLContext_get_error(MGLContext * self, void * closure) {
 	switch (self->gl.GetError()) {
 		case GL_NO_ERROR:
@@ -1193,6 +1217,8 @@ PyGetSetDef MGLContext_tp_getseters[] = {
 
 	{(char *)"wireframe", (getter)MGLContext_get_wireframe, (setter)MGLContext_set_wireframe, 0, 0},
 	{(char *)"front_face", (getter)MGLContext_get_front_face, (setter)MGLContext_set_front_face, 0, 0},
+
+	{(char *)"patch_vertices", (getter)MGLContext_get_patch_vertices, (setter)MGLContext_set_patch_vertices, 0, 0},
 
 	{(char *)"info", (getter)MGLContext_get_info, 0, 0, 0},
 	{(char *)"error", (getter)MGLContext_get_error, 0, 0, 0},

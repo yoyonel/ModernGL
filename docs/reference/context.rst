@@ -62,6 +62,7 @@ Attributes
 .. autoattribute:: Context.max_texture_units
 .. autoattribute:: Context.default_texture_unit
 .. autoattribute:: Context.multisample
+.. autoattribute:: Context.patch_vertices
 .. autoattribute:: Context.error
 .. autoattribute:: Context.info
 

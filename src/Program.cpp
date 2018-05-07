@@ -70,16 +70,16 @@ PyObject * MGLContext_program(MGLContext * self, PyObject * args) {
 				"vertex_shader",
 				"fragment_shader",
 				"geometry_shader",
-				"tess_evaluation_shader",
 				"tess_control_shader",
+				"tess_evaluation_shader",
 			};
 
 			const char * SHADER_NAME_UNDERLINE[] = {
 				"=============",
 				"===============",
 				"===============",
-				"======================",
 				"===================",
+				"======================",
 			};
 
 			const char * message = "GLSL Compiler failed";
