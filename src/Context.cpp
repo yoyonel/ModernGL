@@ -766,6 +766,9 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		int gl_subpixel_bits = 0;
 		gl.GetIntegerv(GL_SUBPIXEL_BITS, &gl_subpixel_bits);
 
+		int gl_context_profile_mask = 0;
+		gl.GetIntegerv(GL_CONTEXT_PROFILE_MASK, &gl_context_profile_mask);
+
 		int gl_uniform_buffer_offset_alignment = 0;
 		gl.GetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &gl_uniform_buffer_offset_alignment);
 
@@ -773,6 +776,7 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(info, "GL_MAJOR_VERSION", PyLong_FromLong(gl_major_version));
 		PyDict_SetItemString(info, "GL_SAMPLE_BUFFERS", PyLong_FromLong(gl_sample_buffers));
 		PyDict_SetItemString(info, "GL_SUBPIXEL_BITS", PyLong_FromLong(gl_subpixel_bits));
+		PyDict_SetItemString(info, "GL_CONTEXT_PROFILE_MASK", PyLong_FromLong(gl_context_profile_mask));
 		PyDict_SetItemString(info, "GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT", PyLong_FromLong(gl_uniform_buffer_offset_alignment));
 	}
 

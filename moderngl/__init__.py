@@ -5,6 +5,7 @@
 # pylint: disable=C0123, W0212
 
 import os
+import warnings
 from typing import Dict, Tuple, Union
 
 if os.environ.get('READTHEDOCS') == 'True':
@@ -3075,6 +3076,25 @@ class Context:
         res.mglo, res._glo = self.mglo.compute_shader(source)
         res.ctx = self
         return res
+
+    def core_profile_check(self) -> None:
+        '''
+            Core profile check.
+
+            FOR DEBUG PURPOSES ONLY
+        '''
+
+        profile_mask = self.info['GL_CONTEXT_PROFILE_MASK']
+        if profile_mask != 1:
+            warnings.warn('The window should request a CORE OpenGL profile')
+
+        version_code = self.version_code
+        if not version_code:
+            major, minor = map(int, self.info['GL_VERSION'].split('.', 2)[:2])
+            version_code = major * 100 + minor * 10
+
+        if version_code < 330:
+            warnings.warn('The window should support OpenGL 3.3+ (version_code=%d)' % version_code)
 
     def release(self) -> None:
         '''
