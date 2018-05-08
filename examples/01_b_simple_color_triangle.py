@@ -1,15 +1,15 @@
+'''
+    Renders a traingle that has all RGB combinations
+'''
+
 import moderngl
-from moderngl_examples import run_example
 import numpy as np
 
-"""
-    Renders a traingle that has all RGB combinations
-"""
+from example_window import Example, run_example
 
 
-class Example:
-    def __init__(self, wnd):
-        self.wnd = wnd
+class SimpleColorTriangle(Example):
+    def __init__(self):
         self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program(
@@ -53,9 +53,8 @@ class Example:
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert', 'in_color')
 
     def render(self):
-        self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
         self.vao.render()
 
 
-run_example(Example)
+run_example(SimpleColorTriangle)
