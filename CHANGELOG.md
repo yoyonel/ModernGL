@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.2.1] - 2018-05-10
+
+### Fixed
+
+- markdown readme issues
+
 ## [5.2.0] - 2018-05-10
 
 ### Added
@@ -399,7 +405,8 @@ For more information please see: [Differneces between ModernGL5 and ModernGL4](h
 
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.2.0...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.2.1...master
+[5.2.1]: https://github.com/cprogrammer1994/ModernGL/compare/5.2.0...5.2.1
 [5.2.0]: https://github.com/cprogrammer1994/ModernGL/compare/5.1.0...5.2.0
 [5.1.0]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.7...5.1.0
 [5.0.7]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.6...5.0.7

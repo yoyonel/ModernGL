@@ -98,7 +98,7 @@ short_description = 'ModernGL: High performance rendering for Python 3'
 
 with open('README.md') as f:
     long_description = f.read()
-    long_description = re.sub(r'</?div[^>]*>', '', long_description, flags=re.M)
+    long_description = re.sub(r'</?div[^>]*>|\r', '', long_description, flags=re.M)
 
 keywords = [
     'ModernGL',
@@ -127,7 +127,7 @@ classifiers = [
 
 setup(
     name='moderngl',
-    version='5.2.0',
+    version='5.2.1',
     description=short_description,
     long_description=long_description,
     long_description_content_type='text/markdown',
