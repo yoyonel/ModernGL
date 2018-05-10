@@ -1,6 +1,6 @@
 <div align="center">
 
-  [![preview](.github/preview.png)](#readme)
+[![preview](https://github.com/cprogrammer1994/ModernGL/raw/master/.github/preview.png)](#readme)
 
 </div>
 
@@ -13,7 +13,7 @@ pip install ModernGL
 - [Documentation](https://moderngl.readthedocs.io/)
 - [Examples](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/#readme)
 - [ModernGL on Github](https://github.com/cprogrammer1994/ModernGL/)
-- [ModernGL on PyPI](https://pypi.python.org/pypi/ModernGL/)
+- [ModernGL on PyPI](https://pypi.org/project/ModernGL/)
 
 ## Features
 
@@ -104,7 +104,7 @@ OpenGL 3.3 came out in February 2010. With **up to date drivers** you will be ab
 
 **NO**, Window creation is up to you. You can choose from a large variety of modules that can create a window: [PyQt5], [pyglet], [pygame], [GLUT] and many others.
 
-[PyQt5]: https://pypi.python.org/pypi/PyQt5/
+[PyQt5]: https://pypi.org/project/PyQt5/
 [pyglet]: https://bitbucket.org/pyglet/pyglet/wiki/Home
 [pygame]: https://www.pygame.org/news
 [GLUT]: https://wiki.python.org/moin/PyOpenGL
