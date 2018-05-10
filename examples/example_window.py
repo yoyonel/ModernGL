@@ -1,3 +1,5 @@
+import time
+
 import moderngl as mgl
 import numpy as np
 from PyQt5 import QtOpenGL, QtWidgets
@@ -8,6 +10,8 @@ class WindowInfo:
         self.size = (0, 0)
         self.mouse = (0, 0)
         self.wheel = 0
+        self.time = 0
+        self.ratio = 1.0
         self.viewport = (0, 0, 0, 0)
         self.keys = np.full(256, False)
         self.old_keys = np.copy(self.keys)
@@ -35,11 +39,13 @@ class ExampleWindow(QtOpenGL.QGLWidget):
         self.move(QtWidgets.QDesktopWidget().rect().center() - self.rect().center())
         self.setWindowTitle(title)
 
+        self.start_time = time.clock()
         self.example = lambda: None
         self.ex = None
 
         self.wnd = WindowInfo()
         self.wnd.viewport = (0, 0) + size
+        self.wnd.ratio = size[0] / size[1]
         self.wnd.size = size
 
     def keyPressEvent(self, event):
@@ -57,6 +63,7 @@ class ExampleWindow(QtOpenGL.QGLWidget):
     def paintGL(self):
         if self.ex is None:
             self.ex = self.example()
+        self.wnd.time = time.clock() - self.start_time
         self.ex.render()
         self.wnd.old_keys = np.copy(self.wnd.keys)
         self.wnd.wheel = 0

@@ -1,15 +1,15 @@
 import os
 
 import moderngl
-from moderngl_examples import run_example
-from moderngl_obj import Obj
+from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
+from example_window import Example, run_example
 
-class Example:
-    def __init__(self, wnd):
-        self.wnd = wnd
+
+class LoadingOBJ(Example):
+    def __init__(self):
         self.ctx = moderngl.create_context()
 
         self.obj = Obj.open(os.path.join(os.path.dirname(__file__), 'data', 'sitting_dummy.obj'))
@@ -96,4 +96,4 @@ class Example:
         self.vao.render()
 
 
-run_example(Example)
+run_example(LoadingOBJ)

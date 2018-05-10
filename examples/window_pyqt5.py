@@ -32,7 +32,6 @@ class MyWidget(QModernGLWidget):
         self.resize(512, 512)
         self.ctx.viewport = (0, 0, 512, 512)
         self.scene = HelloWorld2D(self.ctx)
-        print(self.ctx.version_code)
 
     def render(self):
         self.screen.use()

@@ -53,6 +53,7 @@ class SimpleColorTriangle(Example):
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert', 'in_color')
 
     def render(self):
+        self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
         self.vao.render()
 

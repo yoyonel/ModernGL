@@ -1,16 +1,16 @@
 import io
 import os
 
-import matplotlib
 import moderngl
 import numpy as np
-from moderngl_examples import run_example
-from moderngl_obj import Obj
+from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
-matplotlib.use('svg')
+from example_window import Example, run_example
 
+import matplotlib
+matplotlib.use('svg')
 import matplotlib.pyplot as plt
 
 
@@ -18,9 +18,8 @@ def local(*path):
     return os.path.join(os.path.dirname(__file__), *path)
 
 
-class Example:
-    def __init__(self, wnd):
-        self.wnd = wnd
+class MatplotlibTexture(Example):
+    def __init__(self):
         self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program(
@@ -140,4 +139,4 @@ class Example:
         self.objects['billboard-image'].render()
 
 
-run_example(Example)
+run_example(MatplotlibTexture)

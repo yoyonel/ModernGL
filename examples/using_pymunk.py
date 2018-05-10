@@ -1,21 +1,22 @@
 import os
 import struct
+import time
 
 import moderngl
 import numpy as np
 import pymunk
-from moderngl_examples import run_example
 from PIL import Image
 from pymunk import Vec2d
+
+from example_window import Example, run_example
 
 
 def local(*path):
     return os.path.join(os.path.dirname(__file__), *path)
 
 
-class Example:
-    def __init__(self, wnd):
-        self.wnd = wnd
+class PymunkExample(Example):
+    def __init__(self):
         self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program(
@@ -134,11 +135,12 @@ class Example:
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.BLEND)
 
-        if self.wnd.key_pressed(' '):
+        if self.wnd.key_pressed(32):
             self.shoot()
 
         for i in range(10):
-            self.space.step(self.wnd.frame_time / 10)
+            self.space.step(1 / 60)
+            time.sleep(1 / 200)  # TODO: fix high fps
 
         self.prog['Camera'].value = (200, 300, width / 2, height / 2)
 
@@ -155,4 +157,4 @@ class Example:
         self.vao.render(moderngl.TRIANGLE_STRIP, instances=len(self.balls))
 
 
-run_example(Example)
+run_example(PymunkExample)

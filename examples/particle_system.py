@@ -1,6 +1,7 @@
 import moderngl
-from moderngl_examples import run_example
 import numpy as np
+
+from example_window import Example, run_example
 
 
 def particle():
@@ -9,9 +10,8 @@ def particle():
     return np.array([0.0, 0.0, np.cos(a) * r - 0.003, np.sin(a) * r - 0.008]).astype('f4').tobytes()
 
 
-class Example:
-    def __init__(self, wnd):
-        self.wnd = wnd
+class Particles(Example):
+    def __init__(self):
         self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program(
@@ -84,4 +84,4 @@ class Example:
         self.ctx.copy_buffer(self.vbo1, self.vbo2)
 
 
-run_example(Example)
+run_example(Particles)

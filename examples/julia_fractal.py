@@ -1,11 +1,12 @@
 import moderngl
-from moderngl_examples import run_example
+
 import numpy as np
 
+from example_window import Example, run_example
 
-class Example:
-    def __init__(self, wnd):
-        self.wnd = wnd
+
+class Fractal(Example):
+    def __init__(self):
         self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program(
@@ -72,4 +73,4 @@ class Example:
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
 
-run_example(Example)
+run_example(Fractal)

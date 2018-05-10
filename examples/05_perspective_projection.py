@@ -1,15 +1,15 @@
+'''
+    Renders a blue triangle
+'''
+
 import moderngl
-from moderngl_examples import run_example
 import numpy as np
 
-"""
-    Renders a blue triangle
-"""
+from example_window import Example, run_example
 
 
-class Example:
-    def __init__(self, wnd):
-        self.wnd = wnd
+class PerspectiveProjection(Example):
+    def __init__(self):
         self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program(
@@ -96,4 +96,4 @@ class Example:
         self.vao.render(moderngl.LINES, 65 * 4)
 
 
-run_example(Example)
+run_example(PerspectiveProjection)
