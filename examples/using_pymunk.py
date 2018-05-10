@@ -1,6 +1,5 @@
 import os
 import struct
-import time
 
 import moderngl
 import numpy as np
@@ -139,8 +138,7 @@ class PymunkExample(Example):
             self.shoot()
 
         for i in range(10):
-            self.space.step(1 / 60)
-            time.sleep(1 / 200)  # TODO: fix high fps
+            self.space.step(1 / 60 / 10)
 
         self.prog['Camera'].value = (200, 300, width / 2, height / 2)
 

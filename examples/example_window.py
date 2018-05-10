@@ -31,6 +31,7 @@ class ExampleWindow(QtOpenGL.QGLWidget):
         fmt = QtOpenGL.QGLFormat()
         fmt.setVersion(3, 3)
         fmt.setProfile(QtOpenGL.QGLFormat.CoreProfile)
+        fmt.setSwapInterval(1)
         fmt.setSampleBuffers(True)
         fmt.setDepthBufferSize(24)
 
