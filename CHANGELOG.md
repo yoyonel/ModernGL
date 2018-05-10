@@ -7,10 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.2.0] - 2018-05-10
+
 ### Added
 
 - `Context.core_profile_check` method
 - `GL_CONTEXT_PROFILE_MASK` to `Context.info`
+- `GL_PATCHES` constant for drawing patches
+- getter and setter for `GL_PATCH_VERTICES`
+- markdown readme
+
+### Fixed
+
+- tesselation control and tesselation evaluation shader being swapped when creating a program
 
 ## [5.1.0] - 2018-04-28
 
@@ -390,7 +399,8 @@ For more information please see: [Differneces between ModernGL5 and ModernGL4](h
 
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.1.0...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.2.0...master
+[5.2.0]: https://github.com/cprogrammer1994/ModernGL/compare/5.1.0...5.2.0
 [5.1.0]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.7...5.1.0
 [5.0.7]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.6...5.0.7
 [5.0.6]: https://github.com/cprogrammer1994/ModernGL/compare/5.0.5...5.0.6
