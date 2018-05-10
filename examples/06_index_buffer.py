@@ -1,15 +1,15 @@
+'''
+    Renders 2 triangles that share the same head using index buffers (ibo)
+'''
+
 import moderngl
-from moderngl_examples import run_example
 import numpy as np
 
-"""
-    Renders 2 triangles that share the same head using index buffers (ibo)
-"""
+from example_window import Example, run_example
 
 
-class Example:
-    def __init__(self, wnd):
-        self.wnd = wnd
+class IndexBuffer(Example):
+    def __init__(self):
         self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program(
@@ -63,4 +63,4 @@ class Example:
         self.vao.render()
 
 
-run_example(Example)
+run_example(IndexBuffer)

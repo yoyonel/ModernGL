@@ -3,19 +3,19 @@ import struct
 
 import moderngl
 import numpy as np
-from moderngl_examples import run_example
-from moderngl_obj import Obj
+from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
+
+from example_window import Example, run_example
 
 
 def local(*path):
     return os.path.join(os.path.dirname(__file__), *path)
 
 
-class Example:
-    def __init__(self, wnd):
-        self.wnd = wnd
+class MugExample(Example):
+    def __init__(self):
         self.ctx = moderngl.create_context()
 
         self.canvas_prog = self.ctx.program(
@@ -131,7 +131,6 @@ class Example:
         self.sticker_vao = self.ctx.simple_vertex_array(self.prog, self.sticker_vbo, 'in_vert', 'in_norm', 'in_text')
 
     def render(self):
-        width, height = self.wnd.size
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
         self.bg_texture.use()
@@ -139,7 +138,7 @@ class Example:
         self.canvas_vao.render(moderngl.TRIANGLE_STRIP)
         self.ctx.enable_only(moderngl.DEPTH_TEST)
 
-        proj = Matrix44.perspective_projection(30.0, width / height, 1.0, 1000.0)
+        proj = Matrix44.perspective_projection(30.0, self.wnd.ratio, 1.0, 1000.0)
         lookat = Matrix44.look_at(
             (46.748, -280.619, 154.391),
             (-23.844, 2.698, 44.493),
@@ -155,4 +154,4 @@ class Example:
         self.sticker_vao.render(moderngl.TRIANGLE_STRIP)
 
 
-run_example(Example)
+run_example(MugExample)

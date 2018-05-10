@@ -1,10 +1,10 @@
 import moderngl
-from moderngl_examples import run_example
+
+from example_window import Example, run_example
 
 
-class Example:
-    def __init__(self, wnd):
-        self.wnd = wnd
+class EmptyWindow(Example):
+    def __init__(self):
         self.ctx = moderngl.create_context()
 
     def render(self):
@@ -12,4 +12,4 @@ class Example:
         self.ctx.clear(0.2, 0.4, 0.7)
 
 
-run_example(Example)
+run_example(EmptyWindow)

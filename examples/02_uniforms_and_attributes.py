@@ -1,15 +1,15 @@
+'''
+    Renders a rotating and scaling traignle
+'''
+
 import moderngl
-from moderngl_examples import run_example
 import numpy as np
 
-"""
-    Renders a rotating and scaling traignle
-"""
+from example_window import Example, run_example
 
 
-class Example:
-    def __init__(self, wnd):
-        self.wnd = wnd
+class UniformsAndAttributes(Example):
+    def __init__(self):
         self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program(
@@ -53,13 +53,9 @@ class Example:
 
         self.vbo = self.ctx.buffer(vertices.astype('f4').tobytes())
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'vert')
-        self.frame_count = 0
-
-        print(self.wnd.time)
 
     def render(self):
-        self.frame_count += 1
-        sin_scale = np.sin(np.deg2rad(self.frame_count))
+        sin_scale = np.sin(np.deg2rad(self.wnd.time * 60))
 
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
@@ -70,4 +66,4 @@ class Example:
         self.scale.value = (sin_scale * 0.75, 0.75)
 
 
-run_example(Example)
+run_example(UniformsAndAttributes)

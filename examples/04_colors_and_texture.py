@@ -1,24 +1,24 @@
+'''
+    Renders a floating, oscillating, 3d islan with lights
+'''
+
 import os
 
 import moderngl
 import numpy as np
-from moderngl_examples import run_example
-from moderngl_obj import Obj
+from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
-"""
-    Renders a floating, oscillating, 3d islan with lights
-"""
+from example_window import Example, run_example
 
 
 def local(*path):
     return os.path.join(os.path.dirname(__file__), *path)
 
 
-class Example:
-    def __init__(self, wnd):
-        self.wnd = wnd
+class ColorsAndTexture(Example):
+    def __init__(self):
         self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program(
@@ -122,4 +122,4 @@ class Example:
         self.objects['billboard-image'].render()
 
 
-run_example(Example)
+run_example(ColorsAndTexture)

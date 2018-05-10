@@ -2,25 +2,25 @@ import os
 
 import moderngl
 import numpy as np
-from moderngl_obj import Obj
-from moderngl_examples import run_example
+from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
+
+from example_window import Example, run_example
 
 
 def local(*path):
     return os.path.join(os.path.dirname(__file__), *path)
 
 
-class InstancedCrates:
+class InstancedCrates(Example):
     '''
         This example renders 32x32 crates.
         For each crate the location is [x, y, sin(a * time + b)]
         There are 1024 crates aligned in a grid.
     '''
 
-    def __init__(self, wnd):
-        self.wnd = wnd
+    def __init__(self):
         self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program(

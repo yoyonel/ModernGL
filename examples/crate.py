@@ -2,19 +2,19 @@ import os
 
 import moderngl
 import numpy as np
-from moderngl_obj import Obj
-from moderngl_examples import run_example
+from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
+
+from example_window import Example, run_example
 
 
 def local(*path):
     return os.path.join(os.path.dirname(__file__), *path)
 
 
-class Example:
-    def __init__(self, wnd):
-        self.wnd = wnd
+class CrateExample(Example):
+    def __init__(self):
         self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program(
@@ -70,14 +70,13 @@ class Example:
 
     def render(self):
         angle = self.wnd.time
-        width, height = self.wnd.size
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.DEPTH_TEST)
 
         camera_pos = (np.cos(angle) * 5.0, np.sin(angle) * 5.0, 2.0)
 
-        proj = Matrix44.perspective_projection(45.0, width / height, 0.1, 1000.0)
+        proj = Matrix44.perspective_projection(45.0, self.wnd.ratio, 0.1, 1000.0)
         lookat = Matrix44.look_at(
             camera_pos,
             (0.0, 0.0, 0.5),
@@ -89,4 +88,4 @@ class Example:
         self.vao.render()
 
 
-run_example(Example)
+run_example(CrateExample)

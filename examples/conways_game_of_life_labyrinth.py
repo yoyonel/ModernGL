@@ -1,11 +1,13 @@
 import moderngl
 import numpy as np
-from moderngl_examples import run_example
+
+from example_window import Example, run_example
 
 
-class Example:
-    def __init__(self, wnd):
-        self.wnd = wnd
+class Conway(Example):
+    WINDOW_SIZE = (640, 640)
+
+    def __init__(self):
         self.ctx = moderngl.create_context()
 
         width, height = self.wnd.size
@@ -105,4 +107,4 @@ class Example:
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
 
-run_example(Example)
+run_example(Conway)
