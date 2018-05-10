@@ -1,5 +1,6 @@
-moderngl_examples
-moderngl_obj
+objloader
 numpy
 pillow
 pyrr
+pymunk
+PyQt5
