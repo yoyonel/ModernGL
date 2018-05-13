@@ -109,6 +109,7 @@ class ToyCars(Example):
         self.light.value = camera_pos
 
         # self.vbo2.write(Matrix33.from_z_rotation(self.wnd.time).astype('f4').tobytes(), offset=24)
+        # Cars
         self.vbo2.write(b''.join(struct.pack(
             '15f',
             *car['color'],
@@ -118,6 +119,7 @@ class ToyCars(Example):
             0.0, 0.0, 1.0,
         ) for car in cars))
         self.vao.render(instances=len(cars))
+        # Shadow
         self.vbo2.write(b''.join(struct.pack(
             '15f',
             0.0, 0.0, 0.0,
