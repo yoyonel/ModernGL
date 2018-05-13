@@ -137,19 +137,31 @@ class PymunkExample(Example):
         if self.wnd.key_pressed(32):
             self.shoot()
 
-        for i in range(10):
-            self.space.step(1 / 60 / 10)
+        nb_sub_steps = 10
+        for i in range(nb_sub_steps):
+            self.space.step(1 / 60 / nb_sub_steps)
 
         self.prog['Camera'].value = (200, 300, width / 2, height / 2)
 
-        bodies = np.array([(b.position.x, b.position.y, b.angle, 10, 10, 1, 1, 1, 0) for b in self.bodies], dtype='f4')
+        bodies = np.array(
+            [
+                (b.position.x, b.position.y, b.angle, 10, 10, 1, 1, 1, 0)
+                for b in self.bodies
+            ], dtype='f4'
+        )
         self.vbo2.write(bodies.tobytes())
         self.prog['Texture'].value = 0
         self.vao.render(moderngl.TRIANGLE_STRIP, instances=len(self.bodies))
 
         self.vbo2.orphan()
 
-        balls = np.array([(b.position.x, b.position.y, b.angle, 15, 15, 1, 1, 1, 0) for b in self.balls], dtype='f4')
+        balls = np.array(
+            [
+                (b.position.x, b.position.y, b.angle, 15, 15, 1, 1, 1, 0)
+                for b in self.balls
+            ],
+            dtype='f4'
+        )
         self.vbo2.write(balls.tobytes())
         self.prog['Texture'].value = 1
         self.vao.render(moderngl.TRIANGLE_STRIP, instances=len(self.balls))

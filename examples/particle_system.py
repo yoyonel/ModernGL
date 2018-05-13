@@ -58,15 +58,20 @@ class Particles(Example):
         self.acc = self.transform['Acc']
         self.acc.value = (0.0, -0.0001)
 
-        self.vbo1 = self.ctx.buffer(b''.join(particle() for i in range(1024)))
+        self.nb_particles = int(1024)
+
+        self.vbo1 = self.ctx.buffer(b''.join(particle() for _ in range(self.nb_particles)))
         self.vbo2 = self.ctx.buffer(reserve=self.vbo1.size)
 
         self.vao1 = self.ctx.simple_vertex_array(self.transform, self.vbo1, 'in_pos', 'in_prev')
         self.vao2 = self.ctx.simple_vertex_array(self.transform, self.vbo2, 'in_pos', 'in_prev')
 
-        self.render_vao = self.ctx.vertex_array(self.prog, [
-            (self.vbo1, '2f 2x4', 'in_vert'),
-        ])
+        self.render_vao = self.ctx.vertex_array(
+            self.prog,
+            [
+                (self.vbo1, '2f 2x4', 'in_vert'),
+            ]
+        )
 
         self.idx = 0
 
@@ -77,10 +82,10 @@ class Particles(Example):
 
         for i in range(8):
             self.vbo1.write(particle(), offset=self.idx * 16)
-            self.idx = (self.idx + 1) % 1024
+            self.idx = (self.idx + 1) % self.nb_particles
 
-        self.render_vao.render(moderngl.POINTS, 1024)
-        self.vao1.transform(self.vbo2, moderngl.POINTS, 1024)
+        self.render_vao.render(moderngl.POINTS, self.nb_particles)
+        self.vao1.transform(self.vbo2, moderngl.POINTS, self.nb_particles)
         self.ctx.copy_buffer(self.vbo1, self.vbo2)
 
 

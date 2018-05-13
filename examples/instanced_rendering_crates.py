@@ -111,7 +111,7 @@ class InstancedCrates(Example):
         coordinates = np.dstack([self.crate_x, self.crate_y, crate_z])
 
         self.vbo2.write(coordinates.astype('f4').tobytes())
-        self.vao.render(instances=1024)
+        self.vao.render(instances=32*32)
 
 
 run_example(InstancedCrates)

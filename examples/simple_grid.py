@@ -2,7 +2,7 @@ import moderngl
 import numpy as np
 from pyrr import Matrix44
 
-from example_window import Example, run_example
+from examples.example_window import Example, run_example
 
 
 def grid(size, steps):

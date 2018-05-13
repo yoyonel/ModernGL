@@ -6,7 +6,7 @@ from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
-from example_window import Example, run_example
+from examples.example_window import Example, run_example
 
 
 def local(*path):
@@ -127,7 +127,6 @@ class RenderToTexture(Example):
 
             if mode == 'render_to_texture':
                 self.texture1.use()
-
             else:
                 self.texture2.use()
 
