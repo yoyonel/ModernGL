@@ -21,7 +21,7 @@ class InstancedRendering(Example):
                 uniform vec2 Scale;
 
                 void main() {
-                    v_color = in_color;
+                    v_color = in_color * vec4(1, 1, 1, 0.05);
                     float r = Rotation * (0.5 + gl_InstanceID * 0.05);
                     mat2 rot = mat2(cos(r), sin(r), -sin(r), cos(r));
                     gl_Position = vec4((rot * in_vert) * Scale, 0.0, 1.0);
@@ -58,8 +58,8 @@ class InstancedRendering(Example):
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.BLEND)
         self.scale.value = (height / width * 0.75, 0.75)
-        self.rotation.value = self.wnd.time
-        self.vao.render(instances=10)
+        self.rotation.value = self.wnd.time * 10
+        self.vao.render(instances=50)
 
 
 run_example(InstancedRendering)

@@ -5,7 +5,7 @@ from example_window import Example, run_example
 
 
 class Conway(Example):
-    WINDOW_SIZE = (640, 640)
+    WINDOW_SIZE = (512, 512)
 
     def __init__(self):
         self.ctx = moderngl.create_context()

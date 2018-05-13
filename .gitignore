@@ -1,3 +1,7 @@
+#
+.idea/
+
+#
 ModernGL/ext/**/*
 !ModernGL/ext/__init__.py
 !ModernGL/ext/__main__.py
