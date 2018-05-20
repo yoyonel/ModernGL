@@ -67,7 +67,7 @@ inline int compare_func_from_string(const char * str) {
 		return 0;
 	}
 
-	switch (str[0] * 255 + str[1]) {
+	switch (str[0] * 256 + str[1]) {
 		case ('<' * 256 + '='):
 			return GL_LEQUAL;
 
