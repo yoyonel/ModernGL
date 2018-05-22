@@ -90,11 +90,9 @@ PyObject * MGLContext_texture(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-
 	int texture_target = samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	int pixel_type = data_type->gl_type;
-	int base_format = base_formats[components];
+	int base_format = data_type->base_format[components];
 	int internal_format = data_type->internal_format[components];
 
 	const GLMethods & gl = self->gl;
@@ -336,11 +334,9 @@ PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
 	PyObject * result = PyBytes_FromStringAndSize(0, expected_size);
 	char * data = PyBytes_AS_STRING(result);
 
-	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-
 	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	int pixel_type = self->data_type->gl_type;
-	int base_format = base_formats[self->components];
+	int base_format = self->data_type->base_format[self->components];
 
 	const GLMethods & gl = self->context->gl;
 
@@ -419,11 +415,9 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 
-	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-
 	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	int pixel_type = self->data_type->gl_type;
-	int format = formats[self->components];
+	int format = self->data_type->base_format[self->components];
 
 	if (Py_TYPE(data) == &MGLBuffer_Type) {
 
@@ -552,11 +546,9 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 
-	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-
 	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	int pixel_type = self->data_type->gl_type;
-	int format = formats[self->components];
+	int format = self->data_type->base_format[self->components];
 
 	if (Py_TYPE(data) == &MGLBuffer_Type) {
 

@@ -80,10 +80,8 @@ PyObject * MGLContext_texture_array(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-
 	int pixel_type = data_type->gl_type;
-	int base_format = base_formats[components];
+	int base_format = data_type->base_format[components];
 	int internal_format = data_type->internal_format[components];
 
 	const GLMethods & gl = self->gl;
@@ -174,10 +172,8 @@ PyObject * MGLTextureArray_read(MGLTextureArray * self, PyObject * args) {
 	PyObject * result = PyBytes_FromStringAndSize(0, expected_size);
 	char * data = PyBytes_AS_STRING(result);
 
-	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-
 	int pixel_type = self->data_type->gl_type;
-	int base_format = base_formats[self->components];
+	int base_format = self->data_type->base_format[self->components];
 
 	const GLMethods & gl = self->context->gl;
 
@@ -238,10 +234,8 @@ PyObject * MGLTextureArray_read_into(MGLTextureArray * self, PyObject * args) {
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * self->height * self->layers;
 
-	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-
 	int pixel_type = self->data_type->gl_type;
-	int format = formats[self->components];
+	int format = self->data_type->base_format[self->components];
 
 	if (Py_TYPE(data) == &MGLBuffer_Type) {
 
@@ -360,10 +354,8 @@ PyObject * MGLTextureArray_write(MGLTextureArray * self, PyObject * args) {
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height * layers;
 
-	const int formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-
 	int pixel_type = self->data_type->gl_type;
-	int format = formats[self->components];
+	int format = self->data_type->base_format[self->components];
 
 	if (Py_TYPE(data) == &MGLBuffer_Type) {
 

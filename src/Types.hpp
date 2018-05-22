@@ -50,6 +50,7 @@ struct MGLUniformBlock;
 struct MGLVertexArray;
 
 struct MGLDataType {
+	int * base_format;
 	int * internal_format;
 	int gl_type;
 	int size;
