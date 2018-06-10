@@ -6,7 +6,7 @@ import os
 
 import moderngl
 import numpy as np
-from objloader import Obj
+from moderngl_obj import Obj
 from PIL import Image
 from pyrr import Matrix44
 
