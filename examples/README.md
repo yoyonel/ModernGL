@@ -31,20 +31,11 @@ Index buffer
 Multiple instance rendering
 
 ![](preview_images/multiple_instance_rendering.png)
+
 ## Dependencies
 
 ```
-pip install moderngl moderngl_examples moderngl_obj
-```
-
-### Window backends
-
-Pick one or install all.
-
-```
-pip install PyQt5
-pip install pygame
-pip install GLWindow # this is windows only at the moment
+pip install -r requirements.txt
 ```
 
 ## Work in progress...

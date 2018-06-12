@@ -10,6 +10,7 @@ ModernGL/ext/**/*
 **/dist
 
 venv
+.venv
 temp_*
 
 .tox
@@ -19,6 +20,7 @@ temp_*
 .vscode/*
 !.vscode/extensions.json
 !.vscode/snippets
+.idea
 
 *.egg-info
 *.log
