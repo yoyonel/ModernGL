@@ -1,4 +1,4 @@
-Differneces between ModernGL5 and ModernGL4
+Differences between ModernGL5 and ModernGL4
 ===========================================
 
 .. py:module:: moderngl
