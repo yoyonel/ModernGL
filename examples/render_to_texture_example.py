@@ -73,7 +73,7 @@ class RenderToTexture(Example):
         for name in ['ground', 'grass', 'billboard', 'billboard-holder', 'billboard-image']:
             obj = Obj.open(local('data', 'scene-1-%s.obj' % name))
             vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
-            vao = self.ctx.simple_vertex_array(self.prog, vbo, 'in_vert', 'in_norm', 'in_text')
+            vao = self.ctx.simple_vertex_array(self.prog, vbo, "in_vert", "in_norm", "in_text")
             self.objects[name] = vao
 
         img = Image.open(local('data', 'infographic-1.jpg')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
@@ -102,7 +102,6 @@ class RenderToTexture(Example):
             if mode == 'render_to_texture':
                 self.fbo.clear(1.0, 1.0, 1.0)
                 self.fbo.use()
-
             else:
                 self.ctx.screen.use()
 
