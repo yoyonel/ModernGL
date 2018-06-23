@@ -1,0 +1,8 @@
+-e git+git@github.com:yoyonel/ModernGL.git@af294339e579432ff7320e633b324fe4711b719e#egg=moderngl
+multipledispatch==0.5.0
+numpy==1.14.5
+objloader==0.2.0
+Pillow==5.1.0
+PyQt5==5.11
+PyQt5-sip==4.19.9
+pyrr==0.9.2
