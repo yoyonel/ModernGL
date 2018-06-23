@@ -55,7 +55,7 @@ prog = ctx.program(
             color = texture(Texture, v_texcoord);
         }
     '''),
-])
+)
 
 prog.uniforms['Screen'].value = wnd.size
 
