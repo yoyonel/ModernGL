@@ -10,7 +10,9 @@ class Conway(Example):
     def __init__(self):
         self.ctx = moderngl.create_context()
 
-        width, height = self.wnd.size
+        width, height = (128, 128)
+        # width, height = self.wnd.size
+
         canvas = np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]).astype('f4')
         pixels = np.round(np.random.rand(width, height)).astype('f4')
         grid = np.dstack(np.mgrid[0:height, 0:width][::-1]).astype('i4')
@@ -103,7 +105,7 @@ class Conway(Example):
 
         self.tao.transform(self.pbo)
         self.texture.write(self.pbo)
-
+        
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
 
