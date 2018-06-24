@@ -112,33 +112,40 @@ class Fire(Example):
                         }
 
                         void main() {
-                            vec3 c1 = texture(tex_ping, v_text + vec2(0, -0.5*OffsetXY.y)).rgb;
-                            vec3 c2 = texture(tex_ping, v_text + vec2(0, -1.5*OffsetXY.y)).rgb;
-                            vec3 c3 = texture(tex_ping, v_text + vec2(+0.5*OffsetXY.x, -0.5*OffsetXY.y)).rgb;
-                            vec3 c4 = texture(tex_ping, v_text + vec2(-0.5*OffsetXY.x, -1.5*OffsetXY.y)).rgb;
+                            vec3 c1 = texture(tex_ping, v_text + vec2(0, -0.500*OffsetXY.y)).rgb;
+                            vec3 c2 = texture(tex_ping, v_text + vec2(0, -1.000*OffsetXY.y)).rgb;
+                            vec3 c3 = texture(tex_ping, v_text + vec2(0, -1.500*OffsetXY.y)).rgb;
+                            vec3 c4 = texture(tex_ping, v_text + vec2(0, -2.000*OffsetXY.y)).rgb;
+                            vec3 c5 = texture(tex_ping, v_text + vec2(0, -2.500*OffsetXY.y)).rgb;
+                            //
+                            vec3 c6 = texture(tex_ping, v_text + vec2(+0.500*OffsetXY.x, 0)).rgb;
+                            vec3 c7 = texture(tex_ping, v_text + vec2(-0.500*OffsetXY.x, 0)).rgb;
+                            vec3 c8 = texture(tex_ping, v_text + vec2(+1.000*OffsetXY.x, 0)).rgb;
+                            vec3 c9 = texture(tex_ping, v_text + vec2(-1.000*OffsetXY.x, 0)).rgb;
                             
-                            vec3 newC = (c1 + c2 + c3 + c4) * 0.250;
+                            vec3 newC = (c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9) * (1.0/9.0);
 
                             vec2 v_text_scolled = v_text + vec2(cos(time)*0.1, -time);
                             
                             float final_noise = 0.0;
-                            
+                            /*
                             float noise_rand = (
                                 random(v_text_scolled + vec2(-1*OffsetXY.x, 0*OffsetXY.y)) +
                                 random(v_text_scolled + vec2(+1*OffsetXY.x, 0*OffsetXY.y)) + 
                                 random(v_text_scolled + vec2(0*OffsetXY.x, -1*OffsetXY.y)) + 
                                 random(v_text_scolled + vec2(0*OffsetXY.x, +1*OffsetXY.y))
                             ) * 0.25;
-                            //float noise_perlin = pow(noise((v_text_scolled) * 10.00), 3.0);
-                            //final_noise = noise_rand*0.025 + noise_perlin*0.0815;
-                            //final_noise = noise_rand*0.015;
+                            float noise_perlin = pow(noise((v_text_scolled) * 10.00), 3.0);
+                            //final_noise = noise_rand*0.0025 + noise_perlin*0.00815;
+                            //final_noise = noise_rand*0.0015;
+                            */
                             
                             float cooling_value = texture(tex_cooling_map, v_text_scolled).r;
                             cooling_value += final_noise;
                             
                             vec3 fire = texture(tex_fire, v_text).rgb * 1;
                             
-                            newC -= vec3(cooling_value) * 3.0;
+                            newC -= vec3(cooling_value) * 2.00;
                             
                             newC += vec3(fire);                                                        
                             
