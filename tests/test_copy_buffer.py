@@ -1,6 +1,6 @@
 import unittest
 
-from common import get_context
+from tests.common import get_context
 
 
 class TestCase(unittest.TestCase):
