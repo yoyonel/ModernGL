@@ -23,8 +23,8 @@ class WarpGrid(Example):
 
         canvas = np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]).astype('f4')
         # pixels = np.round(np.random.rand(width, height, 2)).astype('f4')
-        nx = np.linspace(0, 1, width)
-        ny = np.linspace(0, 1, height)
+        nx = np.linspace(0.0, 1.0, width)
+        ny = np.linspace(0.0, 1.0, height)
         pixels = np.stack(np.meshgrid(nx, ny), axis=-1).astype('f4')
         # pixels_rand_offsets = (np.random.rand(height, width, 2) - (0.5, 0.5)) * (1/height, 1/width) * 0.010
         # pixels += pixels_rand_offsets
@@ -68,14 +68,6 @@ class WarpGrid(Example):
                 in ivec2 in_text;
                 out vec2 out_vert;
                 
-                float PHI = 1.61803398874989484820459 * 00000.1; // Golden Ratio   
-                float PI  = 3.14159265358979323846264 * 00000.1; // PI
-                float SQ2 = 1.41421356237309504880169 * 10000.0; // Square Root of Two
-                
-                float gold_noise(in vec2 coordinate, in float seed){
-                    return fract(sin(dot(coordinate*(seed+PHI), vec2(PHI, PI)))*SQ2);
-                }
-
                 vec2 cell(int x, int y) {
                     return texelFetch(Texture, ivec2((x + Width) % Width, (y + Height) % Height), 0).rg;
                 }
@@ -92,22 +84,22 @@ class WarpGrid(Example):
                         float inv_Width = 1.0 / Width;
                         float inv_Height = 1.0 / Height;
                         
-                        vec2 cell_neighboor = cell(in_text.x, in_text.y + 1) + (gold_noise(vec2(in_text.x, in_text.y + 1), time) - 0.5) * 0.01;
+                        vec2 cell_neighboor = cell(in_text.x, in_text.y + 1);
                         norm = sqrt(0*inv_Width*inv_Width + 1*inv_Height*inv_Height);
                         spring = cell_neighboor - cell_00;
                         force += spring * (norm - length(spring)) * friction;
                         
-                        cell_neighboor = cell(in_text.x, in_text.y - 1) + (gold_noise(vec2(in_text.x, in_text.y - 1), time) - 0.5) * 0.01;
+                        cell_neighboor = cell(in_text.x, in_text.y - 1);
                         norm = sqrt(0*inv_Width*inv_Width + 1*inv_Height*inv_Height);
                         spring = cell_neighboor - cell_00;
                         force += spring * (norm - length(spring)) * friction;
                         
-                        cell_neighboor = cell(in_text.x + 1, in_text.y) + (gold_noise(vec2(in_text.x + 1, in_text.y), time) - 0.5) * 0.01;
+                        cell_neighboor = cell(in_text.x + 1, in_text.y);
                         norm = sqrt(1*inv_Width*inv_Width + 0*inv_Height*inv_Height);
                         spring = cell_neighboor - cell_00;
                         force += spring * (norm - length(spring)) * friction;
                         
-                        cell_neighboor = cell(in_text.x - 1, in_text.y) + (gold_noise(vec2(in_text.x - 1, in_text.y), time) - 0.5) * 0.01;
+                        cell_neighboor = cell(in_text.x - 1, in_text.y);
                         norm = sqrt(1*inv_Width*inv_Width + 0*inv_Height*inv_Height);
                         spring = cell_neighboor - cell_00;
                         force += spring * (norm - length(spring)) * friction;
