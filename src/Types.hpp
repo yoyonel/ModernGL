@@ -361,6 +361,8 @@ struct MGLVertexArray {
 
 	MGLProgram * program;
 	MGLBuffer * index_buffer;
+    int index_element_size;
+    int index_element_type;
 
 	unsigned * subroutines;
 	int num_subroutines;

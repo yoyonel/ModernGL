@@ -1927,12 +1927,13 @@ class VertexArray:
         to create one.
     '''
 
-    __slots__ = ['mglo', '_program', '_index_buffer', '_glo', 'ctx', 'extra']
+    __slots__ = ['mglo', '_program', '_index_buffer', '_index_element_size', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
         self._program = None
         self._index_buffer = None
+        self._index_element_size = None
         self._glo = None
         self.ctx = None
         self.extra = None
@@ -1960,6 +1961,13 @@ class VertexArray:
         '''
 
         return self._index_buffer
+
+    @property
+    def index_element_size(self) -> int:
+        '''
+            int: The byte size of each element in the index buffer
+        '''
+        return self._index_element_size
 
     @property
     def vertices(self) -> int:
@@ -2821,7 +2829,8 @@ class Context:
         res.ctx = self
         return res
 
-    def vertex_array(self, program, content, index_buffer=None, *, skip_errors=False) -> 'VertexArray':
+    def vertex_array(self, program, content,
+                     index_buffer=None, index_element_size=4, *, skip_errors=False) -> 'VertexArray':
         '''
             Create a :py:class:`VertexArray` object.
 
@@ -2831,24 +2840,27 @@ class Context:
                 index_buffer (Buffer): An index buffer.
 
             Keyword Args:
+                index_element_size (int): byte size of each index element, 1, 2 or 4.
                 skip_errors (bool): Ignore skip_errors varyings.
 
             Returns:
                 :py:class:`VertexArray` object
         '''
-
         members = program._members
         index_buffer_mglo = None if index_buffer is None else index_buffer.mglo
         content = tuple((a.mglo, b) + tuple(getattr(members.get(x), 'mglo', None) for x in c) for a, b, *c in content)
 
         res = VertexArray.__new__(VertexArray)
-        res.mglo, res._glo = self.mglo.vertex_array(program.mglo, content, index_buffer_mglo, skip_errors)
+        res.mglo, res._glo = self.mglo.vertex_array(program.mglo, content, index_buffer_mglo,
+                                                    index_element_size, skip_errors)
         res._program = program
         res._index_buffer = index_buffer
+        res._index_element_size = index_element_size
         res.ctx = self
         return res
 
-    def simple_vertex_array(self, program, buffer, *attributes, index_buffer=None) -> 'VertexArray':
+    def simple_vertex_array(self, program, buffer, *attributes,
+                            index_buffer=None, index_element_size=4) -> 'VertexArray':
         '''
             Create a :py:class:`VertexArray` object.
 
@@ -2858,6 +2870,7 @@ class Context:
                 attributes (list): A list of attribute names.
 
             Keyword Args:
+                index_element_size (int): byte size of each index element, 1, 2 or 4.
                 index_buffer (Buffer): An index buffer.
 
             Returns:
@@ -2868,7 +2881,7 @@ class Context:
             raise SyntaxError('Change simple_vertex_array to vertex_array')
 
         content = [(buffer, detect_format(program, attributes)) + attributes]
-        return self.vertex_array(program, content, index_buffer)
+        return self.vertex_array(program, content, index_buffer, index_element_size)
 
     def program(self, *, vertex_shader, fragment_shader=None, geometry_shader=None,
                 tess_control_shader=None, tess_evaluation_shader=None, varyings=()) -> 'Program':

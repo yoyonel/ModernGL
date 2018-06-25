@@ -6,15 +6,17 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	MGLProgram * program;
 	PyObject * content;
 	MGLBuffer * index_buffer;
+    int index_element_size;
 	int skip_errors;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O!OOp",
+		"O!OOIp",
 		&MGLProgram_Type,
 		&program,
 		&content,
 		&index_buffer,
+		&index_element_size,
 		&skip_errors
 	);
 
@@ -112,6 +114,11 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
+    if (index_element_size != 1 && index_element_size != 2 && index_element_size != 4) {
+        MGLError_Set("index_element_size must be 1, 2, or 4, not %d", index_element_size);
+        return 0;
+    }
+
 	const GLMethods & gl = self->gl;
 
 	MGLVertexArray * array = (MGLVertexArray *)MGLVertexArray_Type.tp_alloc(&MGLVertexArray_Type, 0);
@@ -132,9 +139,17 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 	Py_INCREF(index_buffer);
 	array->index_buffer = index_buffer;
+	array->index_element_size = index_element_size;
+
+    if (index_element_size == 4)
+        array->index_element_type = GL_UNSIGNED_INT;
+    else if (index_element_size == 2)
+        array->index_element_type = GL_UNSIGNED_SHORT;
+    else if (index_element_size == 1)
+        array->index_element_type = GL_UNSIGNED_BYTE;
 
 	if (index_buffer != (MGLBuffer *)Py_None) {
-		array->num_vertices = (int)(index_buffer->size / 4);
+		array->num_vertices = (int)(index_buffer->size / index_element_size);
 		gl.BindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer->buffer_obj);
 	} else {
 		array->num_vertices = -1;
@@ -260,7 +275,7 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 
 	if (self->index_buffer != (MGLBuffer *)Py_None) {
 		const void * ptr = (const void *)((GLintptr)first * 4);
-		gl.DrawElementsInstanced(mode, vertices, GL_UNSIGNED_INT, ptr, instances);
+		gl.DrawElementsInstanced(mode, vertices, self->index_element_type, ptr, instances);
 	} else {
 		gl.DrawArraysInstanced(mode, first, vertices, instances);
 	}
@@ -303,7 +318,7 @@ PyObject * MGLVertexArray_render_indirect(MGLVertexArray * self, PyObject * args
 	const void * ptr = (const void *)((GLintptr)first * 20);
 
 	if (self->index_buffer != (MGLBuffer *)Py_None) {
-		gl.MultiDrawElementsIndirect(mode, GL_UNSIGNED_INT, ptr, count, 20);
+		gl.MultiDrawElementsIndirect(mode, self->index_element_type, ptr, count, 20);
 	} else {
 		gl.MultiDrawArraysIndirect(mode, ptr, count, 20);
 	}
@@ -361,7 +376,7 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 
 	if (self->index_buffer != (MGLBuffer *)Py_None) {
 		const void * ptr = (const void *)((GLintptr)first * 4);
-		gl.DrawElementsInstanced(mode, vertices, GL_UNSIGNED_INT, ptr, instances);
+		gl.DrawElementsInstanced(mode, vertices, self->index_element_type, ptr, instances);
 	} else {
 		gl.DrawArraysInstanced(mode, first, vertices, instances);
 	}
