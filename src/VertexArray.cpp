@@ -6,7 +6,7 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	MGLProgram * program;
 	PyObject * content;
 	MGLBuffer * index_buffer;
-    int index_element_size;
+	int index_element_size;
 	int skip_errors;
 
 	int args_ok = PyArg_ParseTuple(
