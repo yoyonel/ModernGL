@@ -109,7 +109,7 @@ class Fire(Example):
 
         canvas = np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]).astype('f4')
 
-        self.prog = self.ctx.program(
+        self.render_final_fire = self.ctx.program(
             vertex_shader='''
                 #version 330
 
@@ -196,22 +196,23 @@ class Fire(Example):
 
                         void main() {
                             vec3 c1 = texture(tex_prev_frame, v_text + vec2(0, -0.500*OffsetXY.y)).rgb;
-                            vec3 c2 = texture(tex_prev_frame, v_text + vec2(0, -1.000*OffsetXY.y)).rgb;
+                            //vec3 c2 = texture(tex_prev_frame, v_text + vec2(0, -1.000*OffsetXY.y)).rgb;
                             vec3 c3 = texture(tex_prev_frame, v_text + vec2(0, -1.500*OffsetXY.y)).rgb;
-                            vec3 c4 = texture(tex_prev_frame, v_text + vec2(0, -2.000*OffsetXY.y)).rgb;
+                            //vec3 c4 = texture(tex_prev_frame, v_text + vec2(0, -2.000*OffsetXY.y)).rgb;
                             vec3 c5 = texture(tex_prev_frame, v_text + vec2(0, -2.500*OffsetXY.y)).rgb;
                             //
                             vec3 c6 = texture(tex_prev_frame, v_text + vec2(+0.500*OffsetXY.x, 0)).rgb;
                             vec3 c7 = texture(tex_prev_frame, v_text + vec2(-0.500*OffsetXY.x, 0)).rgb;
-                            vec3 c8 = texture(tex_prev_frame, v_text + vec2(+1.000*OffsetXY.x, 0)).rgb;
-                            vec3 c9 = texture(tex_prev_frame, v_text + vec2(-1.000*OffsetXY.x, 0)).rgb;
+                            vec3 c8 = texture(tex_prev_frame, v_text + vec2(+1.500*OffsetXY.x, 0)).rgb;
+                            vec3 c9 = texture(tex_prev_frame, v_text + vec2(-1.500*OffsetXY.x, 0)).rgb;
                             
-                            vec3 newC = (c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9) * (1.0/9.0);
+                            //vec3 newC = (c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9) * (1.0/9.0);
+                            vec3 newC = (c1 + c3 + c5 + c6 + c7 + c8 + c9) * (1.0/7.0);
 
                             vec2 v_text_scrolled = v_text + vec2(cos(time)*0.1, -time);
                             
                             float final_noise = 0.0;
-                            /*
+                            /**
                             float noise_rand = (
                                 random(v_text_scrolled + vec2(-1*OffsetXY.x, 0*OffsetXY.y)) +
                                 random(v_text_scrolled + vec2(+1*OffsetXY.x, 0*OffsetXY.y)) + 
@@ -219,9 +220,8 @@ class Fire(Example):
                                 random(v_text_scrolled + vec2(0*OffsetXY.x, +1*OffsetXY.y))
                             ) * 0.25;
                             float noise_perlin = pow(noise((v_text_scrolled) * 10.00), 3.0);
-                            //final_noise = noise_rand*0.0025 + noise_perlin*0.00815;
-                            //final_noise = noise_rand*0.0015;
-                            */
+                            final_noise = noise_rand*0.0025 + noise_perlin*0.00815;
+                            /**/                            
                             
                             float cooling_value = texture(tex_cooling_map, v_text_scrolled).r;
                             cooling_value += final_noise;
@@ -238,7 +238,7 @@ class Fire(Example):
         )
 
         self.vbo = self.ctx.buffer(canvas.tobytes())
-        self.vao_final_render = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert')
+        self.vao_final_render = self.ctx.simple_vertex_array(self.render_final_fire, self.vbo, 'in_vert')
         self.vao_update_frame = self.ctx.simple_vertex_array(self.update_frame, self.vbo, 'in_vert')
 
         img = Image.open(local('data', 'fire_colors.png')).transpose(Image.FLIP_TOP_BOTTOM)
@@ -263,6 +263,7 @@ class Fire(Example):
 
         # fire_size = self.wnd.size
         fire_size = (self.wnd.size[0] >> 1, self.wnd.size[1] >> 1)
+        # fire_size = (256, 256)
 
         # Ping Pong Buffers
         self.textures = [
@@ -283,8 +284,8 @@ class Fire(Example):
             logger.warning("", exc_info=True)
 
         try:
-            self.prog['Texture'].value = 0
-            self.prog['tex_fire_colors'].value = 1
+            self.render_final_fire['Texture'].value = 0
+            self.render_final_fire['tex_fire_colors'].value = 1
         except:
             logger.warning("", exc_info=True)
 
