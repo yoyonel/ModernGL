@@ -34,6 +34,7 @@ Attributes
 
 .. autoattribute:: VertexArray.program
 .. autoattribute:: VertexArray.index_buffer
+.. autoattribute:: VertexArray.index_element_size
 .. autoattribute:: VertexArray.vertices
 .. autoattribute:: VertexArray.subroutines
 .. autoattribute:: VertexArray.glo
