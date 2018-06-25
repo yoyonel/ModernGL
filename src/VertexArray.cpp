@@ -114,10 +114,10 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 		return 0;
 	}
 
-    if (index_element_size != 1 && index_element_size != 2 && index_element_size != 4) {
-        MGLError_Set("index_element_size must be 1, 2, or 4, not %d", index_element_size);
-        return 0;
-    }
+  if (index_element_size != 1 && index_element_size != 2 && index_element_size != 4) {
+    MGLError_Set("index_element_size must be 1, 2, or 4, not %d", index_element_size);
+    return 0;
+  }
 
 	const GLMethods & gl = self->gl;
 
@@ -141,12 +141,12 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	array->index_buffer = index_buffer;
 	array->index_element_size = index_element_size;
 
-    if (index_element_size == 4)
-        array->index_element_type = GL_UNSIGNED_INT;
-    else if (index_element_size == 2)
-        array->index_element_type = GL_UNSIGNED_SHORT;
-    else if (index_element_size == 1)
-        array->index_element_type = GL_UNSIGNED_BYTE;
+  if (index_element_size == 4)
+    array->index_element_type = GL_UNSIGNED_INT;
+  else if (index_element_size == 2)
+    array->index_element_type = GL_UNSIGNED_SHORT;
+  else if (index_element_size == 1)
+    array->index_element_type = GL_UNSIGNED_BYTE;
 
 	if (index_buffer != (MGLBuffer *)Py_None) {
 		array->num_vertices = (int)(index_buffer->size / index_element_size);
