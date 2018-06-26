@@ -141,12 +141,8 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	array->index_buffer = index_buffer;
 	array->index_element_size = index_element_size;
 
-	if (index_element_size == 4)
-		array->index_element_type = GL_UNSIGNED_INT;
-	else if (index_element_size == 2)
-		array->index_element_type = GL_UNSIGNED_SHORT;
-	else if (index_element_size == 1)
-		array->index_element_type = GL_UNSIGNED_BYTE;
+    const int element_types[5] = {0, GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, 0, GL_UNSIGNED_INT};
+	array->index_element_type = element_types[index_element_size];
 
 	if (index_buffer != (MGLBuffer *)Py_None) {
 		array->num_vertices = (int)(index_buffer->size / index_element_size);

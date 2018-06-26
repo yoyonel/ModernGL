@@ -31,8 +31,8 @@ class TestCase(unittest.TestCase):
             4.0, 2.0, 7.5, 1.8,
             3.0, 2.8, 6.0, 10.0
         ]
-        indices = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
         count = 10
+        indices = [0, 1] * 10
 
         # UNSIGNED_INT index
         vbo1 = self.ctx.buffer(np.array(vertices, dtype='f4').tobytes())
@@ -80,7 +80,7 @@ class TestCase(unittest.TestCase):
             4.0, 2.0, 7.5, 1.8,
             3.0, 2.8, 6.0, 10.0
         ]
-        indices = [0, 1, 0, 1, 0, 1, 0, 1.0, 1.0]
+        indices = [0, 1, 0, 1, 0, 1, 0, 1, 0]
 
         vbo1 = self.ctx.buffer(np.array(vertices, dtype='f4').tobytes())
         index_u4 = self.ctx.buffer(np.array(indices, dtype='u4').tobytes())
