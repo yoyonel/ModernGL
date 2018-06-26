@@ -141,7 +141,7 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 	array->index_buffer = index_buffer;
 	array->index_element_size = index_element_size;
 
-    const int element_types[5] = {0, GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, 0, GL_UNSIGNED_INT};
+	const int element_types[5] = {0, GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, 0, GL_UNSIGNED_INT};
 	array->index_element_type = element_types[index_element_size];
 
 	if (index_buffer != (MGLBuffer *)Py_None) {
