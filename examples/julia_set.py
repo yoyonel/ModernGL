@@ -56,6 +56,7 @@ class Fractal(Example):
                     }
 
                     f_color = texture(Texture, vec2((i == Iter ? 0.0 : float(i)) / 100.0, 0.0));
+                    //f_color = vec4(vec2((i == Iter ? 0.0 : float(i)) / 100.0, 0.0), 0, 0.0);
                 }
             ''',
         )
@@ -77,7 +78,7 @@ class Fractal(Example):
         self.ctx.clear(1.0, 1.0, 1.0)
 
         self.seed.value = (-0.8, 0.156)
-        self.iter.value = 100
+        self.iter.value = 1000
 
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
