@@ -1,7 +1,7 @@
 import moderngl
 import numpy as np
 
-from example_window import Example, run_example
+from examples.example_window import Example, run_example
 
 
 def particle():
@@ -64,7 +64,7 @@ class Particles(Example):
         self.vbo2 = self.ctx.buffer(reserve=self.vbo1.size)
 
         self.vao1 = self.ctx.simple_vertex_array(self.transform, self.vbo1, 'in_pos', 'in_prev')
-        self.vao2 = self.ctx.simple_vertex_array(self.transform, self.vbo2, 'in_pos', 'in_prev')
+        # self.vao2 = self.ctx.simple_vertex_array(self.transform, self.vbo2, 'in_pos', 'in_prev')
 
         self.render_vao = self.ctx.vertex_array(
             self.prog,
