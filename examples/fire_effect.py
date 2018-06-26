@@ -163,76 +163,39 @@ class Fire(Example):
                         in vec2 v_text;
                         out vec4 f_color;
 
-                        // 2D Random
-                        float random (in vec2 st) {
-                            return fract(sin(dot(st.xy,
-                                                 vec2(12.9898,78.233)))
-                                         * 43758.5453123);
-                        }
-                        
-                        // 2D Noise based on Morgan McGuire @morgan3d
-                        // https://www.shadertoy.com/view/4dS3Wd
-                        float noise (in vec2 st) {
-                            vec2 i = floor(st);
-                            vec2 f = fract(st);
-                        
-                            // Four corners in 2D of a tile
-                            float a = random(i);
-                            float b = random(i + vec2(1.0, 0.0));
-                            float c = random(i + vec2(0.0, 1.0));
-                            float d = random(i + vec2(1.0, 1.0));
-                        
-                            // Smooth Interpolation
-                        
-                            // Cubic Hermine Curve.  Same as SmoothStep()
-                            vec2 u = f*f*(3.0-2.0*f);
-                            // u = smoothstep(0.,1.,f);
-                        
-                            // Mix 4 coorners percentages
-                            return mix(a, b, u.x) +
-                                    (c - a)* u.y * (1.0 - u.x) +
-                                    (d - b) * u.x * u.y;
-                        }
-
-                        void main() {
-                            vec3 c1 = texture(tex_prev_frame, v_text + vec2(0, -0.500*OffsetXY.y)).rgb;
-                            //vec3 c2 = texture(tex_prev_frame, v_text + vec2(0, -1.000*OffsetXY.y)).rgb;
-                            vec3 c3 = texture(tex_prev_frame, v_text + vec2(0, -1.500*OffsetXY.y)).rgb;
-                            //vec3 c4 = texture(tex_prev_frame, v_text + vec2(0, -2.000*OffsetXY.y)).rgb;
-                            vec3 c5 = texture(tex_prev_frame, v_text + vec2(0, -2.500*OffsetXY.y)).rgb;
-                            //
-                            vec3 c6 = texture(tex_prev_frame, v_text + vec2(+0.500*OffsetXY.x, 0)).rgb;
-                            vec3 c7 = texture(tex_prev_frame, v_text + vec2(-0.500*OffsetXY.x, 0)).rgb;
-                            vec3 c8 = texture(tex_prev_frame, v_text + vec2(+1.500*OffsetXY.x, 0)).rgb;
-                            vec3 c9 = texture(tex_prev_frame, v_text + vec2(-1.500*OffsetXY.x, 0)).rgb;
+                        vec3 compute_filter_firemap(sampler2D t, vec2 v_t) {
+                            // Vertical filtering + Up Scroll
+                            vec3 c1 = texture(t, v_t + vec2(0, -0.500*OffsetXY.y)).rgb;
+                            vec3 c3 = texture(t, v_t + vec2(0, -1.500*OffsetXY.y)).rgb;
+                            vec3 c5 = texture(t, v_t + vec2(0, -2.500*OffsetXY.y)).rgb;
+                            // (Light) Horizontal filtering
+                            vec3 c6 = texture(t, v_t + vec2(+0.500*OffsetXY.x, 0)).rgb;
+                            vec3 c7 = texture(t, v_t + vec2(-0.500*OffsetXY.x, 0)).rgb;
+                            vec3 c8 = texture(t, v_t + vec2(+1.500*OffsetXY.x, 0)).rgb;
+                            vec3 c9 = texture(t, v_t + vec2(-1.500*OffsetXY.x, 0)).rgb;
                             
-                            //vec3 newC = (c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8 + c9) * (1.0/9.0);
-                            vec3 newC = (c1 + c3 + c5 + c6 + c7 + c8 + c9) * (1.0/7.0);
-
+                            return (c1 + c3 + c5 + c6 + c7 + c8 + c9) * (1.0/7.0);
+                        }
+                        
+                        vec3 compute_cooling() {
                             vec2 v_text_scrolled = v_text + vec2(cos(time)*0.1, -time);
-                            
-                            float final_noise = 0.0;
-                            /**
-                            float noise_rand = (
-                                random(v_text_scrolled + vec2(-1*OffsetXY.x, 0*OffsetXY.y)) +
-                                random(v_text_scrolled + vec2(+1*OffsetXY.x, 0*OffsetXY.y)) + 
-                                random(v_text_scrolled + vec2(0*OffsetXY.x, -1*OffsetXY.y)) + 
-                                random(v_text_scrolled + vec2(0*OffsetXY.x, +1*OffsetXY.y))
-                            ) * 0.25;
-                            float noise_perlin = pow(noise((v_text_scrolled) * 10.00), 3.0);
-                            final_noise = noise_rand*0.0025 + noise_perlin*0.00815;
-                            /**/                            
-                            
                             float cooling_value = texture(tex_cooling_map, v_text_scrolled).r;
-                            cooling_value += final_noise;
+                            return vec3(cooling_value) * 2.00;
+                        }
+                        
+                        void main() {                                                    
+                            // Source fire
+                            vec3 src_fire = texture(tex_fire, v_text).rgb;
                             
-                            vec3 fire = texture(tex_fire, v_text).rgb * 1;
+                            // Filter (+ scroll) fire map
+                            vec3 filter_fire = compute_filter_firemap(tex_prev_frame, v_text);                            
                             
-                            newC -= vec3(cooling_value) * 2.00;
+                            // Cooling map/attenuation
+                            vec3 cooling = compute_cooling();
                             
-                            newC += vec3(fire);                                                        
+                            vec4 new_fire_color = vec4((src_fire + filter_fire) - cooling, 1.0); 
                             
-                            f_color = clamp(vec4(newC, 1.0), 0, 1);
+                            f_color = new_fire_color;
                         }
                     ''',
         )
@@ -263,7 +226,7 @@ class Fire(Example):
 
         # fire_size = self.wnd.size
         fire_size = (self.wnd.size[0] >> 1, self.wnd.size[1] >> 1)
-        # fire_size = (256, 256)
+        # fire_size = (64, 64)
 
         # Ping Pong Buffers
         self.textures = [
@@ -312,7 +275,7 @@ class Fire(Example):
         self.cur_time = 0
         self.prev_time = time.time()
 
-    def render_fire_0(self):
+    def update_fire(self) -> moderngl.Texture:
         try:
             self.update_frame['time'].value = self.cur_time
         except:
@@ -334,22 +297,26 @@ class Fire(Example):
         # render full screen quad
         self.vao_update_frame.render(moderngl.TRIANGLE_STRIP)
 
-        self.ctx.screen.use()
-        self.ctx.viewport = self.wnd.viewport
-        self.ctx.clear(1.0, 1.0, 1.0)
-        tex_cur_frame.use(0)
-        self.texture_fire_colors.use(1)
-        self.vao_final_render.render(moderngl.TRIANGLE_STRIP)
-
         # Ping Pong strategy for swapping previous and current frames (buffers/textures)
         self.id_buffer = 1 - self.id_buffer
+
+        # Render fire on output buffer
+        return tex_cur_frame
 
     def render(self):
         # OpenGL Timer Query
         q_for_timer = self.ctx.query(time=True)
         with q_for_timer:
-            self.render_fire_0()
-        logger.info(f"Query on time elapsed (GPU side): {q_for_timer.elapsed/1000000.0} ms")
+            tex_on_fire_updated = self.update_fire()
+
+            self.ctx.screen.use()
+            self.ctx.viewport = self.wnd.viewport
+            self.ctx.clear(1.0, 1.0, 1.0)
+            tex_on_fire_updated.use(0)
+            self.texture_fire_colors.use(1)
+            self.vao_final_render.render(moderngl.TRIANGLE_STRIP)
+
+        # logger.info(f"Query on time elapsed (GPU side): {q_for_timer.elapsed/1000000.0} ms")
 
         cur_time = time.time()
         dt = cur_time - self.prev_time

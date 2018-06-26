@@ -6,3 +6,4 @@ Pillow==5.1.0
 PyQt5==5.11.2
 PyQt5-sip==4.19.12
 pyrr==0.9.2
+pymunk==5.3.2
