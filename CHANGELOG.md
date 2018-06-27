@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.3.0] - 2018-06-27
+
 ### Added
 
 - `index_element_size` for `Context.vertex_array` method
