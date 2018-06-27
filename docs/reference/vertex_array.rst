@@ -15,10 +15,10 @@ VertexArray
 Create
 ------
 
-.. automethod:: Context.simple_vertex_array(program, buffer, *attributes, index_buffer=None) -> VertexArray
+.. automethod:: Context.simple_vertex_array(program, buffer, *attributes, index_buffer=None, index_element_size=4) -> VertexArray
     :noindex:
 
-.. automethod:: Context.vertex_array(program, content, index_buffer=None, skip_errors=False) -> VertexArray
+.. automethod:: Context.vertex_array(program, content, index_buffer=None, index_element_size=4, skip_errors=False) -> VertexArray
     :noindex:
 
 Methods
@@ -34,6 +34,7 @@ Attributes
 
 .. autoattribute:: VertexArray.program
 .. autoattribute:: VertexArray.index_buffer
+.. autoattribute:: VertexArray.index_element_size
 .. autoattribute:: VertexArray.vertices
 .. autoattribute:: VertexArray.subroutines
 .. autoattribute:: VertexArray.glo
