@@ -75,11 +75,13 @@ class Particles(Example):
                 
                 out_hot = map(rand_seed, 0.0, 1.0, 0.4, 1.0);
 
-                float a = map(rand(Time), 0.0, 1.0, 0.0, 2*M_PI);                    
-                out_pos = vec2(cos(a), sin(a)) * 0.1;
+                float a = map(rand(Time), 0.0, 1.0, 0.0, 2*M_PI);
+                //out_pos = vec2(cos(a), sin(a)*0) * 0.15;
+                out_pos = vec2(a, 0) * 0.25;
                                                     
                 float angle_main_axis = M_PI/2.0 - Time; 
                 a = map(rand(in_id), 0.0, 1.0, angle_main_axis - M_PI / 8.0, angle_main_axis + M_PI / 8.0);
+                a = M_PI / 2.0;
                 float r = rand_seed * 0.015;
                 out_vel = vec2(cos(a), sin(a)) * r;
             }
@@ -115,7 +117,8 @@ class Particles(Example):
         except:
             pass
 
-        self.nb_particles = int(2 << 12)
+        # self.nb_particles = int(2 << 12)
+        self.nb_particles = 128
 
         self.vbo1 = self.ctx.buffer(b''.join(particle(i) for i in range(self.nb_particles)))
         self.vbo2 = self.ctx.buffer(reserve=self.vbo1.size)
@@ -173,7 +176,7 @@ class Particles(Example):
             self.render_vao.render(moderngl.POINTS, self.nb_particles)
             self.vao1.transform(self.vbo2, moderngl.POINTS, self.nb_particles)
             self.ctx.copy_buffer(self.vbo1, self.vbo2)
-        print(f"Query on time elapsed (GPU side): {q_for_timer.elapsed/1000000.0} ms")
+        # print(f"Query on time elapsed (GPU side): {q_for_timer.elapsed/1000000.0} ms")
 
         self.angle_main_axis += 0.01
 
