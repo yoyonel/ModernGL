@@ -37,7 +37,7 @@ class ExampleWindow(QtOpenGL.QGLWidget):
 
         super(ExampleWindow, self).__init__(fmt, None)
         self.setFixedSize(size[0], size[1])
-        self.move(QtWidgets.QDesktopWidget().rect().center() - self.rect().center())
+        # self.move(QtWidgets.QDesktopWidget().rect().center() - self.rect().center())
         self.setWindowTitle(title)
 
         self.start_time = time.clock()

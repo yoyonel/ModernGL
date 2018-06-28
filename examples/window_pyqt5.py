@@ -1,12 +1,14 @@
-import moderngl
+"""
+
+"""
 import numpy as np
 
-from qtmoderngl import QModernGLWidget
+from examples.qtmoderngl import QModernGLWidget
 import sys
 
 from PyQt5 import QtWidgets
 
-from hello_world import HelloWorld2D, PanTool
+from examples.hello_world import HelloWorld2D, PanTool
 
 
 def vertices():
@@ -36,7 +38,7 @@ class MyWidget(QModernGLWidget):
     def render(self):
         self.screen.use()
         self.scene.clear()
-        self.scene.plot(verts)
+        self.scene.plot(verts, type='line')
 
     def mousePressEvent(self, evt):
         pan_tool.start_drag(evt.x() / 512, evt.y() / 512)
