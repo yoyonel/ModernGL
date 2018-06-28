@@ -3,8 +3,8 @@ import tkinter as tk
 import moderngl
 import numpy as np
 
-from tkinter_framebuffer import FramebufferImage
-from hello_world import HelloWorld2D, PanTool
+from examples.tkinter_framebuffer import FramebufferImage
+from examples.hello_world import HelloWorld2D, PanTool
 
 ctx = moderngl.create_standalone_context()
 
@@ -50,7 +50,9 @@ lbl.bind("<ButtonRelease-1>", update)
 lbl.bind('<Motion>', update)
 lbl.pack()
 
-# btn = tk.Button(root, text='Hello', command=update)
-# btn.pack()
+text = tk.Text(root)
+text.insert(tk.INSERT, "window_tkinter")
+text.pack()
+
 
 root.mainloop()

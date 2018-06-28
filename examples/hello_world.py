@@ -33,7 +33,7 @@ class HelloWorld2D:
             ''',
         )
 
-        self.vbo = ctx.buffer(reserve='4MB', dynamic=True)
+        self.vbo = ctx.buffer(reserve=reserve, dynamic=True)
         self.vao = ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert', 'in_color')
 
     def pan(self, pos):
@@ -42,15 +42,15 @@ class HelloWorld2D:
     def clear(self, color=(0, 0, 0, 0)):
         self.ctx.clear(*color)
 
-    def plot(self, points, type='line'):
+    def plot(self, points, type='line', line_width = 1.0, point_size=8.0):
         data = points.astype('f4').tobytes()
         self.vbo.orphan()
         self.vbo.write(data)
         if type == 'line':
-            self.ctx.line_width = 1.0
+            self.ctx.line_width = line_width
             self.vao.render(moderngl.LINE_STRIP, vertices=len(data) // 24)
         if type == 'points':
-            self.ctx.point_size = 3.0
+            self.ctx.point_size = point_size
             self.vao.render(moderngl.POINTS, vertices=len(data) // 24)
 
 
@@ -85,4 +85,4 @@ class PanTool:
 
     @property
     def value(self):
-        return (self.total_x - self.delta_x, self.total_y + self.delta_y)
+        return self.total_x - self.delta_x, self.total_y + self.delta_y
