@@ -5,8 +5,11 @@ import time
 from examples.example_window import Example, run_example
 
 
-def particle(i: int, angle_main_axis: float = np.pi / 2.0):
-    a = np.random.uniform(angle_main_axis - np.pi / 8.0, angle_main_axis + np.pi / 8.0)
+def particle(i: int,
+             angle_main_axis: float = np.pi / 2.0,
+             range_angle_axis: float = np.pi / 8.0,
+             ):
+    a = np.random.uniform(angle_main_axis - range_angle_axis, angle_main_axis + range_angle_axis)
     r = np.random.uniform(0.0, 0.02)
     xv = np.cos(a) * r
     yv = np.sin(a) * r
@@ -34,6 +37,8 @@ class Particles(Example):
             fragment_shader='''
                 #version 330
 
+                uniform vec4 color_particle;
+                
                 in float out_hot;
                 
                 // https://khronos.org/registry/OpenGL-Refpages/gl4/html/gl_PointCoord.xhtml
@@ -42,11 +47,14 @@ class Particles(Example):
                 out vec4 f_color;
 
                 void main() {
+                    /**/
                     float d_to_center = distance(gl_PointCoord.xy, vec2(0.5, 0.5));
                     if (d_to_center > out_hot*0.5)
                         discard;
-                    //f_color = vec4(gl_PointCoord.xy, out_hot, 1.0);
                     f_color = vec4(1.0 - vec3(d_to_center), 1.0);
+                    /**/
+                    //f_color = vec4(out_hot, 0, 0, 1);
+                    f_color *= color_particle;
                 }
             ''',
         )
@@ -124,10 +132,15 @@ class Particles(Example):
         except:
             pass
 
+        try:
+            self.color_particle = self.prog['color_particle']
+            self.color_particle.value = (0.5, 0.3, 0.7, 1.0);
+        except:
+            pass
         # self.nb_particles = int(2 << 12)
-        self.nb_particles = 64
+        self.nb_particles = 256
 
-        self.vbo1 = self.ctx.buffer(b''.join(particle(i) for i in range(self.nb_particles)))
+        self.vbo1 = self.ctx.buffer(b''.join(particle(i, range_angle_axis=np.pi*2.0) for i in range(self.nb_particles)))
         self.vbo2 = self.ctx.buffer(reserve=self.vbo1.size)
 
         self.vao1 = self.ctx.simple_vertex_array(self.transform, self.vbo1,
@@ -172,7 +185,7 @@ class Particles(Example):
         with q_for_timer:
             self.ctx.viewport = self.wnd.viewport
             self.ctx.clear(1.0, 1.0, 1.0)
-            self.ctx.point_size = 32.0
+            self.ctx.point_size = 24.0
 
             try:
                 self.u_time.value = self.time_from_start
