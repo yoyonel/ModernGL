@@ -8,7 +8,8 @@ import os
 from PIL import Image
 import time
 #
-
+from examples.warp_grid_with_texture3D import WarpGridTex3D
+#
 from examples.example_window import Example, run_example
 
 logger = logging.getLogger(__name__)
@@ -107,8 +108,6 @@ class Fire(Example):
     def __init__(self):
         self.ctx = moderngl.create_context()
 
-        canvas = np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]).astype('f4')
-
         self.render_final_fire = self.ctx.program(
             vertex_shader='''
                 #version 330
@@ -133,6 +132,8 @@ class Fire(Example):
                 void main() {
                     float fire = texture(Texture, v_text).r;
                     f_color = texture(tex_fire_colors, vec2(fire, 1));
+                    
+                    //f_color = texture(Texture, v_text);
                 }
             ''',
         )
@@ -155,6 +156,7 @@ class Fire(Example):
                         uniform sampler2D tex_prev_frame;
                         uniform sampler2D tex_fire;
                         uniform sampler2D tex_cooling_map;
+                        //uniform sampler2D tex_warp_grid;
                         
                         uniform vec2 OffsetXY;
                         
@@ -178,10 +180,21 @@ class Fire(Example):
                         }
                         
                         vec3 compute_cooling() {
-                            vec2 v_text_scrolled = v_text + vec2(cos(time)*0.1, -time);
+                            vec2 v_text_scrolled = v_text;
+                            v_text_scrolled += vec2(0.0, -time);
+                            v_text_scrolled += vec2(cos(time)*0.5, 0.0);
+                            
                             float cooling_value = texture(tex_cooling_map, v_text_scrolled).r;
                             return vec3(cooling_value) * 2.00;
                         }
+                        
+                        /*
+                        vec3 compute_cooling_with_warpgrid() {
+                            vec2 v_text_scrolled = v_text;
+                            float cooling_value = texture(tex_warp_grid, v_text_scrolled).r * 10;
+                            return vec3(cooling_value) * 0.5;
+                        }
+                        */
                         
                         void main() {                                                    
                             // Source fire
@@ -199,6 +212,8 @@ class Fire(Example):
                         }
                     ''',
         )
+
+        canvas = np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]).astype('f4')
 
         self.vbo = self.ctx.buffer(canvas.tobytes())
         self.vao_final_render = self.ctx.simple_vertex_array(self.render_final_fire, self.vbo, 'in_vert')
@@ -243,6 +258,7 @@ class Fire(Example):
             self.update_frame['tex_prev_frame'].value = 0
             self.update_frame['tex_fire'].value = 1
             self.update_frame['tex_cooling_map'].value = 2
+            # self.update_frame['tex_warp_grid'].value = 3
         except:
             logger.warning("", exc_info=True)
 
@@ -275,11 +291,9 @@ class Fire(Example):
         self.cur_time = 0
         self.prev_time = time.time()
 
+        self.warp_grid = WarpGridTex3D(self.ctx)
+
     def update_fire(self) -> moderngl.Texture:
-        try:
-            self.update_frame['time'].value = self.cur_time
-        except:
-            pass
 
         id_prev_frame = self.id_buffer
         id_cur_frame = 1 - id_prev_frame
@@ -294,6 +308,7 @@ class Fire(Example):
         tex_prev_frame.use(0)
         self.texture_fire_map.use(1)
         self.texture_cooling_map.use(2)
+        # self.warp_grid.tex_final_render.use(2)
         # render full screen quad
         self.vao_update_frame.render(moderngl.TRIANGLE_STRIP)
 
@@ -307,12 +322,19 @@ class Fire(Example):
         # OpenGL Timer Query
         q_for_timer = self.ctx.query(time=True)
         with q_for_timer:
+            try:
+                self.update_frame['time'].value = self.cur_time
+            except:
+                pass
+            self.warp_grid.update_grid(self.wnd.time)
+
             tex_on_fire_updated = self.update_fire()
 
             self.ctx.screen.use()
             self.ctx.viewport = self.wnd.viewport
             self.ctx.clear(1.0, 1.0, 1.0)
             tex_on_fire_updated.use(0)
+            # self.warp_grid.tex_final_render.use(0)    # Work
             self.texture_fire_colors.use(1)
             self.vao_final_render.render(moderngl.TRIANGLE_STRIP)
 

@@ -23,25 +23,30 @@ class Particles(Example):
 
                 in vec2 in_vert;
                 in float in_hot;
-                in vec2 in_vel;
-
-                out vec4 in_color;
-                                
+                
+                out float out_hot;
 
                 void main() {
-                    in_color = vec4(vec2(abs(in_vel))*100, in_hot*0.1, 1.0);
-                    gl_Position = vec4(in_vert.xy, in_vel.x, 1.0);
+                    out_hot = in_hot;
+                    gl_Position = vec4(in_vert.xy, 0.0, 1.0);
                 }
             ''',
             fragment_shader='''
                 #version 330
 
-                in vec4 in_color;
-
+                in float out_hot;
+                
+                // https://khronos.org/registry/OpenGL-Refpages/gl4/html/gl_PointCoord.xhtml
+                in vec2 gl_PointCoord;
+                
                 out vec4 f_color;
 
                 void main() {
-                    f_color = in_color;
+                    float d_to_center = distance(gl_PointCoord.xy, vec2(0.5, 0.5));
+                    if (d_to_center > out_hot*0.5)
+                        discard;
+                    //f_color = vec4(gl_PointCoord.xy, out_hot, 1.0);
+                    f_color = vec4(1.0 - vec3(d_to_center), 1.0);
                 }
             ''',
         )
@@ -64,43 +69,45 @@ class Particles(Example):
             out vec2 out_vel;
             out float out_id;
             
-            float rand(float n){return fract(sin(n) * 43758.5453123);}
+            float PHI = 1.61803398874989484820459 * 00000.1; // Golden Ratio   
+            float PI  = 3.14159265358979323846264 * 00000.1; // PI
+            float SQ2 = 1.41421356237309504880169 * 10000.0; // Square Root of Two
+
+            float gold_noise(in vec2 coordinate, in float seed){
+                return fract(sin(dot(coordinate*(seed+PHI), vec2(PHI, PI)))*SQ2);
+            }
             
             float map(float value, float inMin, float inMax, float outMin, float outMax) {
               return outMin + (outMax - outMin) * (value - inMin) / (inMax - inMin);
             }
 
-            void respawn(in float seed) {
-                float rand_seed = rand(seed);
+            void respawn() {
                 
-                out_hot = map(rand_seed, 0.0, 1.0, 0.4, 1.0);
+                out_hot = map(gold_noise(vec2(in_id, Time), 25), 0.0, 1.0, 0.4, 1.0);
 
-                float a = map(rand(Time), 0.0, 1.0, 0.0, 2*M_PI);
-                //out_pos = vec2(cos(a), sin(a)*0) * 0.15;
-                out_pos = vec2(a, 0) * 0.25;
-                                                    
-                float angle_main_axis = M_PI/2.0 - Time; 
-                a = map(rand(in_id), 0.0, 1.0, angle_main_axis - M_PI / 8.0, angle_main_axis + M_PI / 8.0);
-                a = M_PI / 2.0;
-                float r = rand_seed * 0.015;
-                out_vel = vec2(cos(a), sin(a)) * r;
+                out_pos = vec2(
+                    map(gold_noise(vec2(in_id, Time), 0), 0, 1, -1, +1) * 1.0, 
+                    map(gold_noise(vec2(in_id, Time), 50), 0, 1, -1, +1) * 1.0
+                );
+                
+                float r = gold_noise(vec2(in_id, Time), 100) * 0.015;
+                out_vel = vec2(0.0, r);
             }
                         
             void update() {
-                out_hot = in_hot - 0.020;
-                out_pos = in_pos + in_vel;                
-                out_vel = in_vel * 0.98 + Acc;
+                //out_hot = in_hot - map(gold_noise(vec2(in_id, Time), 125), 0.0, 1.0, 0.0075, 0.01);
+                out_hot = in_hot - 0.003;
+                out_pos = in_pos + in_vel + Acc;
+                //out_vel = in_vel * map(gold_noise(vec2(in_id, Time), 150), 0.0, 1.0, 0.95, 1.00) + Acc;
+                out_vel = in_vel * 0.98;
             }
             
             void main() {
-                float seed = in_id + Time;
-                                                
-                if((out_hot < 0.0) || (abs(in_pos.x) > 0.5) || (abs(in_pos.y) > 0.5)) {
-                    respawn(seed);
-                }
-                else {
-                    update();
-                }
+                if(out_hot < 0.0) respawn();
+                else if(abs(in_pos.x) > 1.0) respawn();
+                else if(abs(in_pos.y) > 1.0) respawn();
+                else update();
+                
                 out_id = in_id;
             }
         ''',
@@ -113,12 +120,12 @@ class Particles(Example):
 
         try:
             self.acc = self.transform['Acc']
-            self.acc.value = (0.0, 0.0002)
+            self.acc.value = (0, 0.00981*0.25)
         except:
             pass
 
         # self.nb_particles = int(2 << 12)
-        self.nb_particles = 128
+        self.nb_particles = 64
 
         self.vbo1 = self.ctx.buffer(b''.join(particle(i) for i in range(self.nb_particles)))
         self.vbo2 = self.ctx.buffer(reserve=self.vbo1.size)
@@ -137,10 +144,14 @@ class Particles(Example):
 
                 #
                 (
-                    self.vbo1, '2f 1f 2f 1x4',
-                    'in_vert', 'in_hot', 'in_vel'
+                    self.vbo1,
+                    # '2f 1f 2f 1x4',
+                    # 'in_vert', 'in_hot', 'in_vel'
+                    '2f 1f 3x4',
+                    'in_vert', 'in_hot'
                 ),
-            ]
+            ],
+            skip_errors=False
         )
 
         self.idx = 0
@@ -161,13 +172,8 @@ class Particles(Example):
         with q_for_timer:
             self.ctx.viewport = self.wnd.viewport
             self.ctx.clear(1.0, 1.0, 1.0)
-            self.ctx.point_size = 2.0
+            self.ctx.point_size = 32.0
 
-            # size_particle = len(particle())
-            # for i in range(8):
-            #     p = particle(self.angle_main_axis)
-            #     self.vbo1.write(p, offset=self.idx * size_particle)
-            #     self.idx = (self.idx + 1) % self.nb_particles
             try:
                 self.u_time.value = self.time_from_start
             except:
