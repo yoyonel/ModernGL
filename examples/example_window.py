@@ -1,3 +1,7 @@
+"""
+
+"""
+import logging
 import time
 
 import moderngl as mgl
@@ -72,6 +76,10 @@ class ExampleWindow(QtOpenGL.QGLWidget):
 
 
 def run_example(example):
+    logging.basicConfig(
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        level=logging.DEBUG
+    )
     app = QtWidgets.QApplication([])
     widget = ExampleWindow(example.WINDOW_SIZE, getattr(example, 'WINDOW_TITLE', example.__name__))
     example.wnd = widget.wnd
