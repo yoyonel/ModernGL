@@ -9,6 +9,7 @@ from PIL import Image
 import time
 #
 from examples.warp_grid_with_texture3D import WarpGridTex3D
+from examples.particle_system_2 import Particles
 #
 from examples.example_window import Example, run_example
 
@@ -108,6 +109,33 @@ class Fire(Example):
     def __init__(self):
         self.ctx = moderngl.create_context()
 
+        self.render_tex = self.ctx.program(
+            vertex_shader='''
+                        #version 330
+
+                        in vec2 in_vert;
+                        out vec2 v_text;
+
+                        void main() {
+                            v_text = in_vert;
+                            gl_Position = vec4(in_vert * 2.0 - 1.0, 0.0, 1.0);
+                        }
+                    ''',
+            fragment_shader='''
+                        #version 330
+
+                        uniform sampler2D Texture;
+                        
+                        in vec2 v_text;
+
+                        out vec4 f_color;
+
+                        void main() {
+                            f_color = texture(Texture, v_text);
+                        }
+                    ''',
+        )
+
         self.render_final_fire = self.ctx.program(
             vertex_shader='''
                 #version 330
@@ -131,9 +159,12 @@ class Fire(Example):
 
                 void main() {
                     float fire = texture(Texture, v_text).r;
+
                     f_color = texture(tex_fire_colors, vec2(fire, 1));
-                    
+
                     //f_color = texture(Texture, v_text);
+                    //f_color = vec4(vec3(f_color.r), 1.0);
+                    //f_color = vec4(1.0 - abs(vec3(fire) - vec3(f_color.r)), 1.0);
                 }
             ''',
         )
@@ -156,7 +187,7 @@ class Fire(Example):
                         uniform sampler2D tex_prev_frame;
                         uniform sampler2D tex_fire;
                         uniform sampler2D tex_cooling_map;
-                        //uniform sampler2D tex_warp_grid;
+                        uniform sampler2D tex_warp_grid;
                         
                         uniform vec2 OffsetXY;
                         
@@ -188,13 +219,16 @@ class Fire(Example):
                             return vec3(cooling_value) * 2.00;
                         }
                         
-                        /*
+                        /**/
                         vec3 compute_cooling_with_warpgrid() {
                             vec2 v_text_scrolled = v_text;
-                            float cooling_value = texture(tex_warp_grid, v_text_scrolled).r * 10;
-                            return vec3(cooling_value) * 0.5;
+                            v_text_scrolled += vec2(0.0, -time);
+                            v_text_scrolled += vec2(cos(time)*0.5, 0.0);
+                            
+                            float cooling_value = texture(tex_warp_grid, v_text_scrolled).r;
+                            return vec3(cooling_value) * 2.00;
                         }
-                        */
+                        /**/
                         
                         void main() {                                                    
                             // Source fire
@@ -204,7 +238,8 @@ class Fire(Example):
                             vec3 filter_fire = compute_filter_firemap(tex_prev_frame, v_text);                            
                             
                             // Cooling map/attenuation
-                            vec3 cooling = compute_cooling();
+                            //vec3 cooling = compute_cooling();
+                            vec3 cooling = compute_cooling_with_warpgrid();
                             
                             vec4 new_fire_color = vec4((src_fire + filter_fire) - cooling, 1.0); 
                             
@@ -213,18 +248,95 @@ class Fire(Example):
                     ''',
         )
 
+        self.transform = self.ctx.program(
+            vertex_shader='''
+                    #version 330
+                    #define M_PI 3.14159265358979323846
+
+                    uniform vec2 Acc;
+                    uniform float Time;
+                    
+                    uniform sampler2D tex_fire;
+
+                    in vec2 in_pos;
+                    in float in_hot;
+                    in vec2 in_vel;
+                    in float in_id;
+
+                    out vec2 out_pos;
+                    out float out_hot;
+                    out vec2 out_vel;
+                    out float out_id;
+
+                    float PHI = 1.61803398874989484820459 * 00000.1; // Golden Ratio   
+                    float PI  = 3.14159265358979323846264 * 00000.1; // PI
+                    float SQ2 = 1.41421356237309504880169 * 10000.0; // Square Root of Two
+
+                    float gold_noise(in vec2 coordinate, in float seed){
+                        return fract(sin(dot(coordinate*(seed+PHI), vec2(PHI, PI)))*SQ2);
+                    }
+
+                    float map(float value, float inMin, float inMax, float outMin, float outMax) {
+                      return outMin + (outMax - outMin) * (value - inMin) / (inMax - inMin);
+                    }
+
+                    void respawn() {
+                        float pos_x = gold_noise(vec2(in_id, Time), 0);
+                        float pos_y = gold_noise(vec2(in_id, Time), 50); 
+                        out_pos = vec2(
+                            map(pos_x, 0, 1, -1, +1) * 1.0, 
+                            map(pos_y, 0, 1, -1, +1) * 1.0
+                        );
+                        
+                        out_hot = map(gold_noise(vec2(in_id, Time), 25), 0.0, 1.0, 0.4, 1.0);
+                        out_hot *= texture(tex_fire, vec2(pos_x, pos_y)).r;
+
+                        float r = gold_noise(vec2(in_id, Time), 100) * 0.015;
+                        out_vel = vec2(0.0, r);
+                    }
+
+                    void update() {
+                        //out_hot = in_hot - map(gold_noise(vec2(in_id, Time), 125), 0.0, 1.0, 0.0075, 0.01);
+                        //out_hot = in_hot - 0.003;
+                        out_hot = in_hot - 0.015;
+                        out_pos = in_pos + in_vel + Acc;
+                        //out_vel = in_vel * map(gold_noise(vec2(in_id, Time), 150), 0.0, 1.0, 0.95, 1.00) + Acc;
+                        out_vel = in_vel * 0.95;
+                    }
+
+                    void main() {
+                        if(in_hot <= 0.0) respawn();
+                        else if(abs(in_pos.x) > 1.0) respawn();
+                        else if(abs(in_pos.y) > 1.0) respawn();
+                        else update();
+
+                        out_id = in_id;
+                    }
+                ''',
+            varyings=['out_pos',
+                      'out_hot',
+                      'out_vel',
+                      'out_id',
+                      ]
+        )
+
         canvas = np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]).astype('f4')
 
         self.vbo = self.ctx.buffer(canvas.tobytes())
         self.vao_final_render = self.ctx.simple_vertex_array(self.render_final_fire, self.vbo, 'in_vert')
         self.vao_update_frame = self.ctx.simple_vertex_array(self.update_frame, self.vbo, 'in_vert')
+        self.vao_render_tex = self.ctx.simple_vertex_array(self.render_tex, self.vbo, 'in_vert')
 
         img = Image.open(local('data', 'fire_colors.png')).transpose(Image.FLIP_TOP_BOTTOM)
         self.texture_fire_colors = self.ctx.texture(img.size, 3, img.tobytes())
 
         img = Image.open(local('data', 'fire.jpg')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
-        self.texture_fire_map = self.ctx.texture(img.size, 3, img.tobytes())
-        self.texture_fire_map.build_mipmaps()
+        self.texture_src_fire_map = self.ctx.texture(img.size, 3, img.tobytes())
+        self.texture_fire_map = self.ctx.texture(img.size, 1, dtype='f1')
+        # self.texture_fire_map.build_mipmaps()
+        self.vbo_fire_map = self.ctx.framebuffer(self.texture_fire_map)
+        self.vbo_fire_map.use()
+        # self.vbo_fire_map.clear(0.0, 0.0, 0.0)
 
         img = Image.open(local('data', 'fire_cooling_map.png')).transpose(Image.FLIP_TOP_BOTTOM)
         self.texture_cooling_map = self.ctx.texture(img.size, 1, img.tobytes())
@@ -240,7 +352,7 @@ class Fire(Example):
             logger.warning("", exc_info=True)
 
         # fire_size = self.wnd.size
-        fire_size = (self.wnd.size[0] >> 1, self.wnd.size[1] >> 1)
+        fire_size = np.array(self.wnd.size) >> 1
         # fire_size = (64, 64)
 
         # Ping Pong Buffers
@@ -257,8 +369,8 @@ class Fire(Example):
         try:
             self.update_frame['tex_prev_frame'].value = 0
             self.update_frame['tex_fire'].value = 1
-            self.update_frame['tex_cooling_map'].value = 2
-            # self.update_frame['tex_warp_grid'].value = 3
+            # self.update_frame['tex_cooling_map'].value = 2
+            self.update_frame['tex_warp_grid'].value = 2
         except:
             logger.warning("", exc_info=True)
 
@@ -293,6 +405,10 @@ class Fire(Example):
 
         self.warp_grid = WarpGridTex3D(self.ctx)
 
+        self.particles = Particles(self.ctx,
+                                   shader_transform=self.transform,
+                                   nb_max_particles=32)
+
     def update_fire(self) -> moderngl.Texture:
 
         id_prev_frame = self.id_buffer
@@ -307,8 +423,8 @@ class Fire(Example):
         # set textures for shader
         tex_prev_frame.use(0)
         self.texture_fire_map.use(1)
-        self.texture_cooling_map.use(2)
-        # self.warp_grid.tex_final_render.use(2)
+        # self.texture_cooling_map.use(2)
+        self.warp_grid.tex_final_render.use(2)
         # render full screen quad
         self.vao_update_frame.render(moderngl.TRIANGLE_STRIP)
 
@@ -326,7 +442,20 @@ class Fire(Example):
                 self.update_frame['time'].value = self.cur_time
             except:
                 pass
+
+            # update warp grid
             self.warp_grid.update_grid(self.wnd.time)
+
+            # update particles system
+            self.texture_fire_map.use()
+            self.particles.update()
+
+            self.vbo_fire_map.use()
+            self.vbo_fire_map.clear(0.0, 0.0, 0.0)
+            self.texture_src_fire_map.use()
+            self.vao_render_tex.render(moderngl.TRIANGLE_STRIP)
+            self.ctx.point_size = 9.0
+            self.particles.render_particles()
 
             tex_on_fire_updated = self.update_fire()
 
@@ -336,6 +465,7 @@ class Fire(Example):
             tex_on_fire_updated.use(0)
             # self.warp_grid.tex_final_render.use(0)    # Work
             self.texture_fire_colors.use(1)
+            # self.texture_fire_map.use()
             self.vao_final_render.render(moderngl.TRIANGLE_STRIP)
 
         # logger.info(f"Query on time elapsed (GPU side): {q_for_timer.elapsed/1000000.0} ms")
@@ -349,8 +479,4 @@ class Fire(Example):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        level=logging.DEBUG
-    )
     run_example(Fire)

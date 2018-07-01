@@ -38,9 +38,13 @@ class WireframeTerrain(Example):
                 out vec3 v_color;
 
                 void main() {
+                    /**
                     v_color = in_color;
                     float height = texture(Heightmap, in_vert.xy).r * 0.5;
                     gl_Position = Mvp * vec4(in_vert.xy - 0.5, height, 1.0);
+                    **/
+                    v_color = vec3(in_vert, 0);
+                    gl_Position = Mvp * vec4(in_vert.xy - 0.5, 0, 1.0);
                 }
             ''',
             fragment_shader='''
@@ -66,7 +70,7 @@ class WireframeTerrain(Example):
             (self.vbo, '2f', 'in_vert'),
         ]
 
-        self.vao = self.ctx.vertex_array(self.prog, vao_content, self.ibo)
+        self.vao = self.ctx.vertex_array(self.prog, vao_content, self.ibo, skip_errors=True)
 
         self.img = Image.open(local('data', 'noise.jpg')).convert('L')
         texture = self.ctx.texture(self.img.size, 1, self.img.tobytes())
@@ -79,7 +83,7 @@ class WireframeTerrain(Example):
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.DEPTH_TEST)
-        self.ctx.wireframe = True
+        self.ctx.wireframe = False
 
         proj = Matrix44.perspective_projection(45.0, width / height, 0.1, 1000.0)
         lookat = Matrix44.look_at(

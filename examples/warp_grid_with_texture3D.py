@@ -5,14 +5,18 @@ try:
     import _pickle as pickle
 except ImportError:
     import pickle
+import logging
 import moderngl
 import numpy as np
 import os
 from pathlib import Path
 from PIL import Image
-from pyrr import Matrix44
+# from pyrr import Matrix44
 #
 from examples.example_window import Example, run_example
+
+
+logger = logging.getLogger(__name__)
 
 
 def local(*path):
@@ -25,7 +29,16 @@ def local(*path):
 
 
 def terrain(size: tuple):
-    vertices = np.dstack(np.mgrid[0:size[0], 0:size[1]][::-1]) / np.array(size)
+    xv, yv = np.mgrid[0:size[0], 0:size[1]][::-1]
+    xv = xv / (size[1] - 1)
+    yv = yv / (size[0] - 1)
+    vertices = np.dstack((xv, yv))
+    # vertices = np.dstack(np.mgrid[0:size[0], 0:size[1]][::-1]) / (np.array(size) - np.array([-1, -1]))
+
+    # x = np.linspace(0, 1, size[0])
+    # y = np.linspace(0, 1, size[1])
+    # vertices = np.dstack(np.meshgrid(x, y)[::-1])
+
     temp = np.dstack([np.arange(0, size[0] * size[1] - size[1]), np.arange(size[1], size[0] * size[1])])
     index = np.pad(temp.reshape(size[0] - 1, 2 * size[1]), [[0, 0], [0, 1]], 'constant', constant_values=-1)
     return vertices, index
@@ -91,8 +104,8 @@ class WarpGridTex3D(Example):
                             vec2 pos_in_grid = in_vert.yx - 0.5;
                             v_text = texture(Heightmap, vec3(in_vert.xy, time)).xy;
                             // y scrolling
-                            v_text -= vec2(0, time)*8;
-                            v_text += vec2(2/32.0, 0.0);
+                            // v_text -= vec2(0, time)*8;
+                            //v_text += vec2(2/32.0, 0.0);
                             //gl_Position = Mvp * vec4(pos_in_grid, 0.0, 1.0);
                             gl_Position = vec4(in_vert * 2.0 - 1.0, 0.0, 1.0);
                         }
@@ -142,24 +155,25 @@ class WarpGridTex3D(Example):
 
         canvas = np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]).astype('f4')
 
-        self.vbo = self.ctx.buffer(canvas.tobytes())
-        self.vao_final_render = self.ctx.simple_vertex_array(self.render_final, self.vbo, 'in_vert')
-        self.final_render_size = (512, 512)
-        self.tex_final_render = self.ctx.texture(self.final_render_size, 1, dtype='f1')
-        self.fbo_final_render = self.ctx.framebuffer(self.tex_final_render)
-
         # self.mvp = self.prog_hm['Mvp']
 
         #######################################
         # [CPU side]
         #######################################
         vertices, index = terrain((13, 11))
-
         # canvas = np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]).astype('f4')
+        img = Image.open(local('data', 'fire_cooling_map.png')).transpose(Image.FLIP_TOP_BOTTOM)
 
         #######################################
         # [GPU side]
         #######################################
+        self.vbo = self.ctx.buffer(canvas.tobytes())
+        self.vao_final_render = self.ctx.simple_vertex_array(self.render_final, self.vbo, 'in_vert')
+        self.final_render_size = np.array(img.size) * 1
+        logger.debug(f'self.final_render_size: {self.final_render_size}')
+        self.tex_final_render = self.ctx.texture(self.final_render_size, 1, dtype='f1')
+        self.fbo_final_render = self.ctx.framebuffer(self.tex_final_render)
+
         # For HeightMap GPU object:
         # Vertex Buffer Object
         self.vbo_hm = self.ctx.buffer(vertices.astype('f4').tobytes())
@@ -194,7 +208,7 @@ class WarpGridTex3D(Example):
             except EOFError:
                 pass
         grids_array = np.array(grids_array)
-        print(f"Nb warp grid loaded: {grids_array.shape[0]}")
+        logger.debug(f"Nb warp grid loaded: {grids_array.shape[0]}")
 
         # https://moderngl.readthedocs.io/en/stable/reference/texture3d.html?highlight=write
         self.texture_grids = self.ctx.texture3d(
@@ -208,7 +222,6 @@ class WarpGridTex3D(Example):
         self.texture_grids.repeat_z = True
         self.texture_grids.filter = (moderngl.LINEAR, moderngl.LINEAR)
 
-        img = Image.open(local('data', 'fire_cooling_map.png')).transpose(Image.FLIP_TOP_BOTTOM)
         self.texture_cooling_map = self.ctx.texture(img.size, 1, img.tobytes())
         self.texture_cooling_map.repeat_x = False
         self.texture_cooling_map.repeat_y = True
@@ -223,7 +236,7 @@ class WarpGridTex3D(Example):
         self.fbo_final_render.use()
         if dt is None:
             try:
-                self.prog_hm['time'].value = self.wnd.time * 0.25
+                self.prog_hm['time'].value = self.wnd.time * 0.25   # 4 hz record
             except:
                 pass
         else:
