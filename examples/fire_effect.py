@@ -195,6 +195,14 @@ class Fire(Example):
 
                         in vec2 v_text;
                         out vec4 f_color;
+                        
+                        float PHI = 1.61803398874989484820459 * 00000.1; // Golden Ratio   
+                        float PI  = 3.14159265358979323846264 * 00000.1; // PI
+                        float SQ2 = 1.41421356237309504880169 * 10000.0; // Square Root of Two
+    
+                        float gold_noise(in vec2 coordinate, in float seed){
+                            return fract(sin(dot(coordinate*(seed+PHI), vec2(PHI, PI)))*SQ2);
+                        }
 
                         vec3 compute_filter_firemap(sampler2D t, vec2 v_t) {
                             // Vertical filtering + Up Scroll
@@ -226,7 +234,8 @@ class Fire(Example):
                             v_text_scrolled += vec2(cos(time)*0.5, 0.0);
                             
                             float cooling_value = texture(tex_warp_grid, v_text_scrolled).r;
-                            return vec3(cooling_value) * 2.00;
+                            float r = gold_noise(gl_FragCoord.xy, time) * 0.015;
+                            return vec3(cooling_value) * 1.50 + vec3(r);
                         }
                         /**/
                         
@@ -292,7 +301,9 @@ class Fire(Example):
                         out_hot *= texture(tex_fire, vec2(pos_x, pos_y)).r;
 
                         float r = gold_noise(vec2(in_id, Time), 100) * 0.015;
-                        out_vel = vec2(0.0, r);
+                        float vel_x =  map(gold_noise(vec2(in_id, Time), 105), 0, 1, -1, 1) * 0.005;
+                        //out_vel = vec2(0.0, r);
+                        out_vel = vec2(vel_x, r);
                     }
 
                     void update() {
@@ -397,8 +408,8 @@ class Fire(Example):
         fbo_ping = self.fbos[id_buffer_ping]
         fbo_ping.use()
         fbo_ping.clear(0.0, 0.0, 0.0)
-        self.texture_fire_map.use()
-        self.vao_final_render.render(moderngl.TRIANGLE_STRIP)
+        # self.texture_fire_map.use()
+        # self.vao_final_render.render(moderngl.TRIANGLE_STRIP)
 
         self.cur_time = 0
         self.prev_time = time.time()
@@ -450,24 +461,28 @@ class Fire(Example):
             self.texture_fire_map.use()
             self.particles.update()
 
+            # update/render source fire map
             self.vbo_fire_map.use()
             self.vbo_fire_map.clear(0.0, 0.0, 0.0)
+            # static sources fires
             self.texture_src_fire_map.use()
+            # particles system for Sparkles fire
             self.vao_render_tex.render(moderngl.TRIANGLE_STRIP)
             self.ctx.point_size = 9.0
             self.particles.render_particles()
 
+            # update/render fire effect
             tex_on_fire_updated = self.update_fire()
 
+            # show the result on 'screen' (main context)
             self.ctx.screen.use()
             self.ctx.viewport = self.wnd.viewport
             self.ctx.clear(1.0, 1.0, 1.0)
-            tex_on_fire_updated.use(0)
             # self.warp_grid.tex_final_render.use(0)    # Work
+            tex_on_fire_updated.use(0)
             self.texture_fire_colors.use(1)
-            # self.texture_fire_map.use()
             self.vao_final_render.render(moderngl.TRIANGLE_STRIP)
-
+        #
         # logger.info(f"Query on time elapsed (GPU side): {q_for_timer.elapsed/1000000.0} ms")
 
         cur_time = time.time()
