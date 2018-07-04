@@ -200,6 +200,7 @@ class Fire(Example):
                         float PI  = 3.14159265358979323846264 * 00000.1; // PI
                         float SQ2 = 1.41421356237309504880169 * 10000.0; // Square Root of Two
     
+                        // https://stackoverflow.com/questions/4200224/random-noise-functions-for-glsl
                         float gold_noise(in vec2 coordinate, in float seed){
                             return fract(sin(dot(coordinate*(seed+PHI), vec2(PHI, PI)))*SQ2);
                         }
@@ -234,6 +235,8 @@ class Fire(Example):
                             v_text_scrolled += vec2(cos(time)*0.5, 0.0);
                             
                             float cooling_value = texture(tex_warp_grid, v_text_scrolled).r;
+                            // https://khronos.org/opengl/wiki/Fragment_Shader#System_inputs
+                            // https://khronos.org/registry/OpenGL-Refpages/gl4/html/gl_FragCoord.xhtml
                             float r = gold_noise(gl_FragCoord.xy, time) * 0.015;
                             return vec3(cooling_value) * 1.50 + vec3(r);
                         }
