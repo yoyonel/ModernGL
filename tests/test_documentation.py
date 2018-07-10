@@ -20,7 +20,7 @@ class TestCase(unittest.TestCase):
         self.assertSetEqual(implemented - documented - ignored, set(), msg='Implemented but not Documented')
         self.assertSetEqual(documented - implemented, set(), msg='Documented but not Implemented')
 
-        attribute_access = re.compile(r"\w+\.(\w+)")
+        attribute_access = re.compile(r"[a-zA-Z]\w*\.(\w+)")
         for method, docsig in methods:
             classname, methodname = method.split('.')
             sig = str(inspect.signature(getattr(getattr(moderngl, classname), methodname)))
