@@ -30,6 +30,3 @@ del os
 
 
 __version__ = '5.3.0'
-
-
-Error = mgl.Error
