@@ -1,5 +1,6 @@
 import moderngl
 import numpy as np
+
 from PIL import Image
 
 ctx = moderngl.create_standalone_context()
