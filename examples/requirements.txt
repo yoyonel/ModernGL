@@ -4,3 +4,4 @@ pillow
 pyrr
 pymunk
 PyQt5
+matplotlib

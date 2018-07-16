@@ -13,6 +13,8 @@ def main():
 
     glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 4)
     glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 0)
+    glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
+    glfw.window_hint(glfw.OPENGL_FORWARD_COMPAT, True)
     win = glfw.create_window(640, 480, 'bezier', None, None)
     if not win:
         print('Failed to create glfw window!')
