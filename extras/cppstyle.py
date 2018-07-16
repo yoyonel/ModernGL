@@ -1,6 +1,6 @@
-import subprocess
 import glob
 import re
+import subprocess
 
 subprocess.call(['AStyle', '--recursive', '--suffix=none', '--indent-after-parens', '--indent-continuation=1', '--indent=tab', '--indent=force-tab=4', '--indent-switches', '--pad-oper', '--pad-comma', '--pad-header', '--add-braces', '--align-reference=middle', '--align-pointer=middle', 'src\\*'])
 

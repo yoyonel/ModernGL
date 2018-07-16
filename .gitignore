@@ -22,6 +22,8 @@ temp_*
 !.vscode/snippets
 .idea
 
+.eggs/
+
 *.egg-info
 *.log
 *.pyd

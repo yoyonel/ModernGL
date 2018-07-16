@@ -3,10 +3,8 @@
 '''
 
 import argparse
-import ctypes
 import json
 import os
-import struct
 import subprocess
 import sys
 
