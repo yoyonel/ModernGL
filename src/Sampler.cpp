@@ -1,4 +1,5 @@
 #include "Types.hpp"
+#include "InlineMethods.hpp"
 
 PyObject * MGLContext_sampler(MGLContext * self, PyObject * args) {
 	int args_ok = PyArg_ParseTuple(
@@ -14,9 +15,14 @@ PyObject * MGLContext_sampler(MGLContext * self, PyObject * args) {
 
 	MGLSampler * sampler = (MGLSampler *)MGLSampler_Type.tp_alloc(&MGLSampler_Type, 0);
 
-	sampler->sampler_obj = 0;
+	gl.GenSamplers(1, (GLuint *)&sampler->sampler_obj);
 
-	// TODO: impl sampler
+	sampler->min_filter = GL_LINEAR;
+	sampler->mag_filter = GL_LINEAR;
+	sampler->anisotropy = 1.0;
+	sampler->repeat_x = true;
+	sampler->repeat_y = true;
+	sampler->compare_func = 0;
 
 	Py_INCREF(self);
 	sampler->context = self;
@@ -42,17 +48,21 @@ void MGLSampler_tp_dealloc(MGLSampler * self) {
 	MGLSampler_Type.tp_free((PyObject *)self);
 }
 
-PyObject * MGLSampler_foo(MGLContext * self, PyObject * args) {
+PyObject * MGLSampler_use(MGLSampler * self, PyObject * args) {
+	int index;
+
 	int args_ok = PyArg_ParseTuple(
 		args,
-		""
+		"I",
+		&index
 	);
 
 	if (!args_ok) {
 		return 0;
 	}
 
-	// TODO: impl sampler
+	const GLMethods & gl = self->context->gl;
+	gl.BindSampler(index, self->sampler_obj);
 
 	Py_RETURN_NONE;
 }
@@ -63,23 +73,118 @@ PyObject * MGLSampler_release(MGLSampler * self) {
 }
 
 PyMethodDef MGLSampler_tp_methods[] = {
-	{"foo", (PyCFunction)MGLSampler_foo, METH_VARARGS, 0},
+	{"use", (PyCFunction)MGLSampler_use, METH_VARARGS, 0},
 	{"release", (PyCFunction)MGLSampler_release, METH_NOARGS, 0},
 	{0},
 };
 
-PyObject * MGLSampler_get_bar(MGLSampler * self) {
-	// TODO: impl sampler
-	Py_RETURN_NONE;
+// PyObject * MGLSampler_get_bar(MGLSampler * self) {
+// 	// TODO: impl sampler
+// 	Py_RETURN_NONE;
+// }
+
+// int MGLSampler_set_bar(MGLSampler * self, PyObject * value) {
+// 	// TODO: impl sampler
+// 	return 0;
+// }
+
+PyObject * MGLSampler_get_repeat_x(MGLSampler * self) {
+	return PyBool_FromLong(self->repeat_x);
 }
 
-int MGLSampler_set_bar(MGLSampler * self, PyObject * value) {
-	// TODO: impl sampler
+int MGLSampler_set_repeat_x(MGLSampler * self, PyObject * value) {
+	const GLMethods & gl = self->context->gl;
+
+	if (value == Py_True) {
+		gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		self->repeat_x = true;
+		return 0;
+	} else if (value == Py_False) {
+		gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		self->repeat_x = false;
+		return 0;
+	} else {
+		MGLError_Set("invalid value for texture_x");
+		return -1;
+	}
+}
+
+PyObject * MGLSampler_get_repeat_y(MGLSampler * self) {
+	return PyBool_FromLong(self->repeat_y);
+}
+
+int MGLSampler_set_repeat_y(MGLSampler * self, PyObject * value) {
+	const GLMethods & gl = self->context->gl;
+
+	if (value == Py_True) {
+		gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		self->repeat_y = true;
+		return 0;
+	} else if (value == Py_False) {
+		gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		self->repeat_y = false;
+		return 0;
+	} else {
+		MGLError_Set("invalid value for texture_x");
+		return -1;
+	}
+}
+
+PyObject * MGLSampler_get_filter(MGLSampler * self) {
+	PyObject * res = PyTuple_New(2);
+	PyTuple_SET_ITEM(res, 0, PyLong_FromLong(self->min_filter));
+	PyTuple_SET_ITEM(res, 1, PyLong_FromLong(self->mag_filter));
+	return res;
+}
+
+int MGLSampler_set_filter(MGLSampler * self, PyObject * value) {
+	if (PyTuple_GET_SIZE(value) != 2) {
+		MGLError_Set("invalid filter");
+		return -1;
+	}
+
+	self->min_filter = PyLong_AsLong(PyTuple_GET_ITEM(value, 0));
+	self->mag_filter = PyLong_AsLong(PyTuple_GET_ITEM(value, 1));
+
+	const GLMethods & gl = self->context->gl;
+	gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MIN_FILTER, self->min_filter);
+	gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MAG_FILTER, self->mag_filter);
+
+	return 0;
+}
+
+PyObject * MGLSampler_get_compare_func(MGLSampler * self) {
+	return compare_func_to_string(self->compare_func);
+}
+
+int MGLSampler_set_compare_func(MGLSampler * self, PyObject * value) {
+	const char * func = PyUnicode_AsUTF8(value);
+	
+	const GLMethods & gl = self->context->gl;
+	gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_COMPARE_FUNC, compare_func_from_string(func));
+
+	return 0;
+}
+
+PyObject * MGLSampler_get_anisotropy(MGLSampler * self) {
+	return PyFloat_FromDouble(self->anisotropy);
+}
+
+int MGLSampler_set_anisotropy(MGLSampler * self, PyObject * value) {
+	self->anisotropy = fmin(fmax(PyFloat_AsDouble(value), 1.0), self->context->max_anisotropy);
+
+	const GLMethods & gl = self->context->gl;
+	gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_MAX_ANISOTROPY, self->anisotropy);
+
 	return 0;
 }
 
 PyGetSetDef MGLSampler_tp_getseters[] = {
-	{(char *)"bar", (getter)MGLSampler_get_bar, (setter)MGLSampler_set_bar, 0, 0},
+	{(char *)"repeat_x", (getter)MGLSampler_get_repeat_x, (setter)MGLSampler_set_repeat_x, 0, 0},
+	{(char *)"repeat_y", (getter)MGLSampler_get_repeat_y, (setter)MGLSampler_set_repeat_y, 0, 0},
+	{(char *)"filter", (getter)MGLSampler_get_filter, (setter)MGLSampler_set_filter, 0, 0},
+	{(char *)"compare_func", (getter)MGLSampler_get_compare_func, (setter)MGLSampler_set_compare_func, 0, 0},
+	{(char *)"anisotropy", (getter)MGLSampler_get_anisotropy, (setter)MGLSampler_set_anisotropy, 0, 0},
 	{0},
 };
 

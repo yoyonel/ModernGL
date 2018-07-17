@@ -804,14 +804,30 @@ class Context:
         res.ctx = self
         return res
 
-    def sampler(self, repeat_x: bool, repeat_y: bool, filter: Tuple[int, int], compare_func: str) -> Sampler:
+    def sampler(self, repeat_x: bool=True, repeat_y: bool=True, filter: Tuple[int, int]=(9729, 9729),
+                anisotropy: float=1.0, compare_func: str='=<') -> Sampler:
         '''
-            Docstring
+            Create a sampler object.
+            When a sampler object is bound to a texture image unit, the internal sampling parameters for a
+            texture bound to the same image unit are all ignored. Instead, the sampling parameters are taken
+            from this sampler object.
+
+            Keyword Arguments:
+                repeat_x (bool): Repeat texture on x
+                repeat_x (bool): Repeat texture on y
+                filter (tuple): The min and max filter
+                anisotropy (float): Number of samples for anisotropic filtering. Any value greater than 1.0f counts as a use of anisotropic filtering.
+                compare_func: Compare function for depth textures
         '''
 
         res = Sampler.__new__(Sampler)
         res.mglo, res._glo = self.mglo.sampler()
         res.ctx = self
+        res.repeat_x = repeat_x
+        res.repeat_y = repeat_y
+        res.filter = filter
+        res.anisotropy = anisotropy
+        res.compare_func = compare_func
         return res
 
     def core_profile_check(self) -> None:

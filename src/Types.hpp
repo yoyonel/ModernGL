@@ -379,7 +379,14 @@ struct MGLSampler {
 	MGLContext * context;
 	int sampler_obj;
 
-	// TODO: impl sampler
+	int min_filter;
+	int mag_filter;
+	float anisotropy;
+
+	int compare_func;
+
+	bool repeat_x;
+	bool repeat_y;
 };
 
 MGLDataType * from_dtype(const char * dtype);
