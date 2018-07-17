@@ -159,9 +159,10 @@ PyObject * MGLSampler_get_compare_func(MGLSampler * self) {
 
 int MGLSampler_set_compare_func(MGLSampler * self, PyObject * value) {
 	const char * func = PyUnicode_AsUTF8(value);
-	
+	self->compare_func = compare_func_from_string(func);
+
 	const GLMethods & gl = self->context->gl;
-	gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_COMPARE_FUNC, compare_func_from_string(func));
+	gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_COMPARE_FUNC, self->compare_func);
 
 	return 0;
 }
