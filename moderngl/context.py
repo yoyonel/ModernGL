@@ -824,8 +824,7 @@ class Context:
         res.ctx = self
         res.repeat_x = repeat_x
         res.repeat_y = repeat_y
-        if filter is not None:
-            res.filter = filter
+        res.filter = filter or (9729, 9729)
         res.anisotropy = anisotropy
         res.compare_func = compare_func
         return res

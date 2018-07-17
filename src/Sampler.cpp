@@ -162,6 +162,12 @@ int MGLSampler_set_compare_func(MGLSampler * self, PyObject * value) {
 	self->compare_func = compare_func_from_string(func);
 
 	const GLMethods & gl = self->context->gl;
+
+	if (self->compare_func == 0) {
+		gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+	} else {
+		gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+	}
 	gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_COMPARE_FUNC, self->compare_func);
 
 	return 0;
