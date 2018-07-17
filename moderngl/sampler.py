@@ -1,5 +1,7 @@
 from typing import Tuple
 
+__all__ = ['Sampler']
+
 
 class Sampler:
     '''
