@@ -1,5 +1,15 @@
 #pragma once
 
+#ifdef _MSC_VER
+    #define INLINE __inline
+
+    INLINE double fmax(double left, double right)
+    { return (left > right) ? left : right; }
+
+    INLINE double fmin(double left, double right)
+    { return (left < right) ? left : right; }
+#endif
+
 inline void clean_glsl_name(char * name, int & name_len) {
 	if (name_len && name[name_len - 1] == ']') {
 		name_len -= 1;
