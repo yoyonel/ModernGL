@@ -82,6 +82,8 @@ class TestCase(unittest.TestCase):
     def test_conditional_render_docs(self):
         self.validate('conditional_render.rst', 'ConditionalRender', ['mglo'])
 
+    def test_sampler_docs(self):
+        self.validate('sampler.rst', 'Sampler', ['release', 'mglo', 'glo', 'ctx', 'extra'])
 
 if __name__ == '__main__':
     unittest.main()

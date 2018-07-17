@@ -17,3 +17,4 @@ Reference
     query.rst
     conditional_render.rst
     compute_shader.rst
+    sampler.rst
