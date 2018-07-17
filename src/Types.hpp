@@ -115,6 +115,7 @@ struct MGLContext {
 
 	int max_texture_units;
 	int default_texture_unit;
+	float max_anisotropy;
 
 	int enable_flags;
 	int front_face;

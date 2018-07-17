@@ -584,6 +584,10 @@ PyObject * MGLContext_get_max_texture_units(MGLContext * self) {
 	return PyLong_FromLong(self->max_texture_units);
 }
 
+PyObject * MGLContext_get_max_anisotropy(MGLContext * self) {
+	return PyFloat_FromDouble(self->max_anisotropy);
+}
+
 MGLFramebuffer * MGLContext_get_fbo(MGLContext * self) {
 	Py_INCREF(self->bound_framebuffer);
 	return self->bound_framebuffer;
@@ -1219,6 +1223,12 @@ PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"blend_func", (getter)MGLContext_get_depth_func, (setter)MGLContext_set_blend_func, 0, 0},
 	{(char *)"multisample", (getter)MGLContext_get_multisample, (setter)MGLContext_set_multisample, 0, 0},
 
+	{(char *)"default_texture_unit", (getter)MGLContext_get_default_texture_unit, (setter)MGLContext_set_default_texture_unit, 0, 0},
+	{(char *)"max_samples", (getter)MGLContext_get_max_samples, 0, 0, 0},
+	{(char *)"max_integer_samples", (getter)MGLContext_get_max_integer_samples, 0, 0, 0},
+	{(char *)"max_texture_units", (getter)MGLContext_get_max_texture_units, 0, 0, 0},
+	{(char *)"max_anisotropy", (getter)MGLContext_get_max_anisotropy, 0, 0, 0},
+
 	{(char *)"fbo", (getter)MGLContext_get_fbo, (setter)MGLContext_set_fbo, 0, 0},
 
 	{(char *)"wireframe", (getter)MGLContext_get_wireframe, (setter)MGLContext_set_wireframe, 0, 0},
@@ -1318,6 +1328,9 @@ void MGLContext_Initialize(MGLContext * self) {
 	self->max_texture_units = 0;
 	gl.GetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, (GLint *)&self->max_texture_units);
 	self->default_texture_unit = self->max_texture_units - 1;
+
+	self->max_anisotropy = 0.0;
+	gl.GetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY, (GLfloat *)&self->max_anisotropy);
 
 	int bound_framebuffer = 0;
 	gl.GetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &bound_framebuffer);

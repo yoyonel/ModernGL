@@ -186,6 +186,13 @@ class Context:
         self.mglo.default_texture_unit = value
 
     @property
+    def max_anisotropy(self):
+        '''
+            float: Max anisotropy
+        '''
+        return self.mglo.max_anisotropy
+
+    @property
     def screen(self) -> 'Framebuffer':
         '''
             Framebuffer: The default framebuffer.
