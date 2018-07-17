@@ -18,6 +18,7 @@ from .texture_3d import Texture3D
 from .texture_array import TextureArray
 from .texture_cube import TextureCube
 from .vertex_array import VertexArray
+from .sampler import Sampler
 
 __all__ = ['Context', 'create_context', 'create_standalone_context',
            'NOTHING', 'BLEND', 'DEPTH_TEST', 'CULL_FACE', 'RASTERIZER_DISCARD',
@@ -793,6 +794,16 @@ class Context:
 
         res = ComputeShader.__new__(ComputeShader)
         res.mglo, res._glo = self.mglo.compute_shader(source)
+        res.ctx = self
+        return res
+
+    def sampler(self, repeat_x: bool, repeat_y: bool, filter: Tuple[int, int], compare_func: str) -> Sampler:
+        '''
+            Docstring
+        '''
+
+        res = Sampler.__new__(Sampler)
+        res.mglo, res._glo = self.mglo.sampler()
         res.ctx = self
         return res
 
