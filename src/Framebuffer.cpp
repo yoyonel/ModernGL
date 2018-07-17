@@ -525,9 +525,7 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 	expected_size = expected_size * height;
 
 	int pixel_type = data_type->gl_type;
-
-	const int base_formats[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-	int base_format = base_formats[components];
+	int base_format = data_type->base_format[components];
 
 	PyObject * result = PyBytes_FromStringAndSize(0, expected_size);
 	char * data = PyBytes_AS_STRING(result);
