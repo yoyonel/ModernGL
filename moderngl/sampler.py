@@ -30,10 +30,16 @@ class Sampler:
         self.mglo.use(location)
 
     def release(self) -> None:
+        '''
+            Release the ModernGL object.
+        '''
         self.mglo.release()
 
     @property
     def repeat_x(self) -> bool:
+        '''
+            bool: The repeat_x of the texture.
+        '''
         return self.mglo.repeat_x
 
     @repeat_x.setter
@@ -42,6 +48,9 @@ class Sampler:
 
     @property
     def repeat_y(self) -> bool:
+        '''
+            bool: The repeat_y of the texture.
+        '''
         return self.mglo.repeat_x
 
     @repeat_y.setter
@@ -51,7 +60,7 @@ class Sampler:
     @property
     def filter(self) -> Tuple[int, int]:
         '''
-            tuple: The filter of the sampler
+            tuple: The filter of the sampler (min, mag)
         '''
         return self.mglo.filter
 
@@ -61,6 +70,9 @@ class Sampler:
 
     @property
     def compare_func(self) -> str:
+        '''
+            tuple: The compare function of the depth texture.
+        '''
         return self.mglo.compare_func
 
     @compare_func.setter
@@ -69,6 +81,9 @@ class Sampler:
 
     @property
     def anisotropy(self) -> float:
+        '''
+            float: Number of samples for anisotropic filtering. Any value greater than 1.0 counts as a use of anisotropic filtering
+        '''
         return self.mglo.anisotropy
 
     @anisotropy.setter

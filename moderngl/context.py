@@ -806,16 +806,13 @@ class Context:
 
     def sampler(self, repeat_x=True, repeat_y=True, filter=None, anisotropy=1.0, compare_func='') -> Sampler:
         '''
-            Create a sampler object.
-            When a sampler object is bound to a texture image unit, the internal sampling parameters for a
-            texture bound to the same image unit are all ignored. Instead, the sampling parameters are taken
-            from this sampler object.
+            Create a :py:class:`Sampler` object.
 
             Keyword Arguments:
                 repeat_x (bool): Repeat texture on x
                 repeat_x (bool): Repeat texture on y
                 filter (tuple): The min and max filter
-                anisotropy (float): Number of samples for anisotropic filtering. Any value greater than 1.0f counts as a use of anisotropic filtering.
+                anisotropy (float): Number of samples for anisotropic filtering. Any value greater than 1.0 counts as a use of anisotropic filtering
                 compare_func: Compare function for depth textures
         '''
 

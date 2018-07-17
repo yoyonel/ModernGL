@@ -7,7 +7,7 @@ Sampler
 .. autoclass:: moderngl.Sampler
 
 Create
-======
+------
 
 .. automethod:: Context.sampler(repeat_x=True, repeat_y=True, filter=None, anisotropy=1.0, compare_func='') -> Sampler
 
