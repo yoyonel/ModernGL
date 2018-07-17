@@ -375,7 +375,8 @@ PyObject * MGLFramebuffer_clear(MGLFramebuffer * self, PyObject * args) {
 	const GLMethods & gl = self->context->gl;
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, self->framebuffer_obj);
-	gl.DrawBuffers(self->draw_buffers_len, self->draw_buffers);
+	if (self->framebuffer_obj > 0)
+		gl.DrawBuffers(self->draw_buffers_len, self->draw_buffers);
 	gl.ClearColor(r, g, b, a);
 	gl.ClearDepth(depth);
 
