@@ -804,8 +804,7 @@ class Context:
         res.ctx = self
         return res
 
-    def sampler(self, repeat_x: bool=True, repeat_y: bool=True, filter: Tuple[int, int]=(9729, 9729),
-                anisotropy: float=1.0, compare_func: str='=<') -> Sampler:
+    def sampler(self, repeat_x=True, repeat_y=True, filter=None, anisotropy=1.0, compare_func='') -> Sampler:
         '''
             Create a sampler object.
             When a sampler object is bound to a texture image unit, the internal sampling parameters for a
@@ -825,7 +824,8 @@ class Context:
         res.ctx = self
         res.repeat_x = repeat_x
         res.repeat_y = repeat_y
-        res.filter = filter
+        if filter is not None:
+            res.filter = filter
         res.anisotropy = anisotropy
         res.compare_func = compare_func
         return res
