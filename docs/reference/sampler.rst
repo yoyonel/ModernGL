@@ -15,6 +15,7 @@ Methods
 -------
 
 .. automethod:: Sampler.use(location=0)
+.. automethod:: Sampler.clear(location=0)
 .. automethod:: Sampler.release()
 
 Attributes
