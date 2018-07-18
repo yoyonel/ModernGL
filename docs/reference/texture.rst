@@ -32,6 +32,7 @@ Attributes
 .. autoattribute:: Texture.filter
 .. autoattribute:: Texture.swizzle
 .. autoattribute:: Texture.compare_func
+.. autoattribute:: Texture.anisotropy
 .. autoattribute:: Texture.width
 .. autoattribute:: Texture.height
 .. autoattribute:: Texture.size

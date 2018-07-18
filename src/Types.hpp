@@ -251,6 +251,7 @@ struct MGLTexture {
 	int max_level;
 
 	int compare_func;
+	int anisotropy;
 
 	bool depth;
 
