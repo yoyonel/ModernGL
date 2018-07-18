@@ -29,9 +29,18 @@ class Sampler:
         '''
         self.mglo.use(location)
 
+    def clear(self, location=0) -> None:
+        '''
+            Clear the sampler binding on a texture unit
+
+            Args:
+                location (int): The texture unit
+        '''
+        self.mglo.clear(location)
+
     def release(self) -> None:
         '''
-            Release the ModernGL object.
+            Release/destroy the ModernGL object.
         '''
         self.mglo.release()
 

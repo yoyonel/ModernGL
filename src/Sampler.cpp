@@ -67,6 +67,25 @@ PyObject * MGLSampler_use(MGLSampler * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
+PyObject * MGLSampler_clear(MGLSampler * self, PyObject * args) {
+	int index;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"I",
+		&index
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	const GLMethods & gl = self->context->gl;
+	gl.BindSampler(index, 0);
+
+	Py_RETURN_NONE;
+}
+
 PyObject * MGLSampler_release(MGLSampler * self) {
 	MGLSampler_Invalidate(self);
 	Py_RETURN_NONE;
@@ -74,6 +93,7 @@ PyObject * MGLSampler_release(MGLSampler * self) {
 
 PyMethodDef MGLSampler_tp_methods[] = {
 	{"use", (PyCFunction)MGLSampler_use, METH_VARARGS, 0},
+	{"clear", (PyCFunction)MGLSampler_clear, METH_VARARGS, 0},
 	{"release", (PyCFunction)MGLSampler_release, METH_NOARGS, 0},
 	{0},
 };
