@@ -10,8 +10,12 @@ about: Create a report to help us improve
 
 **Proof of code**
 
+<!-- Please upload code that can be executed to see the bug. -->
+
 ```py
-please paste a minimalist code that can reproduce the bug
+
+
+
 ```
 
 **Expected behavior**
@@ -20,8 +24,10 @@ please paste a minimalist code that can reproduce the bug
 
 **Version info**
 
-Please run `python -m moderngl`
+<!-- Please run `python -m moderngl` and paste the output below -->
 
 ```
-paste the content here
+
+
+
 ```
