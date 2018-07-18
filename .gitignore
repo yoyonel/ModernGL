@@ -1,28 +1,21 @@
-ModernGL/ext/**/*
-!ModernGL/ext/__init__.py
-!ModernGL/ext/__main__.py
-!ModernGL/ext/README.md
+/temp
+/build
+/dist
+/venv
+/.venv
+/.tox
+/.cache
+/.pytest_cache
+/.idea
+/.eggs
 
-**/python-embed
-**/__pycache__
-**/temp
-**/build
-**/dist
+/.vscode/*
+!/.vscode/extensions.json
+!/.vscode/snippets
 
-venv
-.venv
+__pycache__
+
 temp_*
-
-.tox
-.cache
-.pytest_cache
-
-.vscode/*
-!.vscode/extensions.json
-!.vscode/snippets
-.idea
-
-.eggs/
 
 *.egg-info
 *.log
