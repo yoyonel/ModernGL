@@ -452,6 +452,9 @@ class Context:
 
         res = TextureArray.__new__(TextureArray)
         res.mglo, res._glo = self.mglo.texture_array(size, components, data, alignment, dtype)
+        res._size = size
+        res._components = components
+        res._dtype = dtype
         res.ctx = self
         return res
 
