@@ -9,6 +9,7 @@ Reference
     vertex_array.rst
     program.rst
     texture.rst
+    texture_array.rst
     texture3d.rst
     texture_cube.rst
     framebuffer.rst
