@@ -304,6 +304,7 @@ struct MGLTextureArray {
 
 	bool repeat_x;
 	bool repeat_y;
+	float anisotropy;
 };
 
 struct MGLTextureCube {
