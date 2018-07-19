@@ -636,11 +636,11 @@ int MGLTextureArray_set_swizzle(MGLTextureArray * self, PyObject * value, void *
 	return 0;
 }
 
-PyObject * MGLTextureArray_get_anisotropy(MGLTexture * self) {
+PyObject * MGLTextureArray_get_anisotropy(MGLTextureArray * self) {
 	return PyFloat_FromDouble(self->anisotropy);
 }
 
-int MGLTextureArray_set_anisotropy(MGLTexture * self, PyObject * value) {
+int MGLTextureArray_set_anisotropy(MGLTextureArray * self, PyObject * value) {
 	self->anisotropy = fmin(fmax(PyFloat_AsDouble(value), 1.0), self->context->max_anisotropy);
 
 	const GLMethods & gl = self->context->gl;
