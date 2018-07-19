@@ -485,7 +485,7 @@ class Context:
             Create a :py:class:`TextureCube` object.
 
             Args:
-                size (tuple): The width, height and depth of the texture.
+                size (tuple): The width, height of the texture. Each side of the cube will have this size.
                 components (int): The number of components 1, 2, 3 or 4.
                 data (bytes): Content of the texture.
 

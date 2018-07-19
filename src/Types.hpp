@@ -324,6 +324,7 @@ struct MGLTextureCube {
 	int min_filter;
 	int mag_filter;
 	int max_level;
+	float anisotropy;
 };
 
 struct MGLUniform {

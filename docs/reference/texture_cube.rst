@@ -23,6 +23,12 @@ Methods
 Attributes
 ----------
 
+.. autoattribute:: TextureCube.size
+.. autoattribute:: TextureCube.dtype
+.. autoattribute:: TextureCube.components
+.. autoattribute:: TextureCube.filter
+.. autoattribute:: TextureCube.swizzle
+.. autoattribute:: TextureCube.anisotropy
 .. autoattribute:: TextureCube.glo
 
 .. toctree::
