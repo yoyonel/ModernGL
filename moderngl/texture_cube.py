@@ -33,6 +33,63 @@ class TextureCube:
         return type(self) is type(other) and self.mglo is other.mglo
 
     @property
+    def size(self):
+        '''
+            tuple: The size of the texture.
+        '''
+        return self._size
+
+    @property
+    def components(self) -> int:
+        '''
+            int: The number of components of the texture.
+        '''
+        return self._components
+
+    @property
+    def dtype(self) -> str:
+        '''
+            str: Data type.
+        '''
+
+        return self._dtype
+
+    @property
+    def filter(self):
+        '''
+            tuple: The filter of the texture.
+        '''
+        return self.mglo.filter
+
+    @filter.setter
+    def filter(self, value):
+        self.mglo.filter = value
+
+    @property
+    def swizzle(self) -> str:
+        '''
+            str: The swizzle of the texture.
+        '''
+
+        return self.mglo.swizzle
+
+    @swizzle.setter
+    def swizzle(self, value):
+        self.mglo.swizzle = value
+
+    @property
+    def anisotropy(self):
+        '''
+            float: Number of samples for anisotropic filtering.
+            Any value greater than 1.0 counts as a use of anisotropic filtering
+        '''
+        return self.mglo.anisotropy
+
+    @anisotropy.setter
+    def anisotropy(self, value):
+        self.mglo.anisotropy = value
+
+    @property
     def glo(self) -> int:
         '''
             int: The internal OpenGL object.

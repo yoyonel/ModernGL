@@ -48,6 +48,7 @@ struct MGLTextureCube;
 struct MGLUniform;
 struct MGLUniformBlock;
 struct MGLVertexArray;
+struct MGLSampler;
 
 struct MGLDataType {
 	int * base_format;
@@ -115,6 +116,7 @@ struct MGLContext {
 
 	int max_texture_units;
 	int default_texture_unit;
+	float max_anisotropy;
 
 	int enable_flags;
 	int front_face;
@@ -250,6 +252,7 @@ struct MGLTexture {
 	int max_level;
 
 	int compare_func;
+	int anisotropy;
 
 	bool depth;
 
@@ -302,6 +305,7 @@ struct MGLTextureArray {
 
 	bool repeat_x;
 	bool repeat_y;
+	float anisotropy;
 };
 
 struct MGLTextureCube {
@@ -321,6 +325,7 @@ struct MGLTextureCube {
 	int min_filter;
 	int mag_filter;
 	int max_level;
+	float anisotropy;
 };
 
 struct MGLUniform {
@@ -372,6 +377,22 @@ struct MGLVertexArray {
 	int num_vertices;
 };
 
+struct MGLSampler {
+	PyObject_HEAD
+
+	MGLContext * context;
+	int sampler_obj;
+
+	int min_filter;
+	int mag_filter;
+	float anisotropy;
+
+	int compare_func;
+
+	bool repeat_x;
+	bool repeat_y;
+};
+
 MGLDataType * from_dtype(const char * dtype);
 
 void MGLAttribute_Invalidate(MGLAttribute * attribute);
@@ -387,6 +408,7 @@ void MGLTexture_Invalidate(MGLTexture * texture);
 void MGLTextureArray_Invalidate(MGLTextureArray * texture);
 void MGLUniform_Invalidate(MGLUniform * uniform);
 void MGLVertexArray_Invalidate(MGLVertexArray * vertex_array);
+void MGLSampler_Invalidate(MGLSampler * sampler);
 
 void MGLAttribute_Complete(MGLAttribute * attribute, const GLMethods & gl);
 void MGLUniform_Complete(MGLUniform * self, const GLMethods & gl);
@@ -412,3 +434,4 @@ extern PyTypeObject MGLTextureArray_Type;
 extern PyTypeObject MGLUniformBlock_Type;
 extern PyTypeObject MGLUniform_Type;
 extern PyTypeObject MGLVertexArray_Type;
+extern PyTypeObject MGLSampler_Type;

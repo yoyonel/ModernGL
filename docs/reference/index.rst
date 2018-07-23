@@ -9,6 +9,7 @@ Reference
     vertex_array.rst
     program.rst
     texture.rst
+    texture_array.rst
     texture3d.rst
     texture_cube.rst
     framebuffer.rst
@@ -17,3 +18,4 @@ Reference
     query.rst
     conditional_render.rst
     compute_shader.rst
+    sampler.rst

@@ -18,6 +18,7 @@ from .texture_3d import Texture3D
 from .texture_array import TextureArray
 from .texture_cube import TextureCube
 from .vertex_array import VertexArray
+from .sampler import Sampler
 
 __all__ = ['Context', 'create_context', 'create_standalone_context',
            'NOTHING', 'BLEND', 'DEPTH_TEST', 'CULL_FACE', 'RASTERIZER_DISCARD',
@@ -183,6 +184,13 @@ class Context:
     @default_texture_unit.setter
     def default_texture_unit(self, value):
         self.mglo.default_texture_unit = value
+
+    @property
+    def max_anisotropy(self):
+        '''
+            float: Max anisotropy
+        '''
+        return self.mglo.max_anisotropy
 
     @property
     def screen(self) -> 'Framebuffer':
@@ -444,6 +452,9 @@ class Context:
 
         res = TextureArray.__new__(TextureArray)
         res.mglo, res._glo = self.mglo.texture_array(size, components, data, alignment, dtype)
+        res._size = size
+        res._components = components
+        res._dtype = dtype
         res.ctx = self
         return res
 
@@ -474,7 +485,7 @@ class Context:
             Create a :py:class:`TextureCube` object.
 
             Args:
-                size (tuple): The width, height and depth of the texture.
+                size (tuple): The width, height of the texture. Each side of the cube will have this size.
                 components (int): The number of components 1, 2, 3 or 4.
                 data (bytes): Content of the texture.
 
@@ -808,6 +819,28 @@ class Context:
 
         res._members = members
         res.ctx = self
+        return res
+
+    def sampler(self, repeat_x=True, repeat_y=True, filter=None, anisotropy=1.0, compare_func='') -> Sampler:
+        '''
+            Create a :py:class:`Sampler` object.
+
+            Keyword Arguments:
+                repeat_x (bool): Repeat texture on x
+                repeat_x (bool): Repeat texture on y
+                filter (tuple): The min and max filter
+                anisotropy (float): Number of samples for anisotropic filtering. Any value greater than 1.0 counts as a use of anisotropic filtering
+                compare_func: Compare function for depth textures
+        '''
+
+        res = Sampler.__new__(Sampler)
+        res.mglo, res._glo = self.mglo.sampler()
+        res.ctx = self
+        res.repeat_x = repeat_x
+        res.repeat_y = repeat_y
+        res.filter = filter or (9729, 9729)
+        res.anisotropy = anisotropy
+        res.compare_func = compare_func
         return res
 
     def core_profile_check(self) -> None:

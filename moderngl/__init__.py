@@ -19,6 +19,8 @@ from .texture_3d import *
 from .texture_array import *
 from .texture_cube import *
 from .vertex_array import *
+from .sampler import *
+
 
 import os
 if os.environ.get('READTHEDOCS') == 'True':
