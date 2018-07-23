@@ -334,14 +334,13 @@ PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
 	PyObject * result = PyBytes_FromStringAndSize(0, expected_size);
 	char * data = PyBytes_AS_STRING(result);
 
-	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	int pixel_type = self->data_type->gl_type;
-	int base_format = self->data_type->base_format[self->components];
+	int base_format = self->depth ? GL_DEPTH_COMPONENT : self->data_type->base_format[self->components];
 
 	const GLMethods & gl = self->context->gl;
 
 	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
-	gl.BindTexture(texture_target, self->texture_obj);
+	gl.BindTexture(GL_TEXTURE_2D, self->texture_obj);
 
 	gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 	gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
@@ -366,7 +365,7 @@ PyObject * MGLTexture_read(MGLTexture * self, PyObject * args) {
 	// printf("level_width: %d\n", level_width);
 	// printf("level_height: %d\n", level_height);
 
-	gl.GetTexImage(texture_target, level, base_format, pixel_type, data);
+	gl.GetTexImage(GL_TEXTURE_2D, level, base_format, pixel_type, data);
 
 	return result;
 }
@@ -415,9 +414,8 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 	expected_size = (expected_size + alignment - 1) / alignment * alignment;
 	expected_size = expected_size * height;
 
-	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	int pixel_type = self->data_type->gl_type;
-	int format = self->data_type->base_format[self->components];
+	int base_format = self->depth ? GL_DEPTH_COMPONENT : self->data_type->base_format[self->components];
 
 	if (Py_TYPE(data) == &MGLBuffer_Type) {
 
@@ -427,10 +425,10 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 
 		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, buffer->buffer_obj);
 		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
-		gl.BindTexture(texture_target, self->texture_obj);
+		gl.BindTexture(GL_TEXTURE_2D, self->texture_obj);
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-		gl.GetTexImage(texture_target, level, format, pixel_type, (void *)write_offset);
+		gl.GetTexImage(GL_TEXTURE_2D, level, base_format, pixel_type, (void *)write_offset);
 		gl.BindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
 	} else {
@@ -454,10 +452,10 @@ PyObject * MGLTexture_read_into(MGLTexture * self, PyObject * args) {
 		const GLMethods & gl = self->context->gl;
 
 		gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
-		gl.BindTexture(texture_target, self->texture_obj);
+		gl.BindTexture(GL_TEXTURE_2D, self->texture_obj);
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
-		gl.GetTexImage(texture_target, level, format, pixel_type, ptr);
+		gl.GetTexImage(GL_TEXTURE_2D, level, base_format, pixel_type, ptr);
 
 		PyBuffer_Release(&buffer_view);
 
