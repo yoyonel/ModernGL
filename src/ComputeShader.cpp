@@ -222,9 +222,13 @@ PyObject * MGLContext_compute_shader(MGLContext * self, PyObject * args) {
 		}
 	}
 
-	PyObject * result = PyTuple_New(2);
+	PyObject * result = PyTuple_New(6);
 	PyTuple_SET_ITEM(result, 0, (PyObject *)compute_shader);
-	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(compute_shader->program_obj));
+	PyTuple_SET_ITEM(result, 1, uniforms_lst);
+	PyTuple_SET_ITEM(result, 2, uniform_blocks_lst);
+	PyTuple_SET_ITEM(result, 3, subroutines_lst);
+	PyTuple_SET_ITEM(result, 4, subroutine_uniforms_lst);
+	PyTuple_SET_ITEM(result, 5, PyLong_FromLong(compute_shader->program_obj));
 	return result;
 }
 

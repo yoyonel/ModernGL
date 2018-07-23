@@ -792,7 +792,21 @@ class Context:
         '''
 
         res = ComputeShader.__new__(ComputeShader)
-        res.mglo, res._glo = self.mglo.compute_shader(source)
+        res.mglo, ls1, ls2, ls3, ls4, res._glo = self.mglo.compute_shader(source)
+
+        members = {}
+
+        for item in ls1:
+            obj = Uniform.__new__(Uniform)
+            obj.mglo, obj._location, obj._array_length, obj._dimension, obj._name = item
+            members[obj.name] = obj
+
+        for item in ls2:
+            obj = UniformBlock.__new__(UniformBlock)
+            obj.mglo, obj._index, obj._size, obj._name = item
+            members[obj.name] = obj
+
+        res._members = members
         res.ctx = self
         return res
 
