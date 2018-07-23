@@ -134,6 +134,7 @@ PyObject * MGLContext_texture(MGLContext * self, PyObject * args) {
 
 	texture->max_level = 0;
 	texture->compare_func = 0;
+	texture->anisotropy = 1.0;
 	texture->depth = false;
 
 	texture->min_filter = GL_LINEAR;
@@ -861,10 +862,34 @@ int MGLTexture_set_compare_func(MGLTexture * self, PyObject * value) {
 		return -1;
 	}
 
+	self->compare_func = compare_func_from_string(func);
+
 	const GLMethods & gl = self->context->gl;
 	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
 	gl.BindTexture(texture_target, self->texture_obj);
-	gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_FUNC, compare_func_from_string(func));
+	if (self->compare_func == 0) {
+		gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+	} else {
+		gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+	}
+	gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_FUNC, self->compare_func);
+
+	return 0;
+}
+
+PyObject * MGLTexture_get_anisotropy(MGLTexture * self) {
+	return PyFloat_FromDouble(self->anisotropy);
+}
+
+int MGLTexture_set_anisotropy(MGLTexture * self, PyObject * value) {
+	self->anisotropy = fmin(fmax(PyFloat_AsDouble(value), 1.0), self->context->max_anisotropy);
+	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+	gl.BindTexture(texture_target, self->texture_obj);
+	gl.TexParameterf(texture_target, GL_TEXTURE_MAX_ANISOTROPY, self->anisotropy);
 
 	return 0;
 }
@@ -875,6 +900,7 @@ PyGetSetDef MGLTexture_tp_getseters[] = {
 	{(char *)"filter", (getter)MGLTexture_get_filter, (setter)MGLTexture_set_filter, 0, 0},
 	{(char *)"swizzle", (getter)MGLTexture_get_swizzle, (setter)MGLTexture_set_swizzle, 0, 0},
 	{(char *)"compare_func", (getter)MGLTexture_get_compare_func, (setter)MGLTexture_set_compare_func, 0, 0},
+	{(char *)"anisotropy", (getter)MGLTexture_get_anisotropy, (setter)MGLTexture_set_anisotropy, 0, 0},
 	{0},
 };
 

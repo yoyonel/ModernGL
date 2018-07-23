@@ -30,7 +30,10 @@ class TestCase(unittest.TestCase):
         self.ctx.texture((16, 16), 3, samples=2)
 
     def test_depth_texture(self):
-        self.ctx.depth_texture((16, 16))
+        dt = self.ctx.depth_texture((16, 16))
+        assert dt.compare_func == '<='
+        dt.compare_func = ''
+        assert dt.compare_func == '?'
 
     def test_multisample_depth_texture(self):
         # if self.ctx.max_samples < 2:

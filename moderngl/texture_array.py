@@ -84,6 +84,18 @@ class TextureArray:
         self.mglo.swizzle = value
 
     @property
+    def anisotropy(self) -> float:
+        '''
+            float: Number of samples for anisotropic filtering.
+            Any value greater than 1.0 counts as a use of anisotropic filtering
+        '''
+        return self.mglo.anisotropy
+
+    @anisotropy.setter
+    def anisotropy(self, value):
+        self.mglo.anisotropy = value
+
+    @property
     def width(self) -> int:
         '''
             int: The width of the texture array.
