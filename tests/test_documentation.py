@@ -46,6 +46,9 @@ class TestCase(unittest.TestCase):
     def test_texture_docs(self):
         self.validate('texture.rst', 'Texture', ['release', 'mglo', 'glo', 'ctx', 'extra'])
 
+    def test_texture_array_docs(self):
+        self.validate('texture_array.rst', 'TextureArray', ['release', 'mglo', 'glo', 'ctx', 'extra'])
+
     def test_texture3d_docs(self):
         self.validate('texture3d.rst', 'Texture3D', ['release', 'mglo', 'glo', 'ctx', 'extra'])
 
@@ -82,6 +85,8 @@ class TestCase(unittest.TestCase):
     def test_conditional_render_docs(self):
         self.validate('conditional_render.rst', 'ConditionalRender', ['mglo'])
 
+    def test_sampler_docs(self):
+        self.validate('sampler.rst', 'Sampler', ['release', 'mglo', 'glo', 'ctx', 'extra'])
 
 if __name__ == '__main__':
     unittest.main()

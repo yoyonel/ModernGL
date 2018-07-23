@@ -964,6 +964,8 @@ typedef GLvoid (GLAPI * PROC_glTextureBarrier)();
 #define GL_TEXTURE30                                                  0x84DE
 #define GL_TEXTURE31                                                  0x84DF
 #define GL_ACTIVE_TEXTURE                                             0x84E0
+#define GL_TEXTURE_MAX_ANISOTROPY                                     0x84FE
+#define GL_MAX_TEXTURE_MAX_ANISOTROPY                                 0x84FF
 #define GL_MULTISAMPLE                                                0x809D
 #define GL_SAMPLE_ALPHA_TO_COVERAGE                                   0x809E
 #define GL_SAMPLE_ALPHA_TO_ONE                                        0x809F

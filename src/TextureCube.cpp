@@ -134,6 +134,7 @@ PyObject * MGLContext_texture_cube(MGLContext * self, PyObject * args) {
 	texture->min_filter = GL_LINEAR;
 	texture->mag_filter = GL_LINEAR;
 	texture->max_level = 0;
+	texture->anisotropy = 1.0;
 
 	Py_INCREF(self);
 	texture->context = self;
@@ -546,9 +547,26 @@ int MGLTextureCube_set_swizzle(MGLTextureCube * self, PyObject * value, void * c
 	return 0;
 }
 
+PyObject * MGLTextureCube_get_anisotropy(MGLTextureCube * self) {
+	return PyFloat_FromDouble(self->anisotropy);
+}
+
+int MGLTextureCube_set_anisotropy(MGLTextureCube * self, PyObject * value) {
+	self->anisotropy = fmin(fmax(PyFloat_AsDouble(value), 1.0), self->context->max_anisotropy);
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+	gl.BindTexture(GL_TEXTURE_CUBE_MAP, self->texture_obj);
+	gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_ANISOTROPY, self->anisotropy);
+
+	return 0;
+}
+
 PyGetSetDef MGLTextureCube_tp_getseters[] = {
 	{(char *)"filter", (getter)MGLTextureCube_get_filter, (setter)MGLTextureCube_set_filter, 0, 0},
 	{(char *)"swizzle", (getter)MGLTextureCube_get_swizzle, (setter)MGLTextureCube_set_swizzle, 0, 0},
+	{(char *)"anisotropy", (getter)MGLTextureCube_get_anisotropy, (setter)MGLTextureCube_set_anisotropy, 0, 0},
 	{0},
 };
 

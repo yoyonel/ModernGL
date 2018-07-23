@@ -1,5 +1,7 @@
 import unittest
 
+import moderngl
+
 from common import get_context
 
 
@@ -8,6 +10,15 @@ class TestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.ctx = get_context()
+
+    def test_0(self):
+        texture = self.ctx.texture_cube((16, 16), 4)
+        assert texture.size == (16, 16)
+        assert texture.components == 4
+        assert texture.filter == (moderngl.LINEAR, moderngl.LINEAR)
+        assert texture.anisotropy == 1.0
+        assert texture.swizzle == "RGBA"
+        assert texture.glo > 0
 
     def test_1(self):
         faces = [

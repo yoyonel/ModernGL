@@ -1,3 +1,8 @@
+from typing import Tuple, Union
+
+from .program_members import (Attribute, Subroutine, Uniform, UniformBlock,
+                              Varying)
+
 __all__ = ['ComputeShader']
 
 
@@ -7,10 +12,11 @@ class ComputeShader:
         While it can do rendering, it is generally used for tasks not directly related to drawing.
     '''
 
-    __slots__ = ['mglo', '_glo', 'ctx', 'extra']
+    __slots__ = ['mglo', '_members', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
+        self._members = {}
         self._glo = None
         self.ctx = None
         self.extra = None
@@ -21,6 +27,12 @@ class ComputeShader:
 
     def __eq__(self, other):
         return type(self) is type(other) and self.mglo is other.mglo
+
+    def __getitem__(self, key) -> Union[Uniform, UniformBlock, Subroutine, Attribute, Varying]:
+        return self._members[key]
+
+    def __iter__(self):
+        yield from self._members
 
     @property
     def source(self) -> str:
@@ -50,6 +62,20 @@ class ComputeShader:
         '''
 
         return self.mglo.run(group_x, group_y, group_z)
+
+    def get(self, key, default) -> Union[Uniform, UniformBlock, Subroutine, Attribute, Varying]:
+        '''
+            Returns a Uniform, UniformBlock, Subroutine, Attribute or Varying.
+
+            Args:
+                default: This is the value to be returned in case key does not exist.
+
+            Returns:
+                :py:class:`Uniform`, :py:class:`UniformBlock`, :py:class:`Subroutine`,
+                :py:class:`Attribute` or :py:class:`Varying`
+        '''
+
+        return self._members.get(key, default)
 
     def release(self) -> None:
         '''

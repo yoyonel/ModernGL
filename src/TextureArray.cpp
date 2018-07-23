@@ -122,6 +122,7 @@ PyObject * MGLContext_texture_array(MGLContext * self, PyObject * args) {
 
 	texture->repeat_x = true;
 	texture->repeat_y = true;
+	texture->anisotropy = 1.0;
 
 	Py_INCREF(self);
 	texture->context = self;
@@ -627,11 +628,28 @@ int MGLTextureArray_set_swizzle(MGLTextureArray * self, PyObject * value, void *
 	return 0;
 }
 
+PyObject * MGLTextureArray_get_anisotropy(MGLTextureArray * self) {
+	return PyFloat_FromDouble(self->anisotropy);
+}
+
+int MGLTextureArray_set_anisotropy(MGLTextureArray * self, PyObject * value) {
+	self->anisotropy = fmin(fmax(PyFloat_AsDouble(value), 1.0), self->context->max_anisotropy);
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+	gl.BindTexture(GL_TEXTURE_2D_ARRAY, self->texture_obj);
+	gl.TexParameterf(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_ANISOTROPY, self->anisotropy);
+
+	return 0;
+}
+
 PyGetSetDef MGLTextureArray_tp_getseters[] = {
 	{(char *)"repeat_x", (getter)MGLTextureArray_get_repeat_x, (setter)MGLTextureArray_set_repeat_x, 0, 0},
 	{(char *)"repeat_y", (getter)MGLTextureArray_get_repeat_y, (setter)MGLTextureArray_set_repeat_y, 0, 0},
 	{(char *)"filter", (getter)MGLTextureArray_get_filter, (setter)MGLTextureArray_set_filter, 0, 0},
 	{(char *)"swizzle", (getter)MGLTextureArray_get_swizzle, (setter)MGLTextureArray_set_swizzle, 0, 0},
+	{(char *)"anisotropy", (getter)MGLTextureArray_get_anisotropy, (setter)MGLTextureArray_set_anisotropy, 0, 0},
 	{0},
 };
 
