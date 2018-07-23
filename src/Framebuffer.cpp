@@ -522,7 +522,7 @@ PyObject * MGLFramebuffer_read(MGLFramebuffer * self, PyObject * args) {
 
 	bool read_depth = false;
 
-	if (components == -1) {
+	if (attachment == -1) {
 		components = 1;
 		read_depth = true;
 	}
@@ -637,7 +637,7 @@ PyObject * MGLFramebuffer_read_into(MGLFramebuffer * self, PyObject * args) {
 
 	bool read_depth = false;
 
-	if (components == -1) {
+	if (attachment == -1) {
 		components = 1;
 		read_depth = true;
 	}
