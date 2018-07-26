@@ -50,7 +50,15 @@ class Texture:
     @property
     def repeat_x(self) -> bool:
         '''
-            bool: The repeat_x of the texture.
+            bool: The x repeat flag for the texture (Default ``True``)
+
+            Example::
+
+                # Enable texture repeat (GL_REPEAT)
+                texture.repeat_x = True
+
+                # Disable texture repeat (GL_CLAMP_TO_EDGE)
+                texture.repeat_x = False
         '''
 
         return self.mglo.repeat_x
@@ -62,7 +70,15 @@ class Texture:
     @property
     def repeat_y(self) -> bool:
         '''
-            bool: The repeat_y of the texture.
+            bool: The y repeat flag for the texture (Default ``True``)
+
+            Example::
+
+                # Enable texture repeat (GL_REPEAT)
+                texture.repeat_y = True
+
+                # Disable texture repeat (GL_CLAMP_TO_EDGE)
+                texture.repeat_y = False
         '''
 
         return self.mglo.repeat_y
@@ -74,7 +90,15 @@ class Texture:
     @property
     def filter(self) -> Tuple[int, int]:
         '''
-            tuple: The filter of the texture.
+            tuple: The minification and magnification filter for the texture.
+            (Default ``(moderngl.LINEAR. moderngl.LINEAR)``)
+
+            Example::
+
+                texture.filter == (monderngl.NEAREST, moderngl.NEAREST)
+                texture.filter == (monderngl.LINEAR_MIPMAP_LINEAR, moderngl.LINEAR)
+                texture.filter == (monderngl.NEAREST_MIPMAP_LINEAR, moderngl.NEAREST)
+                texture.filter == (monderngl.LINEAR_MIPMAP_NEAREST, moderngl.NEAREST)
         '''
 
         return self.mglo.filter
@@ -82,8 +106,16 @@ class Texture:
     @property
     def anisotropy(self) -> float:
         '''
-            float: Number of samples for anisotropic filtering.
-            Any value greater than 1.0 counts as a use of anisotropic filtering
+            float: Number of samples for anisotropic filtering (Default ``1.0``).
+            The value will be clamped range ``1.0`` and ``ctx.max_anisotropy``.
+
+            Any value greater than 1.0 counts as a use of anisotropic filtering::
+
+                # Disable anisotropic filtering
+                texture.anisotropy = 1.0
+
+                # Enable anisotropic filtering suggesting 16 samples as a maximum
+                texture.anisotropy = 16.0
         '''
         return self.mglo.anisotropy
 
@@ -98,7 +130,29 @@ class Texture:
     @property
     def swizzle(self) -> str:
         '''
-            str: The swizzle of the texture.
+            str: The swizzle maskeof the texture (Default ``'RGBA'``).
+
+            The swizzle mask change/reorder the ``vec4`` value returned by the ``texture()`` function
+            in a GLSL shaders. This is represented by a 4 character string were each
+            character can be::
+
+                'R' GL_RED
+                'G' GL_GREEN
+                'B' GL_BLUE
+                'A' GL_ALPHA
+                '0' GL_ZERO
+                '1' GL_ONE
+
+            Example::
+
+                # Alpha channel will always return 1.0
+                texture.swizzle = 'RGB1'
+
+                # Only return the red component. The rest is masked to 0.0
+                texture.swizzle = 'R000'
+
+                # Reverse the components
+                texture.swizzle = 'ABGR'
         '''
 
         return self.mglo.swizzle
@@ -110,7 +164,36 @@ class Texture:
     @property
     def compare_func(self) -> str:
         '''
-            tuple: The compare function of the depth texture.
+            tuple: The compare function of the depth texture (Default ``'<='``)
+
+            By default depth textures have ``GL_TEXTURE_COMPARE_MODE`` set to
+            ``GL_COMPARE_REF_TO_TEXTURE``, meaning any texture lookup will
+            return a depth comparison value.
+
+            If you need to read the actual depth value in shaders, setting
+            ``compare_func`` to a blank string will set ``GL_TEXTURE_COMPARE_MODE`` to
+            ``GL_NONE`` making you able to read the depth texture as a ``sampler2D``::
+
+                uniform sampler2D depth;
+                out vec4 fragColor;
+                in vec2 uv;
+
+                void main() {
+                    float raw_depth_nonlinear = texture(depth, uv);
+                    fragColor = vec4(raw_depth_nonlinear);
+                }
+
+            Accepted compare functions::
+
+                ctx.compare_func = ''    # Disale depth comparison completely
+                ctx.compare_func = '<='  # GL_LEQUAL
+                ctx.compare_func = '<'   # GL_LESS
+                ctx.compare_func = '>='  # GL_GEQUAL
+                ctx.compare_func = '>'   # GL_GREATER
+                ctx.compare_func = '=='  # GL_EQUAL 
+                ctx.compare_func = '!='  # GL_NOTEQUAL 
+                ctx.compare_func = '0'   # GL_NEVER 
+                ctx.compare_func = '1'   # GL_ALWAYS 
         '''
 
         return self.mglo.compare_func
@@ -154,7 +237,7 @@ class Texture:
     @property
     def samples(self) -> int:
         '''
-            int: The number of samples of the texture.
+            int: The number of samples set for the texture used in multisampling.
         '''
 
         return self._samples
