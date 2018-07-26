@@ -1004,6 +1004,14 @@ def create_context(require=None) -> Context:
         An OpenGL context must exists. If rendering is done without a window please use the
         :py:func:`create_standalone_context` instead.
 
+        Example::
+
+            # Accept the current context version
+            ctx = moderngl.create_context()
+
+            # Require at least OpenGL 4.3
+            ctx = moderngl.create_context(require=430)
+
         Keyword Arguments:
             require (int): OpenGL version code.
 
@@ -1027,6 +1035,14 @@ def create_context(require=None) -> Context:
 def create_standalone_context(require=None, **settings) -> 'Context':
     '''
         Create a standalone ModernGL context.
+
+        Example::
+
+            # Create a context with highest possible supported version
+            ctx = moderngl.create_context()
+
+            # Require at least OpenGL 4.3
+            ctx = moderngl.create_context(require=430)
 
         Keyword Arguments:
             require (int): OpenGL version code.
