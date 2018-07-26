@@ -66,8 +66,8 @@ class Context:
         self.mglo = None
         self._screen = None
         self._info = None
-        self.version_code = None  #: int: The OpenGL version code.
-        self.fbo = None  #: Framebuffer: The active framebuffer.
+        self.version_code = None  #: int: The OpenGL version code. Reports ``410`` for OpenGL 4.1
+        self.fbo = None  #: Framebuffer: The active framebuffer. Set every time ``Framebuffer.use()`` is called.
         self.extra = None
         raise TypeError()
 
@@ -92,7 +92,7 @@ class Context:
     @property
     def point_size(self) -> float:
         '''
-            float: Set the default point size.
+            float: Set/get the default point size.
         '''
 
         return self.mglo.point_size
@@ -102,9 +102,21 @@ class Context:
         self.mglo.point_size = value
 
     @property
-    def depth_func(self) -> int:
+    def depth_func(self) -> str:
         '''
             int: Set the default depth func.
+            The depth function is set using a string.
+
+            Example::
+
+                ctx.depth_func = '<='  # GL_LEQUAL
+                ctx.depth_func = '<'   # GL_LESS
+                ctx.depth_func = '>='  # GL_GEQUAL
+                ctx.depth_func = '>'   # GL_GREATER
+                ctx.depth_func = '=='  # GL_EQUAL 
+                ctx.depth_func = '!='  # GL_NOTEQUAL 
+                ctx.depth_func = '0'   # GL_NEVER 
+                ctx.depth_func = '1'   # GL_ALWAYS 
         '''
 
         raise NotImplementedError()
@@ -117,6 +129,11 @@ class Context:
     def blend_func(self) -> Tuple[int, int]:
         '''
             tuple: Set the blend depth func.
+
+            Example::
+
+                ctx.enable(moderngl.BLEND)
+                ctx.blend_func = moderngl.SRC_ALPHA, moderngl.ONE_MINUS_SRC_ALPHA
         '''
 
         raise NotImplementedError()
@@ -128,7 +145,15 @@ class Context:
     @property
     def multisample(self) -> bool:
         '''
-            bool: Multisample.
+            bool: Enable/disable multisample mode (``GL_MULTISAMPLE``).
+            This property is write only.
+
+            Example::
+
+                # Enable
+                ctx.multisample = True
+                # Disable
+                ctx.multisample = False
         '''
 
         raise NotImplementedError()
@@ -140,7 +165,18 @@ class Context:
     @property
     def viewport(self) -> Tuple[int, int, int, int]:
         '''
-            tuple: The viewport.
+            tuple: The viewport of the active framebuffer.
+            Modifies or gets the viewport.
+
+            Example::
+
+                >>> ctx.viewport
+                (0, 0, 1280, 720)
+                >>> ctx.viewport = (0, 0, 640, 360)
+                >>> ctx.viewport
+                (0, 0, 640, 360)
+
+            If no framebuffer is bound ``(0, 0, 0, 0)`` will be returned.
         '''
 
         return self.mglo.fbo.viewport
@@ -152,7 +188,7 @@ class Context:
     @property
     def max_samples(self) -> int:
         '''
-            int: The max samples.
+            int: The maximum supported number of samples for multisampling
         '''
 
         return self.mglo.max_samples
@@ -188,14 +224,19 @@ class Context:
     @property
     def max_anisotropy(self):
         '''
-            float: Max anisotropy
+            float: The maximum value supported for anisotropic filtering.
         '''
         return self.mglo.max_anisotropy
 
     @property
     def screen(self) -> 'Framebuffer':
         '''
-            Framebuffer: The default framebuffer.
+            Framebuffer: A Framebuffer instance representing the screen usually
+            set when creating a context with ``create_context()`` attaching to
+            an existing context. This is the special system framebuffer
+            represented by framebuffer ``id=0``.
+
+            When creating a standalone context this property is not set.
         '''
 
         return self._screen
@@ -215,7 +256,17 @@ class Context:
     @property
     def front_face(self) -> str:
         '''
-            str: The front_face.
+            str: The front_face. Acceptable values are ``'ccw'`` (default) or ``'cw'``.
+
+            Face culling must be enabled for this to have any effect:
+            ``ctx.enable(moderngl.CULL_FACE)``.
+
+            Example::
+
+                # Triangles winded counter-clockwise considerd front facing
+                ctx.front_face = 'ccw'
+                # Triangles winded clockwise considerd front facing
+                ctx.front_face = 'cw'
         '''
 
         return self.mglo.front_face
@@ -240,8 +291,9 @@ class Context:
     @property
     def error(self) -> str:
         '''
-            str: The result of glGetError() but human readable.
-            This values is provided for debug purposes only.
+            str: The result of ``glGetError()`` but human readable.
+            This values is provided for debug purposes only and is likely to
+            reduce performace when used in a draw loop.
         '''
 
         return self.mglo.error
@@ -249,7 +301,83 @@ class Context:
     @property
     def info(self) -> Dict[str, object]:
         '''
-            dict: The result of multiple glGet.
+            dict: Information about the context
+
+            Example::
+
+                {
+                    'GL_VENDOR': 'NVIDIA Corporation', 
+                    'GL_RENDERER': 'NVIDIA GeForce GT 650M OpenGL Engine', 
+                    'GL_VERSION': '4.1 NVIDIA-10.32.0 355.11.10.10.40.102', 
+                    'GL_POINT_SIZE_RANGE': (1.0, 2047.0), 
+                    'GL_SMOOTH_LINE_WIDTH_RANGE': (0.5, 1.0), 
+                    'GL_ALIASED_LINE_WIDTH_RANGE': (1.0, 1.0), 
+                    'GL_POINT_FADE_THRESHOLD_SIZE': 1.0, 
+                    'GL_POINT_SIZE_GRANULARITY': 0.125, 
+                    'GL_SMOOTH_LINE_WIDTH_GRANULARITY': 0.125, 
+                    'GL_MIN_PROGRAM_TEXEL_OFFSET': -8.0, 
+                    'GL_MAX_PROGRAM_TEXEL_OFFSET': 7.0, 
+                    'GL_MINOR_VERSION': 1, 
+                    'GL_MAJOR_VERSION': 4, 
+                    'GL_SAMPLE_BUFFERS': 0, 
+                    'GL_SUBPIXEL_BITS': 8, 
+                    'GL_CONTEXT_PROFILE_MASK': 1, 
+                    'GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT': 256, 
+                    'GL_DOUBLEBUFFER': False, 
+                    'GL_STEREO': False, 
+                    'GL_MAX_VIEWPORT_DIMS': (16384, 16384), 
+                    'GL_MAX_3D_TEXTURE_SIZE': 2048, 
+                    'GL_MAX_ARRAY_TEXTURE_LAYERS': 2048, 
+                    'GL_MAX_CLIP_DISTANCES': 8, 
+                    'GL_MAX_COLOR_ATTACHMENTS': 8, 
+                    'GL_MAX_COLOR_TEXTURE_SAMPLES': 8, 
+                    'GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS': 233472, 
+                    'GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS': 231424, 
+                    'GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS': 80, 
+                    'GL_MAX_COMBINED_UNIFORM_BLOCKS': 70, 
+                    'GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS': 233472, 
+                    'GL_MAX_CUBE_MAP_TEXTURE_SIZE': 16384, 
+                    'GL_MAX_DEPTH_TEXTURE_SAMPLES': 8, 
+                    'GL_MAX_DRAW_BUFFERS': 8, 
+                    'GL_MAX_DUAL_SOURCE_DRAW_BUFFERS': 1, 
+                    'GL_MAX_ELEMENTS_INDICES': 150000, 
+                    'GL_MAX_ELEMENTS_VERTICES': 1048575, 
+                    'GL_MAX_FRAGMENT_INPUT_COMPONENTS': 128, 
+                    'GL_MAX_FRAGMENT_UNIFORM_COMPONENTS': 4096, 
+                    'GL_MAX_FRAGMENT_UNIFORM_VECTORS': 1024, 
+                    'GL_MAX_FRAGMENT_UNIFORM_BLOCKS': 14, 
+                    'GL_MAX_GEOMETRY_INPUT_COMPONENTS': 128, 
+                    'GL_MAX_GEOMETRY_OUTPUT_COMPONENTS': 128, 
+                    'GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS': 16, 
+                    'GL_MAX_GEOMETRY_UNIFORM_BLOCKS': 14, 
+                    'GL_MAX_GEOMETRY_UNIFORM_COMPONENTS': 2048, 
+                    'GL_MAX_INTEGER_SAMPLES': 1, 
+                    'GL_MAX_SAMPLES': 8, 
+                    'GL_MAX_RECTANGLE_TEXTURE_SIZE': 16384, 
+                    'GL_MAX_RENDERBUFFER_SIZE': 16384, 
+                    'GL_MAX_SAMPLE_MASK_WORDS': 1, 
+                    'GL_MAX_SERVER_WAIT_TIMEOUT': -1, 
+                    'GL_MAX_TEXTURE_BUFFER_SIZE': 134217728, 
+                    'GL_MAX_TEXTURE_IMAGE_UNITS': 16, 
+                    'GL_MAX_TEXTURE_LOD_BIAS': 15, 
+                    'GL_MAX_TEXTURE_SIZE': 16384, 
+                    'GL_MAX_UNIFORM_BUFFER_BINDINGS': 70, 
+                    'GL_MAX_UNIFORM_BLOCK_SIZE': 65536, 
+                    'GL_MAX_VARYING_COMPONENTS': 0, 
+                    'GL_MAX_VARYING_VECTORS': 31, 
+                    'GL_MAX_VARYING_FLOATS': 0, 
+                    'GL_MAX_VERTEX_ATTRIBS': 16, 
+                    'GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS': 16, 
+                    'GL_MAX_VERTEX_UNIFORM_COMPONENTS': 4096, 
+                    'GL_MAX_VERTEX_UNIFORM_VECTORS': 1024, 
+                    'GL_MAX_VERTEX_OUTPUT_COMPONENTS': 128, 
+                    'GL_MAX_VERTEX_UNIFORM_BLOCKS': 14, 
+                    'GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET': 0, 
+                    'GL_MAX_VERTEX_ATTRIB_BINDINGS': 0, 
+                    'GL_VIEWPORT_BOUNDS_RANGE': (-32768, 32768), 
+                    'GL_VIEWPORT_SUBPIXEL_BITS': 0, 
+                    'GL_MAX_VIEWPORTS': 16
+                }
         '''
 
         if self._info is None:
