@@ -107,7 +107,7 @@ class Texture:
     def anisotropy(self) -> float:
         '''
             float: Number of samples for anisotropic filtering (Default ``1.0``).
-            The value will be clamped range ``1.0`` and ``ctx.max_anisotropy``.
+            The value will be clamped in range ``1.0`` and ``ctx.max_anisotropy``.
 
             Any value greater than 1.0 counts as a use of anisotropic filtering::
 
@@ -185,15 +185,15 @@ class Texture:
 
             Accepted compare functions::
 
-                ctx.compare_func = ''    # Disale depth comparison completely
-                ctx.compare_func = '<='  # GL_LEQUAL
-                ctx.compare_func = '<'   # GL_LESS
-                ctx.compare_func = '>='  # GL_GEQUAL
-                ctx.compare_func = '>'   # GL_GREATER
-                ctx.compare_func = '=='  # GL_EQUAL 
-                ctx.compare_func = '!='  # GL_NOTEQUAL 
-                ctx.compare_func = '0'   # GL_NEVER 
-                ctx.compare_func = '1'   # GL_ALWAYS 
+                texture.compare_func = ''    # Disale depth comparison completely
+                texture.compare_func = '<='  # GL_LEQUAL
+                texture.compare_func = '<'   # GL_LESS
+                texture.compare_func = '>='  # GL_GEQUAL
+                texture.compare_func = '>'   # GL_GREATER
+                texture.compare_func = '=='  # GL_EQUAL 
+                texture.compare_func = '!='  # GL_NOTEQUAL 
+                texture.compare_func = '0'   # GL_NEVER 
+                texture.compare_func = '1'   # GL_ALWAYS 
         '''
 
         return self.mglo.compare_func
