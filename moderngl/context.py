@@ -566,9 +566,10 @@ class Context:
             Create a :py:class:`TextureArray` object.
 
             Args:
-                size (tuple): The width, height and layers of the texture.
+                size (tuple): The ``(width, height, layers)`` of the texture.
                 components (int): The number of components 1, 2, 3 or 4.
-                data (bytes): Content of the texture.
+                data (bytes): Content of the texture. The size must be ``(width, height * layers)``
+                              so each layer is stacked vertically.
 
             Keyword Args:
                 alignment (int): The byte alignment 1, 2, 4 or 8.
