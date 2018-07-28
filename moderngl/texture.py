@@ -130,7 +130,7 @@ class Texture:
     @property
     def swizzle(self) -> str:
         '''
-            str: The swizzle maskeof the texture (Default ``'RGBA'``).
+            str: The swizzle maske of the texture (Default ``'RGBA'``).
 
             The swizzle mask change/reorder the ``vec4`` value returned by the ``texture()`` function
             in a GLSL shaders. This is represented by a 4 character string were each
