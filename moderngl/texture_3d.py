@@ -38,7 +38,15 @@ class Texture3D:
     @property
     def repeat_x(self) -> bool:
         '''
-            bool: The repeat_x of the texture.
+            bool: The x repeat flag for the texture (Default ``True``)
+
+            Example::
+
+                # Enable texture repeat (GL_REPEAT)
+                texture.repeat_x = True
+
+                # Disable texture repeat (GL_CLAMP_TO_EDGE)
+                texture.repeat_x = False
         '''
 
         return self.mglo.repeat_x
@@ -50,7 +58,15 @@ class Texture3D:
     @property
     def repeat_y(self) -> bool:
         '''
-            bool: The repeat_y of the texture.
+            bool: The y repeat flag for the texture (Default ``True``)
+
+            Example::
+
+                # Enable texture repeat (GL_REPEAT)
+                texture.repeat_y = True
+
+                # Disable texture repeat (GL_CLAMP_TO_EDGE)
+                texture.repeat_y = False
         '''
 
         return self.mglo.repeat_y
@@ -62,7 +78,15 @@ class Texture3D:
     @property
     def repeat_z(self) -> bool:
         '''
-            bool: The repeat_z of the texture.
+            bool: The z repeat flag for the texture (Default ``True``)
+
+            Example::
+
+                # Enable texture repeat (GL_REPEAT)
+                texture.repeat_z = True
+
+                # Disable texture repeat (GL_CLAMP_TO_EDGE)
+                texture.repeat_z = False
         '''
 
         return self.mglo.repeat_z
@@ -86,7 +110,29 @@ class Texture3D:
     @property
     def swizzle(self) -> str:
         '''
-            str: The swizzle of the texture.
+            str: The swizzle mask of the texture (Default ``'RGBA'``).
+
+            The swizzle mask change/reorder the ``vec4`` value returned by the ``texture()`` function
+            in a GLSL shaders. This is represented by a 4 character string were each
+            character can be::
+
+                'R' GL_RED
+                'G' GL_GREEN
+                'B' GL_BLUE
+                'A' GL_ALPHA
+                '0' GL_ZERO
+                '1' GL_ONE
+
+            Example::
+
+                # Alpha channel will always return 1.0
+                texture.swizzle = 'RGB1'
+
+                # Only return the red component. The rest is masked to 0.0
+                texture.swizzle = 'R000'
+
+                # Reverse the components
+                texture.swizzle = 'ABGR'
         '''
 
         return self.mglo.swizzle
