@@ -57,7 +57,15 @@ class TextureCube:
     @property
     def filter(self):
         '''
-            tuple: The filter of the texture.
+            tuple: The minification and magnification filter for the texture.
+            (Default ``(moderngl.LINEAR. moderngl.LINEAR)``)
+
+            Example::
+
+                texture.filter == (monderngl.NEAREST, moderngl.NEAREST)
+                texture.filter == (monderngl.LINEAR_MIPMAP_LINEAR, moderngl.LINEAR)
+                texture.filter == (monderngl.NEAREST_MIPMAP_LINEAR, moderngl.NEAREST)
+                texture.filter == (monderngl.LINEAR_MIPMAP_NEAREST, moderngl.NEAREST)
         '''
         return self.mglo.filter
 
@@ -68,7 +76,29 @@ class TextureCube:
     @property
     def swizzle(self) -> str:
         '''
-            str: The swizzle of the texture.
+            str: The swizzle mask of the texture (Default ``'RGBA'``).
+
+            The swizzle mask change/reorder the ``vec4`` value returned by the ``texture()`` function
+            in a GLSL shaders. This is represented by a 4 character string were each
+            character can be::
+
+                'R' GL_RED
+                'G' GL_GREEN
+                'B' GL_BLUE
+                'A' GL_ALPHA
+                '0' GL_ZERO
+                '1' GL_ONE
+
+            Example::
+
+                # Alpha channel will always return 1.0
+                texture.swizzle = 'RGB1'
+
+                # Only return the red component. The rest is masked to 0.0
+                texture.swizzle = 'R000'
+
+                # Reverse the components
+                texture.swizzle = 'ABGR'
         '''
 
         return self.mglo.swizzle
@@ -80,8 +110,16 @@ class TextureCube:
     @property
     def anisotropy(self):
         '''
-            float: Number of samples for anisotropic filtering.
-            Any value greater than 1.0 counts as a use of anisotropic filtering
+            float: Number of samples for anisotropic filtering (Default ``1.0``).
+            The value will be clamped in range ``1.0`` and ``ctx.max_anisotropy``.
+
+            Any value greater than 1.0 counts as a use of anisotropic filtering::
+
+                # Disable anisotropic filtering
+                texture.anisotropy = 1.0
+
+                # Enable anisotropic filtering suggesting 16 samples as a maximum
+                texture.anisotropy = 16.0
         '''
         return self.mglo.anisotropy
 
