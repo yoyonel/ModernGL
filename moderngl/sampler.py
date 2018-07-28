@@ -9,6 +9,13 @@ class Sampler:
         Texture access inside of a shader. When a sampler object is bound to a texture image unit,
         the internal sampling parameters for a texture bound to the same image unit are all ignored.
         Instead, the sampling parameters are taken from this sampler object.
+
+        Unlike textures, a samplers state can also be changed freely be at any time
+        without the sampler object being bound/in use.
+
+        Samplers are bound to a texture unit and not a texture itself. Be careful with leaving
+        samplers bound to texture units as it can cause texture incompletness issues
+        (the texture bind is ignored).
     '''
 
     __slots__ = ['mglo', '_glo', 'ctx', 'extra']
@@ -47,7 +54,15 @@ class Sampler:
     @property
     def repeat_x(self) -> bool:
         '''
-            bool: The repeat_x of the texture.
+            bool: The x repeat flag for the sampler (Default ``True``)
+
+            Example::
+
+                # Enable texture repeat (GL_REPEAT)
+                sampler.repeat_x = True
+
+                # Disable texture repeat (GL_CLAMP_TO_EDGE)
+                sampler.repeat_x = False
         '''
         return self.mglo.repeat_x
 
@@ -58,7 +73,15 @@ class Sampler:
     @property
     def repeat_y(self) -> bool:
         '''
-            bool: The repeat_y of the texture.
+            bool: The y repeat flag for the sampler (Default ``True``)
+
+            Example::
+
+                # Enable texture repeat (GL_REPEAT)
+                sampler.repeat_y = True
+
+                # Disable texture repeat (GL_CLAMP_TO_EDGE)
+                sampler.repeat_y = False
         '''
         return self.mglo.repeat_x
 
@@ -69,7 +92,15 @@ class Sampler:
     @property
     def filter(self) -> Tuple[int, int]:
         '''
-            tuple: The filter of the sampler (min, mag)
+            tuple: The minification and magnification filter for the sampler.
+            (Default ``(moderngl.LINEAR. moderngl.LINEAR)``)
+
+            Example::
+
+                sampler.filter == (monderngl.NEAREST, moderngl.NEAREST)
+                sampler.filter == (monderngl.LINEAR_MIPMAP_LINEAR, moderngl.LINEAR)
+                sampler.filter == (monderngl.NEAREST_MIPMAP_LINEAR, moderngl.NEAREST)
+                sampler.filter == (monderngl.LINEAR_MIPMAP_NEAREST, moderngl.NEAREST)
         '''
         return self.mglo.filter
 
@@ -80,7 +111,28 @@ class Sampler:
     @property
     def compare_func(self) -> str:
         '''
-            tuple: The compare function of the depth texture.
+            tuple: The compare function for a depth textures (Default ``'?'``)
+
+            By default samplers don't have depth comparison mode enabled.
+            This means that depth texture values can be read as a ``sampler2D``
+            using ``texture()`` in a GLSL shader by default.
+
+            When setting this property to a valid compare mode, ``GL_TEXTURE_COMPARE_MODE``
+            is set to ``GL_COMPARE_REF_TO_TEXTURE`` so that texture lookup
+            functions in GLSL will return a depth comparison result instead
+            of the actual depth value.
+
+            Accepted compare functions::
+
+                .compare_func = ''    # Disale depth comparison completely
+                sampler.compare_func = '<='  # GL_LEQUAL
+                sampler.compare_func = '<'   # GL_LESS
+                sampler.compare_func = '>='  # GL_GEQUAL
+                sampler.compare_func = '>'   # GL_GREATER
+                sampler.compare_func = '=='  # GL_EQUAL 
+                sampler.compare_func = '!='  # GL_NOTEQUAL 
+                sampler.compare_func = '0'   # GL_NEVER 
+                sampler.compare_func = '1'   # GL_ALWAYS 
         '''
         return self.mglo.compare_func
 
@@ -91,7 +143,16 @@ class Sampler:
     @property
     def anisotropy(self) -> float:
         '''
-            float: Number of samples for anisotropic filtering. Any value greater than 1.0 counts as a use of anisotropic filtering
+            float: Number of samples for anisotropic filtering (Default ``1.0``).
+            The value will be clamped in range ``1.0`` and ``ctx.max_anisotropy``.
+
+            Any value greater than 1.0 counts as a use of anisotropic filtering::
+
+                # Disable anisotropic filtering
+                sampler.anisotropy = 1.0
+
+                # Enable anisotropic filtering suggesting 16 samples as a maximum
+                sampler.anisotropy = 16.0
         '''
         return self.mglo.anisotropy
 
