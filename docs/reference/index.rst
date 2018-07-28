@@ -8,6 +8,7 @@ Reference
     buffer.rst
     vertex_array.rst
     program.rst
+    sampler.rst
     texture.rst
     texture_array.rst
     texture3d.rst
@@ -18,4 +19,3 @@ Reference
     query.rst
     conditional_render.rst
     compute_shader.rst
-    sampler.rst
