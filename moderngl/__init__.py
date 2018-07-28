@@ -2,7 +2,13 @@
     ModernGL: PyOpenGL alternative
 '''
 
-# pylint: disable=C0123, W0212
+import os
+
+if os.environ.get('READTHEDOCS') == 'True':
+    import sys
+    from .mock import mgl
+    sys.modules['moderngl.mgl'] = mgl
+
 from .buffer import *
 from .compute_shader import *
 from .conditional_render import *
@@ -20,15 +26,5 @@ from .texture_array import *
 from .texture_cube import *
 from .vertex_array import *
 from .sampler import *
-
-
-import os
-if os.environ.get('READTHEDOCS') == 'True':
-    import sys
-    from .mock import mgl
-    sys.modules['moderngl.mgl'] = mgl
-    del sys
-del os
-
 
 __version__ = '5.3.0'
