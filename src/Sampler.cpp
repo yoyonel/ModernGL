@@ -28,6 +28,8 @@ PyObject * MGLContext_sampler(MGLContext * self, PyObject * args) {
 	sampler->border_color[1] = 0.0;
 	sampler->border_color[2] = 0.0;
 	sampler->border_color[3] = 0.0;
+	sampler->min_lod = -1000.0;
+	sampler->max_lod = 1000.0;
 
 	Py_INCREF(self);
 	sampler->context = self;
@@ -260,8 +262,31 @@ int MGLSampler_set_border_color(MGLSampler * self, PyObject * value) {
 	return 0;
 }
 
-// GL_TEXTURE_MIN_LOD 
-// GL_TEXTURE_MAX_LOD
+PyObject * MGLSampler_get_min_lod(MGLSampler * self) {
+	return PyFloat_FromDouble(self->min_lod);
+}
+
+int MGLSampler_set_min_lod(MGLSampler * self, PyObject * value) {
+	self->min_lod = PyFloat_AsDouble(value);
+
+	const GLMethods & gl = self->context->gl;
+	gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_MIN_LOD, self->min_lod);
+
+	return 0;
+}
+
+PyObject * MGLSampler_get_max_lod(MGLSampler * self) {
+	return PyFloat_FromDouble(self->max_lod);
+}
+
+int MGLSampler_set_max_lod(MGLSampler * self, PyObject * value) {
+	self->max_lod = PyFloat_AsDouble(value);
+
+	const GLMethods & gl = self->context->gl;
+	gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_MAX_LOD, self->max_lod);
+
+	return 0;
+}
 
 PyGetSetDef MGLSampler_tp_getseters[] = {
 	{(char *)"repeat_x", (getter)MGLSampler_get_repeat_x, (setter)MGLSampler_set_repeat_x, 0, 0},
@@ -271,7 +296,8 @@ PyGetSetDef MGLSampler_tp_getseters[] = {
 	{(char *)"compare_func", (getter)MGLSampler_get_compare_func, (setter)MGLSampler_set_compare_func, 0, 0},
 	{(char *)"anisotropy", (getter)MGLSampler_get_anisotropy, (setter)MGLSampler_set_anisotropy, 0, 0},
 	{(char *)"border_color", (getter)MGLSampler_get_border_color, (setter)MGLSampler_set_border_color, 0, 0},
-
+	{(char *)"min_lod", (getter)MGLSampler_get_min_lod, (setter)MGLSampler_set_min_lod, 0, 0},
+	{(char *)"max_lod", (getter)MGLSampler_get_max_lod, (setter)MGLSampler_set_max_lod, 0, 0},
 	{0},
 };
 

@@ -951,7 +951,7 @@ class Context:
         return res
 
     def sampler(self, repeat_x=True, repeat_y=True, repeat_z=True, filter=None, anisotropy=1.0,
-                compare_func='', border_color=None) -> Sampler:
+                compare_func='', border_color=None, min_lod=-1000.0, max_lod=1000.0) -> Sampler:
         '''
             Create a :py:class:`Sampler` object.
 
@@ -965,6 +965,10 @@ class Context:
                 border_color (tuple): The (r, g, b, a) color for the texture border.
                                       When this value is set the ``repeat_`` values are overriden
                                       setting the texture wrap to return the border color when outside ``[0, 1]`` range.
+                min_lod (float): Minimum level-of-detail parameter (Default ``-1000.0``).
+                                 This floating-point value limits the selection of highest resolution mipmap (lowest mipmap level)
+                max_lod (float): Minimum level-of-detail parameter (Default ``1000.0``).
+                                 This floating-point value limits the selection of the lowest resolution mipmap (highest mipmap level)
         '''
 
         res = Sampler.__new__(Sampler)
@@ -978,6 +982,8 @@ class Context:
         res.compare_func = compare_func
         if border_color:
             res.border_color = border_color
+        res.min_lod = min_lod
+        res.max_lod = max_lod
         return res
 
     def core_profile_check(self) -> None:

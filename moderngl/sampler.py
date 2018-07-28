@@ -196,3 +196,27 @@ class Sampler:
     @border_color.setter
     def border_color(self, value):
         self.mglo.border_color = value
+
+    @property
+    def min_lod(self):
+        '''
+            float: Minimum level-of-detail parameter (Default ``-1000.0``).
+                   This floating-point value limits the selection of highest resolution mipmap (lowest mipmap level)
+        '''
+        return self.mglo.min_lod
+
+    @min_lod.setter
+    def min_lod(self, value):
+        self.mglo.min_lod = value
+
+    @property
+    def max_lod(self):
+        '''
+            float: Minimum level-of-detail parameter (Default ``1000.0``).
+                   This floating-point value limits the selection of the lowest resolution mipmap (highest mipmap level)
+        '''
+        return self.mglo.max_lod
+
+    @max_lod.setter
+    def max_lod(self, value):
+        self.mglo.max_lod = value

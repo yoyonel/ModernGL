@@ -50,3 +50,13 @@ class TestCase(unittest.TestCase):
         for color in colors:
             sampler.border_color = color
             self.assertEqual(sampler.border_color, color)
+
+        # LOD
+        self.assertEqual(sampler.min_lod, -1000.0)
+        self.assertEqual(sampler.max_lod, 1000.0)
+
+        sampler.min_lod = 0.0
+        self.assertEqual(sampler.min_lod, 0.0)
+
+        sampler.max_lod = 500.0
+        self.assertEqual(sampler.max_lod, 500.0)

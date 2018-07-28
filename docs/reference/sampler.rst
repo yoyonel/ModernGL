@@ -9,7 +9,7 @@ Sampler
 Create
 ------
 
-.. automethod:: Context.sampler(repeat_x=True, repeat_y=True, repeat_z=True, filter=None, anisotropy=1.0, compare_func='', border_color=None) -> Sampler
+.. automethod:: Context.sampler(repeat_x=True, repeat_y=True, repeat_z=True, filter=None, anisotropy=1.0, compare_func='', border_color=None, min_lod=-1000.0, max_lod=1000.0) -> Sampler
 
 Methods
 -------
@@ -28,3 +28,5 @@ Attributes
 .. autoattribute:: Sampler.compare_func
 .. autoattribute:: Sampler.anisotropy
 .. autoattribute:: Sampler.border_color
+.. autoattribute:: Sampler.min_lod
+.. autoattribute:: Sampler.max_lod
