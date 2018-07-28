@@ -31,7 +31,7 @@ ModernGL Objects
 .. automethod:: Context.scope(framebuffer, enable_only=None, textures=(), uniform_buffers=(), storage_buffers=()) -> Scope
 .. automethod:: Context.query(samples=False, any_samples=False, time=False, primitives=False) -> Query
 .. automethod:: Context.compute_shader(source) -> ComputeShader
-.. automethod:: Context.sampler(repeat_x=True, repeat_y=True, filter=None, anisotropy=1.0, compare_func='') -> Sampler
+.. automethod:: Context.sampler(repeat_x=True, repeat_y=True, repeat_z=True, filter=None, anisotropy=1.0, compare_func='', border_color=None) -> Sampler
 
 Methods
 -------

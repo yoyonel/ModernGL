@@ -21,6 +21,7 @@ class TestCase(unittest.TestCase):
         self.assertTrue(sampler.repeat_z)
         self.assertEqual(sampler.filter, (moderngl.LINEAR, moderngl.LINEAR))
         self.assertEqual(sampler.compare_func, '?')
+        self.assertEqual(sampler.border_color, (0.0, 0.0, 0.0, 0.0))
 
         # Change values
         sampler.anisotropy = self.ctx.max_anisotropy
@@ -38,3 +39,14 @@ class TestCase(unittest.TestCase):
         self.assertEqual((sampler.repeat_x, sampler.repeat_y, sampler.repeat_z), (False, False, True))
         sampler.repeat_z = False
         self.assertEqual((sampler.repeat_x, sampler.repeat_y, sampler.repeat_z), (False, False, False))
+
+        # Ensure border color values are set correctly
+        colors = [
+            (1.0, 0.0, 0.0, 0.0),
+            (0.0, 1.0, 0.0, 0.0),
+            (0.0, 0.0, 1.0, 0.0),
+            (0.0, 0.0, 0.0, 1.0),
+        ]
+        for color in colors:
+            sampler.border_color = color
+            self.assertEqual(sampler.border_color, color)

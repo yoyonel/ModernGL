@@ -950,16 +950,21 @@ class Context:
         res.ctx = self
         return res
 
-    def sampler(self, repeat_x=True, repeat_y=True, filter=None, anisotropy=1.0, compare_func='') -> Sampler:
+    def sampler(self, repeat_x=True, repeat_y=True, repeat_z=True, filter=None, anisotropy=1.0,
+                compare_func='', border_color=None) -> Sampler:
         '''
             Create a :py:class:`Sampler` object.
 
             Keyword Arguments:
                 repeat_x (bool): Repeat texture on x
-                repeat_x (bool): Repeat texture on y
+                repeat_y (bool): Repeat texture on y
+                repeat_z (bool): Repeat texture on z
                 filter (tuple): The min and max filter
                 anisotropy (float): Number of samples for anisotropic filtering. Any value greater than 1.0 counts as a use of anisotropic filtering
                 compare_func: Compare function for depth textures
+                border_color (tuple): The (r, g, b, a) color for the texture border.
+                                      When this value is set the ``repeat_`` values are overriden
+                                      setting the texture wrap to return the border color when outside ``[0, 1]`` range.
         '''
 
         res = Sampler.__new__(Sampler)
@@ -967,9 +972,12 @@ class Context:
         res.ctx = self
         res.repeat_x = repeat_x
         res.repeat_y = repeat_y
+        res.repeat_z = repeat_z
         res.filter = filter or (9729, 9729)
         res.anisotropy = anisotropy
         res.compare_func = compare_func
+        if border_color:
+            res.border_color = border_color
         return res
 
     def core_profile_check(self) -> None:

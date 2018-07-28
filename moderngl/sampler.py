@@ -178,3 +178,21 @@ class Sampler:
     @anisotropy.setter
     def anisotropy(self, value: float):
         self.mglo.anisotropy = value
+
+    @property
+    def border_color(self):
+        '''
+            border_color (tuple) – The (r, g, b, a) color for the texture border (Default ``(0.0, 0.0, 0.0, 0.0)``)
+            When setting this value the ``repeat_`` values are overriden setting the texture wrap to return
+            the border color when outside [0, 1] range.
+
+            Example::
+
+                # Red border color
+                sampler.border_color = (1.0, 0.0, 0.0, 0.0)
+        '''
+        return self.mglo.border_color
+
+    @border_color.setter
+    def border_color(self, value):
+        self.mglo.border_color = value

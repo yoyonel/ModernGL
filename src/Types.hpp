@@ -392,6 +392,9 @@ struct MGLSampler {
 	bool repeat_x;
 	bool repeat_y;
 	bool repeat_z;
+
+	// border color
+	float border_color[4];
 };
 
 MGLDataType * from_dtype(const char * dtype);
