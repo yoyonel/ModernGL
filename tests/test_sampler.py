@@ -15,21 +15,26 @@ class TestCase(unittest.TestCase):
         sampler = self.ctx.sampler()
 
         # Default values
-        assert sampler.anisotropy == 1.0
-        assert sampler.repeat_x is True
-        assert sampler.repeat_y is True
-        assert sampler.filter == (moderngl.LINEAR, moderngl.LINEAR)
-        assert sampler.compare_func == '?'
+        self.assertEqual(sampler.anisotropy, 1.0)
+        self.assertTrue(sampler.repeat_x)
+        self.assertTrue(sampler.repeat_y)
+        self.assertTrue(sampler.repeat_z)
+        self.assertEqual(sampler.filter, (moderngl.LINEAR, moderngl.LINEAR))
+        self.assertEqual(sampler.compare_func, '?')
 
         # Change values
-        sampler.anisotropy = 2.0
-        sampler.repeat_x = False
-        sampler.repeat_y = False
+        sampler.anisotropy = self.ctx.max_anisotropy
         sampler.filter = (moderngl.NEAREST_MIPMAP_NEAREST, moderngl.NEAREST)
         sampler.compare_func = "<="
 
-        assert sampler.anisotropy == 2.0
-        assert sampler.repeat_x is False
-        assert sampler.repeat_y is False
-        assert sampler.filter == (moderngl.NEAREST_MIPMAP_NEAREST, moderngl.NEAREST)
-        assert sampler.compare_func == "<="
+        self.assertEqual(sampler.anisotropy, self.ctx.max_anisotropy)
+        self.assertEqual(sampler.filter, (moderngl.NEAREST_MIPMAP_NEAREST, moderngl.NEAREST))
+        self.assertEqual(sampler.compare_func, "<=")
+
+        # Ensure repeat parameters are set correctly
+        sampler.repeat_x = False
+        self.assertEqual((sampler.repeat_x, sampler.repeat_y, sampler.repeat_z), (False, True, True))
+        sampler.repeat_y = False
+        self.assertEqual((sampler.repeat_x, sampler.repeat_y, sampler.repeat_z), (False, False, True))
+        sampler.repeat_z = False
+        self.assertEqual((sampler.repeat_x, sampler.repeat_y, sampler.repeat_z), (False, False, False))

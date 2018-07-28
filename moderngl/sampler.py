@@ -83,11 +83,30 @@ class Sampler:
                 # Disable texture repeat (GL_CLAMP_TO_EDGE)
                 sampler.repeat_y = False
         '''
-        return self.mglo.repeat_x
+        return self.mglo.repeat_y
 
     @repeat_y.setter
     def repeat_y(self, value: bool):
         self.mglo.repeat_y = value
+
+    @property
+    def repeat_z(self) -> bool:
+        '''
+            bool: The z repeat flag for the sampler (Default ``True``)
+
+            Example::
+
+                # Enable texture repeat (GL_REPEAT)
+                sampler.repeat_z = True
+
+                # Disable texture repeat (GL_CLAMP_TO_EDGE)
+                sampler.repeat_z = False
+        '''
+        return self.mglo.repeat_z
+
+    @repeat_z.setter
+    def repeat_z(self, value: bool):
+        self.mglo.repeat_z = value
 
     @property
     def filter(self) -> Tuple[int, int]:

@@ -22,6 +22,7 @@ PyObject * MGLContext_sampler(MGLContext * self, PyObject * args) {
 	sampler->anisotropy = 1.0;
 	sampler->repeat_x = true;
 	sampler->repeat_y = true;
+	sampler->repeat_z = true;
 	sampler->compare_func = 0;
 
 	Py_INCREF(self);
@@ -145,7 +146,28 @@ int MGLSampler_set_repeat_y(MGLSampler * self, PyObject * value) {
 		self->repeat_y = false;
 		return 0;
 	} else {
-		MGLError_Set("invalid value for texture_x");
+		MGLError_Set("invalid value for texture_y");
+		return -1;
+	}
+}
+
+PyObject * MGLSampler_get_repeat_z(MGLSampler * self) {
+	return PyBool_FromLong(self->repeat_z);
+}
+
+int MGLSampler_set_repeat_z(MGLSampler * self, PyObject * value) {
+	const GLMethods & gl = self->context->gl;
+
+	if (value == Py_True) {
+		gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_REPEAT);
+		self->repeat_z = true;
+		return 0;
+	} else if (value == Py_False) {
+		gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+		self->repeat_z = false;
+		return 0;
+	} else {
+		MGLError_Set("invalid value for texture_z");
 		return -1;
 	}
 }
@@ -206,9 +228,12 @@ int MGLSampler_set_anisotropy(MGLSampler * self, PyObject * value) {
 	return 0;
 }
 
+
+
 PyGetSetDef MGLSampler_tp_getseters[] = {
 	{(char *)"repeat_x", (getter)MGLSampler_get_repeat_x, (setter)MGLSampler_set_repeat_x, 0, 0},
 	{(char *)"repeat_y", (getter)MGLSampler_get_repeat_y, (setter)MGLSampler_set_repeat_y, 0, 0},
+	{(char *)"repeat_z", (getter)MGLSampler_get_repeat_z, (setter)MGLSampler_set_repeat_z, 0, 0},
 	{(char *)"filter", (getter)MGLSampler_get_filter, (setter)MGLSampler_set_filter, 0, 0},
 	{(char *)"compare_func", (getter)MGLSampler_get_compare_func, (setter)MGLSampler_set_compare_func, 0, 0},
 	{(char *)"anisotropy", (getter)MGLSampler_get_anisotropy, (setter)MGLSampler_set_anisotropy, 0, 0},

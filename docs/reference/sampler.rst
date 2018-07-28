@@ -23,6 +23,7 @@ Attributes
 
 .. autoattribute:: Sampler.repeat_x
 .. autoattribute:: Sampler.repeat_y
+.. autoattribute:: Sampler.repeat_z
 .. autoattribute:: Sampler.filter
 .. autoattribute:: Sampler.compare_func
 .. autoattribute:: Sampler.anisotropy
