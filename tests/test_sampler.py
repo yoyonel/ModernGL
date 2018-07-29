@@ -4,6 +4,14 @@ import moderngl
 
 from common import get_context
 
+def checkerror(func):
+    def wrapper(*args, **kwargs):
+        _ = get_context().error
+        func(*args, **kwargs)
+        err = get_context().error
+        assert err == 'GL_NO_ERROR', "Error: %s" % err
+    return wrapper
+
 
 class TestCase(unittest.TestCase):
 
@@ -11,10 +19,15 @@ class TestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.ctx = get_context()
 
-    def test_attributes(self):
+    @checkerror
+    def test_create(self):
         sampler = self.ctx.sampler()
+        sampler.use(location=0)
+        sampler.clear(location=0)
 
-        # Default values
+    @checkerror
+    def test_defaults(self):
+        sampler = self.ctx.sampler()
         self.assertEqual(sampler.anisotropy, 1.0)
         self.assertTrue(sampler.repeat_x)
         self.assertTrue(sampler.repeat_y)
@@ -22,7 +35,12 @@ class TestCase(unittest.TestCase):
         self.assertEqual(sampler.filter, (moderngl.LINEAR, moderngl.LINEAR))
         self.assertEqual(sampler.compare_func, '?')
         self.assertEqual(sampler.border_color, (0.0, 0.0, 0.0, 0.0))
+        self.assertEqual(sampler.min_lod, -1000.0)
+        self.assertEqual(sampler.max_lod, 1000.0)
 
+    @checkerror
+    def test_prop_changes(self):
+        sampler = self.ctx.sampler()
         # Change values
         sampler.anisotropy = self.ctx.max_anisotropy
         sampler.filter = (moderngl.NEAREST_MIPMAP_NEAREST, moderngl.NEAREST)
@@ -40,6 +58,10 @@ class TestCase(unittest.TestCase):
         sampler.repeat_z = False
         self.assertEqual((sampler.repeat_x, sampler.repeat_y, sampler.repeat_z), (False, False, False))
 
+    @checkerror
+    def test_border_color(self):
+        sampler = self.ctx.sampler()
+
         # Ensure border color values are set correctly
         colors = [
             (1.0, 0.0, 0.0, 0.0),
@@ -51,9 +73,9 @@ class TestCase(unittest.TestCase):
             sampler.border_color = color
             self.assertEqual(sampler.border_color, color)
 
-        # LOD
-        self.assertEqual(sampler.min_lod, -1000.0)
-        self.assertEqual(sampler.max_lod, 1000.0)
+    @checkerror
+    def test_lod(self):
+        sampler = self.ctx.sampler()
 
         sampler.min_lod = 0.0
         self.assertEqual(sampler.min_lod, 0.0)
@@ -61,6 +83,7 @@ class TestCase(unittest.TestCase):
         sampler.max_lod = 500.0
         self.assertEqual(sampler.max_lod, 500.0)
 
+    @checkerror
     def test_clear_samplers(self):
         self.ctx.clear_samplers(start=0, end=5)
         self.ctx.clear_samplers(start=5, end=10)
