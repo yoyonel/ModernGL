@@ -216,7 +216,7 @@ PyObject * MGLSampler_get_anisotropy(MGLSampler * self) {
 }
 
 int MGLSampler_set_anisotropy(MGLSampler * self, PyObject * value) {
-	self->anisotropy = fmin(fmax(PyFloat_AsDouble(value), 1.0), self->context->max_anisotropy);
+	self->anisotropy = min(max(PyFloat_AsDouble(value), 1.0), self->context->max_anisotropy);
 
 	const GLMethods & gl = self->context->gl;
 	gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_MAX_ANISOTROPY, self->anisotropy);

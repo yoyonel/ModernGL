@@ -62,4 +62,6 @@ class TestCase(unittest.TestCase):
         self.assertEqual(sampler.max_lod, 500.0)
 
     def test_clear_samplers(self):
-        self.ctx.clear_samplers()
+        self.ctx.clear_samplers(start=0, end=5)
+        self.ctx.clear_samplers(start=5, end=10)
+        self.ctx.clear_samplers(start=10, end=100)

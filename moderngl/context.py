@@ -986,13 +986,26 @@ class Context:
         res.max_lod = max_lod
         return res
 
-    def clear_samplers(self):
+    def clear_samplers(self, start=0, end=-1):
         '''
-            Unbinds samplers from all texture units.
+            Unbinds samplers from texture units.
             Lingering samplers can be a source of weird bugs.
             This methods provides a fairly brute force and efficient way to ensure all texture units are clear.
+
+            Keyword Arguments:
+
+                start (int): The texture unit index to start the clearing samplers
+                stop (int): The texture unit index to stop clearing samplers
+            
+            Example::
+
+                # Clear texture unit 0, 1, 2, 3, 4
+                ctx.clear_samplers(start=0, end=5)
+
+                # Clear texture unit 4, 5, 6, 7
+                ctx.clear_samplers(start=4, end=8)
         '''
-        self.mglo.clear_samplers()
+        return self.mglo.clear_samplers(start, end)
 
     def core_profile_check(self) -> None:
         '''

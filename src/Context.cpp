@@ -400,13 +400,37 @@ PyObject * MGLContext_detect_framebuffer(MGLContext * self, PyObject * args) {
 }
 
 PyObject * MGLContext_clear_samplers(MGLContext * self, PyObject * args) {
+	int start;
+	int end;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"ii",
+		&start,
+		&end
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	start = max(start, 0);
+	if (end == -1) {
+		end = self->max_texture_units;
+	} else {
+		end = min(end, self->max_texture_units);
+	}
+
 	const GLMethods & gl = self->gl;
 
-	for(int i = 0; i < self->max_texture_units; i++) {
+	for(int i = start; i < end; i++) {
 		gl.BindSampler(i, 0);
 	}
 
-	Py_RETURN_NONE;
+	PyObject * res = PyTuple_New(2);
+	PyTuple_SET_ITEM(res, 0, PyLong_FromLong(start));
+	PyTuple_SET_ITEM(res, 1, PyLong_FromLong(end));
+	return res;
 }
 
 PyObject * MGLContext_buffer(MGLContext * self, PyObject * args);

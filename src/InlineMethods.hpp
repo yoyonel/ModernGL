@@ -1,13 +1,10 @@
 #pragma once
 
-#ifdef _MSC_VER
-    #define INLINE __inline
-
-    INLINE double fmax(double left, double right)
-    { return (left > right) ? left : right; }
-
-    INLINE double fmin(double left, double right)
-    { return (left < right) ? left : right; }
+#ifndef max
+#define max(a,b) (((a) > (b)) ? (a) : (b))
+#endif
+#ifndef min
+#define min(a,b) (((a) < (b)) ? (a) : (b))
 #endif
 
 inline void clean_glsl_name(char * name, int & name_len) {
