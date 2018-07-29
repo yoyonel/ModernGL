@@ -427,10 +427,7 @@ PyObject * MGLContext_clear_samplers(MGLContext * self, PyObject * args) {
 		gl.BindSampler(i, 0);
 	}
 
-	PyObject * res = PyTuple_New(2);
-	PyTuple_SET_ITEM(res, 0, PyLong_FromLong(start));
-	PyTuple_SET_ITEM(res, 1, PyLong_FromLong(end));
-	return res;
+	Py_RETURN_NONE;
 }
 
 PyObject * MGLContext_buffer(MGLContext * self, PyObject * args);

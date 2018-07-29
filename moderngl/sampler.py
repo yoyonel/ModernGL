@@ -16,6 +16,9 @@ class Sampler:
         Samplers are bound to a texture unit and not a texture itself. Be careful with leaving
         samplers bound to texture units as it can cause texture incompletness issues
         (the texture bind is ignored).
+
+        Sampler bindings do clear automatically between every frame so a texture unit
+        need at least one bind/use per frame.
     '''
 
     __slots__ = ['mglo', '_glo', 'ctx', 'extra']

@@ -989,8 +989,9 @@ class Context:
     def clear_samplers(self, start=0, end=-1):
         '''
             Unbinds samplers from texture units.
-            Lingering samplers can be a source of weird bugs.
-            This methods provides a fairly brute force and efficient way to ensure all texture units are clear.
+            Sampler bindings do clear automatically between every frame,
+            but lingering samplers can still be a source of weird bugs during the frame rendering.
+            This methods provides a fairly brute force and efficient way to ensure texture units are clear.
 
             Keyword Arguments:
 
@@ -1005,7 +1006,7 @@ class Context:
                 # Clear texture unit 4, 5, 6, 7
                 ctx.clear_samplers(start=4, end=8)
         '''
-        return self.mglo.clear_samplers(start, end)
+        self.mglo.clear_samplers(start, end)
 
     def core_profile_check(self) -> None:
         '''
