@@ -986,6 +986,14 @@ class Context:
         res.max_lod = max_lod
         return res
 
+    def clear_samplers(self):
+        '''
+            Unbinds samplers from all texture units.
+            Lingering samplers can be a source of weird bugs.
+            This methods provides a fairly brute force and efficient way to ensure all texture units are clear.
+        '''
+        self.mglo.clear_samplers()
+
     def core_profile_check(self) -> None:
         '''
             Core profile check.

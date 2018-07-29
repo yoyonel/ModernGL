@@ -399,6 +399,16 @@ PyObject * MGLContext_detect_framebuffer(MGLContext * self, PyObject * args) {
 	return result;
 }
 
+PyObject * MGLContext_clear_samplers(MGLContext * self, PyObject * args) {
+	const GLMethods & gl = self->gl;
+
+	for(int i = 0; i < self->max_texture_units; i++) {
+		gl.BindSampler(i, 0);
+	}
+
+	Py_RETURN_NONE;
+}
+
 PyObject * MGLContext_buffer(MGLContext * self, PyObject * args);
 PyObject * MGLContext_texture(MGLContext * self, PyObject * args);
 PyObject * MGLContext_texture3d(MGLContext * self, PyObject * args);
@@ -429,6 +439,7 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"copy_buffer", (PyCFunction)MGLContext_copy_buffer, METH_VARARGS, 0},
 	{"copy_framebuffer", (PyCFunction)MGLContext_copy_framebuffer, METH_VARARGS, 0},
 	{"detect_framebuffer", (PyCFunction)MGLContext_detect_framebuffer, METH_VARARGS, 0},
+	{"clear_samplers", (PyCFunction)MGLContext_clear_samplers, METH_VARARGS, 0},
 
 	{"buffer", (PyCFunction)MGLContext_buffer, METH_VARARGS, 0},
 	{"texture", (PyCFunction)MGLContext_texture, METH_VARARGS, 0},

@@ -60,3 +60,6 @@ class TestCase(unittest.TestCase):
 
         sampler.max_lod = 500.0
         self.assertEqual(sampler.max_lod, 500.0)
+
+    def test_clear_samplers(self):
+        self.ctx.clear_samplers()
