@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Sampler object support
+- `Context.sampler` method
+- `index_element_size` parameter for `Context.vertex_array` and `Context.simple_vertex_array`
+- `Context.max_anisotropy` property
+- `Context.clear_samplers` method
+- `Framebuffer.read` and `Framebuffer.read_into` now accepts `attachment=-1` to read the depth attachment
+- `Texture.compare_func` property
+- `Texture.anisotropy` property
+- docs and tests
+
+### Fixed
+
+- missing `ComputeShader` uniforms and uniform blocks
+- wrong `DrawBuffer` call when clearing the screen
+- reading depth values from textures
+- broken comapre functions
+
 ## [5.3.0] - 2018-06-27
 
 ### Added
