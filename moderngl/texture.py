@@ -320,6 +320,13 @@ class Texture:
     def build_mipmaps(self, base=0, max_level=1000) -> None:
         '''
             Generate mipmaps.
+
+            This also changes the texture filter to ``LINEAR_MIPMAP_LINEAR, LINEAR``
+            (Will be removed in ``6.x``)
+
+            Keyword Args:
+                base (int): The base level
+                max_level (int): The maximum levels to generate
         '''
 
         self.mglo.build_mipmaps(base, max_level)
