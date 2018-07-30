@@ -950,16 +950,25 @@ class Context:
         res.ctx = self
         return res
 
-    def sampler(self, repeat_x=True, repeat_y=True, filter=None, anisotropy=1.0, compare_func='') -> Sampler:
+    def sampler(self, repeat_x=True, repeat_y=True, repeat_z=True, filter=None, anisotropy=1.0,
+                compare_func='?', border_color=None, min_lod=-1000.0, max_lod=1000.0) -> Sampler:
         '''
             Create a :py:class:`Sampler` object.
 
             Keyword Arguments:
                 repeat_x (bool): Repeat texture on x
-                repeat_x (bool): Repeat texture on y
+                repeat_y (bool): Repeat texture on y
+                repeat_z (bool): Repeat texture on z
                 filter (tuple): The min and max filter
                 anisotropy (float): Number of samples for anisotropic filtering. Any value greater than 1.0 counts as a use of anisotropic filtering
                 compare_func: Compare function for depth textures
+                border_color (tuple): The (r, g, b, a) color for the texture border.
+                                      When this value is set the ``repeat_`` values are overriden
+                                      setting the texture wrap to return the border color when outside ``[0, 1]`` range.
+                min_lod (float): Minimum level-of-detail parameter (Default ``-1000.0``).
+                                 This floating-point value limits the selection of highest resolution mipmap (lowest mipmap level)
+                max_lod (float): Minimum level-of-detail parameter (Default ``1000.0``).
+                                 This floating-point value limits the selection of the lowest resolution mipmap (highest mipmap level)
         '''
 
         res = Sampler.__new__(Sampler)
@@ -967,10 +976,37 @@ class Context:
         res.ctx = self
         res.repeat_x = repeat_x
         res.repeat_y = repeat_y
+        res.repeat_z = repeat_z
         res.filter = filter or (9729, 9729)
         res.anisotropy = anisotropy
         res.compare_func = compare_func
+        if border_color:
+            res.border_color = border_color
+        res.min_lod = min_lod
+        res.max_lod = max_lod
         return res
+
+    def clear_samplers(self, start=0, end=-1):
+        '''
+            Unbinds samplers from texture units.
+            Sampler bindings do clear automatically between every frame,
+            but lingering samplers can still be a source of weird bugs during the frame rendering.
+            This methods provides a fairly brute force and efficient way to ensure texture units are clear.
+
+            Keyword Arguments:
+
+                start (int): The texture unit index to start the clearing samplers
+                stop (int): The texture unit index to stop clearing samplers
+            
+            Example::
+
+                # Clear texture unit 0, 1, 2, 3, 4
+                ctx.clear_samplers(start=0, end=5)
+
+                # Clear texture unit 4, 5, 6, 7
+                ctx.clear_samplers(start=4, end=8)
+        '''
+        self.mglo.clear_samplers(start, end)
 
     def core_profile_check(self) -> None:
         '''

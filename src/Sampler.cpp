@@ -22,7 +22,14 @@ PyObject * MGLContext_sampler(MGLContext * self, PyObject * args) {
 	sampler->anisotropy = 1.0;
 	sampler->repeat_x = true;
 	sampler->repeat_y = true;
+	sampler->repeat_z = true;
 	sampler->compare_func = 0;
+	sampler->border_color[0] = 0.0;
+	sampler->border_color[1] = 0.0;
+	sampler->border_color[2] = 0.0;
+	sampler->border_color[3] = 0.0;
+	sampler->min_lod = -1000.0;
+	sampler->max_lod = 1000.0;
 
 	Py_INCREF(self);
 	sampler->context = self;
@@ -98,16 +105,6 @@ PyMethodDef MGLSampler_tp_methods[] = {
 	{0},
 };
 
-// PyObject * MGLSampler_get_bar(MGLSampler * self) {
-// 	// TODO: impl sampler
-// 	Py_RETURN_NONE;
-// }
-
-// int MGLSampler_set_bar(MGLSampler * self, PyObject * value) {
-// 	// TODO: impl sampler
-// 	return 0;
-// }
-
 PyObject * MGLSampler_get_repeat_x(MGLSampler * self) {
 	return PyBool_FromLong(self->repeat_x);
 }
@@ -145,7 +142,28 @@ int MGLSampler_set_repeat_y(MGLSampler * self, PyObject * value) {
 		self->repeat_y = false;
 		return 0;
 	} else {
-		MGLError_Set("invalid value for texture_x");
+		MGLError_Set("invalid value for texture_y");
+		return -1;
+	}
+}
+
+PyObject * MGLSampler_get_repeat_z(MGLSampler * self) {
+	return PyBool_FromLong(self->repeat_z);
+}
+
+int MGLSampler_set_repeat_z(MGLSampler * self, PyObject * value) {
+	const GLMethods & gl = self->context->gl;
+
+	if (value == Py_True) {
+		gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_REPEAT);
+		self->repeat_z = true;
+		return 0;
+	} else if (value == Py_False) {
+		gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+		self->repeat_z = false;
+		return 0;
+	} else {
+		MGLError_Set("invalid value for texture_z");
 		return -1;
 	}
 }
@@ -187,8 +205,8 @@ int MGLSampler_set_compare_func(MGLSampler * self, PyObject * value) {
 		gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_COMPARE_MODE, GL_NONE);
 	} else {
 		gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+		gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_COMPARE_FUNC, self->compare_func);
 	}
-	gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_COMPARE_FUNC, self->compare_func);
 
 	return 0;
 }
@@ -198,7 +216,7 @@ PyObject * MGLSampler_get_anisotropy(MGLSampler * self) {
 }
 
 int MGLSampler_set_anisotropy(MGLSampler * self, PyObject * value) {
-	self->anisotropy = fmin(fmax(PyFloat_AsDouble(value), 1.0), self->context->max_anisotropy);
+	self->anisotropy = min(max(PyFloat_AsDouble(value), 1.0), self->context->max_anisotropy);
 
 	const GLMethods & gl = self->context->gl;
 	gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_MAX_ANISOTROPY, self->anisotropy);
@@ -206,12 +224,80 @@ int MGLSampler_set_anisotropy(MGLSampler * self, PyObject * value) {
 	return 0;
 }
 
+PyObject * MGLSampler_get_border_color(MGLSampler * self) {
+	PyObject * r = PyFloat_FromDouble(self->border_color[0]);
+	PyObject * g = PyFloat_FromDouble(self->border_color[1]);
+	PyObject * b = PyFloat_FromDouble(self->border_color[2]);
+	PyObject * a = PyFloat_FromDouble(self->border_color[3]);
+	return PyTuple_Pack(4, r, g, b, a);
+}
+
+int MGLSampler_set_border_color(MGLSampler * self, PyObject * value) {
+	if (PyTuple_GET_SIZE(value) != 4) {
+		MGLError_Set("border_color must be a 4-tuple not %d-tuple", PyTuple_GET_SIZE(value));
+		return -1;
+	}
+
+	float r = PyFloat_AsDouble(PyTuple_GET_ITEM(value, 0));
+	float g = PyFloat_AsDouble(PyTuple_GET_ITEM(value, 1));
+	float b = PyFloat_AsDouble(PyTuple_GET_ITEM(value, 2));
+	float a = PyFloat_AsDouble(PyTuple_GET_ITEM(value, 3));
+
+	if (PyErr_Occurred()) {
+		MGLError_Set("the border_color is invalid");
+		return -1;
+	}
+
+	self->border_color[0] = r;
+	self->border_color[1] = g;
+	self->border_color[2] = b;
+	self->border_color[3] = a;
+
+	const GLMethods & gl = self->context->gl;
+	gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
+	gl.SamplerParameterfv(self->sampler_obj, GL_TEXTURE_BORDER_COLOR, (GLfloat*)&self->border_color);
+
+	return 0;
+}
+
+PyObject * MGLSampler_get_min_lod(MGLSampler * self) {
+	return PyFloat_FromDouble(self->min_lod);
+}
+
+int MGLSampler_set_min_lod(MGLSampler * self, PyObject * value) {
+	self->min_lod = PyFloat_AsDouble(value);
+
+	const GLMethods & gl = self->context->gl;
+	gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_MIN_LOD, self->min_lod);
+
+	return 0;
+}
+
+PyObject * MGLSampler_get_max_lod(MGLSampler * self) {
+	return PyFloat_FromDouble(self->max_lod);
+}
+
+int MGLSampler_set_max_lod(MGLSampler * self, PyObject * value) {
+	self->max_lod = PyFloat_AsDouble(value);
+
+	const GLMethods & gl = self->context->gl;
+	gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_MAX_LOD, self->max_lod);
+
+	return 0;
+}
+
 PyGetSetDef MGLSampler_tp_getseters[] = {
 	{(char *)"repeat_x", (getter)MGLSampler_get_repeat_x, (setter)MGLSampler_set_repeat_x, 0, 0},
 	{(char *)"repeat_y", (getter)MGLSampler_get_repeat_y, (setter)MGLSampler_set_repeat_y, 0, 0},
+	{(char *)"repeat_z", (getter)MGLSampler_get_repeat_z, (setter)MGLSampler_set_repeat_z, 0, 0},
 	{(char *)"filter", (getter)MGLSampler_get_filter, (setter)MGLSampler_set_filter, 0, 0},
 	{(char *)"compare_func", (getter)MGLSampler_get_compare_func, (setter)MGLSampler_set_compare_func, 0, 0},
 	{(char *)"anisotropy", (getter)MGLSampler_get_anisotropy, (setter)MGLSampler_set_anisotropy, 0, 0},
+	{(char *)"border_color", (getter)MGLSampler_get_border_color, (setter)MGLSampler_set_border_color, 0, 0},
+	{(char *)"min_lod", (getter)MGLSampler_get_min_lod, (setter)MGLSampler_set_min_lod, 0, 0},
+	{(char *)"max_lod", (getter)MGLSampler_get_max_lod, (setter)MGLSampler_set_max_lod, 0, 0},
 	{0},
 };
 

@@ -16,6 +16,9 @@ class Sampler:
         Samplers are bound to a texture unit and not a texture itself. Be careful with leaving
         samplers bound to texture units as it can cause texture incompletness issues
         (the texture bind is ignored).
+
+        Sampler bindings do clear automatically between every frame so a texture unit
+        need at least one bind/use per frame.
     '''
 
     __slots__ = ['mglo', '_glo', 'ctx', 'extra']
@@ -83,11 +86,30 @@ class Sampler:
                 # Disable texture repeat (GL_CLAMP_TO_EDGE)
                 sampler.repeat_y = False
         '''
-        return self.mglo.repeat_x
+        return self.mglo.repeat_y
 
     @repeat_y.setter
     def repeat_y(self, value: bool):
         self.mglo.repeat_y = value
+
+    @property
+    def repeat_z(self) -> bool:
+        '''
+            bool: The z repeat flag for the sampler (Default ``True``)
+
+            Example::
+
+                # Enable texture repeat (GL_REPEAT)
+                sampler.repeat_z = True
+
+                # Disable texture repeat (GL_CLAMP_TO_EDGE)
+                sampler.repeat_z = False
+        '''
+        return self.mglo.repeat_z
+
+    @repeat_z.setter
+    def repeat_z(self, value: bool):
+        self.mglo.repeat_z = value
 
     @property
     def filter(self) -> Tuple[int, int]:
@@ -159,3 +181,45 @@ class Sampler:
     @anisotropy.setter
     def anisotropy(self, value: float):
         self.mglo.anisotropy = value
+
+    @property
+    def border_color(self):
+        '''
+            border_color (tuple) – The (r, g, b, a) color for the texture border (Default ``(0.0, 0.0, 0.0, 0.0)``)
+            When setting this value the ``repeat_`` values are overriden setting the texture wrap to return
+            the border color when outside [0, 1] range.
+
+            Example::
+
+                # Red border color
+                sampler.border_color = (1.0, 0.0, 0.0, 0.0)
+        '''
+        return self.mglo.border_color
+
+    @border_color.setter
+    def border_color(self, value):
+        self.mglo.border_color = value
+
+    @property
+    def min_lod(self):
+        '''
+            float: Minimum level-of-detail parameter (Default ``-1000.0``).
+                   This floating-point value limits the selection of highest resolution mipmap (lowest mipmap level)
+        '''
+        return self.mglo.min_lod
+
+    @min_lod.setter
+    def min_lod(self, value):
+        self.mglo.min_lod = value
+
+    @property
+    def max_lod(self):
+        '''
+            float: Minimum level-of-detail parameter (Default ``1000.0``).
+                   This floating-point value limits the selection of the lowest resolution mipmap (highest mipmap level)
+        '''
+        return self.mglo.max_lod
+
+    @max_lod.setter
+    def max_lod(self, value):
+        self.mglo.max_lod = value
