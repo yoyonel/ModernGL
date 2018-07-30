@@ -3,7 +3,7 @@ import platform
 import re
 import sys
 
-from setuptools import Extension, find_packages, setup
+from setuptools import Extension, setup
 
 # pylint: disable=C0103, W0212
 
@@ -139,11 +139,8 @@ setup(
     license='MIT',
     classifiers=classifiers,
     keywords=keywords,
-    packages=find_packages(),
+    packages=['moderngl'],
     install_requires=install_requires,
     ext_modules=[mgl],
     platforms=['any'],
-    python_requires='>=3.4',
-    setup_requires=['pytest-runner'],
-    tests_require=['pytest'],
 )
