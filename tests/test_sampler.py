@@ -4,14 +4,6 @@ import moderngl
 
 from common import get_context
 
-def checkerror(func):
-    def wrapper(*args, **kwargs):
-        _ = get_context().error
-        func(*args, **kwargs)
-        err = get_context().error
-        assert err == 'GL_NO_ERROR', "Error: %s" % err
-    return wrapper
-
 
 class TestCase(unittest.TestCase):
 
@@ -19,13 +11,11 @@ class TestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.ctx = get_context()
 
-    @checkerror
     def test_create(self):
         sampler = self.ctx.sampler()
         sampler.use(location=0)
         sampler.clear(location=0)
 
-    @checkerror
     def test_defaults(self):
         sampler = self.ctx.sampler()
         self.assertEqual(sampler.anisotropy, 1.0)
@@ -38,7 +28,6 @@ class TestCase(unittest.TestCase):
         self.assertEqual(sampler.min_lod, -1000.0)
         self.assertEqual(sampler.max_lod, 1000.0)
 
-    @checkerror
     def test_prop_changes(self):
         sampler = self.ctx.sampler()
         # Change values
@@ -58,7 +47,6 @@ class TestCase(unittest.TestCase):
         sampler.repeat_z = False
         self.assertEqual((sampler.repeat_x, sampler.repeat_y, sampler.repeat_z), (False, False, False))
 
-    @checkerror
     def test_border_color(self):
         sampler = self.ctx.sampler()
 
@@ -73,7 +61,6 @@ class TestCase(unittest.TestCase):
             sampler.border_color = color
             self.assertEqual(sampler.border_color, color)
 
-    @checkerror
     def test_lod(self):
         sampler = self.ctx.sampler()
 
@@ -83,7 +70,6 @@ class TestCase(unittest.TestCase):
         sampler.max_lod = 500.0
         self.assertEqual(sampler.max_lod, 500.0)
 
-    @checkerror
     def test_clear_samplers(self):
         self.ctx.clear_samplers(start=0, end=5)
         self.ctx.clear_samplers(start=5, end=10)
