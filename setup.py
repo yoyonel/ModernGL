@@ -139,7 +139,7 @@ setup(
     license='MIT',
     classifiers=classifiers,
     keywords=keywords,
-    packages=['moderngl'],
+    packages=['moderngl', 'moderngl.program_members'],
     install_requires=install_requires,
     ext_modules=[mgl],
     platforms=['any'],
