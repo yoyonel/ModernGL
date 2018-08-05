@@ -2,7 +2,7 @@ import time
 
 import moderngl as mgl
 import numpy as np
-from PyQt5 import QtOpenGL, QtWidgets
+from PyQt5 import QtOpenGL, QtWidgets, QtCore
 
 
 class WindowInfo:
@@ -50,6 +50,10 @@ class ExampleWindow(QtOpenGL.QGLWidget):
         self.wnd.size = size
 
     def keyPressEvent(self, event):
+        # Quit when ESC is pressed
+        if event.key() == QtCore.Qt.Key_Escape:
+            QtCore.QCoreApplication.instance().quit()
+
         self.wnd.keys[event.nativeVirtualKey() & 0xFF] = True
 
     def keyReleaseEvent(self, event):
