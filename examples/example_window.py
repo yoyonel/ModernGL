@@ -51,7 +51,7 @@ class ExampleWindow(QtOpenGL.QGLWidget):
 
     def keyPressEvent(self, event):
         # Quit when ESC is pressed
-        if event.nativeVirtualKey() == 53:
+        if event.key() == QtCore.Qt.Key_Escape:
             QtCore.QCoreApplication.instance().quit()
 
         self.wnd.keys[event.nativeVirtualKey() & 0xFF] = True
