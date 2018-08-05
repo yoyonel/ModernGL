@@ -204,6 +204,8 @@ PyObject * MGLScope_end(MGLScope * self, PyObject * args) {
 	const GLMethods & gl = self->context->gl;
 	const int & flags = self->old_enable_flags;
 
+	self->context->enable_flags = self->old_enable_flags;
+
 	MGLFramebuffer_use(self->old_framebuffer);
 
 	if (flags & MGL_BLEND) {
