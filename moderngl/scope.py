@@ -9,9 +9,9 @@ class Scope:
 
         - Set the enable flags.
         - Bind the framebuffer.
-        - Assing textures to texture locations.
-        - Assing buffers to uniform buffers.
-        - Assing buffers to shader storage buffers.
+        - Assigning textures to texture locations.
+        - Assigning buffers to uniform buffers.
+        - Assigning buffers to shader storage buffers.
 
         Responsibilities on exit:
 
