@@ -46,7 +46,7 @@ Examples
 
     scope = ctx.scope(
         framebuffer=framebuffer1,
-        enable_flags=moderngl.BLEND,
+        enable_only=moderngl.BLEND,
         textures=[
             (texture1, 4),
             (texture2, 3),

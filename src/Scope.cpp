@@ -150,6 +150,9 @@ PyObject * MGLScope_begin(MGLScope * self, PyObject * args) {
 	const GLMethods & gl = self->context->gl;
 	const int & flags = self->enable_flags;
 
+	self->old_enable_flags = self->context->enable_flags;
+	self->context->enable_flags = self->enable_flags;
+
 	MGLFramebuffer_use(self->framebuffer);
 
 	for (int i = 0; i < self->num_textures; ++i) {
@@ -200,6 +203,8 @@ PyObject * MGLScope_end(MGLScope * self, PyObject * args) {
 
 	const GLMethods & gl = self->context->gl;
 	const int & flags = self->old_enable_flags;
+
+	self->context->enable_flags = self->old_enable_flags;
 
 	MGLFramebuffer_use(self->old_framebuffer);
 
