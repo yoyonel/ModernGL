@@ -341,8 +341,28 @@ class Fire(Example):
         self.vao_update_frame = self.ctx.simple_vertex_array(self.update_frame, self.vbo, 'in_vert')
         self.vao_render_tex = self.ctx.simple_vertex_array(self.render_tex, self.vbo, 'in_vert')
 
-        img = Image.open(local('data', 'fire_colors.png')).transpose(Image.FLIP_TOP_BOTTOM)
+        using_lut_image_for_fire_colors = True
+        if using_lut_image_for_fire_colors:
+            map_fire_lut = {
+                'fire_color': ('lut/fire_colors.png',),
+                'nih-image-fire1': ('lut/nih-image-fire1.png', True),
+                'HotRed': ('lut/HotRed.png', False),
+                'Amber': ('lut/Amber-1.png', True),
+                'fire-ncsa': ('lut/fire-ncsa.png', True),
+                'GreenFire': ('lut/GreenFire.png', False),
+                'fire_colors': ('lut/fire_colors.png', False),
+            }
+            lut_name = 'HotRed'
+            fire_lut_fn, transpose_img = map_fire_lut.get(lut_name, map_fire_lut['fire_colors'])
+            img = Image.open(local('data', fire_lut_fn)).convert('RGB')
+            if transpose_img:
+                img = img.transpose(Image.FLIP_LEFT_RIGHT)
+        else:
+            # else -> generate/load lut colors from const arrays
+            img = generate_image_fire_colors()
         self.texture_fire_colors = self.ctx.texture(img.size, 3, img.tobytes())
+        self.texture_fire_colors.repeat_x = False
+        self.texture_fire_colors.repeat_y = False
 
         img = Image.open(local('data', 'fire.jpg')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
         self.texture_src_fire_map = self.ctx.texture(img.size, 3, img.tobytes())
@@ -354,11 +374,6 @@ class Fire(Example):
 
         img = Image.open(local('data', 'fire_cooling_map.png')).transpose(Image.FLIP_TOP_BOTTOM)
         self.texture_cooling_map = self.ctx.texture(img.size, 1, img.tobytes())
-
-        img_fire_colors = generate_image_fire_colors()
-        self.texture_fire_colors = self.ctx.texture(img_fire_colors.size, 3, img_fire_colors.tobytes())
-        self.texture_fire_colors.repeat_x = False
-        self.texture_fire_colors.repeat_y = False
 
         try:
             self.update_frame['OffsetXY'].value = (1.0 / img.size[0], 1.0 / img.size[1])
