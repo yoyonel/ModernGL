@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import platform
 import re
 import sys
@@ -134,8 +133,8 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/cprogrammer1994/ModernGL',
-    author='Szabolcs Dombi',
-    author_email='cprogrammer1994@gmail.com',
+    author=['Szabolcs Dombi', 'ATTY Lionel'],
+    author_email=['cprogrammer1994@gmail.com', 'yoyonel@hotmail.com'],
     license='MIT',
     classifiers=classifiers,
     keywords=keywords,
