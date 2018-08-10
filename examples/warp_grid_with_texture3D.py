@@ -191,7 +191,6 @@ class WarpGridTex3D(Example):
         # Load datas (precomputed) from Pymunk warp grid simulation
         # https://stackoverflow.com/questions/17623523/can-i-stream-a-python-pickle-list-tuple-or-other-iterable-data-type
         grids_array = []
-        Path.mkdir(Path('/tmp/warp/'), exist_ok=True)
         #
         grid_size_x = 11
         grid_size_y = 13
@@ -236,7 +235,7 @@ class WarpGridTex3D(Example):
         self.fbo_final_render.use()
         if dt is None:
             try:
-                self.prog_hm['time'].value = self.wnd.time * 0.25   # 4 hz record
+                self.prog_hm['time'].value = self.wnd.time * 0.025   # 4 hz record
             except:
                 pass
         else:
@@ -247,8 +246,8 @@ class WarpGridTex3D(Example):
         self.render_grid()
 
     def render(self):
-        q_for_timer = self.ctx.query(time=True)
-        with q_for_timer:
+        # q_for_timer = self.ctx.query(time=True)
+        # with q_for_timer:
             # width, height = self.wnd.size
             #
             # angle = self.wnd.time * 0.20
