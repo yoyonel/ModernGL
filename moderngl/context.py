@@ -412,7 +412,9 @@ class Context:
 
     def enable_only(self, flags) -> None:
         '''
-            Enable flags.
+            Clears all existing flags applying new ones
+
+            Available flags:
 
             - :py:data:`moderngl.NOTHING`
             - :py:data:`moderngl.BLEND`
@@ -420,8 +422,16 @@ class Context:
             - :py:data:`moderngl.CULL_FACE`
             - :py:data:`moderngl.RASTERIZER_DISCARD`
 
+            Examples::
+
+                # Disable all flags
+                ctx.enable_only(moderngl.NOTHING)
+
+                # Ensure only depth testing and face culling is enabled
+                ctx.enable_only(moderngl.DEPTH_TEST | moderngl.CULL_FACE)
+
             Args:
-                flags (EnableFlag): The flags to enable. Unset flags will be disabled.
+                flags (EnableFlag): The flags to enable
         '''
 
         self.mglo.enable_only(flags)
@@ -431,6 +441,14 @@ class Context:
             Enable flags.
 
             For valid flags, please see :py:meth:`enable_only`.
+
+            Examples::
+
+                # Enable a single flag
+                ctx.enable(moderngl.DEPTH_TEST)
+
+                # Enable multiple flags
+                ctx.enable(moderngl.DEPTH_TEST | moderngl.CULL_FACE | moderngl.BLEND)
 
             Args:
                 flag (int): The flags to enable.
@@ -443,6 +461,14 @@ class Context:
             Disable flags.
 
             For valid flags, please see :py:meth:`enable_only`.
+
+            Examples::
+
+                # Only disable depth testing
+                ctx.disable(moderngl.DEPTH_TEST)
+
+                # Disable depth testing and face culling
+                ctx.disable(moderngl.DEPTH_TEST | moderngl.CULL_FACE)
 
             Args:
                 flag (int): The flags to disable.
