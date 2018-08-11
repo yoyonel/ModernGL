@@ -23,6 +23,7 @@ Attributes
 
 .. autoattribute:: ComputeShader.source
 .. autoattribute:: ComputeShader.glo
+.. autoattribute:: ComputeShader.extra
 
 .. toctree::
     :maxdepth: 2

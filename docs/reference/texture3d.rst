@@ -36,6 +36,7 @@ Attributes
 .. autoattribute:: Texture3D.dtype
 .. autoattribute:: Texture3D.components
 .. autoattribute:: Texture3D.glo
+.. autoattribute:: Texture3D.extra
 
 .. toctree::
     :maxdepth: 2

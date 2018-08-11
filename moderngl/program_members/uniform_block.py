@@ -13,7 +13,7 @@ class UniformBlock:
         self._index = None
         self._size = None
         self._name = None
-        self.extra = None
+        self.extra = None  #: Any - Attribute for storing user defined objects
         raise TypeError()
 
     def __repr__(self):

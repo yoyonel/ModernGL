@@ -41,6 +41,7 @@ Attributes
 .. autoattribute:: Texture.samples
 .. autoattribute:: Texture.depth
 .. autoattribute:: Texture.glo
+.. autoattribute:: Texture.extra
 
 .. toctree::
     :maxdepth: 2

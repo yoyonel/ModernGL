@@ -12,7 +12,7 @@ class Query:
         self.mglo = None
         self.crender = None  #: ConditionalRender: Can be used in a ``with`` statement.
         self.ctx = None
-        self.extra = None
+        self.extra = None  #: Any - Attribute for storing user defined objects
         raise TypeError()
 
     def __repr__(self):

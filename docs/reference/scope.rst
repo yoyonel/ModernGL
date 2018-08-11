@@ -12,6 +12,11 @@ Create
 .. automethod:: Context.scope(framebuffer, enable_only=None, textures=(), uniform_buffers=(), storage_buffers=()) -> Scope
     :noindex:
 
+Attributes
+----------
+
+.. autoattribute:: Scope.extra
+
 Examples
 --------
 

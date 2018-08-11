@@ -68,7 +68,7 @@ class Context:
         self._info = None
         self.version_code = None  #: int: The OpenGL version code. Reports ``410`` for OpenGL 4.1
         self.fbo = None  #: Framebuffer: The active framebuffer. Set every time ``Framebuffer.use()`` is called.
-        self.extra = None
+        self.extra = None  #: Any - Attribute for storing user defined objects
         raise TypeError()
 
     def __repr__(self):
@@ -1062,6 +1062,7 @@ def create_context(require=None) -> Context:
     ctx.fbo = ctx.detect_framebuffer()
     ctx.mglo.fbo = ctx.fbo.mglo
     ctx._info = None
+    ctx.extra = None
 
     if require is not None and ctx.version_code < require:
         raise ValueError('The version required is not provided')
@@ -1097,6 +1098,7 @@ def create_standalone_context(require=None, **settings) -> 'Context':
     ctx._screen = None
     ctx.fbo = None
     ctx._info = None
+    ctx.extra = None
 
     if require is not None and ctx.version_code < require:
         raise ValueError('Requested OpenGL version {}, got version {}'.format(

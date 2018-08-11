@@ -68,6 +68,7 @@ Attributes
 .. autoattribute:: Context.patch_vertices
 .. autoattribute:: Context.error
 .. autoattribute:: Context.info
+.. autoattribute:: Context.extra
 
 Examples
 --------

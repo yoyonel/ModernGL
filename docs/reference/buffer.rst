@@ -58,6 +58,7 @@ Attributes
 .. autoattribute:: Buffer.size
 .. autoattribute:: Buffer.dynamic
 .. autoattribute:: Buffer.glo
+.. autoattribute:: Buffer.extra
 
 .. toctree::
     :maxdepth: 2
