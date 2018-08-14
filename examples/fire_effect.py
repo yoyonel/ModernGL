@@ -502,8 +502,12 @@ class Fire(Example):
         #
         # logger.info(f"Query on time elapsed (GPU side): {q_for_timer.elapsed/1000000.0} ms")
 
+        # Synch loop for reaching 60hz (animation of fire is set to work on this framerate)
         cur_time = time.time()
         dt = cur_time - self.prev_time
+        while dt < 1.0/60.0:
+            cur_time = time.time()
+            dt = cur_time - self.prev_time
         self.cur_time += dt
         self.prev_time = cur_time
 
