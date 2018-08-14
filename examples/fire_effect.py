@@ -385,7 +385,10 @@ class Fire(Example):
 
         # Ping Pong Buffers
         self.textures = [
-            self.ctx.texture(fire_size, 1, dtype='f1')
+            # TODO: side effect ! Can't use a texture with 1 component (Red for example)
+            # without interfering with ctx.screen framebuffer (set to force 1-RED)
+            # https://github.com/cprogrammer1994/ModernGL/issues/233
+            self.ctx.texture(fire_size, components=3, dtype='f1')
             for _ in range(2)
         ]
         # Textures (attach to ping-pong frame buffer object) attributes
@@ -502,8 +505,12 @@ class Fire(Example):
         #
         # logger.info(f"Query on time elapsed (GPU side): {q_for_timer.elapsed/1000000.0} ms")
 
+        # Synch loop for reaching 60hz (animation of fire is set to work on this framerate)
         cur_time = time.time()
         dt = cur_time - self.prev_time
+        while dt < 1.0/60.0:
+            cur_time = time.time()
+            dt = cur_time - self.prev_time
         self.cur_time += dt
         self.prev_time = cur_time
 

@@ -196,11 +196,12 @@ class Blur(Example):
         # OpenGL Timer Query
         q_for_timer = self.ctx.query(time=True)
         with q_for_timer:
-            # radius = abs(sin(self.cur_time) * 8.0)
-            radius = 3.0
+            radius = abs(sin(self.cur_time) * 32.0)
+            # radius = 3.0
+            # print(f"radius: {radius}")
 
-            # final_blur = self.one_shot_blur(radius)
-            final_blur = self.continuous_blur(radius)
+            final_blur = self.one_shot_blur(radius)
+            # final_blur = self.continuous_blur(radius)
 
             self.ctx.screen.use()
             self.ctx.viewport = self.wnd.viewport
