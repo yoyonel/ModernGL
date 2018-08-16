@@ -25,6 +25,7 @@ Attributes
 .. autoattribute:: Program.geometry_vertices
 .. autoattribute:: Program.subroutines
 .. autoattribute:: Program.glo
+.. autoattribute:: Program.extra
 
 Examples
 --------

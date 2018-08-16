@@ -20,6 +20,7 @@ Attributes
 .. autoattribute:: Uniform.array_length
 .. autoattribute:: Uniform.name
 .. autoattribute:: Uniform.value
+.. autoattribute:: Uniform.extra
 
 .. toctree::
     :maxdepth: 2

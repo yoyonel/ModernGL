@@ -19,6 +19,7 @@ Attributes
 .. autoattribute:: Query.primitives
 .. autoattribute:: Query.elapsed
 .. autoattribute:: Query.crender
+.. autoattribute:: Query.extra
 
 Examples
 --------

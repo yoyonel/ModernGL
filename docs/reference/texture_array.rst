@@ -36,6 +36,7 @@ Attributes
 .. autoattribute:: TextureArray.dtype
 .. autoattribute:: TextureArray.components
 .. autoattribute:: TextureArray.glo
+.. autoattribute:: TextureArray.extra
 
 .. toctree::
     :maxdepth: 2

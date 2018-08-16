@@ -30,6 +30,7 @@ Attributes
 .. autoattribute:: TextureCube.swizzle
 .. autoattribute:: TextureCube.anisotropy
 .. autoattribute:: TextureCube.glo
+.. autoattribute:: TextureCube.extra
 
 .. toctree::
     :maxdepth: 2

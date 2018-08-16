@@ -30,3 +30,4 @@ Attributes
 .. autoattribute:: Sampler.border_color
 .. autoattribute:: Sampler.min_lod
 .. autoattribute:: Sampler.max_lod
+.. autoattribute:: Sampler.extra

@@ -13,7 +13,7 @@ class Varying:
         self._array_length = None
         self._dimension = None
         self._name = None
-        self.extra = None
+        self.extra = None  #: Any - Attribute for storing user defined objects
         raise TypeError()
 
     def __repr__(self):

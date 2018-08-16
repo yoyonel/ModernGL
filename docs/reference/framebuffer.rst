@@ -37,6 +37,7 @@ Attributes
 .. autoattribute:: Framebuffer.color_attachments
 .. autoattribute:: Framebuffer.depth_attachment
 .. autoattribute:: Framebuffer.glo
+.. autoattribute:: Framebuffer.extra
 
 .. toctree::
     :maxdepth: 2

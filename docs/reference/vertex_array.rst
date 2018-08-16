@@ -38,6 +38,7 @@ Attributes
 .. autoattribute:: VertexArray.vertices
 .. autoattribute:: VertexArray.subroutines
 .. autoattribute:: VertexArray.glo
+.. autoattribute:: VertexArray.extra
 
 .. toctree::
     :maxdepth: 2

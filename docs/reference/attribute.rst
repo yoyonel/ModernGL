@@ -11,6 +11,7 @@ Attribute
 .. autoattribute:: Attribute.dimension
 .. autoattribute:: Attribute.shape
 .. autoattribute:: Attribute.name
+.. autoattribute:: Attribute.extra
 
 .. toctree::
     :maxdepth: 2

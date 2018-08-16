@@ -26,6 +26,7 @@ Attributes
 .. autoattribute:: Renderbuffer.depth
 .. autoattribute:: Renderbuffer.dtype
 .. autoattribute:: Renderbuffer.glo
+.. autoattribute:: Renderbuffer.extra
 
 .. toctree::
     :maxdepth: 2

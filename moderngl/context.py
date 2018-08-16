@@ -68,7 +68,7 @@ class Context:
         self._info = None
         self.version_code = None  #: int: The OpenGL version code. Reports ``410`` for OpenGL 4.1
         self.fbo = None  #: Framebuffer: The active framebuffer. Set every time ``Framebuffer.use()`` is called.
-        self.extra = None
+        self.extra = None  #: Any - Attribute for storing user defined objects
         raise TypeError()
 
     def __repr__(self):
@@ -507,6 +507,7 @@ class Context:
         res._color_attachments = None
         res._depth_attachment = None
         res.ctx = self
+        res.extra = None
         return res
 
     def buffer(self, data=None, *, reserve=0, dynamic=False) -> Buffer:
@@ -531,6 +532,7 @@ class Context:
         res.mglo, res._size, res._glo = self.mglo.buffer(data, reserve, dynamic)
         res._dynamic = dynamic
         res.ctx = self
+        res.extra = None
         return res
 
     def texture(self, size, components, data=None, *, samples=0, alignment=1, dtype='f1') -> 'Texture':
@@ -559,6 +561,7 @@ class Context:
         res._dtype = dtype
         res._depth = False
         res.ctx = self
+        res.extra = None
         return res
 
     def texture_array(self, size, components, data=None, *, alignment=1, dtype='f1') -> 'TextureArray':
@@ -585,6 +588,7 @@ class Context:
         res._components = components
         res._dtype = dtype
         res.ctx = self
+        res.extra = None
         return res
 
     def texture3d(self, size, components, data=None, *, alignment=1, dtype='f1') -> 'Texture3D':
@@ -607,6 +611,7 @@ class Context:
         res = Texture3D.__new__(Texture3D)
         res.mglo, res._glo = self.mglo.texture3d(size, components, data, alignment, dtype)
         res.ctx = self
+        res.extra = None
         return res
 
     def texture_cube(self, size, components, data=None, *, alignment=1, dtype='f1') -> 'TextureCube':
@@ -632,6 +637,7 @@ class Context:
         res._components = components
         res._dtype = dtype
         res.ctx = self
+        res.extra = None
         return res
 
     def depth_texture(self, size, data=None, *, samples=0, alignment=4) -> 'Texture':
@@ -658,6 +664,7 @@ class Context:
         res._dtype = 'f4'
         res._depth = True
         res.ctx = self
+        res.extra = None
         return res
 
     def vertex_array(self, program, content,
@@ -688,6 +695,7 @@ class Context:
         res._index_buffer = index_buffer
         res._index_element_size = index_element_size
         res.ctx = self
+        res.extra = None
         return res
 
     def simple_vertex_array(self, program, buffer, *attributes,
@@ -772,6 +780,7 @@ class Context:
 
         res._members = members
         res.ctx = self
+        res.extra = None
         return res
 
     def query(self, *, samples=False, any_samples=False, time=False, primitives=False) -> 'Query':
@@ -794,6 +803,7 @@ class Context:
             res.crender.mglo = res.mglo
 
         res.ctx = self
+        res.extra = None
         return res
 
     def scope(self, framebuffer, enable_only=None, *, textures=(), uniform_buffers=(), storage_buffers=()) -> 'Scope':
@@ -817,6 +827,7 @@ class Context:
         res = Scope.__new__(Scope)
         res.mglo = self.mglo.scope(framebuffer.mglo, enable_only, textures, uniform_buffers, storage_buffers)
         res.ctx = self
+        res.extra = None
         return res
 
     def simple_framebuffer(self, size, components=4, *, samples=0, dtype='f1') -> 'Framebuffer':
@@ -865,6 +876,7 @@ class Context:
         res._color_attachments = tuple(color_attachments)
         res._depth_attachment = depth_attachment
         res.ctx = self
+        res.extra = None
         return res
 
     def renderbuffer(self, size, components=4, *, samples=0, dtype='f1') -> 'Renderbuffer':
@@ -892,6 +904,7 @@ class Context:
         res._dtype = dtype
         res._depth = False
         res.ctx = self
+        res.extra = None
         return res
 
     def depth_renderbuffer(self, size, *, samples=0) -> 'Renderbuffer':
@@ -917,6 +930,7 @@ class Context:
         res._dtype = 'f4'
         res._depth = True
         res.ctx = self
+        res.extra = None
         return res
 
     def compute_shader(self, source) -> 'ComputeShader':
@@ -948,6 +962,7 @@ class Context:
 
         res._members = members
         res.ctx = self
+        res.extra = None
         return res
 
     def sampler(self, repeat_x=True, repeat_y=True, repeat_z=True, filter=None, anisotropy=1.0,
@@ -984,6 +999,7 @@ class Context:
             res.border_color = border_color
         res.min_lod = min_lod
         res.max_lod = max_lod
+        res.extra = None
         return res
 
     def clear_samplers(self, start=0, end=-1):
@@ -1062,6 +1078,7 @@ def create_context(require=None) -> Context:
     ctx.fbo = ctx.detect_framebuffer()
     ctx.mglo.fbo = ctx.fbo.mglo
     ctx._info = None
+    ctx.extra = None
 
     if require is not None and ctx.version_code < require:
         raise ValueError('The version required is not provided')
@@ -1097,6 +1114,7 @@ def create_standalone_context(require=None, **settings) -> 'Context':
     ctx._screen = None
     ctx.fbo = None
     ctx._info = None
+    ctx.extra = None
 
     if require is not None and ctx.version_code < require:
         raise ValueError('Requested OpenGL version {}, got version {}'.format(
