@@ -55,9 +55,10 @@ class TestCase(unittest.TestCase):
         rbo1 = self.ctx.renderbuffer((4, 4), dtype='f1')
         rbo2 = self.ctx.renderbuffer((4, 4))
         rbo3 = self.ctx.renderbuffer((4, 4))
+        rbo3_depth = self.ctx.depth_renderbuffer((4, 4))
         fbo1 = self.ctx.framebuffer(rbo1)
         fbo2 = self.ctx.framebuffer(rbo2)
-        fbo3 = self.ctx.framebuffer(rbo3)
+        fbo3 = self.ctx.framebuffer(rbo3, depth_attachment=rbo3_depth)
         fbo4 = self.ctx.framebuffer([rbo1, rbo2, rbo3])
 
         fbo1.clear(1.0, 0.0, 0.0, 1.0)

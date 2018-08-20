@@ -87,6 +87,11 @@ class TestCase(unittest.TestCase):
         tex.read_into(buf)
         self.assertEqual(buf.read(), pixels)
 
+    def test_depth_texture_read(self):
+        pixels = b'\x00\x00\x00\x00' * 8 * 8
+        tex = self.ctx.depth_texture((8, 8), data=pixels)
+        self.assertEqual(tex.read(), pixels)
+
     def test_texture_write_1(self):
         pixels1 = b'\x00\x00\x00' * 8 * 8
         pixels2 = b'\xff\xff\xff' * 8 * 8
