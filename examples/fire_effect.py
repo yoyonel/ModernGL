@@ -369,7 +369,6 @@ class Fire(Example):
         # self.texture_fire_map.build_mipmaps()
         self.vbo_fire_map = self.ctx.framebuffer(self.texture_fire_map)
         self.vbo_fire_map.use()
-        # self.vbo_fire_map.clear(0.0, 0.0, 0.0)
 
         img = Image.open(local('data', 'fire_cooling_map.png')).transpose(Image.FLIP_TOP_BOTTOM)
         self.texture_cooling_map = self.ctx.texture(img.size, 1, img.tobytes())
@@ -380,7 +379,7 @@ class Fire(Example):
             logger.warning("", exc_info=True)
 
         # fire_size = self.wnd.size
-        fire_size = np.array(self.wnd.size) >> 1
+        fire_size = tuple(np.array(self.wnd.size) >> 1)
         # fire_size = (64, 64)
 
         # Ping Pong Buffers
@@ -418,18 +417,6 @@ class Fire(Example):
         ]
 
         self.id_buffer = 0
-        id_buffer_ping = self.id_buffer
-        id_buffer_pong = 1 - id_buffer_ping
-
-        fbo_pong = self.fbos[id_buffer_pong]
-        fbo_pong.use()
-        fbo_pong.clear(0.0, 0.0, 0.0)
-
-        fbo_ping = self.fbos[id_buffer_ping]
-        fbo_ping.use()
-        fbo_ping.clear(0.0, 0.0, 0.0)
-        # self.texture_fire_map.use()
-        # self.vao_final_render.render(moderngl.TRIANGLE_STRIP)
 
         self.cur_time = 0
         self.prev_time = time.time()
@@ -483,7 +470,6 @@ class Fire(Example):
 
             # update/render source fire map
             self.vbo_fire_map.use()
-            self.vbo_fire_map.clear(0.0, 0.0, 0.0)
             # static sources fires
             self.texture_src_fire_map.use()
             # particles system for Sparkles fire
@@ -497,7 +483,6 @@ class Fire(Example):
             # show the result on 'screen' (main context)
             self.ctx.screen.use()
             self.ctx.viewport = self.wnd.viewport
-            self.ctx.clear(1.0, 1.0, 1.0)
             # self.warp_grid.tex_final_render.use(0)    # Work
             tex_on_fire_updated.use(0)
             self.texture_fire_colors.use(1)
