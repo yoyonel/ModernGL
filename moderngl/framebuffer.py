@@ -187,7 +187,6 @@ class Framebuffer:
             Returns:
                 bytes
         '''
-
         return self.mglo.read(viewport, components, attachment, alignment, dtype)
 
     def read_into(self, buffer, viewport=None, components=3, *,
