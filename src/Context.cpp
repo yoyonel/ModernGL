@@ -1372,7 +1372,7 @@ void MGLContext_Initialize(MGLContext * self) {
 
 		framebuffer->framebuffer_obj = 0;
 
-		framebuffer->draw_buffers_len = 0;
+		framebuffer->draw_buffers_len = 1;
 		framebuffer->draw_buffers = new unsigned[1];
 
 		// According to glGet docs:
