@@ -27,16 +27,13 @@ __all__ = ['Context', 'create_context', 'create_standalone_context',
            'DEFAULT_BLENDING', 'PREMULTIPLIED_ALPHA',
            'Error']
 
-
 Error = mgl.Error
-
 
 NOTHING = 0
 BLEND = 1
 DEPTH_TEST = 2
 CULL_FACE = 4
 RASTERIZER_DISCARD = 8
-
 
 ZERO = 0x0000
 ONE = 0x0001
@@ -48,7 +45,6 @@ DST_ALPHA = 0x0304
 ONE_MINUS_DST_ALPHA = 0x0305
 DST_COLOR = 0x0306
 ONE_MINUS_DST_COLOR = 0x0307
-
 
 DEFAULT_BLENDING = (SRC_ALPHA, ONE_MINUS_SRC_ALPHA)
 PREMULTIPLIED_ALPHA = (SRC_ALPHA, ONE)

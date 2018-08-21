@@ -184,6 +184,7 @@ class RenderToTexture(Example):
         self.ctx.screen.use()
         self.ctx.viewport = (0, 0, self.wnd.viewport[2] // 4, self.wnd.viewport[3] // 4)
         # np_texture_depth = np.frombuffer(self.texture_depth.read(), dtype='f4').reshape(self.texture_depth.size)
+        # TODO: Bad ! Double transfers GPU -> CPU -> GPU ... :/
         texture = self.ctx.texture(self.size_tex, 1, self.texture_depth.read(), dtype='f4')
         texture.use(0)
         # self.texture_depth.use(0)
