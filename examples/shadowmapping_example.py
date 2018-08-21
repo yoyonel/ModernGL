@@ -106,27 +106,32 @@ class ShadowMappingSample(Example):
                     } else {
                         //vec4 ShadowCoord = v_ShadowCoord / v_ShadowCoord.w;
                         vec4 ShadowCoord = v_ShadowCoord;
-                        const float bias = 0.0005;
-                        bool shadowed = textureProj(Texture, ShadowCoord.xyw).r < (ShadowCoord.z - bias) / ShadowCoord.w;
+                        
+                        // const float bias = 0.005;
+                        float bias = 0.005*tan(acos(cosTheta));
+                        bias = clamp(bias, 0,0.01);
+                        
                         float visibility = 1.0;
-                        const int nb_samples = 8;
+                        
+                        const int nb_samples = 4;
+                        
                         // Sample the shadow map vnb_samples` times
                         for (int i=0;i<nb_samples;i++){
                             // use either :
                             //  - Always the same samples.
                             //    Gives a fixed pattern in the shadow, but no noise
-                            int index = i;
+                            // int index = i;
                             //  - A random sample, based on the pixel's screen location. 
                             //    No banding, but the shadow moves with the camera, which looks weird.
                             // int index = int(16.0*random(gl_FragCoord.xyy, i))%16;
                             //  - A random sample, based on the pixel's position in world space.
                             //    The position is rounded to the millimeter to avoid too much aliasing
-                            // int index = int(16.0*random(floor(Position_worldspace.xyz*1000.0), i))%16;
+                            int index = int(16.0*random(floor(v_vert.xyz*1000.0), i))%16;
                             
                             // being fully in the shadow will eat up 4*0.2 = 0.8
                             // 0.2 potentially remain, which is quite dark.
                             //visibility -= 0.2*(1.0 - textureProj( Texture, vec3(ShadowCoord.xy/ShadowCoord.w, (ShadowCoord.z-bias)/ShadowCoord.w)).r);
-                            visibility -= 1.0/nb_samples * (texture(Texture, ShadowCoord.xy/ShadowCoord.w + poissonDisk[index]/400.0).r < (ShadowCoord.z - bias) / ShadowCoord.w ? 1.0: 0.0);
+                            visibility -= 1.0/nb_samples * (texture(Texture, ShadowCoord.xy/ShadowCoord.w + poissonDisk[index]/700.0).r < (ShadowCoord.z - bias) / ShadowCoord.w ? 1.0: 0.0);
                         }
                         lum *= visibility;
                         visibility = 1.0;
@@ -188,12 +193,12 @@ class ShadowMappingSample(Example):
         self.texture1 = self.ctx.texture(img.size, 3, img.tobytes())
         self.texture1.build_mipmaps()
 
-        self.texture2 = self.ctx.texture((1, 1), 3)     # TODO: (1) composents influenced the bug below
+        self.texture2 = self.ctx.texture((1, 1), 3)  # TODO: (1) composents influenced the bug below
         # depth_attachment = self.ctx.depth_renderbuffer(self.wnd.size)
         self.fbo = self.ctx.framebuffer(color_attachments=[self.texture2])
 
         ############################################################################################################
-        shadow_size = tuple([1 << 11] * 2)
+        shadow_size = tuple([1 << 9] * 2)
         print(f"Depth texture size: {shadow_size}")
 
         # self.tex_depth = self.ctx.depth_texture(size=shadow_size)
@@ -216,17 +221,18 @@ class ShadowMappingSample(Example):
 
         cam_proj = Matrix44.perspective_projection(45.0, self.wnd.ratio, 1.0, 100.0)
         scene_position = (47.697, -8.147, 24.498)
-        lookat = Matrix44.look_at(
+        cam_lookat = Matrix44.look_at(
             scene_position,
             (0.0, 0.0, 8.0),
             (0.0, 0.0, 1.0),
         )
 
-        rotate = Matrix44.from_z_rotation(self.wnd.time)
+        cam_rotate = Matrix44.from_z_rotation(self.wnd.time * 0.5)
 
-        self.mvp.write((cam_proj * lookat * rotate).astype('f4').tobytes())
+        self.mvp.write((cam_proj * cam_lookat * cam_rotate).astype('f4').tobytes())
 
         light_rotate = Matrix44.from_z_rotation(-np.sin(self.wnd.time * 2) * 0.50 + 0.2)
+        light_rotate = Matrix44.identity()
         light_pos = light_rotate * Vector3((-60.69, -40.14, 52.49))
         self.light.value = tuple(light_pos)
         bias_matrix = Matrix44(
