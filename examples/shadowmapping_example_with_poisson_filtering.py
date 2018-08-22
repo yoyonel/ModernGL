@@ -10,16 +10,15 @@ Links:
 - https://learnopengl.com/Advanced-Lighting/Shadows/Shadow-Mapping
 - https://learnopengl.com/Advanced-OpenGL/Depth-testing
 """
+import os
+
 import moderngl
 import numpy as np
 from objloader import Obj
-import os
 from PIL import Image
-from pyrr import Matrix44, matrix44
+from pyrr import Matrix44
 from pyrr import Vector3
-from pyrr import Vector4
-#
-from examples.draw_frustum import DrawFrustumExample
+
 from examples.example_window import Example, run_example
 
 
@@ -27,21 +26,9 @@ def local(*path):
     return os.path.join(os.path.dirname(__file__), *path)
 
 
-def bbox2_3D(img):
-    r = np.any(img, axis=(1, 2))
-    c = np.any(img, axis=(0, 2))
-    z = np.any(img, axis=(0, 1))
-
-    rmin, rmax = np.where(r)[0][[0, -1]]
-    cmin, cmax = np.where(c)[0][[0, -1]]
-    zmin, zmax = np.where(z)[0][[0, -1]]
-
-    return rmin, rmax, cmin, cmax, zmin, zmax
-
-
-class ShadowMappingSample(Example):
+class ShadowMappingWithPoissonFilteringSample(Example):
     def __init__(self):
-        self.ctx = moderngl.create_context(require=330)
+        self.ctx = moderngl.create_context()
 
         self.prog = self.ctx.program(
             vertex_shader='''
@@ -83,22 +70,69 @@ class ShadowMappingSample(Example):
                 in vec2 v_text;
                 in vec4 v_ShadowCoord;
 
-                out vec4 f_color;                
+                out vec4 f_color;
+                
+                // https://github.com/opengl-tutorials/ogl/blob/master/tutorial16_shadowmaps/ShadowMapping.fragmentshader
+                vec2 poissonDisk[16] = vec2[]( 
+                    vec2( -0.94201624, -0.39906216 ), 
+                    vec2( 0.94558609, -0.76890725 ), 
+                    vec2( -0.094184101, -0.92938870 ), 
+                    vec2( 0.34495938, 0.29387760 ), 
+                    vec2( -0.91588581, 0.45771432 ), 
+                    vec2( -0.81544232, -0.87912464 ), 
+                    vec2( -0.38277543, 0.27676845 ), 
+                    vec2( 0.97484398, 0.75648379 ), 
+                    vec2( 0.44323325, -0.97511554 ), 
+                    vec2( 0.53742981, -0.47373420 ), 
+                    vec2( -0.26496911, -0.41893023 ), 
+                    vec2( 0.79197514, 0.19090188 ), 
+                    vec2( -0.24188840, 0.99706507 ), 
+                    vec2( -0.81409955, 0.91437590 ), 
+                    vec2( 0.19984126, 0.78641367 ), 
+                    vec2( 0.14383161, -0.14100790 ) 
+                );
+                
+                // Returns a random number based on a vec3 and an int.
+                float random(vec3 seed, int i){
+                    vec4 seed4 = vec4(seed,i);
+                    float dot_product = dot(seed4, vec4(12.9898,78.233,45.164,94.673));
+                    return fract(sin(dot_product) * 43758.5453);
+                }
 
-                float compute_shadow(in float cosTheta) {
+                float compute_shadow_with_poisson_filtering(in float cosTheta) {
                     //vec4 ShadowCoord = v_ShadowCoord / v_ShadowCoord.w;
                     vec4 ShadowCoord = v_ShadowCoord;
                     
-                    vec2 ShadowCoord_LightView = ShadowCoord.xy/ShadowCoord.w;
-                    float z_from_light = texture(Texture, ShadowCoord_LightView).r;
-                    
                     // const float bias = 0.005;
-                    float bias = 0.005*tan(acos(cosTheta));
-                    bias = clamp(bias, 0,0.01);                    
-                    float z_from_cam = (ShadowCoord.z - bias) / ShadowCoord.w;
+                    float bias = 0.50*tan(acos(cosTheta));
+                    bias = clamp(bias, 0, 0.50);
+                    //const float bias = 0.250;
                     
-                    float is_texel_shadowed = (z_from_cam >=  z_from_light ? 1.0: 0.0);
-                    float visibility = 1.0 - is_texel_shadowed;
+                    float visibility = 1.0;
+                    
+                    const int nb_samples = 4;
+                    
+                    // Sample the shadow map vnb_samples` times
+                    for (int i=0;i<nb_samples;i++){
+                        // use either :
+                        //  - Always the same samples.
+                        //    Gives a fixed pattern in the shadow, but no noise
+                        // int index = i;
+                        //  - A random sample, based on the pixel's screen location. 
+                        //    No banding, but the shadow moves with the camera, which looks weird.
+                        // int index = int(16.0*random(gl_FragCoord.xyy, i))%16;
+                        //  - A random sample, based on the pixel's position in world space.
+                        //    The position is rounded to the millimeter to avoid too much aliasing
+                        int index = int(16.0*random(floor(v_vert.xyz*1000.0), i))%16;
+
+                        vec2 ShadowCoord_LightView = ShadowCoord.xy/ShadowCoord.w;
+                        ShadowCoord_LightView +=  + poissonDisk[index]/700.0;
+                        float z_from_light = texture(Texture, ShadowCoord_LightView).r;
+                        float z_from_cam = (ShadowCoord.z - bias) / ShadowCoord.w;
+                        float is_texel_shadowed = (z_from_cam >=  z_from_light ? 1.0: 0.0);
+                        // retrieve the lighting/shadowing contribution of this texel 
+                        visibility -= 1.0/nb_samples * is_texel_shadowed;
+                    }
                     return visibility;
                 }
                 
@@ -109,7 +143,7 @@ class ShadowMappingSample(Example):
                     if (UseTexture) {
                         f_color = texture(Texture, v_text);
                     } else {
-                        float visibility = compute_shadow(cosTheta);                 
+                        float visibility = compute_shadow_with_poisson_filtering(cosTheta);                 
 
                         lum *= visibility;
 
@@ -159,7 +193,6 @@ class ShadowMappingSample(Example):
 
         self.objects = {}
         self.objects_shadow = {}
-        self.objects_mat_bbox = {}
 
         for name in ['ground', 'grass', 'billboard', 'billboard-holder', 'billboard-image']:
             obj = Obj.open(local('data', 'scene-1-%s.obj' % name))
@@ -172,19 +205,6 @@ class ShadowMappingSample(Example):
             vao_shadow = self.ctx.simple_vertex_array(self.prog_shadow, vbo_shadow, "in_vert")
             self.objects_shadow[name] = vao_shadow
 
-            ##########################################
-            # Compute BBox (Orthographic) Matrix
-            ##########################################
-            np_obj_vert = np.array(obj.vert)
-            bbox_min, bbox_max = Vector3(np.min(np_obj_vert, axis=0)), Vector3(np.max(np_obj_vert, axis=0))
-            mat_bbox = Matrix44.orthogonal_projection(bbox_min.x, bbox_max.x,
-                                                      bbox_min.y, bbox_max.y,
-                                                      -bbox_min.z, -bbox_max.z)
-            assert ((mat_bbox * bbox_min) - Vector3((-1, -1, -1))).length <= 0.0001
-            assert ((mat_bbox * bbox_max) - Vector3((1, 1, 1))).length <= 0.0001
-            self.objects_mat_bbox[name] = mat_bbox
-            ##########################################
-
         img = Image.open(local('data', 'infographic-1.jpg')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
         self.texture1 = self.ctx.texture(img.size, 3, img.tobytes())
         self.texture1.build_mipmaps()
@@ -196,21 +216,11 @@ class ShadowMappingSample(Example):
         ############################################################################################################
         shadow_size = tuple([1 << 9] * 2)
         print(f"Depth texture size: {shadow_size}")
-
-        # self.tex_depth = self.ctx.depth_texture(size=shadow_size)
-        # self.tex_depth.compare_func = '0'
-        # self.fbo_shadow = self.ctx.framebuffer(depth_attachment=self.tex_depth)
-        #
-        # self.fbo_shadow = self.ctx.framebuffer(color_attachments=[self.tex_depth], depth_attachment=depth_attachment)
-        #
-
         depth_attachment_shadow = self.ctx.depth_renderbuffer(shadow_size)
         self.tex_depth = self.ctx.texture(shadow_size, components=1, dtype='f4')
         self.fbo_shadow = self.ctx.framebuffer(color_attachments=[self.tex_depth],
                                                depth_attachment=depth_attachment_shadow)
         ############################################################################################################
-
-        self.render_light_frustum = DrawFrustumExample()
 
     def render(self):
         self.ctx.viewport = self.wnd.viewport
@@ -224,13 +234,13 @@ class ShadowMappingSample(Example):
             (0.0, 0.0, 8.0),
             (0.0, 0.0, 1.0),
         )
-        cam_rotate = Matrix44.from_z_rotation(self.wnd.time * 0.25)
-        # cam_rotate = Matrix44.identity()
-        cam_mvp = cam_proj * cam_lookat * cam_rotate
-        self.mvp.write(cam_mvp.astype('f4').tobytes())
 
-        # light_rotate = Matrix44.from_z_rotation(-np.sin(self.wnd.time * 0.25) * 0.50 + 0.2)
-        light_rotate = Matrix44.identity()
+        # cam_rotate = Matrix44.from_z_rotation(self.wnd.time * 0.5)
+        cam_rotate = Matrix44.identity()
+
+        self.mvp.write((cam_proj * cam_lookat * cam_rotate).astype('f4').tobytes())
+
+        light_rotate = Matrix44.from_z_rotation(-np.sin(self.wnd.time * 2) * 0.50 + 0.2)
         light_pos = light_rotate * Vector3((-60.69, -40.14, 52.49))
         self.light.value = tuple(light_pos)
         bias_matrix = Matrix44(
@@ -241,18 +251,17 @@ class ShadowMappingSample(Example):
                 [0.5, 0.5, 0.5, 1.0]
             ]
         )
+
         light_proj = Matrix44.perspective_projection(20.0, self.wnd.ratio, 60.0, 100.0)
         light_lookat = Matrix44.look_at(
             light_pos,
             (0, 0, 0),
             (0.0, 0.0, 1.0),
         )
-        light_mpv = light_proj * light_lookat
-        depthBiasMVP = bias_matrix * light_mpv
-
+        depthMVP = light_proj * light_lookat
+        depthBiasMVP = bias_matrix * depthMVP
         self.depth_mvp.write(depthBiasMVP.astype('f4').tobytes())
-        self.mvp_shadow.write(light_mpv.astype('f4').tobytes())
-
+        self.mvp_shadow.write(depthMVP.astype('f4').tobytes())
         self.fbo_shadow.clear(1.0, 1.0, 1.0)
         self.fbo_shadow.use()
         for vao_shadow in self.objects_shadow.values():
@@ -280,14 +289,5 @@ class ShadowMappingSample(Example):
         self.texture1.use(0)
         self.objects['billboard-image'].render()
 
-        # BBox objects frustums
-        for mat_bbox in self.objects_mat_bbox.values():
-            self.render_light_frustum.render_frustum(cam_mvp, mat_bbox.inverse,
-                                                     color_faces=(0.05, 0.50, 0.30, 0.25),
-                                                     color_edges=(0.5, 0.15, 0.65, 1.0))
 
-        # Light Frustum
-        self.render_light_frustum.render_frustum(cam_mvp, light_mpv.inverse)
-
-
-run_example(ShadowMappingSample)
+run_example(ShadowMappingWithPoissonFilteringSample)
