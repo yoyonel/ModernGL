@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(scope="session", autouse=True)
 def standalone_context():
     return mgl.create_standalone_context()
 

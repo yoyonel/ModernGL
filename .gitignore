@@ -24,3 +24,5 @@ temp_*
 *.bat
 *.whl
 *.so
+
+*.trace

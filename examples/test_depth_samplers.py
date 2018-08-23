@@ -123,7 +123,7 @@ def test_sampler_shadow(standalone_context, prog_render_depth_pass, vbo_triangle
                 ''',
     )
     prog_for_shadow['depth_bias'].value = 0.00001
-    prog_for_shadow['depth_triangle'].value = 0.50
+    prog_for_shadow['depth_triangle'].value = (0 + 1) * 0.5
     # https://www.khronos.org/opengl/wiki/Sampler_(GLSL)#Shadow_samplers
     vao_fs_shadow = ctx.simple_vertex_array(prog_for_shadow, vbo_quad, 'in_vert')
 
@@ -204,14 +204,14 @@ def test_sampler_shadow_with_bilinear_interpolation(standalone_context, prog_ren
     # https://github.com/Contraz/demosys-py/blob/01f285cd3a132012e14a51bf0ae9d7aa5a489b55/demosys/opengl/texture.py#L151
     shadow_sampler = ctx.sampler(
         filter=(moderngl.LINEAR, moderngl.LINEAR),
-        compare_func='>=',
-        # # from context.py:
-        # #   border_color (tuple): The (r, g, b, a) color for the texture border.
-        # #                         When this value is set the ``repeat_`` values are overriden
-        # #                         setting the texture wrap to return the border color when outside ``[0, 1]`` range.
-        # border_color=(0, 0, 0, 0),
+        compare_func='>=',  # enable depth func
+        # from context.py:
+        #   border_color (tuple): The (r, g, b, a) color for the texture border.
+        #                         When this value is set the ``repeat_`` values are overriden
+        #                         setting the texture wrap to return the border color when outside ``[0, 1]`` range.
+        # border_color=(0, 0, 0, 0),    # seems not to work well ...
         repeat_x=False, repeat_y=False,
-    )  # enable depth func
+    )
     shadow_sampler.use(location=0)
     tex_depth.use(location=0)
 
