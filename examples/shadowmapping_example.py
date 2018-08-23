@@ -1,36 +1,45 @@
 """
 TODO:
+- separate pass: color, texture, albedo, shadow, lighting, etc ...
 - cullface (front, back) for different render pass (standard, shadow pass, ...)
-- draw frustums/cameras (light, camera, differents point of view, ...)
 - optimize (simply) the light (shadow) frustum
 - try to work with real depth texture and shadow samplers (https://www.khronos.org/opengl/wiki/Sampler_(GLSL)#Shadow_samplers)
+DONE:
+- draw frustums/cameras (light, camera, differents point of view, ...)
 
 Links:
 - http://www.opengl-tutorial.org/fr/intermediate-tutorials/tutorial-16-shadow-mapping/#shadowmap-basique
 - https://learnopengl.com/Advanced-Lighting/Shadows/Shadow-Mapping
 - https://learnopengl.com/Advanced-OpenGL/Depth-testing
 """
+import logging
 import moderngl
 import numpy as np
 from objloader import Obj
 import os
-from PIL import Image
-from pyrr import Matrix44, matrix44
+from pyrr import Matrix44
 from pyrr import Vector3
-from pyrr import Vector4
 #
 from examples.draw_frustum import DrawFrustumExample
 from examples.example_window import Example, run_example
+
+
+logger = logging.getLogger(__name__)
 
 
 def local(*path):
     return os.path.join(os.path.dirname(__file__), *path)
 
 
-def bbox2_3D(img):
-    r = np.any(img, axis=(1, 2))
-    c = np.any(img, axis=(0, 2))
-    z = np.any(img, axis=(0, 1))
+def compute_bbox_from_vertices(vertices):
+    """
+
+    :param vertices:
+    :return:
+    """
+    r = np.any(vertices, axis=(1, 2))
+    c = np.any(vertices, axis=(0, 2))
+    z = np.any(vertices, axis=(0, 1))
 
     rmin, rmax = np.where(r)[0][[0, -1]]
     cmin, cmax = np.where(c)[0][[0, -1]]
@@ -43,7 +52,7 @@ class ShadowMappingSample(Example):
     def __init__(self):
         self.ctx = moderngl.create_context(require=330)
 
-        self.prog = self.ctx.program(
+        self.prog_render_model_with_shadow = self.ctx.program(
             vertex_shader='''
                 #version 330
 
@@ -52,11 +61,10 @@ class ShadowMappingSample(Example):
 
                 in vec3 in_vert;
                 in vec3 in_norm;
-                in vec2 in_text;
 
                 out vec3 v_vert;
                 out vec3 v_norm;
-                out vec2 v_text;
+                
                 out vec4 v_ShadowCoord;
 
                 void main() {
@@ -66,7 +74,6 @@ class ShadowMappingSample(Example):
                     
                     v_vert = in_vert;
                     v_norm = in_norm;
-                    v_text = in_text;
                 }
             ''',
             fragment_shader='''
@@ -74,31 +81,29 @@ class ShadowMappingSample(Example):
 
                 uniform vec3 Light;
                 uniform vec3 Color;
-                uniform bool UseTexture;
 
-                uniform sampler2D Texture;
+                uniform sampler2DShadow Texture;
 
                 in vec3 v_vert;
                 in vec3 v_norm;
-                in vec2 v_text;
+                
                 in vec4 v_ShadowCoord;
 
                 out vec4 f_color;                
 
                 float compute_shadow(in float cosTheta) {
-                    //vec4 ShadowCoord = v_ShadowCoord / v_ShadowCoord.w;
                     vec4 ShadowCoord = v_ShadowCoord;
                     
                     vec2 ShadowCoord_LightView = ShadowCoord.xy/ShadowCoord.w;
-                    float z_from_light = texture(Texture, ShadowCoord_LightView).r;
                     
-                    // const float bias = 0.005;
-                    float bias = 0.005*tan(acos(cosTheta));
-                    bias = clamp(bias, 0,0.01);                    
-                    float z_from_cam = (ShadowCoord.z - bias) / ShadowCoord.w;
+                    //float bias = 0.005 * tan(acos(cosTheta));
+                    //bias = clamp(bias, 0, 0.005);
+                    const float bias = 0.005;
+                                        
+                    float z_from_cam = ShadowCoord.z / ShadowCoord.w - bias;
+                    vec3 shadow_coord = vec3(ShadowCoord_LightView, z_from_cam);
+                    float visibility = 1.0 - texture(Texture, shadow_coord);
                     
-                    float is_texel_shadowed = (z_from_cam >=  z_from_light ? 1.0: 0.0);
-                    float visibility = 1.0 - is_texel_shadowed;
                     return visibility;
                 }
                 
@@ -106,21 +111,17 @@ class ShadowMappingSample(Example):
                 void main() {
                     float cosTheta = dot(normalize(Light - v_vert), normalize(v_norm));
                     float lum = clamp(cosTheta, 0.0, 1.0) * 0.9 + 0.1;
-                    if (UseTexture) {
-                        f_color = texture(Texture, v_text);
-                    } else {
-                        float visibility = compute_shadow(cosTheta);                 
+                    
+                    float visibility = compute_shadow(cosTheta);
+                    lum *= visibility;
 
-                        lum *= visibility;
-
-                        const float coefAmbient = 0.15;
-                        f_color = vec4(Color * (coefAmbient + lum), 1.0);
-                    }
+                    const float coefAmbient = 0.15;
+                    f_color = vec4(Color * (coefAmbient + lum), 1.0);
                 }
             ''',
         )
 
-        self.prog_shadow = self.ctx.program(
+        self.prog_depth = self.ctx.program(
             vertex_shader='''
                         #version 330
 
@@ -148,14 +149,17 @@ class ShadowMappingSample(Example):
                     ''',
         )
 
-        self.mvp = self.prog['Mvp']
-        self.depth_mvp = self.prog['DepthBiasMVP']
-        self.light = self.prog['Light']
-        self.color = self.prog['Color']
-        self.use_texture = self.prog['UseTexture']
-        self.prog['Texture'].value = 0
+        self.mvp = self.prog_render_model_with_shadow['Mvp']
+        self.mvp_depth = self.prog_render_model_with_shadow['DepthBiasMVP']
+        self.light = self.prog_render_model_with_shadow['Light']
+        self.color = self.prog_render_model_with_shadow['Color']
+        try:
+            self.use_texture = self.prog_render_model_with_shadow['UseTexture']
+        except:
+            pass
+        self.prog_render_model_with_shadow['Texture'].value = 0
 
-        self.mvp_shadow = self.prog_shadow['Mvp']
+        self.mvp_shadow = self.prog_depth['Mvp']
 
         self.objects = {}
         self.objects_shadow = {}
@@ -164,12 +168,12 @@ class ShadowMappingSample(Example):
         for name in ['ground', 'grass', 'billboard', 'billboard-holder', 'billboard-image']:
             obj = Obj.open(local('data', 'scene-1-%s.obj' % name))
 
-            vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
-            vao = self.ctx.simple_vertex_array(self.prog, vbo, "in_vert", "in_norm", "in_text")
+            vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz'))    # vertices + normals
+            vao = self.ctx.simple_vertex_array(self.prog_render_model_with_shadow, vbo, "in_vert", "in_norm")
             self.objects[name] = vao
 
             vbo_shadow = self.ctx.buffer(obj.pack('vx vy vz'))  # only vertices
-            vao_shadow = self.ctx.simple_vertex_array(self.prog_shadow, vbo_shadow, "in_vert")
+            vao_shadow = self.ctx.simple_vertex_array(self.prog_depth, vbo_shadow, "in_vert")
             self.objects_shadow[name] = vao_shadow
 
             ##########################################
@@ -185,29 +189,21 @@ class ShadowMappingSample(Example):
             self.objects_mat_bbox[name] = mat_bbox
             ##########################################
 
-        img = Image.open(local('data', 'infographic-1.jpg')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
-        self.texture1 = self.ctx.texture(img.size, 3, img.tobytes())
-        self.texture1.build_mipmaps()
-
-        self.texture2 = self.ctx.texture((1, 1), 3)  # TODO: (1) composents influenced the bug below
-        # depth_attachment = self.ctx.depth_renderbuffer(self.wnd.size)
-        self.fbo = self.ctx.framebuffer(color_attachments=[self.texture2])
+        self.color_buffer = self.ctx.renderbuffer((1, 1), 3)  # TODO: (1) composents influenced the bug below
+        self.fbo = self.ctx.framebuffer(color_attachments=[self.color_buffer])
 
         ############################################################################################################
         shadow_size = tuple([1 << 9] * 2)
-        print(f"Depth texture size: {shadow_size}")
+        logger.info(f"Depth texture size: {shadow_size}")
 
-        # self.tex_depth = self.ctx.depth_texture(size=shadow_size)
-        # self.tex_depth.compare_func = '0'
-        # self.fbo_shadow = self.ctx.framebuffer(depth_attachment=self.tex_depth)
-        #
-        # self.fbo_shadow = self.ctx.framebuffer(color_attachments=[self.tex_depth], depth_attachment=depth_attachment)
-        #
-
-        depth_attachment_shadow = self.ctx.depth_renderbuffer(shadow_size)
-        self.tex_depth = self.ctx.texture(shadow_size, components=1, dtype='f4')
-        self.fbo_shadow = self.ctx.framebuffer(color_attachments=[self.tex_depth],
-                                               depth_attachment=depth_attachment_shadow)
+        self.tex_depth = self.ctx.depth_texture(shadow_size)
+        self.tex_color_depth = self.ctx.texture(shadow_size, components=1, dtype='f4')
+        self.fbo_depth = self.ctx.framebuffer(color_attachments=[self.tex_color_depth], depth_attachment=self.tex_depth)
+        self.sampler_depth = self.ctx.sampler(
+            filter=(moderngl.LINEAR, moderngl.LINEAR),  # bilinear interpolation on depth fetch (PCF)
+            compare_func='>=',  # enable depth func
+            repeat_x=False, repeat_y=False,
+        )
         ############################################################################################################
 
         self.render_light_frustum = DrawFrustumExample()
@@ -247,22 +243,23 @@ class ShadowMappingSample(Example):
             (0, 0, 0),
             (0.0, 0.0, 1.0),
         )
-        light_mpv = light_proj * light_lookat
-        depthBiasMVP = bias_matrix * light_mpv
+        mpv_light = light_proj * light_lookat
+        mvp_depth_bias = bias_matrix * mpv_light
 
-        self.depth_mvp.write(depthBiasMVP.astype('f4').tobytes())
-        self.mvp_shadow.write(light_mpv.astype('f4').tobytes())
+        self.mvp_depth.write(mvp_depth_bias.astype('f4').tobytes())
+        self.mvp_shadow.write(mpv_light.astype('f4').tobytes())
 
-        self.fbo_shadow.clear(1.0, 1.0, 1.0)
-        self.fbo_shadow.use()
+        self.fbo_depth.use()
+        self.fbo_depth.clear(1.0, 1.0, 1.0)
         for vao_shadow in self.objects_shadow.values():
             vao_shadow.render()
 
         self.fbo.use()  # TODO: strange .. need to 'use' this fbo to have a 'correct' rendering on screen ... :/ see (1)
         self.ctx.screen.use()
-        self.tex_depth.use()
+        self.sampler_depth.use(location=0)
+        self.tex_depth.use(location=0)
 
-        self.use_texture.value = False
+        # self.use_texture.value = False
 
         self.color.value = (0.67, 0.49, 0.29)
         self.objects['ground'].render()
@@ -276,18 +273,19 @@ class ShadowMappingSample(Example):
         self.color.value = (0.2, 0.2, 0.2)
         self.objects['billboard-holder'].render()
 
-        self.use_texture.value = True
-        self.texture1.use(0)
+        # self.use_texture.value = True
+        # self.texture1.use(0)
         self.objects['billboard-image'].render()
 
-        # BBox objects frustums
-        for mat_bbox in self.objects_mat_bbox.values():
-            self.render_light_frustum.render_frustum(cam_mvp, mat_bbox.inverse,
-                                                     color_faces=(0.05, 0.50, 0.30, 0.25),
-                                                     color_edges=(0.5, 0.15, 0.65, 1.0))
-
-        # Light Frustum
-        self.render_light_frustum.render_frustum(cam_mvp, light_mpv.inverse)
+        draw_bbox = False
+        if draw_bbox:
+            # BBox objects frustums
+            for mat_bbox in self.objects_mat_bbox.values():
+                self.render_light_frustum.render_frustum(cam_mvp, mat_bbox.inverse,
+                                                         color_faces=(0.05, 0.50, 0.30, 0.25),
+                                                         color_edges=(0.5, 0.15, 0.65, 1.0))
+            # Light Frustum
+            self.render_light_frustum.render_frustum(cam_mvp, mpv_light.inverse)
 
 
 run_example(ShadowMappingSample)
