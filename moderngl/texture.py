@@ -185,7 +185,7 @@ class Texture:
 
             Accepted compare functions::
 
-                texture.compare_func = ''    # Disale depth comparison completely
+                texture.compare_func = ''    # Disable depth comparison completely
                 texture.compare_func = '<='  # GL_LEQUAL
                 texture.compare_func = '<'   # GL_LESS
                 texture.compare_func = '>='  # GL_GEQUAL

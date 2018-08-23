@@ -867,10 +867,11 @@ int MGLTexture_set_compare_func(MGLTexture * self, PyObject * value) {
 	gl.BindTexture(texture_target, self->texture_obj);
 	if (self->compare_func == 0) {
 		gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+		gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_FUNC, GL_ALWAYS);
 	} else {
 		gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+		gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_FUNC, self->compare_func);
 	}
-	gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_FUNC, self->compare_func);
 
 	return 0;
 }

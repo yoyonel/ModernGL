@@ -54,7 +54,7 @@ class VertexArray:
     @property
     def program(self) -> 'Program':
         '''
-            Program: The program assinged to the VertexArray.
+            Program: The program assigned to the VertexArray.
             The program used when rendering or transforming primitives.
         '''
 
