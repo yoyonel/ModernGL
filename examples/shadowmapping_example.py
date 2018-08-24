@@ -49,6 +49,8 @@ def compute_bbox_from_vertices(vertices):
 
 
 class ShadowMappingSample(Example):
+    WINDOW_SIZE = (512, 512)
+
     def __init__(self):
         self.ctx = moderngl.create_context(require=330)
 

@@ -56,7 +56,7 @@ class Particles(Example):
                 in float out_hot;
                 
                 // https://khronos.org/registry/OpenGL-Refpages/gl4/html/gl_PointCoord.xhtml
-                in vec2 gl_PointCoord;
+                // in vec2 gl_PointCoord;
                 
                 out vec4 f_color;
 

@@ -69,38 +69,82 @@ class Blur(Example):
                                 #version 330
 
                                 uniform sampler2D Texture;
-                                uniform vec2 Resolution;
+                                uniform vec2 inv_Resolution;
                                 uniform vec2 Direction;
 
                                 in vec2 v_text;
 
                                 out vec4 f_color;
 
-                                vec4 blur13(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {
-                                  vec4 color = vec4(0.0);
-                                  vec2 off1 = vec2(1.411764705882353) * direction;
-                                  vec2 off2 = vec2(3.2941176470588234) * direction;
-                                  vec2 off3 = vec2(5.176470588235294) * direction;
-                                  color += texture2D(image, uv) * 0.1964825501511404;
-                                  color += texture2D(image, uv + (off1 / resolution)) * 0.2969069646728344;
-                                  color += texture2D(image, uv - (off1 / resolution)) * 0.2969069646728344;
-                                  color += texture2D(image, uv + (off2 / resolution)) * 0.09447039785044732;
-                                  color += texture2D(image, uv - (off2 / resolution)) * 0.09447039785044732;
-                                  color += texture2D(image, uv + (off3 / resolution)) * 0.010381362401148057;
-                                  color += texture2D(image, uv - (off3 / resolution)) * 0.010381362401148057;
-                                  return color;
+                                vec4 blur13(sampler2D image, vec2 uv, vec2 inv_resolution, vec2 direction) {
+                                    vec4 color = vec4(0.0);
+                                    vec2 off1 = vec2(1.411764705882353) * direction;
+                                    vec2 off2 = vec2(3.2941176470588234) * direction;
+                                    vec2 off3 = vec2(5.176470588235294) * direction;
+                                    color += texture2D(image, uv) * 0.1964825501511404;
+                                    color += texture2D(image, uv + (off1 * inv_resolution)) * 0.2969069646728344;
+                                    color += texture2D(image, uv - (off1 * inv_resolution)) * 0.2969069646728344;
+                                    color += texture2D(image, uv + (off2 * inv_resolution)) * 0.09447039785044732;
+                                    color += texture2D(image, uv - (off2 * inv_resolution)) * 0.09447039785044732;
+                                    color += texture2D(image, uv + (off3 * inv_resolution)) * 0.010381362401148057;
+                                    color += texture2D(image, uv - (off3 * inv_resolution)) * 0.010381362401148057;
+                                    return color;
                                 }
 
                                 void main() {
-                                    f_color = blur13(Texture, v_text, Resolution, Direction);
+                                    f_color = blur13(Texture, v_text, inv_Resolution, Direction);
+                                }
+                            '''
+        )
+        self.prog_filtering_blur = self.ctx.program(
+            vertex_shader='''
+                                #version 330
+
+                                in vec2 in_vert;
+                                out vec2 v_text;
+
+                                void main() {
+                                    v_text = in_vert;
+                                    gl_Position = vec4(in_vert * 2.0 - 1.0, 0.0, 1.0);
                                 }
                             ''',
-        )
+            fragment_shader='''
+                            #version 330
 
+                            uniform sampler2D Texture;
+                            uniform vec2 inv_Resolution;
+                            uniform vec2 Direction;
+
+                            uniform float offset[3] = float[]( 0.0, 1.3846153846, 3.2307692308 );
+                            uniform float weight[3] = float[]( 0.2270270270, 0.3162162162, 0.0702702703 );
+
+                            in vec2 v_text;
+                            out vec4 f_color;
+
+                            vec4 filtering(sampler2D image, vec2 uv, vec2 inv_resolution, vec2 direction) {
+                                vec2 off1 = vec2(offset[1]) * direction;
+                                vec2 off2 = vec2(offset[2]) * direction;
+                                vec4 color = texture2D(image, uv) * weight[0];
+                                for(int i=1; i<3; i++) {
+                                    color += texture2D(image, uv + (vec2(offset[i]) * direction * inv_resolution)) * weight[i];
+                                    color += texture2D(image, uv - (vec2(offset[i]) * direction * inv_resolution)) * weight[i];
+                                }
+                                return color;
+                            }
+
+                            void main(void)
+                            {
+
+                                f_color = filtering(Texture, v_text, inv_Resolution, Direction);
+                            }
+                    '''
+        )
         self.vbo = self.ctx.buffer(canvas.tobytes())
         #
         self.vao_render_texture = self.ctx.simple_vertex_array(self.render_tex, self.vbo, 'in_vert')
-        self.vao_blur13 = self.ctx.simple_vertex_array(self.filter_blur13, self.vbo, 'in_vert')
+        # self.prog_cur_filter = self.filter_blur13
+        self.prog_cur_filter = self.prog_filtering_blur
+        self.vao_blur13 = self.ctx.simple_vertex_array(self.prog_cur_filter, self.vbo, 'in_vert')
 
         img = Image.open(local('data', 'panda.jpg')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
         self.texture_panda = self.ctx.texture(img.size, 3, img.tobytes())
@@ -121,14 +165,14 @@ class Blur(Example):
             tex.repeat_y = False
 
         try:
-            self.filter_blur13['Texture'].value = 0
-            self.filter_blur13['Resolution'].value = img.size
+            self.prog_cur_filter['Texture'].value = 0
+            self.prog_cur_filter['inv_Resolution'].value = (1./img.size[0], 1./img.size[1])
         except:
             logger.warning("", exc_info=True)
 
         # Init Frame Buffer Object from textures attachment
         self.fbos_blur = [
-            self.ctx.framebuffer(tex)
+            self.ctx.framebuffer([tex])
             for tex in self.tex_for_blurs
         ]
 
@@ -158,7 +202,7 @@ class Blur(Example):
         # set in texture for first pass
         tex_in.use(0)
         try:
-            self.filter_blur13['Direction'].value = (0, radius)
+            self.prog_cur_filter['Direction'].value = (0, radius)
         except:
             pass
         #
@@ -170,7 +214,7 @@ class Blur(Example):
         tex_vertical.use(0)
         #
         try:
-            self.filter_blur13['Direction'].value = (radius, 0)
+            self.prog_cur_filter['Direction'].value = (radius, 0)
         except:
             pass
         #
@@ -196,7 +240,7 @@ class Blur(Example):
         # OpenGL Timer Query
         q_for_timer = self.ctx.query(time=True)
         with q_for_timer:
-            radius = abs(sin(self.cur_time) * 32.0)
+            radius = abs(sin(self.cur_time * 0.5) * 16.0)
             # radius = 3.0
             # print(f"radius: {radius}")
 
