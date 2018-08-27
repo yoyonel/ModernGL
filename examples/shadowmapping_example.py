@@ -1,11 +1,11 @@
 """
 TODO:
 - separate pass: color, texture, albedo, shadow, lighting, etc ...
-- cullface (front, back) for different render pass (standard, shadow pass, ...)
 - optimize (simply) the light (shadow) frustum
-- try to work with real depth texture and shadow samplers (https://www.khronos.org/opengl/wiki/Sampler_(GLSL)#Shadow_samplers)
 DONE:
 - draw frustums/cameras (light, camera, differents point of view, ...)
+- cullface (front, back) for different render pass (standard, shadow pass, ...)
+- try to work with real depth texture and shadow samplers (https://www.khronos.org/opengl/wiki/Sampler_(GLSL)#Shadow_samplers)
 
 Links:
 - http://www.opengl-tutorial.org/fr/intermediate-tutorials/tutorial-16-shadow-mapping/#shadowmap-basique
@@ -97,10 +97,10 @@ class ShadowMappingSample(Example):
                     vec4 ShadowCoord = v_ShadowCoord;
                     
                     vec2 ShadowCoord_LightView = ShadowCoord.xy/ShadowCoord.w;
-                    
-                    //float bias = 0.005 * tan(acos(cosTheta));
-                    //bias = clamp(bias, 0, 0.005);
-                    const float bias = 0.005;
+
+                    float bias = 0.005 * tan(acos(cosTheta));
+                    bias = clamp(bias, 0, 0.005);
+                    //const float bias = 0.005;
                                         
                     float z_from_cam = ShadowCoord.z / ShadowCoord.w - bias;
                     vec3 shadow_coord = vec3(ShadowCoord_LightView, z_from_cam);
@@ -111,7 +111,10 @@ class ShadowMappingSample(Example):
                 
 
                 void main() {
-                    float cosTheta = dot(normalize(Light - v_vert), normalize(v_norm));
+                    vec3 light_vector_obj_space = normalize(Light - v_vert);
+                    vec3 normal_obj_space = normalize(v_norm);
+                    float cosTheta = dot(light_vector_obj_space, normal_obj_space);
+                    
                     float lum = clamp(cosTheta, 0.0, 1.0) * 0.9 + 0.1;
                     
                     float visibility = compute_shadow(cosTheta);
@@ -210,6 +213,8 @@ class ShadowMappingSample(Example):
 
         self.render_light_frustum = DrawFrustumExample()
 
+        self.ctx.enable(moderngl.CULL_FACE)
+
     def render(self):
         self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
@@ -222,7 +227,7 @@ class ShadowMappingSample(Example):
             (0.0, 0.0, 8.0),
             (0.0, 0.0, 1.0),
         )
-        cam_rotate = Matrix44.from_z_rotation(self.wnd.time * 0.25)
+        cam_rotate = Matrix44.from_z_rotation(self.wnd.time * 2.25)
         # cam_rotate = Matrix44.identity()
         cam_mvp = cam_proj * cam_lookat * cam_rotate
         self.mvp.write(cam_mvp.astype('f4').tobytes())
@@ -253,8 +258,12 @@ class ShadowMappingSample(Example):
 
         self.fbo_depth.use()
         self.fbo_depth.clear(1.0, 1.0, 1.0)
+        # https://moderngl.readthedocs.io/en/stable/reference/context.html?highlight=culling#moderngl.Context.front_face
+        self.ctx.front_face = 'cw'
         for vao_shadow in self.objects_shadow.values():
             vao_shadow.render()
+
+        self.ctx.front_face = 'ccw'
 
         self.fbo.use()  # TODO: strange .. need to 'use' this fbo to have a 'correct' rendering on screen ... :/ see (1)
         self.ctx.screen.use()

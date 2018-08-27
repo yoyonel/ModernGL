@@ -42,7 +42,7 @@ def test_depth_sampler(standalone_context, prog_render_depth_pass, prog_draw_dep
     ctx = standalone_context
     ctx.enable(mgl.DEPTH_TEST)
 
-    size = (16, 16)
+    size = (16,) * 2
     fbo_depth, tex_depth = _build_fbo_with_rasterised_triangle(ctx, prog_render_depth_pass, vbo_triangle, size)
 
     # It should have some different values where the triangle lies.
@@ -95,7 +95,7 @@ def test_sampler_shadow(
     ctx = standalone_context
     ctx.enable(mgl.DEPTH_TEST)
 
-    size = (3, 3)
+    size = (3,) * 2
     fbo_depth, tex_depth = _build_fbo_with_rasterised_triangle(ctx, prog_render_depth_pass, vbo_triangle, size)
 
     # No offset - fetch the center pixel (NEAREST)
@@ -145,7 +145,7 @@ def test_sampler_shadow_with_bilinear_interpolation(
     ctx = standalone_context
     ctx.enable(mgl.DEPTH_TEST)
 
-    size = (7, 7)
+    size = (7,) * 2
 
     fbo_depth, tex_depth = _build_fbo_with_rasterised_triangle(ctx, prog_render_depth_pass, vbo_triangle, size)
 
