@@ -108,9 +108,16 @@ PyObject * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 				return 0;
 			}
 
-			if (texture->width != width || texture->height != height || texture->samples != samples) {
-				MGLError_Set("the depth_attachment have different sizes or samples");
-				return 0;
+			if (color_attachments_len) {
+				if (texture->width != width || texture->height != height || texture->samples != samples) {
+					MGLError_Set("the depth_attachment have different sizes or samples");
+					return 0;
+				}
+			}
+			else {
+				width = texture->width;
+				height = texture->height;
+				samples = texture->samples;
 			}
 		} else if (Py_TYPE(depth_attachment) == &MGLRenderbuffer_Type) {
 			MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)depth_attachment;
@@ -125,9 +132,16 @@ PyObject * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 				return 0;
 			}
 
-			if (renderbuffer->width != width || renderbuffer->height != height || renderbuffer->samples != samples) {
-				MGLError_Set("the depth_attachment have different sizes or samples");
-				return 0;
+			if (color_attachments_len) {
+				if (renderbuffer->width != width || renderbuffer->height != height || renderbuffer->samples != samples) {
+					MGLError_Set("the depth_attachment have different sizes or samples");
+					return 0;
+				}
+			}
+			else {
+				width = renderbuffer->width;
+				height = renderbuffer->height;
+				samples = renderbuffer->samples;
 			}
 		} else {
 			MGLError_Set("the depth_attachment must be a Renderbuffer or Texture not %s", Py_TYPE(depth_attachment)->tp_name);
@@ -147,6 +161,10 @@ PyObject * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	}
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, framebuffer->framebuffer_obj);
+
+	if (!color_attachments_len) {
+		gl.DrawBuffer(GL_NONE); // No color buffer is drawn to.
+	}
 
 	for (int i = 0; i < color_attachments_len; ++i) {
 		PyObject * item = PyTuple_GET_ITEM(color_attachments, i);
