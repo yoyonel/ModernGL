@@ -81,6 +81,7 @@ mgl = Extension(
         'src/InvalidObject.cpp',
         'src/ModernGL.cpp',
         'src/Program.cpp',
+        'src/Program_Error.cpp',
         'src/Query.cpp',
         'src/Renderbuffer.cpp',
         'src/Scope.cpp',
