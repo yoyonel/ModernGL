@@ -12,3 +12,5 @@ install:
   - "python -m pip install pip wheel setuptools numpy pytest -U"
   - "python setup.py develop"
   - "python -m pytest tests/test_local.py tests/test_module_integrity.py tests/test_documentation.py"
+
+build: off
