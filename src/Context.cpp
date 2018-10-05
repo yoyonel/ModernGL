@@ -1429,4 +1429,5 @@ void MGLContext_Initialize(MGLContext * self) {
 
 	self->wireframe = false;
 	self->multisample = true;
+	gl.GetError(); // clear errors
 }
