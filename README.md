@@ -50,9 +50,8 @@ For complete examples please visit the [Examples](https://github.com/cprogrammer
 
 ## Compared to PyOpenGL
 
-With the original OpenGL API you have to write a couple of lines to achieve a **simple task** like compiling a shader or running a computation on the GPU. With ModernGL you will need just a **few lines** to achieve the same result.
-
-#### Using PyOpenGL
+With PyOpenGL, using the original OpenGL API, you have to write three lines to
+achieve a simple task like binding a VBO:
 
 ```py
 vbo1 = glGenBuffers(1)
@@ -64,7 +63,8 @@ GL.glBindBuffer(GL_ARRAY_BUFFER, vbo2)
 GL.glBufferData(GL_ARRAY_BUFFER, b'\x00' * 1024, GL_DYNAMIC_DRAW)
 ```
 
-#### Using ModernGL
+With ModernGL you need just one simple line per VBO to achieve the same
+results:
 
 ```py
 vbo1 = ctx.buffer(b'Hello World!')
