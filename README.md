@@ -98,7 +98,7 @@ OpenGL 3.3 came out in February 2010. With **up to date drivers** you will be ab
 
 **Anywhere where OpenGL is supported.** ModernGL is capable of rendering using a [standalone_context] as well. Rendering to a window only requires a valid OpenGL context.
 
-[standalone_context]: https://github.com/cprogrammer1994/ModernGL/tree/master/examples/standalone
+[standalone_context]: https://github.com/cprogrammer1994/ModernGL/tree/master/examples/old-examples/standalone
 
 ### Can ModernGL create a Window?
 

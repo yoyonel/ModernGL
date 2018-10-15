@@ -38,86 +38,67 @@ pip install PySDL2
 
 ## Contents
 
-- [GLUT](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLUT)
-  - [01_hello_world](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLUT/01_hello_world.py)
-  - [02_uniforms_and_attributes](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLUT/02_uniforms_and_attributes.py)
-  - [03_alpha_blending](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLUT/03_alpha_blending.py)
-  - [04_textures](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLUT/04_textures.py)
-  - [perspective_projection](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLUT/perspective_projection.py)
-  - [window_coordinates](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLUT/window_coordinates.py)
+- [GLUT](GLUT)
+  - [01_hello_world](GLUT/01_hello_world.py)
+  - [02_uniforms_and_attributes](GLUT/02_uniforms_and_attributes.py)
+  - [03_alpha_blending](GLUT/03_alpha_blending.py)
+  - [04_textures](GLUT/04_textures.py)
+  - [perspective_projection](GLUT/perspective_projection.py)
+  - [window_coordinates](GLUT/window_coordinates.py)
 
-- [GLWindow](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow)
-  - [01_hello_world](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/01_hello_world.py)
-  - [02_uniforms_and_attributes](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/02_uniforms_and_attributes.py)
-  - [03_alpha_blending](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/03_alpha_blending.py)
-  - [04_textures](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/04_textures.py)
-  - [05_perspective_projection](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/05_perspective_projection.py)
-  - [05_perspective_projection_using_numpy](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/05_perspective_projection_using_numpy.py)
-  - [julia_fractal](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/julia_fractal.py)
-  - [particle_system](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/particle_system.py)
-  - [particle_system_2](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/particle_system_2.py)
-  - [pillow_font](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/pillow_font.py)
-  - [using_texture3d](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/using_texture3d.py)
-  - [perspective_projection](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/perspective_projection.py)
-  - [window_coordinates](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/GLWindow/window_coordinates.py)
+- [GLWindow](GLWindow)
+  - [01_hello_world](GLWindow/01_hello_world.py)
+  - [02_uniforms_and_attributes](GLWindow/02_uniforms_and_attributes.py)
+  - [03_alpha_blending](GLWindow/03_alpha_blending.py)
+  - [04_textures](GLWindow/04_textures.py)
+  - [05_perspective_projection](GLWindow/05_perspective_projection.py)
+  - [05_perspective_projection_using_numpy](GLWindow/05_perspective_projection_using_numpy.py)
+  - [julia_fractal](GLWindow/julia_fractal.py)
+  - [particle_system](GLWindow/particle_system.py)
+  - [particle_system_2](GLWindow/particle_system_2.py)
+  - [pillow_font](GLWindow/pillow_font.py)
+  - [using_texture3d](GLWindow/using_texture3d.py)
+  - [perspective_projection](GLWindow/perspective_projection.py)
+  - [window_coordinates](GLWindow/window_coordinates.py)
 
-- [Kivy](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/Kivy)
-  - [01_hello_world](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/Kivy/01_hello_world.py)
-  - [perspective_projection](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/Kivy/perspective_projection.py)
-  - [window_coordinates](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/Kivy/window_coordinates.py)
+- [Kivy](Kivy)
+  - [01_hello_world](Kivy/01_hello_world.py)
+  - [perspective_projection](Kivy/perspective_projection.py)
+  - [window_coordinates](Kivy/window_coordinates.py)
 
-- [pygame](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/pygame)
-  - [01_hello_world](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/pygame/01_hello_world.py)
-  - [perspective_projection](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/pygame/perspective_projection.py)
-  - [window_coordinates](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/pygame/window_coordinates.py)
+- [pygame](pygame)
+  - [01_hello_world](pygame/01_hello_world.py)
+  - [perspective_projection](pygame/perspective_projection.py)
+  - [window_coordinates](pygame/window_coordinates.py)
 
-- [pyglet](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/pyglet)
-  - [01_hello_world](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/pyglet/01_hello_world.py)
-  - [02_uniforms_and_attributes](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/pyglet/02_uniforms_and_attributes.py)
-  - [03_alpha_blending](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/pyglet/03_alpha_blending.py)
-  - [04_textures](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/pyglet/04_textures.py)
-  - [perspective_projection](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/pyglet/perspective_projection.py)
-  - [window_coordinates](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/pyglet/window_coordinates.py)
+- [pyglet](pyglet)
+  - [01_hello_world](pyglet/01_hello_world.py)
+  - [02_uniforms_and_attributes](pyglet/02_uniforms_and_attributes.py)
+  - [03_alpha_blending](pyglet/03_alpha_blending.py)
+  - [04_textures](pyglet/04_textures.py)
+  - [perspective_projection](pyglet/perspective_projection.py)
+  - [window_coordinates](pyglet/window_coordinates.py)
 
-- [PyQt5](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/PyQt5)
-  - [01_hello_world](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/PyQt5/01_hello_world.py)
-  - [02_uniforms_and_attributes](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/PyQt5/02_uniforms_and_attributes.py)
-  - [03_alpha_blending](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/PyQt5/03_alpha_blending.py)
-  - [04_textures](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/PyQt5/04_textures.py)
-  - [05_perspective_projection](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/PyQt5/05_perspective_projection.py)
-  - [perspective_projection](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/PyQt5/perspective_projection.py)
-  - [window_coordinates](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/PyQt5/window_coordinates.py)
+- [PyQt5](PyQt5)
+  - [01_hello_world](PyQt5/01_hello_world.py)
+  - [02_uniforms_and_attributes](PyQt5/02_uniforms_and_attributes.py)
+  - [03_alpha_blending](PyQt5/03_alpha_blending.py)
+  - [04_textures](PyQt5/04_textures.py)
+  - [05_perspective_projection](PyQt5/05_perspective_projection.py)
+  - [perspective_projection](PyQt5/perspective_projection.py)
+  - [window_coordinates](PyQt5/window_coordinates.py)
 
-- [PyQt5](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/PySDL2)
+- [PyQt5](PySDL2)
   - soon
 
-- [tkinter](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/tkinter)
-  - [01_hello_world](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/tkinter/01_hello_world.py)
-  - [colors](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/tkinter/colors.py)
+- [tkinter](tkinter)
+  - [01_hello_world](tkinter/01_hello_world.py)
+  - [colors](tkinter/colors.py)
 
-- [standalone](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/standalone)
-  - [01_hello_world](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/standalone/01_hello_world.py)
-  - [render_to_pillow_image](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/standalone/render_to_pillow_image.py)
-  - [render_to_pillow_image_multisample](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/standalone/render_to_pillow_image_multisample.py)
-  - [perspective_projection](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/standalone/perspective_projection.py)
-  - [window_coordinates](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/standalone/window_coordinates.py)
+- [standalone](standalone)
+  - [01_hello_world](standalone/01_hello_world.py)
+  - [render_to_pillow_image](standalone/render_to_pillow_image.py)
+  - [render_to_pillow_image_multisample](standalone/render_to_pillow_image_multisample.py)
+  - [perspective_projection](standalone/perspective_projection.py)
+  - [window_coordinates](standalone/window_coordinates.py)
 
-## Images
-
-### Basic
-
-<img width="50%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/01_hello_world.png">
-
-<img width="50%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/02_uniforms_and_attributes.png">
-
-<img width="50%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/03_alpha_blending.png">
-
-<img width="50%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/04_textures.png">
-
-### julia_fractal
-
-<img width="50%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/julia_fractal.png">
-
-### particle_system
-
-<img width="50%" src="https://raw.githubusercontent.com/cprogrammer1994/ModernGL/master/docs/Examples/images/particle_system.png">

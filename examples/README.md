@@ -38,4 +38,7 @@ Multiple instance rendering
 pip install -r requirements.txt
 ```
 
-## Work in progress...
+## Old examples
+
+Also see the [old examples](old-examples).
+
