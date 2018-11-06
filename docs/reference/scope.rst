@@ -95,7 +95,7 @@ Examples
     some_random_buffer.bind_to_storage_buffer(8)  # Have to restore it manually.
     ctx.enable_only(moderngl.DEPTH_TEST)          # This was restored too.
 
-    # Scope objects only do as much as neccessary.
+    # Scope objects only do as much as necessary.
     # Restoring the framebuffer and enable flags are lowcost operations and
     # without them you could get a hard time debugging the application.
 

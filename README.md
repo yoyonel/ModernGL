@@ -111,7 +111,7 @@ OpenGL 3.3 came out in February 2010. With **up to date drivers** you will be ab
 
 ### Limitations using ModernGL over PyOpenGL?
 
-All the neccessary calls are (or can be) implemented in ModernGL. However you can interract with the ModernGL objects from PyOpenGL. If something is missing write an [issue](https://github.com/cprogrammer1994/ModernGL/issues) or raise a [PR](https://github.com/cprogrammer1994/ModernGL/pulls).
+All the necessary calls are (or can be) implemented in ModernGL. However you can interract with the ModernGL objects from PyOpenGL. If something is missing write an [issue](https://github.com/cprogrammer1994/ModernGL/issues) or raise a [PR](https://github.com/cprogrammer1994/ModernGL/pulls).
 
 ## Supported platforms
 

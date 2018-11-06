@@ -263,9 +263,9 @@ class Context:
 
             Example::
 
-                # Triangles winded counter-clockwise considerd front facing
+                # Triangles winded counter-clockwise considered front facing
                 ctx.front_face = 'ccw'
-                # Triangles winded clockwise considerd front facing
+                # Triangles winded clockwise considered front facing
                 ctx.front_face = 'cw'
         '''
 

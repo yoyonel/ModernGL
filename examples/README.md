@@ -20,7 +20,7 @@ Colors and texture
 
 [![](preview_images/colors_and_texture.png)](04_colors_and_texture.py)
 
-Prespective projection
+Perspective projection
 
 [![](preview_images/perspective_projection.png)](05_perspective_projection.py)
 
