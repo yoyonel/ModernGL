@@ -578,7 +578,10 @@ class DrawFrustumExample(Example):
         self.mv_frustum = Matrix44.from_translation((0, 0, -1)) * Matrix44.from_scale((2, 2, 2))
 
         # self.sys_camera = SystemCamera(fov=60.0, aspect=self.wnd.ratio, near=1.0, far=10.0)
-        self.sys_camera = SystemCameraQuaternion(fov=60.0, aspect=self.wnd.ratio, near=1.0, far=10.0)
+        aspect = 1
+        if self.wnd is not None:
+            aspect = self.wnd.ratio
+        self.sys_camera = SystemCameraQuaternion(fov=60, aspect=aspect, near=1, far=10)
 
     def _render_frustum(self, mvp_cam, inv_mvp_frustrum, color=(0.0, 1.0, 0.0, 1.0)):
         """
