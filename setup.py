@@ -1,10 +1,16 @@
 #!/usr/bin/env python
+"""
+Parts of this file were taken from the pandas project
+https://github.com/pandas-dev/pandas (BSD 3-Clause)
+"""
+import os
 import platform
 import re
 import sys
 
+from distutils.sysconfig import get_config_var
+from distutils.version import LooseVersion
 from setuptools import Extension, setup
-
 # pylint: disable=C0103, W0212
 
 if sys.version_info < (3, 0):
@@ -20,6 +26,18 @@ for known in PLATFORMS:
 
 if target not in PLATFORMS:
     target = 'linux'
+
+# For mac, ensure extensions are built for macos 10.9 when compiling on a
+# 10.9 system or above, overriding distuitls behaviour which is to target
+# the version that python was built for. This may be overridden by setting
+# MACOSX_DEPLOYMENT_TARGET before calling setup.py
+if target == 'darwin':
+    if 'MACOSX_DEPLOYMENT_TARGET' not in os.environ:
+        current_system = LooseVersion(platform.mac_ver()[0])
+        python_target = LooseVersion(
+            get_config_var('MACOSX_DEPLOYMENT_TARGET'))
+        if python_target < '10.9' and current_system >= '10.9':
+            os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.9'
 
 if target in ['linux', 'cygwin']:
     from distutils import sysconfig
