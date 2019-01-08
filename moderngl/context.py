@@ -1107,7 +1107,8 @@ def create_context(require=None) -> Context:
     ctx.extra = None
 
     if require is not None and ctx.version_code < require:
-        raise ValueError('The version required is not provided')
+        raise ValueError('Requested OpenGL version {}, got version {}'.format(
+            require, ctx.version_code))
 
     return ctx
 
