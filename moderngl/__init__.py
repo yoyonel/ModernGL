@@ -27,4 +27,4 @@ from .texture_cube import *
 from .vertex_array import *
 from .sampler import *
 
-__version__ = '5.4.2'
+__version__ = '5.5.0'
