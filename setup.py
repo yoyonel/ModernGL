@@ -1,16 +1,12 @@
-#!/usr/bin/env python
-"""
-Parts of this file were taken from the pandas project
-https://github.com/pandas-dev/pandas (BSD 3-Clause)
-"""
 import os
 import platform
 import re
 import sys
-
 from distutils.sysconfig import get_config_var
 from distutils.version import LooseVersion
-from setuptools import Extension, setup
+
+from setuptools import Extension, find_namespace_packages, setup
+
 # pylint: disable=C0103, W0212
 
 if sys.version_info < (3, 0):
@@ -34,8 +30,7 @@ if target not in PLATFORMS:
 if target == 'darwin':
     if 'MACOSX_DEPLOYMENT_TARGET' not in os.environ:
         current_system = LooseVersion(platform.mac_ver()[0])
-        python_target = LooseVersion(
-            get_config_var('MACOSX_DEPLOYMENT_TARGET'))
+        python_target = LooseVersion(get_config_var('MACOSX_DEPLOYMENT_TARGET'))
         if python_target < '10.9' and current_system >= '10.9':
             os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.9'
 
@@ -50,11 +45,6 @@ if target in ['linux', 'cygwin']:
     if 'CFLAGS' in cvars:
         sysconfig._config_vars['CFLAGS'] = cvars['CFLAGS'].replace('-Wstrict-prototypes', '')
         sysconfig._config_vars['CFLAGS'] = cvars['CFLAGS'].replace('-Wimplicit-function-declaration', '')
-
-install_requires = []
-
-if sys.version_info < (3, 5):
-    install_requires.append('typing')
 
 libraries = {
     'windows': ['gdi32', 'opengl32', 'user32'],
@@ -114,6 +104,45 @@ mgl = Extension(
     ],
 )
 
+ext_modules = [mgl]
+
+if target == 'windows':
+    experimental_mgl = Extension(
+        name='moderngl.experimental.mgl',
+        include_dirs=['moderngl/experimental'],
+        define_macros=[],
+        libraries=libraries[target],
+        extra_compile_args=extra_compile_args[target],
+        extra_link_args=extra_linker_args[target],
+        sources=[
+            'moderngl/experimental/mgl/buffer.cpp',
+            'moderngl/experimental/mgl/configuration.cpp',
+            'moderngl/experimental/mgl/context.cpp',
+            'moderngl/experimental/mgl/extensions.cpp',
+            'moderngl/experimental/mgl/framebuffer.cpp',
+            'moderngl/experimental/mgl/limits.cpp',
+            'moderngl/experimental/mgl/mgl.cpp',
+            'moderngl/experimental/mgl/program.cpp',
+            'moderngl/experimental/mgl/query.cpp',
+            'moderngl/experimental/mgl/renderbuffer.cpp',
+            'moderngl/experimental/mgl/sampler.cpp',
+            'moderngl/experimental/mgl/scope.cpp',
+            'moderngl/experimental/mgl/texture.cpp',
+            'moderngl/experimental/mgl/vertex_array.cpp',
+            'moderngl/experimental/mgl/generated/cpp_classes.cpp',
+            'moderngl/experimental/mgl/generated/methods.cpp',
+            'moderngl/experimental/mgl/generated/py_classes.cpp',
+            'moderngl/experimental/mgl/generated/tools.cpp',
+            'moderngl/experimental/mgl/internal/data_type.cpp',
+            'moderngl/experimental/mgl/internal/glsl.cpp',
+            'moderngl/experimental/mgl/internal/modules.cpp',
+            'moderngl/experimental/mgl/internal/tools.cpp',
+            'moderngl/experimental/mgl/internal/opengl/gl_context_windows.cpp',
+            'moderngl/experimental/mgl/internal/opengl/gl_methods.cpp',
+        ],
+    )
+    ext_modules.append(experimental_mgl)
+
 short_description = 'ModernGL: High performance rendering for Python 3'
 
 with open('README.md') as f:
@@ -157,8 +186,7 @@ setup(
     license='MIT',
     classifiers=classifiers,
     keywords=keywords,
-    packages=['moderngl', 'moderngl.program_members'],
-    install_requires=install_requires,
-    ext_modules=[mgl],
+    packages=find_namespace_packages(include=['moderngl', 'moderngl.*']),
+    ext_modules=ext_modules,
     platforms=['any'],
 )
