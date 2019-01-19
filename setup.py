@@ -139,7 +139,6 @@ if target == 'windows':
         ],
     )
     ext_modules.append(experimental_mgl)
-    ext_modules = ext_modules[1:]
 
 short_description = 'ModernGL: High performance rendering for Python 3'
 
