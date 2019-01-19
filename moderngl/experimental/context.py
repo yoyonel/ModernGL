@@ -3,10 +3,14 @@ from typing import Any
 
 from . import mgl
 from .buffer import Buffer
+from .framebuffer import Framebuffer
 from .limits import Limits
 from .program import Program
-from .texture import Texture
+from .query import Query
+from .renderbuffer import Renderbuffer
 from .sampler import Sampler
+from .scope import Scope
+from .texture import Texture
 from .vertex_array import VertexArray
 
 
@@ -47,19 +51,19 @@ class Context:
         content = [(buffer, ' '.join(_attr_fmt(program.attributes[a]) for a in attributes)) + attributes]
         return self.__mglo.vertex_array(program, content, index_buffer)
 
-    def scope(self, framebuffer=None, enable_only=-1, samplers=None, uniform_buffers=None, storage_buffers=None):
+    def scope(self, framebuffer=None, enable_only=-1, samplers=None, uniform_buffers=None, storage_buffers=None) -> Scope:
         return self.__mglo.scope(framebuffer, enable_only, samplers, uniform_buffers, storage_buffers)
 
-    def query(self, time=False, primitives=False, samples=False, any_samples=False):
+    def query(self, time=False, primitives=False, samples=False, any_samples=False) -> Query:
         return self.__mglo.query(time, primitives, samples, any_samples)
 
-    def renderbuffer(self, size, components=4, samples=0, dtype='f1'):
+    def renderbuffer(self, size, components=4, samples=0, dtype='f1') -> Renderbuffer:
         return self.__mglo.renderbuffer(size, components, samples, dtype)
 
-    def depth_renderbuffer(self, size, samples=0):
+    def depth_renderbuffer(self, size, samples=0) -> Renderbuffer:
         return self.__mglo.depth_renderbuffer(size, samples)
 
-    def framebuffer(self, color_attachments=(), depth_attachment=None):
+    def framebuffer(self, color_attachments=(), depth_attachment=None) -> Framebuffer:
         return self.__mglo.framebuffer(color_attachments, depth_attachment)
 
     def configure(self, key, **params):

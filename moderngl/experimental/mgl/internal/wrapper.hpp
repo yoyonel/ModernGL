@@ -185,6 +185,8 @@ extern int Renderbuffer_class_extra;
 
 extern PyTypeObject * Sampler_class;
 extern int Sampler_class_mglo;
+extern int Sampler_class_swizzle;
+extern int Sampler_class_filter;
 extern int Sampler_class_texture;
 extern int Sampler_class_extra;
 

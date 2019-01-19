@@ -1,5 +1,8 @@
 from typing import Any
 
+from .attribute import Attribute
+from .uniform import Uniform
+
 
 class ComputeShader:
     __slots__ = ['__mglo', 'attributes', 'uniforms', 'extra']

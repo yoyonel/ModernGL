@@ -11,22 +11,6 @@ class Texture:
         self.size = None  # type: Union[Tuple[int, int], Tuple[int, int, int]]
         self.extra = None  # type: Any
 
-    @property
-    def swizzle(self):
-        raise NotImplementedError()
-
-    @swizzle.setter
-    def swizzle(self, value):
-        self.__mglo.swizzle = value
-
-    @property
-    def filter(self):
-        raise NotImplementedError()
-
-    @filter.setter
-    def filter(self, value):
-        self.__mglo.filter = value
-
     def level(self, level) -> 'Texture':
         return self.__mglo.level(level)
 

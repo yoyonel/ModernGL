@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Any, Tuple
 
 
 class Framebuffer:

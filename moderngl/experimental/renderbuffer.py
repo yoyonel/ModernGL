@@ -1,3 +1,5 @@
+from typing import Any
+
 
 class Renderbuffer:
     __slots__ = ['__mglo', 'size', 'extra']
