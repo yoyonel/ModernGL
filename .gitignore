@@ -21,6 +21,5 @@ temp_*
 *.log
 *.pyd
 *.pyc
-*.bat
 *.whl
 *.so
