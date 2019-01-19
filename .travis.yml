@@ -12,6 +12,6 @@ script:
       /opt/python/cp35-cp35m/bin/python setup.py bdist_wheel &&\
       /opt/python/cp36-cp36m/bin/python setup.py bdist_wheel &&\
       /opt/python/cp37-cp37m/bin/python setup.py bdist_wheel &&\
-      for whl in dist/*.whl; do; auditwheel repair "$whl"; done
+      for whl in dist/*.whl; do auditwheel repair "$whl"; done
   # - docker run --rm -v `pwd`:/io quay.io/pypa/manylinux1_i686 linux32 /opt/python/python3.5/bin/pip wheel /io/ -w
   # - ls wheelhouse/
