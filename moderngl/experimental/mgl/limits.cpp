@@ -1,5 +1,5 @@
 #include "limits.hpp"
-#include "generated/py_classes.hpp"
+#include "internal/wrapper.hpp"
 #include "context.hpp"
 
 template <typename T>

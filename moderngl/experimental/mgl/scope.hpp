@@ -27,3 +27,6 @@ struct MGLScope {
     int enable_only;
     int old_enable_only;
 };
+
+extern PyType_Spec MGLScope_spec;
+PyObject * MGLContext_meth_scope(MGLContext * self, PyObject * const * args, Py_ssize_t nargs);

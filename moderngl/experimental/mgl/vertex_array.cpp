@@ -3,8 +3,7 @@
 #include "context.hpp"
 #include "program.hpp"
 
-#include "generated/py_classes.hpp"
-#include "generated/cpp_classes.hpp"
+#include "internal/wrapper.hpp"
 
 #include "internal/modules.hpp"
 
@@ -332,3 +331,48 @@ int MGLVertexArray_set_ibo(MGLVertexArray * self, PyObject * value) {
 
     return 0;
 }
+
+#if PY_VERSION_HEX >= 0x03070000
+
+PyMethodDef MGLVertexArray_methods[] = {
+    {"render", (PyCFunction)MGLVertexArray_meth_render, METH_FASTCALL, 0},
+    {"transform", (PyCFunction)MGLVertexArray_meth_transform, METH_FASTCALL, 0},
+    {0},
+};
+
+#else
+
+PyObject * MGLVertexArray_meth_render_va(MGLVertexArray * self, PyObject * args) {
+    return MGLVertexArray_meth_render(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
+
+PyObject * MGLVertexArray_meth_transform_va(MGLVertexArray * self, PyObject * args) {
+    return MGLVertexArray_meth_transform(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
+
+PyMethodDef MGLVertexArray_methods[] = {
+    {"render", (PyCFunction)MGLVertexArray_meth_render_va, METH_VARARGS, 0},
+    {"transform", (PyCFunction)MGLVertexArray_meth_transform_va, METH_VARARGS, 0},
+    {0},
+};
+
+#endif
+
+PyGetSetDef MGLVertexArray_getset[] = {
+    {"ibo", 0, (setter)MGLVertexArray_set_ibo, 0, 0},
+    {0},
+};
+
+PyType_Slot MGLVertexArray_slots[] = {
+    {Py_tp_methods, MGLVertexArray_methods},
+    {Py_tp_getset, MGLVertexArray_getset},
+    {0},
+};
+
+PyType_Spec MGLVertexArray_spec = {
+    mgl_name ".VertexArray",
+    sizeof(MGLVertexArray),
+    0,
+    Py_TPFLAGS_DEFAULT,
+    MGLVertexArray_slots,
+};

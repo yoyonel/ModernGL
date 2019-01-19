@@ -1,8 +1,6 @@
 #include "buffer.hpp"
 #include "context.hpp"
-
-#include "generated/py_classes.hpp"
-#include "generated/cpp_classes.hpp"
+#include "internal/wrapper.hpp"
 
 #include "internal/modules.hpp"
 #include "internal/tools.hpp"
@@ -332,3 +330,52 @@ PyObject * MGLBuffer_meth_clear(MGLBuffer * self) {
     }
     Py_RETURN_NONE;
 }
+
+#if PY_VERSION_HEX >= 0x03070000
+
+PyMethodDef MGLBuffer_methods[] = {
+    {"write", (PyCFunction)MGLBuffer_meth_write, METH_FASTCALL, 0},
+    {"read", (PyCFunction)MGLBuffer_meth_read, METH_FASTCALL, 0},
+    {"map", (PyCFunction)MGLBuffer_meth_map, METH_FASTCALL, 0},
+    {"unmap", (PyCFunction)MGLBuffer_meth_unmap, METH_NOARGS, 0},
+    {"clear", (PyCFunction)MGLBuffer_meth_clear, METH_NOARGS, 0},
+    {0},
+};
+
+#else
+
+PyObject * MGLBuffer_meth_write_va(MGLBuffer * self, PyObject * args) {
+    return MGLBuffer_meth_write(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
+
+PyObject * MGLBuffer_meth_read_va(MGLBuffer * self, PyObject * args) {
+    return MGLBuffer_meth_read(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
+
+PyObject * MGLBuffer_meth_map_va(MGLBuffer * self, PyObject * args) {
+    return MGLBuffer_meth_map(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
+
+PyMethodDef MGLBuffer_methods[] = {
+    {"write", (PyCFunction)MGLBuffer_meth_write_va, METH_VARARGS, 0},
+    {"read", (PyCFunction)MGLBuffer_meth_read_va, METH_VARARGS, 0},
+    {"map", (PyCFunction)MGLBuffer_meth_map_va, METH_VARARGS, 0},
+    {"unmap", (PyCFunction)MGLBuffer_meth_unmap, METH_NOARGS, 0},
+    {"clear", (PyCFunction)MGLBuffer_meth_clear, METH_NOARGS, 0},
+    {0},
+};
+
+#endif
+
+PyType_Slot MGLBuffer_slots[] = {
+    {Py_tp_methods, MGLBuffer_methods},
+    {0},
+};
+
+PyType_Spec MGLBuffer_spec = {
+    mgl_name ".Buffer",
+    sizeof(MGLBuffer),
+    0,
+    Py_TPFLAGS_DEFAULT,
+    MGLBuffer_slots,
+};

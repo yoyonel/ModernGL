@@ -3,8 +3,7 @@
 #include "renderbuffer.hpp"
 #include "texture.hpp"
 
-#include "generated/py_classes.hpp"
-#include "generated/cpp_classes.hpp"
+#include "internal/wrapper.hpp"
 
 #include "internal/modules.hpp"
 #include "internal/tools.hpp"
@@ -113,6 +112,11 @@ PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * arg
         return 0;
     }
 
+    framebuffer->viewport[0] = 0;
+    framebuffer->viewport[1] = 0;
+    framebuffer->viewport[2] = framebuffer->width;
+    framebuffer->viewport[3] = framebuffer->height;
+    SLOT(framebuffer->wrapper, PyObject, Framebuffer_class_viewport) = int_tuple(0, 0, framebuffer->width, framebuffer->height);
     return NEW_REF(framebuffer->wrapper);
 }
 
@@ -169,6 +173,7 @@ PyObject * MGLFramebuffer_meth_use(MGLFramebuffer * self) {
     const GLMethods & gl = self->context->gl;
 
     self->context->bind_framebuffer(self->framebuffer_obj);
+    gl.Viewport(self->viewport[0], self->viewport[1], self->viewport[2], self->viewport[3]);
 
     Py_RETURN_NONE;
 }
@@ -264,3 +269,77 @@ PyObject * MGLFramebuffer_meth_clear(MGLFramebuffer * self, PyObject * const * a
     // return 0;
     Py_RETURN_NONE;
 }
+
+/* MGLFramebuffer.viewport
+ */
+int MGLFramebuffer_set_viewport(MGLFramebuffer * self, PyObject * value) {
+    int x = 0;
+    int y = 0;
+    int width = self->width;
+    int height = self->height;
+
+    if (!unpack_viewport(value, x, y, width, height)) {
+        return -1;
+    }
+
+    PyObject *& viewport_slot = SLOT(self->wrapper, PyObject, Framebuffer_class_viewport);
+    // PyObject * viewport =
+    // replace_object(viewport_slot, viewport);
+    Py_XDECREF(viewport_slot);
+    viewport_slot = int_tuple(x, y, width, height);
+    self->viewport[0] = x;
+    self->viewport[1] = y;
+    self->viewport[2] = width;
+    self->viewport[3] = height;
+    if (self->context->bound_framebuffer == self) {
+        self->context->gl.Viewport(x, y, width, height);
+    }
+    return 0;
+}
+
+#if PY_VERSION_HEX >= 0x03070000
+
+PyMethodDef MGLFramebuffer_methods[] = {
+    {"read", (PyCFunction)MGLFramebuffer_meth_read, METH_FASTCALL, 0},
+    {"use", (PyCFunction)MGLFramebuffer_meth_use, METH_NOARGS, 0},
+    {"clear", (PyCFunction)MGLFramebuffer_meth_clear, METH_FASTCALL, 0},
+    {0},
+};
+
+#else
+
+PyObject * MGLFramebuffer_meth_read_va(MGLFramebuffer * self, PyObject * args) {
+    return MGLFramebuffer_meth_read(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
+
+PyObject * MGLFramebuffer_meth_clear_va(MGLFramebuffer * self, PyObject * args) {
+    return MGLFramebuffer_meth_clear(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
+
+PyMethodDef MGLFramebuffer_methods[] = {
+    {"read", (PyCFunction)MGLFramebuffer_meth_read_va, METH_VARARGS, 0},
+    {"use", (PyCFunction)MGLFramebuffer_meth_use, METH_NOARGS, 0},
+    {"clear", (PyCFunction)MGLFramebuffer_meth_clear_va, METH_VARARGS, 0},
+    {0},
+};
+
+#endif
+
+PyGetSetDef MGLFramebuffer_getset[] = {
+    {"viewport", 0, (setter)MGLFramebuffer_set_viewport, 0, 0},
+    {0},
+};
+
+PyType_Slot MGLFramebuffer_slots[] = {
+    {Py_tp_methods, MGLFramebuffer_methods},
+    {Py_tp_getset, MGLFramebuffer_getset},
+    {0},
+};
+
+PyType_Spec MGLFramebuffer_spec = {
+    mgl_name ".Framebuffer",
+    sizeof(MGLFramebuffer),
+    0,
+    Py_TPFLAGS_DEFAULT,
+    MGLFramebuffer_slots,
+};

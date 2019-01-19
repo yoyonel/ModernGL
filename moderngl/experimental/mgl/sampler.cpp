@@ -2,8 +2,7 @@
 #include "context.hpp"
 #include "texture.hpp"
 
-#include "generated/py_classes.hpp"
-#include "generated/cpp_classes.hpp"
+#include "internal/wrapper.hpp"
 
 #include "internal/modules.hpp"
 #include "internal/tools.hpp"
@@ -52,3 +51,36 @@ PyObject * MGLSampler_meth_use(MGLSampler * self, PyObject * const * args, Py_ss
     self->context->bind_sampler(location, texture->texture_target, texture->texture_obj, self->sampler_obj);
     Py_RETURN_NONE;
 }
+
+#if PY_VERSION_HEX >= 0x03070000
+
+PyMethodDef MGLSampler_methods[] = {
+    {"use", (PyCFunction)MGLSampler_meth_use, METH_FASTCALL, 0},
+    {0},
+};
+
+#else
+
+PyObject * MGLSampler_meth_use_va(MGLSampler * self, PyObject * args) {
+    return MGLSampler_meth_use(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
+
+PyMethodDef MGLSampler_methods[] = {
+    {"use", (PyCFunction)MGLSampler_meth_use_va, METH_VARARGS, 0},
+    {0},
+};
+
+#endif
+
+PyType_Slot MGLSampler_slots[] = {
+    {Py_tp_methods, MGLSampler_methods},
+    {0},
+};
+
+PyType_Spec MGLSampler_spec = {
+    mgl_name ".Sampler",
+    sizeof(MGLSampler),
+    0,
+    Py_TPFLAGS_DEFAULT,
+    MGLSampler_slots,
+};

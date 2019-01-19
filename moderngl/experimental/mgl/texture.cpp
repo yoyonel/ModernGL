@@ -2,8 +2,7 @@
 #include "buffer.hpp"
 #include "context.hpp"
 
-#include "generated/py_classes.hpp"
-#include "generated/cpp_classes.hpp"
+#include "internal/wrapper.hpp"
 
 #include "internal/modules.hpp"
 #include "internal/tools.hpp"
@@ -263,3 +262,36 @@ PyObject * MGLTexture_meth_write(MGLTexture * self, PyObject * const * args, Py_
 
     Py_RETURN_NONE;
 }
+
+#if PY_VERSION_HEX >= 0x03070000
+
+PyMethodDef MGLTexture_methods[] = {
+    {"write", (PyCFunction)MGLTexture_meth_write, METH_FASTCALL, 0},
+    {0},
+};
+
+#else
+
+PyObject * MGLTexture_meth_write_va(MGLTexture * self, PyObject * args) {
+    return MGLTexture_meth_write(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
+
+PyMethodDef MGLTexture_methods[] = {
+    {"write", (PyCFunction)MGLTexture_meth_write_va, METH_VARARGS, 0},
+    {0},
+};
+
+#endif
+
+PyType_Slot MGLTexture_slots[] = {
+    {Py_tp_methods, MGLTexture_methods},
+    {0},
+};
+
+PyType_Spec MGLTexture_spec = {
+    mgl_name ".Texture",
+    sizeof(MGLTexture),
+    0,
+    Py_TPFLAGS_DEFAULT,
+    MGLTexture_slots,
+};

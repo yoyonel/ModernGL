@@ -4,8 +4,7 @@
 #include "sampler.hpp"
 #include "texture.hpp"
 
-#include "generated/py_classes.hpp"
-#include "generated/cpp_classes.hpp"
+#include "internal/wrapper.hpp"
 
 #include "internal/modules.hpp"
 #include "internal/tools.hpp"
@@ -182,3 +181,34 @@ PyObject * MGLScope_meth_end(MGLScope * self) {
     // return MGLFramebuffer_meth_use(self->old_framebuffer);
     Py_RETURN_NONE;
 }
+
+#if PY_VERSION_HEX >= 0x03070000
+
+PyMethodDef MGLScope_methods[] = {
+    {"begin", (PyCFunction)MGLScope_meth_begin, METH_NOARGS, 0},
+    {"end", (PyCFunction)MGLScope_meth_end, METH_NOARGS, 0},
+    {0},
+};
+
+#else
+
+PyMethodDef MGLScope_methods[] = {
+    {"begin", (PyCFunction)MGLScope_meth_begin, METH_NOARGS, 0},
+    {"end", (PyCFunction)MGLScope_meth_end, METH_NOARGS, 0},
+    {0},
+};
+
+#endif
+
+PyType_Slot MGLScope_slots[] = {
+    {Py_tp_methods, MGLScope_methods},
+    {0},
+};
+
+PyType_Spec MGLScope_spec = {
+    mgl_name ".Scope",
+    sizeof(MGLScope),
+    0,
+    Py_TPFLAGS_DEFAULT,
+    MGLScope_slots,
+};

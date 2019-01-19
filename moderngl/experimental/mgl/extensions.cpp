@@ -1,7 +1,7 @@
 #include "extensions.hpp"
 #include "context.hpp"
 
-#include "generated/py_classes.hpp"
+#include "internal/wrapper.hpp"
 
 /* moderngl.core.extensions(context)
  * Returns a list of supported extensions.

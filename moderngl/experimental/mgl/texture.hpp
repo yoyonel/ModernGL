@@ -18,3 +18,6 @@ struct MGLTexture {
     int levels;
     int samples;
 };
+
+extern PyType_Spec MGLTexture_spec;
+PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, Py_ssize_t nargs);

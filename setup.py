@@ -5,7 +5,7 @@ import sys
 from distutils.sysconfig import get_config_var
 from distutils.version import LooseVersion
 
-from setuptools import Extension, find_namespace_packages, setup
+from setuptools import Extension, setup
 
 # pylint: disable=C0103, W0212
 
@@ -129,19 +129,17 @@ if target == 'windows':
             'moderngl/experimental/mgl/scope.cpp',
             'moderngl/experimental/mgl/texture.cpp',
             'moderngl/experimental/mgl/vertex_array.cpp',
-            'moderngl/experimental/mgl/generated/cpp_classes.cpp',
-            'moderngl/experimental/mgl/generated/methods.cpp',
-            'moderngl/experimental/mgl/generated/py_classes.cpp',
-            'moderngl/experimental/mgl/generated/tools.cpp',
             'moderngl/experimental/mgl/internal/data_type.cpp',
             'moderngl/experimental/mgl/internal/glsl.cpp',
             'moderngl/experimental/mgl/internal/modules.cpp',
             'moderngl/experimental/mgl/internal/tools.cpp',
+            'moderngl/experimental/mgl/internal/wrapper.cpp',
             'moderngl/experimental/mgl/internal/opengl/gl_context_windows.cpp',
             'moderngl/experimental/mgl/internal/opengl/gl_methods.cpp',
         ],
     )
     ext_modules.append(experimental_mgl)
+    ext_modules = ext_modules[1:]
 
 short_description = 'ModernGL: High performance rendering for Python 3'
 
@@ -186,7 +184,7 @@ setup(
     license='MIT',
     classifiers=classifiers,
     keywords=keywords,
-    packages=find_namespace_packages(include=['moderngl', 'moderngl.*']),
+    packages=['moderngl', 'moderngl.experimental', 'moderngl.program_members'],
     ext_modules=ext_modules,
     platforms=['any'],
 )

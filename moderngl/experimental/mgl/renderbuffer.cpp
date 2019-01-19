@@ -1,8 +1,7 @@
 #include "renderbuffer.hpp"
 #include "context.hpp"
 
-#include "generated/py_classes.hpp"
-#include "generated/cpp_classes.hpp"
+#include "internal/wrapper.hpp"
 
 #include "internal/modules.hpp"
 #include "internal/tools.hpp"
@@ -63,3 +62,36 @@ PyObject * MGLContext_meth_renderbuffer(MGLContext * self, PyObject * const * ar
 PyObject * MGLRenderbuffer_meth_write(MGLRenderbuffer * self, PyObject * const * args, Py_ssize_t nargs) {
     Py_RETURN_NONE;
 }
+
+#if PY_VERSION_HEX >= 0x03070000
+
+PyMethodDef MGLRenderbuffer_methods[] = {
+    {"write", (PyCFunction)MGLRenderbuffer_meth_write, METH_FASTCALL, 0},
+    {0},
+};
+
+#else
+
+PyObject * MGLRenderbuffer_meth_write_va(MGLRenderbuffer * self, PyObject * args) {
+    return MGLRenderbuffer_meth_write(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
+
+PyMethodDef MGLRenderbuffer_methods[] = {
+    {"write", (PyCFunction)MGLRenderbuffer_meth_write_va, METH_VARARGS, 0},
+    {0},
+};
+
+#endif
+
+PyType_Slot MGLRenderbuffer_slots[] = {
+    {Py_tp_methods, MGLRenderbuffer_methods},
+    {0},
+};
+
+PyType_Spec MGLRenderbuffer_spec = {
+    mgl_name ".Renderbuffer",
+    sizeof(MGLRenderbuffer),
+    0,
+    Py_TPFLAGS_DEFAULT,
+    MGLRenderbuffer_slots,
+};

@@ -1,8 +1,7 @@
 #include "query.hpp"
 #include "context.hpp"
 
-#include "generated/py_classes.hpp"
-#include "generated/cpp_classes.hpp"
+#include "internal/wrapper.hpp"
 
 #include "internal/modules.hpp"
 #include "internal/tools.hpp"
@@ -141,3 +140,38 @@ PyObject * MGLQuery_meth_end_render(MGLQuery * self) {
     self->context->gl.EndConditionalRender();
     Py_RETURN_NONE;
 }
+
+#if PY_VERSION_HEX >= 0x03070000
+
+PyMethodDef MGLQuery_methods[] = {
+    {"begin", (PyCFunction)MGLQuery_meth_begin, METH_NOARGS, 0},
+    {"end", (PyCFunction)MGLQuery_meth_end, METH_NOARGS, 0},
+    {"begin_render", (PyCFunction)MGLQuery_meth_begin_render, METH_NOARGS, 0},
+    {"end_render", (PyCFunction)MGLQuery_meth_end_render, METH_NOARGS, 0},
+    {0},
+};
+
+#else
+
+PyMethodDef MGLQuery_methods[] = {
+    {"begin", (PyCFunction)MGLQuery_meth_begin, METH_NOARGS, 0},
+    {"end", (PyCFunction)MGLQuery_meth_end, METH_NOARGS, 0},
+    {"begin_render", (PyCFunction)MGLQuery_meth_begin_render, METH_NOARGS, 0},
+    {"end_render", (PyCFunction)MGLQuery_meth_end_render, METH_NOARGS, 0},
+    {0},
+};
+
+#endif
+
+PyType_Slot MGLQuery_slots[] = {
+    {Py_tp_methods, MGLQuery_methods},
+    {0},
+};
+
+PyType_Spec MGLQuery_spec = {
+    mgl_name ".Query",
+    sizeof(MGLQuery),
+    0,
+    Py_TPFLAGS_DEFAULT,
+    MGLQuery_slots,
+};

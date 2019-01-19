@@ -29,3 +29,7 @@ inline PyObject * int_tuple(int i0, int i1, int i2, int i3) {
     PyTuple_SET_ITEM(res, 3, PyLong_FromLong(i3));
     return res;
 }
+
+PyTypeObject * detect_class(PyObject * module, const char * name, int & slots_len);
+int slot_offset(PyTypeObject * type, const char * name, int & counter);
+void assert_slots_len(PyTypeObject * type, int slots_len);

@@ -1,8 +1,7 @@
 #include "program.hpp"
 #include "context.hpp"
 
-#include "generated/py_classes.hpp"
-#include "generated/cpp_classes.hpp"
+#include "internal/wrapper.hpp"
 
 #include "internal/modules.hpp"
 #include "internal/tools.hpp"
@@ -411,3 +410,36 @@ PyObject * MGLProgram_meth_uniform(MGLProgram * self, PyObject * const * args, P
 
     Py_RETURN_NONE;
 }
+
+#if PY_VERSION_HEX >= 0x03070000
+
+PyMethodDef MGLProgram_methods[] = {
+    {"uniform", (PyCFunction)MGLProgram_meth_uniform, METH_FASTCALL, 0},
+    {0},
+};
+
+#else
+
+PyObject * MGLProgram_meth_uniform_va(MGLProgram * self, PyObject * args) {
+    return MGLProgram_meth_uniform(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
+
+PyMethodDef MGLProgram_methods[] = {
+    {"uniform", (PyCFunction)MGLProgram_meth_uniform_va, METH_VARARGS, 0},
+    {0},
+};
+
+#endif
+
+PyType_Slot MGLProgram_slots[] = {
+    {Py_tp_methods, MGLProgram_methods},
+    {0},
+};
+
+PyType_Spec MGLProgram_spec = {
+    mgl_name ".Program",
+    sizeof(MGLProgram),
+    0,
+    Py_TPFLAGS_DEFAULT,
+    MGLProgram_slots,
+};

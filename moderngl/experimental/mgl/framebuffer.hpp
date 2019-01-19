@@ -21,3 +21,6 @@ struct MGLFramebuffer {
     unsigned long long color_mask;
     bool depth_mask;
 };
+
+extern PyType_Spec MGLFramebuffer_spec;
+PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * args, Py_ssize_t nargs);

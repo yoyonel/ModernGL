@@ -65,6 +65,7 @@ struct MGLContext {
     void set_write_mask(unsigned long long color_mask, bool depth_mask);
 };
 
+extern PyType_Spec MGLContext_spec;
 PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssize_t nargs);
 
 /* Every objects derived from a Context must have the following HEAD */

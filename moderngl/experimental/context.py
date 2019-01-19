@@ -10,6 +10,10 @@ from .sampler import Sampler
 from .vertex_array import VertexArray
 
 
+def _attr_fmt(attr):
+    return '%d%c' % (attr.cols * attr.rows * attr.size, attr.shape)
+
+
 class Context:
     __slots__ = ['__mglo', 'version_code', 'limits', 'screen', 'fbo', 'extra']
 
@@ -39,6 +43,10 @@ class Context:
     def vertex_array(self, program, content, index_buffer=None) -> VertexArray:
         return self.__mglo.vertex_array(program, content, index_buffer)
 
+    def simple_vertex_array(self, program, buffer, *attributes, index_buffer=None) -> VertexArray:
+        content = [(buffer, ' '.join(_attr_fmt(program.attributes[a]) for a in attributes)) + attributes]
+        return self.__mglo.vertex_array(program, content, index_buffer)
+
     def scope(self, framebuffer=None, enable_only=-1, samplers=None, uniform_buffers=None, storage_buffers=None):
         return self.__mglo.scope(framebuffer, enable_only, samplers, uniform_buffers, storage_buffers)
 
@@ -56,6 +64,10 @@ class Context:
 
     def configure(self, key, **params):
         return self.__mglo.configure(params)
+
+    def clear(self, red=1.0, green=1.0, blue=1.0, alpha=1.0, depth=1.0, viewport=None):
+        self.fbo.clear(0, (red, green, blue, alpha), viewport)
+        self.fbo.clear(-1, depth, viewport)
 
 
 def create_context(standalone=False, debug=False, glhook=None, gc=None):
