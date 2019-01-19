@@ -8,6 +8,6 @@ matrix:
         - docker
 
 script:
-  - docker run --rm -v `pwd`:/io quay.io/pypa/manylinux1_x86_64 sh extras/build-travis/build.sh
-  - docker run --rm -v `pwd`:/io quay.io/pypa/manylinux1_i686 linux32 sh extras/build-travis/build.sh
+  - docker run --rm -v `pwd`:/io quay.io/pypa/manylinux1_x86_64 sh /io/extras/build-travis/build.sh
+  - docker run --rm -v `pwd`:/io quay.io/pypa/manylinux1_i686 linux32 sh /io/extras/build-travis/build.sh
   - ls wheelhouse/
