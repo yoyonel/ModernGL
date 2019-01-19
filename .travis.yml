@@ -1,13 +1,20 @@
 notifications:
   email: false
 
-matrix:
-  include:
-    - sudo: required
-      services:
-        - docker
+language: python
 
-script:
+python: 3.7
+
+sudo: required
+
+services:
+  - docker
+
+install:
+  - export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start
   - docker run --rm -v `pwd`:/io quay.io/pypa/manylinux1_x86_64 sh /io/extras/build-travis/build.sh
   - docker run --rm -v `pwd`:/io quay.io/pypa/manylinux1_i686 linux32 sh /io/extras/build-travis/build.sh
-  - ls wheelhouse/
+  - python -m pip install moderngl --no-index -f wheelhouse
+
+script:
+  - python -m pytest tests/experimental
