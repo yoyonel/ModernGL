@@ -83,7 +83,7 @@ class CrateExample(Example):
 
         self.prog['Mvp'] = (proj * lookat).astype('f4').tobytes()
         self.prog['Light'] = camera_pos
-        with self.ctx.scope(enable_only=mgl.DEPTH_TEST):
+        with self.ctx.scope(mgl.DEPTH_TEST):
             self.vao.render()
 
 
