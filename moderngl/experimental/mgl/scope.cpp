@@ -10,7 +10,7 @@
 #include "internal/tools.hpp"
 #include "internal/glsl.hpp"
 
-/* MGLContext.scope(framebuffer, enable_only, samplers, uniform_buffers, storage_buffers)
+/* MGLContext.scope(enable_only, framebuffer, samplers, uniform_buffers, storage_buffers)
  */
 PyObject * MGLContext_meth_scope(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 5) {
@@ -18,19 +18,19 @@ PyObject * MGLContext_meth_scope(MGLContext * self, PyObject * const * args, Py_
         return 0;
     }
 
-    if (args[0] != Py_None && Py_TYPE(args[0]) != Framebuffer_class) {
+    MGLScope * scope = MGLContext_new_object(self, Scope);
+
+    scope->enable_only = PyLong_AsLong(args[0]);
+
+    if (args[1] != Py_None && Py_TYPE(args[1]) != Framebuffer_class) {
         return 0;
     }
 
-    MGLScope * scope = MGLContext_new_object(self, Scope);
-
-    if (args[0] == Py_None) {
+    if (args[1] == Py_None) {
         scope->framebuffer = 0;
     } else {
-        scope->framebuffer = NEW_REF(SLOT(args[0], MGLFramebuffer, Framebuffer_class_mglo));
+        scope->framebuffer = NEW_REF(SLOT(args[1], MGLFramebuffer, Framebuffer_class_mglo));
     }
-
-    scope->enable_only = PyLong_AsLong(args[1]);
 
     PyObject * samplers = 0;
     PyObject * uniform_buffers = 0;
