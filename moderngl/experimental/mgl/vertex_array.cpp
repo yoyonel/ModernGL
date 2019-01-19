@@ -243,7 +243,7 @@ PyObject * MGLVertexArray_meth_render(MGLVertexArray * self, PyObject * const * 
     Py_RETURN_NONE;
 }
 
-/* MGLVertexArray.render(buffer, mode, vertices, first, instances, flush)
+/* MGLVertexArray.transform(buffer, mode, vertices, first, instances, flush)
  */
 PyObject * MGLVertexArray_meth_transform(MGLVertexArray * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 6) {
