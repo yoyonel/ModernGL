@@ -12,9 +12,12 @@ from setuptools import Extension, setup
 if sys.version_info < (3, 0):
     raise Exception('Python 2 is not supported!')
 
-PLATFORMS = {'windows', 'linux', 'darwin', 'cygwin'}
+PLATFORMS = {'windows', 'linux', 'darwin', 'cygwin', 'android'}
 
 target = platform.system().lower()
+
+if 'pydroid3' in sys.executable.lower():
+    target = 'android'
 
 for known in PLATFORMS:
     if target.startswith(known):
@@ -51,6 +54,7 @@ libraries = {
     'linux': ['GL', 'dl', 'X11'],
     'cygwin': ['GL', 'X11'],
     'darwin': [],
+    'android': [],
 }
 
 extra_compile_args = {
@@ -58,6 +62,7 @@ extra_compile_args = {
     'linux': [],
     'cygwin': [],
     'darwin': ['-Wno-deprecated-declarations'],
+    'android': [],
 }
 
 extra_linker_args = {
@@ -65,6 +70,7 @@ extra_linker_args = {
     'linux': [],
     'cygwin': [],
     'darwin': ['-framework', 'OpenGL', '-Wno-deprecated'],
+    'android': [],
 }
 
 mgl = Extension(
@@ -104,41 +110,37 @@ mgl = Extension(
     ],
 )
 
-ext_modules = [mgl]
-
-if target == 'windows':
-    experimental_mgl = Extension(
-        name='moderngl.experimental.mgl',
-        include_dirs=['moderngl/experimental'],
-        define_macros=[],
-        libraries=libraries[target],
-        extra_compile_args=extra_compile_args[target],
-        extra_link_args=extra_linker_args[target],
-        sources=[
-            'moderngl/experimental/mgl/buffer.cpp',
-            'moderngl/experimental/mgl/configuration.cpp',
-            'moderngl/experimental/mgl/context.cpp',
-            'moderngl/experimental/mgl/extensions.cpp',
-            'moderngl/experimental/mgl/framebuffer.cpp',
-            'moderngl/experimental/mgl/limits.cpp',
-            'moderngl/experimental/mgl/mgl.cpp',
-            'moderngl/experimental/mgl/program.cpp',
-            'moderngl/experimental/mgl/query.cpp',
-            'moderngl/experimental/mgl/renderbuffer.cpp',
-            'moderngl/experimental/mgl/sampler.cpp',
-            'moderngl/experimental/mgl/scope.cpp',
-            'moderngl/experimental/mgl/texture.cpp',
-            'moderngl/experimental/mgl/vertex_array.cpp',
-            'moderngl/experimental/mgl/internal/data_type.cpp',
-            'moderngl/experimental/mgl/internal/glsl.cpp',
-            'moderngl/experimental/mgl/internal/modules.cpp',
-            'moderngl/experimental/mgl/internal/tools.cpp',
-            'moderngl/experimental/mgl/internal/wrapper.cpp',
-            'moderngl/experimental/mgl/internal/opengl/gl_context_windows.cpp',
-            'moderngl/experimental/mgl/internal/opengl/gl_methods.cpp',
-        ],
-    )
-    ext_modules.append(experimental_mgl)
+experimental_mgl = Extension(
+    name='moderngl.experimental.mgl',
+    include_dirs=['moderngl/experimental'],
+    define_macros=[],
+    libraries=libraries[target],
+    extra_compile_args=extra_compile_args[target],
+    extra_link_args=extra_linker_args[target],
+    sources=[
+        'moderngl/experimental/mgl/buffer.cpp',
+        'moderngl/experimental/mgl/configuration.cpp',
+        'moderngl/experimental/mgl/context.cpp',
+        'moderngl/experimental/mgl/extensions.cpp',
+        'moderngl/experimental/mgl/framebuffer.cpp',
+        'moderngl/experimental/mgl/limits.cpp',
+        'moderngl/experimental/mgl/mgl.cpp',
+        'moderngl/experimental/mgl/program.cpp',
+        'moderngl/experimental/mgl/query.cpp',
+        'moderngl/experimental/mgl/renderbuffer.cpp',
+        'moderngl/experimental/mgl/sampler.cpp',
+        'moderngl/experimental/mgl/scope.cpp',
+        'moderngl/experimental/mgl/texture.cpp',
+        'moderngl/experimental/mgl/vertex_array.cpp',
+        'moderngl/experimental/mgl/internal/data_type.cpp',
+        'moderngl/experimental/mgl/internal/glsl.cpp',
+        'moderngl/experimental/mgl/internal/modules.cpp',
+        'moderngl/experimental/mgl/internal/tools.cpp',
+        'moderngl/experimental/mgl/internal/wrapper.cpp',
+        'moderngl/experimental/mgl/internal/opengl/gl_context_%s.cpp' % target,
+        'moderngl/experimental/mgl/internal/opengl/gl_methods.cpp',
+    ],
+)
 
 short_description = 'ModernGL: High performance rendering for Python 3'
 
@@ -184,6 +186,6 @@ setup(
     classifiers=classifiers,
     keywords=keywords,
     packages=['moderngl', 'moderngl.experimental', 'moderngl.program_members'],
-    ext_modules=ext_modules,
+    ext_modules=[mgl, experimental_mgl],
     platforms=['any'],
 )
