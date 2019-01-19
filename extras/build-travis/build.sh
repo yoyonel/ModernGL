@@ -1,13 +1,10 @@
 set -e -x
+cd /io
 
 for PYBIN in /opt/python/cp3*/bin; do
-    "${PYBIN}/pip" wheel /io/ -w wheelhouse/
+    "${PYBIN}/python" setup.py bdist_wheel -w dist
 done
 
-for whl in wheelhouse/*.whl; do
-    auditwheel repair "$whl" -w /io/wheelhouse/
+for whl in dist/*.whl; do
+    auditwheel repair "$whl" -w /io/dist
 done
-
-# for PYBIN in /opt/python/cp3*/bin/; do
-#     "${PYBIN}/pip" install moderngl --no-index -f /io/wheelhouse
-# done
