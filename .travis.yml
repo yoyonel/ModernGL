@@ -1,46 +1,17 @@
-language: generic
-
-sudo: false
-
 notifications:
   email: false
 
 matrix:
-  fast_finish: true
   include:
-    - os: linux
-      language: python
-      python: 3.4
-      env:
-        - CC=gcc-4.9
-        - CXX=g++-4.9
-    - os: linux
-      language: python
-      python: 3.5
-      env:
-        - CC=gcc-4.9
-        - CXX=g++-4.9
-    - os: linux
-      language: python
-      python: 3.6
-      env:
-        - CC=gcc-4.9
-        - CXX=g++-4.9
-
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc-4.9
-      - g++-4.9
-
-install:
-  - export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start
-  - python -m pip install -r tests/requirements.txt
-  - python setup.py build_ext --inplace
-  - python -m pip install -e .
+    - sudo: required
+      services:
+        - docker
 
 script:
-  - python -m moderngl
-  - python -m pytest tests/test_local.py tests/test_module_integrity.py tests/test_code_style.py tests/test_documentation.py
+  - docker run --rm -v `pwd`:/moderngl quay.io/pypa/manylinux1_x86_64 cd /moderngl/ &&\
+      /opt/python/cp35-cp35m/bin/python setup.py bdist_wheel &&\
+      /opt/python/cp36-cp36m/bin/python setup.py bdist_wheel &&\
+      /opt/python/cp37-cp37m/bin/python setup.py bdist_wheel &&\
+      for whl in dist/*.whl; do; auditwheel repair "$whl"; done
+  # - docker run --rm -v `pwd`:/io quay.io/pypa/manylinux1_i686 linux32 /opt/python/python3.5/bin/pip wheel /io/ -w
+  # - ls wheelhouse/
