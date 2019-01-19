@@ -17,7 +17,6 @@ extern int Buffer_class_extra;
 
 extern PyTypeObject * ComputeShader_class;
 extern int ComputeShader_class_mglo;
-extern int ComputeShader_class_attributes;
 extern int ComputeShader_class_uniforms;
 extern int ComputeShader_class_extra;
 

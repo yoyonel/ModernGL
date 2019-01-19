@@ -17,7 +17,6 @@ int Buffer_class_extra;
 
 PyTypeObject * ComputeShader_class;
 int ComputeShader_class_mglo;
-int ComputeShader_class_attributes;
 int ComputeShader_class_uniforms;
 int ComputeShader_class_extra;
 
@@ -250,7 +249,6 @@ void init_wrappers() {
     int ComputeShader_slots = 0;
     ComputeShader_class = detect_class(moderngl, "ComputeShader", ComputeShader_slots);
     ComputeShader_class_mglo = slot_offset(ComputeShader_class, "_ComputeShader__mglo", ComputeShader_slots);
-    ComputeShader_class_attributes = slot_offset(ComputeShader_class, "attributes", ComputeShader_slots);
     ComputeShader_class_uniforms = slot_offset(ComputeShader_class, "uniforms", ComputeShader_slots);
     ComputeShader_class_extra = slot_offset(ComputeShader_class, "extra", ComputeShader_slots);
     assert_slots_len(ComputeShader_class, ComputeShader_slots);

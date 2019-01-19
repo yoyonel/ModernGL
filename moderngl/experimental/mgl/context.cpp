@@ -1,6 +1,7 @@
 #include "context.hpp"
 
 #include "buffer.hpp"
+#include "compute_shader.hpp"
 #include "configuration.hpp"
 #include "framebuffer.hpp"
 #include "limits.hpp"
@@ -86,6 +87,7 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
     gl.PrimitiveRestartIndex(-1);
 
     context->MGLBuffer_class = (PyTypeObject *)PyType_FromSpec(&MGLBuffer_spec);
+    context->MGLComputeShader_class = (PyTypeObject *)PyType_FromSpec(&MGLComputeShader_spec);
     context->MGLFramebuffer_class = (PyTypeObject *)PyType_FromSpec(&MGLFramebuffer_spec);
     context->MGLProgram_class = (PyTypeObject *)PyType_FromSpec(&MGLProgram_spec);
     context->MGLQuery_class = (PyTypeObject *)PyType_FromSpec(&MGLQuery_spec);
@@ -282,7 +284,9 @@ PyTypeObject * MGLContext_class;
 #if PY_VERSION_HEX >= 0x03070000
 
 PyMethodDef MGLContext_methods[] = {
+    {"copy_buffer", (PyCFunction)MGLContext_meth_copy_buffer, METH_FASTCALL, 0},
     {"buffer", (PyCFunction)MGLContext_meth_buffer, METH_FASTCALL, 0},
+    {"compute_shader", (PyCFunction)MGLContext_meth_compute_shader, METH_FASTCALL, 0},
     {"configure", (PyCFunction)MGLContext_meth_configure, METH_FASTCALL, 0},
     {"framebuffer", (PyCFunction)MGLContext_meth_framebuffer, METH_FASTCALL, 0},
     {"program", (PyCFunction)MGLContext_meth_program, METH_FASTCALL, 0},
@@ -296,6 +300,10 @@ PyMethodDef MGLContext_methods[] = {
 };
 
 #else
+
+PyObject * MGLContext_meth_copy_buffer_va(MGLContext * self, PyObject * args) {
+    return MGLContext_meth_copy_buffer(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
 
 PyObject * MGLContext_meth_buffer_va(MGLContext * self, PyObject * args) {
     return MGLContext_meth_buffer(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
@@ -338,6 +346,7 @@ PyObject * MGLContext_meth_vertex_array_va(MGLContext * self, PyObject * args) {
 }
 
 PyMethodDef MGLContext_methods[] = {
+    {"copy_buffer", (PyCFunction)MGLContext_meth_copy_buffer_va, METH_VARARGS, 0},
     {"buffer", (PyCFunction)MGLContext_meth_buffer_va, METH_VARARGS, 0},
     {"configure", (PyCFunction)MGLContext_meth_configure_va, METH_VARARGS, 0},
     {"framebuffer", (PyCFunction)MGLContext_meth_framebuffer_va, METH_VARARGS, 0},
