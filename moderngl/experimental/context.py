@@ -3,6 +3,7 @@ from typing import Any
 
 from . import mgl
 from .buffer import Buffer
+from .compute_shader import ComputeShader
 from .framebuffer import Framebuffer
 from .limits import Limits
 from .program import Program
@@ -32,6 +33,9 @@ class Context:
     def buffer(self, data=None, reserve=0, readable=True, writable=True, local=False) -> Buffer:
         return self.__mglo.buffer(data, reserve, readable, writable, local)
 
+    def compute_shader(self, source) -> ComputeShader:
+        return self.__mglo.compute_shader(source)
+
     def program(self, vertex_shader, fragment_shader=None, geometry_shader=None, tess_control_shader=None, tess_evaluation_shader=None, varyings=()) -> Program:
         return self.__mglo.program(vertex_shader, fragment_shader, geometry_shader, tess_control_shader, tess_evaluation_shader, varyings)
 
@@ -51,8 +55,8 @@ class Context:
         content = [(buffer, ' '.join(_attr_fmt(program.attributes[a]) for a in attributes)) + attributes]
         return self.__mglo.vertex_array(program, content, index_buffer)
 
-    def scope(self, framebuffer=None, enable_only=-1, samplers=None, uniform_buffers=None, storage_buffers=None) -> Scope:
-        return self.__mglo.scope(framebuffer, enable_only, samplers, uniform_buffers, storage_buffers)
+    def scope(self, enable_only=-1, framebuffer=None, samplers=None, uniform_buffers=None, storage_buffers=None) -> Scope:
+        return self.__mglo.scope(enable_only, framebuffer, samplers, uniform_buffers, storage_buffers)
 
     def query(self, time=False, primitives=False, samples=False, any_samples=False) -> Query:
         return self.__mglo.query(time, primitives, samples, any_samples)
@@ -72,6 +76,9 @@ class Context:
     def clear(self, red=1.0, green=1.0, blue=1.0, alpha=1.0, depth=1.0, viewport=None):
         self.fbo.clear(0, (red, green, blue, alpha), viewport)
         self.fbo.clear(-1, depth, viewport)
+
+    def copy_buffer(self, dst, src, size=-1, *, read_offset=0, write_offset=0) -> None:
+        self.__mglo.copy_buffer(dst, src, size, read_offset, write_offset)
 
 
 def create_context(standalone=False, debug=False, glhook=None, gc=None):
