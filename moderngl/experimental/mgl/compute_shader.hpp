@@ -12,4 +12,4 @@ struct MGLComputeShader {
 };
 
 extern PyType_Spec MGLComputeShader_spec;
-PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * const * args, Py_ssize_t nargs);
+PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source);

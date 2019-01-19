@@ -9,14 +9,7 @@
 
 /* MGLContext.compute_shader(texture)
  */
-PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 1) {
-        // TODO: error
-        return 0;
-    }
-
-    PyObject * source = args[0];
-
+PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source) {
     MGLComputeShader * compute_shader = MGLContext_new_object(self, ComputeShader);
 
     const GLMethods & gl = self->gl;
