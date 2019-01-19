@@ -57,7 +57,7 @@ PyMethodDef MGLSampler_methods[] = {
 #else
 
 PyMethodDef MGLSampler_methods[] = {
-    {"use", (PyCFunction)MGLSampler_meth_use_va, METH_O, 0},
+    {"use", (PyCFunction)MGLSampler_meth_use, METH_O, 0},
     {0},
 };
 
