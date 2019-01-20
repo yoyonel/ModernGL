@@ -5,16 +5,18 @@ language: python
 
 python: 3.6
 
-sudo: required
+# sudo: required
 
-services:
-  - docker
+# services:
+#   - docker
 
 install:
   - export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start
-  - docker run --rm -v `pwd`:/io quay.io/pypa/manylinux1_x86_64 sh /io/extras/build-travis/build.sh
-  - docker run --rm -v `pwd`:/io quay.io/pypa/manylinux1_i686 linux32 sh /io/extras/build-travis/build.sh
-  - cd dist && python -m pip install moderngl --no-index -f .
+  # - docker run --rm -v `pwd`:/io quay.io/pypa/manylinux1_i686 linux32 sh /io/extras/build-travis/build.sh
+  # - docker run --rm -v `pwd`:/io quay.io/pypa/manylinux1_x86_64 sh /io/extras/build-travis/build.sh
+  # - cd dist && python -m pip install moderngl --no-index -f .
+  - python -m pip install pip wheel setuptools numpy -U
+  - python setup.py develop
 
 script:
-  - cd tests/experimental && python -m pytest
+  - cd python -m pytest tests/experimental
