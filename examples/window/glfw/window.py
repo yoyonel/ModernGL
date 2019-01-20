@@ -1,0 +1,107 @@
+import glfw
+import moderngl
+
+from window.base import BaseWindow
+from window.glfw.keys import Keys
+
+
+class Window(BaseWindow):
+    keys = Keys
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        if not glfw.init():
+            raise ValueError("Failed to initialize glfw")
+
+        glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, self.gl_version[0])
+        glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, self.gl_version[1])
+        glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
+        glfw.window_hint(glfw.OPENGL_FORWARD_COMPAT, True)
+        glfw.window_hint(glfw.RESIZABLE, True)
+        glfw.window_hint(glfw.DOUBLEBUFFER, True)
+        glfw.window_hint(glfw.DEPTH_BITS, 24)
+        glfw.window_hint(glfw.SAMPLES, self.samples)
+
+        monitor = None
+        if self.fullscreen:
+            # Use the primary monitors current resolution
+            monitor = glfw.get_primary_monitor()
+            mode = glfw.get_video_mode(monitor)
+
+            self.width, self.height = mode.size.width, mode.size.height
+
+        self.window = glfw.create_window(self.width, self.height, self.title, monitor, None)
+
+        if not self.window:
+            glfw.terminate()
+            raise ValueError("Failed to create window")
+
+        if not self.cursor:
+            glfw.set_input_mode(self.window, glfw.CURSOR, glfw.CURSOR_DISABLED)
+
+        self.buffer_width, self.buffer_height = glfw.get_framebuffer_size(self.window)
+        glfw.make_context_current(self.window)
+
+        if self.vsync:
+            glfw.swap_interval(1)
+
+        glfw.set_key_callback(self.window, self.key_event_callback)
+        glfw.set_cursor_pos_callback(self.window, self.mouse_event_callback)
+        glfw.set_window_size_callback(self.window, self.window_resize_callback)
+
+        self.ctx = moderngl.create_context(require=self.gl_version[0] * 100 +  self.gl_version[1] * 10)
+        self.print_context_info()
+
+    def close(self):
+        glfw.set_window_should_close(self.window, True)
+
+    @property
+    def is_closing(self):
+        return glfw.window_should_close(self.window)
+
+    def swap_buffers(self):
+        glfw.swap_buffers(self.window)
+        glfw.poll_events()
+
+    def destroy(self):
+        glfw.terminate()
+
+    # GLFW specific callbacks
+
+    def key_event_callback(self, window, key, scancode, action, mods):
+        """
+        Key event callback for glfw.
+        Translates and forwards keyboard event to :py:func:`keyboard_event`
+
+        :param window: Window event origin
+        :param key: The key that was pressed or released.
+        :param scancode: The system-specific scancode of the key.
+        :param action: GLFW_PRESS, GLFW_RELEASE or GLFW_REPEAT
+        :param mods: Bit field describing which modifier keys were held down.
+        """
+        self.key_event(key, action)
+
+    def mouse_event_callback(self, window, xpos, ypos):
+        """
+        Mouse event callback from glfw.
+        Translates the events forwarding them to :py:func:`cursor_event`.
+
+        :param window: The window
+        :param xpos: viewport x pos
+        :param ypos: viewport y pos
+        """
+        # screen coordinates relative to the top-left corner
+        self.example.mouse_event(xpos, ypos)
+
+    def window_resize_callback(self, window, width, height):
+        """
+        Window resize callback for glfw
+
+        :param window: The window
+        :param width: New width
+        :param height: New height
+        """
+        self.width, self.height = width, height
+        self.buffer_width, self.buffer_height = glfw.get_framebuffer_size(self.window)
+        self.set_default_viewport()

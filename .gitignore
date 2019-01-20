@@ -3,6 +3,7 @@
 /dist
 /venv
 /.venv
+/env
 /.tox
 /.cache
 /.pytest_cache
@@ -24,3 +25,5 @@ temp_*
 *.bat
 *.whl
 *.so
+*.a
+*.dll
