@@ -199,3 +199,10 @@ void assert_slots_len(PyTypeObject * type, int slots_len) {
 
     PyErr_Format(PyExc_Exception, "remaining slots in %s", type->tp_name);
 }
+
+bool starts_with(const char * str, const char * prefix) {
+    while (*prefix && *prefix == *str++) {
+        ++prefix;
+    }
+    return *prefix == 0;
+}
