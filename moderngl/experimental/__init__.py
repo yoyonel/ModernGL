@@ -1,4 +1,4 @@
-from .context import Context, create_context, extensions, hwinfo, glprocs, release
+from .context import Context, create_context, extensions, hwinfo, inspect, glprocs, release
 from .attribute import Attribute
 from .buffer import Buffer
 from .compute_shader import ComputeShader

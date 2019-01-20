@@ -8,6 +8,7 @@ struct MGLBuffer;
 
 struct MGLScopeBinding {
     union {
+        PyObject * object;
         MGLSampler * sampler;
         MGLBuffer * buffer;
     };

@@ -1,5 +1,6 @@
 #include "mgl.hpp"
 #include "extensions.hpp"
+#include "inspect.hpp"
 #include "internal/modules.hpp"
 
 #include "context.hpp"
@@ -145,6 +146,7 @@ PyMethodDef module_methods[] = {
     {"extensions", (PyCFunction)meth_extensions, METH_O, 0},
     {"hwinfo", (PyCFunction)meth_hwinfo, METH_O, 0},
     {"initialize", (PyCFunction)meth_initialize, METH_NOARGS, 0},
+    {"inspect", (PyCFunction)meth_inspect, METH_O, 0},
     {"glprocs", (PyCFunction)meth_glprocs, METH_O, 0},
     {"release", (PyCFunction)meth_release, METH_O, 0},
     {0},
@@ -161,6 +163,7 @@ PyMethodDef module_methods[] = {
     {"extensions", (PyCFunction)meth_extensions, METH_O, 0},
     {"hwinfo", (PyCFunction)meth_hwinfo, METH_O, 0},
     {"initialize", (PyCFunction)meth_initialize, METH_NOARGS, 0},
+    {"inspect", (PyCFunction)meth_inspect, METH_O, 0},
     {"glprocs", (PyCFunction)meth_glprocs, METH_O, 0},
     {"release", (PyCFunction)meth_release, METH_O, 0},
     {0},

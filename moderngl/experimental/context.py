@@ -99,3 +99,7 @@ def glprocs(context):
 
 def release(obj):
     return mgl.release(obj)
+
+
+def inspect(obj):
+    return mgl.inspect(obj)

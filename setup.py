@@ -124,6 +124,7 @@ experimental_mgl = Extension(
         'moderngl/experimental/mgl/context.cpp',
         'moderngl/experimental/mgl/extensions.cpp',
         'moderngl/experimental/mgl/framebuffer.cpp',
+        'moderngl/experimental/mgl/inspect.cpp',
         'moderngl/experimental/mgl/limits.cpp',
         'moderngl/experimental/mgl/mgl.cpp',
         'moderngl/experimental/mgl/program.cpp',
