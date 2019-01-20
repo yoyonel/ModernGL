@@ -17,4 +17,4 @@ install:
   - python -m pip install moderngl --no-index -f dist
 
 script:
-  - python -m pytest tests/experimental
+  - cd tests/experimental && python -m pytest
