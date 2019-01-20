@@ -16,7 +16,9 @@ install:
   # - docker run --rm -v `pwd`:/io quay.io/pypa/manylinux1_x86_64 sh /io/extras/build-travis/build.sh
   # - cd dist && python -m pip install moderngl --no-index -f .
   - python -m pip install pip wheel setuptools numpy -U
+  - python extras/gltraces/setup.py develop
   - python setup.py develop
 
 script:
+  - python tests/experimental/print_info.py
   - python -m pytest tests/experimental
