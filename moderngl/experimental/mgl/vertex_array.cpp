@@ -185,6 +185,7 @@ PyObject * MGLContext_meth_vertex_array(MGLContext * self, PyObject * const * ar
 
     SLOT(vertex_array->wrapper, PyObject, VertexArray_class_ibo) = NEW_REF(Py_None);
     SLOT(vertex_array->wrapper, PyObject, VertexArray_class_program) = NEW_REF(program);
+    SLOT(vertex_array->wrapper, PyObject, VertexArray_class_scope) = NEW_REF(Py_None);
     SLOT(vertex_array->wrapper, PyObject, VertexArray_class_mode) = NEW_REF(Py_None);
     SLOT(vertex_array->wrapper, PyObject, VertexArray_class_vertices) = PyLong_FromLong(vertices);
 

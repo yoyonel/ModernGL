@@ -224,6 +224,7 @@ PyTypeObject * VertexArray_class;
 int VertexArray_class_mglo;
 int VertexArray_class_ibo;
 int VertexArray_class_program;
+int VertexArray_class_scope;
 int VertexArray_class_mode;
 int VertexArray_class_vertices;
 int VertexArray_class_extra;
@@ -484,6 +485,7 @@ void init_wrappers() {
     VertexArray_class_mglo = slot_offset(VertexArray_class, "_VertexArray__mglo", VertexArray_slots);
     VertexArray_class_ibo = slot_offset(VertexArray_class, "_VertexArray__ibo", VertexArray_slots);
     VertexArray_class_program = slot_offset(VertexArray_class, "program", VertexArray_slots);
+    VertexArray_class_scope = slot_offset(VertexArray_class, "scope", VertexArray_slots);
     VertexArray_class_mode = slot_offset(VertexArray_class, "mode", VertexArray_slots);
     VertexArray_class_vertices = slot_offset(VertexArray_class, "vertices", VertexArray_slots);
     VertexArray_class_extra = slot_offset(VertexArray_class, "extra", VertexArray_slots);
