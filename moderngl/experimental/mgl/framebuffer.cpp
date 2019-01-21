@@ -10,6 +10,12 @@
 #include "internal/glsl.hpp"
 #include "internal/data_type.hpp"
 
+void MGLFramebuffer_use_core(MGLFramebuffer * self) {
+    const GLMethods & gl = self->context->gl;
+    self->context->bind_framebuffer(self->framebuffer_obj);
+    gl.Viewport(self->viewport[0], self->viewport[1], self->viewport[2], self->viewport[3]);
+}
+
 /* MGLContext.framebuffer(...)
  */
 PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
@@ -170,11 +176,7 @@ PyObject * MGLFramebuffer_meth_read(MGLFramebuffer * self, PyObject * const * ar
 /* MGLFramebuffer.use()
  */
 PyObject * MGLFramebuffer_meth_use(MGLFramebuffer * self) {
-    const GLMethods & gl = self->context->gl;
-
-    self->context->bind_framebuffer(self->framebuffer_obj);
-    gl.Viewport(self->viewport[0], self->viewport[1], self->viewport[2], self->viewport[3]);
-
+    MGLFramebuffer_use_core(self);
     Py_RETURN_NONE;
 }
 
