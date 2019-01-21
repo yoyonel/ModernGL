@@ -65,12 +65,12 @@ class CrateExample(Example):
 
         self.vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert', 'in_norm', 'in_text')
+        self.vao.scope = self.ctx.scope(mgl.DEPTH_TEST)
 
     def render(self):
         angle = self.wnd.time
         self.ctx.screen.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
-        # self.ctx.enable(mgl.DEPTH_TEST)
 
         camera_pos = (np.cos(angle) * 5.0, np.sin(angle) * 5.0, 2.0)
 
@@ -83,8 +83,7 @@ class CrateExample(Example):
 
         self.prog['Mvp'] = (proj * lookat).astype('f4').tobytes()
         self.prog['Light'] = camera_pos
-        with self.ctx.scope(mgl.DEPTH_TEST):
-            self.vao.render()
+        self.vao.render()
 
 
 run_example(CrateExample)
