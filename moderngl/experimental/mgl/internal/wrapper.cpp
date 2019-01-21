@@ -177,6 +177,10 @@ int Query_class_primitives;
 int Query_class_samples;
 int Query_class_extra;
 
+PyTypeObject * RenderBatch_class;
+int RenderBatch_class_mglo;
+int RenderBatch_class_extra;
+
 PyTypeObject * Renderbuffer_class;
 int Renderbuffer_class_mglo;
 int Renderbuffer_class_size;
@@ -420,6 +424,12 @@ void init_wrappers() {
     Query_class_samples = slot_offset(Query_class, "samples", Query_slots);
     Query_class_extra = slot_offset(Query_class, "extra", Query_slots);
     assert_slots_len(Query_class, Query_slots);
+
+    int RenderBatch_slots = 0;
+    RenderBatch_class = detect_class(moderngl, "RenderBatch", RenderBatch_slots);
+    RenderBatch_class_mglo = slot_offset(RenderBatch_class, "_RenderBatch__mglo", RenderBatch_slots);
+    RenderBatch_class_extra = slot_offset(RenderBatch_class, "extra", RenderBatch_slots);
+    assert_slots_len(RenderBatch_class, RenderBatch_slots);
 
     int Renderbuffer_slots = 0;
     Renderbuffer_class = detect_class(moderngl, "Renderbuffer", Renderbuffer_slots);

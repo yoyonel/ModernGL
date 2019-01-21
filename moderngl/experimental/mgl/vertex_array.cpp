@@ -7,22 +7,13 @@
 #include "internal/wrapper.hpp"
 #include "internal/modules.hpp"
 
-struct RenderArgs {
-    int mode;
-    int vertices;
-    int first;
-    int instances;
-    unsigned long long color_mask;
-    bool depth_mask;
-};
-
-void MGLVertexArray_render_core(MGLVertexArray * self, const RenderArgs & args) {
+void MGLVertexArray_render_core(MGLVertexArray * self, int mode, int vertices, int first, int instances, unsigned long long color_mask, bool depth_mask) {
     const GLMethods & gl = self->context->gl;
 
     PyObject * program = SLOT(self->wrapper, PyObject, VertexArray_class_program);
     self->context->use_program(SLOT(program, MGLProgram, Program_class_mglo)->program_obj);
     self->context->bind_vertex_array(self->vertex_array_obj);
-    self->context->set_write_mask(args.color_mask, args.depth_mask);
+    self->context->set_write_mask(color_mask, depth_mask);
 
     bool scoped = false;
     PyObject * scope = SLOT(self->wrapper, PyObject, VertexArray_class_scope);
@@ -37,10 +28,10 @@ void MGLVertexArray_render_core(MGLVertexArray * self, const RenderArgs & args) 
     }
 
     if (SLOT(self->wrapper, PyObject, VertexArray_class_ibo) != Py_None) {
-        const void * ptr = (const void *)((GLintptr)args.first * 4);
-        gl.DrawElementsInstanced(args.mode, args.vertices, GL_UNSIGNED_INT, ptr, args.instances);
+        const void * ptr = (const void *)((GLintptr)first * 4);
+        gl.DrawElementsInstanced(mode, vertices, GL_UNSIGNED_INT, ptr, instances);
     } else {
-        gl.DrawArraysInstanced(args.mode, args.first, args.vertices, args.instances);
+        gl.DrawArraysInstanced(mode, first, vertices, instances);
     }
 
     if (scoped) {
@@ -245,16 +236,15 @@ PyObject * MGLVertexArray_meth_render(MGLVertexArray * self, PyObject * const * 
         return 0;
     }
 
-    RenderArgs render_args;
     PyObject * mode = args[0];
-    render_args.vertices = PyLong_AsLong(args[1]);
-    render_args.first = PyLong_AsLong(args[2]);
-    render_args.instances = PyLong_AsLong(args[3]);
-    render_args.color_mask = PyLong_AsUnsignedLongLong(args[4]);
-    render_args.depth_mask = PyObject_IsTrue(args[5]);
+    int vertices = PyLong_AsLong(args[1]);
+    int first = PyLong_AsLong(args[2]);
+    int instances = PyLong_AsLong(args[3]);
+    unsigned long long color_mask = PyLong_AsUnsignedLongLong(args[4]);
+    bool depth_mask = (bool)PyObject_IsTrue(args[5]);
 
-    if (render_args.vertices < 0) {
-        render_args.vertices = PyLong_AsLong(SLOT(self->wrapper, PyObject, VertexArray_class_vertices));
+    if (vertices < 0) {
+        vertices = PyLong_AsLong(SLOT(self->wrapper, PyObject, VertexArray_class_vertices));
     }
 
     if (mode == Py_None) {
@@ -264,12 +254,12 @@ PyObject * MGLVertexArray_meth_render(MGLVertexArray * self, PyObject * const * 
         }
     }
 
-    render_args.mode = PyLong_AsLong(mode);
+    int render_mode = PyLong_AsLong(mode);
     if (PyErr_Occurred()) {
         return 0;
     }
 
-    MGLVertexArray_render_core(self, render_args);
+    MGLVertexArray_render_core(self, render_mode, vertices, first, instances, color_mask, depth_mask);
     Py_RETURN_NONE;
 }
 

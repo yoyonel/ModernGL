@@ -44,6 +44,7 @@ struct MGLContext {
     PyTypeObject * MGLFramebuffer_class;
     PyTypeObject * MGLProgram_class;
     PyTypeObject * MGLQuery_class;
+    PyTypeObject * MGLRenderBatch_class;
     PyTypeObject * MGLRenderbuffer_class;
     PyTypeObject * MGLSampler_class;
     PyTypeObject * MGLScope_class;

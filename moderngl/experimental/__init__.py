@@ -7,6 +7,7 @@ from .framebuffer import Framebuffer
 from .limits import Limits
 from .program import Program
 from .query import Query
+from .render_batch import RenderBatch
 from .renderbuffer import Renderbuffer
 from .sampler import Sampler
 from .scope import Scope

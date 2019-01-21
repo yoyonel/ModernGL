@@ -177,6 +177,10 @@ extern int Query_class_primitives;
 extern int Query_class_samples;
 extern int Query_class_extra;
 
+extern PyTypeObject * RenderBatch_class;
+extern int RenderBatch_class_mglo;
+extern int RenderBatch_class_extra;
+
 extern PyTypeObject * Renderbuffer_class;
 extern int Renderbuffer_class_mglo;
 extern int Renderbuffer_class_size;

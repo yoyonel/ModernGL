@@ -57,14 +57,37 @@ class CrateExample(Example):
             ''',
         )
 
-        obj = Obj.open(local('data', 'crate.obj'))
-        img = Image.open(local('data', 'crate.png')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
-        self.texture = self.ctx.texture(img.size, 3, img.tobytes())
-        self.sampler = self.ctx.sampler(self.texture)
+        obj1 = Obj.open(local('data', 'crate_left.obj'))
+        obj2 = Obj.open(local('data', 'crate.obj'))
+        obj3 = Obj.open(local('data', 'crate_right.obj'))
 
-        self.vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
-        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert', 'in_norm', 'in_text')
-        self.vao.scope = self.ctx.scope(mgl.DEPTH_TEST, samplers=[(self.sampler, 0)])
+        img1 = Image.open(local('data', 'crate.png')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
+        img2 = Image.open(local('data', 'rock.jpg')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
+
+        self.texture1 = self.ctx.texture(img1)
+        self.texture2 = self.ctx.texture(img2)
+
+        self.sampler1 = self.ctx.sampler(self.texture1)
+        self.sampler2 = self.ctx.sampler(self.texture2)
+
+        self.vbo1 = self.ctx.buffer(obj1.pack('vx vy vz nx ny nz tx ty'))
+        self.vbo2 = self.ctx.buffer(obj2.pack('vx vy vz nx ny nz tx ty'))
+        self.vbo3 = self.ctx.buffer(obj3.pack('vx vy vz nx ny nz tx ty'))
+
+        self.vao1 = self.ctx.simple_vertex_array(self.prog, self.vbo1, 'in_vert', 'in_norm', 'in_text')
+        self.vao1.scope = self.ctx.scope(mgl.DEPTH_TEST, samplers=[(self.sampler2, 0)])
+
+        self.vao2 = self.ctx.simple_vertex_array(self.prog, self.vbo2, 'in_vert', 'in_norm', 'in_text')
+        self.vao2.scope = self.ctx.scope(mgl.DEPTH_TEST, samplers=[(self.sampler1, 0)])
+
+        self.vao3 = self.ctx.simple_vertex_array(self.prog, self.vbo3, 'in_vert', 'in_norm', 'in_text')
+        self.vao3.scope = self.ctx.scope(mgl.DEPTH_TEST, samplers=[(self.sampler2, 0)])
+
+        self.batch = self.ctx.render_batch([
+            (0, self.vao1, mgl.TRIANGLES, self.vao1.vertices, 0, 1, 0xffffffffffffffff, True),
+            (0, self.vao2, mgl.TRIANGLES, self.vao2.vertices, 0, 1, 0xffffffffffffffff, True),
+            (0, self.vao3, mgl.TRIANGLES, self.vao3.vertices, 0, 1, 0xffffffffffffffff, True),
+        ])
 
     def render(self):
         angle = self.wnd.time
@@ -82,7 +105,7 @@ class CrateExample(Example):
 
         self.prog['Mvp'] = (proj * lookat).astype('f4').tobytes()
         self.prog['Light'] = camera_pos
-        self.vao.render()
 
+        self.batch.run()
 
 run_example(CrateExample)
