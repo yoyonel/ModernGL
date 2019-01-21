@@ -1,6 +1,7 @@
 #pragma once
 #include "mgl.hpp"
 #include "framebuffer.hpp"
+#include "scope.hpp"
 
 #include "internal/opengl/gl_context.hpp"
 #include "internal/opengl/gl_methods.hpp"
@@ -36,6 +37,7 @@ struct MGLContext {
 
     MGLFramebuffer * bound_framebuffer;
     MGLFramebuffer * default_framebuffer;
+    MGLScope * active_scope;
 
     PyTypeObject * MGLBuffer_class;
     PyTypeObject * MGLComputeShader_class;
