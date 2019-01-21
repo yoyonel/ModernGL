@@ -10,6 +10,54 @@
 #include "internal/tools.hpp"
 #include "internal/glsl.hpp"
 
+void MGLScope_begin_core(MGLScope * self) {
+    const GLMethods & gl = self->context->gl;
+    self->old_scope = self->context->active_scope;
+    self->context->active_scope = self;
+
+    if (self->enable_only >= 0) {
+        self->old_enable_only = self->context->current_enable_only;
+        self->context->enable(self->enable_only);
+    }
+
+    if (self->framebuffer) {
+        MGLFramebuffer_use_core(self->framebuffer);
+    }
+
+    if (self->bindings) {
+        MGLScopeBinding * ptr = self->bindings;
+
+        for (int i = 0; i < self->num_samplers; ++i) {
+            PyObject * wrapper = SLOT(ptr->sampler->wrapper, PyObject, Sampler_class_texture);
+            MGLTexture * texture = SLOT(wrapper, MGLTexture, Texture_class_mglo);
+            self->context->bind_sampler(ptr->binding, texture->texture_target, texture->texture_obj, ptr->sampler->sampler_obj);
+            ++ptr;
+        }
+
+        for (int i = 0; i < self->num_uniform_buffers; ++i) {
+            ++ptr;
+        }
+
+        for (int i = 0; i < self->num_storage_buffers; ++i) {
+            ++ptr;
+        }
+    }
+}
+
+void MGLScope_end_core(MGLScope * self) {
+    const GLMethods & gl = self->context->gl;
+    if (self->enable_only >= 0) {
+        self->context->enable(self->enable_only);
+    }
+
+    self->context->active_scope = self->old_scope;
+    self->old_scope = 0;
+
+    if (self->framebuffer) {
+        MGLFramebuffer_use_core(self->old_framebuffer);
+    }
+}
+
 /* MGLContext.scope(enable_only, framebuffer, samplers, uniform_buffers, storage_buffers)
  */
 PyObject * MGLContext_meth_scope(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
@@ -142,43 +190,14 @@ PyObject * MGLContext_meth_scope(MGLContext * self, PyObject * const * args, Py_
 /* MGLScope.begin()
  */
 PyObject * MGLScope_meth_begin(MGLScope * self) {
-    const GLMethods & gl = self->context->gl;
-    if (self->enable_only >= 0) {
-        self->old_enable_only = self->context->current_enable_only;
-        self->context->enable(self->enable_only);
-    }
-    // return MGLFramebuffer_meth_use(self->framebuffer);
-
-    if (self->bindings) {
-        MGLScopeBinding * ptr = self->bindings;
-
-        for (int i = 0; i < self->num_samplers; ++i) {
-            PyObject * wrapper = SLOT(ptr->sampler->wrapper, PyObject, Sampler_class_texture);
-            MGLTexture * texture = SLOT(wrapper, MGLTexture, Texture_class_mglo);
-            self->context->bind_sampler(ptr->binding, texture->texture_target, texture->texture_obj, ptr->sampler->sampler_obj);
-            ++ptr;
-        }
-
-        for (int i = 0; i < self->num_uniform_buffers; ++i) {
-            ++ptr;
-        }
-
-        for (int i = 0; i < self->num_storage_buffers; ++i) {
-            ++ptr;
-        }
-    }
-
+    MGLScope_begin_core(self);
     Py_RETURN_NONE;
 }
 
 /* MGLScope.end()
  */
 PyObject * MGLScope_meth_end(MGLScope * self) {
-    const GLMethods & gl = self->context->gl;
-    if (self->enable_only >= 0) {
-        self->context->enable(self->enable_only);
-    }
-    // return MGLFramebuffer_meth_use(self->old_framebuffer);
+    MGLScope_end_core(self);
     Py_RETURN_NONE;
 }
 
