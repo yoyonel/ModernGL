@@ -114,6 +114,12 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
 
     context->bound_framebuffer = NEW_REF(context->default_framebuffer);
 
+    context->default_scope = MGLContext_new_object(context, Scope);
+    context->default_scope->framebuffer = NEW_REF(context->default_framebuffer);
+
+    context->active_scope = NEW_REF(context->default_scope);
+    context->bound_scope = NEW_REF(context->default_scope);
+
     context->wrapper = new_object(PyObject, Context_class);
     SLOT(context->wrapper, MGLContext, Context_class_mglo) = context;
     SLOT(context->wrapper, PyObject, Context_class_version_code) = PyLong_FromLong(version_code);

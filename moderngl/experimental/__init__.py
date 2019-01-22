@@ -19,6 +19,8 @@ from .uniform import Uniform
 from .vertex_array import VertexArray
 from .mgl import initialize
 
+__version__ = '6.0.0'
+
 NOTHING = 0
 BLEND = 1
 DEPTH_TEST = 2

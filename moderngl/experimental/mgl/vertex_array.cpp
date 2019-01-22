@@ -21,10 +21,14 @@ void MGLVertexArray_render_core(MGLVertexArray * self, int mode, int vertices, i
 
     if (scope != Py_None) {
         scope_mglo = SLOT(scope, MGLScope, Scope_class_mglo);
-        if (self->context->active_scope != scope_mglo) {
+        if (self->context->bound_scope != scope_mglo) {
             MGLScope_begin_core(scope_mglo);
             scoped = true;
         }
+    } else if (self->context->bound_scope != self->context->active_scope) {
+        scope_mglo = self->context->bound_scope;
+        MGLScope_begin_core(scope_mglo);
+        scoped = true;
     }
 
     if (SLOT(self->wrapper, PyObject, VertexArray_class_ibo) != Py_None) {

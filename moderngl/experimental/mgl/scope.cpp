@@ -14,6 +14,7 @@ void MGLScope_begin_core(MGLScope * self) {
     const GLMethods & gl = self->context->gl;
     self->old_scope = self->context->active_scope;
     self->context->active_scope = self;
+    self->context->bound_scope = self;
 
     if (self->enable_only >= 0) {
         self->old_enable_only = self->context->current_enable_only;
@@ -45,17 +46,8 @@ void MGLScope_begin_core(MGLScope * self) {
 }
 
 void MGLScope_end_core(MGLScope * self) {
-    const GLMethods & gl = self->context->gl;
-    if (self->enable_only >= 0) {
-        self->context->enable(self->enable_only);
-    }
-
     self->context->active_scope = self->old_scope;
     self->old_scope = 0;
-
-    if (self->framebuffer) {
-        MGLFramebuffer_use_core(self->old_framebuffer);
-    }
 }
 
 /* MGLContext.scope(enable_only, framebuffer, samplers, uniform_buffers, storage_buffers)
