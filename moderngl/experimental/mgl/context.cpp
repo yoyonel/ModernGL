@@ -100,6 +100,7 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
     context->MGLVertexArray_class = (PyTypeObject *)PyType_FromSpec(&MGLVertexArray_spec);
 
     context->default_framebuffer = MGLContext_new_object(context, Framebuffer);
+    context->default_framebuffer->framebuffer_obj = 0;
 
     context->default_framebuffer->color_mask = 0xF;
     context->default_framebuffer->depth_mask = 1;

@@ -1,4 +1,5 @@
 import os
+import struct
 
 import moderngl.experimental as mgl
 import numpy as np
@@ -16,6 +17,10 @@ def local(*path):
 class CrateExample(Example):
     def __init__(self):
         self.ctx = mgl.create_context()
+        # import gltraces
+        # mglprocs = mgl.glprocs(self.ctx)
+        # gltraces.glprocs[:] = mglprocs
+        # mglprocs[:] = gltraces.gltraces
 
         self.prog = self.ctx.program(
             vertex_shader='''
@@ -84,15 +89,20 @@ class CrateExample(Example):
         self.vao3.scope = self.ctx.scope(mgl.DEPTH_TEST, samplers=[(self.sampler2, 0)])
 
         self.batch = self.ctx.batch([
-            (0, self.vao1, mgl.TRIANGLES, self.vao1.vertices, 0, 1, 0xffffffffffffffff, True),
-            (0, self.vao2, mgl.TRIANGLES, self.vao2.vertices, 0, 1, 0xffffffffffffffff, True),
-            (0, self.vao3, mgl.TRIANGLES, self.vao3.vertices, 0, 1, 0xffffffffffffffff, True),
+            (2, self.ctx.screen, struct.pack('iIf', -1, 0, 1.0)),
+            (2, self.ctx.screen, struct.pack('iIffff', 0, 0xf, 1.0, 1.0, 1.0, 1.0)),
+            (0, self.vao1.scope, b''),
+            (1, self.vao1, struct.pack('IIQ?', mgl.TRIANGLES, self.vao1.vertices, 0xffffffffffffffff, True)),
+            (0, self.vao2.scope, b''),
+            (1, self.vao2, struct.pack('IIQ?', mgl.TRIANGLES, self.vao2.vertices, 0xffffffffffffffff, True)),
+            (0, self.vao3.scope, b''),
+            (1, self.vao3, struct.pack('IIQ?', mgl.TRIANGLES, self.vao3.vertices, 0xffffffffffffffff, True)),
         ])
 
     def render(self):
         angle = self.wnd.time
         self.ctx.screen.viewport = self.wnd.viewport
-        self.ctx.clear(1.0, 1.0, 1.0)
+        # self.ctx.clear(1.0, 1.0, 1.0)
 
         camera_pos = (np.cos(angle) * 5.0, np.sin(angle) * 5.0, 2.0)
 
@@ -107,5 +117,6 @@ class CrateExample(Example):
         self.prog['Light'] = camera_pos
 
         self.batch.run()
+        # exit()
 
 run_example(CrateExample)

@@ -1,5 +1,11 @@
 #include "batch.hpp"
 #include "context.hpp"
+
+#include "framebuffer.hpp"
+#include "scope.hpp"
+#include "sampler.hpp"
+#include "program.hpp"
+#include "texture.hpp"
 #include "vertex_array.hpp"
 
 #include "internal/wrapper.hpp"
@@ -27,25 +33,35 @@ PyObject * MGLContext_meth_batch(MGLContext * self, PyObject * const * args, Py_
     batch->num_tasks = num_tasks;
 
     for (int i = 0; i < num_tasks; ++i) {
-        PyObject * item = PySequence_Fast(PySequence_Fast_GET_ITEM(seq, i), "");
-        int num_params = (int)PySequence_Fast_GET_SIZE(item);
-        int task = PyLong_AsLong(PySequence_Fast_GET_ITEM(item, 0));
-        PyObject * wrapper = PySequence_Fast_GET_ITEM(item, 1);
-        if (wrapper->ob_type != VertexArray_class) {
-            return 0;
-        }
-        batch->tasks[i].task = task;
-        batch->tasks[i].vertex_array = SLOT(wrapper, MGLVertexArray, VertexArray_class_mglo);
+        MGLBatchTask & task = batch->tasks[i];
 
-        switch (task) {
-            case MGL_RENDER_TASK:
-                batch->tasks[i].render_args.mode = PyLong_AsLong(PySequence_Fast_GET_ITEM(item, 2));
-                batch->tasks[i].render_args.vertices = PyLong_AsLong(PySequence_Fast_GET_ITEM(item, 3));
-                batch->tasks[i].render_args.first = PyLong_AsLong(PySequence_Fast_GET_ITEM(item, 4));
-                batch->tasks[i].render_args.instances = PyLong_AsLong(PySequence_Fast_GET_ITEM(item, 5));
-                batch->tasks[i].render_args.color_mask = PyLong_AsUnsignedLongLong(PySequence_Fast_GET_ITEM(item, 6));
-                batch->tasks[i].render_args.depth_mask = (bool)PyObject_IsTrue(PySequence_Fast_GET_ITEM(item, 7));
+        PyObject * item = PySequence_Fast(PySequence_Fast_GET_ITEM(seq, i), "");
+        // if (PySequence_Fast_GET_SIZE(item) ...)
+        task.task_code = PyLong_AsLong(PySequence_Fast_GET_ITEM(item, 0));
+        PyObject * wrapper = PySequence_Fast_GET_ITEM(item, 1);
+        PyObject * args = PySequence_Fast_GET_ITEM(item, 2);
+
+        Py_buffer view = {};
+        PyObject_GetBuffer(args, &view, PyBUF_STRIDED_RO);
+        // if (view.len ...)
+        PyBuffer_ToContiguous(task.raw, &view, view.len, 'C');
+        PyBuffer_Release(&view);
+
+        switch (task.task_code) {
+            case MGL_SCOPE_USE_TASK: {
+                task.scope = SLOT(wrapper, MGLScope, Scope_class_mglo);
                 break;
+            }
+
+            case MGL_VAO_SIMPLE_RENDER_TASK: {
+                task.vertex_array = SLOT(wrapper, MGLVertexArray, VertexArray_class_mglo);
+                break;
+            }
+
+            case MGL_FBO_SIMPLE_CLEAR_TASK: {
+                task.framebuffer = SLOT(wrapper, MGLFramebuffer, Framebuffer_class_mglo);
+                break;
+            }
         }
 
         Py_DECREF(item);
@@ -58,12 +74,87 @@ PyObject * MGLContext_meth_batch(MGLContext * self, PyObject * const * args, Py_
 /* MGLBatch.run()
  */
 PyObject * MGLBatch_meth_run(MGLBatch * self) {
+    MGLContext * ctx = self->context;
+    const GLMethods & gl = ctx->gl;
+
     for (int i = 0; i < self->num_tasks; ++i) {
         const MGLBatchTask & task = self->tasks[i];
-        switch (task.task) {
-            case MGL_RENDER_TASK:
-                MGLVertexArray_render_core(task.vertex_array, task.render_args.mode, task.render_args.vertices, task.render_args.first, task.render_args.instances, task.render_args.color_mask, task.render_args.depth_mask);
+        switch (task.task_code) {
+            case MGL_SCOPE_USE_TASK: {
+                if (task.scope->enable_only >= 0) {
+                    task.scope->old_enable_only = ctx->current_enable_only;
+                    ctx->enable(task.scope->enable_only);
+                }
+
+                if (task.scope->framebuffer) {
+                    MGLFramebuffer_use_core(task.scope->framebuffer);
+                }
+
+                if (task.scope->bindings) {
+                    MGLScopeBinding * ptr = task.scope->bindings;
+
+                    for (int i = 0; i < task.scope->num_samplers; ++i) {
+                        PyObject * wrapper = SLOT(ptr->sampler->wrapper, PyObject, Sampler_class_texture);
+                        MGLTexture * texture = SLOT(wrapper, MGLTexture, Texture_class_mglo);
+                        ctx->bind_sampler(ptr->binding, texture->texture_target, texture->texture_obj, ptr->sampler->sampler_obj);
+                        ++ptr;
+                    }
+
+                    for (int i = 0; i < task.scope->num_uniform_buffers; ++i) {
+                        ++ptr;
+                    }
+
+                    for (int i = 0; i < task.scope->num_storage_buffers; ++i) {
+                        ++ptr;
+                    }
+                }
+                ctx->active_scope = task.scope;
                 break;
+            }
+
+            case MGL_VAO_SIMPLE_RENDER_TASK: {
+                PyObject * program = SLOT(task.vertex_array->wrapper, PyObject, VertexArray_class_program);
+                task.vertex_array->context->use_program(SLOT(program, MGLProgram, Program_class_mglo)->program_obj);
+                task.vertex_array->context->bind_vertex_array(task.vertex_array->vertex_array_obj);
+                task.vertex_array->context->set_write_mask(task.vao_simple_render.color_mask, task.vao_simple_render.depth_mask);
+
+                if (SLOT(task.vertex_array->wrapper, PyObject, VertexArray_class_ibo) != Py_None) {
+                    gl.DrawElementsInstanced(task.vao_simple_render.mode, task.vao_simple_render.vertices, GL_UNSIGNED_INT, 0, 1);
+                } else {
+                    gl.DrawArraysInstanced(task.vao_simple_render.mode, 0, task.vao_simple_render.vertices, 1);
+                }
+                break;
+            }
+
+            case MGL_FBO_SIMPLE_CLEAR_TASK: {
+                ctx->bind_framebuffer(task.framebuffer->framebuffer_obj);
+
+                if (task.fbo_simple_clear.attachment < 0) {
+                    if (!ctx->current_depth_mask) {
+                        gl.DepthMask(true);
+                    }
+                    gl.ClearBufferfv(GL_DEPTH, 0, (float *)task.fbo_simple_clear.color);
+                    if (!ctx->current_depth_mask) {
+                        gl.DepthMask(false);
+                    }
+                } else {
+                    const char shape = task.framebuffer->attachment_type[task.fbo_simple_clear.attachment];
+                    int old_mask = ctx->current_color_mask >> (task.fbo_simple_clear.attachment * 4) & 0xF;
+                    int color_mask = task.fbo_simple_clear.color_mask;
+                    if (old_mask != color_mask) {
+                        gl.ColorMaski(task.fbo_simple_clear.attachment, color_mask & 1, color_mask & 2, color_mask & 4, color_mask & 8);
+                    }
+                    switch (shape) {
+                        case 'f': gl.ClearBufferfv(GL_COLOR, task.fbo_simple_clear.attachment, (float *)task.fbo_simple_clear.color); break;
+                        case 'i': gl.ClearBufferiv(GL_COLOR, task.fbo_simple_clear.attachment, (int *)task.fbo_simple_clear.color); break;
+                        case 'u': gl.ClearBufferuiv(GL_COLOR, task.fbo_simple_clear.attachment, (unsigned *)task.fbo_simple_clear.color); break;
+                    }
+                    if (old_mask != color_mask) {
+                        gl.ColorMaski(task.fbo_simple_clear.attachment, old_mask & 1, old_mask & 2, old_mask & 4, old_mask & 8);
+                    }
+                }
+                break;
+            }
         }
     }
     Py_RETURN_NONE;

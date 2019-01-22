@@ -1,25 +1,41 @@
 #pragma once
 #include "mgl.hpp"
-#include "vertex_array.hpp"
 
 struct MGLContext;
+struct MGLObject;
+struct MGLFramebuffer;
+struct MGLScope;
+struct MGLVertexArray;
 
-enum MGLRenderTask {
-    MGL_RENDER_TASK,
+enum MGLBatchTaskCode {
+    MGL_SCOPE_USE_TASK,
+    MGL_VAO_SIMPLE_RENDER_TASK,
+    MGL_FBO_SIMPLE_CLEAR_TASK,
 };
 
 struct MGLBatchTask {
-    int task;
-    MGLVertexArray * vertex_array;
+    int task_code;
     union {
+        MGLObject * object;
+        MGLFramebuffer * framebuffer;
+        MGLScope * scope;
+        MGLVertexArray * vertex_array;
+    };
+    union {
+        // struct {
+        // } scope_use;
         struct {
             int mode;
             int vertices;
-            int first;
-            int instances;
             unsigned long long color_mask;
             bool depth_mask;
-        } render_args;
+        } vao_simple_render;
+        struct {
+            int attachment;
+            int color_mask;
+            unsigned char color[16];
+        } fbo_simple_clear;
+        char raw[32];
     };
 };
 

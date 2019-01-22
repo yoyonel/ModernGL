@@ -7,42 +7,6 @@
 #include "internal/wrapper.hpp"
 #include "internal/modules.hpp"
 
-void MGLVertexArray_render_core(MGLVertexArray * self, int mode, int vertices, int first, int instances, unsigned long long color_mask, bool depth_mask) {
-    const GLMethods & gl = self->context->gl;
-
-    PyObject * program = SLOT(self->wrapper, PyObject, VertexArray_class_program);
-    self->context->use_program(SLOT(program, MGLProgram, Program_class_mglo)->program_obj);
-    self->context->bind_vertex_array(self->vertex_array_obj);
-    self->context->set_write_mask(color_mask, depth_mask);
-
-    bool scoped = false;
-    PyObject * scope = SLOT(self->wrapper, PyObject, VertexArray_class_scope);
-    MGLScope * scope_mglo = 0;
-
-    if (scope != Py_None) {
-        scope_mglo = SLOT(scope, MGLScope, Scope_class_mglo);
-        if (self->context->bound_scope != scope_mglo) {
-            MGLScope_begin_core(scope_mglo);
-            scoped = true;
-        }
-    } else if (self->context->bound_scope != self->context->active_scope) {
-        scope_mglo = self->context->bound_scope;
-        MGLScope_begin_core(scope_mglo);
-        scoped = true;
-    }
-
-    if (SLOT(self->wrapper, PyObject, VertexArray_class_ibo) != Py_None) {
-        const void * ptr = (const void *)((GLintptr)first * 4);
-        gl.DrawElementsInstanced(mode, vertices, GL_UNSIGNED_INT, ptr, instances);
-    } else {
-        gl.DrawArraysInstanced(mode, first, vertices, instances);
-    }
-
-    if (scoped) {
-        MGLScope_end_core(scope_mglo);
-    }
-}
-
 /* MGLContext.vertex_array(program, content, index_buffer)
  */
 PyObject * MGLContext_meth_vertex_array(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
@@ -263,7 +227,40 @@ PyObject * MGLVertexArray_meth_render(MGLVertexArray * self, PyObject * const * 
         return 0;
     }
 
-    MGLVertexArray_render_core(self, render_mode, vertices, first, instances, color_mask, depth_mask);
+    const GLMethods & gl = self->context->gl;
+
+    PyObject * program = SLOT(self->wrapper, PyObject, VertexArray_class_program);
+    self->context->use_program(SLOT(program, MGLProgram, Program_class_mglo)->program_obj);
+    self->context->bind_vertex_array(self->vertex_array_obj);
+    self->context->set_write_mask(color_mask, depth_mask);
+
+    bool scoped = false;
+    PyObject * scope = SLOT(self->wrapper, PyObject, VertexArray_class_scope);
+    MGLScope * scope_mglo = 0;
+
+    if (scope != Py_None) {
+        scope_mglo = SLOT(scope, MGLScope, Scope_class_mglo);
+        if (self->context->bound_scope != scope_mglo) {
+            MGLScope_begin_core(scope_mglo);
+            scoped = true;
+        }
+    } else if (self->context->bound_scope != self->context->active_scope) {
+        scope_mglo = self->context->bound_scope;
+        MGLScope_begin_core(scope_mglo);
+        scoped = true;
+    }
+
+    if (SLOT(self->wrapper, PyObject, VertexArray_class_ibo) != Py_None) {
+        const void * ptr = (const void *)((GLintptr)first * 4);
+        gl.DrawElementsInstanced(render_mode, vertices, GL_UNSIGNED_INT, ptr, instances);
+    } else {
+        gl.DrawArraysInstanced(render_mode, first, vertices, instances);
+    }
+
+    if (scoped) {
+        MGLScope_end_core(scope_mglo);
+    }
+
     Py_RETURN_NONE;
 }
 
