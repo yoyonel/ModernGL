@@ -10,6 +10,10 @@ int Attribute_class_rows;
 int Attribute_class_size;
 int Attribute_class_shape;
 
+PyTypeObject * Batch_class;
+int Batch_class_mglo;
+int Batch_class_extra;
+
 PyTypeObject * Buffer_class;
 int Buffer_class_mglo;
 int Buffer_class_size;
@@ -177,10 +181,6 @@ int Query_class_primitives;
 int Query_class_samples;
 int Query_class_extra;
 
-PyTypeObject * RenderBatch_class;
-int RenderBatch_class_mglo;
-int RenderBatch_class_extra;
-
 PyTypeObject * Renderbuffer_class;
 int Renderbuffer_class_mglo;
 int Renderbuffer_class_size;
@@ -243,6 +243,12 @@ void init_wrappers() {
     Attribute_class_size = slot_offset(Attribute_class, "size", Attribute_slots);
     Attribute_class_shape = slot_offset(Attribute_class, "shape", Attribute_slots);
     assert_slots_len(Attribute_class, Attribute_slots);
+
+    int Batch_slots = 0;
+    Batch_class = detect_class(moderngl, "Batch", Batch_slots);
+    Batch_class_mglo = slot_offset(Batch_class, "_Batch__mglo", Batch_slots);
+    Batch_class_extra = slot_offset(Batch_class, "extra", Batch_slots);
+    assert_slots_len(Batch_class, Batch_slots);
 
     int Buffer_slots = 0;
     Buffer_class = detect_class(moderngl, "Buffer", Buffer_slots);
@@ -424,12 +430,6 @@ void init_wrappers() {
     Query_class_samples = slot_offset(Query_class, "samples", Query_slots);
     Query_class_extra = slot_offset(Query_class, "extra", Query_slots);
     assert_slots_len(Query_class, Query_slots);
-
-    int RenderBatch_slots = 0;
-    RenderBatch_class = detect_class(moderngl, "RenderBatch", RenderBatch_slots);
-    RenderBatch_class_mglo = slot_offset(RenderBatch_class, "_RenderBatch__mglo", RenderBatch_slots);
-    RenderBatch_class_extra = slot_offset(RenderBatch_class, "extra", RenderBatch_slots);
-    assert_slots_len(RenderBatch_class, RenderBatch_slots);
 
     int Renderbuffer_slots = 0;
     Renderbuffer_class = detect_class(moderngl, "Renderbuffer", Renderbuffer_slots);

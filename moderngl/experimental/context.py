@@ -2,13 +2,13 @@ import importlib
 from typing import Any
 
 from . import mgl
+from .batch import Batch
 from .buffer import Buffer
 from .compute_shader import ComputeShader
 from .framebuffer import Framebuffer
 from .limits import Limits
 from .program import Program
 from .query import Query
-from .render_batch import RenderBatch
 from .renderbuffer import Renderbuffer
 from .sampler import Sampler
 from .scope import Scope
@@ -62,8 +62,8 @@ class Context:
     def query(self, time=False, primitives=False, samples=False, any_samples=False) -> Query:
         return self.__mglo.query(time, primitives, samples, any_samples)
 
-    def render_batch(self, batch) -> RenderBatch:
-        return self.__mglo.render_batch(batch)
+    def batch(self, batch) -> Batch:
+        return self.__mglo.batch(batch)
 
     def renderbuffer(self, size, components=4, samples=0, dtype='f1') -> Renderbuffer:
         return self.__mglo.renderbuffer(size, components, samples, dtype)

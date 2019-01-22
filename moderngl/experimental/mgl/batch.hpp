@@ -8,7 +8,7 @@ enum MGLRenderTask {
     MGL_RENDER_TASK,
 };
 
-struct MGLRenderBatchTask {
+struct MGLBatchTask {
     int task;
     MGLVertexArray * vertex_array;
     union {
@@ -23,13 +23,13 @@ struct MGLRenderBatchTask {
     };
 };
 
-struct MGLRenderBatch {
+struct MGLBatch {
     PyObject_HEAD
     PyObject * wrapper;
     MGLContext * context;
-    MGLRenderBatchTask * tasks;
+    MGLBatchTask * tasks;
     int num_tasks;
 };
 
-extern PyType_Spec MGLRenderBatch_spec;
-PyObject * MGLContext_meth_render_batch(MGLContext * self, PyObject * const * args, Py_ssize_t nargs);
+extern PyType_Spec MGLBatch_spec;
+PyObject * MGLContext_meth_batch(MGLContext * self, PyObject * const * args, Py_ssize_t nargs);

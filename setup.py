@@ -129,7 +129,7 @@ experimental_mgl = Extension(
         'moderngl/experimental/mgl/mgl.cpp',
         'moderngl/experimental/mgl/program.cpp',
         'moderngl/experimental/mgl/query.cpp',
-        'moderngl/experimental/mgl/render_batch.cpp',
+        'moderngl/experimental/mgl/batch.cpp',
         'moderngl/experimental/mgl/renderbuffer.cpp',
         'moderngl/experimental/mgl/sampler.cpp',
         'moderngl/experimental/mgl/scope.cpp',

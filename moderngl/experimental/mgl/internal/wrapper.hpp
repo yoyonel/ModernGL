@@ -10,6 +10,10 @@ extern int Attribute_class_rows;
 extern int Attribute_class_size;
 extern int Attribute_class_shape;
 
+extern PyTypeObject * Batch_class;
+extern int Batch_class_mglo;
+extern int Batch_class_extra;
+
 extern PyTypeObject * Buffer_class;
 extern int Buffer_class_mglo;
 extern int Buffer_class_size;
@@ -177,9 +181,6 @@ extern int Query_class_primitives;
 extern int Query_class_samples;
 extern int Query_class_extra;
 
-extern PyTypeObject * RenderBatch_class;
-extern int RenderBatch_class_mglo;
-extern int RenderBatch_class_extra;
 
 extern PyTypeObject * Renderbuffer_class;
 extern int Renderbuffer_class_mglo;

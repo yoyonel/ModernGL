@@ -1,5 +1,6 @@
 #include "context.hpp"
 
+#include "batch.hpp"
 #include "buffer.hpp"
 #include "compute_shader.hpp"
 #include "configuration.hpp"
@@ -7,7 +8,6 @@
 #include "limits.hpp"
 #include "program.hpp"
 #include "query.hpp"
-#include "render_batch.hpp"
 #include "renderbuffer.hpp"
 #include "sampler.hpp"
 #include "scope.hpp"
@@ -92,7 +92,7 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
     context->MGLFramebuffer_class = (PyTypeObject *)PyType_FromSpec(&MGLFramebuffer_spec);
     context->MGLProgram_class = (PyTypeObject *)PyType_FromSpec(&MGLProgram_spec);
     context->MGLQuery_class = (PyTypeObject *)PyType_FromSpec(&MGLQuery_spec);
-    context->MGLRenderBatch_class = (PyTypeObject *)PyType_FromSpec(&MGLRenderBatch_spec);
+    context->MGLBatch_class = (PyTypeObject *)PyType_FromSpec(&MGLBatch_spec);
     context->MGLRenderbuffer_class = (PyTypeObject *)PyType_FromSpec(&MGLRenderbuffer_spec);
     context->MGLSampler_class = (PyTypeObject *)PyType_FromSpec(&MGLSampler_spec);
     context->MGLScope_class = (PyTypeObject *)PyType_FromSpec(&MGLScope_spec);
@@ -299,7 +299,7 @@ PyMethodDef MGLContext_methods[] = {
     {"framebuffer", (PyCFunction)MGLContext_meth_framebuffer, METH_FASTCALL, 0},
     {"program", (PyCFunction)MGLContext_meth_program, METH_FASTCALL, 0},
     {"query", (PyCFunction)MGLContext_meth_query, METH_FASTCALL, 0},
-    {"render_batch", (PyCFunction)MGLContext_meth_render_batch, METH_FASTCALL, 0},
+    {"batch", (PyCFunction)MGLContext_meth_batch, METH_FASTCALL, 0},
     {"renderbuffer", (PyCFunction)MGLContext_meth_renderbuffer, METH_FASTCALL, 0},
     {"sampler", (PyCFunction)MGLContext_meth_sampler, METH_FASTCALL, 0},
     {"scope", (PyCFunction)MGLContext_meth_scope, METH_FASTCALL, 0},
@@ -330,8 +330,8 @@ PyObject * MGLContext_meth_query_va(MGLContext * self, PyObject * args) {
     return MGLContext_meth_query(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
 }
 
-PyObject * MGLContext_meth_render_batch_va(MGLContext * self, PyObject * args) {
-    return MGLContext_meth_render_batch(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+PyObject * MGLContext_meth_batch_va(MGLContext * self, PyObject * args) {
+    return MGLContext_meth_batch(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
 }
 
 PyObject * MGLContext_meth_renderbuffer_va(MGLContext * self, PyObject * args) {
@@ -362,7 +362,7 @@ PyMethodDef MGLContext_methods[] = {
     {"framebuffer", (PyCFunction)MGLContext_meth_framebuffer_va, METH_VARARGS, 0},
     {"program", (PyCFunction)MGLContext_meth_program_va, METH_VARARGS, 0},
     {"query", (PyCFunction)MGLContext_meth_query_va, METH_VARARGS, 0},
-    {"render_batch", (PyCFunction)MGLContext_meth_render_batch_va, METH_VARARGS, 0},
+    {"batch", (PyCFunction)MGLContext_meth_batch_va, METH_VARARGS, 0},
     {"renderbuffer", (PyCFunction)MGLContext_meth_renderbuffer_va, METH_VARARGS, 0},
     {"sampler", (PyCFunction)MGLContext_meth_sampler_va, METH_VARARGS, 0},
     {"scope", (PyCFunction)MGLContext_meth_scope_va, METH_VARARGS, 0},

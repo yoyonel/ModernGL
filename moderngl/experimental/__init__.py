@@ -1,5 +1,6 @@
 from .context import Context, create_context, extensions, hwinfo, inspect, glprocs, release
 from .attribute import Attribute
+from .batch import Batch
 from .buffer import Buffer
 from .compute_shader import ComputeShader
 from .error import Error
@@ -7,7 +8,6 @@ from .framebuffer import Framebuffer
 from .limits import Limits
 from .program import Program
 from .query import Query
-from .render_batch import RenderBatch
 from .renderbuffer import Renderbuffer
 from .sampler import Sampler
 from .scope import Scope

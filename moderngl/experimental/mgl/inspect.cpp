@@ -1,10 +1,10 @@
+#include "batch.hpp"
 #include "buffer.hpp"
 #include "compute_shader.hpp"
 #include "context.hpp"
 #include "framebuffer.hpp"
 #include "program.hpp"
 #include "query.hpp"
-#include "render_batch.hpp"
 #include "renderbuffer.hpp"
 #include "sampler.hpp"
 #include "scope.hpp"
@@ -140,10 +140,10 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
         return res;
     }
 
-    if (obj->ob_type == RenderBatch_class) {
+    if (obj->ob_type == Batch_class) {
         PyObject * res = PyDict_New();
         dict_add_obj(res, "self", obj);
-        dict_add_obj_decref(res, "mglo", meth_inspect(0, SLOT(obj, PyObject, RenderBatch_class_mglo)));
+        dict_add_obj_decref(res, "mglo", meth_inspect(0, SLOT(obj, PyObject, Batch_class_mglo)));
         return res;
     }
 
@@ -283,8 +283,8 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
             return res;
         }
 
-        if (mglo->ob_base.ob_type == mglo->context->MGLRenderBatch_class) {
-            MGLRenderBatch * batch = (MGLRenderBatch *)obj;
+        if (mglo->ob_base.ob_type == mglo->context->MGLBatch_class) {
+            MGLBatch * batch = (MGLBatch *)obj;
             PyObject * res = PyDict_New();
             dict_add_obj(res, "self", obj);
             dict_add_obj(res, "wrapper", batch->wrapper);

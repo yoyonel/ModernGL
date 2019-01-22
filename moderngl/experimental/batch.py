@@ -1,7 +1,7 @@
 from typing import Any
 
 
-class RenderBatch:
+class Batch:
     __slots__ = ['__mglo', 'extra']
 
     def __init__(self):

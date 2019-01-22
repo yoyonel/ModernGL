@@ -83,7 +83,7 @@ class CrateExample(Example):
         self.vao3 = self.ctx.simple_vertex_array(self.prog, self.vbo3, 'in_vert', 'in_norm', 'in_text')
         self.vao3.scope = self.ctx.scope(mgl.DEPTH_TEST, samplers=[(self.sampler2, 0)])
 
-        self.batch = self.ctx.render_batch([
+        self.batch = self.ctx.batch([
             (0, self.vao1, mgl.TRIANGLES, self.vao1.vertices, 0, 1, 0xffffffffffffffff, True),
             (0, self.vao2, mgl.TRIANGLES, self.vao2.vertices, 0, 1, 0xffffffffffffffff, True),
             (0, self.vao3, mgl.TRIANGLES, self.vao3.vertices, 0, 1, 0xffffffffffffffff, True),
