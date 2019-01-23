@@ -1,4 +1,3 @@
-#include "batch.hpp"
 #include "buffer.hpp"
 #include "compute_shader.hpp"
 #include "context.hpp"
@@ -109,6 +108,7 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
         dict_add_obj(res, "limits", SLOT(obj, PyObject, Context_class_limits));
         dict_add_obj(res, "screen", SLOT(obj, PyObject, Context_class_screen));
         dict_add_obj(res, "fbo", SLOT(obj, PyObject, Context_class_fbo));
+        dict_add_obj(res, "recorder", SLOT(obj, PyObject, Context_class_recorder));
         return res;
     }
 
@@ -137,13 +137,6 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
         dict_add_obj(res, "elapsed", SLOT(obj, PyObject, Query_class_elapsed));
         dict_add_obj(res, "primitives", SLOT(obj, PyObject, Query_class_primitives));
         dict_add_obj(res, "samples", SLOT(obj, PyObject, Query_class_samples));
-        return res;
-    }
-
-    if (obj->ob_type == Batch_class) {
-        PyObject * res = PyDict_New();
-        dict_add_obj(res, "self", obj);
-        dict_add_obj_decref(res, "mglo", meth_inspect(0, SLOT(obj, PyObject, Batch_class_mglo)));
         return res;
     }
 
@@ -280,15 +273,6 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
             dict_add_obj(res, "wrapper", query->wrapper);
             dict_add_obj(res, "context", (PyObject *)query->context);
             dict_add_int_tuple(res, "query_obj", 4, query->query_obj);
-            return res;
-        }
-
-        if (mglo->ob_base.ob_type == mglo->context->MGLBatch_class) {
-            MGLBatch * batch = (MGLBatch *)obj;
-            PyObject * res = PyDict_New();
-            dict_add_obj(res, "self", obj);
-            dict_add_obj(res, "wrapper", batch->wrapper);
-            dict_add_obj(res, "context", (PyObject *)batch->context);
             return res;
         }
 

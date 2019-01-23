@@ -88,20 +88,26 @@ class CrateExample(Example):
         self.vao3 = self.ctx.simple_vertex_array(self.prog, self.vbo3, 'in_vert', 'in_norm', 'in_text')
         self.vao3.scope = self.ctx.scope(mgl.DEPTH_TEST, samplers=[(self.sampler2, 0)])
 
-        self.batch = self.ctx.batch([
-            (2, self.ctx.screen, struct.pack('iIf', -1, 0, 1.0)),
-            (2, self.ctx.screen, struct.pack('iIffff', 0, 0xf, 1.0, 1.0, 1.0, 1.0)),
-            (0, self.vao1.scope, b''),
-            (1, self.vao1, struct.pack('IIQ?', mgl.TRIANGLES, self.vao1.vertices, 0xffffffffffffffff, True)),
-            (0, self.vao2.scope, b''),
-            (1, self.vao2, struct.pack('IIQ?', mgl.TRIANGLES, self.vao2.vertices, 0xffffffffffffffff, True)),
-            (0, self.vao3.scope, b''),
-            (1, self.vao3, struct.pack('IIQ?', mgl.TRIANGLES, self.vao3.vertices, 0xffffffffffffffff, True)),
-        ])
+        with self.ctx.recorder:
+            # print('recorder', recorder)
+        # if True:
+            # print('---')
+            self.ctx.screen.viewport = self.wnd.viewport
+            self.ctx.clear(1.0, 1.0, 1.0)
+            self.vao1.render()
+            self.vao2.render()
+            self.vao3.render()
+
+            # print('---')
+        # exit()
+
+        self.bytecode = self.ctx.recorder.dump()
+        print(self.bytecode)
+        # exit()
 
     def render(self):
         angle = self.wnd.time
-        self.ctx.screen.viewport = self.wnd.viewport
+        # self.ctx.screen.viewport = self.wnd.viewport
         # self.ctx.clear(1.0, 1.0, 1.0)
 
         camera_pos = (np.cos(angle) * 5.0, np.sin(angle) * 5.0, 2.0)
@@ -116,7 +122,6 @@ class CrateExample(Example):
         self.prog['Mvp'] = (proj * lookat).astype('f4').tobytes()
         self.prog['Light'] = camera_pos
 
-        self.batch.run()
-        # exit()
+        self.ctx.replay(self.bytecode)
 
 run_example(CrateExample)

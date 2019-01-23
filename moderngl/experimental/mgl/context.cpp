@@ -1,7 +1,7 @@
 #include "context.hpp"
 
-#include "batch.hpp"
 #include "buffer.hpp"
+#include "bytecode.hpp"
 #include "compute_shader.hpp"
 #include "configuration.hpp"
 #include "framebuffer.hpp"
@@ -92,7 +92,6 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
     context->MGLFramebuffer_class = (PyTypeObject *)PyType_FromSpec(&MGLFramebuffer_spec);
     context->MGLProgram_class = (PyTypeObject *)PyType_FromSpec(&MGLProgram_spec);
     context->MGLQuery_class = (PyTypeObject *)PyType_FromSpec(&MGLQuery_spec);
-    context->MGLBatch_class = (PyTypeObject *)PyType_FromSpec(&MGLBatch_spec);
     context->MGLRenderbuffer_class = (PyTypeObject *)PyType_FromSpec(&MGLRenderbuffer_spec);
     context->MGLSampler_class = (PyTypeObject *)PyType_FromSpec(&MGLSampler_spec);
     context->MGLScope_class = (PyTypeObject *)PyType_FromSpec(&MGLScope_spec);
@@ -121,12 +120,16 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
     context->active_scope = NEW_REF(context->default_scope);
     context->bound_scope = NEW_REF(context->default_scope);
 
+    MGLRecorder * recorder = PyObject_New(MGLRecorder, MGLRecorder_class);
+    recorder->context = context;
+
     context->wrapper = new_object(PyObject, Context_class);
     SLOT(context->wrapper, MGLContext, Context_class_mglo) = context;
     SLOT(context->wrapper, PyObject, Context_class_version_code) = PyLong_FromLong(version_code);
     SLOT(context->wrapper, PyObject, Context_class_limits) = get_limits(gl, version_code);
     SLOT(context->wrapper, PyObject, Context_class_screen) = NEW_REF(context->default_framebuffer->wrapper);
     SLOT(context->wrapper, PyObject, Context_class_fbo) = NEW_REF(context->bound_framebuffer->wrapper);
+    SLOT(context->wrapper, MGLRecorder, Context_class_recorder) = recorder;
     return NEW_REF(context->wrapper);
 }
 
@@ -300,12 +303,12 @@ PyMethodDef MGLContext_methods[] = {
     {"framebuffer", (PyCFunction)MGLContext_meth_framebuffer, METH_FASTCALL, 0},
     {"program", (PyCFunction)MGLContext_meth_program, METH_FASTCALL, 0},
     {"query", (PyCFunction)MGLContext_meth_query, METH_FASTCALL, 0},
-    {"batch", (PyCFunction)MGLContext_meth_batch, METH_FASTCALL, 0},
     {"renderbuffer", (PyCFunction)MGLContext_meth_renderbuffer, METH_FASTCALL, 0},
     {"sampler", (PyCFunction)MGLContext_meth_sampler, METH_FASTCALL, 0},
     {"scope", (PyCFunction)MGLContext_meth_scope, METH_FASTCALL, 0},
     {"texture", (PyCFunction)MGLContext_meth_texture, METH_FASTCALL, 0},
     {"vertex_array", (PyCFunction)MGLContext_meth_vertex_array, METH_FASTCALL, 0},
+    {"replay", (PyCFunction)MGLContext_meth_replay, METH_O, 0},
     {0},
 };
 
@@ -329,10 +332,6 @@ PyObject * MGLContext_meth_program_va(MGLContext * self, PyObject * args) {
 
 PyObject * MGLContext_meth_query_va(MGLContext * self, PyObject * args) {
     return MGLContext_meth_query(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLContext_meth_batch_va(MGLContext * self, PyObject * args) {
-    return MGLContext_meth_batch(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
 }
 
 PyObject * MGLContext_meth_renderbuffer_va(MGLContext * self, PyObject * args) {
@@ -363,12 +362,13 @@ PyMethodDef MGLContext_methods[] = {
     {"framebuffer", (PyCFunction)MGLContext_meth_framebuffer_va, METH_VARARGS, 0},
     {"program", (PyCFunction)MGLContext_meth_program_va, METH_VARARGS, 0},
     {"query", (PyCFunction)MGLContext_meth_query_va, METH_VARARGS, 0},
-    {"batch", (PyCFunction)MGLContext_meth_batch_va, METH_VARARGS, 0},
     {"renderbuffer", (PyCFunction)MGLContext_meth_renderbuffer_va, METH_VARARGS, 0},
     {"sampler", (PyCFunction)MGLContext_meth_sampler_va, METH_VARARGS, 0},
     {"scope", (PyCFunction)MGLContext_meth_scope_va, METH_VARARGS, 0},
     {"texture", (PyCFunction)MGLContext_meth_texture_va, METH_VARARGS, 0},
     {"vertex_array", (PyCFunction)MGLContext_meth_vertex_array_va, METH_VARARGS, 0},
+    {"record", (PyCFunction)MGLContext_meth_record, METH_NOARGS, 0},
+    {"replay", (PyCFunction)MGLContext_meth_replay, METH_O, 0},
     {0},
 };
 

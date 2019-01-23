@@ -10,10 +10,6 @@ int Attribute_class_rows;
 int Attribute_class_size;
 int Attribute_class_shape;
 
-PyTypeObject * Batch_class;
-int Batch_class_mglo;
-int Batch_class_extra;
-
 PyTypeObject * Buffer_class;
 int Buffer_class_mglo;
 int Buffer_class_size;
@@ -30,6 +26,7 @@ int Context_class_version_code;
 int Context_class_limits;
 int Context_class_screen;
 int Context_class_fbo;
+int Context_class_recorder;
 int Context_class_extra;
 
 PyTypeObject * Framebuffer_class;
@@ -244,12 +241,6 @@ void init_wrappers() {
     Attribute_class_shape = slot_offset(Attribute_class, "shape", Attribute_slots);
     assert_slots_len(Attribute_class, Attribute_slots);
 
-    int Batch_slots = 0;
-    Batch_class = detect_class(moderngl, "Batch", Batch_slots);
-    Batch_class_mglo = slot_offset(Batch_class, "_Batch__mglo", Batch_slots);
-    Batch_class_extra = slot_offset(Batch_class, "extra", Batch_slots);
-    assert_slots_len(Batch_class, Batch_slots);
-
     int Buffer_slots = 0;
     Buffer_class = detect_class(moderngl, "Buffer", Buffer_slots);
     Buffer_class_mglo = slot_offset(Buffer_class, "_Buffer__mglo", Buffer_slots);
@@ -271,6 +262,7 @@ void init_wrappers() {
     Context_class_limits = slot_offset(Context_class, "limits", Context_slots);
     Context_class_screen = slot_offset(Context_class, "screen", Context_slots);
     Context_class_fbo = slot_offset(Context_class, "fbo", Context_slots);
+    Context_class_recorder = slot_offset(Context_class, "recorder", Context_slots);
     Context_class_extra = slot_offset(Context_class, "extra", Context_slots);
     assert_slots_len(Context_class, Context_slots);
 

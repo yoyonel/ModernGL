@@ -5,6 +5,7 @@
 
 #include "context.hpp"
 #include "buffer.hpp"
+#include "bytecode.hpp"
 #include "framebuffer.hpp"
 #include "limits.hpp"
 #include "program.hpp"
@@ -41,6 +42,7 @@ PyObject * meth_initialize(PyObject * self) {
     /* Detect wrapper classes for internal types */
 
     init_wrappers();
+    initialize_recording();
 
     /* Errors are not recoverable at this point */
 

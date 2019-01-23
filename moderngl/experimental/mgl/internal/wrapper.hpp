@@ -10,10 +10,6 @@ extern int Attribute_class_rows;
 extern int Attribute_class_size;
 extern int Attribute_class_shape;
 
-extern PyTypeObject * Batch_class;
-extern int Batch_class_mglo;
-extern int Batch_class_extra;
-
 extern PyTypeObject * Buffer_class;
 extern int Buffer_class_mglo;
 extern int Buffer_class_size;
@@ -30,6 +26,7 @@ extern int Context_class_version_code;
 extern int Context_class_limits;
 extern int Context_class_screen;
 extern int Context_class_fbo;
+extern int Context_class_recorder;
 extern int Context_class_extra;
 
 extern PyTypeObject * Framebuffer_class;

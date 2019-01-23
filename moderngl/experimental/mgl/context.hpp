@@ -42,7 +42,6 @@ struct MGLContext {
     MGLScope * active_scope;
     MGLScope * bound_scope;
 
-    PyTypeObject * MGLBatch_class;
     PyTypeObject * MGLBuffer_class;
     PyTypeObject * MGLComputeShader_class;
     PyTypeObject * MGLFramebuffer_class;

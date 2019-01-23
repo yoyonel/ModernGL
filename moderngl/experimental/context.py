@@ -2,7 +2,6 @@ import importlib
 from typing import Any
 
 from . import mgl
-from .batch import Batch
 from .buffer import Buffer
 from .compute_shader import ComputeShader
 from .framebuffer import Framebuffer
@@ -21,7 +20,7 @@ def _attr_fmt(attr):
 
 
 class Context:
-    __slots__ = ['__mglo', 'version_code', 'limits', 'screen', 'fbo', 'extra']
+    __slots__ = ['__mglo', 'version_code', 'limits', 'screen', 'fbo', 'recorder', 'extra']
 
     def __init__(self):
         self.__mglo = None  # type: Any
@@ -29,6 +28,7 @@ class Context:
         self.limits = None  # type: Limits
         self.screen = None  # type: Framebuffer
         self.fbo = None  # type: Framebuffer
+        self.recorder = None  # type: Any
         self.extra = None  # type: Any
 
     def buffer(self, data=None, reserve=0, readable=True, writable=True, local=False) -> Buffer:
@@ -62,9 +62,6 @@ class Context:
     def query(self, time=False, primitives=False, samples=False, any_samples=False) -> Query:
         return self.__mglo.query(time, primitives, samples, any_samples)
 
-    def batch(self, batch) -> Batch:
-        return self.__mglo.batch(batch)
-
     def renderbuffer(self, size, components=4, samples=0, dtype='f1') -> Renderbuffer:
         return self.__mglo.renderbuffer(size, components, samples, dtype)
 
@@ -83,6 +80,12 @@ class Context:
 
     def copy_buffer(self, dst, src, size=-1, *, read_offset=0, write_offset=0) -> None:
         self.__mglo.copy_buffer(dst, src, size, read_offset, write_offset)
+
+    def record(self):
+        return self.__mglo.record()
+
+    def replay(self, bytecode):
+        return self.__mglo.replay(bytecode)
 
 
 def create_context(standalone=False, debug=False, glhook=None, gc=None):

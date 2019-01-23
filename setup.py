@@ -119,6 +119,7 @@ experimental_mgl = Extension(
     extra_link_args=extra_linker_args[target],
     sources=[
         'moderngl/experimental/mgl/buffer.cpp',
+        'moderngl/experimental/mgl/bytecode.cpp',
         'moderngl/experimental/mgl/compute_shader.cpp',
         'moderngl/experimental/mgl/configuration.cpp',
         'moderngl/experimental/mgl/context.cpp',
@@ -129,7 +130,6 @@ experimental_mgl = Extension(
         'moderngl/experimental/mgl/mgl.cpp',
         'moderngl/experimental/mgl/program.cpp',
         'moderngl/experimental/mgl/query.cpp',
-        'moderngl/experimental/mgl/batch.cpp',
         'moderngl/experimental/mgl/renderbuffer.cpp',
         'moderngl/experimental/mgl/sampler.cpp',
         'moderngl/experimental/mgl/scope.cpp',
