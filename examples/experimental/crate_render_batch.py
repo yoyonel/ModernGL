@@ -89,26 +89,17 @@ class CrateExample(Example):
         self.vao3.scope = self.ctx.scope(mgl.DEPTH_TEST, samplers=[(self.sampler2, 0)])
 
         with self.ctx.recorder:
-            # print('recorder', recorder)
-        # if True:
-            # print('---')
-            self.ctx.screen.viewport = self.wnd.viewport
             self.ctx.clear(1.0, 1.0, 1.0)
             self.vao1.render()
             self.vao2.render()
             self.vao3.render()
 
-            # print('---')
-        # exit()
-
         self.bytecode = self.ctx.recorder.dump()
         print(self.bytecode)
-        # exit()
 
     def render(self):
         angle = self.wnd.time
-        # self.ctx.screen.viewport = self.wnd.viewport
-        # self.ctx.clear(1.0, 1.0, 1.0)
+        self.ctx.screen.viewport = self.wnd.viewport
 
         camera_pos = (np.cos(angle) * 5.0, np.sin(angle) * 5.0, 2.0)
 

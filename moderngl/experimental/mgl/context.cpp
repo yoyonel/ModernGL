@@ -116,6 +116,7 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
 
     context->default_scope = MGLContext_new_object(context, Scope);
     context->default_scope->framebuffer = NEW_REF(context->default_framebuffer);
+    context->default_scope->enable_only = 0;
 
     context->active_scope = NEW_REF(context->default_scope);
     context->bound_scope = NEW_REF(context->default_scope);
