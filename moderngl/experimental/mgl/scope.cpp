@@ -60,7 +60,13 @@ PyObject * MGLContext_meth_scope(MGLContext * self, PyObject * const * args, Py_
 
     MGLScope * scope = MGLContext_new_object(self, Scope);
 
-    scope->enable_only = PyLong_AsLong(args[0]);
+    int enable_only = PyLong_AsLong(args[0]);
+
+    if (PyErr_Occurred()) {
+        return 0;
+    }
+
+    scope->enable_only = enable_only;
 
     if (args[1] != Py_None && Py_TYPE(args[1]) != Framebuffer_class) {
         return 0;

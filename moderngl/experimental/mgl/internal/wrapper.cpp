@@ -1,6 +1,7 @@
 #include "wrapper.hpp"
 
 #include "modules.hpp"
+#include "tools.hpp"
 
 PyTypeObject * Attribute_class;
 int Attribute_class_type;

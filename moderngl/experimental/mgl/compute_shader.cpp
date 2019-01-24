@@ -15,23 +15,20 @@ PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source) 
     const GLMethods & gl = self->gl;
 
 	int program_obj = gl.CreateProgram();
-
 	if (!program_obj) {
 		PyErr_Format(moderngl_error, "cannot create program");
         Py_DECREF(compute_shader);
 		return 0;
 	}
 
-    compute_shader->program_obj = program_obj;
-
 	int shader_obj = gl.CreateShader(GL_COMPUTE_SHADER);
-
 	if (!shader_obj) {
 		PyErr_Format(moderngl_error, "cannot create the shader object");
         // Py_DECREF(compute_shader);
 		return 0;
 	}
 
+    compute_shader->program_obj = program_obj;
     compute_shader->shader_obj = shader_obj;
 
 	int compiled = GL_FALSE;
@@ -103,10 +100,10 @@ PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source) 
         PyObject * uniform = new_object(PyObject, Uniform_class);
         SLOT(uniform, PyObject, Uniform_class_type) = PyLong_FromLong(type);
         SLOT(uniform, PyObject, Uniform_class_location) = PyLong_FromLong(location);
-        SLOT(uniform, PyObject, Uniform_class_shape) = PyLong_FromLong(info.shape);
         SLOT(uniform, PyObject, Uniform_class_cols) = PyLong_FromLong(info.cols);
         SLOT(uniform, PyObject, Uniform_class_rows) = PyLong_FromLong(info.rows);
         SLOT(uniform, PyObject, Uniform_class_size) = PyLong_FromLong(size);
+        SLOT(uniform, PyObject, Uniform_class_shape) = PyLong_FromLong(info.shape);
         PyDict_SetItemString(uniforms, name, uniform);
     }
 
@@ -121,9 +118,12 @@ PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source) 
         clean_glsl_name(name, name_len);
 
         PyObject * uniform = new_object(PyObject, Uniform_class);
+        SLOT(uniform, PyObject, Uniform_class_type) = 0;
         SLOT(uniform, PyObject, Uniform_class_location) = PyLong_FromLong(index);
-        SLOT(uniform, PyObject, Uniform_class_shape) = PyLong_FromLong(0);
+        SLOT(uniform, PyObject, Uniform_class_cols) = 0;
+        SLOT(uniform, PyObject, Uniform_class_rows) = 0;
         SLOT(uniform, PyObject, Uniform_class_size) = PyLong_FromLong(size);
+        SLOT(uniform, PyObject, Uniform_class_shape) = PyLong_FromLong(0);
         PyDict_SetItemString(uniforms, name, uniform);
     }
 

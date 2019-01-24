@@ -13,7 +13,9 @@
 #include "scope.hpp"
 #include "texture.hpp"
 #include "vertex_array.hpp"
+
 #include "internal/wrapper.hpp"
+#include "internal/tools.hpp"
 
 /* moderngl.core.create_context(standalone, debug, glhook, gc)
  * Returns a Context object.
@@ -30,6 +32,8 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
     PyObject * gc = args[3];
 
     MGLContext * context = new_object(MGLContext, MGLContext_class);
+    memset((char *)context + sizeof(PyObject), 0, sizeof(MGLContext) - sizeof(PyObject));
+
     // context->glsl_compiler_error = moderngl_compiler_error;
     // context->glsl_linker_error = moderngl_linker_error;
 
@@ -98,51 +102,58 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
     context->MGLTexture_class = (PyTypeObject *)PyType_FromSpec(&MGLTexture_spec);
     context->MGLVertexArray_class = (PyTypeObject *)PyType_FromSpec(&MGLVertexArray_spec);
 
-    context->default_framebuffer = MGLContext_new_object(context, Framebuffer);
-    context->default_framebuffer->framebuffer_obj = 0;
+    MGLFramebuffer * default_framebuffer = MGLContext_new_object(context, Framebuffer);
 
-    context->default_framebuffer->color_mask = 0xF;
-    context->default_framebuffer->depth_mask = 1;
-    context->default_framebuffer->attachments = 1;
-    context->default_framebuffer->attachment_type = "f";
+    default_framebuffer->framebuffer_obj = 0;
+    default_framebuffer->components = 4;
+    default_framebuffer->color_mask = 0xF;
+    default_framebuffer->depth_mask = true;
+    default_framebuffer->attachments = 1;
+    default_framebuffer->attachment_type = "f";
 
-    context->default_framebuffer->viewport[0] = 0;
-    context->default_framebuffer->viewport[1] = 0;
-    context->default_framebuffer->viewport[2] = context->default_framebuffer->width;
-    context->default_framebuffer->viewport[3] = context->default_framebuffer->height;
-    SLOT(context->default_framebuffer->wrapper, PyObject, Framebuffer_class_viewport) = int_tuple(0, 0, context->default_framebuffer->width, context->default_framebuffer->height);
+    default_framebuffer->viewport[0] = 0;
+    default_framebuffer->viewport[1] = 0;
+    default_framebuffer->viewport[2] = default_framebuffer->width;
+    default_framebuffer->viewport[3] = default_framebuffer->height;
+    SLOT(default_framebuffer->wrapper, PyObject, Framebuffer_class_viewport) = int_tuple(0, 0, default_framebuffer->width, default_framebuffer->height);
 
-    context->bound_framebuffer = NEW_REF(context->default_framebuffer);
+    context->default_framebuffer = default_framebuffer;
+    context->bound_framebuffer = NEW_REF(default_framebuffer);
 
-    context->default_scope = MGLContext_new_object(context, Scope);
-    context->default_scope->framebuffer = NEW_REF(context->default_framebuffer);
-    context->default_scope->enable_only = 0;
-    context->default_scope->num_samplers = 0;
-    context->default_scope->num_uniform_buffers = 0;
-    context->default_scope->num_storage_buffers = 0;
-    context->default_scope->bindings = 0;
+    MGLScope * default_scope = MGLContext_new_object(context, Scope);
 
-    context->active_scope = NEW_REF(context->default_scope);
-    context->bound_scope = NEW_REF(context->default_scope);
+    default_scope->framebuffer = NEW_REF(default_framebuffer);
+    default_scope->old_scope = default_scope;
+    default_scope->enable_only = 0;
+
+    context->default_scope = default_scope;
+    context->active_scope = NEW_REF(default_scope);
+    context->bound_scope = NEW_REF(default_scope);
 
     MGLRecorder * recorder = PyObject_New(MGLRecorder, MGLRecorder_class);
+    // memset((char *)recorder + sizeof(PyObject), 0, sizeof(MGLRecorder) - sizeof(PyObject));
     recorder->context = context;
 
     context->wrapper = new_object(PyObject, Context_class);
+    clear_slots(context->wrapper);
+
     SLOT(context->wrapper, MGLContext, Context_class_mglo) = context;
     SLOT(context->wrapper, PyObject, Context_class_version_code) = PyLong_FromLong(version_code);
     SLOT(context->wrapper, PyObject, Context_class_limits) = get_limits(gl, version_code);
     SLOT(context->wrapper, PyObject, Context_class_screen) = NEW_REF(context->default_framebuffer->wrapper);
     SLOT(context->wrapper, PyObject, Context_class_fbo) = NEW_REF(context->bound_framebuffer->wrapper);
     SLOT(context->wrapper, MGLRecorder, Context_class_recorder) = recorder;
+
     return NEW_REF(context->wrapper);
 }
 
 /* _MGLContext_new_object(...)
  */
-MGLObject * _MGLContext_new_object(MGLContext * self, PyTypeObject * type, PyTypeObject * cls, int slot) {
+MGLObject * _MGLContext_new_object(MGLContext * self, PyTypeObject * type, PyTypeObject * cls, int slot, int size) {
     MGLObject * res = new_object(MGLObject, type);
+    memset((char *)res + sizeof(PyObject), 0, size - sizeof(PyObject));
     res->wrapper = new_object(PyObject, cls);
+    clear_slots(res->wrapper);
     SLOT(res->wrapper, MGLObject, slot) = NEW_REF(res);
     res->context = NEW_REF(self);
     if (self->gc) {

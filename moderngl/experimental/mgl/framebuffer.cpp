@@ -35,11 +35,9 @@ PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * arg
         color_attachments = PySequence_Fast(color_attachments, "not iterable");
     }
 
-    const GLMethods & gl = self->gl;
-
     MGLFramebuffer * framebuffer = MGLContext_new_object(self, Framebuffer);
 
-    framebuffer->framebuffer_obj = 0;
+    const GLMethods & gl = self->gl;
     gl.GenFramebuffers(1, (GLuint *)&framebuffer->framebuffer_obj);
 
     if (!framebuffer->framebuffer_obj) {

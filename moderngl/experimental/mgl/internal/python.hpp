@@ -17,7 +17,7 @@
  * The allocated memory is initialized to zero.
  * Slots can be set using the SLOT(...) macro.
  */
-inline PyObject * _new_object(PyTypeObject * type, int size) {
+inline PyObject * _new_object(PyTypeObject * type) {
     PyObject * res = 0;
     Py_INCREF(type);
     if (type->tp_flags & Py_TPFLAGS_HAVE_GC) {
@@ -25,12 +25,10 @@ inline PyObject * _new_object(PyTypeObject * type, int size) {
     } else {
         res = PyObject_New(PyObject, type);
     }
-    // PyObject_GC_Track(wrapper);
-    memset((char *)res + sizeof(PyObject), 0, size - sizeof(PyObject));
     return res;
 }
 
-#define new_object(type, typeobj) (type *)_new_object(typeobj, sizeof(type))
+#define new_object(type, typeobj) (type *)_new_object(typeobj)
 #define call_function(function, ...) PyObject_CallFunctionObjArgs(function, __VA_ARGS__, (void *)0)
 
 inline void replace_object(PyObject *& src, PyObject * dst) {

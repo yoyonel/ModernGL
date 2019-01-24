@@ -30,9 +30,9 @@ PyObject * MGLContext_meth_vertex_array(MGLContext * self, PyObject * const * ar
         return 0;
     }
 
-    const GLMethods & gl = self->gl;
-
     MGLVertexArray * vertex_array = MGLContext_new_object(self, VertexArray);
+
+    const GLMethods & gl = self->gl;
     gl.GenVertexArrays(1, (GLuint *)&vertex_array->vertex_array_obj);
 
     if (!vertex_array->vertex_array_obj) {

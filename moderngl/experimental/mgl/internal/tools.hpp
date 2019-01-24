@@ -34,3 +34,4 @@ PyTypeObject * detect_class(PyObject * module, const char * name, int & slots_le
 int slot_offset(PyTypeObject * type, const char * name, int & counter);
 void assert_slots_len(PyTypeObject * type, int slots_len);
 bool starts_with(const char * str, const char * prefix);
+void clear_slots(PyObject * obj);

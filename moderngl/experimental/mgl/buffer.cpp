@@ -79,6 +79,7 @@ PyObject * MGLContext_meth_buffer(MGLContext * self, PyObject * const * args, Py
     }
 
     MGLBuffer * buffer = MGLContext_new_object(self, Buffer);
+
     buffer->flags = (readable ? MGL_BUFFER_READABLE : 0) | (writable ? MGL_BUFFER_WRITABLE : 0) | (local ? MGL_BUFFER_LOCAL : 0);
 
     const GLMethods & gl = self->gl;
