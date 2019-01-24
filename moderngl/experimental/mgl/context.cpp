@@ -372,7 +372,6 @@ PyMethodDef MGLContext_methods[] = {
     {"scope", (PyCFunction)MGLContext_meth_scope_va, METH_VARARGS, 0},
     {"texture", (PyCFunction)MGLContext_meth_texture_va, METH_VARARGS, 0},
     {"vertex_array", (PyCFunction)MGLContext_meth_vertex_array_va, METH_VARARGS, 0},
-    {"record", (PyCFunction)MGLContext_meth_record, METH_NOARGS, 0},
     {"replay", (PyCFunction)MGLContext_meth_replay, METH_O, 0},
     {0},
 };
