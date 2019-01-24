@@ -31,7 +31,6 @@ enum Opcode {
     OP_glDrawArraysInstanced,
     OP_glDrawElementsInstanced,
     OP_glEnable,
-    OP_glEnableVertexAttribArray,
     OP_glEndConditionalRender,
     OP_glEndQuery,
     OP_glEndTransformFeedback,
@@ -115,7 +114,6 @@ void GLAPI rec_glDispatchCompute(GLuint num_groups_x, GLuint num_groups_y, GLuin
 void GLAPI rec_glDrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
 void GLAPI rec_glDrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const void * indices, GLsizei instancecount);
 void GLAPI rec_glEnable(GLenum cap);
-void GLAPI rec_glEnableVertexAttribArray(GLuint index);
 void GLAPI rec_glEndConditionalRender();
 void GLAPI rec_glEndQuery(GLenum target);
 void GLAPI rec_glEndTransformFeedback();
@@ -179,6 +177,7 @@ void GLAPI rec_glDeleteSamplers(GLsizei count, const GLuint * samplers);
 void GLAPI rec_glDeleteShader(GLuint shader);
 void GLAPI rec_glDeleteTextures(GLsizei n, const GLuint * textures);
 void GLAPI rec_glDeleteVertexArrays(GLsizei n, const GLuint * arrays);
+void GLAPI rec_glEnableVertexAttribArray(GLuint index);
 void GLAPI rec_glFramebufferRenderbuffer(GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer);
 void GLAPI rec_glFramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level);
 void GLAPI rec_glGenBuffers(GLsizei n, GLuint * buffers);

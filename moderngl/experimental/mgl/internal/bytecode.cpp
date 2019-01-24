@@ -216,11 +216,6 @@ void GLAPI rec_glEnable(GLenum cap) {
     write(cap);
 }
 
-void GLAPI rec_glEnableVertexAttribArray(GLuint index) {
-    write(OP_glEnableVertexAttribArray);
-    write(index);
-}
-
 void GLAPI rec_glEndConditionalRender() {
     write(OP_glEndConditionalRender);
 }
@@ -743,6 +738,10 @@ void GLAPI rec_glDeleteTextures(GLsizei n, const GLuint * textures) {
 }
 
 void GLAPI rec_glDeleteVertexArrays(GLsizei n, const GLuint * arrays) {
+    error = true;
+}
+
+void GLAPI rec_glEnableVertexAttribArray(GLuint index) {
     error = true;
 }
 
