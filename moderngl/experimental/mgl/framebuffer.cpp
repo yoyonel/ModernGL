@@ -58,13 +58,14 @@ PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * arg
                 renderbuffer->renderbuffer_obj
             );
         } else if (attachment->ob_type == Texture_class) {
+            int level = PyLong_AsLong(SLOT(attachment, PyObject, Texture_class_level));
             MGLTexture * texture = SLOT(attachment, MGLTexture, Texture_class_mglo);
             gl.FramebufferTexture2D(
                 GL_FRAMEBUFFER,
                 GL_COLOR_ATTACHMENT0 + i,
                 texture->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D,
                 texture->texture_obj,
-                0
+                level
             );
         } else {
             return 0;
