@@ -13,6 +13,7 @@ def run_example(example_cls: Example, args=None):
     window = window_cls(
         title=example_cls.title,
         size=example_cls.window_size,
+        resizable=example_cls.resizable,
         gl_version=example_cls.gl_version,
         aspect_ratio=example_cls.aspect_ratio,
         **vars(values)

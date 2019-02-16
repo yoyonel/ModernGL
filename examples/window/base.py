@@ -57,11 +57,12 @@ class BaseWindow:
     """Helper base class for a generic window implementation"""
     keys = BaseKeys
 
-    def __init__(self, title="Example", gl_version=(3, 3), size=(1280, 720),
+    def __init__(self, title="Example", gl_version=(3, 3), size=(1280, 720), resizable=True,
                  fullscreen=False, vsync=True, aspect_ratio=16/9, samples=4, cursor=True, **kwargs):
         self.title = title
         self.gl_version = gl_version
         self.width, self.height = size
+        self.resizable = resizable
         self.buffer_width, self.buffer_height = size
         self.fullscreen = fullscreen
         self.vsync = vsync
@@ -101,6 +102,10 @@ class BaseWindow:
         blank_space = self.buffer_height - expected_height
         self.ctx.viewport = (0, blank_space // 2, self.buffer_width, expected_height)
 
+    @property
+    def gl_version_code(self):
+        return self.gl_version[0] * 100 +  self.gl_version[1] * 10
+
     def print_context_info(self):
         """
         Prints moderngl context info.
@@ -117,6 +122,7 @@ class BaseWindow:
 
 class Example:
     window_size = (1280, 720)
+    resizable = True
     gl_version = (3, 3)
     title = "Example"
     aspect_ratio = 16/9
