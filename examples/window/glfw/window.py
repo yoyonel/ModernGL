@@ -52,6 +52,7 @@ class Window(BaseWindow):
 
         self.ctx = moderngl.create_context(require=self.gl_version[0] * 100 +  self.gl_version[1] * 10)
         self.print_context_info()
+        self.set_default_viewport()
 
     def close(self):
         glfw.set_window_should_close(self.window, True)
@@ -74,22 +75,27 @@ class Window(BaseWindow):
         Key event callback for glfw.
         Translates and forwards keyboard event to :py:func:`keyboard_event`
 
-        :param window: Window event origin
-        :param key: The key that was pressed or released.
-        :param scancode: The system-specific scancode of the key.
-        :param action: GLFW_PRESS, GLFW_RELEASE or GLFW_REPEAT
-        :param mods: Bit field describing which modifier keys were held down.
+        Args:
+            window: Window event origin
+            key: The key that was pressed or released.
+            scancode: The system-specific scancode of the key.
+            action: GLFW_PRESS, GLFW_RELEASE or GLFW_REPEAT
+            mods: Bit field describing which modifier keys were held down.
         """
-        self.key_event(key, action)
+        if key == self.keys.ESCAPE:
+            self.close()
+
+        self.example.key_event(key, action)
 
     def mouse_event_callback(self, window, xpos, ypos):
         """
         Mouse event callback from glfw.
         Translates the events forwarding them to :py:func:`cursor_event`.
 
-        :param window: The window
-        :param xpos: viewport x pos
-        :param ypos: viewport y pos
+        Args:
+            window: The window
+            xpos: viewport x pos
+            ypos: viewport y pos
         """
         # screen coordinates relative to the top-left corner
         self.example.mouse_event(xpos, ypos)
@@ -98,9 +104,10 @@ class Window(BaseWindow):
         """
         Window resize callback for glfw
 
-        :param window: The window
-        :param width: New width
-        :param height: New height
+        Args:
+            window: The window
+            width: New width
+            height: New height
         """
         self.width, self.height = width, height
         self.buffer_width, self.buffer_height = glfw.get_framebuffer_size(self.window)

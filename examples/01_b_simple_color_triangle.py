@@ -9,6 +9,7 @@ from window import Example, run_example
 
 
 class SimpleColorTriangle(Example):
+    window_size = (640, 640)
     gl_version = (3, 3)
     aspect_ratio = 16/9
     title = "Bollemann"

@@ -13,11 +13,39 @@ class BaseKeys:
     ESCAPE = None
     SPACE = None
     ENTER = None
+    PAGE_UP = None
+    PAGE_DOWN = None
+    LEFT = None
+    RIGHT = None
+    UP = None
+    DOWN = None
 
     A = None
-    S = None
+    B = None
+    C = None
     D = None
+    E = None
+    F = None
+    G = None
+    H = None
+    I = None
+    J = None
+    K = None
+    L = None
+    M = None
+    N = None
+    O = None
+    P = None
+    Q = None
+    R = None
+    S = None
+    T = None
+    U = None
+    V = None
     W = None
+    X = None
+    Y = None
+    Z = None
 
     LEFT = None
     RIGHT = None
@@ -27,14 +55,14 @@ class BaseKeys:
 
 class BaseWindow:
     """Helper base class for a generic window implementation"""
-    keys = None  # type: BaseKeys
+    keys = BaseKeys
 
-    def __init__(self, title="Example", gl_version=(3, 3), width=1280, height=720,
+    def __init__(self, title="Example", gl_version=(3, 3), size=(1280, 720),
                  fullscreen=False, vsync=True, aspect_ratio=16/9, samples=4, cursor=True, **kwargs):
         self.title = title
         self.gl_version = gl_version
-        self.width, self.height = width, height
-        self.buffer_width, self.buffer_height = width, height
+        self.width, self.height = size
+        self.buffer_width, self.buffer_height = size
         self.fullscreen = fullscreen
         self.vsync = vsync
         self.aspect_ratio = aspect_ratio
@@ -88,6 +116,7 @@ class BaseWindow:
 
 
 class Example:
+    window_size = (1280, 720)
     gl_version = (3, 3)
     title = "Example"
     aspect_ratio = 16/9
@@ -100,7 +129,7 @@ class Example:
         pass
 
     def key_event(self, key, action):
-        pass
+        print("Example:key_event", key, action)
 
     def mouse_event(self, x, y):
         pass

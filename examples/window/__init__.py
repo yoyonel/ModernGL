@@ -12,6 +12,7 @@ def run_example(example_cls: Example, args=None):
     window_cls = get_window_cls(values.window)
     window = window_cls(
         title=example_cls.title,
+        size=example_cls.window_size,
         gl_version=example_cls.gl_version,
         aspect_ratio=example_cls.aspect_ratio,
         **vars(values)
