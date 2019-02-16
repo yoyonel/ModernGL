@@ -18,7 +18,7 @@ class Window(BaseWindow):
         glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, self.gl_version[1])
         glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
         glfw.window_hint(glfw.OPENGL_FORWARD_COMPAT, True)
-        glfw.window_hint(glfw.RESIZABLE, True)
+        glfw.window_hint(glfw.RESIZABLE, self.resizable)
         glfw.window_hint(glfw.DOUBLEBUFFER, True)
         glfw.window_hint(glfw.DEPTH_BITS, 24)
         glfw.window_hint(glfw.SAMPLES, self.samples)
@@ -50,7 +50,7 @@ class Window(BaseWindow):
         glfw.set_cursor_pos_callback(self.window, self.mouse_event_callback)
         glfw.set_window_size_callback(self.window, self.window_resize_callback)
 
-        self.ctx = moderngl.create_context(require=self.gl_version[0] * 100 +  self.gl_version[1] * 10)
+        self.ctx = moderngl.create_context(require=self.gl_version_code)
         self.print_context_info()
         self.set_default_viewport()
 
