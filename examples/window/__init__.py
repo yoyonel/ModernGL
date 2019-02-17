@@ -1,4 +1,5 @@
 import argparse
+import time
 import sys
 from importlib import import_module
 from pathlib import Path
@@ -28,8 +29,16 @@ def run_example(example_cls: Example, args=None):
 
     window.example = example_cls(ctx=window.ctx, wnd=window)
 
+    start_time = time.time()
+    current_time = start_time
+    prev_time = start_time
+    frame_time = 0
+
     while not window.is_closing:
-        window.render()
+        current_time, prev_time = time.time(), current_time
+        frame_time = max(current_time - prev_time, 1 / 1000)
+
+        window.render(current_time - start_time, frame_time)
         window.swap_buffers()
 
     window.destroy()

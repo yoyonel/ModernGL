@@ -47,11 +47,6 @@ class BaseKeys:
     Y = None
     Z = None
 
-    LEFT = None
-    RIGHT = None
-    UP = None
-    DOWN = None
-
 
 class BaseWindow:
     """Helper base class for a generic window implementation"""
@@ -84,8 +79,15 @@ class BaseWindow:
     def close(self):
         self._close = True
 
-    def render(self):
-        self.example.render()
+    def render(self, time, frame_time):
+        """
+        Renders the assigned effect
+
+        Args:
+            time (float): Current time in seconds
+            frame_time (float): Delta time from last frame in seconds
+        """
+        self.example.render(time, frame_time)
 
     def swap_buffers(self):
         raise NotImplementedError()
@@ -132,10 +134,17 @@ class Example:
         self.wnd = wnd
 
     def render(self, current_time):
-        pass
+        """
+        Renders the assigned effect
+
+        Args:
+            time (float): Current time in seconds
+            frame_time (float): Delta time from last frame in seconds
+        """
+        raise NotImplementedError("Example:render not implemented")
 
     def key_event(self, key, action):
         print("Example:key_event", key, action)
 
     def mouse_event(self, x, y):
-        pass
+        print("Example:mouse_event", x, y)
