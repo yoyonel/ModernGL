@@ -67,6 +67,7 @@ class Window(BaseWindow):
         self.widget.keyPressEvent = self.key_pressed_event
         self.widget.keyReleaseEvent = self.key_release_event
         self.widget.mouseMoveEvent = self.mouse_move_event
+        self.widget.closeEvent = self.close_event
 
         # Attach to the context
         self.ctx = moderngl.create_context(require=self.gl_version_code)
@@ -103,6 +104,9 @@ class Window(BaseWindow):
 
     def mouse_move_event(self, event):
         self.example.mouse_event(event.x(), event.y())
+
+    def close_event(self, event):
+        self.close()
 
     @property
     def is_closing(self):
