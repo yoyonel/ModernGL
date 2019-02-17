@@ -91,7 +91,7 @@ class ColorsAndTexture(Example):
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.DEPTH_TEST)
 
-        proj = Matrix44.perspective_projection(45.0, self.wnd.width / self.wnd.height, 0.1, 1000.0)
+        proj = Matrix44.perspective_projection(45.0, self.aspect_ratio, 0.1, 1000.0)
         lookat = Matrix44.look_at(
             (47.697, -8.147, 24.498),
             (0.0, 0.0, 8.0),

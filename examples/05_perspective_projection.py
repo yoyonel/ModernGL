@@ -72,10 +72,9 @@ class PerspectiveProjection(Example):
             ''',
         )
 
-        width, height = self.wnd.width, self.wnd.height
         self.prog['z_near'].value = 0.1
         self.prog['z_far'].value = 1000.0
-        self.prog['ratio'].value = width / height
+        self.prog['ratio'].value = self.aspect_ratio
         self.prog['fovy'].value = 60
 
         self.prog['eye'].value = (3, 3, 3)

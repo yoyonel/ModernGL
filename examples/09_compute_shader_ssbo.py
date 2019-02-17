@@ -218,7 +218,7 @@ class Renderer(QtWidgets.QOpenGLWidget):
 
             # match bytes
             compute_data.append(
-                [[x, y, z, w],  [vx, vy, vz, vw],  [r, g, b, a]])
+                [[x, y, z, w], [vx, vy, vz, vw], [r, g, b, a]])
 
         compute_data = np.array(compute_data).astype('f4')
         compute_data_bytes = compute_data.tobytes()

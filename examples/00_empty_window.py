@@ -4,6 +4,9 @@ from window import Example, run_example
 class EmptyWindow(Example):
     gl_version = (3, 3)
     title = "Empty Window"
+    window_size = (1280, 720)
+    aspect_ratio = 16 / 9
+    resizable = True
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
