@@ -5,12 +5,15 @@
 import moderngl
 import numpy as np
 
-from example_window import Example, run_example
+from window import Example, run_example
 
 
 class IndexBuffer(Example):
-    def __init__(self):
-        self.ctx = moderngl.create_context()
+    gl_version = (3, 3)
+    title = "Index Buffer"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
         self.prog = self.ctx.program(
             vertex_shader='''
@@ -57,10 +60,10 @@ class IndexBuffer(Example):
 
         self.vao = self.ctx.vertex_array(self.prog, vao_content, self.ibo)
 
-    def render(self):
-        self.ctx.viewport = self.wnd.viewport
+    def render(self, time: float, frame_time: float):
         self.ctx.clear(1.0, 1.0, 1.0)
         self.vao.render()
 
 
-run_example(IndexBuffer)
+if __name__ == '__main__':
+    run_example(IndexBuffer)

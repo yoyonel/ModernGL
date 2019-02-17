@@ -5,12 +5,15 @@
 import moderngl
 import numpy as np
 
-from example_window import Example, run_example
+from window import Example, run_example
 
 
 class PerspectiveProjection(Example):
-    def __init__(self):
-        self.ctx = moderngl.create_context()
+    gl_version = (3, 3)
+    title = "Perspective Projection"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
         self.prog = self.ctx.program(
             vertex_shader='''
@@ -69,7 +72,7 @@ class PerspectiveProjection(Example):
             ''',
         )
 
-        width, height = self.wnd.size
+        width, height = self.wnd.width, self.wnd.height
         self.prog['z_near'].value = 0.1
         self.prog['z_far'].value = 1000.0
         self.prog['ratio'].value = width / height
@@ -90,10 +93,10 @@ class PerspectiveProjection(Example):
         self.vbo = self.ctx.buffer(grid.astype('f4').tobytes())
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'vert')
 
-    def render(self):
-        self.ctx.viewport = self.wnd.viewport
+    def render(self, time: float, frame_time: float):
         self.ctx.clear(1.0, 1.0, 1.0)
         self.vao.render(moderngl.LINES, 65 * 4)
 
 
-run_example(PerspectiveProjection)
+if __name__ == '__main__':
+    run_example(PerspectiveProjection)

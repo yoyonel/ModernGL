@@ -1,15 +1,16 @@
-import moderngl
-
-from example_window import Example, run_example
+from window import Example, run_example
 
 
 class EmptyWindow(Example):
-    def __init__(self):
-        self.ctx = moderngl.create_context()
+    gl_version = (3, 3)
+    title = "Empty Window"
 
-    def render(self):
-        self.ctx.viewport = self.wnd.viewport
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def render(self, time: float, frame_time: float):
         self.ctx.clear(0.2, 0.4, 0.7)
 
 
-run_example(EmptyWindow)
+if __name__ == '__main__':
+    run_example(EmptyWindow)

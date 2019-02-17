@@ -79,7 +79,7 @@ class BaseWindow:
     def close(self):
         self._close = True
 
-    def render(self, time, frame_time):
+    def render(self, time: float, frame_time: float):
         """
         Renders the assigned effect
 
@@ -127,13 +127,13 @@ class Example:
     resizable = True
     gl_version = (3, 3)
     title = "Example"
-    aspect_ratio = 16/9
+    aspect_ratio = 16 / 9
 
     def __init__(self, ctx=None, wnd=None, **kwargs):
         self.ctx = ctx
         self.wnd = wnd
 
-    def render(self, current_time):
+    def render(self, time: float, frame_time: float):
         """
         Renders the assigned effect
 

@@ -5,12 +5,15 @@
 import moderngl
 import numpy as np
 
-from example_window import Example, run_example
+from window import Example, run_example
 
 
 class AlphaBlending(Example):
-    def __init__(self):
-        self.ctx = moderngl.create_context()
+    gl_version = (3, 3)
+    title = "Alpha Blending"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
         self.prog = self.ctx.program(
             vertex_shader='''
@@ -44,8 +47,7 @@ class AlphaBlending(Example):
         self.scale = self.prog['scale']
         self.rotation = self.prog['rotation']
 
-        width, height = self.wnd.size
-        self.scale.value = (height / width * 0.75, 0.75)
+        self.scale.value = (self.wnd.height / self.wnd.width * 0.75, 0.75)
 
         vertices = np.array([
             1.0, 0.0,
@@ -61,12 +63,12 @@ class AlphaBlending(Example):
         self.vbo = self.ctx.buffer(vertices.astype('f4').tobytes())
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'vert', 'vert_color')
 
-    def render(self):
-        self.ctx.viewport = self.wnd.viewport
+    def render(self, time: float, frame_time: float):
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.BLEND)
-        self.rotation.value = self.wnd.time
+        self.rotation.value = time
         self.vao.render(instances=10)
 
 
-run_example(AlphaBlending)
+if __name__ == '__main__':
+    run_example(AlphaBlending)

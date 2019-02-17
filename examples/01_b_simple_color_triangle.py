@@ -9,10 +9,9 @@ from window import Example, run_example
 
 
 class SimpleColorTriangle(Example):
-    window_size = (640, 640)
     gl_version = (3, 3)
-    aspect_ratio = 16/9
-    title = "Bollemann"
+    aspect_ratio = 16 / 9
+    title = "Simple Color Triangle"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -57,10 +56,10 @@ class SimpleColorTriangle(Example):
         # We control the 'in_vert' and `in_color' variables
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert', 'in_color')
 
-    def render(self):
-        # self.ctx.viewport = self.wnd.viewport
-        # self.ctx.clear(1.0, 1.0, 1.0)
+    def render(self, time: float, frame_time: float):
+        self.ctx.clear(1.0, 1.0, 1.0)
         self.vao.render()
 
 
-run_example(SimpleColorTriangle)
+if __name__ == '__main__':
+    run_example(SimpleColorTriangle)
