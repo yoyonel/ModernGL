@@ -98,11 +98,25 @@ class BaseWindow:
     def set_default_viewport(self):
         """
         Calculates the viewport based on the configured aspect ratio
-        Will add black borders if the window do not match the viewport
+        Will add black borders and center the viewport if the window
+        do not match the viewport configured viewport.
         """
-        expected_height = int(self.buffer_width / self.aspect_ratio)
-        blank_space = self.buffer_height - expected_height
-        self.ctx.viewport = (0, blank_space // 2, self.buffer_width, expected_height)
+        expected_width = int(self.buffer_height * self.aspect_ratio)
+        expected_height = int(expected_width / self.aspect_ratio)
+
+        if expected_width > self.buffer_width:
+            expected_width = self.buffer_width
+            expected_height =  int(expected_width / self.aspect_ratio)
+
+        blank_space_x = self.buffer_width - expected_width
+        blank_space_y = self.buffer_height - expected_height
+
+        self.ctx.viewport = (
+            blank_space_x // 2,
+            blank_space_y // 2,
+            expected_width,
+            expected_height,
+        )
 
     @property
     def gl_version_code(self):
@@ -144,7 +158,9 @@ class Example:
         raise NotImplementedError("Example:render not implemented")
 
     def key_event(self, key, action):
-        print("Example:key_event", key, action)
+        # print("Example:key_event", key, action)
+        pass
 
     def mouse_event(self, x, y):
-        print("Example:mouse_event", x, y)
+        # print("Example:mouse_event", x, y)
+        pass

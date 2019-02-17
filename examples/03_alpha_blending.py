@@ -47,7 +47,7 @@ class AlphaBlending(Example):
         self.scale = self.prog['scale']
         self.rotation = self.prog['rotation']
 
-        self.scale.value = (self.wnd.height / self.wnd.width * 0.75, 0.75)
+        self.scale.value = (0.5, self.aspect_ratio * 0.5)
 
         vertices = np.array([
             1.0, 0.0,
