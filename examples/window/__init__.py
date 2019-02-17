@@ -1,10 +1,15 @@
 import argparse
-import time
 import sys
+import time
+
 from importlib import import_module
 from pathlib import Path
 
-from .base import Example, BaseWindow
+from window.base import Example, BaseWindow
+
+OPTIONS_TRUE = ['yes', 'true', 't', 'y', '1']
+OPTIONS_FALSE = ['no', 'false', 'f', 'n', '0']
+OPTIONS_ALL = OPTIONS_TRUE + OPTIONS_FALSE
 
 
 def run_example(example_cls: Example, args=None):
@@ -25,6 +30,9 @@ def run_example(example_cls: Example, args=None):
         resizable=example_cls.resizable,
         gl_version=example_cls.gl_version,
         aspect_ratio=example_cls.aspect_ratio,
+        vsync=values.vsync,
+        samples=values.samples,
+        cursor=values.cursor,
     )
 
     window.example = example_cls(ctx=window.ctx, wnd=window)
@@ -66,6 +74,24 @@ def parse_args(args=None):
         action="store_true",
         help='Open the window in fullscreen mode',
     )
+    parser.add_argument(
+        '-vs', '--vsync',
+        type=str2bool,
+        default="1",
+        help="Enable or disable vsync",
+    )
+    parser.add_argument(
+        '-s', '--samples',
+        type=int,
+        default=4,
+        help="Specify the desired number of samples to use for multisampling",
+    )
+    parser.add_argument(
+        '-c', '--cursor',
+        type=str2bool,
+        default="true",
+        help="Enable or disable displaying the mouse cursor",
+    )
 
     return parser.parse_args(args or sys.argv[1:])
 
@@ -101,3 +127,15 @@ def import_string(dotted_path):
     except AttributeError as err:
         raise ImportError('Module "%s" does not define a "%s" attribute/class' % (
             module_path, class_name)) from err
+
+
+def str2bool(value):
+    value = value.lower()
+
+    if value in OPTIONS_TRUE:
+        return True
+
+    if value in OPTIONS_FALSE:
+        return False
+
+    raise argparse.ArgumentTypeError('Boolean value expected. Options: {}'.format(OPTIONS_ALL))
