@@ -2,10 +2,11 @@ import moderngl
 from PyQt5 import QtCore, QtOpenGL, QtWidgets
 
 from window.base import BaseWindow
-from window.glfw.keys import Keys
+from window.pyqt5.keys import Keys
 
 
 class Window(BaseWindow):
+    keys = Keys
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -78,20 +79,30 @@ class Window(BaseWindow):
 
     def swap_buffers(self):
         self.widget.swapBuffers()
+        self.set_default_viewport()
         self.app.processEvents()
 
     def resize(self, width, heigh):
+        self.width = width
+        self.height = heigh
+
+        self.buffer_width = self.width * self.widget.devicePixelRatio()
+        self.buffer_height = self.height * self.widget.devicePixelRatio()
+
         if self.ctx:
             self.set_default_viewport()
 
     def key_pressed_event(self, event):
-        pass
+        if event.key() == self.keys.ESCAPE:
+            self.close()
+
+        self.example.key_event(event.key(), self.keys.ACTION_PRESS)
 
     def key_release_event(self, event):
-        pass
+        self.example.key_event(event.key(), self.keys.ACTION_RELEASE)
 
     def mouse_move_event(self, event):
-        pass
+        self.example.mouse_event(event.x(), event.y())
 
     @property
     def is_closing(self):
@@ -100,5 +111,5 @@ class Window(BaseWindow):
     def close(self):
         self._closed = True
 
-    def terminate(self):
+    def destroy(self):
          QtCore.QCoreApplication.instance().quit()

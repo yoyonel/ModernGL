@@ -7,8 +7,8 @@ class BaseKeys:
     Namespace for mapping key constants.
     Add missing keys for all windows when needed.
     """
-    ACTION_PRESS = None
-    ACTION_RELEASE = None
+    ACTION_PRESS = 'ACTION_PRESS'
+    ACTION_RELEASE = 'ACTION_RELEASE'
 
     ESCAPE = None
     SPACE = None
@@ -67,7 +67,7 @@ class BaseWindow:
 
         self._close = False
         self.ctx = None
-        self.example = None
+        self.example = None  # type: Example
 
         if not self.keys:
             raise ValueError("Window {} class missing keys".format(self.__class__))

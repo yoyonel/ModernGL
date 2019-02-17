@@ -55,7 +55,7 @@ def parse_args(args=None):
 
     parser.add_argument(
         '-w', '--window',
-        default="glfw",
+        default="pyqt5",
         choices=find_window_classes(),
         help='Name for the window type to use',
     )
