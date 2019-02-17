@@ -49,9 +49,7 @@ class Raymarching(Example):
         self.u_time = program.get("T", 0.0)
 
     def render(self, time: float, frame_time: float):
-        time_value = struct.pack('f', time * 2.0)
-        self.u_time.write(time_value)
-
+        self.u_time.value = time
         self.vao.render()
 
 
