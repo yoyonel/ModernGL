@@ -68,6 +68,7 @@ class BaseWindow:
         self._close = False
         self.ctx = None
         self.example = None  # type: Example
+        self.frames = 0
 
         if not self.keys:
             raise ValueError("Window {} class missing keys".format(self.__class__))

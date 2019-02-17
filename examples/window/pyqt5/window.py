@@ -82,6 +82,7 @@ class Window(BaseWindow):
         self.widget.swapBuffers()
         self.set_default_viewport()
         self.app.processEvents()
+        self.frames += 1
 
     def resize(self, width, heigh):
         self.width = width

@@ -41,7 +41,9 @@ def run_example(example_cls: Example, args=None):
         window.render(current_time - start_time, frame_time)
         window.swap_buffers()
 
+    duration = time.time() - start_time
     window.destroy()
+    print("Duration: {0:.2f}s @ {1:.2f} FPS".format(duration, window.frames / duration))
 
 
 def get_window_cls(window: str) -> BaseWindow:
