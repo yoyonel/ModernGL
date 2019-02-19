@@ -94,6 +94,8 @@ class Window(BaseWindow):
         if self.ctx:
             self.set_default_viewport()
 
+        super().resize(width, heigh)
+
     def key_pressed_event(self, event):
         if event.key() == self.keys.ESCAPE:
             self.close()

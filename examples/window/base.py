@@ -93,6 +93,10 @@ class BaseWindow:
     def swap_buffers(self):
         raise NotImplementedError()
 
+    def resize(self, width, height):
+        if self.example:
+            self.example.resize(width, height)
+
     def destroy(self):
         raise NotImplementedError()
 
@@ -158,10 +162,21 @@ class Example:
         """
         raise NotImplementedError("Example:render not implemented")
 
+    def resize(self, width, height):
+        """
+        Called every time the window is resized
+        in case the example needs to do internal adustments
+        """
+        print("Window resized to", width, height)
+
     def key_event(self, key, action):
-        # print("Example:key_event", key, action)
+        """
+        Called for every key press and release
+        """
         pass
 
     def mouse_event(self, x, y):
-        # print("Example:mouse_event", x, y)
+        """
+        Reports the current mouse cursor position in the window
+        """
         pass
