@@ -6,6 +6,7 @@ from window import Example, run_example
 
 class InstancedRendering(Example):
     title = "Instanced Rendering"
+    gl_version = (3, 3)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -64,4 +65,5 @@ class InstancedRendering(Example):
         self.vao.render(instances=10)
 
 
-run_example(InstancedRendering)
+if __name__ == '__main__':
+    run_example(InstancedRendering)

@@ -108,4 +108,5 @@ class Conway(Example):
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
 
-run_example(Conway)
+if __name__ == '__main__':
+    run_example(Conway)

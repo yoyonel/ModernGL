@@ -7,7 +7,7 @@ from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
-from example_window import Example, run_example
+from window import Example, run_example
 
 
 def local(*path):
@@ -15,8 +15,11 @@ def local(*path):
 
 
 class MugExample(Example):
-    def __init__(self):
-        self.ctx = moderngl.create_context()
+    title = "Mug"
+    gl_version = (3, 3)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
         self.canvas_prog = self.ctx.program(
             vertex_shader='''
@@ -130,15 +133,14 @@ class MugExample(Example):
         self.sticker_vbo = self.ctx.buffer(sticker_vertices.T.astype('f4').tobytes())
         self.sticker_vao = self.ctx.simple_vertex_array(self.prog, self.sticker_vbo, 'in_vert', 'in_norm', 'in_text')
 
-    def render(self):
-        self.ctx.viewport = self.wnd.viewport
+    def render(self, time, frame_time):
         self.ctx.clear(1.0, 1.0, 1.0)
         self.bg_texture.use()
         self.ctx.enable_only(moderngl.BLEND)
         self.canvas_vao.render(moderngl.TRIANGLE_STRIP)
         self.ctx.enable_only(moderngl.DEPTH_TEST)
 
-        proj = Matrix44.perspective_projection(30.0, self.wnd.ratio, 1.0, 1000.0)
+        proj = Matrix44.perspective_projection(30.0, self.aspect_ratio, 1.0, 1000.0)
         lookat = Matrix44.look_at(
             (46.748, -280.619, 154.391),
             (-23.844, 2.698, 44.493),
@@ -154,4 +156,5 @@ class MugExample(Example):
         self.sticker_vao.render(moderngl.TRIANGLE_STRIP)
 
 
-run_example(MugExample)
+if __name__ == '__main__':
+    run_example(MugExample)

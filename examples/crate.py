@@ -89,4 +89,5 @@ class CrateExample(Example):
         self.vao.render()
 
 
-run_example(CrateExample)
+if __name__ == '__main__':
+    run_example(CrateExample)

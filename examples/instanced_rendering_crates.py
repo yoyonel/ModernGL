@@ -6,7 +6,7 @@ from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
-from example_window import Example, run_example
+from window import Example, run_example
 
 
 def local(*path):
@@ -19,9 +19,11 @@ class InstancedCrates(Example):
         For each crate the location is [x, y, sin(a * time + b)]
         There are 1024 crates aligned in a grid.
     '''
+    title = "Instanced Crates"
+    gl_version = (3, 3)
 
-    def __init__(self):
-        self.ctx = moderngl.create_context()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
         self.prog = self.ctx.program(
             vertex_shader='''
@@ -88,16 +90,14 @@ class InstancedCrates(Example):
         self.crate_x += np.random.uniform(-0.2, 0.2, 32 * 32)
         self.crate_y += np.random.uniform(-0.2, 0.2, 32 * 32)
 
-    def render(self):
-        angle = self.wnd.time * 0.2
-        width, height = self.wnd.size
-        self.ctx.viewport = self.wnd.viewport
+    def render(self, time, frame_time):
+        angle = time * 0.2
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.DEPTH_TEST)
 
         camera_pos = (np.cos(angle) * 5.0, np.sin(angle) * 5.0, 2.0)
 
-        proj = Matrix44.perspective_projection(45.0, width / height, 0.1, 1000.0)
+        proj = Matrix44.perspective_projection(45.0, self.aspect_ratio, 0.1, 1000.0)
         lookat = Matrix44.look_at(
             camera_pos,
             (0.0, 0.0, 0.5),
@@ -107,11 +107,12 @@ class InstancedCrates(Example):
         self.mvp.write((proj * lookat).astype('f4').tobytes())
         self.light.value = camera_pos
 
-        crate_z = np.sin(self.crate_a * self.wnd.time + self.crate_b) * 0.2
+        crate_z = np.sin(self.crate_a * time + self.crate_b) * 0.2
         coordinates = np.dstack([self.crate_x, self.crate_y, crate_z])
 
         self.vbo2.write(coordinates.astype('f4').tobytes())
         self.vao.render(instances=1024)
 
 
-run_example(InstancedCrates)
+if __name__ == '__main__':
+    run_example(InstancedCrates)

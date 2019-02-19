@@ -10,6 +10,7 @@ from window import Example, run_example
 
 class LoadingOBJ(Example):
     title = "Loading OBJ"
+    gl_version = (3, 3)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -96,4 +97,5 @@ class LoadingOBJ(Example):
         self.vao.render()
 
 
-run_example(LoadingOBJ)
+if __name__ == '__main__':
+    run_example(LoadingOBJ)

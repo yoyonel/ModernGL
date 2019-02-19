@@ -7,6 +7,7 @@ from window import Example, run_example
 
 class Fractal(Example):
     title = "Julia Fractal"
+    gl_version = (3, 3)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -74,4 +75,5 @@ class Fractal(Example):
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
 
-run_example(Fractal)
+if __name__ == '__main__':
+    run_example(Fractal)
