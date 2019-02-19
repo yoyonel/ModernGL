@@ -106,22 +106,25 @@ class BaseWindow:
         Will add black borders and center the viewport if the window
         do not match the viewport configured viewport.
         """
-        expected_width = int(self.buffer_height * self.aspect_ratio)
-        expected_height = int(expected_width / self.aspect_ratio)
+        if self.aspect_ratio:
+            expected_width = int(self.buffer_height * self.aspect_ratio)
+            expected_height = int(expected_width / self.aspect_ratio)
 
-        if expected_width > self.buffer_width:
-            expected_width = self.buffer_width
-            expected_height =  int(expected_width / self.aspect_ratio)
+            if expected_width > self.buffer_width:
+                expected_width = self.buffer_width
+                expected_height =  int(expected_width / self.aspect_ratio)
 
-        blank_space_x = self.buffer_width - expected_width
-        blank_space_y = self.buffer_height - expected_height
+            blank_space_x = self.buffer_width - expected_width
+            blank_space_y = self.buffer_height - expected_height
 
-        self.ctx.viewport = (
-            blank_space_x // 2,
-            blank_space_y // 2,
-            expected_width,
-            expected_height,
-        )
+            self.ctx.viewport = (
+                blank_space_x // 2,
+                blank_space_y // 2,
+                expected_width,
+                expected_height,
+            )
+        else:
+            self.ctx.viewport = (0, 0, self.buffer_height, self.buffer_height)
 
     @property
     def gl_version_code(self):
