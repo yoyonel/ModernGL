@@ -4,7 +4,7 @@ import moderngl
 import numpy as np
 from PIL import Image
 
-from example_window import Example, run_example
+from window import Example, run_example
 
 
 def local(*path):
@@ -12,8 +12,10 @@ def local(*path):
 
 
 class Fractal(Example):
-    def __init__(self):
-        self.ctx = moderngl.create_context()
+    title = "Julia Set"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
         self.prog = self.ctx.program(
             vertex_shader='''
@@ -72,8 +74,7 @@ class Fractal(Example):
         self.vbo = self.ctx.buffer(vertices.astype('f4').tobytes())
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert')
 
-    def render(self):
-        self.ctx.viewport = self.wnd.viewport
+    def render(self, time, frame_time):
         self.ctx.clear(1.0, 1.0, 1.0)
 
         self.seed.value = (-0.8, 0.156)
