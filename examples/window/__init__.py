@@ -7,8 +7,8 @@ from pathlib import Path
 
 from window.base import Example, BaseWindow
 
-OPTIONS_TRUE = ['yes', 'true', 't', 'y', '1']
-OPTIONS_FALSE = ['no', 'false', 'f', 'n', '0']
+OPTIONS_TRUE = ['yes', 'on', 'true', 't', 'y', '1']
+OPTIONS_FALSE = ['no', 'off', 'false', 'f', 'n', '0']
 OPTIONS_ALL = OPTIONS_TRUE + OPTIONS_FALSE
 
 
