@@ -74,6 +74,14 @@ class BaseWindow:
             raise ValueError("Window {} class missing keys".format(self.__class__))
 
     @property
+    def size(self):
+        return self.width, self.height
+
+    @property
+    def buffer_size(self):
+        return self.buffer_width, self.buffer_height
+
+    @property
     def is_closing(self):
         return self._close
 
@@ -170,7 +178,7 @@ class Example:
         Called every time the window is resized
         in case the example needs to do internal adustments
         """
-        print("Window resized to", width, height)
+        pass
 
     def key_event(self, key, action):
         """
