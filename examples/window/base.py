@@ -113,6 +113,9 @@ class BaseWindow:
         Calculates the viewport based on the configured aspect ratio
         Will add black borders and center the viewport if the window
         do not match the viewport configured viewport.
+
+        If not aspect ratio is set the viewport will be scaled
+        to the entire window size.
         """
         if self.aspect_ratio:
             expected_width = int(self.buffer_height * self.aspect_ratio)
