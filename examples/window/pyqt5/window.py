@@ -67,6 +67,8 @@ class Window(BaseWindow):
         self.widget.keyPressEvent = self.key_pressed_event
         self.widget.keyReleaseEvent = self.key_release_event
         self.widget.mouseMoveEvent = self.mouse_move_event
+        self.widget.mousePressEvent = self.mouse_press_event
+        self.widget.mouseReleaseEvent = self.mouse_release_event
         self.widget.closeEvent = self.close_event
 
         # Attach to the context
@@ -107,7 +109,21 @@ class Window(BaseWindow):
         self.example.key_event(event.key(), self.keys.ACTION_RELEASE)
 
     def mouse_move_event(self, event):
-        self.example.mouse_event(event.x(), event.y())
+        self.example.mouse_postion_event(event.x(), event.y())
+
+    def mouse_press_event(self, event):
+        # Support left and right mouse button for now
+        if event.button() not in [1, 2]:
+            return
+
+        self.example.mouse_press_event(event.x(), event.y(), event.button())
+
+    def mouse_release_event(self, event):
+        # Support left and right mouse button for now
+        if event.button() not in [1, 2]:
+            return
+
+        self.example.mouse_release_event(event.x(), event.y(), event.button())
 
     def close_event(self, event):
         self.close()

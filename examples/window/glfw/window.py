@@ -48,6 +48,7 @@ class Window(BaseWindow):
 
         glfw.set_key_callback(self.window, self.key_event_callback)
         glfw.set_cursor_pos_callback(self.window, self.mouse_event_callback)
+        glfw.set_mouse_button_callback(self.window, self.mouse_button_callback)
         glfw.set_window_size_callback(self.window, self.window_resize_callback)
 
         self.ctx = moderngl.create_context(require=self.gl_version_code)
@@ -99,7 +100,20 @@ class Window(BaseWindow):
             ypos: viewport y pos
         """
         # screen coordinates relative to the top-left corner
-        self.example.mouse_event(xpos, ypos)
+        self.example.mouse_postion_event(xpos, ypos)
+
+    def mouse_button_callback(self, window, button, action, mods):
+        button += 1
+        # Support left and right mouse button for now
+        if button not in [1, 2]:
+            return
+
+        xpos, ypos = glfw.get_cursor_pos(self.window)
+
+        if action == glfw.PRESS:
+            self.example.mouse_press_event(xpos, ypos, button)
+        else:
+            self.example.mouse_release_event(xpos, ypos, button)
 
     def window_resize_callback(self, window, width, height):
         """

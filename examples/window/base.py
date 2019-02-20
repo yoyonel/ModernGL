@@ -156,6 +156,10 @@ class BaseWindow:
 
 
 class Example:
+    """
+    Base class for making an example.
+    Examples can be rendered by an arbitrary window type.
+    """
     window_size = (1280, 720)
     resizable = True
     gl_version = (3, 3)
@@ -189,8 +193,30 @@ class Example:
         """
         pass
 
-    def mouse_event(self, x, y):
+    def mouse_postion_event(self, x: int, y: int):
         """
         Reports the current mouse cursor position in the window
+        """
+        pass
+
+    def mouse_press_event(self, x: int, y: int, button: int):
+        """
+        Called when a mouse button in pressed
+
+        Args:
+            x (int): X position
+            y (int): Y position
+            button (int): 1 = Left button, 2 = right button
+        """
+        pass
+
+    def mouse_release_event(self, x: int, y: int, button: int):
+        """
+        Called when a mouse button in released
+
+        Args:
+            x (int): X position
+            y (int): Y position
+            button (int): 1 = Left button, 2 = right button
         """
         pass

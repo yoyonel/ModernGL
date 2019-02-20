@@ -131,6 +131,9 @@ class PymunkExample(Example):
         body.apply_impulse_at_local_point((f, 0), (0, 0))
         self.balls.append(body)
 
+    def mouse_press_event(self, x: int, y: int, button: int):
+        self.shoot()
+
     def key_event(self, key, action):
         if action == self.wnd.keys.ACTION_PRESS:
             self.shoot()
