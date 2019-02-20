@@ -95,7 +95,7 @@ class Window(BaseWindow):
         Forwards and traslates the event to :py:func:`cursor_event`
         """
         # screen coordinates relative to the lower-left corner
-        self.example.mouse_postion_event(x, self.buffer_height - y)
+        self.example.mouse_position_event(x, self.buffer_height - y)
 
     def on_mouse_press(self, x, y, button, mods):
         if button in [1, 4]:

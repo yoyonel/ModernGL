@@ -80,7 +80,7 @@ class Window(BaseWindow):
     def process_events(self):
         for event in sdl2.ext.get_events():
             if event.type == sdl2.SDL_MOUSEMOTION:
-                self.example.mouse_postion_event(event.motion.x, event.motion.y)
+                self.example.mouse_position_event(event.motion.x, event.motion.y)
 
             elif event.type == sdl2.SDL_MOUSEBUTTONUP:
                 # Support left and right mouse button for now

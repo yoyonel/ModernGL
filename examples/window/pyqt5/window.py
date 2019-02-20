@@ -109,7 +109,7 @@ class Window(BaseWindow):
         self.example.key_event(event.key(), self.keys.ACTION_RELEASE)
 
     def mouse_move_event(self, event):
-        self.example.mouse_postion_event(event.x(), event.y())
+        self.example.mouse_position_event(event.x(), event.y())
 
     def mouse_press_event(self, event):
         # Support left and right mouse button for now

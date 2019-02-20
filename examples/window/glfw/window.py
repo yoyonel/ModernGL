@@ -100,7 +100,7 @@ class Window(BaseWindow):
             ypos: viewport y pos
         """
         # screen coordinates relative to the top-left corner
-        self.example.mouse_postion_event(xpos, ypos)
+        self.example.mouse_position_event(xpos, ypos)
 
     def mouse_button_callback(self, window, button, action, mods):
         button += 1

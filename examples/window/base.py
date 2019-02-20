@@ -193,7 +193,7 @@ class Example:
         """
         pass
 
-    def mouse_postion_event(self, x: int, y: int):
+    def mouse_position_event(self, x: int, y: int):
         """
         Reports the current mouse cursor position in the window
         """
