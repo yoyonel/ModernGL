@@ -63,9 +63,9 @@ class Window(BaseWindow):
         return glfw.window_should_close(self.window)
 
     def swap_buffers(self):
+        self.frames += 1
         glfw.swap_buffers(self.window)
         glfw.poll_events()
-        self.frames += 1
 
     def destroy(self):
         glfw.terminate()
