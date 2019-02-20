@@ -89,7 +89,9 @@ smoother and higher frame rates.
 # Creating Examples
 
 Creating an example is fairly simple. We simply need to implement the `Example`
-class and pass its reference into `run_example`.
+class and pass its reference into `run_example`. The example below is similar
+to `00_empty_window.py` and works as a decent template with enough comments
+to explain
 
 ```py
 from window import Example, run_example
