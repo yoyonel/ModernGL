@@ -85,9 +85,9 @@ class Window(BaseWindow):
         self.app.processEvents()
         self.frames += 1
 
-    def resize(self, width, heigh):
+    def resize(self, width, height):
         self.width = width
-        self.height = heigh
+        self.height = height
 
         self.buffer_width = self.width * self.widget.devicePixelRatio()
         self.buffer_height = self.height * self.widget.devicePixelRatio()
@@ -95,7 +95,7 @@ class Window(BaseWindow):
         if self.ctx:
             self.set_default_viewport()
 
-        super().resize(width, heigh)
+        super().resize(width, height)
 
     def key_pressed_event(self, event):
         if event.key() == self.keys.ESCAPE:
