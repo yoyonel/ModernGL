@@ -135,7 +135,7 @@ class BaseWindow:
                 expected_height,
             )
         else:
-            self.ctx.viewport = (0, 0, self.buffer_height, self.buffer_height)
+            self.ctx.viewport = (0, 0, self.buffer_width, self.buffer_height)
 
     @property
     def gl_version_code(self):
