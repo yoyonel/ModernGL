@@ -6,13 +6,23 @@ struct MGLFramebuffer;
 struct MGLSampler;
 struct MGLBuffer;
 
-struct MGLScopeBinding {
+struct MGLScopeSamplerBinding {
     union {
         PyObject * object;
         MGLSampler * sampler;
-        MGLBuffer * buffer;
     };
     int binding;
+};
+
+struct MGLScopeBufferBinding {
+    union {
+        PyObject * object;
+        MGLBuffer * buffer;
+    };
+    int target;
+    int binding;
+    Py_ssize_t offset;
+    Py_ssize_t size;
 };
 
 struct MGLScope {
@@ -21,11 +31,11 @@ struct MGLScope {
     MGLContext * context;
     MGLFramebuffer * framebuffer;
     MGLFramebuffer * old_framebuffer;
-    MGLScopeBinding * bindings;
+    MGLScopeSamplerBinding * samplers;
+    MGLScopeBufferBinding * buffers;
     MGLScope * old_scope;
     int num_samplers;
-    int num_uniform_buffers;
-    int num_storage_buffers;
+    int num_buffers;
     int enable_only;
     int old_enable_only;
 };
