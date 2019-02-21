@@ -186,8 +186,13 @@ extern int Renderbuffer_class_extra;
 
 extern PyTypeObject * Sampler_class;
 extern int Sampler_class_mglo;
-extern int Sampler_class_swizzle;
 extern int Sampler_class_filter;
+extern int Sampler_class_repeat_x;
+extern int Sampler_class_repeat_y;
+extern int Sampler_class_repeat_z;
+extern int Sampler_class_anisotropy;
+extern int Sampler_class_min_lod;
+extern int Sampler_class_max_lod;
 extern int Sampler_class_texture;
 extern int Sampler_class_extra;
 
@@ -199,6 +204,7 @@ extern PyTypeObject * Texture_class;
 extern int Texture_class_mglo;
 extern int Texture_class_level;
 extern int Texture_class_layer;
+extern int Texture_class_swizzle;
 extern int Texture_class_size;
 extern int Texture_class_extra;
 

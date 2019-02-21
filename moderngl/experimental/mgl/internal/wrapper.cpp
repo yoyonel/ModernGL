@@ -186,8 +186,13 @@ int Renderbuffer_class_extra;
 
 PyTypeObject * Sampler_class;
 int Sampler_class_mglo;
-int Sampler_class_swizzle;
 int Sampler_class_filter;
+int Sampler_class_repeat_x;
+int Sampler_class_repeat_y;
+int Sampler_class_repeat_z;
+int Sampler_class_anisotropy;
+int Sampler_class_min_lod;
+int Sampler_class_max_lod;
 int Sampler_class_texture;
 int Sampler_class_extra;
 
@@ -199,6 +204,7 @@ PyTypeObject * Texture_class;
 int Texture_class_mglo;
 int Texture_class_level;
 int Texture_class_layer;
+int Texture_class_swizzle;
 int Texture_class_size;
 int Texture_class_extra;
 
@@ -434,8 +440,13 @@ void init_wrappers() {
     int Sampler_slots = 0;
     Sampler_class = detect_class(moderngl, "Sampler", Sampler_slots);
     Sampler_class_mglo = slot_offset(Sampler_class, "_Sampler__mglo", Sampler_slots);
-    Sampler_class_swizzle = slot_offset(Sampler_class, "_Sampler__swizzle", Sampler_slots);
     Sampler_class_filter = slot_offset(Sampler_class, "_Sampler__filter", Sampler_slots);
+    Sampler_class_repeat_x = slot_offset(Sampler_class, "_Sampler__repeat_x", Sampler_slots);
+    Sampler_class_repeat_y = slot_offset(Sampler_class, "_Sampler__repeat_y", Sampler_slots);
+    Sampler_class_repeat_z = slot_offset(Sampler_class, "_Sampler__repeat_z", Sampler_slots);
+    Sampler_class_anisotropy = slot_offset(Sampler_class, "_Sampler__anisotropy", Sampler_slots);
+    Sampler_class_min_lod = slot_offset(Sampler_class, "_Sampler__min_lod", Sampler_slots);
+    Sampler_class_max_lod = slot_offset(Sampler_class, "_Sampler__max_lod", Sampler_slots);
     Sampler_class_texture = slot_offset(Sampler_class, "texture", Sampler_slots);
     Sampler_class_extra = slot_offset(Sampler_class, "extra", Sampler_slots);
     assert_slots_len(Sampler_class, Sampler_slots);
@@ -451,6 +462,7 @@ void init_wrappers() {
     Texture_class_mglo = slot_offset(Texture_class, "_Texture__mglo", Texture_slots);
     Texture_class_level = slot_offset(Texture_class, "_Texture__level", Texture_slots);
     Texture_class_layer = slot_offset(Texture_class, "_Texture__layer", Texture_slots);
+    Texture_class_swizzle = slot_offset(Texture_class, "_Texture__swizzle", Texture_slots);
     Texture_class_size = slot_offset(Texture_class, "size", Texture_slots);
     Texture_class_extra = slot_offset(Texture_class, "extra", Texture_slots);
     assert_slots_len(Texture_class, Texture_slots);
