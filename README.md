@@ -104,6 +104,9 @@ OpenGL 3.3 came out in February 2010. With **up to date drivers** you will be ab
 
 **NO**, Window creation is up to you. You can choose from a large variety of modules that can create a window: [PyQt5], [pyglet], [pygame], [GLUT] and many others.
 
+We currently have example windows you can use or look at in the [standard example system](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/window)
+currently supporting [PyQt5], [GLFW], [SDL2] and [Pyglet] (1.x).
+
 [PyQt5]: https://pypi.org/project/PyQt5/
 [pyglet]: https://bitbucket.org/pyglet/pyglet/wiki/Home
 [pygame]: https://www.pygame.org/news
@@ -159,6 +162,8 @@ Code is tested with [pep8], [flake8], [prospector] and [pylint]
 [flake8]: http://flake8.pycqa.org/en/latest/
 [prospector]: https://prospector.landscape.io/en/master/
 [pylint]: https://www.pylint.org/
+[glfw]: https://www.glfw.org
+[sdl2]: https://www.libsdl.org
 
 ## Community
 

@@ -7,7 +7,7 @@ import pymunk
 from PIL import Image
 from pymunk import Vec2d
 
-from example_window import Example, run_example
+from window import Example, run_example
 
 
 def local(*path):
@@ -15,8 +15,11 @@ def local(*path):
 
 
 class PymunkExample(Example):
-    def __init__(self):
-        self.ctx = moderngl.create_context()
+    title = "Using PyMunk"
+    gl_version = (3, 3)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
         self.prog = self.ctx.program(
             vertex_shader='''
@@ -128,14 +131,18 @@ class PymunkExample(Example):
         body.apply_impulse_at_local_point((f, 0), (0, 0))
         self.balls.append(body)
 
-    def render(self):
+    def mouse_press_event(self, x: int, y: int, button: int):
+        self.shoot()
+
+    def key_event(self, key, action):
+        if action == self.wnd.keys.ACTION_PRESS:
+            self.shoot()
+
+    def render(self, time, frame_time):
         width, height = self.wnd.size
-        self.ctx.viewport = self.wnd.viewport
+
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.BLEND)
-
-        if self.wnd.key_pressed(32):
-            self.shoot()
 
         for i in range(10):
             self.space.step(1 / 60 / 10)
@@ -155,4 +162,5 @@ class PymunkExample(Example):
         self.vao.render(moderngl.TRIANGLE_STRIP, instances=len(self.balls))
 
 
-run_example(PymunkExample)
+if __name__ == '__main__':
+    run_example(PymunkExample)

@@ -8,7 +8,7 @@ import numpy as np
 from objloader import Obj
 from pyrr import Matrix44
 
-from example_window import Example, run_example
+from window import Example, run_example
 
 
 def local(*path):
@@ -25,8 +25,11 @@ cars += [{'color': random_color(), 'pos': (-1.5, i * 2.0 - 9.0, 0.0), 'angle': u
 
 
 class ToyCars(Example):
-    def __init__(self):
-        self.ctx = moderngl.create_context()
+    title = "Toy Cars With Vector Shadow"
+    gl_version = (3, 3)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
         self.prog = self.ctx.program(
             vertex_shader='''
@@ -90,15 +93,14 @@ class ToyCars(Example):
             (self.vbo2, '3f 3f 9f/i', 'in_color', 'in_origin', 'in_basis'),
         ])
 
-    def render(self):
-        angle = self.wnd.time
-        self.ctx.viewport = self.wnd.viewport
+    def render(self, time, frame_time):
+        angle = time
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.DEPTH_TEST)
 
         camera_pos = (np.cos(angle) * 20.0, np.sin(angle) * 20.0, 5.0)
 
-        proj = Matrix44.perspective_projection(45.0, self.wnd.ratio, 0.1, 1000.0)
+        proj = Matrix44.perspective_projection(45.0, self.aspect_ratio, 0.1, 1000.0)
         lookat = Matrix44.look_at(
             camera_pos,
             (0.0, 0.0, 0.5),
@@ -129,4 +131,5 @@ class ToyCars(Example):
         self.vao.render(instances=len(cars))
 
 
-run_example(ToyCars)
+if __name__ == '__main__':
+    run_example(ToyCars)

@@ -75,5 +75,7 @@ for i in range(FRAMES):
     output = np.multiply(output, 255).astype(np.uint8)
     imgs.append(output)
 
-# if you don't want to use imageio, remove this line
-imageio.mimwrite(f"./{OUTPUT_DIRPATH}/debug.gif", imgs, "GIF", duration=0.15)
+# if you don't want to use imageio, remove this section
+out_path = f"{OUTPUT_DIRPATH}/debug.gif"
+print("Writing GIF anim to", out_path)
+imageio.mimwrite(out_path, imgs, "GIF", duration=0.15)

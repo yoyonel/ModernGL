@@ -7,7 +7,7 @@ from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
-from example_window import Example, run_example
+from window import Example, run_example
 
 import matplotlib
 matplotlib.use('svg')
@@ -19,8 +19,11 @@ def local(*path):
 
 
 class MatplotlibTexture(Example):
-    def __init__(self):
-        self.ctx = moderngl.create_context()
+    title = "Matplotlib as Texture"
+    gl_version = (3, 3)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
         self.prog = self.ctx.program(
             vertex_shader='''
@@ -101,20 +104,18 @@ class MatplotlibTexture(Example):
         self.texture = self.ctx.texture(img.size, 3, img.tobytes())
         self.texture.build_mipmaps()
 
-    def render(self):
-        width, height = self.wnd.size
-        self.ctx.viewport = self.wnd.viewport
+    def render(self, time, frame_time):
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.DEPTH_TEST)
 
-        proj = Matrix44.perspective_projection(45.0, width / height, 0.1, 1000.0)
+        proj = Matrix44.perspective_projection(45.0, self.aspect_ratio, 0.1, 1000.0)
         lookat = Matrix44.look_at(
             (47.697, -8.147, 24.498),
             (0.0, 0.0, 8.0),
             (0.0, 0.0, 1.0),
         )
 
-        rotate = Matrix44.from_z_rotation(np.sin(self.wnd.time) * 0.5 + 0.2)
+        rotate = Matrix44.from_z_rotation(np.sin(time) * 0.5 + 0.2)
 
         self.use_texture.value = False
 
@@ -139,4 +140,5 @@ class MatplotlibTexture(Example):
         self.objects['billboard-image'].render()
 
 
-run_example(MatplotlibTexture)
+if __name__ == '__main__':
+    run_example(MatplotlibTexture)

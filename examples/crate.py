@@ -6,7 +6,7 @@ from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
-from example_window import Example, run_example
+from window import Example, run_example
 
 
 def local(*path):
@@ -14,8 +14,10 @@ def local(*path):
 
 
 class CrateExample(Example):
-    def __init__(self):
-        self.ctx = moderngl.create_context()
+    title = "Crate"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
         self.prog = self.ctx.program(
             vertex_shader='''
@@ -68,15 +70,14 @@ class CrateExample(Example):
         self.vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert', 'in_norm', 'in_text')
 
-    def render(self):
-        angle = self.wnd.time
-        self.ctx.viewport = self.wnd.viewport
+    def render(self, time, frame_time):
+        angle = time
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.DEPTH_TEST)
 
         camera_pos = (np.cos(angle) * 5.0, np.sin(angle) * 5.0, 2.0)
 
-        proj = Matrix44.perspective_projection(45.0, self.wnd.ratio, 0.1, 1000.0)
+        proj = Matrix44.perspective_projection(45.0, self.aspect_ratio, 0.1, 1000.0)
         lookat = Matrix44.look_at(
             camera_pos,
             (0.0, 0.0, 0.5),
@@ -88,4 +89,5 @@ class CrateExample(Example):
         self.vao.render()
 
 
-run_example(CrateExample)
+if __name__ == '__main__':
+    run_example(CrateExample)

@@ -3,6 +3,7 @@
 /dist
 /venv
 /.venv
+/env
 /.tox
 /.cache
 /.pytest_cache
@@ -16,6 +17,7 @@
 __pycache__
 
 temp_*
+examples/output
 
 *.egg-info
 *.log
@@ -23,3 +25,5 @@ temp_*
 *.pyc
 *.whl
 *.so
+*.a
+*.dll

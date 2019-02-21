@@ -1,4 +1,3 @@
-
 '''
 simple raymarching demo with moderngl
 
@@ -6,15 +5,55 @@ author: minu jeong
 '''
 
 import struct
-import time
 
 import numpy as np
-import moderngl as mg
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+
+from window import Example, run_example
 
 
-vertex_shader = '''
+class Raymarching(Example):
+    gl_version = (3, 3)
+    window_size = (500, 500)
+    aspect_ratio = 1.0
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.vaos = []
+
+        program = self.ctx.program(
+            vertex_shader=VERTEX_SHADER,
+            fragment_shader=FRAGMENT_SHADER
+        )
+
+        vertex_data = np.array([
+            # x,    y,   z,    u,   v
+            -1.0, -1.0, 0.0,  0.0, 0.0,
+            +1.0, -1.0, 0.0,  1.0, 0.0,
+            -1.0, +1.0, 0.0,  0.0, 1.0,
+            +1.0, +1.0, 0.0,  1.0, 1.0,
+        ]).astype(np.float32)
+
+        content = [(
+            self.ctx.buffer(vertex_data.tobytes()),
+            '3f 2f',
+            'in_vert', 'in_uv'
+        )]
+
+        idx_data = np.array([
+            0, 1, 2,
+            1, 2, 3
+        ]).astype(np.int32)
+
+        idx_buffer = self.ctx.buffer(idx_data.tobytes())
+        self.vao = self.ctx.vertex_array(program, content, idx_buffer)
+        self.u_time = program.get("T", 0.0)
+
+    def render(self, time: float, frame_time: float):
+        self.u_time.value = time
+        self.vao.render()
+
+
+VERTEX_SHADER = '''
 #version 430
 
 in vec3 in_vert;
@@ -27,7 +66,7 @@ void main()
 }
 '''
 
-fragment_shader = '''
+FRAGMENT_SHADER = '''
 #version 430
 
 #define FAR 80.0
@@ -242,52 +281,5 @@ void main()
 '''
 
 
-class Renderer(QtWidgets.QOpenGLWidget):
-    vaos = []
-
-    def __init__(self):
-        super(Renderer, self).__init__()
-        W, H = 500, 500
-        self.setMinimumSize(W, H)
-        self.setMaximumSize(W, H)
-        self.viewport = (0, 0, W, H)
-
-    def initializeGL(self):
-        self.context = mg.create_context()
-        program = self.context.program(vertex_shader=vertex_shader, fragment_shader=fragment_shader)
-
-        vertex_data = np.array([
-            # x,    y,   z,    u,   v
-            -1.0, -1.0, 0.0,  0.0, 0.0,
-            +1.0, -1.0, 0.0,  1.0, 0.0,
-            -1.0, +1.0, 0.0,  0.0, 1.0,
-            +1.0, +1.0, 0.0,  1.0, 1.0,
-        ]).astype(np.float32)
-        content = [(
-            self.context.buffer(vertex_data.tobytes()),
-            '3f 2f',
-            'in_vert', 'in_uv'
-        )]
-        idx_data = np.array([
-            0, 1, 2,
-            1, 2, 3
-        ]).astype(np.int32)
-        idx_buffer = self.context.buffer(idx_data.tobytes())
-        self.vao = self.context.vertex_array(program, content, idx_buffer)
-        self.u_time = program.get("T", 0.0)
-
-    def paintGL(self):
-        time_value = struct.pack('f', time.clock() * 2.0)
-        self.u_time.write(time_value)
-
-        self.context.viewport = self.viewport
-        self.vao.render()
-        self.update()
-
-
-app = QtWidgets.QApplication([])
-mainwin = QtWidgets.QMainWindow(None, QtCore.Qt.WindowStaysOnTopHint)
-renderer = Renderer()
-mainwin.setCentralWidget(renderer)
-mainwin.show()
-app.exec()
+if __name__ == '__main__':
+    run_example(Raymarching)

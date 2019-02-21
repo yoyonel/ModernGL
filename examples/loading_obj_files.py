@@ -5,12 +5,15 @@ from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
-from example_window import Example, run_example
+from window import Example, run_example
 
 
 class LoadingOBJ(Example):
-    def __init__(self):
-        self.ctx = moderngl.create_context()
+    title = "Loading OBJ"
+    gl_version = (3, 3)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
         self.obj = Obj.open(os.path.join(os.path.dirname(__file__), 'data', 'sitting_dummy.obj'))
         self.wood = Image.open(os.path.join(os.path.dirname(__file__), 'data', 'wood.jpg'))
@@ -75,13 +78,11 @@ class LoadingOBJ(Example):
         self.vbo = self.ctx.buffer(self.obj.pack('vx vy vz nx ny nz tx ty'))
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert', 'in_norm', 'in_text')
 
-    def render(self):
-        width, height = self.wnd.size
-        self.ctx.viewport = self.wnd.viewport
+    def render(self, time, frame_time):
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.DEPTH_TEST)
 
-        proj = Matrix44.perspective_projection(45.0, width / height, 0.1, 1000.0)
+        proj = Matrix44.perspective_projection(45.0, self.aspect_ratio, 0.1, 1000.0)
         lookat = Matrix44.look_at(
             (-85, -180, 140),
             (0.0, 0.0, 65.0),
@@ -96,4 +97,5 @@ class LoadingOBJ(Example):
         self.vao.render()
 
 
-run_example(LoadingOBJ)
+if __name__ == '__main__':
+    run_example(LoadingOBJ)

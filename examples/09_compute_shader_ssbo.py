@@ -218,7 +218,7 @@ class Renderer(QtWidgets.QOpenGLWidget):
 
             # match bytes
             compute_data.append(
-                [[x, y, z, w],  [vx, vy, vz, vw],  [r, g, b, a]])
+                [[x, y, z, w], [vx, vy, vz, vw], [r, g, b, a]])
 
         compute_data = np.array(compute_data).astype('f4')
         compute_data_bytes = compute_data.tobytes()
@@ -230,6 +230,18 @@ class Renderer(QtWidgets.QOpenGLWidget):
         self.timer_thread = ComputeToggleTimer()
         self.timer_thread.compute_update_signal.connect(self.update_computeworker)
         self.timer_thread.start()
+
+        self.item_vertex_buffer = self.context.buffer(reserve=112)
+        self.vertex_array = self.context.vertex_array(
+            self.program,
+            [(
+                self.item_vertex_buffer,
+                '2f 2f 3f',
+                'in_vert', 'in_uv', 'in_col'
+            )],
+            self.index_buffer,
+        )
+
 
     def paintGL(self):
         self.context.viewport = self.viewport
@@ -254,17 +266,9 @@ class Renderer(QtWidgets.QOpenGLWidget):
             item_vertex[:, 6] = item[10]
 
             # generate vertex buffer object to render
-            item_vertex_buffer = self.context.buffer(item_vertex.tobytes())
-            bo = [(
-                item_vertex_buffer,
-                '2f 2f 3f',
-                'in_vert', 'in_uv', 'in_col'
-            )]
+            self.item_vertex_buffer.write(item_vertex.tobytes())
+            self.vertex_array.render()
 
-            # generate vertex array object and render
-            self.context.vertex_array(
-                self.program, bo, self.index_buffer
-            ).render()
         self.update()
 
 

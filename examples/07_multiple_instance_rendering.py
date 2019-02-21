@@ -6,12 +6,17 @@
 import moderngl
 import numpy as np
 
-from example_window import Example, run_example
+from window import Example, run_example
 
 
 class InstancedRendering(Example):
-    def __init__(self):
-        self.ctx = moderngl.create_context()
+    gl_version = (3, 3)
+    title = "Instanced Rendering"
+    aspect_ratio = 1.0
+    window_size = (640, 640)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
         self.prog = self.ctx.program(
             vertex_shader='''
@@ -105,10 +110,10 @@ class InstancedRendering(Example):
 
         self.vao = self.ctx.vertex_array(self.prog, vao_content, self.index_buffer)
 
-    def render(self):
-        self.ctx.viewport = self.wnd.viewport
+    def render(self, time: float, frame_time: float):
         self.ctx.clear(1.0, 1.0, 1.0)
         self.vao.render(instances=8)
 
 
-run_example(InstancedRendering)
+if __name__ == '__main__':
+    run_example(InstancedRendering)

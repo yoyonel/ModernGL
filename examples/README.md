@@ -1,4 +1,43 @@
-# moderngl Examples
+# ModernGL Examples
+
+Most examples are currently using the [standard example system](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/window).
+It's recommended to use this as your example will be able to run on all supported platforms and window types (sdl2, pyglet, pyqt, glfw etc..)
+
+## Example Options
+
+```
+optional arguments:
+  -h, --help            show this help message and exit
+  -w {glfw,pyglet,pyqt5,sdl2}, --window {glfw,pyglet,pyqt5,sdl2}
+                        Name for the window type to use
+  -fs, --fullscreen     Open the window in fullscreen mode
+  -vs VSYNC, --vsync VSYNC
+                        Enable or disable vsync
+  -s SAMPLES, --samples SAMPLES
+                        Specify the desired number of samples to use for
+                        multisampling
+  -c CURSOR, --cursor CURSOR
+                        Enable or disable displaying the mouse cursor
+```
+
+For example:
+
+```bash
+# Run example in fullscreen with 8 x MSAA, vsync and no visible mouse cursor
+python 03_alpha_blending.py --fullscreen --samples 8 --cursor off --vsync on
+
+# Run example using SDL2
+python 03_alpha_blending.py --window sdl2
+
+# Run example using pyglet
+python 03_alpha_blending.py --window pyglet
+
+# Run example using glfw
+python 03_alpha_blending.py --window glfw
+
+```
+
+## Basic Examples
 
 Hello world :tada:
 
@@ -31,6 +70,11 @@ Index buffer
 Multiple instance rendering
 
 [![](preview_images/multiple_instance_rendering.png)](07_multiple_instance_rendering.py)
+
+## Other Examples
+
+The examples directory also contains a **large amount of examples** contributed
+by varous people over time. Browse around and see what you can find :)
 
 ## Dependencies
 
