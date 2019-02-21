@@ -152,8 +152,13 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
         PyObject * res = PyDict_New();
         dict_add_obj(res, "self", obj);
         dict_add_obj_decref(res, "mglo", meth_inspect(0, SLOT(obj, PyObject, Sampler_class_mglo)));
-        dict_add_obj(res, "swizzle", SLOT(obj, PyObject, Sampler_class_swizzle));
         dict_add_obj(res, "filter", SLOT(obj, PyObject, Sampler_class_filter));
+        dict_add_obj(res, "repeat_x", SLOT(obj, PyObject, Sampler_class_repeat_x));
+        dict_add_obj(res, "repeat_y", SLOT(obj, PyObject, Sampler_class_repeat_y));
+        dict_add_obj(res, "repeat_z", SLOT(obj, PyObject, Sampler_class_repeat_z));
+        dict_add_obj(res, "anisotropy", SLOT(obj, PyObject, Sampler_class_anisotropy));
+        dict_add_obj(res, "min_lod", SLOT(obj, PyObject, Sampler_class_min_lod));
+        dict_add_obj(res, "max_lod", SLOT(obj, PyObject, Sampler_class_max_lod));
         dict_add_obj(res, "texture", SLOT(obj, PyObject, Sampler_class_texture));
         return res;
     }
@@ -171,6 +176,7 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
         dict_add_obj_decref(res, "mglo", meth_inspect(0, SLOT(obj, PyObject, Texture_class_mglo)));
         dict_add_obj(res, "level", SLOT(obj, PyObject, Texture_class_level));
         dict_add_obj(res, "layer", SLOT(obj, PyObject, Texture_class_layer));
+        dict_add_obj(res, "swizzle", SLOT(obj, PyObject, Texture_class_swizzle));
         dict_add_obj(res, "size", SLOT(obj, PyObject, Texture_class_size));
         return res;
     }
@@ -311,40 +317,39 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
             dict_add_obj(res, "framebuffer", (PyObject *)scope->framebuffer);
             dict_add_obj(res, "old_framebuffer", (PyObject *)scope->old_framebuffer);
             dict_add_int(res, "num_samplers", scope->num_samplers);
-            dict_add_int(res, "num_uniform_buffers", scope->num_uniform_buffers);
-            dict_add_int(res, "num_storage_buffers", scope->num_storage_buffers);
+            dict_add_int(res, "num_buffers", scope->num_buffers);
             dict_add_int(res, "enable_only", scope->enable_only);
             dict_add_int(res, "old_enable_only", scope->old_enable_only);
 
-            PyObject * bindings = PyTuple_New(3);
+            PyObject * bindings = PyTuple_New(2);
             PyObject * bindings_samplers = PyTuple_New(scope->num_samplers);
-            MGLScopeBinding * it = scope->bindings;
+            PyObject * bindings_buffers = PyTuple_New(scope->num_buffers);
             for (int i = 0; i < scope->num_samplers; ++i) {
-                PyObject * binding = PyTuple_New(2);
-                PyTuple_SET_ITEM(binding, 0, it->object);
-                PyTuple_SET_ITEM(binding, 1, PyLong_FromLong(it->binding));
-                PyTuple_SET_ITEM(bindings_samplers, 0, binding);
-                it += 1;
+                PyObject * obj = PyDict_New();
+                PyTuple_SET_ITEM(bindings_samplers, 0, obj);
+                PyDict_SetItemString(obj, "sampler", scope->samplers[i].object);
+                PyObject * binding = PyLong_FromLong(scope->samplers[i].binding);
+                PyDict_SetItemString(obj, "binding", binding);
+                Py_DECREF(binding);
             }
-            PyObject * bindings_uniform_buffers = PyTuple_New(scope->num_uniform_buffers);
-            for (int i = 0; i < scope->num_uniform_buffers; ++i) {
-                PyObject * binding = PyTuple_New(2);
-                PyTuple_SET_ITEM(binding, 0, it->object);
-                PyTuple_SET_ITEM(binding, 1, PyLong_FromLong(it->binding));
-                PyTuple_SET_ITEM(bindings_samplers, 0, binding);
-                it += 1;
-            }
-            PyObject * bindings_storage_buffers = PyTuple_New(scope->num_storage_buffers);
-            for (int i = 0; i < scope->num_storage_buffers; ++i) {
-                PyObject * binding = PyTuple_New(2);
-                PyTuple_SET_ITEM(binding, 0, it->object);
-                PyTuple_SET_ITEM(binding, 1, PyLong_FromLong(it->binding));
-                PyTuple_SET_ITEM(bindings_samplers, 0, binding);
-                it += 1;
+            for (int i = 0; i < scope->num_buffers; ++i) {
+                PyObject * obj = PyDict_New();
+                PyDict_SetItemString(obj, "buffer", scope->buffers[i].object);
+                PyObject * target = PyLong_FromLong(scope->buffers[i].target);
+                PyDict_SetItemString(obj, "target", target);
+                Py_DECREF(target);
+                PyObject * binding = PyLong_FromLong(scope->buffers[i].binding);
+                PyDict_SetItemString(obj, "binding", binding);
+                Py_DECREF(binding);
+                PyObject * offset = PyLong_FromSsize_t(scope->buffers[i].offset);
+                PyDict_SetItemString(obj, "offset", offset);
+                Py_DECREF(offset);
+                PyObject * size = PyLong_FromSsize_t(scope->buffers[i].size);
+                PyDict_SetItemString(obj, "size", size);
+                Py_DECREF(size);
             }
             PyTuple_SET_ITEM(bindings, 0, bindings_samplers);
-            PyTuple_SET_ITEM(bindings, 1, bindings_uniform_buffers);
-            PyTuple_SET_ITEM(bindings, 2, bindings_storage_buffers);
+            PyTuple_SET_ITEM(bindings, 1, bindings_buffers);
             dict_add_obj_decref(res, "bindings", bindings);
             return res;
         }
