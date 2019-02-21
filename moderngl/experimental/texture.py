@@ -34,3 +34,6 @@ class Texture:
 
     def build_mipmaps(self, base=0, max=-1) -> None:
         self.__mglo.build_mipmaps(base, max)
+
+    def bind_to_image(self, binding, access, format) -> None:
+        self.__mglo.bind(binding, access, format)

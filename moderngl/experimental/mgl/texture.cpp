@@ -264,6 +264,23 @@ PyObject * MGLTexture_meth_write(MGLTexture * self, PyObject * const * args, Py_
     Py_RETURN_NONE;
 }
 
+/* MGLTexture.bind(...)
+ */
+PyObject * MGLTexture_meth_bind(MGLTexture * self, PyObject * const * args, Py_ssize_t nargs) {
+    if (nargs != 3) {
+        // TODO: error
+        return 0;
+    }
+
+	int binding = PyLong_AsLong(args[0]);
+	int access = PyLong_AsLong(args[1]);
+	int format = PyLong_AsLong(args[2]);
+
+    const GLMethods & gl = self->context->gl;
+	gl.BindImageTexture(binding, self->texture_obj, 0, 0, 0, access, format);
+    Py_RETURN_NONE;
+}
+
 int MGLTexture_set_swizzle(MGLTexture * self, PyObject * value) {
 	const char * swizzle = PyUnicode_AsUTF8(value);
 
@@ -307,6 +324,7 @@ int MGLTexture_set_swizzle(MGLTexture * self, PyObject * value) {
 
 PyMethodDef MGLTexture_methods[] = {
     {"write", (PyCFunction)MGLTexture_meth_write, METH_FASTCALL, 0},
+    {"bind", (PyCFunction)MGLTexture_meth_bind, METH_FASTCALL, 0},
     {0},
 };
 
@@ -316,8 +334,13 @@ PyObject * MGLTexture_meth_write_va(MGLTexture * self, PyObject * args) {
     return MGLTexture_meth_write(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
 }
 
+PyObject * MGLTexture_meth_bind_va(MGLTexture * self, PyObject * args) {
+    return MGLTexture_meth_bind(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
+
 PyMethodDef MGLTexture_methods[] = {
     {"write", (PyCFunction)MGLTexture_meth_write_va, METH_VARARGS, 0},
+    {"bind", (PyCFunction)MGLTexture_meth_bind_va, METH_VARARGS, 0},
     {0},
 };
 
