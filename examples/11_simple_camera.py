@@ -6,22 +6,22 @@
    
     Controls:
         Move:
-            Forward - "w"
-            Backwards - "s"
+            Forward - W
+            Backwards - S
     
         Strafe:
-            Up - left "shift", "up arrow"
-            Down - left "control", "down arrow"
-            Left - "a", "left arrow"
-            Right - "d", "right arrow"
+            Up - up arrow
+            Down - down arrow
+            Left - A
+            Right - D
 
         Rotate:
-            Left - "q"
-            Right - "e"
+            Left - Q
+            Right - E
         
         Zoom:
-            In - numpad "+"
-            Out - numpad "-"
+            In - X
+            Out - Z
     
     adopted by: Alex Zakrividoroga
 '''
@@ -29,7 +29,9 @@
 import moderngl
 import numpy as np
 from pyrr import Matrix44, Vector3, vector, Quaternion
-from example_window import Example, run_example
+
+from window import Example, run_example
+
 
 class Camera():
     
@@ -108,52 +110,6 @@ class Camera():
             self._z_near,
             self._z_far)
 
-class QTKeyDecoder():
-
-    def __init__(self, keys):
-        self._keys = keys
-
-    def up(self):
-        return self._keys[38]
-
-    def down(self):
-        return self._keys[40]
-
-    def left(self):
-        return self._keys[37]
-
-    def right(self):
-        return self._keys[39]
-
-    def num_plus(self):
-        return self._keys[107]
-
-    def num_minus(self):
-        return self._keys[109]
-
-    def key_w(self):
-        return self._keys[87]
-
-    def key_s(self):
-        return self._keys[83]
-
-    def key_a(self):
-        return self._keys[65]
-
-    def key_d(self):
-        return self._keys[68]
-
-    def left_shift(self):
-        return self._keys[16]
-
-    def left_control(self):
-        return self._keys[17]
-
-    def key_e(self):
-        return self._keys[69]
-        
-    def key_q(self):
-        return self._keys[81]
 
 def grid(size, steps):
     u = np.repeat(np.linspace(-size, size, steps), 2)
@@ -161,9 +117,12 @@ def grid(size, steps):
     w = np.zeros(steps * 2)
     return np.concatenate([np.dstack([u, v, w]), np.dstack([v, u, w])])
  
+
 class PerspectiveProjection(Example):
-    def __init__(self):
-        self.ctx = moderngl.create_context()
+    gl_version = (3, 3)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
         self.prog = self.ctx.program(
             vertex_shader='''
@@ -188,65 +147,74 @@ class PerspectiveProjection(Example):
             ''',
         )
 
-        self.camera = Camera(self.wnd.ratio)
+        self.camera = Camera(self.aspect_ratio)
         self.mvp = self.prog['Mvp']
         self.vbo = self.ctx.buffer(grid(15, 10).astype('f4').tobytes())
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert')
 
-    def input_update(self):
-        #Keyboard Processing
-        qt_keys = QTKeyDecoder(self.wnd.keys)
-        
-        if qt_keys.up() == True:
-            self.camera.strafe_up()
+        self.states = {
+            self.wnd.keys.W: False,     # forward
+            self.wnd.keys.S: False,     # backwards
+            self.wnd.keys.UP: False,    # strafe Up
+            self.wnd.keys.DOWN: False,  # strafe Down
+            self.wnd.keys.A: False,     # strafe left
+            self.wnd.keys.D: False,     # strafe right
+            self.wnd.keys.Q: False,     # rotate left
+            self.wnd.keys.E: False,     # rotare right
+            self.wnd.keys.Z: False,     # zoom in
+            self.wnd.keys.X: False,     # zoom out
+        }
 
-        if qt_keys.down() == True:
-            self.camera.strafe_down()
-
-        if qt_keys.left() == True:
-            self.camera.strafe_left()
-
-        if qt_keys.right() == True:
-            self.camera.strafe_right()
-
-        if qt_keys.num_plus() == True:
-           self.camera.zoom_in()
-
-        if qt_keys.num_minus() == True:
-            self.camera.zoom_out()
-
-        if qt_keys.key_w() == True:
+    def move_camera(self):
+        if self.states.get(self.wnd.keys.W):
             self.camera.move_forward()
 
-        if qt_keys.key_s() == True:
+        if self.states.get(self.wnd.keys.S):
             self.camera.move_backwards()
 
-        if qt_keys.key_a() == True:
-            self.camera.strafe_left()
-
-        if qt_keys.key_d() == True:
-            self.camera.strafe_right()
-
-        if qt_keys.left_shift() == True:
+        if self.states.get(self.wnd.keys.UP):
             self.camera.strafe_up()
 
-        if qt_keys.left_control() == True:
+        if self.states.get(self.wnd.keys.DOWN):
             self.camera.strafe_down()
 
-        if qt_keys.key_q() == True:
+        if self.states.get(self.wnd.keys.A):
+           self.camera.strafe_left()
+
+        if self.states.get(self.wnd.keys.D):
+            self.camera.strafe_right()
+
+        if self.states.get(self.wnd.keys.Q):
             self.camera.rotate_left()
 
-        if qt_keys.key_e() == True:
+        if self.states.get(self.wnd.keys.E):
             self.camera.rotate_right()
-      
-    def render(self):
-        self.input_update()
-        
-        self.ctx.viewport = self.wnd.viewport
+
+        if self.states.get(self.wnd.keys.Z):
+            self.camera.zoom_in()
+
+        if self.states.get(self.wnd.keys.X):
+            self.camera.zoom_out()
+
+    def key_event(self, key, action):
+        if key not in self.states:
+            print(key, action)
+            return        
+
+        if action == self.wnd.keys.ACTION_PRESS:
+            self.states[key] = True
+        else:
+            self.states[key] = False
+
+    def render(self, time, frame_time):
+        self.move_camera()
+
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.DEPTH_TEST)
 
         self.mvp.write((self.camera.mat_projection * self.camera.mat_lookat).astype('f4').tobytes())
         self.vao.render(moderngl.LINES)
 
-run_example(PerspectiveProjection)
+
+if __name__ == '__main__':
+    run_example(PerspectiveProjection)
