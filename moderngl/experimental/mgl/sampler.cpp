@@ -47,6 +47,61 @@ PyObject * MGLSampler_meth_use(MGLSampler * self, PyObject * arg) {
     Py_RETURN_NONE;
 }
 
+int MGLSampler_set_filter(MGLSampler * self, PyObject * value) {
+    return 0;
+}
+
+int MGLSampler_set_repeat_x(MGLSampler * self, PyObject * value) {
+    if (PyObject_IsTrue(value)) {
+        SLOT(self->wrapper, PyObject, Sampler_class_repeat_x) = NEW_REF(Py_True);
+		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    } else {
+        SLOT(self->wrapper, PyObject, Sampler_class_repeat_x) = NEW_REF(Py_False);
+		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    }
+    return 0;
+}
+
+int MGLSampler_set_repeat_y(MGLSampler * self, PyObject * value) {
+    if (PyObject_IsTrue(value)) {
+        SLOT(self->wrapper, PyObject, Sampler_class_repeat_y) = NEW_REF(Py_True);
+		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    } else {
+        SLOT(self->wrapper, PyObject, Sampler_class_repeat_y) = NEW_REF(Py_False);
+		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    }
+    return 0;
+}
+
+int MGLSampler_set_repeat_z(MGLSampler * self, PyObject * value) {
+    if (PyObject_IsTrue(value)) {
+        SLOT(self->wrapper, PyObject, Sampler_class_repeat_z) = NEW_REF(Py_True);
+		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_REPEAT);
+    } else {
+        SLOT(self->wrapper, PyObject, Sampler_class_repeat_z) = NEW_REF(Py_False);
+		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    }
+    return 0;
+}
+
+int MGLSampler_set_anisotropy(MGLSampler * self, PyObject * value) {
+    return 0;
+}
+
+int MGLSampler_set_min_lod(MGLSampler * self, PyObject * value) {
+    int min_lod = PyLong_AsLong(value);
+    SLOT(self->wrapper, PyObject, Sampler_class_min_lod) = NEW_REF(value);
+	self->context->gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_MIN_LOD, min_lod);
+    return 0;
+}
+
+int MGLSampler_set_max_lod(MGLSampler * self, PyObject * value) {
+    int max_lod = PyLong_AsLong(value);
+    SLOT(self->wrapper, PyObject, Sampler_class_max_lod) = NEW_REF(value);
+	self->context->gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_MAX_LOD, max_lod);
+    return 0;
+}
+
 #if PY_VERSION_HEX >= 0x03070000
 
 PyMethodDef MGLSampler_methods[] = {
@@ -63,8 +118,20 @@ PyMethodDef MGLSampler_methods[] = {
 
 #endif
 
+PyGetSetDef MGLSampler_getset[] = {
+    {"filter", 0, (setter)MGLSampler_set_filter, 0, 0},
+    {"repeat_x", 0, (setter)MGLSampler_set_repeat_x, 0, 0},
+    {"repeat_y", 0, (setter)MGLSampler_set_repeat_y, 0, 0},
+    {"repeat_z", 0, (setter)MGLSampler_set_repeat_z, 0, 0},
+    {"anisotropy", 0, (setter)MGLSampler_set_anisotropy, 0, 0},
+    {"min_lod", 0, (setter)MGLSampler_set_min_lod, 0, 0},
+    {"max_lod", 0, (setter)MGLSampler_set_max_lod, 0, 0},
+    {0},
+};
+
 PyType_Slot MGLSampler_slots[] = {
     {Py_tp_methods, MGLSampler_methods},
+    {Py_tp_getset, MGLSampler_getset},
     {0},
 };
 
