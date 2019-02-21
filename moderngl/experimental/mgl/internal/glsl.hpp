@@ -8,6 +8,10 @@ struct GLTypeInfo {
 };
 
 void clean_glsl_name(char * name, int & name_len);
+
+int swizzle_from_char(char c);
+char char_from_swizzle(int c);
+
 GLTypeInfo type_info(int type);
 
 void read_float(float *& ptr, PyObject * value);

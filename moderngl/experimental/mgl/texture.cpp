@@ -160,6 +160,7 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
 
     SLOT(texture->wrapper, PyObject, Texture_class_level) = PyLong_FromLong(0);
     SLOT(texture->wrapper, PyObject, Texture_class_layer) = PyLong_FromLong(-1);
+    SLOT(texture->wrapper, PyObject, Texture_class_swizzle) = PyUnicode_FromStringAndSize("RGBA", components);
     SLOT(texture->wrapper, PyObject, Texture_class_size) = dims == 3 ? int_tuple(width, height, depth) : int_tuple(width, height);
     return NEW_REF(texture->wrapper);
 }
@@ -263,6 +264,45 @@ PyObject * MGLTexture_meth_write(MGLTexture * self, PyObject * const * args, Py_
     Py_RETURN_NONE;
 }
 
+int MGLTexture_set_swizzle(MGLTexture * self, PyObject * value) {
+	const char * swizzle = PyUnicode_AsUTF8(value);
+
+    if (PyUnicode_GetSize(value) > 4) {
+        PyErr_Format(PyExc_Exception, "error -- %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+        return -1;
+    }
+
+	int tex_swizzle[4] = {GL_ZERO, GL_ZERO, GL_ZERO, GL_ONE};
+
+	for (int i = 0; i < swizzle[i]; ++i) {
+		tex_swizzle[i] = swizzle_from_char(swizzle[i]);
+		if (tex_swizzle[i] == -1) {
+            PyErr_Format(PyExc_Exception, "error -- %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
+			return -1;
+		}
+	}
+
+	int texture_target = self->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+
+	const GLMethods & gl = self->context->gl;
+
+	gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+	gl.BindTexture(texture_target, self->texture_obj);
+	gl.TexParameteriv(texture_target, GL_TEXTURE_SWIZZLE_RGBA, tex_swizzle);
+
+	char swizzle_str[4] = {
+		char_from_swizzle(tex_swizzle[0]),
+		char_from_swizzle(tex_swizzle[1]),
+		char_from_swizzle(tex_swizzle[2]),
+		char_from_swizzle(tex_swizzle[3]),
+	};
+
+    PyObject *& swizzle_slot = SLOT(self->wrapper, PyObject, Texture_class_swizzle);
+    Py_DECREF(swizzle_slot);
+	swizzle_slot = PyUnicode_FromStringAndSize(swizzle_str, 4);
+    return 0;
+}
+
 #if PY_VERSION_HEX >= 0x03070000
 
 PyMethodDef MGLTexture_methods[] = {
@@ -283,8 +323,14 @@ PyMethodDef MGLTexture_methods[] = {
 
 #endif
 
+PyGetSetDef MGLTexture_getset[] = {
+    {"swizzle", 0, (setter)MGLTexture_set_swizzle, 0, 0},
+    {0},
+};
+
 PyType_Slot MGLTexture_slots[] = {
     {Py_tp_methods, MGLTexture_methods},
+    {Py_tp_getset, MGLTexture_getset},
     {0},
 };
 
