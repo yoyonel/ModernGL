@@ -86,9 +86,9 @@ class Conway(Example):
         self.transform['Height'] = height
 
         self.texture = self.ctx.texture((width, height), 1, pixels.tobytes(), dtype='f4')
+        self.texture.swizzle = 'RRR1'
         self.sampler = self.ctx.sampler(self.texture)
         # self.sampler.filter = (mgl.NEAREST, mgl.NEAREST)
-        # self.sampler.swizzle = 'RRR1'
         self.sampler.use()
 
         self.vbo = self.ctx.buffer(canvas.tobytes())
