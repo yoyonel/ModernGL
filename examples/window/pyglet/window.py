@@ -34,7 +34,7 @@ class Window(BaseWindow):
         config = pyglet.gl.Config()
         config.double_buffer = True
         config.major_version = self.gl_version[0]
-        config.minor_version = self.gl_version[0]
+        config.minor_version = self.gl_version[1]
         config.forward_compatible = True
         config.sample_buffers = 1 if self.samples > 1 else 0
         config.samples = self.samples
