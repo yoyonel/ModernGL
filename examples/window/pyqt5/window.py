@@ -88,11 +88,11 @@ class Window(BaseWindow):
         self.frames += 1
 
     def resize(self, width, height):
-        self.width = width
-        self.height = height
-
-        self.buffer_width = self.width * self.widget.devicePixelRatio()
-        self.buffer_height = self.height * self.widget.devicePixelRatio()
+        # pyqt reports sizes in actual buffer size (not window size)
+        self.width = width // self.widget.devicePixelRatio()
+        self.height = height // self.widget.devicePixelRatio()
+        self.buffer_width = width
+        self.buffer_height = height
 
         if self.ctx:
             self.set_default_viewport()
