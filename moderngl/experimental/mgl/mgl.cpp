@@ -17,6 +17,7 @@
 #include "vertex_array.hpp"
 
 #include "internal/wrapper.hpp"
+#include "internal/data_type.hpp"
 
 /* moderngl.core.initialize()
  * Initializes internal objects that cannot be initialized import time.
@@ -179,5 +180,16 @@ PyModuleDef module_def = {PyModuleDef_HEAD_INIT, mgl_name, 0, -1, module_methods
 
 extern "C" PyObject * PyInit_mgl() {
     PyObject * module = PyModule_Create(&module_def);
+
+    f1.numpy_dtype = PyUnicode_FromString("f1");
+    f2.numpy_dtype = PyUnicode_FromString("f2");
+    f4.numpy_dtype = PyUnicode_FromString("f4");
+    u1.numpy_dtype = PyUnicode_FromString("u1");
+    u2.numpy_dtype = PyUnicode_FromString("u2");
+    u4.numpy_dtype = PyUnicode_FromString("u4");
+    i1.numpy_dtype = PyUnicode_FromString("i1");
+    i2.numpy_dtype = PyUnicode_FromString("i2");
+    i4.numpy_dtype = PyUnicode_FromString("i4");
+
     return module;
 }
