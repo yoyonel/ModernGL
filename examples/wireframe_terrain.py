@@ -5,11 +5,8 @@ import numpy as np
 from PIL import Image
 from pyrr import Matrix44
 
+import data
 from window import Example, run_example
-
-
-def local(*path):
-    return os.path.join(os.path.dirname(__file__), *path)
 
 
 def terrain(size):
@@ -69,7 +66,7 @@ class WireframeTerrain(Example):
 
         self.vao = self.ctx.vertex_array(self.prog, vao_content, self.ibo)
 
-        self.img = Image.open(local('data', 'noise.jpg')).convert('L')
+        self.img = Image.open(data.find('noise.jpg')).convert('L')
         texture = self.ctx.texture(self.img.size, 1, self.img.tobytes())
         texture.use()
 

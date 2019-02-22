@@ -6,11 +6,8 @@ from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
+import data
 from window import Example, run_example
-
-
-def local(*path):
-    return os.path.join(os.path.dirname(__file__), *path)
 
 
 class RenderToTexture(Example):
@@ -74,12 +71,12 @@ class RenderToTexture(Example):
         self.objects = {}
 
         for name in ['ground', 'grass', 'billboard', 'billboard-holder', 'billboard-image']:
-            obj = Obj.open(local('data', 'scene-1-%s.obj' % name))
+            obj = Obj.open(data.find('scene-1-%s.obj' % name))
             vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
             vao = self.ctx.simple_vertex_array(self.prog, vbo, 'in_vert', 'in_norm', 'in_text')
             self.objects[name] = vao
 
-        img = Image.open(local('data', 'infographic-1.jpg')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
+        img = Image.open(data.find('infographic-1.jpg')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
         self.texture1 = self.ctx.texture(img.size, 3, img.tobytes())
         self.texture1.build_mipmaps()
 

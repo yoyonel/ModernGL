@@ -6,11 +6,8 @@ from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
+import data
 from window import Example, run_example
-
-
-def local(*path):
-    return os.path.join(os.path.dirname(__file__), *path)
 
 
 class InstancedCrates(Example):
@@ -70,8 +67,8 @@ class InstancedCrates(Example):
         self.mvp = self.prog['Mvp']
         self.light = self.prog['Light']
 
-        obj = Obj.open(local('data', 'crate.obj'))
-        img = Image.open(local('data', 'crate.png')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
+        obj = Obj.open(data.find('crate.obj'))
+        img = Image.open(data.find('crate.png')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
         self.texture = self.ctx.texture(img.size, 3, img.tobytes())
         self.texture.build_mipmaps()
         self.texture.use()

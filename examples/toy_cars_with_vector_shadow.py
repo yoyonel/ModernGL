@@ -8,11 +8,8 @@ import numpy as np
 from objloader import Obj
 from pyrr import Matrix44
 
+import data
 from window import Example, run_example
-
-
-def local(*path):
-    return os.path.join(os.path.dirname(__file__), *path)
 
 
 def random_color():
@@ -77,7 +74,7 @@ class ToyCars(Example):
         self.mvp = self.prog['Mvp']
         self.light = self.prog['Light']
 
-        obj = Obj.open(local('data', 'lowpoly_toy_car.obj'))
+        obj = Obj.open(data.find('lowpoly_toy_car.obj'))
 
         self.vbo1 = self.ctx.buffer(obj.pack('vx vy vz nx ny nz'))
         self.vbo2 = self.ctx.buffer(struct.pack(

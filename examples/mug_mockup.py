@@ -7,11 +7,8 @@ from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
+import data
 from window import Example, run_example
-
-
-def local(*path):
-    return os.path.join(os.path.dirname(__file__), *path)
 
 
 class MugExample(Example):
@@ -94,20 +91,20 @@ class MugExample(Example):
         self.canvas_vbo = self.ctx.buffer(np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0], dtype='f4').tobytes())
         self.canvas_vao = self.ctx.simple_vertex_array(self.canvas_prog, self.canvas_vbo, 'in_vert')
 
-        bg_img = Image.open(local('data', 'mug-background.jpg')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
+        bg_img = Image.open(data.find('mug-background.jpg')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
         self.bg_texture = self.ctx.texture(bg_img.size, 3, bg_img.tobytes())
 
         self.mvp = self.prog['Mvp']
         self.light = self.prog['Light']
 
-        sticker_img = Image.open(local('data', 'mug-pymet-logo.png')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGBA')
+        sticker_img = Image.open(data.find('mug-pymet-logo.png')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGBA')
         self.sticker_texture = self.ctx.texture(sticker_img.size, 4, sticker_img.tobytes())
         self.sticker_texture.build_mipmaps(0, 2)
 
         self.mug_texture = self.ctx.texture((1, 1), 3)
         self.mug_texture.write(struct.pack('3B', 10, 10, 10))
 
-        obj = Obj.open(local('data', 'mug.obj'))
+        obj = Obj.open(data.find('mug.obj'))
         self.mug_vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
         self.mug_vao = self.ctx.simple_vertex_array(self.prog, self.mug_vbo, 'in_vert', 'in_norm', 'in_text')
 

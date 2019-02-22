@@ -7,11 +7,8 @@ import pymunk
 from PIL import Image
 from pymunk import Vec2d
 
+import data
 from window import Example, run_example
-
-
-def local(*path):
-    return os.path.join(os.path.dirname(__file__), *path)
 
 
 class PymunkExample(Example):
@@ -70,11 +67,11 @@ class PymunkExample(Example):
             ''',
         )
 
-        img = Image.open(local('data', 'crate.png')).convert('RGBA')
+        img = Image.open(data.find('crate.png')).convert('RGBA')
         self.tex1 = self.ctx.texture(img.size, 4, img.tobytes())
         self.tex1.use(0)
 
-        img = Image.open(local('data', 'ball.png')).convert('RGBA')
+        img = Image.open(data.find('ball.png')).convert('RGBA')
         self.tex2 = self.ctx.texture(img.size, 4, img.tobytes())
         self.tex2.use(1)
 

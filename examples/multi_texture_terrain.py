@@ -5,11 +5,8 @@ import numpy as np
 from PIL import Image
 from pyrr import Matrix44
 
+import data
 from window import Example, run_example
-
-
-def local(*path):
-    return os.path.join(os.path.dirname(__file__), *path)
 
 
 def terrain(size):
@@ -88,11 +85,11 @@ class MultiTextireTerrain(Example):
 
         self.vao = self.ctx.vertex_array(self.prog, vao_content, self.ibo)
 
-        img0 = Image.open(local('data', 'heightmap.jpg')).convert('L').transpose(Image.FLIP_TOP_BOTTOM)
-        img1 = Image.open(local('data', 'grass.jpg')).convert('RGB').transpose(Image.FLIP_TOP_BOTTOM)
-        img2 = Image.open(local('data', 'rock.jpg')).convert('RGB').transpose(Image.FLIP_TOP_BOTTOM)
-        img3 = Image.open(local('data', 'cracks.jpg')).convert('L').transpose(Image.FLIP_TOP_BOTTOM)
-        img4 = Image.open(local('data', 'checked.jpg')).convert('L').transpose(Image.FLIP_TOP_BOTTOM)
+        img0 = Image.open(data.find('heightmap.jpg')).convert('L').transpose(Image.FLIP_TOP_BOTTOM)
+        img1 = Image.open(data.find('grass.jpg')).convert('RGB').transpose(Image.FLIP_TOP_BOTTOM)
+        img2 = Image.open(data.find('rock.jpg')).convert('RGB').transpose(Image.FLIP_TOP_BOTTOM)
+        img3 = Image.open(data.find('cracks.jpg')).convert('L').transpose(Image.FLIP_TOP_BOTTOM)
+        img4 = Image.open(data.find('checked.jpg')).convert('L').transpose(Image.FLIP_TOP_BOTTOM)
 
         tex0 = self.ctx.texture(img0.size, 1, img0.tobytes())
         tex1 = self.ctx.texture(img1.size, 3, img1.tobytes())
