@@ -7,11 +7,8 @@ from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
+import data
 from example_window import Example, run_example
-
-
-def local(*path):
-    return os.path.join(os.path.dirname(__file__), '..', *path)
 
 
 class CrateExample(Example):
@@ -62,12 +59,12 @@ class CrateExample(Example):
             ''',
         )
 
-        obj1 = Obj.open(local('data', 'crate_left.obj'))
-        obj2 = Obj.open(local('data', 'crate.obj'))
-        obj3 = Obj.open(local('data', 'crate_right.obj'))
+        obj1 = Obj.open(data.find('crate_left.obj'))
+        obj2 = Obj.open(data.find('crate.obj'))
+        obj3 = Obj.open(data.find('crate_right.obj'))
 
-        img1 = Image.open(local('data', 'crate.png')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
-        img2 = Image.open(local('data', 'rock.jpg')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
+        img1 = Image.open(data.find('crate.png')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
+        img2 = Image.open(data.find('rock.jpg')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
 
         self.texture1 = self.ctx.texture(img1)
         self.texture2 = self.ctx.texture(img2)

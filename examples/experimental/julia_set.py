@@ -4,11 +4,8 @@ import moderngl.experimental as mgl
 import numpy as np
 from PIL import Image
 
+import data
 from example_window import Example, run_example
-
-
-def local(*path):
-    return os.path.join(os.path.dirname(__file__), '..', *path)
 
 
 class Fractal(Example):
@@ -60,7 +57,7 @@ class Fractal(Example):
             ''',
         )
 
-        img = Image.open(local('data', 'pal.png')).convert('RGB')
+        img = Image.open(data.find('pal.png')).convert('RGB')
         self.texture = self.ctx.texture(img.size, 3, img.tobytes())
         self.sampler = self.ctx.sampler(self.texture)
         self.sampler.use()
