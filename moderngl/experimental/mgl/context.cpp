@@ -320,6 +320,7 @@ PyMethodDef MGLContext_methods[] = {
     {"program", (PyCFunction)MGLContext_meth_program, METH_FASTCALL, 0},
     {"query", (PyCFunction)MGLContext_meth_query, METH_FASTCALL, 0},
     {"renderbuffer", (PyCFunction)MGLContext_meth_renderbuffer, METH_FASTCALL, 0},
+    {"depth_renderbuffer", (PyCFunction)MGLContext_meth_depth_renderbuffer, METH_FASTCALL, 0},
     {"sampler", (PyCFunction)MGLContext_meth_sampler, METH_FASTCALL, 0},
     {"scope", (PyCFunction)MGLContext_meth_scope, METH_FASTCALL, 0},
     {"texture", (PyCFunction)MGLContext_meth_texture, METH_FASTCALL, 0},

@@ -74,6 +74,28 @@ PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * arg
 
     Py_DECREF(color_attachments);
 
+    if (depth_attachment->ob_type == Renderbuffer_class) {
+        MGLRenderbuffer * renderbuffer = SLOT(depth_attachment, MGLRenderbuffer, Renderbuffer_class_mglo);
+        gl.FramebufferRenderbuffer(
+            GL_FRAMEBUFFER,
+			GL_DEPTH_ATTACHMENT,
+            GL_RENDERBUFFER,
+            renderbuffer->renderbuffer_obj
+        );
+    } else if (depth_attachment->ob_type == Texture_class) {
+        int level = PyLong_AsLong(SLOT(depth_attachment, PyObject, Texture_class_level));
+        MGLTexture * texture = SLOT(depth_attachment, MGLTexture, Texture_class_mglo);
+        gl.FramebufferTexture2D(
+            GL_FRAMEBUFFER,
+			GL_DEPTH_ATTACHMENT,
+            texture->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D,
+            texture->texture_obj,
+            level
+        );
+    } else {
+        return 0;
+    }
+
     int status = gl.CheckFramebufferStatus(GL_FRAMEBUFFER);
     self->bind_framebuffer(self->bound_framebuffer->framebuffer_obj);
 
