@@ -4,7 +4,9 @@ from window.base import BaseKeys
 
 
 class Keys(BaseKeys):
-    """Namespace defining sdl2 specific keys constants"""
+    """
+    Namespace mapping SDL2 specific key constants
+    """
     ACTION_PRESS = sdl2.SDL_KEYDOWN
     ACTION_RELEASE = sdl2.SDL_KEYUP
 
