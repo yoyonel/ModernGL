@@ -52,11 +52,11 @@ int MGLSampler_set_filter(MGLSampler * self, PyObject * value) {
 }
 
 enum MGLSamplerWrapModes {
-    MGL_CLAMP_TO_EDGE = 1,
-    MGL_REPEAT,
-    MGL_MIRRORED_REPEAT,
-    MGL_MIRROR_CLAMP_TO_EDGE,
-    MGL_CLAMP_TO_BORDER,
+    MGL_CLAMP_TO_EDGE = 0x01,
+    MGL_REPEAT = 0x02,
+    MGL_MIRRORED_REPEAT = 0x04,
+    MGL_MIRROR_CLAMP_TO_EDGE = 0x08,
+    MGL_CLAMP_TO_BORDER = 0x10,
 };
 
 int MGLSampler_set_wrap(MGLSampler * self, PyObject * value) {
