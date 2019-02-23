@@ -6,6 +6,9 @@ from window.glfw.keys import Keys
 
 
 class Window(BaseWindow):
+    """
+    Window based on GLFW
+    """
     keys = Keys
 
     def __init__(self, **kwargs):
@@ -31,15 +34,14 @@ class Window(BaseWindow):
             # Use the primary monitors current resolution
             monitor = glfw.get_primary_monitor()
             mode = glfw.get_video_mode(monitor)
+            self.width, self.height = mode.size.width, mode.size.height
 
-            # Make sure video more switching will not happen by
-            # matching the desktops current vide mode
+            # Make sure video mode switching will not happen by
+            # matching the desktops current video mode
             glfw.window_hint(glfw.RED_BITS, mode.bits.red)
             glfw.window_hint(glfw.GREEN_BITS, mode.bits.green)
             glfw.window_hint(glfw.BLUE_BITS, mode.bits.blue)
             glfw.window_hint(glfw.REFRESH_RATE, mode.refresh_rate)
-
-            self.width, self.height = mode.size.width, mode.size.height
 
         self.window = glfw.create_window(self.width, self.height, self.title, monitor, None)
 
@@ -66,21 +68,25 @@ class Window(BaseWindow):
         self.set_default_viewport()
 
     def close(self):
+        """
+        Suggest to glfw the window should be closed soon
+        """
         glfw.set_window_should_close(self.window, True)
 
     @property
     def is_closing(self):
+        """
+        Checks if the window is scheduled for closing
+        """
         return glfw.window_should_close(self.window)
 
     def swap_buffers(self):
-        self.frames += 1
+        """
+        Swap buffers, increment frame counter and pull events
+        """
         glfw.swap_buffers(self.window)
+        self.frames += 1
         glfw.poll_events()
-
-    def destroy(self):
-        glfw.terminate()
-
-    # GLFW specific callbacks
 
     def key_event_callback(self, window, key, scancode, action, mods):
         """
@@ -113,6 +119,10 @@ class Window(BaseWindow):
         self.example.mouse_position_event(xpos, ypos)
 
     def mouse_button_callback(self, window, button, action, mods):
+        """
+        Handle mouse button events and forward them to the example
+        """
+        # Offset button index by 1 to make it match the other libraries
         button += 1
         # Support left and right mouse button for now
         if button not in [1, 2]:
@@ -139,3 +149,10 @@ class Window(BaseWindow):
         self.set_default_viewport()
 
         super().resize(self.buffer_width, self.buffer_height)
+
+    def destroy(self):
+        """
+        Gracefully terminate GLFW.
+        This will also properly terminate the window and context
+        """
+        glfw.terminate()
