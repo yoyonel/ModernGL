@@ -14,6 +14,9 @@ class Window(BaseWindow):
         if not glfw.init():
             raise ValueError("Failed to initialize glfw")
 
+        # Configure the OpenGL context
+        glfw.window_hint(glfw.CONTEXT_CREATION_API, glfw.NATIVE_CONTEXT_API)
+        glfw.window_hint(glfw.CLIENT_API, glfw.OPENGL_API)
         glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, self.gl_version[0])
         glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, self.gl_version[1])
         glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
@@ -28,6 +31,13 @@ class Window(BaseWindow):
             # Use the primary monitors current resolution
             monitor = glfw.get_primary_monitor()
             mode = glfw.get_video_mode(monitor)
+
+            # Make sure video more switching will not happen by
+            # matching the desktops current vide mode
+            glfw.window_hint(glfw.RED_BITS, mode.bits.red)
+            glfw.window_hint(glfw.GREEN_BITS, mode.bits.green)
+            glfw.window_hint(glfw.BLUE_BITS, mode.bits.blue)
+            glfw.window_hint(glfw.REFRESH_RATE, mode.refresh_rate)
 
             self.width, self.height = mode.size.width, mode.size.height
 
