@@ -128,4 +128,4 @@ class Window(BaseWindow):
         self.buffer_width, self.buffer_height = glfw.get_framebuffer_size(self.window)
         self.set_default_viewport()
 
-        super().resize(width, height)
+        super().resize(self.buffer_width, self.buffer_height)

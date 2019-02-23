@@ -133,6 +133,14 @@ class MyExample(Example):
         self.ctx.clear(0.2, 0.4, 0.7)
         # Render stuff here
 
+    # ------------ OPTIONAL METHODS --------------
+
+    def resize(self, width: int, heigh: int):
+        """
+        Pick window resizes in case we need to update internal states.
+        """
+        print("Window resized to", width, heigh)
+
     def key_event(self, key, action):
         """
         Handle key events in a generic way supporting all window types.

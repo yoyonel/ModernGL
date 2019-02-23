@@ -117,8 +117,9 @@ class Window(BaseWindow):
         """
         self.width, self.height = width, height
         self.buffer_width, self.buffer_height = width, height
-        self.resize(width, height)
         self.set_default_viewport()
+
+        super().resize(self.buffer_width, self.buffer_height)
 
     def close(self):
         self.window.close()

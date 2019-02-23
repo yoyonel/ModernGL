@@ -77,6 +77,8 @@ class Window(BaseWindow):
         self.buffer_width, self.buffer_height = self.width, self.height
         self.set_default_viewport()
 
+        super().resize(self.buffer_width, self.buffer_height)
+
     def process_events(self):
         for event in sdl2.ext.get_events():
             if event.type == sdl2.SDL_MOUSEMOTION:

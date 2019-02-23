@@ -14,6 +14,13 @@ class EmptyWindow(Example):
     def render(self, time: float, frame_time: float):
         self.ctx.clear(0.2, 0.4, 0.7)
 
+    def resize(self, width: int, heigh: int):
+        """
+        Pick window resizes in case we need yo update
+        internal states when this happens.
+        """
+        print("Window resized to", width, heigh)
+
     def key_event(self, key, action):
         """
         Handle key events in a generic way
