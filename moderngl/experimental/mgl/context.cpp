@@ -17,19 +17,20 @@
 #include "internal/wrapper.hpp"
 #include "internal/tools.hpp"
 
-/* moderngl.core.create_context(standalone, debug, glhook, gc)
+/* moderngl.core.create_context(standalone, debug, require, glhook, gc)
  * Returns a Context object.
  */
 PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 4) {
+    if (nargs != 5) {
         // TODO: error
         return 0;
     }
 
     bool standalone = (bool)PyObject_IsTrue(args[0]);
     bool debug = (bool)PyObject_IsTrue(args[1]);
-    PyObject * glhook = args[2];
-    PyObject * gc = args[3];
+    PyObject * require = args[2];
+    PyObject * glhook = args[3];
+    PyObject * gc = args[4];
 
     MGLContext * context = new_object(MGLContext, MGLContext_class);
     memset((char *)context + sizeof(PyObject), 0, sizeof(MGLContext) - sizeof(PyObject));

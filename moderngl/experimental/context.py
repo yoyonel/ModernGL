@@ -87,9 +87,21 @@ class Context:
     def replay(self, bytecode):
         return self.__mglo.replay(bytecode)
 
+    @property
+    def info(self):
+        return {'GL_' + k.upper(): v for k, v in hwinfo(self).items()}
 
-def create_context(standalone=False, debug=False, glhook=None, gc=None):
-    return mgl.create_context(standalone, debug, glhook, gc)
+    @property
+    def viewport(self):
+        return self.fbo.viewport
+
+    @viewport.setter
+    def viewport(self, value):
+        self.fbo.viewport = value
+
+
+def create_context(standalone=False, debug=False, require=None, glhook=None, gc=None):
+    return mgl.create_context(standalone, debug, require, glhook, gc)
 
 
 def extensions(context):
