@@ -5,9 +5,11 @@ ModernGL can only create contexts in headless mode and relies on other libraries
 to create a context displaying a visible window. ModernGL will then load OpenGL
 functions from the existing contexts instead.
 
-
 This package contains examples using ModernGL with various libraries
 opening a visible window.
+
+**Most example windows should work on Windows, Linux and OS X.
+Some require additional setup such as installing dynamic libraries.**
 
 ## PyQt5
 
