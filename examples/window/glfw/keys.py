@@ -4,7 +4,9 @@ from window.base import BaseKeys
 
 
 class Keys(BaseKeys):
-    """Namespace defining glfw specific keys constants"""
+    """
+    Namespace defining glfw specific keys constants
+    """
     ACTION_PRESS = glfw.PRESS
     ACTION_RELEASE = glfw.RELEASE
 

@@ -8,35 +8,43 @@ from window.sdl2.keys import Keys
 
 
 class Window(BaseWindow):
+    """
+    Basic window implementation using SDL2.
+    """
     keys = Keys
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self._window_closing = False
-
         if sdl2.SDL_Init(sdl2.SDL_INIT_VIDEO) != 0:
             raise ValueError("Failed to initialize sdl2")
 
+        # Configure OpenGL context
         sdl2.video.SDL_GL_SetAttribute(sdl2.SDL_GL_CONTEXT_MAJOR_VERSION, self.gl_version[0])
         sdl2.video.SDL_GL_SetAttribute(sdl2.SDL_GL_CONTEXT_MINOR_VERSION, self.gl_version[1])
         sdl2.video.SDL_GL_SetAttribute(sdl2.SDL_GL_CONTEXT_PROFILE_MASK, sdl2.SDL_GL_CONTEXT_PROFILE_CORE)
         sdl2.video.SDL_GL_SetAttribute(sdl2.SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG, 1)
         sdl2.video.SDL_GL_SetAttribute(sdl2.SDL_GL_DOUBLEBUFFER, 1)
         sdl2.video.SDL_GL_SetAttribute(sdl2.SDL_GL_DEPTH_SIZE, 24)
+
+        # Display/hide mouse cursor
         sdl2.SDL_ShowCursor(sdl2.SDL_ENABLE if self.cursor else sdl2.SDL_DISABLE)
 
+        # Configure multisampling
         if self.samples > 1:
             sdl2.video.SDL_GL_SetAttribute(sdl2.SDL_GL_MULTISAMPLEBUFFERS, 1)
             sdl2.video.SDL_GL_SetAttribute(sdl2.SDL_GL_MULTISAMPLESAMPLES, self.samples)
 
+        # Built the window flags
         flags = sdl2.SDL_WINDOW_OPENGL
         if self.fullscreen:
+            # Use primary desktop screen resolution
             flags |= sdl2.SDL_WINDOW_FULLSCREEN_DESKTOP
         else:
             if self.resizable:
                 flags |= sdl2.SDL_WINDOW_RESIZABLE
 
+        # Create the window
         self.window = sdl2.SDL_CreateWindow(
             self.title.encode(),
             sdl2.SDL_WINDOWPOS_UNDEFINED,
@@ -56,17 +64,14 @@ class Window(BaseWindow):
         self.set_default_viewport()
         self.print_context_info()
 
-    @property
-    def is_closing(self):
-        return self._window_closing
-
-    def close(self):
-        self._window_closing = True
-
     def swap_buffers(self):
-        self.frames += 1
+        """
+        Swap buffers, set viewport, trigger events and increment frame counter
+        """
         sdl2.SDL_GL_SwapWindow(self.window)
+        self.set_default_viewport()
         self.process_events()
+        self.frames += 1
 
     def resize(self, width, height):
         """
@@ -77,7 +82,12 @@ class Window(BaseWindow):
         self.buffer_width, self.buffer_height = self.width, self.height
         self.set_default_viewport()
 
+        super().resize(self.buffer_width, self.buffer_height)
+
     def process_events(self):
+        """
+        Loop through and handle all the queued events.
+        """
         for event in sdl2.ext.get_events():
             if event.type == sdl2.SDL_MOUSEMOTION:
                 self.example.mouse_position_event(event.motion.x, event.motion.y)
@@ -112,6 +122,9 @@ class Window(BaseWindow):
                     self.resize(event.window.data1, event.window.data2)
 
     def destroy(self):
+        """
+        Gracefully close the window
+        """
         sdl2.SDL_GL_DeleteContext(self.context)
         sdl2.SDL_DestroyWindow(self.window)
         sdl2.SDL_Quit()

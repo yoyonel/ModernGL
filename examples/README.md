@@ -3,6 +3,8 @@
 Most examples are currently using the [standard example system](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/window).
 It's recommended to use this as your example will be able to run on all supported platforms and window types (sdl2, pyglet, pyqt, glfw etc..)
 
+**Examples should work out of the box on Windows, Linux and OS X.**
+
 ## Example Options
 
 ```
