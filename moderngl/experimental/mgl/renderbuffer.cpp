@@ -62,13 +62,14 @@ PyObject * MGLContext_meth_renderbuffer(MGLContext * self, PyObject * const * ar
 /* MGLContext.depth_renderbuffer(size, samples)
  */
 PyObject * MGLContext_meth_depth_renderbuffer(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 2) {
+    if (nargs != 3) {
         // TODO: error
         return 0;
     }
 
     PyObject * size = args[0];
     int samples = PyLong_AsLong(args[1]);
+    int bits = PyLong_AsLong(args[2]);
 
     int dims = (int)PySequence_Fast_GET_SIZE(size);
     if (dims != 2) {
@@ -77,6 +78,13 @@ PyObject * MGLContext_meth_depth_renderbuffer(MGLContext * self, PyObject * cons
 
     int width = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 0));
     int height = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 1));
+
+    int internal_format = GL_DEPTH_COMPONENT24;
+    if (bits == 32) {
+        internal_format = GL_DEPTH_COMPONENT32;
+    } else if (bits == 16) {
+        internal_format = GL_DEPTH_COMPONENT16;
+    }
 
     MGLRenderbuffer * renderbuffer = MGLContext_new_object(self, Renderbuffer);
 
@@ -91,9 +99,9 @@ PyObject * MGLContext_meth_depth_renderbuffer(MGLContext * self, PyObject * cons
     gl.BindRenderbuffer(GL_RENDERBUFFER, renderbuffer->renderbuffer_obj);
 
     if (samples == 0) {
-        gl.RenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+        gl.RenderbufferStorage(GL_RENDERBUFFER, internal_format, width, height);
     } else {
-        gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24, width, height);
+        gl.RenderbufferStorageMultisample(GL_RENDERBUFFER, samples, internal_format, width, height);
     }
 
     renderbuffer->width = width;
@@ -101,38 +109,13 @@ PyObject * MGLContext_meth_depth_renderbuffer(MGLContext * self, PyObject * cons
     renderbuffer->components = 1;
     renderbuffer->samples = samples;
     renderbuffer->data_type = &f4;
-    renderbuffer->depth = false;
+    renderbuffer->depth = true;
 
     SLOT(renderbuffer->wrapper, PyObject, Renderbuffer_class_size) = int_tuple(width, height);
     return NEW_REF(renderbuffer->wrapper);
 }
 
-PyObject * MGLRenderbuffer_meth_write(MGLRenderbuffer * self, PyObject * const * args, Py_ssize_t nargs) {
-    Py_RETURN_NONE;
-}
-
-#if PY_VERSION_HEX >= 0x03070000
-
-PyMethodDef MGLRenderbuffer_methods[] = {
-    {"write", (PyCFunction)MGLRenderbuffer_meth_write, METH_FASTCALL, 0},
-    {0},
-};
-
-#else
-
-PyObject * MGLRenderbuffer_meth_write_va(MGLRenderbuffer * self, PyObject * args) {
-    return MGLRenderbuffer_meth_write(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyMethodDef MGLRenderbuffer_methods[] = {
-    {"write", (PyCFunction)MGLRenderbuffer_meth_write_va, METH_VARARGS, 0},
-    {0},
-};
-
-#endif
-
 PyType_Slot MGLRenderbuffer_slots[] = {
-    {Py_tp_methods, MGLRenderbuffer_methods},
     {0},
 };
 

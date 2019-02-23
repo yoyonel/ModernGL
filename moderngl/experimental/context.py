@@ -65,8 +65,8 @@ class Context:
     def renderbuffer(self, size, components=4, samples=0, dtype='f1') -> Renderbuffer:
         return self.__mglo.renderbuffer(size, components, samples, dtype)
 
-    def depth_renderbuffer(self, size, samples=0) -> Renderbuffer:
-        return self.__mglo.depth_renderbuffer(size, samples)
+    def depth_renderbuffer(self, size, samples=0, bits=24) -> Renderbuffer:
+        return self.__mglo.depth_renderbuffer(size, samples, bits)
 
     def framebuffer(self, color_attachments=(), depth_attachment=None) -> Framebuffer:
         return self.__mglo.framebuffer(color_attachments, depth_attachment)
