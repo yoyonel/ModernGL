@@ -41,6 +41,13 @@ class Window(BaseWindow):
         config.sample_buffers = 1 if self.samples > 1 else 0
         config.samples = self.samples
 
+        # Obtain the default destop screen's resolution
+        if self.fullscreen:
+            platform = pyglet.window.get_platform()
+            display = platform.get_default_display()
+            screen = display.get_default_screen()
+            self.width, self.height = screen.width, screen.height
+
         # Create window wrapper
         self.window = PygletWrapper(
             width=self.width, height=self.height,
