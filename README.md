@@ -7,7 +7,7 @@
 # ModernGL
 
 ```sh
-pip install ModernGL
+pip install moderngl
 ```
 
 - [Documentation](https://moderngl.readthedocs.io/)
