@@ -51,35 +51,85 @@ int MGLSampler_set_filter(MGLSampler * self, PyObject * value) {
     return 0;
 }
 
-int MGLSampler_set_repeat_x(MGLSampler * self, PyObject * value) {
-    if (PyObject_IsTrue(value)) {
-        SLOT(self->wrapper, PyObject, Sampler_class_repeat_x) = NEW_REF(Py_True);
-		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    } else {
-        SLOT(self->wrapper, PyObject, Sampler_class_repeat_x) = NEW_REF(Py_False);
-		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    }
-    return 0;
-}
+enum MGLSamplerWrapModes {
+    MGL_CLAMP_TO_EDGE = 1,
+    MGL_REPEAT,
+    MGL_MIRRORED_REPEAT,
+    MGL_MIRROR_CLAMP_TO_EDGE,
+    MGL_CLAMP_TO_BORDER,
+};
 
-int MGLSampler_set_repeat_y(MGLSampler * self, PyObject * value) {
-    if (PyObject_IsTrue(value)) {
-        SLOT(self->wrapper, PyObject, Sampler_class_repeat_y) = NEW_REF(Py_True);
-		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    } else {
-        SLOT(self->wrapper, PyObject, Sampler_class_repeat_y) = NEW_REF(Py_False);
-		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+int MGLSampler_set_wrap(MGLSampler * self, PyObject * value) {
+    int wrap = PyLong_AsLong(value);
+    SLOT(self->wrapper, PyObject, Sampler_class_wrap) = PyLong_FromLong(wrap);
+    switch (((unsigned char *)&wrap)[0]) {
+        case 0:
+        case MGL_CLAMP_TO_EDGE:
+    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            break;
+        case MGL_REPEAT:
+    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            break;
+        case MGL_MIRRORED_REPEAT:
+    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+            break;
+        case MGL_MIRROR_CLAMP_TO_EDGE:
+    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_MIRROR_CLAMP_TO_EDGE);
+            break;
+        case MGL_CLAMP_TO_BORDER:
+    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+            break;
+        default:
+            // TODO: error
+            return -1;
     }
-    return 0;
-}
-
-int MGLSampler_set_repeat_z(MGLSampler * self, PyObject * value) {
-    if (PyObject_IsTrue(value)) {
-        SLOT(self->wrapper, PyObject, Sampler_class_repeat_z) = NEW_REF(Py_True);
-		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_REPEAT);
-    } else {
-        SLOT(self->wrapper, PyObject, Sampler_class_repeat_z) = NEW_REF(Py_False);
-		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    switch (((unsigned char *)&wrap)[1]) {
+        case 0:
+        case MGL_CLAMP_TO_EDGE:
+    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            break;
+        case MGL_REPEAT:
+    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            break;
+        case MGL_MIRRORED_REPEAT:
+    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+            break;
+        case MGL_MIRROR_CLAMP_TO_EDGE:
+    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_MIRROR_CLAMP_TO_EDGE);
+            break;
+        case MGL_CLAMP_TO_BORDER:
+    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+            break;
+        default:
+            // TODO: error
+            return -1;
+    }
+    PyObject * wrapper = SLOT(self->wrapper, PyObject, Sampler_class_texture);
+    MGLTexture * texture = SLOT(wrapper, MGLTexture, Texture_class_mglo);
+    if (texture->texture_target == GL_TEXTURE_3D) {
+        switch (((unsigned char *)&wrap)[2]) {
+            case 0:
+            case MGL_CLAMP_TO_EDGE:
+                self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+                break;
+            case MGL_REPEAT:
+                self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_REPEAT);
+                break;
+            case MGL_MIRRORED_REPEAT:
+                self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_MIRRORED_REPEAT);
+                break;
+            case MGL_MIRROR_CLAMP_TO_EDGE:
+                self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_MIRROR_CLAMP_TO_EDGE);
+                break;
+            case MGL_CLAMP_TO_BORDER:
+                self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
+                break;
+            default:
+                // TODO: error
+                return -1;
+        }
+    } else if (((unsigned char *)&wrap)[2]) {
+        return -1;
     }
     return 0;
 }
@@ -120,9 +170,7 @@ PyMethodDef MGLSampler_methods[] = {
 
 PyGetSetDef MGLSampler_getset[] = {
     {"filter", 0, (setter)MGLSampler_set_filter, 0, 0},
-    {"repeat_x", 0, (setter)MGLSampler_set_repeat_x, 0, 0},
-    {"repeat_y", 0, (setter)MGLSampler_set_repeat_y, 0, 0},
-    {"repeat_z", 0, (setter)MGLSampler_set_repeat_z, 0, 0},
+    {"wrap", 0, (setter)MGLSampler_set_wrap, 0, 0},
     {"anisotropy", 0, (setter)MGLSampler_set_anisotropy, 0, 0},
     {"min_lod", 0, (setter)MGLSampler_set_min_lod, 0, 0},
     {"max_lod", 0, (setter)MGLSampler_set_max_lod, 0, 0},
