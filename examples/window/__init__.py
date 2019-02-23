@@ -4,6 +4,7 @@ import time
 
 from importlib import import_module
 from pathlib import Path
+from typing import List
 
 from window.base import Example, BaseWindow
 
@@ -55,7 +56,9 @@ def run_example(example_cls: Example, args=None):
 
 
 def get_window_cls(window: str) -> BaseWindow:
-    """Attept to obtain the configured window class"""
+    """
+    Attept to obtain the configured window class
+    """
     return import_string('window.{}.window.Window'.format(window))
 
 
@@ -96,8 +99,13 @@ def parse_args(args=None):
     return parser.parse_args(args or sys.argv[1:])
 
 
-def find_window_classes():
-    """Find available window packages"""
+def find_window_classes() -> List[str]:
+    """
+    Find available window packages
+
+    Returns:
+        A list of avaialble window packages
+    """
     return [
         path.parts[-1] for path in Path(__file__).parent.iterdir()
         if path.is_dir() and not path.parts[-1].startswith('__')
