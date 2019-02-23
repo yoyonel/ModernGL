@@ -5,7 +5,7 @@ from window.base import BaseKeys
 
 class Keys(BaseKeys):
     """
-    Namespace creating pyqt specific key constants
+    Namespace mapping pyqt specific key constants
     """
     ESCAPE = Qt.Key_Escape
     SPACE = Qt.Key_Space
