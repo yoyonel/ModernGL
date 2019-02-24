@@ -49,6 +49,32 @@ PyObject * MGLSampler_meth_use(MGLSampler * self, PyObject * arg) {
 }
 
 int MGLSampler_set_filter(MGLSampler * self, PyObject * value) {
+    int min_filter;
+    int mag_filter;
+    if (value->ob_type->tp_flags & Py_TPFLAGS_LONG_SUBCLASS) {
+        min_filter = PyLong_AsLong(value);
+        mag_filter = min_filter;
+    } else {
+        PyObject * filter = PySequence_Fast(value, "not iterable");
+        if (!filter) {
+            return -1;
+        }
+
+        if (PySequence_Fast_GET_SIZE(filter) != 2) {
+            Py_DECREF(filter);
+            // TODO: error
+            return -1;
+        }
+
+        min_filter = PyLong_AsLong(PySequence_Fast_GET_ITEM(filter, 0));
+        mag_filter = PyLong_AsLong(PySequence_Fast_GET_ITEM(filter, 1));
+        Py_DECREF(filter);
+    }
+
+ 	const GLMethods & gl = self->context->gl;
+	gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MIN_FILTER, min_filter);
+	gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MAG_FILTER, mag_filter);
+    Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_filter), int_tuple(min_filter, mag_filter));
     return 0;
 }
 
