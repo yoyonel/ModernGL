@@ -153,9 +153,7 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
         dict_add_obj(res, "self", obj);
         dict_add_obj_decref(res, "mglo", meth_inspect(0, SLOT(obj, PyObject, Sampler_class_mglo)));
         dict_add_obj(res, "filter", SLOT(obj, PyObject, Sampler_class_filter));
-        dict_add_obj(res, "repeat_x", SLOT(obj, PyObject, Sampler_class_repeat_x));
-        dict_add_obj(res, "repeat_y", SLOT(obj, PyObject, Sampler_class_repeat_y));
-        dict_add_obj(res, "repeat_z", SLOT(obj, PyObject, Sampler_class_repeat_z));
+        dict_add_obj(res, "wrap", SLOT(obj, PyObject, Sampler_class_wrap));
         dict_add_obj(res, "anisotropy", SLOT(obj, PyObject, Sampler_class_anisotropy));
         dict_add_obj(res, "min_lod", SLOT(obj, PyObject, Sampler_class_min_lod));
         dict_add_obj(res, "max_lod", SLOT(obj, PyObject, Sampler_class_max_lod));

@@ -4,14 +4,12 @@ from .texture import Texture
 
 
 class Sampler:
-    __slots__ = ['__mglo', '__filter', '__repeat_x', '__repeat_y', '__repeat_z', '__anisotropy', '__min_lod', '__max_lod', 'texture', 'extra']
+    __slots__ = ['__mglo', '__filter', '__wrap', '__anisotropy', '__min_lod', '__max_lod', 'texture', 'extra']
 
     def __init__(self):
         self.__mglo = None  # type: Any
         self.__filter = None  # type: Tuple[int, int]
-        self.__repeat_x = None  # type: bool
-        self.__repeat_y = None  # type: bool
-        self.__repeat_z = None  # type: bool
+        self.__wrap = None  # type: int
         self.__anisotropy = None  # type: float
         self.__min_lod = None  # type: int
         self.__max_lod = None  # type: int
@@ -27,28 +25,12 @@ class Sampler:
         self.__mglo.filter = value
 
     @property
-    def repeat_x(self):
-        return self.__repeat_x
+    def wrap(self):
+        return self.__wrap
 
-    @repeat_x.setter
-    def repeat_x(self, value):
-        self.__mglo.repeat_x = value
-
-    @property
-    def repeat_y(self):
-        return self.__repeat_y
-
-    @repeat_y.setter
-    def repeat_y(self, value):
-        self.__mglo.repeat_y = value
-
-    @property
-    def repeat_z(self):
-        return self.__repeat_z
-
-    @repeat_z.setter
-    def repeat_z(self, value):
-        self.__mglo.repeat_z = value
+    @wrap.setter
+    def wrap(self, value):
+        self.__mglo.wrap = value
 
     @property
     def anisotropy(self):
