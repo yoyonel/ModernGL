@@ -13,11 +13,16 @@
  */
 PyObject * MGLContext_meth_sampler(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 1) {
-        // TODO: error
+		PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
     PyObject * texture = args[0];
+
+    if (texture->ob_type != self->MGLTexture_class) {
+		PyErr_Format(moderngl_error, "invalid texture");
+        return 0;
+    }
 
     MGLSampler * sampler = MGLContext_new_object(self, Sampler);
 
@@ -45,6 +50,11 @@ PyObject * MGLSampler_meth_use(MGLSampler * self, PyObject * arg) {
 
     int location = PyLong_AsLong(arg);
     self->context->bind_sampler(location, texture->texture_target, texture->texture_obj, self->sampler_obj);
+
+    if (PyErr_Occurred()) {
+        return 0;
+    }
+
     Py_RETURN_NONE;
 }
 
@@ -62,7 +72,7 @@ int MGLSampler_set_filter(MGLSampler * self, PyObject * value) {
 
         if (PySequence_Fast_GET_SIZE(filter) != 2) {
             Py_DECREF(filter);
-            // TODO: error
+    		PyErr_Format(moderngl_error, "invalid filter");
             return -1;
         }
 
@@ -75,6 +85,11 @@ int MGLSampler_set_filter(MGLSampler * self, PyObject * value) {
 	gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MIN_FILTER, min_filter);
 	gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MAG_FILTER, mag_filter);
     Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_filter), int_tuple(min_filter, mag_filter));
+
+    if (PyErr_Occurred()) {
+        return -1;
+    }
+
     return 0;
 }
 
@@ -96,7 +111,7 @@ int MGLSampler_set_wrap(MGLSampler * self, PyObject * value) {
     int wrap = PyLong_AsLong(value);
 
     if (wrap >> (8 * dims)) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "invalid wrap");
         return -1;
     }
 
@@ -121,9 +136,13 @@ int MGLSampler_set_wrap(MGLSampler * self, PyObject * value) {
                 gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_CLAMP_TO_BORDER);
                 break;
             default:
-                // TODO: error
+                PyErr_Format(moderngl_error, "invalid wrap");
                 return -1;
         }
+    }
+
+    if (PyErr_Occurred()) {
+        return -1;
     }
 
     return 0;
@@ -148,7 +167,7 @@ int MGLSampler_set_border(MGLSampler * self, PyObject * value) {
             color[0] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border, 0));
         default:
             Py_DECREF(border);
-            // TODO: error
+            PyErr_Format(moderngl_error, "invalid border");
             return -1;
     }
 
@@ -156,6 +175,11 @@ int MGLSampler_set_border(MGLSampler * self, PyObject * value) {
 
 	self->context->gl.SamplerParameterfv(self->sampler_obj, GL_TEXTURE_BORDER_COLOR, color);
     Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_border), float_tuple(color[0], color[1], color[2], color[3]));
+
+    if (PyErr_Occurred()) {
+        return -1;
+    }
+
     return 0;
 }
 
@@ -181,13 +205,18 @@ int MGLSampler_set_compare_func(MGLSampler * self, PyObject * value) {
     const char * compare_func_str = PyUnicode_AsUTF8(value);
 	int compare_func = compare_func_from_string(compare_func_str);
 	if (!compare_func) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "invalid compare_func");
         return -1;
 	}
 
     gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
     gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_COMPARE_FUNC, compare_func);
     Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_compare_func), PyUnicode_FromString(compare_func_str));
+
+    if (PyErr_Occurred()) {
+        return -1;
+    }
+
     return 0;
 }
 
@@ -199,7 +228,7 @@ int MGLSampler_set_lod_range(MGLSampler * self, PyObject * value) {
 
     if (PySequence_Fast_GET_SIZE(lod_range) != 2) {
         Py_DECREF(lod_range);
-        // TODO: error
+        PyErr_Format(moderngl_error, "invalid lod_range");
         return -1;
     }
 
@@ -210,6 +239,11 @@ int MGLSampler_set_lod_range(MGLSampler * self, PyObject * value) {
 	self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MIN_LOD, min_lod);
 	self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MIN_LOD, max_lod);
     Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_lod_range), int_tuple(min_lod, max_lod));
+
+    if (PyErr_Occurred()) {
+        return -1;
+    }
+
     return 0;
 }
 
@@ -217,6 +251,11 @@ int MGLSampler_set_lod_bias(MGLSampler * self, PyObject * value) {
 	float lod_bias = (float)PyFloat_AsDouble(value);
 	self->context->gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_LOD_BIAS, lod_bias);
     Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_lod_bias), PyFloat_FromDouble(lod_bias));
+
+    if (PyErr_Occurred()) {
+        return -1;
+    }
+
     return 0;
 }
 
