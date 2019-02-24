@@ -1,6 +1,6 @@
 import os
 
-import moderngl.experimental as mgl
+import moderngl.next as mgl
 import pytest
 
 

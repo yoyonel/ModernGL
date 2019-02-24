@@ -1,6 +1,6 @@
 import json
 
-import moderngl.experimental as mgl
+import moderngl.next as mgl
 
 ctx = mgl.create_context(standalone=True, debug=True)
 

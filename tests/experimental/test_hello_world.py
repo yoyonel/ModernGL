@@ -1,4 +1,4 @@
-import moderngl.experimental as mgl
+import moderngl.next as mgl
 import numpy as np
 import pytest
 
