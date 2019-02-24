@@ -134,6 +134,31 @@ int MGLSampler_set_wrap(MGLSampler * self, PyObject * value) {
     return 0;
 }
 
+int MGLSampler_set_border_color(MGLSampler * self, PyObject * value) {
+    PyObject * border_color = PySequence_Fast(value, "not iterable");
+    if (!border_color) {
+        return -1;
+    }
+    float color[4] = {};
+    PyObject ** border_colors = PySequence_Fast_ITEMS(border_color);
+    switch (PySequence_Fast_GET_SIZE(border_color)) {
+        case 4:
+            color[3] = (float)PyFloat_AsDouble(border_colors[3]);
+        case 3:
+            color[2] = (float)PyFloat_AsDouble(border_colors[2]);
+        case 2:
+            color[1] = (float)PyFloat_AsDouble(border_colors[1]);
+        case 1:
+            color[0] = (float)PyFloat_AsDouble(border_colors[0]);
+        default:
+            // TODO: error
+            return -1;
+    }
+
+	self->context->gl.SamplerParameterfv(self->sampler_obj, GL_TEXTURE_BORDER_COLOR, color);
+    return 0;
+}
+
 int MGLSampler_set_anisotropy(MGLSampler * self, PyObject * value) {
 	float anisotropy = PyFloat_AsDouble(value);
     if (anisotropy < 1.0) {
@@ -181,6 +206,7 @@ PyGetSetDef MGLSampler_getset[] = {
     {"filter", 0, (setter)MGLSampler_set_filter, 0, 0},
     {"wrap", 0, (setter)MGLSampler_set_wrap, 0, 0},
     {"anisotropy", 0, (setter)MGLSampler_set_anisotropy, 0, 0},
+    {"border_color", 0, (setter)MGLSampler_set_border_color, 0, 0},
     {"min_lod", 0, (setter)MGLSampler_set_min_lod, 0, 0},
     {"max_lod", 0, (setter)MGLSampler_set_max_lod, 0, 0},
     {0},
