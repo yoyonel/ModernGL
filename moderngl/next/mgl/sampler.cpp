@@ -134,27 +134,33 @@ int MGLSampler_set_wrap(MGLSampler * self, PyObject * value) {
     return 0;
 }
 
-int MGLSampler_set_border_color(MGLSampler * self, PyObject * value) {
-    PyObject * border_color = PySequence_Fast(value, "not iterable");
-    if (!border_color) {
+int MGLSampler_set_border(MGLSampler * self, PyObject * value) {
+    PyObject * border = PySequence_Fast(value, "not iterable");
+    if (!border) {
         return -1;
     }
+
     float color[4] = {};
-    switch (PySequence_Fast_GET_SIZE(border_color)) {
+
+    switch (PySequence_Fast_GET_SIZE(border)) {
         case 4:
-            color[3] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border_color, 3));
+            color[3] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border, 3));
         case 3:
-            color[2] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border_color, 2));
+            color[2] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border, 2));
         case 2:
-            color[1] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border_color, 1));
+            color[1] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border, 1));
         case 1:
-            color[0] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border_color, 0));
+            color[0] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border, 0));
         default:
+            Py_DECREF(border);
             // TODO: error
             return -1;
     }
 
+    Py_DECREF(border);
+
 	self->context->gl.SamplerParameterfv(self->sampler_obj, GL_TEXTURE_BORDER_COLOR, color);
+    Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_border), float_tuple(color[0], color[1], color[2], color[3]));
     return 0;
 }
 
@@ -163,11 +169,9 @@ int MGLSampler_set_anisotropy(MGLSampler * self, PyObject * value) {
     if (anisotropy < 1.0) {
         anisotropy = 1.0;
     }
-    // if (anisotropy > max_anisotropy) {
-    //     anisotropy = max_anisotropy;
-    // }
-    // SLOT(self->wrapper, PyObject, Sampler_class_max_lod) = PyFloat_FromDouble(anisotropy);
+    // TODO: clamp with max value
 	self->context->gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_MAX_ANISOTROPY, anisotropy);
+    Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_anisotropy), PyFloat_FromDouble(anisotropy));
     return 0;
 }
 
@@ -177,24 +181,26 @@ int MGLSampler_set_lod_range(MGLSampler * self, PyObject * value) {
         return -1;
     }
 
-    int min_lod;
-    int max_lod;
-    float lod_bias = 0.0f;
-    switch (PySequence_Fast_GET_SIZE(lod_range)) {
-        case 3:
-            lod_bias = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(lod_range, 2));
-        case 2:
-            min_lod = PyLong_AsLong(PySequence_Fast_GET_ITEM(lod_range, 0));
-            max_lod = PyLong_AsLong(PySequence_Fast_GET_ITEM(lod_range, 1));
-        default:
-            // TODO: error
-            return -1;
+    if (PySequence_Fast_GET_SIZE(lod_range) != 2) {
+        Py_DECREF(lod_range);
+        // TODO: error
+        return -1;
     }
 
-    // SLOT(self->wrapper, PyObject, Sampler_class_max_lod) = PyFloat_FromDouble(anisotropy);
+    int min_lod = PyLong_AsLong(PySequence_Fast_GET_ITEM(lod_range, 0));
+    int max_lod = PyLong_AsLong(PySequence_Fast_GET_ITEM(lod_range, 1));
+    Py_DECREF(lod_range);
+
 	self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MIN_LOD, min_lod);
 	self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MIN_LOD, max_lod);
+    Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_lod_range), int_tuple(min_lod, max_lod));
+    return 0;
+}
+
+int MGLSampler_set_lod_bias(MGLSampler * self, PyObject * value) {
+	float lod_bias = (float)PyFloat_AsDouble(value);
 	self->context->gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_LOD_BIAS, lod_bias);
+    Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_lod_bias), PyFloat_FromDouble(lod_bias));
     return 0;
 }
 
@@ -218,8 +224,9 @@ PyGetSetDef MGLSampler_getset[] = {
     {"filter", 0, (setter)MGLSampler_set_filter, 0, 0},
     {"wrap", 0, (setter)MGLSampler_set_wrap, 0, 0},
     {"anisotropy", 0, (setter)MGLSampler_set_anisotropy, 0, 0},
-    {"border_color", 0, (setter)MGLSampler_set_border_color, 0, 0},
+    {"border", 0, (setter)MGLSampler_set_border, 0, 0},
     {"lod_range", 0, (setter)MGLSampler_set_lod_range, 0, 0},
+    {"lod_bias", 0, (setter)MGLSampler_set_lod_bias, 0, 0},
     {0},
 };
 
