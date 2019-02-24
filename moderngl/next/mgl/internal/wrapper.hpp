@@ -189,8 +189,10 @@ extern int Sampler_class_mglo;
 extern int Sampler_class_filter;
 extern int Sampler_class_wrap;
 extern int Sampler_class_anisotropy;
-extern int Sampler_class_min_lod;
-extern int Sampler_class_max_lod;
+extern int Sampler_class_compare_func;
+extern int Sampler_class_lod_range;
+extern int Sampler_class_lod_bias;
+extern int Sampler_class_border;
 extern int Sampler_class_texture;
 extern int Sampler_class_extra;
 

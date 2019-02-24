@@ -189,8 +189,10 @@ int Sampler_class_mglo;
 int Sampler_class_filter;
 int Sampler_class_wrap;
 int Sampler_class_anisotropy;
-int Sampler_class_min_lod;
-int Sampler_class_max_lod;
+int Sampler_class_compare_func;
+int Sampler_class_lod_range;
+int Sampler_class_lod_bias;
+int Sampler_class_border;
 int Sampler_class_texture;
 int Sampler_class_extra;
 
@@ -441,8 +443,10 @@ void init_wrappers() {
     Sampler_class_filter = slot_offset(Sampler_class, "_Sampler__filter", Sampler_slots);
     Sampler_class_wrap = slot_offset(Sampler_class, "_Sampler__wrap", Sampler_slots);
     Sampler_class_anisotropy = slot_offset(Sampler_class, "_Sampler__anisotropy", Sampler_slots);
-    Sampler_class_min_lod = slot_offset(Sampler_class, "_Sampler__min_lod", Sampler_slots);
-    Sampler_class_max_lod = slot_offset(Sampler_class, "_Sampler__max_lod", Sampler_slots);
+    Sampler_class_compare_func = slot_offset(Sampler_class, "_Sampler__compare_func", Sampler_slots);
+    Sampler_class_lod_range = slot_offset(Sampler_class, "_Sampler__lod_range", Sampler_slots);
+    Sampler_class_lod_bias = slot_offset(Sampler_class, "_Sampler__lod_bias", Sampler_slots);
+    Sampler_class_border = slot_offset(Sampler_class, "_Sampler__border", Sampler_slots);
     Sampler_class_texture = slot_offset(Sampler_class, "texture", Sampler_slots);
     Sampler_class_extra = slot_offset(Sampler_class, "extra", Sampler_slots);
     assert_slots_len(Sampler_class, Sampler_slots);
