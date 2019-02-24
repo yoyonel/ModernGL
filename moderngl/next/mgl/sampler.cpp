@@ -38,7 +38,15 @@ PyObject * MGLContext_meth_sampler(MGLContext * self, PyObject * const * args, P
     gl.SamplerParameteri(sampler->sampler_obj, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     gl.SamplerParameteri(sampler->sampler_obj, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
+    SLOT(sampler->wrapper, PyObject, Sampler_class_filter) = int_tuple(GL_NEAREST, GL_NEAREST);
+    SLOT(sampler->wrapper, PyObject, Sampler_class_wrap) = PyLong_FromLong(0);
+    SLOT(sampler->wrapper, PyObject, Sampler_class_anisotropy) = PyFloat_FromDouble(1.0);
+    SLOT(sampler->wrapper, PyObject, Sampler_class_compare_func) = NEW_REF(Py_None);
+    SLOT(sampler->wrapper, PyObject, Sampler_class_lod_range) = int_tuple(-1000, 1000);
+    SLOT(sampler->wrapper, PyObject, Sampler_class_lod_bias) = PyFloat_FromDouble(0.0);
+    SLOT(sampler->wrapper, PyObject, Sampler_class_border) = float_tuple(0.0, 0.0, 0.0, 0.0);
     SLOT(sampler->wrapper, PyObject, Sampler_class_texture) = texture;
+    SLOT(sampler->wrapper, PyObject, Sampler_class_extra) = 0;
     return NEW_REF(sampler->wrapper);
 }
 
