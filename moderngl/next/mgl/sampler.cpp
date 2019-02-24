@@ -100,23 +100,25 @@ int MGLSampler_set_wrap(MGLSampler * self, PyObject * value) {
         return -1;
     }
 
+ 	const GLMethods & gl = self->context->gl;
+
     for (int i = 0; i < dims; ++i) {
         switch (((unsigned char *)&wrap)[i]) {
             case 0:
             case MGL_CLAMP_TO_EDGE:
-                self->context->gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_CLAMP_TO_EDGE);
+                gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_CLAMP_TO_EDGE);
                 break;
             case MGL_REPEAT:
-                self->context->gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_REPEAT);
+                gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_REPEAT);
                 break;
             case MGL_MIRRORED_REPEAT:
-                self->context->gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_MIRRORED_REPEAT);
+                gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_MIRRORED_REPEAT);
                 break;
             case MGL_MIRROR_CLAMP_TO_EDGE:
-                self->context->gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_MIRROR_CLAMP_TO_EDGE);
+                gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_MIRROR_CLAMP_TO_EDGE);
                 break;
             case MGL_CLAMP_TO_BORDER:
-                self->context->gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_CLAMP_TO_BORDER);
+                gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_CLAMP_TO_BORDER);
                 break;
             default:
                 // TODO: error
