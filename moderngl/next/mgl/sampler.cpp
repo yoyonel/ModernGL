@@ -141,14 +141,14 @@ int MGLSampler_set_anisotropy(MGLSampler * self, PyObject * value) {
 int MGLSampler_set_min_lod(MGLSampler * self, PyObject * value) {
     int min_lod = PyLong_AsLong(value);
     SLOT(self->wrapper, PyObject, Sampler_class_min_lod) = NEW_REF(value);
-	self->context->gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_MIN_LOD, min_lod);
+	self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MIN_LOD, min_lod);
     return 0;
 }
 
 int MGLSampler_set_max_lod(MGLSampler * self, PyObject * value) {
     int max_lod = PyLong_AsLong(value);
     SLOT(self->wrapper, PyObject, Sampler_class_max_lod) = NEW_REF(value);
-	self->context->gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_MAX_LOD, max_lod);
+	self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MAX_LOD, max_lod);
     return 0;
 }
 
