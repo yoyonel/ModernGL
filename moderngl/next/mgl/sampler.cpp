@@ -171,17 +171,30 @@ int MGLSampler_set_anisotropy(MGLSampler * self, PyObject * value) {
     return 0;
 }
 
-int MGLSampler_set_min_lod(MGLSampler * self, PyObject * value) {
-    int min_lod = PyLong_AsLong(value);
-    SLOT(self->wrapper, PyObject, Sampler_class_min_lod) = NEW_REF(value);
-	self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MIN_LOD, min_lod);
-    return 0;
-}
+int MGLSampler_set_lod_range(MGLSampler * self, PyObject * value) {
+    PyObject * lod_range = PySequence_Fast(value, "not iterable");
+    if (!lod_range) {
+        return -1;
+    }
 
-int MGLSampler_set_max_lod(MGLSampler * self, PyObject * value) {
-    int max_lod = PyLong_AsLong(value);
-    SLOT(self->wrapper, PyObject, Sampler_class_max_lod) = NEW_REF(value);
-	self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MAX_LOD, max_lod);
+    int min_lod;
+    int max_lod;
+    float lod_bias = 0.0f;
+    switch (PySequence_Fast_GET_SIZE(lod_range)) {
+        case 3:
+            lod_bias = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(lod_range, 2));
+        case 2:
+            min_lod = PyLong_AsLong(PySequence_Fast_GET_ITEM(lod_range, 0));
+            max_lod = PyLong_AsLong(PySequence_Fast_GET_ITEM(lod_range, 1));
+        default:
+            // TODO: error
+            return -1;
+    }
+
+    // SLOT(self->wrapper, PyObject, Sampler_class_max_lod) = PyFloat_FromDouble(anisotropy);
+	self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MIN_LOD, min_lod);
+	self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MIN_LOD, max_lod);
+	self->context->gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_LOD_BIAS, lod_bias);
     return 0;
 }
 
@@ -206,8 +219,7 @@ PyGetSetDef MGLSampler_getset[] = {
     {"wrap", 0, (setter)MGLSampler_set_wrap, 0, 0},
     {"anisotropy", 0, (setter)MGLSampler_set_anisotropy, 0, 0},
     {"border_color", 0, (setter)MGLSampler_set_border_color, 0, 0},
-    {"min_lod", 0, (setter)MGLSampler_set_min_lod, 0, 0},
-    {"max_lod", 0, (setter)MGLSampler_set_max_lod, 0, 0},
+    {"lod_range", 0, (setter)MGLSampler_set_lod_range, 0, 0},
     {0},
 };
 
