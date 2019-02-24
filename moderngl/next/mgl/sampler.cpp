@@ -87,77 +87,43 @@ enum MGLSamplerWrapModes {
 };
 
 int MGLSampler_set_wrap(MGLSampler * self, PyObject * value) {
-    int wrap = PyLong_AsLong(value);
-    SLOT(self->wrapper, PyObject, Sampler_class_wrap) = PyLong_FromLong(wrap);
-    switch (((unsigned char *)&wrap)[0]) {
-        case 0:
-        case MGL_CLAMP_TO_EDGE:
-    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            break;
-        case MGL_REPEAT:
-    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            break;
-        case MGL_MIRRORED_REPEAT:
-    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-            break;
-        case MGL_MIRROR_CLAMP_TO_EDGE:
-    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_MIRROR_CLAMP_TO_EDGE);
-            break;
-        case MGL_CLAMP_TO_BORDER:
-    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-            break;
-        default:
-            // TODO: error
-            return -1;
-    }
-    switch (((unsigned char *)&wrap)[1]) {
-        case 0:
-        case MGL_CLAMP_TO_EDGE:
-    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            break;
-        case MGL_REPEAT:
-    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            break;
-        case MGL_MIRRORED_REPEAT:
-    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-            break;
-        case MGL_MIRROR_CLAMP_TO_EDGE:
-    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_MIRROR_CLAMP_TO_EDGE);
-            break;
-        case MGL_CLAMP_TO_BORDER:
-    		self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-            break;
-        default:
-            // TODO: error
-            return -1;
-    }
+    static const int pnames[] = {GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T, GL_TEXTURE_WRAP_R};
+
     PyObject * wrapper = SLOT(self->wrapper, PyObject, Sampler_class_texture);
     MGLTexture * texture = SLOT(wrapper, MGLTexture, Texture_class_mglo);
-    if (texture->texture_target == GL_TEXTURE_3D) {
-        switch (((unsigned char *)&wrap)[2]) {
+    int dims = texture->texture_target == GL_TEXTURE_3D ? 3 : 2;
+
+    int wrap = PyLong_AsLong(value);
+
+    if (wrap >> (8 * dims)) {
+        // TODO: error
+        return -1;
+    }
+
+    for (int i = 0; i < dims; ++i) {
+        switch (((unsigned char *)&wrap)[i]) {
             case 0:
             case MGL_CLAMP_TO_EDGE:
-                self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+                self->context->gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_CLAMP_TO_EDGE);
                 break;
             case MGL_REPEAT:
-                self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_REPEAT);
+                self->context->gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_REPEAT);
                 break;
             case MGL_MIRRORED_REPEAT:
-                self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_MIRRORED_REPEAT);
+                self->context->gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_MIRRORED_REPEAT);
                 break;
             case MGL_MIRROR_CLAMP_TO_EDGE:
-                self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_MIRROR_CLAMP_TO_EDGE);
+                self->context->gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_MIRROR_CLAMP_TO_EDGE);
                 break;
             case MGL_CLAMP_TO_BORDER:
-                self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
+                self->context->gl.SamplerParameteri(self->sampler_obj, pnames[i], GL_CLAMP_TO_BORDER);
                 break;
             default:
                 // TODO: error
                 return -1;
         }
-    } else if (((unsigned char *)&wrap)[2]) {
-        return -1;
     }
+
     return 0;
 }
 
