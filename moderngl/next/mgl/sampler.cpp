@@ -135,6 +135,15 @@ int MGLSampler_set_wrap(MGLSampler * self, PyObject * value) {
 }
 
 int MGLSampler_set_anisotropy(MGLSampler * self, PyObject * value) {
+	float anisotropy = PyFloat_AsDouble(value);
+    if (anisotropy < 1.0) {
+        anisotropy = 1.0;
+    }
+    // if (anisotropy > max_anisotropy) {
+    //     anisotropy = max_anisotropy;
+    // }
+    SLOT(self->wrapper, PyObject, Sampler_class_max_lod) = PyFloat_FromDouble(anisotropy);
+	self->context->gl.SamplerParameterf(self->sampler_obj, GL_TEXTURE_MAX_ANISOTROPY, anisotropy);
     return 0;
 }
 
