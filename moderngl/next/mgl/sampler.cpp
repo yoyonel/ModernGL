@@ -4,6 +4,7 @@
 
 #include "internal/wrapper.hpp"
 
+#include "internal/compare_func.hpp"
 #include "internal/modules.hpp"
 #include "internal/tools.hpp"
 #include "internal/glsl.hpp"
@@ -175,6 +176,27 @@ int MGLSampler_set_anisotropy(MGLSampler * self, PyObject * value) {
     return 0;
 }
 
+int MGLSampler_set_compare_func(MGLSampler * self, PyObject * value) {
+	const GLMethods & gl = self->context->gl;
+    if (value == Py_None) {
+		gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+        Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_compare_func), NEW_REF(Py_None));
+        return 0;
+    }
+
+    const char * compare_func_str = PyUnicode_AsUTF8(value);
+	int compare_func = compare_func_from_string(compare_func_str);
+	if (!compare_func) {
+        // TODO: error
+        return -1;
+	}
+
+    gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+    gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_COMPARE_FUNC, compare_func);
+    Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_compare_func), PyUnicode_FromString(compare_func_str));
+    return 0;
+}
+
 int MGLSampler_set_lod_range(MGLSampler * self, PyObject * value) {
     PyObject * lod_range = PySequence_Fast(value, "not iterable");
     if (!lod_range) {
@@ -224,6 +246,7 @@ PyGetSetDef MGLSampler_getset[] = {
     {"filter", 0, (setter)MGLSampler_set_filter, 0, 0},
     {"wrap", 0, (setter)MGLSampler_set_wrap, 0, 0},
     {"anisotropy", 0, (setter)MGLSampler_set_anisotropy, 0, 0},
+    {"compare_func", 0, (setter)MGLSampler_set_compare_func, 0, 0},
     {"border", 0, (setter)MGLSampler_set_border, 0, 0},
     {"lod_range", 0, (setter)MGLSampler_set_lod_range, 0, 0},
     {"lod_bias", 0, (setter)MGLSampler_set_lod_bias, 0, 0},
