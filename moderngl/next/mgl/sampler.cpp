@@ -140,16 +140,15 @@ int MGLSampler_set_border_color(MGLSampler * self, PyObject * value) {
         return -1;
     }
     float color[4] = {};
-    PyObject ** border_colors = PySequence_Fast_ITEMS(border_color);
     switch (PySequence_Fast_GET_SIZE(border_color)) {
         case 4:
-            color[3] = (float)PyFloat_AsDouble(border_colors[3]);
+            color[3] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border_color, 3));
         case 3:
-            color[2] = (float)PyFloat_AsDouble(border_colors[2]);
+            color[2] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border_color, 2));
         case 2:
-            color[1] = (float)PyFloat_AsDouble(border_colors[1]);
+            color[1] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border_color, 1));
         case 1:
-            color[0] = (float)PyFloat_AsDouble(border_colors[0]);
+            color[0] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border_color, 0));
         default:
             // TODO: error
             return -1;
