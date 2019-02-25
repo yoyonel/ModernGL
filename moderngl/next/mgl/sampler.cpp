@@ -9,17 +9,25 @@
 #include "internal/tools.hpp"
 #include "internal/glsl.hpp"
 
+int MGLSampler_set_filter(MGLSampler * self, PyObject * value);
+int MGLSampler_set_wrap(MGLSampler * self, PyObject * value);
+int MGLSampler_set_anisotropy(MGLSampler * self, PyObject * value);
+int MGLSampler_set_compare_func(MGLSampler * self, PyObject * value);
+int MGLSampler_set_lod_range(MGLSampler * self, PyObject * value);
+int MGLSampler_set_lod_bias(MGLSampler * self, PyObject * value);
+int MGLSampler_set_border(MGLSampler * self, PyObject * value);
+
 /* MGLContext.sampler(texture)
  */
 PyObject * MGLContext_meth_sampler(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 1) {
+    if (nargs != 8) {
 		PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
     PyObject * texture = args[0];
 
-    if (texture->ob_type != self->MGLTexture_class) {
+    if (texture->ob_type != Texture_class) {
 		PyErr_Format(moderngl_error, "invalid texture");
         return 0;
     }
@@ -35,18 +43,51 @@ PyObject * MGLContext_meth_sampler(MGLContext * self, PyObject * const * args, P
         return 0;
     }
 
-    gl.SamplerParameteri(sampler->sampler_obj, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    gl.SamplerParameteri(sampler->sampler_obj, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    SLOT(sampler->wrapper, PyObject, Sampler_class_filter) = int_tuple(GL_NEAREST, GL_NEAREST);
-    SLOT(sampler->wrapper, PyObject, Sampler_class_wrap) = PyLong_FromLong(0);
-    SLOT(sampler->wrapper, PyObject, Sampler_class_anisotropy) = PyFloat_FromDouble(1.0);
-    SLOT(sampler->wrapper, PyObject, Sampler_class_compare_func) = NEW_REF(Py_None);
-    SLOT(sampler->wrapper, PyObject, Sampler_class_lod_range) = int_tuple(-1000, 1000);
-    SLOT(sampler->wrapper, PyObject, Sampler_class_lod_bias) = PyFloat_FromDouble(0.0);
-    SLOT(sampler->wrapper, PyObject, Sampler_class_border) = float_tuple(0.0, 0.0, 0.0, 0.0);
+    SLOT(sampler->wrapper, PyObject, Sampler_class_filter) = 0;
+    SLOT(sampler->wrapper, PyObject, Sampler_class_wrap) = 0;
+    SLOT(sampler->wrapper, PyObject, Sampler_class_anisotropy) = 0;
+    SLOT(sampler->wrapper, PyObject, Sampler_class_compare_func) = 0;
+    SLOT(sampler->wrapper, PyObject, Sampler_class_lod_range) = 0;
+    SLOT(sampler->wrapper, PyObject, Sampler_class_lod_bias) = 0;
+    SLOT(sampler->wrapper, PyObject, Sampler_class_border) = 0;
     SLOT(sampler->wrapper, PyObject, Sampler_class_texture) = texture;
     SLOT(sampler->wrapper, PyObject, Sampler_class_extra) = 0;
+
+    if (MGLSampler_set_filter(sampler, args[1])) {
+        Py_DECREF(sampler);
+        return 0;
+    }
+
+    if (MGLSampler_set_wrap(sampler, args[2])) {
+        Py_DECREF(sampler);
+        return 0;
+    }
+
+    if (MGLSampler_set_anisotropy(sampler, args[3])) {
+        Py_DECREF(sampler);
+        return 0;
+    }
+
+    if (MGLSampler_set_compare_func(sampler, args[4])) {
+        Py_DECREF(sampler);
+        return 0;
+    }
+
+    if (MGLSampler_set_lod_range(sampler, args[5])) {
+        Py_DECREF(sampler);
+        return 0;
+    }
+
+    if (MGLSampler_set_lod_bias(sampler, args[6])) {
+        Py_DECREF(sampler);
+        return 0;
+    }
+
+    if (MGLSampler_set_border(sampler, args[7])) {
+        Py_DECREF(sampler);
+        return 0;
+    }
+
     return NEW_REF(sampler->wrapper);
 }
 
