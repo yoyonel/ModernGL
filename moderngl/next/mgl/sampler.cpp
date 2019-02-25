@@ -69,7 +69,7 @@ PyObject * MGLSampler_meth_use(MGLSampler * self, PyObject * arg) {
 int MGLSampler_set_filter(MGLSampler * self, PyObject * value) {
     int min_filter;
     int mag_filter;
-    if (value->ob_type->tp_flags & Py_TPFLAGS_LONG_SUBCLASS) {
+    if (PyLong_Check(value)) {
         min_filter = PyLong_AsLong(value);
         mag_filter = min_filter;
     } else {
