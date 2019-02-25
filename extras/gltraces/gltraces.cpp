@@ -1,4 +1,4 @@
-#include "moderngl/experimental/mgl/internal/opengl/gl_methods.hpp"
+#include "moderngl/next/mgl/internal/opengl/gl_methods.hpp"
 #include <Python.h>
 #include <cstdio>
 
