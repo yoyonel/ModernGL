@@ -253,7 +253,7 @@ int MGLSampler_set_lod_range(MGLSampler * self, PyObject * value) {
     Py_DECREF(lod_range);
 
 	self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MIN_LOD, min_lod);
-	self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MIN_LOD, max_lod);
+	self->context->gl.SamplerParameteri(self->sampler_obj, GL_TEXTURE_MAX_LOD, max_lod);
     Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_lod_range), int_tuple(min_lod, max_lod));
 
     if (PyErr_Occurred()) {
