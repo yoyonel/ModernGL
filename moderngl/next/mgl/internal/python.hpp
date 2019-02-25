@@ -18,6 +18,24 @@
 
 #define NEW_REF(obj) (Py_INCREF(obj), obj)
 
+#ifndef Py_SETREF
+#define Py_SETREF(op, op2)                      \
+    do {                                        \
+        PyObject *_py_tmp = (PyObject *)(op);   \
+        (op) = (op2);                           \
+        Py_DECREF(_py_tmp);                     \
+    } while (0)
+#endif
+
+#ifndef Py_XSETREF
+#define Py_XSETREF(op, op2)                     \
+    do {                                        \
+        PyObject *_py_tmp = (PyObject *)(op);   \
+        (op) = (op2);                           \
+        Py_XDECREF(_py_tmp);                    \
+    } while (0)
+#endif
+
 /* Classes defined in python must be instantiated using new_object(...)
  * The allocated memory is initialized to zero.
  * Slots can be set using the SLOT(...) macro.

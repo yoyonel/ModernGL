@@ -4,15 +4,17 @@ from .texture import Texture
 
 
 class Sampler:
-    __slots__ = ['__mglo', '__filter', '__wrap', '__anisotropy', '__min_lod', '__max_lod', 'texture', 'extra']
+    __slots__ = ['__mglo', '__filter', '__wrap', '__anisotropy', '__compare_func', '__lod_range', '__lod_bias', '__border', 'texture', 'extra']
 
     def __init__(self):
         self.__mglo = None  # type: Any
         self.__filter = None  # type: Tuple[int, int]
         self.__wrap = None  # type: int
         self.__anisotropy = None  # type: float
-        self.__min_lod = None  # type: int
-        self.__max_lod = None  # type: int
+        self.__compare_func = None  # type: str
+        self.__lod_range = None  # type: Tuple[int, int]
+        self.__lod_bias = None  # type: float
+        self.__border = None  # type: Tuple[float, float, float, float]
         self.texture = None  # type: Texture
         self.extra = None  # type: Any
 
@@ -41,20 +43,36 @@ class Sampler:
         self.__mglo.anisotropy = value
 
     @property
-    def min_lod(self):
-        return self.__min_lod
+    def compare_func(self):
+        return self.__compare_func
 
-    @min_lod.setter
-    def min_lod(self, value):
-        self.__mglo.min_lod = value
+    @compare_func.setter
+    def compare_func(self, value):
+        self.__mglo.compare_func = value
 
     @property
-    def max_lod(self):
-        return self.__max_lod
+    def lod_range(self):
+        return self.__lod_range
 
-    @max_lod.setter
-    def max_lod(self, value):
-        self.__mglo.max_lod = value
+    @lod_range.setter
+    def lod_range(self, value):
+        self.__mglo.lod_range = value
+
+    @property
+    def lod_bias(self):
+        return self.__lod_bias
+
+    @lod_bias.setter
+    def lod_bias(self, value):
+        self.__mglo.lod_bias = value
+
+    @property
+    def border(self):
+        return self.__border
+
+    @border.setter
+    def border(self, value):
+        self.__mglo.border = value
 
     def use(self, location=0) -> None:
         self.__mglo.use(location)

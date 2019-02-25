@@ -30,6 +30,15 @@ inline PyObject * int_tuple(int i0, int i1, int i2, int i3) {
     return res;
 }
 
+inline PyObject * float_tuple(float f0, float f1, float f2, float f3) {
+    PyObject * res = PyTuple_New(4);
+    PyTuple_SET_ITEM(res, 0, PyFloat_FromDouble(f0));
+    PyTuple_SET_ITEM(res, 1, PyFloat_FromDouble(f1));
+    PyTuple_SET_ITEM(res, 2, PyFloat_FromDouble(f2));
+    PyTuple_SET_ITEM(res, 3, PyFloat_FromDouble(f3));
+    return res;
+}
+
 PyTypeObject * detect_class(PyObject * module, const char * name, int & slots_len);
 int slot_offset(PyTypeObject * type, const char * name, int & counter);
 void assert_slots_len(PyTypeObject * type, int slots_len);
