@@ -157,29 +157,37 @@ int MGLSampler_set_wrap(MGLSampler * self, PyObject * value) {
 }
 
 int MGLSampler_set_border(MGLSampler * self, PyObject * value) {
-    PyObject * border = PySequence_Fast(value, "not iterable");
-    if (!border) {
-        return -1;
-    }
-
     float color[4] = {};
 
-    switch (PySequence_Fast_GET_SIZE(border)) {
-        case 4:
-            color[3] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border, 3));
-        case 3:
-            color[2] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border, 2));
-        case 2:
-            color[1] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border, 1));
-        case 1:
-            color[0] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border, 0));
-        default:
-            Py_DECREF(border);
-            PyErr_Format(moderngl_error, "invalid border");
+    if (PyNumber_Check(value)) {
+        color[0] = (float)PyFloat_AsDouble(value);
+        color[1] = color[0];
+        color[2] = color[0];
+        color[3] = color[0];
+    } else {
+        PyObject * border = PySequence_Fast(value, "not iterable");
+        if (!border) {
             return -1;
-    }
+        }
 
-    Py_DECREF(border);
+        switch (PySequence_Fast_GET_SIZE(border)) {
+            case 4:
+                color[3] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border, 3));
+            case 3:
+                color[2] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border, 2));
+            case 2:
+                color[1] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border, 1));
+            case 1:
+                color[0] = (float)PyFloat_AsDouble(PySequence_Fast_GET_ITEM(border, 0));
+                break;
+            default:
+                Py_DECREF(border);
+                PyErr_Format(moderngl_error, "invalid border");
+                return -1;
+        }
+
+        Py_DECREF(border);
+    }
 
 	self->context->gl.SamplerParameterfv(self->sampler_obj, GL_TEXTURE_BORDER_COLOR, color);
     Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_border), float_tuple(color[0], color[1], color[2], color[3]));
