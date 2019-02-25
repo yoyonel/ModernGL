@@ -62,8 +62,8 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
     MGLContext * context = new_object(MGLContext, MGLContext_class);
     memset((char *)context + sizeof(PyObject), 0, sizeof(MGLContext) - sizeof(PyObject));
 
-    // context->glsl_compiler_error = moderngl_compiler_error;
-    // context->glsl_linker_error = moderngl_linker_error;
+    context->glsl_compiler_error = moderngl_compiler_error;
+    context->glsl_linker_error = moderngl_linker_error;
 
     if (!context->gl_context.load(standalone)) {
         return 0;
