@@ -1,7 +1,7 @@
-from .context import Context, create_context, extensions, hwinfo, inspect, glprocs, release
 from .attribute import Attribute
 from .buffer import Buffer
 from .compute_shader import ComputeShader
+from .context import Context, create_context, extensions, hwinfo, inspect, glprocs, release
 from .error import Error
 from .framebuffer import Framebuffer
 from .limits import Limits
@@ -10,60 +10,26 @@ from .query import Query
 from .renderbuffer import Renderbuffer
 from .sampler import Sampler
 from .scope import Scope
-from .texture_array import TextureArray
-from .texture_cube_array import TextureCubeArray
-from .texture_cube import TextureCube
 from .texture import Texture
+from .texture_array import TextureArray
+from .texture_cube import TextureCube
+from .texture_cube_array import TextureCubeArray
 from .uniform import Uniform
 from .vertex_array import VertexArray
+
+from .constants import (
+    NOTHING, BLEND, DEPTH_TEST, CULL_FACE, RASTERIZER_DISCARD, NEAREST, LINEAR,
+    NEAREST_MIPMAP_NEAREST, LINEAR_MIPMAP_NEAREST, NEAREST_MIPMAP_LINEAR, LINEAR_MIPMAP_LINEAR,
+    POINTS, LINES, LINE_LOOP, LINE_STRIP, TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN, LINES_ADJACENCY,
+    LINE_STRIP_ADJACENCY, TRIANGLES_ADJACENCY, TRIANGLE_STRIP_ADJACENCY, PATCHES,
+    CLAMP_TO_EDGE_X, CLAMP_TO_EDGE_Y, CLAMP_TO_EDGE_Z, REPEAT_X, REPEAT_Y, REPEAT_Z,
+    MIRRORED_REPEAT_X, MIRRORED_REPEAT_Y, MIRRORED_REPEAT_Z, MIRROR_CLAMP_TO_EDGE_X,
+    MIRROR_CLAMP_TO_EDGE_Y, MIRROR_CLAMP_TO_EDGE_Z, CLAMP_TO_BORDER_X,
+    CLAMP_TO_BORDER_Y, CLAMP_TO_BORDER_Z,
+)
+
 from .mgl import initialize
 
 __version__ = '6.0.0'
-
-NOTHING = 0
-BLEND = 1
-DEPTH_TEST = 2
-CULL_FACE = 4
-RASTERIZER_DISCARD = 8
-
-NEAREST = 0x2600
-LINEAR = 0x2601
-NEAREST_MIPMAP_NEAREST = 0x2700
-LINEAR_MIPMAP_NEAREST = 0x2701
-NEAREST_MIPMAP_LINEAR = 0x2702
-LINEAR_MIPMAP_LINEAR = 0x2703
-
-POINTS = 0x0000
-LINES = 0x0001
-LINE_LOOP = 0x0002
-LINE_STRIP = 0x0003
-TRIANGLES = 0x0004
-TRIANGLE_STRIP = 0x0005
-TRIANGLE_FAN = 0x0006
-LINES_ADJACENCY = 0x000A
-LINE_STRIP_ADJACENCY = 0x000B
-TRIANGLES_ADJACENCY = 0x000C
-TRIANGLE_STRIP_ADJACENCY = 0x000D
-PATCHES = 0x000E
-
-CLAMP_TO_EDGE_X = 0x000001
-CLAMP_TO_EDGE_Y = 0x000100
-CLAMP_TO_EDGE_Z = 0x010000
-
-REPEAT_X = 0x000002
-REPEAT_Y = 0x000200
-REPEAT_Z = 0x020000
-
-MIRRORED_REPEAT_X = 0x000004
-MIRRORED_REPEAT_Y = 0x000400
-MIRRORED_REPEAT_Z = 0x040000
-
-MIRROR_CLAMP_TO_EDGE_X = 0x000008
-MIRROR_CLAMP_TO_EDGE_Y = 0x000800
-MIRROR_CLAMP_TO_EDGE_Z = 0x080000
-
-CLAMP_TO_BORDER_X = 0x000010
-CLAMP_TO_BORDER_Y = 0x001000
-CLAMP_TO_BORDER_Z = 0x100000
 
 initialize()

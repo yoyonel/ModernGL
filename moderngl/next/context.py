@@ -14,6 +14,8 @@ from .scope import Scope
 from .texture import Texture
 from .vertex_array import VertexArray
 
+from .constants import NEAREST
+
 
 def _attr_fmt(attr):
     return '%d%c' % (attr.cols * attr.rows * attr.size, attr.shape)
@@ -46,7 +48,7 @@ class Context:
     def depth_texture(self, size, data=None, levels=-1, samples=0, aligment=1) -> Texture:
         return self.__mglo.depth_texture(size, data, levels, samples, aligment)
 
-    def sampler(self, texture, filter=0x2600, wrap=0, anisotropy=1.0, compare_func=None, lod_range=(-1000, 1000), lod_bias=0.0, border=0.0) -> Sampler:
+    def sampler(self, texture, filter=NEAREST, wrap=0, anisotropy=1.0, compare_func=None, lod_range=(-1000, 1000), lod_bias=0.0, border=0.0) -> Sampler:
         return self.__mglo.sampler(texture, filter, wrap, anisotropy, compare_func, lod_range, lod_bias, border)
 
     def vertex_array(self, program, content, index_buffer=None) -> VertexArray:
