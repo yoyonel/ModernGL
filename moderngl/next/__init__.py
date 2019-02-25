@@ -28,8 +28,4 @@ from .constants import (
     CLAMP_TO_BORDER_Y, CLAMP_TO_BORDER_Z,
 )
 
-from .mgl import initialize
-
 __version__ = '6.0.0'
-
-initialize()

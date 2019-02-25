@@ -16,6 +16,7 @@
 
 #include "internal/wrapper.hpp"
 #include "internal/tools.hpp"
+#include "internal/modules.hpp"
 
 /* moderngl.core.create_context(standalone, debug, require, glhook, gc)
  * Returns a Context object.
@@ -31,6 +32,32 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
     PyObject * require = args[2];
     PyObject * glhook = args[3];
     PyObject * gc = args[4];
+
+    static bool first_run = true;
+
+    if (first_run) {
+        /* Load extenal modules */
+        if (!load_modules()) {
+            return 0;
+        }
+
+        /* Define MGLContext only */
+
+        MGLContext_class = (PyTypeObject *)PyType_FromSpec(&MGLContext_spec);
+
+        /* Detect wrapper classes for internal types */
+
+        init_wrappers();
+        init_recording();
+
+        /* Errors are not recoverable at this point */
+
+        if (PyErr_Occurred()) {
+            return 0;
+        }
+
+        first_run = false;
+    }
 
     MGLContext * context = new_object(MGLContext, MGLContext_class);
     memset((char *)context + sizeof(PyObject), 0, sizeof(MGLContext) - sizeof(PyObject));

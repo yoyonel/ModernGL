@@ -1,7 +1,6 @@
 #include "mgl.hpp"
 #include "extensions.hpp"
 #include "inspect.hpp"
-#include "internal/modules.hpp"
 
 #include "context.hpp"
 #include "buffer.hpp"
@@ -18,41 +17,6 @@
 
 #include "internal/wrapper.hpp"
 #include "internal/data_type.hpp"
-
-/* moderngl.core.initialize()
- * Initializes internal objects that cannot be initialized import time.
- */
-PyObject * meth_initialize(PyObject * self) {
-    static bool initialized = false;
-    if (initialized) {
-        Py_RETURN_NONE;
-    }
-
-    initialized = true;
-
-    if (!load_modules()) {
-        return 0;
-    }
-
-    /* Define MGLContext only.
-     * The rest of the internal types will be defined by MGLContext.
-     */
-
-    MGLContext_class = (PyTypeObject *)PyType_FromSpec(&MGLContext_spec);
-
-    /* Detect wrapper classes for internal types */
-
-    init_wrappers();
-    init_recording();
-
-    /* Errors are not recoverable at this point */
-
-    if (PyErr_Occurred()) {
-        return 0;
-    }
-
-    Py_RETURN_NONE;
-}
 
 /* moderngl.core.glprocs(context)
  */
@@ -148,7 +112,6 @@ PyMethodDef module_methods[] = {
     {"create_context", (PyCFunction)meth_create_context, METH_FASTCALL, 0},
     {"extensions", (PyCFunction)meth_extensions, METH_O, 0},
     {"hwinfo", (PyCFunction)meth_hwinfo, METH_O, 0},
-    {"initialize", (PyCFunction)meth_initialize, METH_NOARGS, 0},
     {"inspect", (PyCFunction)meth_inspect, METH_O, 0},
     {"glprocs", (PyCFunction)meth_glprocs, METH_O, 0},
     {"release", (PyCFunction)meth_release, METH_O, 0},
@@ -165,7 +128,6 @@ PyMethodDef module_methods[] = {
     {"create_context", (PyCFunction)meth_create_context_va, METH_VARARGS, 0},
     {"extensions", (PyCFunction)meth_extensions, METH_O, 0},
     {"hwinfo", (PyCFunction)meth_hwinfo, METH_O, 0},
-    {"initialize", (PyCFunction)meth_initialize, METH_NOARGS, 0},
     {"inspect", (PyCFunction)meth_inspect, METH_O, 0},
     {"glprocs", (PyCFunction)meth_glprocs, METH_O, 0},
     {"release", (PyCFunction)meth_release, METH_O, 0},
