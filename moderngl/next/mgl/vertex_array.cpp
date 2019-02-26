@@ -403,6 +403,83 @@ PyObject * MGLVertexArray_meth_transform(MGLVertexArray * self, PyObject * const
     Py_RETURN_NONE;
 }
 
+/* MGLVertexArray.transform_indirect(output, buffer, mode, count, first, flush)
+ */
+PyObject * MGLVertexArray_meth_transform_indirect(MGLVertexArray * self, PyObject * const * args, Py_ssize_t nargs) {
+    if (nargs != 6) {
+        // TODO: error
+        return 0;
+    }
+
+    if (args[0]->ob_type != Buffer_class) {
+        // TODO: error
+        return 0;
+    }
+
+    if (args[1]->ob_type != Buffer_class) {
+        // TODO: error
+        return 0;
+    }
+
+    MGLBuffer * output_buffer = SLOT(args[0], MGLBuffer, Buffer_class_mglo);
+    MGLBuffer * indirect_buffer = SLOT(args[1], MGLBuffer, Buffer_class_mglo);
+
+    PyObject * mode = args[2];
+    int count = PyLong_AsLong(args[3]);
+    int first = PyLong_AsLong(args[4]);
+    int flush = PyObject_IsTrue(args[5]);
+
+    MGLBuffer * index_buffer = SLOT(self->wrapper, MGLBuffer, VertexArray_class_ibo);
+
+    if (count < 0) {
+        count = (PyObject *)index_buffer != Py_None ? index_buffer->size / 4 : indirect_buffer->size / 20;
+    }
+
+    if (mode == Py_None) {
+        mode = SLOT(self->wrapper, PyObject, VertexArray_class_mode);
+        if (mode == Py_None) {
+            mode = points_long;
+        }
+    }
+
+    int render_mode = PyLong_AsLong(mode);
+    if (PyErr_Occurred()) {
+        return 0;
+    }
+
+    const GLMethods & gl = self->context->gl;
+
+    PyObject * program = SLOT(self->wrapper, PyObject, VertexArray_class_program);
+    self->context->use_program(SLOT(program, MGLProgram, Program_class_mglo)->program_obj);
+    self->context->bind_vertex_array(self->vertex_array_obj);
+
+    MGLBuffer * output = SLOT(output_buffer, MGLBuffer, Buffer_class_mglo);
+    gl.BindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, output->buffer_obj);
+    gl.Enable(GL_RASTERIZER_DISCARD);
+    gl.BeginTransformFeedback(render_mode);
+
+	gl.BindBuffer(GL_DRAW_INDIRECT_BUFFER, indirect_buffer->buffer_obj);
+
+	const void * ptr = (const void *)((GLintptr)first * 20);
+
+	if ((PyObject *)index_buffer != Py_None) {
+		gl.MultiDrawElementsIndirect(render_mode, GL_UNSIGNED_INT, ptr, count, 20);
+	} else {
+		gl.MultiDrawArraysIndirect(render_mode, ptr, count, 20);
+	}
+
+    gl.EndTransformFeedback();
+    if (~self->context->current_enable_only & MGL_RASTERIZER_DISCARD) {
+        gl.Disable(GL_RASTERIZER_DISCARD);
+    }
+
+    if (flush) {
+        gl.Flush();
+    }
+
+    Py_RETURN_NONE;
+}
+
 /* MGLVertexArray.ibo
  */
 int MGLVertexArray_set_ibo(MGLVertexArray * self, PyObject * value) {
@@ -437,6 +514,7 @@ PyMethodDef MGLVertexArray_methods[] = {
     {"render", (PyCFunction)MGLVertexArray_meth_render, METH_FASTCALL, 0},
     {"render_indirect", (PyCFunction)MGLVertexArray_meth_render_indirect, METH_FASTCALL, 0},
     {"transform", (PyCFunction)MGLVertexArray_meth_transform, METH_FASTCALL, 0},
+    {"transform_indirect", (PyCFunction)MGLVertexArray_meth_transform_indirect, METH_FASTCALL, 0},
     {0},
 };
 
