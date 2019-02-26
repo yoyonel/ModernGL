@@ -568,14 +568,23 @@ PyObject * MGLVertexArray_meth_render_va(MGLVertexArray * self, PyObject * args)
     return MGLVertexArray_meth_render(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
 }
 
+PyObject * MGLVertexArray_meth_render_indirect_va(MGLVertexArray * self, PyObject * args) {
+    return MGLVertexArray_meth_render_indirect(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
+
 PyObject * MGLVertexArray_meth_transform_va(MGLVertexArray * self, PyObject * args) {
     return MGLVertexArray_meth_transform(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
+
+PyObject * MGLVertexArray_meth_transform_indirect_va(MGLVertexArray * self, PyObject * args) {
+    return MGLVertexArray_meth_transform_indirect(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
 }
 
 PyMethodDef MGLVertexArray_methods[] = {
     {"render", (PyCFunction)MGLVertexArray_meth_render_va, METH_VARARGS, 0},
     {"render_indirect", (PyCFunction)MGLVertexArray_meth_render_indirect_va, METH_VARARGS, 0},
     {"transform", (PyCFunction)MGLVertexArray_meth_transform_va, METH_VARARGS, 0},
+    {"transform_indirect", (PyCFunction)MGLVertexArray_meth_transform_indirect_va, METH_VARARGS, 0},
     {0},
 };
 
