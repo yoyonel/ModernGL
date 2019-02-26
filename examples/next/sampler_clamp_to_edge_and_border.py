@@ -1,10 +1,13 @@
-import moderngl.next as mgl
+import os
 
-from sampler_wrap_modes import SamplerWrapModes
+from PIL import Image
+
+import moderngl.next as mgl
+from sampler_basic_example import SamplerBasicExample
 from window import run_example
 
 
-class ClampToEdgeAndBorder(SamplerWrapModes):
+class ClampToEdgeAndBorder(SamplerBasicExample):
     gl_version = (3, 3)
     aspect_ratio = 1.0
     title = "Clamp to Edge and Border"
@@ -12,7 +15,10 @@ class ClampToEdgeAndBorder(SamplerWrapModes):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.sampler.border = (0.0, 0.5, 1.0, 1.0)
+        # self.sampler.border = 0.3
+        # self.sampler.border = (0.0, 0.5, 1.0, 1.0)
+        self.sampler.border = (0.0, 0.5, 1.0)
+
         self.sampler.wrap = mgl.CLAMP_TO_EDGE_X | mgl.CLAMP_TO_BORDER_Y
 
 
