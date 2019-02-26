@@ -20,6 +20,9 @@ class VertexArray:
     def render(self, mode=None, vertices=-1, first=0, instances=1, color_mask=0xffffffffffffffff, depth_mask=1):
         self.__mglo.render(mode, vertices, first, instances, color_mask, depth_mask)
 
+    def render_indirect(self, buffer, mode=None, count=-1, first=0, color_mask=0xffffffffffffffff, depth_mask=1):
+        self.__mglo.render_indirect(mode, buffer, mode, count, first, color_mask, depth_mask)
+
     def transform(self, buffer, mode=None, vertices=-1, first=0, instances=1, flush=True):
         self.__mglo.transform(buffer, mode, vertices, first, instances, flush)
 
