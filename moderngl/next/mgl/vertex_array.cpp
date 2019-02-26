@@ -342,7 +342,7 @@ PyObject * MGLVertexArray_meth_render_indirect(MGLVertexArray * self, PyObject *
     Py_RETURN_NONE;
 }
 
-/* MGLVertexArray.transform(buffer, mode, vertices, first, instances, flush)
+/* MGLVertexArray.transform(output, mode, vertices, first, instances, flush)
  */
 PyObject * MGLVertexArray_meth_transform(MGLVertexArray * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 6) {
@@ -350,7 +350,12 @@ PyObject * MGLVertexArray_meth_transform(MGLVertexArray * self, PyObject * const
         return 0;
     }
 
-    PyObject * buffer = args[0];
+    if (args[0]->ob_type != Buffer_class) {
+        // TODO: error
+        return 0;
+    }
+
+    MGLBuffer * output_buffer = SLOT(args[0], MGLBuffer, Buffer_class_mglo);
     PyObject * mode = args[1];
     int vertices = PyLong_AsLong(args[2]);
     int first = PyLong_AsLong(args[3]);
@@ -379,8 +384,7 @@ PyObject * MGLVertexArray_meth_transform(MGLVertexArray * self, PyObject * const
     self->context->use_program(SLOT(program, MGLProgram, Program_class_mglo)->program_obj);
     self->context->bind_vertex_array(self->vertex_array_obj);
 
-    MGLBuffer * output = SLOT(buffer, MGLBuffer, Buffer_class_mglo);
-    gl.BindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, output->buffer_obj);
+    gl.BindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, output_buffer->buffer_obj);
     gl.Enable(GL_RASTERIZER_DISCARD);
     gl.BeginTransformFeedback(render_mode);
 
