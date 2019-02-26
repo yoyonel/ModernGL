@@ -277,15 +277,17 @@ PyObject * MGLVertexArray_meth_render_indirect(MGLVertexArray * self, PyObject *
         return 0;
     }
 
-    MGLBuffer * buffer = SLOT(args[0], MGLBuffer, Buffer_class_mglo);
+    MGLBuffer * indirect_buffer = SLOT(args[0], MGLBuffer, Buffer_class_mglo);
     PyObject * mode = args[1];
     int count = PyLong_AsLong(args[2]);
     int first = PyLong_AsLong(args[3]);
     unsigned long long color_mask = PyLong_AsUnsignedLongLong(args[4]);
     bool depth_mask = (bool)PyObject_IsTrue(args[5]);
 
+    MGLBuffer * index_buffer = SLOT(self->wrapper, MGLBuffer, VertexArray_class_ibo);
+
     if (count < 0) {
-        count = buffer->size / 20;
+        count = (PyObject *)index_buffer != Py_None ? index_buffer->size / 4 : indirect_buffer->size / 20;
     }
 
     if (mode == Py_None) {
@@ -323,11 +325,11 @@ PyObject * MGLVertexArray_meth_render_indirect(MGLVertexArray * self, PyObject *
         scoped = true;
     }
 
-	gl.BindBuffer(GL_DRAW_INDIRECT_BUFFER, buffer->buffer_obj);
+	gl.BindBuffer(GL_DRAW_INDIRECT_BUFFER, indirect_buffer->buffer_obj);
 
 	const void * ptr = (const void *)((GLintptr)first * 20);
 
-	if (SLOT(self->wrapper, PyObject, VertexArray_class_ibo) != Py_None) {
+	if ((PyObject *)index_buffer != Py_None) {
 		gl.MultiDrawElementsIndirect(render_mode, GL_UNSIGNED_INT, ptr, count, 20);
 	} else {
 		gl.MultiDrawArraysIndirect(render_mode, ptr, count, 20);
