@@ -8,7 +8,7 @@ from window import Example, run_example
 from common.simple_object_renderer import SimpleObjectRenderer
 
 
-class SimpleColorTriangle(Example):
+class SamplerWrapModes(Example):
     gl_version = (3, 3)
     aspect_ratio = 1.0
     title = "Sampler Wrap Modes"
@@ -50,4 +50,4 @@ class SimpleColorTriangle(Example):
 
 
 if __name__ == '__main__':
-    run_example(SimpleColorTriangle)
+    run_example(SamplerWrapModes)
