@@ -1,8 +1,9 @@
+import os
+
 import moderngl.next as mgl
 import numpy as np
 from PIL import Image
 
-import data
 from window import Example, run_example
 
 from common.simple_object_renderer import SimpleObjectRenderer
@@ -32,10 +33,11 @@ class SimpleColorTriangle(Example):
             (3.0, 3.0),
         ], dtype='f4')
 
-        img = Image.open(data.find('color_arrows.png')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
+        img = Image.frombytes('RGB', (8, 8), os.urandom(192))
         self.texture = self.ctx.texture(img)
         self.sampler = self.ctx.sampler(self.texture)
-        self.sampler.wrap = mgl.REPEAT_X | mgl.MIRROR_CLAMP_TO_EDGE_Y
+        self.sampler.wrap = mgl.REPEAT_X | mgl.REPEAT_Y
+        self.sampler.filter = mgl.LINEAR
 
     def render(self, time: float, frame_time: float):
         self.ctx.clear(1.0, 1.0, 1.0)

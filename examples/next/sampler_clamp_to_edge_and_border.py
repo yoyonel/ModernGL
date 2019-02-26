@@ -35,7 +35,8 @@ class SimpleColorTriangle(Example):
         img = Image.open(data.find('color_arrows.png')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
         self.texture = self.ctx.texture(img)
         self.sampler = self.ctx.sampler(self.texture)
-        self.sampler.wrap = mgl.REPEAT_X | mgl.MIRROR_CLAMP_TO_EDGE_Y
+        self.sampler.wrap = mgl.CLAMP_TO_EDGE_X | mgl.CLAMP_TO_BORDER_Y
+        self.sampler.border = (0.0, 0.5, 1.0, 1.0)
 
     def render(self, time: float, frame_time: float):
         self.ctx.clear(1.0, 1.0, 1.0)
