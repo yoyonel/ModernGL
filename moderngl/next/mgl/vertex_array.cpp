@@ -384,6 +384,22 @@ PyObject * MGLVertexArray_meth_transform(MGLVertexArray * self, PyObject * const
     self->context->use_program(SLOT(program, MGLProgram, Program_class_mglo)->program_obj);
     self->context->bind_vertex_array(self->vertex_array_obj);
 
+    bool scoped = false;
+    PyObject * scope = SLOT(self->wrapper, PyObject, VertexArray_class_scope);
+    MGLScope * scope_mglo = 0;
+
+    if (scope != Py_None) {
+        scope_mglo = SLOT(scope, MGLScope, Scope_class_mglo);
+        if (self->context->bound_scope != scope_mglo) {
+            MGLScope_begin_core(scope_mglo);
+            scoped = true;
+        }
+    } else if (self->context->bound_scope != self->context->active_scope) {
+        scope_mglo = self->context->bound_scope;
+        MGLScope_begin_core(scope_mglo);
+        scoped = true;
+    }
+
     gl.BindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, output_buffer->buffer_obj);
     gl.Enable(GL_RASTERIZER_DISCARD);
     gl.BeginTransformFeedback(render_mode);
@@ -398,6 +414,10 @@ PyObject * MGLVertexArray_meth_transform(MGLVertexArray * self, PyObject * const
     gl.EndTransformFeedback();
     if (~self->context->current_enable_only & MGL_RASTERIZER_DISCARD) {
         gl.Disable(GL_RASTERIZER_DISCARD);
+    }
+
+    if (scoped) {
+        MGLScope_end_core(scope_mglo);
     }
 
     if (flush) {
@@ -462,6 +482,22 @@ PyObject * MGLVertexArray_meth_transform_indirect(MGLVertexArray * self, PyObjec
     gl.Enable(GL_RASTERIZER_DISCARD);
     gl.BeginTransformFeedback(render_mode);
 
+    bool scoped = false;
+    PyObject * scope = SLOT(self->wrapper, PyObject, VertexArray_class_scope);
+    MGLScope * scope_mglo = 0;
+
+    if (scope != Py_None) {
+        scope_mglo = SLOT(scope, MGLScope, Scope_class_mglo);
+        if (self->context->bound_scope != scope_mglo) {
+            MGLScope_begin_core(scope_mglo);
+            scoped = true;
+        }
+    } else if (self->context->bound_scope != self->context->active_scope) {
+        scope_mglo = self->context->bound_scope;
+        MGLScope_begin_core(scope_mglo);
+        scoped = true;
+    }
+
 	gl.BindBuffer(GL_DRAW_INDIRECT_BUFFER, indirect_buffer->buffer_obj);
 
 	const void * ptr = (const void *)((GLintptr)first * 20);
@@ -475,6 +511,10 @@ PyObject * MGLVertexArray_meth_transform_indirect(MGLVertexArray * self, PyObjec
     gl.EndTransformFeedback();
     if (~self->context->current_enable_only & MGL_RASTERIZER_DISCARD) {
         gl.Disable(GL_RASTERIZER_DISCARD);
+    }
+
+    if (scoped) {
+        MGLScope_end_core(scope_mglo);
     }
 
     if (flush) {
