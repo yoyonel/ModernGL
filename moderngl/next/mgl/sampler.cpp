@@ -2,6 +2,7 @@
 #include "context.hpp"
 #include "texture.hpp"
 #include "texture_array.hpp"
+#include "texture_cube.hpp"
 
 #include "internal/wrapper.hpp"
 
@@ -317,6 +318,11 @@ int MGLSampler_set_texture(MGLSampler * self, PyObject * value) {
         self->texture_obj = texture->texture_obj;
     } else if (value->ob_type == TextureArray_class) {
         MGLTextureArray * texture = SLOT(value, MGLTextureArray, TextureArray_class_mglo);
+        self->texture_target = texture->texture_target;
+        self->texture_obj = texture->texture_obj;
+        self->dims = 2;
+    } else if (value->ob_type == TextureCube_class) {
+        MGLTextureCube * texture = SLOT(value, MGLTextureCube, TextureCube_class_mglo);
         self->texture_target = texture->texture_target;
         self->texture_obj = texture->texture_obj;
         self->dims = 2;
