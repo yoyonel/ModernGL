@@ -51,6 +51,7 @@ struct MGLContext {
     PyTypeObject * MGLSampler_class;
     PyTypeObject * MGLScope_class;
     PyTypeObject * MGLTexture_class;
+    PyTypeObject * MGLTextureArray_class;
     PyTypeObject * MGLVertexArray_class;
 
     PyObject * glsl_compiler_error;
