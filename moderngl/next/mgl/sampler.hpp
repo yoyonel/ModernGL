@@ -8,6 +8,9 @@ struct MGLSampler {
     PyObject * wrapper;
     MGLContext * context;
     int sampler_obj;
+    int texture_target;
+    int texture_obj;
+    int dims;
     // TODO:
 };
 

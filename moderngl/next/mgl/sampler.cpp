@@ -1,6 +1,7 @@
 #include "sampler.hpp"
 #include "context.hpp"
 #include "texture.hpp"
+#include "texture_array.hpp"
 
 #include "internal/wrapper.hpp"
 
@@ -16,19 +17,13 @@ int MGLSampler_set_compare_func(MGLSampler * self, PyObject * value);
 int MGLSampler_set_lod_range(MGLSampler * self, PyObject * value);
 int MGLSampler_set_lod_bias(MGLSampler * self, PyObject * value);
 int MGLSampler_set_border(MGLSampler * self, PyObject * value);
+int MGLSampler_set_texture(MGLSampler * self, PyObject * value);
 
 /* MGLContext.sampler(texture)
  */
 PyObject * MGLContext_meth_sampler(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 8) {
 		PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
-
-    PyObject * texture = args[0];
-
-    if (texture->ob_type != Texture_class) {
-		PyErr_Format(moderngl_error, "invalid texture");
         return 0;
     }
 
@@ -50,8 +45,13 @@ PyObject * MGLContext_meth_sampler(MGLContext * self, PyObject * const * args, P
     SLOT(sampler->wrapper, PyObject, Sampler_class_lod_range) = 0;
     SLOT(sampler->wrapper, PyObject, Sampler_class_lod_bias) = 0;
     SLOT(sampler->wrapper, PyObject, Sampler_class_border) = 0;
-    SLOT(sampler->wrapper, PyObject, Sampler_class_texture) = texture;
+    SLOT(sampler->wrapper, PyObject, Sampler_class_texture) = 0;
     SLOT(sampler->wrapper, PyObject, Sampler_class_extra) = 0;
+
+    if (MGLSampler_set_texture(sampler, args[0])) {
+        Py_DECREF(sampler);
+        return 0;
+    }
 
     if (MGLSampler_set_filter(sampler, args[1])) {
         Py_DECREF(sampler);
@@ -94,11 +94,8 @@ PyObject * MGLContext_meth_sampler(MGLContext * self, PyObject * const * args, P
 /* MGLSampler.use(location)
  */
 PyObject * MGLSampler_meth_use(MGLSampler * self, PyObject * arg) {
-    PyObject * wrapper = SLOT(self->wrapper, PyObject, Sampler_class_texture);
-    MGLTexture * texture = SLOT(wrapper, MGLTexture, Texture_class_mglo);
-
     int location = PyLong_AsLong(arg);
-    self->context->bind_sampler(location, texture->texture_target, texture->texture_obj, self->sampler_obj);
+    self->context->bind_sampler(location, self->texture_target, self->texture_obj, self->sampler_obj);
 
     if (PyErr_Occurred()) {
         return 0;
@@ -153,20 +150,16 @@ enum MGLSamplerWrapModes {
 int MGLSampler_set_wrap(MGLSampler * self, PyObject * value) {
     static const int pnames[] = {GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T, GL_TEXTURE_WRAP_R};
 
-    PyObject * wrapper = SLOT(self->wrapper, PyObject, Sampler_class_texture);
-    MGLTexture * texture = SLOT(wrapper, MGLTexture, Texture_class_mglo);
-    int dims = texture->texture_target == GL_TEXTURE_3D ? 3 : 2;
-
     int wrap = PyLong_AsLong(value);
 
-    if (wrap >> (8 * dims)) {
+    if (wrap >> (8 * self->dims)) {
         PyErr_Format(moderngl_error, "invalid wrap");
         return -1;
     }
 
  	const GLMethods & gl = self->context->gl;
 
-    for (int i = 0; i < dims; ++i) {
+    for (int i = 0; i < self->dims; ++i) {
         switch (((unsigned char *)&wrap)[i]) {
             case 0:
             case MGL_CLAMP_TO_EDGE:
@@ -316,6 +309,25 @@ int MGLSampler_set_lod_bias(MGLSampler * self, PyObject * value) {
     return 0;
 }
 
+int MGLSampler_set_texture(MGLSampler * self, PyObject * value) {
+    if (value->ob_type == Texture_class) {
+        MGLTexture * texture = SLOT(value, MGLTexture, Texture_class_mglo);
+        self->dims = texture->texture_target == GL_TEXTURE_3D ? 3 : 2;
+        self->texture_target = texture->texture_target;
+        self->texture_obj = texture->texture_obj;
+    } else if (value->ob_type == TextureArray_class) {
+        MGLTextureArray * texture = SLOT(value, MGLTextureArray, TextureArray_class_mglo);
+        self->texture_target = texture->texture_target;
+        self->texture_obj = texture->texture_obj;
+        self->dims = 2;
+    } else {
+        PyErr_Format(moderngl_error, "invalid texture");
+        return -1;
+    }
+    Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_texture), NEW_REF(value));
+    return 0;
+}
+
 #if PY_VERSION_HEX >= 0x03070000
 
 PyMethodDef MGLSampler_methods[] = {
@@ -340,6 +352,7 @@ PyGetSetDef MGLSampler_getset[] = {
     {"border", 0, (setter)MGLSampler_set_border, 0, 0},
     {"lod_range", 0, (setter)MGLSampler_set_lod_range, 0, 0},
     {"lod_bias", 0, (setter)MGLSampler_set_lod_bias, 0, 0},
+    {"texture", 0, (setter)MGLSampler_set_texture, 0, 0},
     {0},
 };
 

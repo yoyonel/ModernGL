@@ -447,7 +447,7 @@ void init_wrappers() {
     Sampler_class_lod_range = slot_offset(Sampler_class, "_Sampler__lod_range", Sampler_slots);
     Sampler_class_lod_bias = slot_offset(Sampler_class, "_Sampler__lod_bias", Sampler_slots);
     Sampler_class_border = slot_offset(Sampler_class, "_Sampler__border", Sampler_slots);
-    Sampler_class_texture = slot_offset(Sampler_class, "texture", Sampler_slots);
+    Sampler_class_texture = slot_offset(Sampler_class, "_Sampler__texture", Sampler_slots);
     Sampler_class_extra = slot_offset(Sampler_class, "extra", Sampler_slots);
     assert_slots_len(Sampler_class, Sampler_slots);
 

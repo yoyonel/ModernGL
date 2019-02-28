@@ -1,10 +1,11 @@
-from typing import Any, Tuple
+from typing import Any, Tuple, Union
 
 from .texture import Texture
+from .texture_array import TextureArray
 
 
 class Sampler:
-    __slots__ = ['__mglo', '__filter', '__wrap', '__anisotropy', '__compare_func', '__lod_range', '__lod_bias', '__border', 'texture', 'extra']
+    __slots__ = ['__mglo', '__filter', '__wrap', '__anisotropy', '__compare_func', '__lod_range', '__lod_bias', '__border', '__texture', 'extra']
 
     def __init__(self):
         self.__mglo = None  # type: Any
@@ -15,7 +16,7 @@ class Sampler:
         self.__lod_range = None  # type: Tuple[int, int]
         self.__lod_bias = None  # type: float
         self.__border = None  # type: Tuple[float, float, float, float]
-        self.texture = None  # type: Texture
+        self.__texture = None  # type: Union[Texture, TextureArray]
         self.extra = None  # type: Any
 
     @property
@@ -73,6 +74,14 @@ class Sampler:
     @border.setter
     def border(self, value):
         self.__mglo.border = value
+
+    @property
+    def texture(self):
+        return self.__texture
+
+    @texture.setter
+    def texture(self, value):
+        self.__mglo.texture = value
 
     def use(self, location=0) -> None:
         self.__mglo.use(location)
