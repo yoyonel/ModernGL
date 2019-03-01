@@ -72,7 +72,7 @@ class HelloWorld(Example):
         def join(*images):
             return b''.join(img.tobytes('raw', 'RGB', 0, -1) for img in images)
 
-        self.texture = self.ctx.texture_cube(200, 3, join(img1, img2, img3, img4, img5, img6))
+        self.texture = self.ctx.texture_cube((200, 200), 3, join(img1, img2, img3, img4, img5, img6))
         self.sampler = self.ctx.sampler(self.texture)
         self.sampler.filter = mgl.LINEAR
         self.sampler.use()

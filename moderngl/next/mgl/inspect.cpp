@@ -371,13 +371,6 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
             return res;
         }
 
-        if (mglo->ob_base.ob_type == mglo->context->MGLTextureArray_class) {
-            MGLTexture * texture = (MGLTexture *)obj;
-            PyObject * res = PyDict_New();
-            // TODO:
-            return res;
-        }
-
         if (mglo->ob_base.ob_type == mglo->context->MGLVertexArray_class) {
             MGLVertexArray * vertex_array = (MGLVertexArray *)obj;
             PyObject * res = PyDict_New();

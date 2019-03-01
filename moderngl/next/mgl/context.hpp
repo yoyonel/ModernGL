@@ -51,8 +51,6 @@ struct MGLContext {
     PyTypeObject * MGLSampler_class;
     PyTypeObject * MGLScope_class;
     PyTypeObject * MGLTexture_class;
-    PyTypeObject * MGLTextureArray_class;
-    PyTypeObject * MGLTextureCube_class;
     PyTypeObject * MGLVertexArray_class;
 
     PyObject * glsl_compiler_error;
@@ -95,6 +93,7 @@ MGLObject * _MGLContext_new_object(MGLContext * self, PyTypeObject * type, PyTyp
 MGLObject * _MGLObject_pop_mglo(PyObject * wrapper, int slot);
 PyObject * _MGLObject_release(MGLObject * self);
 
+#define MGLContext_new_texture_object(self, name) (MGLTexture *)_MGLContext_new_object(self, self->MGLTexture_class, name ## _class, name ## _class_mglo, sizeof(MGLTexture))
 #define MGLContext_new_object(self, name) (MGL ## name *)_MGLContext_new_object(self, self->MGL ## name ## _class, name ## _class, name ## _class_mglo, sizeof(MGL ## name))
 #define MGLObject_pop_mglo(name, obj) (MGL ## name *)_MGLObject_pop_mglo(obj, name ## _class_mglo)
 #define MGLObject_release(obj) _MGLObject_release((MGLObject *)obj);

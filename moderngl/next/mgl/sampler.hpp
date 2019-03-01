@@ -10,8 +10,7 @@ struct MGLSampler {
     int sampler_obj;
     int texture_target;
     int texture_obj;
-    int dims;
-    // TODO:
+    int dimensions;
 };
 
 extern PyType_Spec MGLSampler_spec;

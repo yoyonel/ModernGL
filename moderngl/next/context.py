@@ -43,16 +43,16 @@ class Context:
         return self.__mglo.program(vertex_shader, fragment_shader, geometry_shader, tess_control_shader, tess_evaluation_shader, varyings)
 
     def texture(self, size, components=3, data=None, levels=-1, samples=0, aligment=1, dtype='f1') -> Texture:
-        return self.__mglo.texture(size, components, data, levels, samples, aligment, dtype)
+        return self.__mglo.texture(0, size, components, data, levels, samples, aligment, dtype)
 
     def depth_texture(self, size, data=None, levels=-1, samples=0, aligment=1) -> Texture:
         return self.__mglo.depth_texture(size, data, levels, samples, aligment)
 
-    def texture_array(self, size, components=3, data=None, levels=-1, aligment=1, dtype='f1') -> Texture:
-        return self.__mglo.texture_array(size, components, data, levels, aligment, dtype)
+    def texture_array(self, size, components=3, data=None, levels=-1, samples=0, aligment=1, dtype='f1') -> Texture:
+        return self.__mglo.texture(2, size, components, data, levels, samples, aligment, dtype)
 
-    def texture_cube(self, size, components=3, data=None, levels=-1, aligment=1, dtype='f1') -> Texture:
-        return self.__mglo.texture_cube(size, components, data, levels, aligment, dtype)
+    def texture_cube(self, size, components=3, data=None, levels=-1, samples=0, aligment=1, dtype='f1') -> Texture:
+        return self.__mglo.texture(3, size, components, data, levels, samples, aligment, dtype)
 
     def sampler(self, texture, filter=NEAREST, wrap=0, anisotropy=1.0, compare_func=None, lod_range=(-1000, 1000), lod_bias=0.0, border=0.0) -> Sampler:
         return self.__mglo.sampler(texture, filter, wrap, anisotropy, compare_func, lod_range, lod_bias, border)

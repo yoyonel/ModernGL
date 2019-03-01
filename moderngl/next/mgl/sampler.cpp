@@ -1,8 +1,6 @@
 #include "sampler.hpp"
 #include "context.hpp"
 #include "texture.hpp"
-#include "texture_array.hpp"
-#include "texture_cube.hpp"
 
 #include "internal/wrapper.hpp"
 
@@ -153,14 +151,14 @@ int MGLSampler_set_wrap(MGLSampler * self, PyObject * value) {
 
     int wrap = PyLong_AsLong(value);
 
-    if (wrap >> (8 * self->dims)) {
+    if (wrap >> (8 * self->dimensions)) {
         PyErr_Format(moderngl_error, "invalid wrap");
         return -1;
     }
 
  	const GLMethods & gl = self->context->gl;
 
-    for (int i = 0; i < self->dims; ++i) {
+    for (int i = 0; i < self->dimensions; ++i) {
         switch (((unsigned char *)&wrap)[i]) {
             case 0:
             case MGL_CLAMP_TO_EDGE:
@@ -311,25 +309,22 @@ int MGLSampler_set_lod_bias(MGLSampler * self, PyObject * value) {
 }
 
 int MGLSampler_set_texture(MGLSampler * self, PyObject * value) {
+    MGLTexture * texture;
     if (value->ob_type == Texture_class) {
-        MGLTexture * texture = SLOT(value, MGLTexture, Texture_class_mglo);
-        self->dims = texture->texture_target == GL_TEXTURE_3D ? 3 : 2;
-        self->texture_target = texture->texture_target;
-        self->texture_obj = texture->texture_obj;
+        texture = SLOT(value, MGLTexture, Texture_class_mglo);
     } else if (value->ob_type == TextureArray_class) {
-        MGLTextureArray * texture = SLOT(value, MGLTextureArray, TextureArray_class_mglo);
-        self->texture_target = texture->texture_target;
-        self->texture_obj = texture->texture_obj;
-        self->dims = 2;
+        texture = SLOT(value, MGLTexture, TextureArray_class_mglo);
     } else if (value->ob_type == TextureCube_class) {
-        MGLTextureCube * texture = SLOT(value, MGLTextureCube, TextureCube_class_mglo);
-        self->texture_target = texture->texture_target;
-        self->texture_obj = texture->texture_obj;
-        self->dims = 2;
+        texture = SLOT(value, MGLTexture, TextureCube_class_mglo);
     } else {
         PyErr_Format(moderngl_error, "invalid texture");
         return -1;
     }
+
+    self->dimensions = texture->dimensions;
+    self->texture_target = texture->texture_target;
+    self->texture_obj = texture->texture_obj;
+
     Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_texture), NEW_REF(value));
     return 0;
 }

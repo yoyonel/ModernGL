@@ -9,21 +9,30 @@
 #include "internal/glsl.hpp"
 #include "internal/data_type.hpp"
 
+enum MGLTextureTypes {
+    MGL_TEXTURE_2D,
+    MGL_TEXTURE_3D,
+    MGL_TEXTURE_2D_ARRAY,
+    MGL_TEXTURE_CUBE,
+    MGL_TEXTURE_CUBE_ARRAY,
+};
+
 /* MGLContext.texture(size, components, data, levels, samples, aligment, dtype)
  */
 PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 7) {
+    if (nargs != 8) {
         // TODO: error
         return 0;
     }
 
-    PyObject * size = args[0];
-    int components = PyLong_AsLong(args[1]);
-    PyObject * data = args[2];
-    int levels = PyLong_AsLong(args[3]);
-    int samples = PyLong_AsLong(args[4]);
-    int alignment = PyLong_AsLong(args[5]);
-    MGLDataType * data_type = from_dtype(args[6]);
+    int texture_type = PyLong_AsLong(args[0]);
+    PyObject * size = args[1];
+    int components = PyLong_AsLong(args[2]);
+    PyObject * data = args[3];
+    int levels = PyLong_AsLong(args[4]);
+    int samples = PyLong_AsLong(args[5]);
+    int alignment = PyLong_AsLong(args[6]);
+    MGLDataType * data_type = from_dtype(args[7]);
 
     if ((PyObject *)args[0]->ob_type == pillow_image) {
         PyObject * image = size;
@@ -59,13 +68,59 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
     }
 
     int dims = (int)PySequence_Fast_GET_SIZE(size);
-    if (dims != 2 && dims != 3) {
-        return 0;
-    }
 
-    int width = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 0));
-    int height = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 1));
-    int depth = dims == 3 ? PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 2)) : 1;
+    MGLTexture * texture;
+
+    switch (texture_type) {
+        case MGL_TEXTURE_2D:
+            texture = MGLContext_new_texture_object(self, Texture);
+            texture->texture_target = samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
+            texture->width = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 0));
+            texture->height = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 1));
+            texture->depth = 1;
+            texture->dimensions = 2;
+            break;
+
+        case MGL_TEXTURE_3D:
+            texture = MGLContext_new_texture_object(self, Texture);
+            texture->texture_target = GL_TEXTURE_3D;
+            texture->width = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 0));
+            texture->height = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 1));
+            texture->depth = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 2));
+            texture->dimensions = 3;
+            break;
+
+        case MGL_TEXTURE_2D_ARRAY:
+            texture = MGLContext_new_texture_object(self, TextureArray);
+            texture->texture_target = samples ? GL_TEXTURE_2D_MULTISAMPLE_ARRAY : GL_TEXTURE_2D_ARRAY;
+            texture->width = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 0));
+            texture->height = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 1));
+            texture->depth = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 2));
+            texture->dimensions = 2;
+            break;
+
+        case MGL_TEXTURE_CUBE:
+            texture = MGLContext_new_texture_object(self, TextureCube);
+            texture->texture_target = GL_TEXTURE_CUBE_MAP;
+            texture->width = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 0));
+            texture->height = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 1));
+            texture->depth = 6;
+            texture->dimensions = 3;
+            break;
+
+        case MGL_TEXTURE_CUBE_ARRAY:
+            texture = MGLContext_new_texture_object(self, TextureCubeArray);
+            texture->texture_target = GL_TEXTURE_CUBE_MAP_ARRAY;
+            texture->width = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 0));
+            texture->height = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 1));
+            texture->depth = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 2)) * 6;
+            texture->dimensions = 3;
+            break;
+
+        default:
+            // TODO: error
+            return 0;
+    }
 
     Py_DECREF(size);
 
@@ -74,10 +129,20 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
         return 0;
     }
 
+    if (samples & (samples - 1)) {
+        PyErr_Format(moderngl_error, "invalid samples");
+        return 0;
+    }
+
+    if (levels > 0 && samples) {
+        PyErr_Format(moderngl_error, "invalid levels");
+        return 0;
+    }
+
     int max_levels = -1;
     {
-        int size = width > height ? width : height;
-        size = size > depth ? size : depth;
+        int size = texture->width > texture->height ? texture->width : texture->height;
+        size = size > texture->depth ? size : texture->depth;
         while (size) {
             max_levels += 1;
             size >>= 1;
@@ -88,25 +153,26 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
         levels = max_levels;
     }
 
-    int expected_size = width * components * data_type->size;
-    expected_size = (expected_size + alignment - 1) / alignment * alignment;
-    expected_size = expected_size * height * depth;
+    texture->expected_size = (texture->width * components * data_type->size + alignment - 1) & -alignment;
+    texture->expected_size *= texture->height * texture->depth;
 
-    int texture_target = dims == 3 ? GL_TEXTURE_3D : (samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D);
+    texture->data_type = data_type;
+    texture->components = components;
+    // texture->depth_component = false;
+    texture->levels = levels;
+    texture->samples = samples;
+
     int pixel_type = data_type->gl_type;
     int base_format = data_type->base_format[components];
     int internal_format = data_type->internal_format[components];
 
-    MGLTexture * texture = MGLContext_new_object(self, Texture);
-
-    texture->data_type = data_type;
-    texture->texture_target = texture_target;
-    texture->width = width;
-    texture->height = height;
-    texture->depth = depth;
-    texture->components = components;
-    texture->levels = levels;
-    texture->samples = samples;
+    // if (texture->components < 0) {
+    //     texture->components = 1;
+    //     texture->depth_component = true;
+    //     internal_format = GL_DEPTH_COMPONENT24;
+    //     base_format = GL_DEPTH_COMPONENT;
+    //     pixel_type = GL_FLOAT;
+    // }
 
     const GLMethods & gl = self->gl;
     gl.GenTextures(1, (GLuint *)&texture->texture_obj);
@@ -116,52 +182,112 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
         return 0;
     }
 
-    self->bind_temp_texture(texture_target, texture->texture_obj);
+    self->bind_temp_texture(texture->texture_target, texture->texture_obj);
+
+    void * buf = 0;
+    bool allocated = false;
 
     if (data != Py_None) {
         Py_buffer view = {};
         if (prepare_buffer(data, &view) < 0) {
             return 0;
         }
-        void * buf = view.buf;
-        bool contiguos = PyBuffer_IsContiguous(&view, 'C');
-        self->set_alignment(alignment);
-        if (!contiguos) {
-            buf = malloc(expected_size);
+        allocated = !PyBuffer_IsContiguous(&view, 'C');
+        if (allocated) {
+            buf = malloc(texture->expected_size);
             PyBuffer_ToContiguous(buf, &view, view.len, 'C');
-        }
-        if (dims == 3) {
-            if (gl.TexStorage3D) {
-                gl.TexStorage3D(texture_target, levels, internal_format, width, height, depth);
-                gl.TexSubImage3D(texture_target, 0, 0, 0, 0, width, height, depth, base_format, pixel_type, buf);
-            } else {
-                gl.TexImage3D(texture_target, 0, internal_format, width, height, depth, 0, base_format, pixel_type, buf);
-            }
         } else {
-            if (gl.TexStorage2D) {
-                gl.TexStorage2D(texture_target, levels, internal_format, width, height);
-                gl.TexSubImage2D(texture_target, 0, 0, 0, width, height, base_format, pixel_type, buf);
-            } else {
-                gl.TexImage2D(texture_target, 0, internal_format, width, height, 0, base_format, pixel_type, buf);
-            }
-        }
-        if (!contiguos) {
-            free(buf);
-        }
-    } else if (samples) {
-        gl.TexImage2DMultisample(texture_target, samples, internal_format, width, height, true);
-    } else {
-        if (dims == 3) {
-            gl.TexImage3D(texture_target, 0, internal_format, width, height, depth, 0, base_format, pixel_type, 0);
-        } else {
-            gl.TexImage2D(texture_target, 0, internal_format, width, height, 0, base_format, pixel_type, 0);
+            buf = view.buf;
         }
     }
 
-    SLOT(texture->wrapper, PyObject, Texture_class_level) = PyLong_FromLong(0);
-    SLOT(texture->wrapper, PyObject, Texture_class_layer) = PyLong_FromLong(-1);
-    SLOT(texture->wrapper, PyObject, Texture_class_swizzle) = PyUnicode_FromStringAndSize("RGBA", components);
-    SLOT(texture->wrapper, PyObject, Texture_class_size) = dims == 3 ? int_tuple(width, height, depth) : int_tuple(width, height);
+    self->set_alignment(alignment);
+
+    int tx = texture->texture_target;
+    int width = texture->width;
+    int height = texture->height;
+    int depth = texture->depth;
+
+    switch (texture_type) {
+        case MGL_TEXTURE_2D:
+            if (samples) {
+                if (gl.TexStorage2DMultisample) {
+                    gl.TexStorage2DMultisample(tx, samples, internal_format, width, height, true);
+                } else {
+                    gl.TexImage2DMultisample(tx, samples, internal_format, width, height, true);
+                }
+            } else {
+                if (gl.TexStorage2D) {
+                    gl.TexStorage2D(tx, levels, internal_format, width, height);
+                    gl.TexSubImage2D(tx, 0, 0, 0, width, height, base_format, pixel_type, buf);
+                } else {
+                    gl.TexImage2D(tx, 0, internal_format, width, height, 0, base_format, pixel_type, buf);
+                }
+            }
+            break;
+
+        case MGL_TEXTURE_3D:
+        case MGL_TEXTURE_2D_ARRAY:
+        case MGL_TEXTURE_CUBE_ARRAY:
+            // if (samples) GL_TEXTURE_2D_MULTISAMPLE_ARRAY
+            if (gl.TexStorage3D) {
+                gl.TexStorage3D(tx, levels, internal_format, width, height, depth);
+                gl.TexSubImage3D(tx, 0, 0, 0, 0, width, height, depth, base_format, pixel_type, buf);
+            } else {
+                gl.TexImage3D(tx, 0, internal_format, width, height, depth, 0, base_format, pixel_type, buf);
+            }
+            break;
+
+        case MGL_TEXTURE_CUBE:
+            if (samples) {
+                if (gl.TexStorage2DMultisample) {
+                    gl.TexStorage2DMultisample(GL_TEXTURE_CUBE_MAP, samples, internal_format, width, height, true);
+                } else {
+                    for (int i = 0; i < 6; ++i) {
+                        gl.TexImage2DMultisample(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, samples, internal_format, width, height, true);
+                    }
+                }
+            } else {
+                if (gl.TexStorage2D) {
+                    gl.TexStorage2D(GL_TEXTURE_CUBE_MAP, levels, internal_format, width, height);
+                    for (int i = 0; i < 6; ++i) {
+                        const char * ptr = (const char *)buf + texture->expected_size * i / 6;
+                        gl.TexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, 0, 0, width, height, base_format, pixel_type, buf ? ptr : 0);
+                    }
+                } else {
+                    for (int i = 0; i < 6; ++i) {
+                        const char * ptr = (const char *)buf + texture->expected_size * i / 6;
+                        gl.TexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internal_format, width, height, 0, base_format, pixel_type, buf ? ptr : 0);
+                    }
+                }
+            }
+            break;
+    }
+
+    if (allocated) {
+        free(buf);
+    }
+
+    switch (texture_type) {
+        case MGL_TEXTURE_2D:
+            SLOT(texture->wrapper, PyObject, Texture_class_level) = PyLong_FromLong(0);
+            SLOT(texture->wrapper, PyObject, Texture_class_layer) = PyLong_FromLong(-1);
+            SLOT(texture->wrapper, PyObject, Texture_class_swizzle) = PyUnicode_FromStringAndSize("RGBA", components);
+            SLOT(texture->wrapper, PyObject, Texture_class_size) = dims == 3 ? int_tuple(width, height, depth) : int_tuple(width, height);
+            break;
+
+        case MGL_TEXTURE_3D:
+            break;
+
+        case MGL_TEXTURE_2D_ARRAY:
+            break;
+
+        case MGL_TEXTURE_CUBE:
+            break;
+
+        case MGL_TEXTURE_CUBE_ARRAY:
+            break;
+    }
     return NEW_REF(texture->wrapper);
 }
 

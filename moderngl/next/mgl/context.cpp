@@ -12,8 +12,6 @@
 #include "sampler.hpp"
 #include "scope.hpp"
 #include "texture.hpp"
-#include "texture_array.hpp"
-#include "texture_cube.hpp"
 #include "vertex_array.hpp"
 
 #include "internal/wrapper.hpp"
@@ -130,8 +128,6 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
     context->MGLSampler_class = (PyTypeObject *)PyType_FromSpec(&MGLSampler_spec);
     context->MGLScope_class = (PyTypeObject *)PyType_FromSpec(&MGLScope_spec);
     context->MGLTexture_class = (PyTypeObject *)PyType_FromSpec(&MGLTexture_spec);
-    context->MGLTextureArray_class = (PyTypeObject *)PyType_FromSpec(&MGLTextureArray_spec);
-    context->MGLTextureCube_class = (PyTypeObject *)PyType_FromSpec(&MGLTextureCube_spec);
     context->MGLVertexArray_class = (PyTypeObject *)PyType_FromSpec(&MGLVertexArray_spec);
 
     MGLFramebuffer * default_framebuffer = MGLContext_new_object(context, Framebuffer);
@@ -356,8 +352,6 @@ PyMethodDef MGLContext_methods[] = {
     {"sampler", (PyCFunction)MGLContext_meth_sampler, METH_FASTCALL, 0},
     {"scope", (PyCFunction)MGLContext_meth_scope, METH_FASTCALL, 0},
     {"texture", (PyCFunction)MGLContext_meth_texture, METH_FASTCALL, 0},
-    {"texture_array", (PyCFunction)MGLContext_meth_texture_array, METH_FASTCALL, 0},
-    {"texture_cube", (PyCFunction)MGLContext_meth_texture_cube, METH_FASTCALL, 0},
     {"vertex_array", (PyCFunction)MGLContext_meth_vertex_array, METH_FASTCALL, 0},
     {"replay", (PyCFunction)MGLContext_meth_replay, METH_O, 0},
     {0},

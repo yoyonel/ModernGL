@@ -1,13 +1,13 @@
 import moderngl.next as mgl
 import numpy as np
 
-from example_window import Example, run_example
+from window import Example, run_example
 
 
 class Conway(Example):
-    WINDOW_SIZE = (640, 640)
 
-    def __init__(self):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.ctx = mgl.create_context()
 
         width, height = self.wnd.size
@@ -98,8 +98,7 @@ class Conway(Example):
         self.tao = self.ctx.simple_vertex_array(self.transform, self.text, 'in_text')
         self.pbo = self.ctx.buffer(reserve=pixels.nbytes)
 
-    def render(self):
-        self.ctx.screen.viewport = self.wnd.viewport
+    def render(self, time, frame_time):
         self.ctx.clear(1.0, 1.0, 1.0)
 
         self.tao.transform(self.pbo)

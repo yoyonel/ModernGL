@@ -83,6 +83,33 @@ MGLDataType i4 = {
     'i',
 };
 
+MGLDataType d2 = {
+    0,
+    {0, GL_DEPTH_COMPONENT, 0, 0, 0},
+    {0, GL_DEPTH_COMPONENT16, 0, 0, 0},
+    GL_HALF_FLOAT,
+    2,
+    'd',
+};
+
+MGLDataType d3 = {
+    0,
+    {0, GL_DEPTH_COMPONENT, 0, 0, 0},
+    {0, GL_DEPTH_COMPONENT24, 0, 0, 0},
+    GL_FLOAT,
+    4,
+    'd',
+};
+
+MGLDataType d4 = {
+    0,
+    {0, GL_DEPTH_COMPONENT, 0, 0, 0},
+    {0, GL_DEPTH_COMPONENT32, 0, 0, 0},
+    GL_FLOAT,
+    4,
+    'd',
+};
+
 MGLDataType * from_dtype(PyObject * dtype) {
     if (PyUnicode_Check(dtype)) {
         short * code = (short *)PyUnicode_AsUTF8(dtype);
@@ -114,6 +141,15 @@ MGLDataType * from_dtype(PyObject * dtype) {
 
                 case 'i' | '4' << 8:
                     return &i4;
+
+                case 'd' | '2' << 8:
+                    return &d2;
+
+                case 'd' | '3' << 8:
+                    return &d3;
+
+                case 'd' | '4' << 8:
+                    return &d4;
 
                 default:
                     return 0;
