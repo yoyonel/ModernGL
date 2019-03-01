@@ -45,8 +45,8 @@ class Context:
     def texture(self, size, components=3, data=None, levels=-1, samples=0, aligment=1, dtype='f1') -> Texture:
         return self.__mglo.texture(0, size, components, data, levels, samples, aligment, dtype)
 
-    def depth_texture(self, size, data=None, levels=-1, samples=0, aligment=1) -> Texture:
-        return self.__mglo.depth_texture(size, data, levels, samples, aligment)
+    def depth_texture(self, size, data=None, levels=-1, samples=0, aligment=1, dtype='d3') -> Texture:
+        return self.__mglo.texture(0, size, 1, data, levels, samples, aligment, dtype)
 
     def texture_array(self, size, components=3, data=None, levels=-1, samples=0, aligment=1, dtype='f1') -> Texture:
         return self.__mglo.texture(2, size, components, data, levels, samples, aligment, dtype)

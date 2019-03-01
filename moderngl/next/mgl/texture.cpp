@@ -69,6 +69,10 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
 
     int dims = (int)PySequence_Fast_GET_SIZE(size);
 
+    if (texture_type == MGL_TEXTURE_2D && dims == 3) {
+        texture_type = MGL_TEXTURE_3D;
+    }
+
     MGLTexture * texture;
 
     switch (texture_type) {
