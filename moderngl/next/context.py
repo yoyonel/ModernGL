@@ -95,6 +95,9 @@ class Context:
     def replay(self, bytecode):
         return self.__mglo.replay(bytecode)
 
+    def make_current(self):
+        self.__mglo.make_current()
+
     @property
     def info(self):
         return {'GL_' + k.upper(): v for k, v in hwinfo(self).items()}

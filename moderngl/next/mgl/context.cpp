@@ -175,6 +175,11 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
     return NEW_REF(context->wrapper);
 }
 
+PyObject * MGLContext_meth_make_current(MGLContext * self) {
+    self->gl_context.enter();
+    Py_RETURN_NONE;
+}
+
 /* _MGLContext_new_object(...)
  */
 MGLObject * _MGLContext_new_object(MGLContext * self, PyTypeObject * type, PyTypeObject * cls, int slot, int size) {
@@ -354,6 +359,7 @@ PyMethodDef MGLContext_methods[] = {
     {"texture", (PyCFunction)MGLContext_meth_texture, METH_FASTCALL, 0},
     {"vertex_array", (PyCFunction)MGLContext_meth_vertex_array, METH_FASTCALL, 0},
     {"replay", (PyCFunction)MGLContext_meth_replay, METH_O, 0},
+    {"make_current", (PyCFunction)MGLContext_meth_make_current, METH_NOARGS, 0},
     {0},
 };
 
@@ -413,6 +419,7 @@ PyMethodDef MGLContext_methods[] = {
     {"texture", (PyCFunction)MGLContext_meth_texture_va, METH_VARARGS, 0},
     {"vertex_array", (PyCFunction)MGLContext_meth_vertex_array_va, METH_VARARGS, 0},
     {"replay", (PyCFunction)MGLContext_meth_replay, METH_O, 0},
+    {"make_current", (PyCFunction)MGLContext_meth_make_current, METH_NOARGS, 0},
     {0},
 };
 
