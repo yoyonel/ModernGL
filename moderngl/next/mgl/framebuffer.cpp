@@ -47,10 +47,18 @@ PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * arg
     self->bind_framebuffer(framebuffer->framebuffer_obj);
 
     int color_attachments_len = (int)PySequence_Fast_GET_SIZE(color_attachments);
+
+    int width, height, samples;
+    char * attachment_type = (char *)malloc(color_attachments_len);
+
     for (int i = 0; i < color_attachments_len; ++i) {
         PyObject * attachment = PySequence_Fast_GET_ITEM(color_attachments, i);
         if (attachment->ob_type == Renderbuffer_class) {
             MGLRenderbuffer * renderbuffer = SLOT(attachment, MGLRenderbuffer, Renderbuffer_class_mglo);
+            attachment_type[i] = renderbuffer->data_type->shape;
+            width = renderbuffer->width;
+            height = renderbuffer->height;
+            samples = renderbuffer->samples;
             gl.FramebufferRenderbuffer(
                 GL_FRAMEBUFFER,
                 GL_COLOR_ATTACHMENT0 + i,
@@ -60,40 +68,69 @@ PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * arg
         } else if (attachment->ob_type == Texture_class) {
             int level = PyLong_AsLong(SLOT(attachment, PyObject, Texture_class_level));
             MGLTexture * texture = SLOT(attachment, MGLTexture, Texture_class_mglo);
-            gl.FramebufferTexture2D(
-                GL_FRAMEBUFFER,
-                GL_COLOR_ATTACHMENT0 + i,
-                texture->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D,
-                texture->texture_obj,
-                level
-            );
+            attachment_type[i] = texture->data_type->shape;
+            width = texture->width;
+            height = texture->height;
+            samples = texture->samples;
+            if (texture->texture_target == GL_TEXTURE_CUBE_MAP) {
+                gl.FramebufferTexture(
+                    GL_FRAMEBUFFER,
+                    GL_COLOR_ATTACHMENT0 + i,
+                    texture->texture_obj,
+                    level
+                );
+            } else {
+                gl.FramebufferTexture2D(
+                    GL_FRAMEBUFFER,
+                    GL_COLOR_ATTACHMENT0 + i,
+                    texture->texture_target,
+                    texture->texture_obj,
+                    level
+                );
+            }
         } else {
             return 0;
         }
     }
 
+    // TODO:
+    framebuffer->width = width;
+    framebuffer->height = height;
+    framebuffer->samples = samples;
+
     Py_DECREF(color_attachments);
 
-    if (depth_attachment->ob_type == Renderbuffer_class) {
-        MGLRenderbuffer * renderbuffer = SLOT(depth_attachment, MGLRenderbuffer, Renderbuffer_class_mglo);
-        gl.FramebufferRenderbuffer(
-            GL_FRAMEBUFFER,
-			GL_DEPTH_ATTACHMENT,
-            GL_RENDERBUFFER,
-            renderbuffer->renderbuffer_obj
-        );
-    } else if (depth_attachment->ob_type == Texture_class) {
-        int level = PyLong_AsLong(SLOT(depth_attachment, PyObject, Texture_class_level));
-        MGLTexture * texture = SLOT(depth_attachment, MGLTexture, Texture_class_mglo);
-        gl.FramebufferTexture2D(
-            GL_FRAMEBUFFER,
-			GL_DEPTH_ATTACHMENT,
-            texture->samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D,
-            texture->texture_obj,
-            level
-        );
-    } else {
-        return 0;
+    if (depth_attachment != Py_None) {
+        if (depth_attachment->ob_type == Renderbuffer_class) {
+            MGLRenderbuffer * renderbuffer = SLOT(depth_attachment, MGLRenderbuffer, Renderbuffer_class_mglo);
+            gl.FramebufferRenderbuffer(
+                GL_FRAMEBUFFER,
+                GL_DEPTH_ATTACHMENT,
+                GL_RENDERBUFFER,
+                renderbuffer->renderbuffer_obj
+            );
+        } else if (depth_attachment->ob_type == Texture_class) {
+            int level = PyLong_AsLong(SLOT(depth_attachment, PyObject, Texture_class_level));
+            MGLTexture * texture = SLOT(depth_attachment, MGLTexture, Texture_class_mglo);
+            if (texture->texture_target == GL_TEXTURE_CUBE_MAP) {
+                gl.FramebufferTexture(
+                    GL_FRAMEBUFFER,
+                    GL_DEPTH_ATTACHMENT,
+                    texture->texture_obj,
+                    level
+                );
+            } else {
+                gl.FramebufferTexture2D(
+                    GL_FRAMEBUFFER,
+                    GL_DEPTH_ATTACHMENT,
+                    texture->texture_target,
+                    texture->texture_obj,
+                    level
+                );
+            }
+        } else {
+            return 0;
+        }
     }
 
     int status = gl.CheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -143,6 +180,8 @@ PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * arg
     framebuffer->viewport[1] = 0;
     framebuffer->viewport[2] = framebuffer->width;
     framebuffer->viewport[3] = framebuffer->height;
+    framebuffer->attachments = color_attachments_len;
+    framebuffer->attachment_type = attachment_type;
     SLOT(framebuffer->wrapper, PyObject, Framebuffer_class_viewport) = int_tuple(0, 0, framebuffer->width, framebuffer->height);
     return NEW_REF(framebuffer->wrapper);
 }
