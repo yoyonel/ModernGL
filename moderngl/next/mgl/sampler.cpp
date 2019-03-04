@@ -309,19 +309,12 @@ int MGLSampler_set_lod_bias(MGLSampler * self, PyObject * value) {
 }
 
 int MGLSampler_set_texture(MGLSampler * self, PyObject * value) {
-    MGLTexture * texture;
-    if (value->ob_type == Texture_class) {
-        texture = SLOT(value, MGLTexture, Texture_class_mglo);
-    } else if (value->ob_type == TextureArray_class) {
-        texture = SLOT(value, MGLTexture, TextureArray_class_mglo);
-    } else if (value->ob_type == TextureCube_class) {
-        texture = SLOT(value, MGLTexture, TextureCube_class_mglo);
-    } else {
+    if (value->ob_type != Texture_class) {
         PyErr_Format(moderngl_error, "invalid texture");
         return -1;
     }
 
-    self->texture = texture;
+    self->texture = SLOT(value, MGLTexture, Texture_class_mglo);;
 
     Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_texture), NEW_REF(value));
     return 0;

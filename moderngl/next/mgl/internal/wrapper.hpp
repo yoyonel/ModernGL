@@ -208,18 +208,6 @@ extern int Texture_class_swizzle;
 extern int Texture_class_size;
 extern int Texture_class_extra;
 
-extern PyTypeObject * TextureArray_class;
-extern int TextureArray_class_mglo;
-extern int TextureArray_class_extra;
-
-extern PyTypeObject * TextureCube_class;
-extern int TextureCube_class_mglo;
-extern int TextureCube_class_extra;
-
-extern PyTypeObject * TextureCubeArray_class;
-extern int TextureCubeArray_class_mglo;
-extern int TextureCubeArray_class_extra;
-
 extern PyTypeObject * Uniform_class;
 extern int Uniform_class_type;
 extern int Uniform_class_location;

@@ -11,9 +11,6 @@ from .renderbuffer import Renderbuffer
 from .sampler import Sampler
 from .scope import Scope
 from .texture import Texture
-from .texture_array import TextureArray
-from .texture_cube import TextureCube
-from .texture_cube_array import TextureCubeArray
 from .uniform import Uniform
 from .vertex_array import VertexArray
 

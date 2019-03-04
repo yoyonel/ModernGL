@@ -208,18 +208,6 @@ int Texture_class_swizzle;
 int Texture_class_size;
 int Texture_class_extra;
 
-PyTypeObject * TextureArray_class;
-int TextureArray_class_mglo;
-int TextureArray_class_extra;
-
-PyTypeObject * TextureCube_class;
-int TextureCube_class_mglo;
-int TextureCube_class_extra;
-
-PyTypeObject * TextureCubeArray_class;
-int TextureCubeArray_class_mglo;
-int TextureCubeArray_class_extra;
-
 PyTypeObject * Uniform_class;
 int Uniform_class_type;
 int Uniform_class_location;
@@ -466,24 +454,6 @@ void init_wrappers() {
     Texture_class_size = slot_offset(Texture_class, "size", Texture_slots);
     Texture_class_extra = slot_offset(Texture_class, "extra", Texture_slots);
     assert_slots_len(Texture_class, Texture_slots);
-
-    int TextureArray_slots = 0;
-    TextureArray_class = detect_class(moderngl, "TextureArray", TextureArray_slots);
-    TextureArray_class_mglo = slot_offset(TextureArray_class, "_TextureArray__mglo", TextureArray_slots);
-    TextureArray_class_extra = slot_offset(TextureArray_class, "extra", TextureArray_slots);
-    assert_slots_len(TextureArray_class, TextureArray_slots);
-
-    int TextureCube_slots = 0;
-    TextureCube_class = detect_class(moderngl, "TextureCube", TextureCube_slots);
-    TextureCube_class_mglo = slot_offset(TextureCube_class, "_TextureCube__mglo", TextureCube_slots);
-    TextureCube_class_extra = slot_offset(TextureCube_class, "extra", TextureCube_slots);
-    assert_slots_len(TextureCube_class, TextureCube_slots);
-
-    int TextureCubeArray_slots = 0;
-    TextureCubeArray_class = detect_class(moderngl, "TextureCubeArray", TextureCubeArray_slots);
-    TextureCubeArray_class_mglo = slot_offset(TextureCubeArray_class, "_TextureCubeArray__mglo", TextureCubeArray_slots);
-    TextureCubeArray_class_extra = slot_offset(TextureCubeArray_class, "extra", TextureCubeArray_slots);
-    assert_slots_len(TextureCubeArray_class, TextureCubeArray_slots);
 
     int Uniform_slots = 0;
     Uniform_class = detect_class(moderngl, "Uniform", Uniform_slots);

@@ -73,11 +73,10 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
         texture_type = MGL_TEXTURE_3D;
     }
 
-    MGLTexture * texture;
+    MGLTexture * texture = MGLContext_new_object(self, Texture);
 
     switch (texture_type) {
         case MGL_TEXTURE_2D:
-            texture = MGLContext_new_texture_object(self, Texture);
             texture->texture_target = samples ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
             texture->width = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 0));
             texture->height = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 1));
@@ -86,7 +85,6 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
             break;
 
         case MGL_TEXTURE_3D:
-            texture = MGLContext_new_texture_object(self, Texture);
             texture->texture_target = GL_TEXTURE_3D;
             texture->width = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 0));
             texture->height = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 1));
@@ -95,7 +93,6 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
             break;
 
         case MGL_TEXTURE_2D_ARRAY:
-            texture = MGLContext_new_texture_object(self, TextureArray);
             texture->texture_target = samples ? GL_TEXTURE_2D_MULTISAMPLE_ARRAY : GL_TEXTURE_2D_ARRAY;
             texture->width = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 0));
             texture->height = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 1));
@@ -104,7 +101,6 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
             break;
 
         case MGL_TEXTURE_CUBE:
-            texture = MGLContext_new_texture_object(self, TextureCube);
             texture->texture_target = GL_TEXTURE_CUBE_MAP;
             texture->width = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 0));
             texture->height = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 1));
@@ -113,7 +109,6 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
             break;
 
         case MGL_TEXTURE_CUBE_ARRAY:
-            texture = MGLContext_new_texture_object(self, TextureCubeArray);
             texture->texture_target = GL_TEXTURE_CUBE_MAP_ARRAY;
             texture->width = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 0));
             texture->height = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 1));

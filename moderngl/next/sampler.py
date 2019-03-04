@@ -1,7 +1,6 @@
 from typing import Any, Tuple, Union
 
 from .texture import Texture
-from .texture_array import TextureArray
 
 
 class Sampler:
@@ -16,7 +15,7 @@ class Sampler:
         self.__lod_range = None  # type: Tuple[int, int]
         self.__lod_bias = None  # type: float
         self.__border = None  # type: Tuple[float, float, float, float]
-        self.__texture = None  # type: Union[Texture, TextureArray]
+        self.__texture = None  # type: Texture
         self.extra = None  # type: Any
 
     @property
