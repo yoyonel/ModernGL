@@ -688,7 +688,7 @@ void print_framebuffer_attachment(GLenum attachment) {
 		case GL_DEPTH_STENCIL_ATTACHMENT: printf("GL_DEPTH_STENCIL_ATTACHMENT"); break;
         default:
             if (GL_COLOR_ATTACHMENT0 <= attachment && attachment < GL_COLOR_ATTACHMENT0 + 32) {
-                printf("GL_COLOR_ATTACHMENT%d", attachment);
+                printf("GL_COLOR_ATTACHMENT%d", attachment - GL_COLOR_ATTACHMENT0);
             } else {
                 printf("0x%04x", attachment);
             }
