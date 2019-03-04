@@ -10,6 +10,8 @@
 /.idea
 /.eggs
 
+/docs/next/_build
+
 /.vscode/*
 !/.vscode/extensions.json
 !/.vscode/snippets
