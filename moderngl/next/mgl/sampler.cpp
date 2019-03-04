@@ -94,7 +94,7 @@ PyObject * MGLContext_meth_sampler(MGLContext * self, PyObject * const * args, P
  */
 PyObject * MGLSampler_meth_use(MGLSampler * self, PyObject * arg) {
     int location = PyLong_AsLong(arg);
-    self->context->bind_sampler(location, self->texture_target, self->texture_obj, self->sampler_obj);
+    self->context->bind_sampler(location, self->texture->texture_target, self->texture->texture_obj, self->sampler_obj);
 
     if (PyErr_Occurred()) {
         return 0;
@@ -151,14 +151,14 @@ int MGLSampler_set_wrap(MGLSampler * self, PyObject * value) {
 
     int wrap = PyLong_AsLong(value);
 
-    if (wrap >> (8 * self->dimensions)) {
+    if (wrap >> (8 * self->texture->dimensions)) {
         PyErr_Format(moderngl_error, "invalid wrap");
         return -1;
     }
 
  	const GLMethods & gl = self->context->gl;
 
-    for (int i = 0; i < self->dimensions; ++i) {
+    for (int i = 0; i < self->texture->dimensions; ++i) {
         switch (((unsigned char *)&wrap)[i]) {
             case 0:
             case MGL_CLAMP_TO_EDGE:
@@ -321,9 +321,7 @@ int MGLSampler_set_texture(MGLSampler * self, PyObject * value) {
         return -1;
     }
 
-    self->dimensions = texture->dimensions;
-    self->texture_target = texture->texture_target;
-    self->texture_obj = texture->texture_obj;
+    self->texture = texture;
 
     Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_texture), NEW_REF(value));
     return 0;

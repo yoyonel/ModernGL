@@ -28,8 +28,7 @@ void MGLScope_begin_core(MGLScope * self) {
     if (self->samplers) {
         MGLScopeSamplerBinding * ptr = self->samplers;
         for (int i = 0; i < self->num_samplers; ++i) {
-            PyObject * wrapper = SLOT(ptr->sampler->wrapper, PyObject, Sampler_class_texture);
-            MGLTexture * texture = SLOT(wrapper, MGLTexture, Texture_class_mglo);
+            MGLTexture * texture = ptr->sampler->texture;
             self->context->bind_sampler(ptr->binding, texture->texture_target, texture->texture_obj, ptr->sampler->sampler_obj);
             ++ptr;
         }

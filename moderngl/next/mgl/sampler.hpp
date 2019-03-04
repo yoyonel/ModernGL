@@ -2,15 +2,14 @@
 #include "mgl.hpp"
 
 struct MGLContext;
+struct MGLTexture;
 
 struct MGLSampler {
     PyObject_HEAD
     PyObject * wrapper;
     MGLContext * context;
+    MGLTexture * texture;
     int sampler_obj;
-    int texture_target;
-    int texture_obj;
-    int dimensions;
 };
 
 extern PyType_Spec MGLSampler_spec;
