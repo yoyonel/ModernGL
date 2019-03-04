@@ -36,5 +36,6 @@ gltraces = Extension(
 
 setup(
     name='gltraces',
+    version='6.0.0',
     ext_modules=[gltraces],
 )
