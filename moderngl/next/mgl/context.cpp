@@ -139,6 +139,11 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
     default_framebuffer->attachments = 1;
     default_framebuffer->attachment_type = "f";
 
+    int scrissor_box[4] = {};
+    gl.GetIntegerv(GL_SCISSOR_BOX, scrissor_box);
+    default_framebuffer->width = scrissor_box[2];
+    default_framebuffer->height = scrissor_box[3];
+
     default_framebuffer->viewport[0] = 0;
     default_framebuffer->viewport[1] = 0;
     default_framebuffer->viewport[2] = default_framebuffer->width;
