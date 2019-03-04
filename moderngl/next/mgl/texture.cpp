@@ -267,26 +267,10 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
         free(buf);
     }
 
-    switch (texture_type) {
-        case MGL_TEXTURE_2D:
-            SLOT(texture->wrapper, PyObject, Texture_class_level) = PyLong_FromLong(0);
-            SLOT(texture->wrapper, PyObject, Texture_class_layer) = PyLong_FromLong(-1);
-            SLOT(texture->wrapper, PyObject, Texture_class_swizzle) = PyUnicode_FromStringAndSize("RGBA", components);
-            SLOT(texture->wrapper, PyObject, Texture_class_size) = dims == 3 ? int_tuple(width, height, depth) : int_tuple(width, height);
-            break;
-
-        case MGL_TEXTURE_3D:
-            break;
-
-        case MGL_TEXTURE_2D_ARRAY:
-            break;
-
-        case MGL_TEXTURE_CUBE:
-            break;
-
-        case MGL_TEXTURE_CUBE_ARRAY:
-            break;
-    }
+    SLOT(texture->wrapper, PyObject, Texture_class_level) = PyLong_FromLong(0);
+    SLOT(texture->wrapper, PyObject, Texture_class_layer) = PyLong_FromLong(-1);
+    SLOT(texture->wrapper, PyObject, Texture_class_swizzle) = PyUnicode_FromStringAndSize("RGBA", components);
+    SLOT(texture->wrapper, PyObject, Texture_class_size) = dims == 3 ? int_tuple(width, height, depth) : int_tuple(width, height);
     return NEW_REF(texture->wrapper);
 }
 
