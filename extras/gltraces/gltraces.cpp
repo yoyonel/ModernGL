@@ -1,5 +1,6 @@
 #include "moderngl/next/mgl/internal/opengl/gl_methods.hpp"
 #include <Python.h>
+#include <frameobject.h>
 #include <cstdio>
 
 GLMethods gl;
@@ -15223,7 +15224,33 @@ const char * names[] = {
     0,
 };
 
-PyModuleDef module_def = {PyModuleDef_HEAD_INIT, "moderngl.gltraces", 0, -1, 0, 0, 0, 0, 0};
+PyObject * meth_mark(PyObject * self, PyObject * args) {
+    const char * name = "";
+
+    if (!PyArg_ParseTuple(args, "|s", &name)) {
+        return 0;
+    }
+
+    PyThreadState * ts = PyThreadState_Get();
+    const char * filename = PyUnicode_AsUTF8(ts->frame->f_code->co_filename);
+    int line = PyCode_Addr2Line(ts->frame->f_code, ts->frame->f_lasti);
+
+    if (strlen(name) > 0) {
+        printf("%s ", name);
+    }
+
+    printf("%s:%d", filename, line);
+    printf("\n");
+
+    Py_RETURN_NONE;
+}
+
+PyMethodDef methods[] = {
+    {"mark", (PyCFunction)meth_mark, METH_VARARGS, 0},
+    {0},
+};
+
+PyModuleDef module_def = {PyModuleDef_HEAD_INIT, "moderngl.gltraces", 0, -1, methods, 0, 0, 0, 0};
 
 extern "C" PyObject * PyInit_gltraces() {
     PyObject * module = PyModule_Create(&module_def);
