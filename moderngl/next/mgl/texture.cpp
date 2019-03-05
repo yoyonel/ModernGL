@@ -21,7 +21,7 @@ enum MGLTextureTypes {
  */
 PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 8) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
@@ -278,7 +278,7 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
  */
 PyObject * MGLTexture_meth_write(MGLTexture * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 4) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
@@ -377,7 +377,7 @@ PyObject * MGLTexture_meth_write(MGLTexture * self, PyObject * const * args, Py_
  */
 PyObject * MGLTexture_meth_bind(MGLTexture * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 3) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 

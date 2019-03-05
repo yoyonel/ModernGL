@@ -135,7 +135,7 @@ PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source) 
  */
 PyObject * MGLComputeShader_meth_run(MGLComputeShader * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 3) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 

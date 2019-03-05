@@ -12,7 +12,7 @@
  */
 PyObject * MGLContext_meth_renderbuffer(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 4) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
@@ -63,7 +63,7 @@ PyObject * MGLContext_meth_renderbuffer(MGLContext * self, PyObject * const * ar
  */
 PyObject * MGLContext_meth_depth_renderbuffer(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 3) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 

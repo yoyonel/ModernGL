@@ -27,7 +27,7 @@ const int SHADER_TYPE[] = {
  */
 PyObject * MGLContext_meth_program(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 6) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
@@ -323,7 +323,7 @@ PyObject * MGLProgram_meth_uniform(MGLProgram * self, PyObject * const * args, P
     }
 
     if (nargs != 2) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 

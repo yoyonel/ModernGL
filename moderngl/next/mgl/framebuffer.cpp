@@ -20,7 +20,7 @@ void MGLFramebuffer_use_core(MGLFramebuffer * self) {
  */
 PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 2) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
@@ -190,7 +190,7 @@ PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * arg
  */
 PyObject * MGLFramebuffer_meth_read(MGLFramebuffer * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 4) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
@@ -244,7 +244,7 @@ PyObject * MGLFramebuffer_meth_use(MGLFramebuffer * self) {
  */
 PyObject * MGLFramebuffer_meth_clear(MGLFramebuffer * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 4) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 

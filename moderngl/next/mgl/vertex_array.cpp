@@ -11,7 +11,7 @@
  */
 PyObject * MGLContext_meth_vertex_array(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 3) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
@@ -200,7 +200,7 @@ PyObject * MGLContext_meth_vertex_array(MGLContext * self, PyObject * const * ar
  */
 PyObject * MGLVertexArray_meth_render(MGLVertexArray * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 6) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
@@ -268,7 +268,7 @@ PyObject * MGLVertexArray_meth_render(MGLVertexArray * self, PyObject * const * 
  */
 PyObject * MGLVertexArray_meth_render_indirect(MGLVertexArray * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 4) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
@@ -346,7 +346,7 @@ PyObject * MGLVertexArray_meth_render_indirect(MGLVertexArray * self, PyObject *
  */
 PyObject * MGLVertexArray_meth_transform(MGLVertexArray * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 6) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
@@ -431,7 +431,7 @@ PyObject * MGLVertexArray_meth_transform(MGLVertexArray * self, PyObject * const
  */
 PyObject * MGLVertexArray_meth_transform_indirect(MGLVertexArray * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 6) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 

@@ -52,7 +52,7 @@ void MGLScope_end_core(MGLScope * self) {
  */
 PyObject * MGLContext_meth_scope(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 5) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 

@@ -30,7 +30,7 @@ int MGLBuffer_core_write(MGLBuffer * self, const Py_ssize_t & offset, Py_buffer 
  */
 PyObject * MGLContext_meth_copy_buffer(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 5) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
@@ -57,7 +57,7 @@ PyObject * MGLContext_meth_copy_buffer(MGLContext * self, PyObject * const * arg
  */
 PyObject * MGLContext_meth_buffer(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 5) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
@@ -146,7 +146,7 @@ PyObject * MGLContext_meth_buffer(MGLContext * self, PyObject * const * args, Py
  */
 PyObject * MGLBuffer_meth_write(MGLBuffer * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 2) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
@@ -187,7 +187,7 @@ PyObject * MGLBuffer_meth_write(MGLBuffer * self, PyObject * const * args, Py_ss
  */
 PyObject * MGLBuffer_meth_read(MGLBuffer * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 3) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
@@ -246,7 +246,7 @@ PyObject * MGLBuffer_meth_read(MGLBuffer * self, PyObject * const * args, Py_ssi
  */
 PyObject * MGLBuffer_meth_map(MGLBuffer * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 5) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
@@ -362,7 +362,7 @@ PyObject * MGLBuffer_meth_clear(MGLBuffer * self) {
  */
 PyObject * MGLBuffer_meth_bind(MGLBuffer * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 4) {
-        // TODO: error
+        PyErr_Format(moderngl_error, "num args");
         return 0;
     }
 
