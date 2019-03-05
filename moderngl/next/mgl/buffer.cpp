@@ -36,6 +36,17 @@ PyObject * MGLContext_meth_copy_buffer(MGLContext * self, PyObject * const * arg
 
     PyObject * dst = args[0];
     PyObject * src = args[1];
+
+    if (dst->ob_type != Buffer_class) {
+        PyErr_Format(moderngl_error, "not a Buffer");
+        return 0;
+    }
+
+    if (src->ob_type != Buffer_class) {
+        PyErr_Format(moderngl_error, "not a Buffer");
+        return 0;
+    }
+
     Py_ssize_t size = PyLong_AsSsize_t(args[2]);
     Py_ssize_t read_offset = PyLong_AsSsize_t(args[3]);
     Py_ssize_t write_offset = PyLong_AsSsize_t(args[4]);
@@ -43,7 +54,19 @@ PyObject * MGLContext_meth_copy_buffer(MGLContext * self, PyObject * const * arg
     MGLBuffer * src_buffer = SLOT(src, MGLBuffer, Buffer_class_mglo);
     MGLBuffer * dst_buffer = SLOT(dst, MGLBuffer, Buffer_class_mglo);
 
-    // TODO: error checking
+    if (size < 0) {
+        size = src_buffer->size - read_offset;
+    }
+
+    if (size < 0 || read_offset < 0 || write_offset < 0) {
+        PyErr_Format(moderngl_error, "overflow");
+        return 0;
+    }
+
+    if (read_offset + size > src_buffer->size || write_offset + size > dst_buffer->size) {
+        PyErr_Format(moderngl_error, "overflow");
+        return 0;
+    }
 
 	const GLMethods & gl = self->gl;
 	gl.BindBuffer(GL_COPY_READ_BUFFER, src_buffer->buffer_obj);
@@ -258,6 +281,11 @@ PyObject * MGLBuffer_meth_map(MGLBuffer * self, PyObject * const * args, Py_ssiz
 
     if (size < 0) {
         size = self->size - offset;
+    }
+
+    if (size < 0 || offset < 0) {
+        PyErr_Format(moderngl_error, "overflow");
+        return 0;
     }
 
     if (!readable && !writable) {
