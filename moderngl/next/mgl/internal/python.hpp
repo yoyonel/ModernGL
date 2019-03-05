@@ -45,6 +45,9 @@ inline PyObject * _new_object(PyTypeObject * type) {
     Py_INCREF(type);
     if (type->tp_flags & Py_TPFLAGS_HAVE_GC) {
         res = PyObject_GC_New(PyObject, type);
+        for (int i = 0; res->ob_type->tp_members[i].name; ++i) {
+            SLOT(res, PyObject, (int)res->ob_type->tp_members[i].offset) = 0;
+        }
     } else {
         res = PyObject_New(PyObject, type);
     }
