@@ -19,7 +19,6 @@ struct MGLTexture {
     int samples;
     int dimensions;
     int expected_size;
-    // bool depth_component;
 };
 
 extern PyType_Spec MGLTexture_spec;
