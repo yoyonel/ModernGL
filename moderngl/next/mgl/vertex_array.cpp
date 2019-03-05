@@ -287,7 +287,7 @@ PyObject * MGLVertexArray_meth_render_indirect(MGLVertexArray * self, PyObject *
     MGLBuffer * index_buffer = SLOT(self->wrapper, MGLBuffer, VertexArray_class_ibo);
 
     if (count < 0) {
-        count = (PyObject *)index_buffer != Py_None ? index_buffer->size / 4 : indirect_buffer->size / 20;
+        count = (int)((PyObject *)index_buffer != Py_None ? index_buffer->size / 4 : indirect_buffer->size / 20);
     }
 
     if (mode == Py_None) {
@@ -456,7 +456,7 @@ PyObject * MGLVertexArray_meth_transform_indirect(MGLVertexArray * self, PyObjec
     MGLBuffer * index_buffer = SLOT(self->wrapper, MGLBuffer, VertexArray_class_ibo);
 
     if (count < 0) {
-        count = (PyObject *)index_buffer != Py_None ? index_buffer->size / 4 : indirect_buffer->size / 20;
+        count = (int)((PyObject *)index_buffer != Py_None ? index_buffer->size / 4 : indirect_buffer->size / 20);
     }
 
     if (mode == Py_None) {
