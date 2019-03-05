@@ -345,6 +345,10 @@ MGLObject * _MGLObject_pop_mglo(PyObject * wrapper, int slot) {
     }
 }
 
+void MGLContext_dealloc(MGLContext * self) {
+    self->ob_base.ob_type->tp_free(self);
+}
+
 PyTypeObject * MGLContext_class;
 
 #if PY_VERSION_HEX >= 0x03070000
@@ -432,6 +436,7 @@ PyMethodDef MGLContext_methods[] = {
 
 PyType_Slot MGLContext_slots[] = {
     {Py_tp_methods, MGLContext_methods},
+    {Py_tp_dealloc, MGLContext_dealloc},
     {0},
 };
 

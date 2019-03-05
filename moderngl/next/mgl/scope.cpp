@@ -57,6 +57,9 @@ PyObject * MGLContext_meth_scope(MGLContext * self, PyObject * const * args, Py_
     }
 
     MGLScope * scope = MGLContext_new_object(self, Scope);
+    scope->framebuffer = 0;
+    scope->samplers = 0;
+    scope->buffers = 0;
 
     int enable_only = PyLong_AsLong(args[0]);
 
@@ -169,6 +172,10 @@ PyObject * MGLScope_meth_end(MGLScope * self) {
     Py_RETURN_NONE;
 }
 
+void MGLScope_dealloc(MGLScope * self) {
+    self->ob_base.ob_type->tp_free(self);
+}
+
 #if PY_VERSION_HEX >= 0x03070000
 
 PyMethodDef MGLScope_methods[] = {
@@ -189,6 +196,7 @@ PyMethodDef MGLScope_methods[] = {
 
 PyType_Slot MGLScope_slots[] = {
     {Py_tp_methods, MGLScope_methods},
+    {Py_tp_dealloc, MGLScope_dealloc},
     {0},
 };
 

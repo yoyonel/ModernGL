@@ -404,6 +404,10 @@ PyObject * MGLBuffer_meth_bind(MGLBuffer * self, PyObject * const * args, Py_ssi
     Py_RETURN_NONE;
 }
 
+void MGLBuffer_dealloc(MGLBuffer * self) {
+    self->ob_base.ob_type->tp_free(self);
+}
+
 #if PY_VERSION_HEX >= 0x03070000
 
 PyMethodDef MGLBuffer_methods[] = {
@@ -448,6 +452,7 @@ PyMethodDef MGLBuffer_methods[] = {
 
 PyType_Slot MGLBuffer_slots[] = {
     {Py_tp_methods, MGLBuffer_methods},
+    {Py_tp_dealloc, MGLBuffer_dealloc},
     {0},
 };
 

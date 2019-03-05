@@ -141,6 +141,10 @@ PyObject * MGLQuery_meth_end_render(MGLQuery * self) {
     Py_RETURN_NONE;
 }
 
+void MGLQuery_dealloc(MGLQuery * self) {
+    self->ob_base.ob_type->tp_free(self);
+}
+
 #if PY_VERSION_HEX >= 0x03070000
 
 PyMethodDef MGLQuery_methods[] = {
@@ -165,6 +169,7 @@ PyMethodDef MGLQuery_methods[] = {
 
 PyType_Slot MGLQuery_slots[] = {
     {Py_tp_methods, MGLQuery_methods},
+    {Py_tp_dealloc, MGLQuery_dealloc},
     {0},
 };
 

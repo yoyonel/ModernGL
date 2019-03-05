@@ -164,6 +164,10 @@ PyObject * MGLComputeShader_meth_run(MGLComputeShader * self, PyObject * const *
     Py_RETURN_NONE;
 }
 
+void MGLComputeShader_dealloc(MGLComputeShader * self) {
+    self->ob_base.ob_type->tp_free(self);
+}
+
 #if PY_VERSION_HEX >= 0x03070000
 
 PyMethodDef MGLComputeShader_methods[] = {
@@ -186,6 +190,7 @@ PyMethodDef MGLComputeShader_methods[] = {
 
 PyType_Slot MGLComputeShader_slots[] = {
     {Py_tp_methods, MGLComputeShader_methods},
+    {Py_tp_dealloc, MGLComputeShader_dealloc},
     {0},
 };
 

@@ -135,6 +135,10 @@ PyObject * MGLRecorder_meth_resize(MGLContext * self, PyObject * size) {
     Py_RETURN_NONE;
 }
 
+void MGLRecorder_dealloc(MGLRecorder * self) {
+    self->ob_base.ob_type->tp_free(self);
+}
+
 PyMethodDef MGLRecorder_methods[] = {
     {"__enter__", (PyCFunction)MGLRecorder_meth_enter, METH_NOARGS, 0},
     {"__exit__", (PyCFunction)MGLRecorder_meth_exit, METH_VARARGS, 0},
@@ -145,6 +149,7 @@ PyMethodDef MGLRecorder_methods[] = {
 
 PyType_Slot MGLRecorder_slots[] = {
     {Py_tp_methods, MGLRecorder_methods},
+    {Py_tp_dealloc, MGLRecorder_dealloc},
     {0},
 };
 

@@ -115,7 +115,12 @@ PyObject * MGLContext_meth_depth_renderbuffer(MGLContext * self, PyObject * cons
     return NEW_REF(renderbuffer->wrapper);
 }
 
+void MGLRenderbuffer_dealloc(MGLRenderbuffer * self) {
+    self->ob_base.ob_type->tp_free(self);
+}
+
 PyType_Slot MGLRenderbuffer_slots[] = {
+    {Py_tp_dealloc, MGLRenderbuffer_dealloc},
     {0},
 };
 

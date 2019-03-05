@@ -357,6 +357,10 @@ int MGLFramebuffer_set_viewport(MGLFramebuffer * self, PyObject * value) {
     return 0;
 }
 
+void MGLFramebuffer_dealloc(MGLFramebuffer * self) {
+    self->ob_base.ob_type->tp_free(self);
+}
+
 #if PY_VERSION_HEX >= 0x03070000
 
 PyMethodDef MGLFramebuffer_methods[] = {
@@ -393,6 +397,7 @@ PyGetSetDef MGLFramebuffer_getset[] = {
 PyType_Slot MGLFramebuffer_slots[] = {
     {Py_tp_methods, MGLFramebuffer_methods},
     {Py_tp_getset, MGLFramebuffer_getset},
+    {Py_tp_dealloc, MGLFramebuffer_dealloc},
     {0},
 };
 

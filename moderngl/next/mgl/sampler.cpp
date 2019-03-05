@@ -73,7 +73,7 @@ PyObject * MGLContext_meth_sampler(MGLContext * self, PyObject * const * args, P
             return 0;
         }
     } else {
-        Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_anisotropy), PyFloat_FromDouble(1.0));
+        Py_XSETREF(SLOT(sampler->wrapper, PyObject, Sampler_class_anisotropy), PyFloat_FromDouble(1.0));
     }
 
     if (args[5] != Py_None) {
@@ -82,7 +82,7 @@ PyObject * MGLContext_meth_sampler(MGLContext * self, PyObject * const * args, P
             return 0;
         }
     } else {
-        Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_lod_range), int_tuple(-1000, 1000));
+        Py_XSETREF(SLOT(sampler->wrapper, PyObject, Sampler_class_lod_range), int_tuple(-1000, 1000));
     }
 
     if (args[6] != Py_None) {
@@ -91,7 +91,7 @@ PyObject * MGLContext_meth_sampler(MGLContext * self, PyObject * const * args, P
             return 0;
         }
     } else {
-        Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_lod_bias), PyFloat_FromDouble(0.0));
+        Py_XSETREF(SLOT(sampler->wrapper, PyObject, Sampler_class_lod_bias), PyFloat_FromDouble(0.0));
     }
 
     if (args[7] != Py_None) {
@@ -100,7 +100,7 @@ PyObject * MGLContext_meth_sampler(MGLContext * self, PyObject * const * args, P
             return 0;
         }
     } else {
-        Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_border), float_tuple(0.0, 0.0, 0.0, 0.0));
+        Py_XSETREF(SLOT(sampler->wrapper, PyObject, Sampler_class_border), float_tuple(0.0, 0.0, 0.0, 0.0));
     }
 
     return NEW_REF(sampler->wrapper);
@@ -336,6 +336,10 @@ int MGLSampler_set_texture(MGLSampler * self, PyObject * value) {
     return 0;
 }
 
+void MGLSampler_dealloc(MGLSampler * self) {
+    self->ob_base.ob_type->tp_free(self);
+}
+
 #if PY_VERSION_HEX >= 0x03070000
 
 PyMethodDef MGLSampler_methods[] = {
@@ -367,6 +371,7 @@ PyGetSetDef MGLSampler_getset[] = {
 PyType_Slot MGLSampler_slots[] = {
     {Py_tp_methods, MGLSampler_methods},
     {Py_tp_getset, MGLSampler_getset},
+    {Py_tp_dealloc, MGLSampler_dealloc},
     {0},
 };
 

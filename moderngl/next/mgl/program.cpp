@@ -414,6 +414,10 @@ PyObject * MGLProgram_meth_uniform(MGLProgram * self, PyObject * const * args, P
     Py_RETURN_NONE;
 }
 
+void MGLProgram_dealloc(MGLProgram * self) {
+    self->ob_base.ob_type->tp_free(self);
+}
+
 #if PY_VERSION_HEX >= 0x03070000
 
 PyMethodDef MGLProgram_methods[] = {
@@ -436,6 +440,7 @@ PyMethodDef MGLProgram_methods[] = {
 
 PyType_Slot MGLProgram_slots[] = {
     {Py_tp_methods, MGLProgram_methods},
+    {Py_tp_dealloc, MGLProgram_dealloc},
     {0},
 };
 

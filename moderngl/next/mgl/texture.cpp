@@ -429,6 +429,10 @@ int MGLTexture_set_swizzle(MGLTexture * self, PyObject * value) {
     return 0;
 }
 
+void MGLTexture_dealloc(MGLTexture * self) {
+    self->ob_base.ob_type->tp_free(self);
+}
+
 #if PY_VERSION_HEX >= 0x03070000
 
 PyMethodDef MGLTexture_methods[] = {
@@ -463,6 +467,7 @@ PyGetSetDef MGLTexture_getset[] = {
 PyType_Slot MGLTexture_slots[] = {
     {Py_tp_methods, MGLTexture_methods},
     {Py_tp_getset, MGLTexture_getset},
+    {Py_tp_dealloc, MGLTexture_dealloc},
     {0},
 };
 
