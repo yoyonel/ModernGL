@@ -137,7 +137,7 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
     default_framebuffer->color_mask = 0xF;
     default_framebuffer->depth_mask = true;
     default_framebuffer->attachments = 1;
-    default_framebuffer->attachment_type = "f";
+    default_framebuffer->attachment_type[0] = 'f';
 
     int scrissor_box[4] = {};
     gl.GetIntegerv(GL_SCISSOR_BOX, scrissor_box);

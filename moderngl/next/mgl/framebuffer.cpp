@@ -49,13 +49,12 @@ PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * arg
     int color_attachments_len = (int)PySequence_Fast_GET_SIZE(color_attachments);
 
     int width, height, samples;
-    char * attachment_type = (char *)malloc(color_attachments_len);
 
     for (int i = 0; i < color_attachments_len; ++i) {
         PyObject * attachment = PySequence_Fast_GET_ITEM(color_attachments, i);
         if (attachment->ob_type == Renderbuffer_class) {
             MGLRenderbuffer * renderbuffer = SLOT(attachment, MGLRenderbuffer, Renderbuffer_class_mglo);
-            attachment_type[i] = renderbuffer->data_type->shape;
+            framebuffer->attachment_type[i] = renderbuffer->data_type->shape;
             width = renderbuffer->width;
             height = renderbuffer->height;
             samples = renderbuffer->samples;
@@ -68,7 +67,7 @@ PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * arg
         } else if (attachment->ob_type == Texture_class) {
             int level = PyLong_AsLong(SLOT(attachment, PyObject, Texture_class_level));
             MGLTexture * texture = SLOT(attachment, MGLTexture, Texture_class_mglo);
-            attachment_type[i] = texture->data_type->shape;
+            framebuffer->attachment_type[i] = texture->data_type->shape;
             width = texture->width;
             height = texture->height;
             samples = texture->samples;
@@ -181,7 +180,6 @@ PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * arg
     framebuffer->viewport[2] = framebuffer->width;
     framebuffer->viewport[3] = framebuffer->height;
     framebuffer->attachments = color_attachments_len;
-    framebuffer->attachment_type = attachment_type;
     SLOT(framebuffer->wrapper, PyObject, Framebuffer_class_viewport) = int_tuple(0, 0, framebuffer->width, framebuffer->height);
     return NEW_REF(framebuffer->wrapper);
 }
