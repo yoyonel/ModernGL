@@ -23,8 +23,9 @@ PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source) 
 
 	int shader_obj = gl.CreateShader(GL_COMPUTE_SHADER);
 	if (!shader_obj) {
-		PyErr_Format(moderngl_error, "cannot create the shader object");
-        // Py_DECREF(compute_shader);
+		PyErr_Format(moderngl_error, "cannot create shader");
+        gl.DeleteProgram(program_obj);
+        Py_DECREF(compute_shader);
 		return 0;
 	}
 
@@ -43,12 +44,17 @@ PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source) 
 
         char * log_text = (char *)malloc(log_len + 1);
         gl.GetShaderInfoLog(shader_obj, log_len, 0, log_text);
+
         PyObject * name = PyUnicode_FromString("ComputeShader");
         PyObject * info = PyUnicode_FromStringAndSize(log_text, log_len);
-        call_function(self->glsl_compiler_error, name, source, info);
+        PyObject * res = call_function(self->glsl_compiler_error, name, source, info);
         Py_DECREF(name);
         Py_DECREF(info);
-        // Py_DECREF(compute_shader);
+        Py_XDECREF(res);
+
+        gl.DeleteProgram(program_obj);
+        gl.DeleteShader(shader_obj);
+        Py_DECREF(compute_shader);
         free(log_text);
         return 0;
 	}
@@ -61,12 +67,18 @@ PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source) 
 	if (!linked) {
         int log_len = 0;
         gl.GetProgramiv(program_obj, GL_INFO_LOG_LENGTH, &log_len);
+
         char * log_text = (char *)malloc(log_len + 1);
         gl.GetProgramInfoLog(program_obj, log_len, 0, log_text);
+
         PyObject * info = PyUnicode_FromStringAndSize(log_text, log_len);
-        call_function(self->glsl_linker_error, info);
+        PyObject * res = call_function(self->glsl_linker_error, info);
         Py_DECREF(info);
-        // Py_DECREF(compute_shader);
+        Py_XDECREF(res);
+
+        gl.DeleteProgram(program_obj);
+        gl.DeleteShader(shader_obj);
+        Py_DECREF(compute_shader);
         free(log_text);
         return 0;
 	}
@@ -143,10 +155,12 @@ PyObject * MGLComputeShader_meth_run(MGLComputeShader * self, PyObject * const *
     unsigned y = PyLong_AsUnsignedLong(args[1]);
     unsigned z = PyLong_AsUnsignedLong(args[2]);
 
-    const GLMethods & gl = self->context->gl;
+    if (PyErr_Occurred()) {
+        return 0;
+    }
+
     self->context->use_program(self->program_obj);
-	// gl.UseProgram(self->program_obj);
-	gl.DispatchCompute(x, y, z);
+	self->context->gl.DispatchCompute(x, y, z);
     Py_RETURN_NONE;
 }
 
