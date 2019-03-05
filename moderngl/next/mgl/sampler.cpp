@@ -62,29 +62,45 @@ PyObject * MGLContext_meth_sampler(MGLContext * self, PyObject * const * args, P
         return 0;
     }
 
-    if (MGLSampler_set_anisotropy(sampler, args[3])) {
+    if (MGLSampler_set_compare_func(sampler, args[3])) {
         Py_DECREF(sampler);
         return 0;
     }
 
-    if (MGLSampler_set_compare_func(sampler, args[4])) {
-        Py_DECREF(sampler);
-        return 0;
+    if (args[4] != Py_None) {
+        if (MGLSampler_set_anisotropy(sampler, args[4])) {
+            Py_DECREF(sampler);
+            return 0;
+        }
+    } else {
+        Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_anisotropy), PyFloat_FromDouble(1.0));
     }
 
-    if (MGLSampler_set_lod_range(sampler, args[5])) {
-        Py_DECREF(sampler);
-        return 0;
+    if (args[5] != Py_None) {
+        if (MGLSampler_set_lod_range(sampler, args[5])) {
+            Py_DECREF(sampler);
+            return 0;
+        }
+    } else {
+        Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_lod_range), int_tuple(-1000, 1000));
     }
 
-    if (MGLSampler_set_lod_bias(sampler, args[6])) {
-        Py_DECREF(sampler);
-        return 0;
+    if (args[6] != Py_None) {
+        if (MGLSampler_set_lod_bias(sampler, args[6])) {
+            Py_DECREF(sampler);
+            return 0;
+        }
+    } else {
+        Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_lod_bias), PyFloat_FromDouble(0.0));
     }
 
-    if (MGLSampler_set_border(sampler, args[7])) {
-        Py_DECREF(sampler);
-        return 0;
+    if (args[7] != Py_None) {
+        if (MGLSampler_set_border(sampler, args[7])) {
+            Py_DECREF(sampler);
+            return 0;
+        }
+    } else {
+        Py_XSETREF(SLOT(self->wrapper, PyObject, Sampler_class_border), float_tuple(0.0, 0.0, 0.0, 0.0));
     }
 
     return NEW_REF(sampler->wrapper);

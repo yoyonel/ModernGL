@@ -60,8 +60,8 @@ class Context:
     def depth_texture_cube(self, size, data=None, levels=-1, samples=0, aligment=1, dtype='d3') -> Texture:
         return self.__mglo.texture(3, size, 1, data, levels, samples, aligment, dtype)
 
-    def sampler(self, texture, filter=NEAREST, wrap=0, anisotropy=1.0, compare_func=None, lod_range=(-1000, 1000), lod_bias=0.0, border=0.0) -> Sampler:
-        return self.__mglo.sampler(texture, filter, wrap, anisotropy, compare_func, lod_range, lod_bias, border)
+    def sampler(self, texture, filter=NEAREST, wrap=0, compare_func=None, anisotropy=None, lod_range=None, lod_bias=None, border=None) -> Sampler:
+        return self.__mglo.sampler(texture, filter, wrap, compare_func, anisotropy, lod_range, lod_bias, border)
 
     def vertex_array(self, program, content, index_buffer=None) -> VertexArray:
         return self.__mglo.vertex_array(program, content, index_buffer)
