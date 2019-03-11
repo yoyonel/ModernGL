@@ -11,8 +11,8 @@ pip install moderngl
 ```
 
 - [Documentation](https://moderngl.readthedocs.io/)
-- [Examples](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/#readme)
-- [ModernGL on Github](https://github.com/cprogrammer1994/ModernGL/)
+- [Examples](https://github.com/moderngl/moderngl/tree/master/examples/#readme)
+- [ModernGL on Github](https://github.com/moderngl/moderngl/)
 - [ModernGL on PyPI](https://pypi.org/project/ModernGL/)
 - [ModernGL Discord Server](https://discord.gg/UEMtW8D)
 
