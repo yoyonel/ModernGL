@@ -467,7 +467,7 @@ PyGetSetDef MGLTexture_getset[] = {
 PyType_Slot MGLTexture_slots[] = {
     {Py_tp_methods, MGLTexture_methods},
     {Py_tp_getset, MGLTexture_getset},
-    {Py_tp_dealloc, MGLTexture_dealloc},
+    {Py_tp_dealloc, (void *)MGLTexture_dealloc},
     {0},
 };
 

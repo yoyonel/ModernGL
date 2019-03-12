@@ -196,7 +196,7 @@ PyMethodDef MGLScope_methods[] = {
 
 PyType_Slot MGLScope_slots[] = {
     {Py_tp_methods, MGLScope_methods},
-    {Py_tp_dealloc, MGLScope_dealloc},
+    {Py_tp_dealloc, (void *)MGLScope_dealloc},
     {0},
 };
 

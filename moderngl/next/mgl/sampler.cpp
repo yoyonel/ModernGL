@@ -371,7 +371,7 @@ PyGetSetDef MGLSampler_getset[] = {
 PyType_Slot MGLSampler_slots[] = {
     {Py_tp_methods, MGLSampler_methods},
     {Py_tp_getset, MGLSampler_getset},
-    {Py_tp_dealloc, MGLSampler_dealloc},
+    {Py_tp_dealloc, (void *)MGLSampler_dealloc},
     {0},
 };
 

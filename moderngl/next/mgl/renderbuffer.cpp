@@ -120,7 +120,7 @@ void MGLRenderbuffer_dealloc(MGLRenderbuffer * self) {
 }
 
 PyType_Slot MGLRenderbuffer_slots[] = {
-    {Py_tp_dealloc, MGLRenderbuffer_dealloc},
+    {Py_tp_dealloc, (void *)MGLRenderbuffer_dealloc},
     {0},
 };
 

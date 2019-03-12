@@ -440,7 +440,7 @@ PyMethodDef MGLProgram_methods[] = {
 
 PyType_Slot MGLProgram_slots[] = {
     {Py_tp_methods, MGLProgram_methods},
-    {Py_tp_dealloc, MGLProgram_dealloc},
+    {Py_tp_dealloc, (void *)MGLProgram_dealloc},
     {0},
 };
 

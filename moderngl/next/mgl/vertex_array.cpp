@@ -602,7 +602,7 @@ PyGetSetDef MGLVertexArray_getset[] = {
 PyType_Slot MGLVertexArray_slots[] = {
     {Py_tp_methods, MGLVertexArray_methods},
     {Py_tp_getset, MGLVertexArray_getset},
-    {Py_tp_dealloc, MGLVertexArray_dealloc},
+    {Py_tp_dealloc, (void *)MGLVertexArray_dealloc},
     {0},
 };
 

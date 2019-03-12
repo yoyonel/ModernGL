@@ -190,7 +190,7 @@ PyMethodDef MGLComputeShader_methods[] = {
 
 PyType_Slot MGLComputeShader_slots[] = {
     {Py_tp_methods, MGLComputeShader_methods},
-    {Py_tp_dealloc, MGLComputeShader_dealloc},
+    {Py_tp_dealloc, (void *)MGLComputeShader_dealloc},
     {0},
 };
 

@@ -452,7 +452,7 @@ PyMethodDef MGLBuffer_methods[] = {
 
 PyType_Slot MGLBuffer_slots[] = {
     {Py_tp_methods, MGLBuffer_methods},
-    {Py_tp_dealloc, MGLBuffer_dealloc},
+    {Py_tp_dealloc, (void *)MGLBuffer_dealloc},
     {0},
 };
 

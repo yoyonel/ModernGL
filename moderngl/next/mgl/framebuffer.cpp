@@ -397,7 +397,7 @@ PyGetSetDef MGLFramebuffer_getset[] = {
 PyType_Slot MGLFramebuffer_slots[] = {
     {Py_tp_methods, MGLFramebuffer_methods},
     {Py_tp_getset, MGLFramebuffer_getset},
-    {Py_tp_dealloc, MGLFramebuffer_dealloc},
+    {Py_tp_dealloc, (void *)MGLFramebuffer_dealloc},
     {0},
 };
 

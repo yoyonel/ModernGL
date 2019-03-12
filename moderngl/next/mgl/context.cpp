@@ -436,7 +436,7 @@ PyMethodDef MGLContext_methods[] = {
 
 PyType_Slot MGLContext_slots[] = {
     {Py_tp_methods, MGLContext_methods},
-    {Py_tp_dealloc, MGLContext_dealloc},
+    {Py_tp_dealloc, (void *)MGLContext_dealloc},
     {0},
 };
 

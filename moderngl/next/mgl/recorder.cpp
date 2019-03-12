@@ -149,7 +149,7 @@ PyMethodDef MGLRecorder_methods[] = {
 
 PyType_Slot MGLRecorder_slots[] = {
     {Py_tp_methods, MGLRecorder_methods},
-    {Py_tp_dealloc, MGLRecorder_dealloc},
+    {Py_tp_dealloc, (void *)MGLRecorder_dealloc},
     {0},
 };
 

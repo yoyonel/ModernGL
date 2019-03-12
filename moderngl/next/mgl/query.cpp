@@ -169,7 +169,7 @@ PyMethodDef MGLQuery_methods[] = {
 
 PyType_Slot MGLQuery_slots[] = {
     {Py_tp_methods, MGLQuery_methods},
-    {Py_tp_dealloc, MGLQuery_dealloc},
+    {Py_tp_dealloc, (void *)MGLQuery_dealloc},
     {0},
 };
 
