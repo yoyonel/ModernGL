@@ -1,19 +1,8 @@
-Buffer Format Strings
-=====================
+Buffer Format
+=============
 
 .. py:module:: moderngl
 .. py:currentmodule:: moderngl
-
-TODO
-----
-
-- A third, most complex example, following Szabolcs' example of /v /i /r ?
-- Describe dtypes?
-  https://github.com/moderngl/moderngl/blob/master/moderngl/context.py#L564
-- study the parent issue carefully for suggestions I missed
-- migrate to docs/next/reference?
-
----
 
 Description
 -----------
@@ -21,25 +10,25 @@ Description
 A buffer format is a short string describing the layout of data in a vertex
 buffer array (VBO).
 
-A VBO often contains an homogeneous array of C-like structures. The buffer
-format string describes what each element of the array looks like. For example,
+A VBO often contains a homogeneous array of C-like structures. The buffer
+format describes what each element of the array looks like. For example,
 a buffer containing an array of 2D vertex positions would have the format
 string ``"2f"`` - each element of the array consists of two floats.
 
-Buffer format strings use a syntax that is unique to ModernGL, although the
+Buffer formats use a syntax that is unique to ModernGL, although the
 resulting formats sometimes look similar to related strings used elsewhere,
 such as the format strings used by ``struct.pack`` (which are documented
 here_.)
 
 .. _here: https://docs.python.org/3.7/library/struct.html
 
-Format strings are used in the :py:meth:`Context.vertex_array()` constructor,
+Buffer formats are used in the :py:meth:`Context.vertex_array()` constructor,
 as the 2nd component of the `content` arg. See the examples below.
 
-Format
+Syntax
 ------
 
-The form of a single-value format string is:
+The form of a single-value format is:
 
     ``[count] type [size] [/usage]``
 
@@ -67,6 +56,9 @@ Where:
      Behaves like a uniform -
      the same value is passed to every vertex of every instance
      for the whole render call.
+
+Multiple formats may be concatenated together, separated by spaces.
+See the multiple value example below.
 
 For example: ``"3f2/i"`` means each element in the buffer array is a struct of
 three floats. Each float is two bytes wide (ie. a "`half float`".) Consecutive
@@ -98,8 +90,8 @@ unsigned bytes.
 
 There is no size 8 variant for types ``i`` and ``u``.
 
-Single format example
----------------------
+Single value example
+--------------------
 
 Consider a VBO containing 2D vertex positions, forming a single triangle::
 
@@ -120,7 +112,7 @@ Consider a VBO containing 2D vertex positions, forming a single triangle::
     vao = ctx.vertex_array(
         shader_program,
         [
-            (vbo, "2f", "in_vert"), # the buffer format string is the "2f" here
+            (vbo, "2f", "in_vert"), # the buffer format is the "2f" here
         ]
         index_buffer_object
     )
@@ -140,7 +132,7 @@ Multiple value example
 A buffer array might contain elements consisting of multiple interleaved
 values.
 
-This is described by a format string containing multiple space separated
+This is described by a format containing multiple space separated
 formats. Each format (other than padding) requires the name of a shader ``in``
 attribute, to which it will be passed.
 
