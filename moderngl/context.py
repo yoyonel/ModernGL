@@ -25,10 +25,7 @@ __all__ = ['Context', 'create_context', 'create_standalone_context',
            'ZERO', 'ONE', 'SRC_COLOR', 'ONE_MINUS_SRC_COLOR', 'SRC_ALPHA', 'ONE_MINUS_SRC_ALPHA', 'DST_ALPHA',
            'ONE_MINUS_DST_ALPHA', 'DST_COLOR', 'ONE_MINUS_DST_COLOR',
            'DEFAULT_BLENDING', 'PREMULTIPLIED_ALPHA',
-           'Error']
-
-
-Error = mgl.Error
+]
 
 
 NOTHING = 0

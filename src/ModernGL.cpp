@@ -170,17 +170,6 @@ PyMethodDef MGL_module_methods[] = {
 
 bool MGL_InitializeModule(PyObject * module) {
 	{
-		if (PyType_Ready(&MGLError_Type) < 0) {
-			PyErr_Format(PyExc_ImportError, "Cannot register Error in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
-			return false;
-		}
-
-		Py_INCREF(&MGLError_Type);
-
-		PyModule_AddObject(module, "Error", (PyObject *)&MGLError_Type);
-	}
-
-	{
 		if (PyType_Ready(&MGLAttribute_Type) < 0) {
 			PyErr_Format(PyExc_ImportError, "Cannot register Attribute in %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return false;

@@ -763,473 +763,469 @@ bool GLMethods::load() {
 
 	// Must have
 
-	PyObject * loading_log = PyUnicode_FromStringAndSize(0, 0);
+	bool loading_error = false;
 
 	if (INVALID_METHOD(this->ActiveTexture)) {
-		AddToLog(&loading_log, "glActiveTexture");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->AttachShader)) {
-		AddToLog(&loading_log, "glAttachShader");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->BeginTransformFeedback)) {
-		AddToLog(&loading_log, "glBeginTransformFeedback");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->BindBuffer)) {
-		AddToLog(&loading_log, "glBindBuffer");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->BindBufferBase)) {
-		AddToLog(&loading_log, "glBindBufferBase");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->BindFramebuffer)) {
-		AddToLog(&loading_log, "glBindFramebuffer");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->BindRenderbuffer)) {
-		AddToLog(&loading_log, "glBindRenderbuffer");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->BindTexture)) {
-		AddToLog(&loading_log, "glBindTexture");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->BindVertexArray)) {
-		AddToLog(&loading_log, "glBindVertexArray");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->BlendFunc)) {
-		AddToLog(&loading_log, "glBlendFunc");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->BufferData)) {
-		AddToLog(&loading_log, "glBufferData");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->BufferSubData)) {
-		AddToLog(&loading_log, "glBufferSubData");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->CheckFramebufferStatus)) {
-		AddToLog(&loading_log, "glCheckFramebufferStatus");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->Clear)) {
-		AddToLog(&loading_log, "glClear");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ClearColor)) {
-		AddToLog(&loading_log, "glClearColor");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->CompileShader)) {
-		AddToLog(&loading_log, "glCompileShader");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->CopyBufferSubData)) {
-		AddToLog(&loading_log, "glCopyBufferSubData");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->CreateProgram)) {
-		AddToLog(&loading_log, "glCreateProgram");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->CreateShader)) {
-		AddToLog(&loading_log, "glCreateShader");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->DeleteBuffers)) {
-		AddToLog(&loading_log, "glDeleteBuffers");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->DeleteFramebuffers)) {
-		AddToLog(&loading_log, "glDeleteFramebuffers");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->DeleteProgram)) {
-		AddToLog(&loading_log, "glDeleteProgram");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->DeleteRenderbuffers)) {
-		AddToLog(&loading_log, "glDeleteRenderbuffers");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->DeleteShader)) {
-		AddToLog(&loading_log, "glDeleteShader");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->DeleteTextures)) {
-		AddToLog(&loading_log, "glDeleteTextures");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->DeleteVertexArrays)) {
-		AddToLog(&loading_log, "glDeleteVertexArrays");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->Disable)) {
-		AddToLog(&loading_log, "glDisable");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->DisableVertexAttribArray)) {
-		AddToLog(&loading_log, "glDisableVertexAttribArray");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->DrawArraysInstanced)) {
-		AddToLog(&loading_log, "glDrawArraysInstanced");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->DrawElementsInstanced)) {
-		AddToLog(&loading_log, "glDrawElementsInstanced");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->Enable)) {
-		AddToLog(&loading_log, "glEnable");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->EnableVertexAttribArray)) {
-		AddToLog(&loading_log, "glEnableVertexAttribArray");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->EndTransformFeedback)) {
-		AddToLog(&loading_log, "glEndTransformFeedback");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->Finish)) {
-		AddToLog(&loading_log, "glFinish");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->Flush)) {
-		AddToLog(&loading_log, "glFlush");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->FramebufferRenderbuffer)) {
-		AddToLog(&loading_log, "glFramebufferRenderbuffer");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->FramebufferTexture2D)) {
-		AddToLog(&loading_log, "glFramebufferTexture2D");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GenBuffers)) {
-		AddToLog(&loading_log, "glGenBuffers");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GenFramebuffers)) {
-		AddToLog(&loading_log, "glGenFramebuffers");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GenRenderbuffers)) {
-		AddToLog(&loading_log, "glGenRenderbuffers");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GenTextures)) {
-		AddToLog(&loading_log, "glGenTextures");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GenVertexArrays)) {
-		AddToLog(&loading_log, "glGenVertexArrays");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetActiveAttrib)) {
-		AddToLog(&loading_log, "glGetActiveAttrib");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetActiveUniform)) {
-		AddToLog(&loading_log, "glGetActiveUniform");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetActiveUniformBlockiv)) {
-		AddToLog(&loading_log, "glGetActiveUniformBlockiv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetActiveUniformBlockName)) {
-		AddToLog(&loading_log, "glGetActiveUniformBlockName");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetAttribLocation)) {
-		AddToLog(&loading_log, "glGetAttribLocation");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetFloatv)) {
-		AddToLog(&loading_log, "glGetFloatv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetIntegerv)) {
-		AddToLog(&loading_log, "glGetIntegerv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetProgramInfoLog)) {
-		AddToLog(&loading_log, "glGetProgramInfoLog");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetProgramiv)) {
-		AddToLog(&loading_log, "glGetProgramiv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetShaderInfoLog)) {
-		AddToLog(&loading_log, "glGetShaderInfoLog");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetShaderiv)) {
-		AddToLog(&loading_log, "glGetShaderiv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetString)) {
-		AddToLog(&loading_log, "glGetString");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetTransformFeedbackVarying)) {
-		AddToLog(&loading_log, "glGetTransformFeedbackVarying");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetUniformdv)) {
-		AddToLog(&loading_log, "glGetUniformdv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetUniformfv)) {
-		AddToLog(&loading_log, "glGetUniformfv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetUniformiv)) {
-		AddToLog(&loading_log, "glGetUniformiv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetUniformLocation)) {
-		AddToLog(&loading_log, "glGetUniformLocation");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetUniformuiv)) {
-		AddToLog(&loading_log, "glGetUniformuiv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->GetVertexAttribiv)) {
-		AddToLog(&loading_log, "glGetVertexAttribiv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->LineWidth)) {
-		AddToLog(&loading_log, "glLineWidth");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->LinkProgram)) {
-		AddToLog(&loading_log, "glLinkProgram");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->MapBufferRange)) {
-		AddToLog(&loading_log, "glMapBufferRange");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->PointSize)) {
-		AddToLog(&loading_log, "glPointSize");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->PrimitiveRestartIndex)) {
-		AddToLog(&loading_log, "glPrimitiveRestartIndex");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform1dv)) {
-		AddToLog(&loading_log, "glProgramUniform1dv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform1fv)) {
-		AddToLog(&loading_log, "glProgramUniform1fv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform1iv)) {
-		AddToLog(&loading_log, "glProgramUniform1iv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform1uiv)) {
-		AddToLog(&loading_log, "glProgramUniform1uiv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform2dv)) {
-		AddToLog(&loading_log, "glProgramUniform2dv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform2fv)) {
-		AddToLog(&loading_log, "glProgramUniform2fv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform2iv)) {
-		AddToLog(&loading_log, "glProgramUniform2iv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform2uiv)) {
-		AddToLog(&loading_log, "glProgramUniform2uiv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform3dv)) {
-		AddToLog(&loading_log, "glProgramUniform3dv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform3fv)) {
-		AddToLog(&loading_log, "glProgramUniform3fv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform3iv)) {
-		AddToLog(&loading_log, "glProgramUniform3iv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform3uiv)) {
-		AddToLog(&loading_log, "glProgramUniform3uiv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform4dv)) {
-		AddToLog(&loading_log, "glProgramUniform4dv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform4fv)) {
-		AddToLog(&loading_log, "glProgramUniform4fv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform4iv)) {
-		AddToLog(&loading_log, "glProgramUniform4iv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniform4uiv)) {
-		AddToLog(&loading_log, "glProgramUniform4uiv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix2dv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix2dv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix2fv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix2fv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix2x3dv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix2x3dv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix2x3fv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix2x3fv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix2x4dv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix2x4dv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix2x4fv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix2x4fv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix3dv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix3dv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix3fv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix3fv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix3x2dv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix3x2dv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix3x2fv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix3x2fv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix3x4dv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix3x4dv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix3x4fv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix3x4fv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix4dv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix4dv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix4fv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix4fv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix4x2dv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix4x2dv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix4x2fv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix4x2fv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix4x3dv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix4x3dv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ProgramUniformMatrix4x3fv)) {
-		AddToLog(&loading_log, "glProgramUniformMatrix4x3fv");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ReadPixels)) {
-		AddToLog(&loading_log, "glReadPixels");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->RenderbufferStorage)) {
-		AddToLog(&loading_log, "glRenderbufferStorage");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->ShaderSource)) {
-		AddToLog(&loading_log, "glShaderSource");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->TexImage2D)) {
-		AddToLog(&loading_log, "glTexImage2D");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->TexParameteri)) {
-		AddToLog(&loading_log, "glTexParameteri");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->TexSubImage2D)) {
-		AddToLog(&loading_log, "glTexSubImage2D");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->TransformFeedbackVaryings)) {
-		AddToLog(&loading_log, "glTransformFeedbackVaryings");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->UnmapBuffer)) {
-		AddToLog(&loading_log, "glUnmapBuffer");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->UseProgram)) {
-		AddToLog(&loading_log, "glUseProgram");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->VertexAttribDivisor)) {
-		AddToLog(&loading_log, "glVertexAttribDivisor");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->VertexAttribIPointer)) {
-		AddToLog(&loading_log, "glVertexAttribIPointer");
+		loading_error = true;
 	}
 
-	// if (INVALID_METHOD(this->VertexAttribLPointer)) {
-	// 	AddToLog(&loading_log, "glVertexAttribLPointer");
-	// }
+	if (INVALID_METHOD(this->VertexAttribLPointer)) {
+		loading_error = true;
+	}
 
 	if (INVALID_METHOD(this->VertexAttribPointer)) {
-		AddToLog(&loading_log, "glVertexAttribPointer");
+		loading_error = true;
 	}
 
 	if (INVALID_METHOD(this->Viewport)) {
-		AddToLog(&loading_log, "glViewport");
+		loading_error = true;
 	}
 
-	if (PyUnicode_GET_SIZE(loading_log) != 0) {
-		PyObject * message = PyUnicode_FromFormat("Error loading some OpenGL functions:\n");
-		PyUnicode_Append(&message, loading_log);
-		Py_DECREF(loading_log);
-
+	if (loading_error) {
+		PyObject * message = PyUnicode_FromFormat("Error loading some OpenGL functions");
 		MGLError_Set(message);
 		return false;
 	}
 
-	Py_DECREF(loading_log);
 	return true;
 }
