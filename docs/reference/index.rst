@@ -7,6 +7,7 @@ Reference
     context.rst
     buffer.rst
     vertex_array.rst
+    formats.rst
     program.rst
     sampler.rst
     texture.rst
