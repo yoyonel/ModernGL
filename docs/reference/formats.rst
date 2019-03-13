@@ -96,7 +96,7 @@ for this combination only, the values are `normalized`, ie. unsigned bytes from
 time they reach the vertex shader. This is intended for passing in colors as
 unsigned bytes.
 
-There is no size 8 variant for `i` and `u`.
+There is no size 8 variant for types ``i`` and ``u``.
 
 Single format example
 ---------------------
@@ -125,9 +125,10 @@ Consider a VBO containing 2D vertex positions, forming a single triangle::
         index_buffer_object
     )
 
-The line ``(vbo, "2f", "in_vert")`` indicates that ``vbo`` contains an array of
-values, each of which consists of two floats. These values are passed to the
-shader's ``in_vert`` variable, which must therefore be a vec2.
+The line ``(vbo, "2f", "in_vert")``, known as the VAO content, indicates that
+``vbo`` contains an array of values, each of which consists of two floats.
+These values are passed to the shader's ``in_vert`` variable, which must
+therefore be a vec2.
 
 The omitted ``size`` defaults to reading regular 4-byte floats from the buffer.
 The omitted ``usage`` defaults to ``/v``, so successive (x, y) rows from
@@ -138,6 +139,10 @@ Multiple value example
 
 A buffer array might contain elements consisting of multiple interleaved
 values.
+
+This is described by a format string containing multiple space separated
+formats. Each format (other than padding) requires the name of a shader ``in``
+attribute, to which it will be passed.
 
 For example, consider a buffer array, each element of which contains 2D vertex
 positions as floats, RGB colors as unsigned ints, and a single byte of padding
@@ -152,15 +157,15 @@ for alignment:
 |       |       | byte     | byte     | byte     |         |
 +-------+-------+----------+----------+----------+---------+
 
-This is described by a format string containing multiple space separated
-formats::
+This is passed as VAO content using::
 
     (vbo, "2f 3f1 x", "in_vert", "in_color")
 
 This specifies that the initial two floats be passed to the vertex shader's
-``in_vert`` attribute, which hence must be a vec2. The three color unsigned
-bytes will be normalized to floats by ``f1``, and passed to the ``in_color``
-attribute. The final byte of padding is ignored.
+``in_vert`` attribute, which hence must be a ``vec2``. The three color unsigned
+bytes (normalized to floats by ``f1``) are passed to the shader's ``vec3
+in_color``. The final byte of padding (``x``) is ignored, and needs no shader
+variable name.
 
 .. toctree::
     :maxdepth: 2
