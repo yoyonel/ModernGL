@@ -2,12 +2,6 @@
 
 #include "Types.hpp"
 
-void AddToLog(PyObject ** pstr, const char * function) {
-	PyObject * name = PyUnicode_FromFormat("- %s\n", function);
-	PyUnicode_Append(pstr, name);
-	Py_DECREF(name);
-}
-
 #define INVALID_METHOD(method) (!(method))
 
 void GLAPI FakeGetProgramStageiv(GLuint program, GLenum shadertype, GLenum pname, GLint * values) {
