@@ -43,28 +43,28 @@ Where:
    - ``x`` padding
 - ``size`` is an optional number of bytes used to store the type.
   If omitted, it defaults to 4 for numeric types, or to 1 for padding bytes.
-- ``usage`` is a slash followed by a single character indicating how successive
-  values in the buffer should be passed to the shader:
+- ``usage`` is optional, consisting of a slash followed by a single character,
+  indicating how successive values in the buffer should be passed to the
+  shader:
 
    - ``/v`` per vertex.
      Successive values from the buffer are passed to each vertex.
-     This is the default behavior.
+     This is the default behavior if usage is omitted.
    - ``/i`` per instance.
-     Successive values from the buffer are passed to each instance,
-     during an instanced rendering call.
+     Successive values from the buffer are passed to each instance.
    - ``/r`` per render.
-     Behaves like a uniform -
-     the same value is passed to every vertex of every instance
-     for the whole render call.
+     the first buffer value is passed to every vertex of every instance.
+     ie. behaves like a uniform.
+
+For example: ``"3f2/i"`` means each element in the buffer array is a struct of
+three floats. Each float is two bytes wide (ie. a "`half float`".) Consecutive
+values in the buffer are passed to each successive instance during an
+instanced render call.
 
 Multiple formats may be concatenated together, separated by spaces.
 See the multiple value example below.
 
-For example: ``"3f2/i"`` means each element in the buffer array is a struct of
-three floats. Each float is two bytes wide (ie. a "`half float`".) Consecutive
-values in the buffer are passed to each successive `instance`.
-
-This results in the following possibilities:
+The valid combinations of type and size are:
 
 +----------+---------------+-------------------+-----------------+---------+
 |          |                 size                                          |
@@ -122,9 +122,10 @@ The line ``(vbo, "2f", "in_vert")``, known as the VAO content, indicates that
 These values are passed to the shader's ``in_vert`` variable, which must
 therefore be a vec2.
 
-The omitted ``size`` defaults to reading regular 4-byte floats from the buffer.
-The omitted ``usage`` defaults to ``/v``, so successive (x, y) rows from
-the buffer are passed to successive vertices during the render.
+The ``"2f"`` format omits a ``size`` component, so the floats default to
+4-bytes each. The format also omits the trailing ``"/usage"`` component, which
+defaults to ``/v``, so successive (x, y) rows from the buffer are passed to
+successive vertices during the render.
 
 Multiple value example
 ----------------------
