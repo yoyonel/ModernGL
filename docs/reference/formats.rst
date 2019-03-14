@@ -15,13 +15,6 @@ format describes what each element of the array looks like. For example,
 a buffer containing an array of 2D vertex positions would have the format
 string ``"2f"`` - each element of the array consists of two floats.
 
-Buffer formats use a syntax that is unique to ModernGL, although the
-resulting formats sometimes look similar to related strings used elsewhere,
-such as the format strings used by ``struct.pack`` (which are documented
-here_.)
-
-.. _here: https://docs.python.org/3.7/library/struct.html
-
 Buffer formats are used in the :py:meth:`Context.vertex_array()` constructor,
 as the 2nd component of the `content` arg. See the examples below.
 
@@ -127,6 +120,12 @@ The ``"2f"`` format omits a ``size`` component, so the floats default to
 defaults to ``/v``, so successive (x, y) rows from the buffer are passed to
 successive vertices during the render.
 
+Buffer formats use a syntax that is unique to ModernGL. As in the example
+above, they sometimes look similar to the format strings passed to
+``struct.pack``, but that is a different syntax (documented here_.)
+
+.. _here: https://docs.python.org/3.7/library/struct.html
+
 Multiple value example
 ----------------------
 
@@ -137,9 +136,9 @@ This is described by a format containing multiple space separated
 formats. Each format (other than padding) requires the name of a shader ``in``
 attribute, to which it will be passed.
 
-For example, consider a buffer array, each element of which contains 2D vertex
-positions as floats, RGB colors as unsigned ints, and a single byte of padding
-for alignment:
+For example, consider a buffer array, each element of which contains a 2D
+vertex position as floats, an RGB color as unsigned ints, and a single byte of
+padding for alignment:
 
 +-------+-------+----------+----------+----------+---------+
 | position      | color                          | padding |
@@ -156,9 +155,8 @@ This is passed as VAO content using::
 
 This specifies that the initial two floats be passed to the vertex shader's
 ``in_vert`` attribute, which hence must be a ``vec2``. The three color unsigned
-bytes (normalized to floats by ``f1``) are passed to the shader's ``vec3
-in_color``. The final byte of padding (``x``) is ignored, and needs no shader
-variable name.
+bytes (normalized to floats by ``f1``) are passed to the shader's ``in_color``, The final byte of padding (``x``) is ignored, and needs no shader
+which must therefore be a ``vec3``.
 
 .. toctree::
     :maxdepth: 2
