@@ -270,7 +270,7 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 	MGLVertexArray_SET_SUBROUTINES(self, gl);
 
 	if (self->index_buffer != (MGLBuffer *)Py_None) {
-		const void * ptr = (const void *)((GLintptr)first * 4);
+		const void * ptr = (const void *)((GLintptr)first * self->index_element_size);
 		gl.DrawElementsInstanced(mode, vertices, self->index_element_type, ptr, instances);
 	} else {
 		gl.DrawArraysInstanced(mode, first, vertices, instances);
@@ -371,7 +371,7 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	MGLVertexArray_SET_SUBROUTINES(self, gl);
 
 	if (self->index_buffer != (MGLBuffer *)Py_None) {
-		const void * ptr = (const void *)((GLintptr)first * 4);
+		const void * ptr = (const void *)((GLintptr)first * self->index_element_size);
 		gl.DrawElementsInstanced(mode, vertices, self->index_element_type, ptr, instances);
 	} else {
 		gl.DrawArraysInstanced(mode, first, vertices, instances);
