@@ -15,6 +15,12 @@ matrix:
       script:
         - python -m pytest tests/experimental
 
+    - language: python
+      python: pypy3.5
+      install:
+        - export TRAVIS=True
+        - python setup.py develop
+
     - sudo: required
       services:
         - docker
