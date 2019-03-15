@@ -41,7 +41,7 @@ if target in ['linux', 'cygwin']:
     from distutils import sysconfig
     cvars = sysconfig.get_config_vars()
     
-    if hasattr(sysconfig, 'config_vars') and sysconfig._config_vars is not None:
+    if hasattr(sysconfig, '_config_vars') and sysconfig._config_vars is not None:
         if 'OPT' in cvars:
             sysconfig._config_vars['OPT'] = cvars['OPT'].replace('-Wstrict-prototypes', '')
             sysconfig._config_vars['OPT'] = cvars['OPT'].replace('-Wimplicit-function-declaration', '')
