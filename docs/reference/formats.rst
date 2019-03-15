@@ -21,11 +21,15 @@ as the 2nd component of the `content` arg. See the examples below.
 Syntax
 ------
 
-The form of a single-value format is:
+A buffer format looks like:
 
-    ``[count] type [size] [/usage]``
+    ``formats /usage``
 
-Where:
+Where ``formats`` is one or more space separated formats, each of the form:
+
+    ``[count] type [size]``
+
+and:
 
 - ``count`` is an optional integer. If omitted, it defaults to ``1``.
 - ``type`` is a single character indicating the data type:
@@ -36,9 +40,9 @@ Where:
    - ``x`` padding
 - ``size`` is an optional number of bytes used to store the type.
   If omitted, it defaults to 4 for numeric types, or to 1 for padding bytes.
-- ``usage`` is optional, consisting of a slash followed by a single character,
-  indicating how successive values in the buffer should be passed to the
-  shader:
+- ``usage`` is optional. It may be preceded by a space, and then consists of
+  a slash followed by a single character, indicating how successive values in
+  the buffer should be passed to the shader:
 
    - ``/v`` per vertex.
      Successive values from the buffer are passed to each vertex.
@@ -49,15 +53,27 @@ Where:
      the first buffer value is passed to every vertex of every instance.
      ie. behaves like a uniform.
 
-For example: ``"3f2/i"`` means each element in the buffer array is a struct of
-three floats. Each float is two bytes wide (ie. a "`half float`".) Consecutive
-values in the buffer are passed to each successive instance during an
-instanced render call.
+Some example buffer formats:
 
-Multiple formats may be concatenated together, separated by spaces.
-See the multiple value example below.
+``"2f"`` has a count of ``2`` and a type of ``f`` (float). Hence it describes
+two floats. The size of the floats is unspecified, so it defaults to ``4``. The
+usage of the buffer is unspecified, so defaults to ``/v`` (vertex), meaning
+each successive pair of floats in the array are passed to successive vertices
+during the render call.
 
-The valid combinations of type and size are:
+``"3i2/i"`` means three ``i`` (integers). The size of each integer is ``2``
+bytes, ie. they are shorts. The trailing ``/i`` means that consecutive values
+in the buffer are passed to successive _instances_ during an instanced render
+call. So the same value is passed to every vertex within a particular instance.
+
+Multiple formats may be concatenated together, separated by spaces. Hence:
+
+``"2f 3u x /v"`` means two floats, followed by three ``u`` (unsigned bytes),
+and then ``x`` - a single byte of padding, for alignment. The ``/v`` indicates
+successive elements in the buffer are passed to successive vertices during the
+render. This is the default, so the ``/v`` could be omitted.
+
+Valid combinations of type and size are:
 
 +----------+---------------+-------------------+-----------------+---------+
 |          |                 size                                          |
@@ -83,8 +99,11 @@ unsigned bytes.
 
 There is no size 8 variant for types ``i`` and ``u``.
 
+Usage Examples
+--------------
+
 Single value example
---------------------
+....................
 
 Consider a VBO containing 2D vertex positions, forming a single triangle::
 
@@ -116,9 +135,9 @@ These values are passed to the shader's ``in_vert`` variable, which must
 therefore be a vec2.
 
 The ``"2f"`` format omits a ``size`` component, so the floats default to
-4-bytes each. The format also omits the trailing ``"/usage"`` component, which
+4-bytes each. The format also omits the trailing ``/usage`` component, which
 defaults to ``/v``, so successive (x, y) rows from the buffer are passed to
-successive vertices during the render.
+successive vertices during the render call.
 
 Buffer formats use a syntax that is unique to ModernGL. As in the example
 above, they sometimes look similar to the format strings passed to
@@ -127,14 +146,10 @@ above, they sometimes look similar to the format strings passed to
 .. _here: https://docs.python.org/3.7/library/struct.html
 
 Multiple value example
-----------------------
+......................
 
 A buffer array might contain elements consisting of multiple interleaved
 values.
-
-This is described by a format containing multiple space separated
-formats. Each format (other than padding) requires the name of a shader ``in``
-attribute, to which it will be passed.
 
 For example, consider a buffer array, each element of which contains a 2D
 vertex position as floats, an RGB color as unsigned ints, and a single byte of
@@ -153,10 +168,16 @@ This is passed as VAO content using::
 
     (vbo, "2f 3f1 x", "in_vert", "in_color")
 
-This specifies that the initial two floats be passed to the vertex shader's
-``in_vert`` attribute, which hence must be a ``vec2``. The three color unsigned
-bytes (normalized to floats by ``f1``) are passed to the shader's ``in_color``, The final byte of padding (``x``) is ignored, and needs no shader
-which must therefore be a ``vec3``.
+The format starts with ``2f``, for the two position floats, which will
+be passed to the shader's ``in_vert`` attribute, which must therfore be a
+``vec2``.
+
+Next, after a space, is ``3f1``, for the three color unsigned bytes, which
+get normalized to floats by ``f1``. These floats will be passed to the shader's
+``in_color`` attribute, which must therefore be a ``vec3``.
+
+Finally, the format ends with ``x``, a single byte of padding, which needs
+no shader attribute name.
 
 .. toctree::
     :maxdepth: 2
