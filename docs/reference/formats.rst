@@ -12,8 +12,9 @@ buffer array (VBO).
 
 A VBO often contains a homogeneous array of C-like structures. The buffer
 format describes what each element of the array looks like. For example,
-a buffer containing an array of 2D vertex positions would have the format
-string ``"2f"`` - each element of the array consists of two floats.
+a buffer containing an array of 2D vertex positions might have the format
+string ``"2f4"`` - each element of the array consists of two floats, each
+float being 4 bytes wide.
 
 Buffer formats are used in the :py:meth:`Context.vertex_array()` constructor,
 as the 2nd component of the `content` arg. See the examples below.
@@ -23,9 +24,9 @@ Syntax
 
 A buffer format looks like:
 
-    ``formats /usage``
+    ``cts [/usage]``
 
-Where ``formats`` is one or more space separated formats, each of the form:
+Where ``cts`` is one or more space separated values of the form:
 
     ``[count] type [size]``
 
@@ -66,7 +67,8 @@ bytes, ie. they are shorts. The trailing ``/i`` means that consecutive values
 in the buffer are passed to successive _instances_ during an instanced render
 call. So the same value is passed to every vertex within a particular instance.
 
-Multiple formats may be concatenated together, separated by spaces. Hence:
+Buffers contining interleaved values are represented by multiple space
+separated count-type-size triples. Hence:
 
 ``"2f 3u x /v"`` means two floats, followed by three ``u`` (unsigned bytes),
 and then ``x`` - a single byte of padding, for alignment. The ``/v`` indicates
