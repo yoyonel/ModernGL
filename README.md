@@ -142,7 +142,8 @@ python setup.py build_sphinx
 ### Running tests
 
 ```sh
-pytest
+pip install -r tests/requirements.txt
+pytest tests
 ```
 
 > Some of the tests may be skipped when the supported OpenGL version is below the requirements of the given test.
