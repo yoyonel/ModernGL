@@ -17,12 +17,9 @@ matrix:
 
     - language: python
       python: pypy3.5
-      install:
+      script:
         - export TRAVIS=True
         - python setup.py develop
-        - python tests/experimental/print_info.py
-      script:
-        - python -m pytest tests/experimental
 
     - sudo: required
       services:
