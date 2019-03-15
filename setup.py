@@ -40,14 +40,15 @@ if target == 'darwin':
 if target in ['linux', 'cygwin']:
     from distutils import sysconfig
     cvars = sysconfig.get_config_vars()
+    
+    if hasattr(sysconfig, 'config_vars') and sysconfig._config_vars is not None:
+        if 'OPT' in cvars:
+            sysconfig._config_vars['OPT'] = cvars['OPT'].replace('-Wstrict-prototypes', '')
+            sysconfig._config_vars['OPT'] = cvars['OPT'].replace('-Wimplicit-function-declaration', '')
 
-    if 'OPT' in cvars:
-        sysconfig._config_vars['OPT'] = cvars['OPT'].replace('-Wstrict-prototypes', '')
-        sysconfig._config_vars['OPT'] = cvars['OPT'].replace('-Wimplicit-function-declaration', '')
-
-    if 'CFLAGS' in cvars:
-        sysconfig._config_vars['CFLAGS'] = cvars['CFLAGS'].replace('-Wstrict-prototypes', '')
-        sysconfig._config_vars['CFLAGS'] = cvars['CFLAGS'].replace('-Wimplicit-function-declaration', '')
+        if 'CFLAGS' in cvars:
+            sysconfig._config_vars['CFLAGS'] = cvars['CFLAGS'].replace('-Wstrict-prototypes', '')
+            sysconfig._config_vars['CFLAGS'] = cvars['CFLAGS'].replace('-Wimplicit-function-declaration', '')
 
 libraries = {
     'windows': ['gdi32', 'opengl32', 'user32'],
