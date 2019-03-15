@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.5.0] - 2019-01-22
+
+### Fixed
+
+- depth texture filder and compare func
+- scope restores old enable flags properly
+- clear gl errors as the final step of initialization
+- fix default framebuffer's number of attachments
+
+### Added
+
+- documentation for `extra` properties
+- improved documentation
+- improved build on Mac
+
+## [5.4.2] - 2018-08-01
+
+### Fixed
+
+- included `moderngl.program_members` in the package list
+
 ## [5.4.1] - 2018-07-30
 
 ### Fixed
