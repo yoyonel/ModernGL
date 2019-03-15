@@ -20,6 +20,9 @@ matrix:
       install:
         - export TRAVIS=True
         - python setup.py develop
+        - python tests/experimental/print_info.py
+      script:
+        - python -m pytest tests/experimental
 
     - sudo: required
       services:
