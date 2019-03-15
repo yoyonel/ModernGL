@@ -165,7 +165,7 @@ PyObject * MGLComputeShader_meth_run(MGLComputeShader * self, PyObject * const *
 }
 
 void MGLComputeShader_dealloc(MGLComputeShader * self) {
-    self->ob_base.ob_type->tp_free(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 #if PY_VERSION_HEX >= 0x03070000

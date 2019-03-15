@@ -217,7 +217,7 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
     if (starts_with(obj->ob_type->tp_name, mgl_ext)) {
         MGLObject * mglo = (MGLObject *)obj;
 
-        if (mglo->ob_base.ob_type == mglo->context->MGLBuffer_class) {
+        if (Py_TYPE(mglo) == mglo->context->MGLBuffer_class) {
             MGLBuffer * buffer = (MGLBuffer *)obj;
             PyObject * res = PyDict_New();
             dict_add_obj(res, "self", obj);
@@ -229,7 +229,7 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
             return res;
         }
 
-        if (mglo->ob_base.ob_type == mglo->context->MGLComputeShader_class) {
+        if (Py_TYPE(mglo) == mglo->context->MGLComputeShader_class) {
             MGLComputeShader * compute_shader = (MGLComputeShader *)obj;
             PyObject * res = PyDict_New();
             dict_add_obj(res, "self", obj);
@@ -240,7 +240,7 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
             return res;
         }
 
-        if (mglo->ob_base.ob_type == mglo->context->MGLFramebuffer_class) {
+        if (Py_TYPE(mglo) == mglo->context->MGLFramebuffer_class) {
             MGLFramebuffer * framebuffer = (MGLFramebuffer *)obj;
             PyObject * res = PyDict_New();
             dict_add_obj(res, "self", obj);
@@ -261,7 +261,7 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
             return res;
         }
 
-        if (mglo->ob_base.ob_type == mglo->context->MGLProgram_class) {
+        if (Py_TYPE(mglo) == mglo->context->MGLProgram_class) {
             MGLProgram * program = (MGLProgram *)obj;
             PyObject * res = PyDict_New();
             dict_add_obj(res, "self", obj);
@@ -272,7 +272,7 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
             return res;
         }
 
-        if (mglo->ob_base.ob_type == mglo->context->MGLQuery_class) {
+        if (Py_TYPE(mglo) == mglo->context->MGLQuery_class) {
             MGLQuery * query = (MGLQuery *)obj;
             PyObject * res = PyDict_New();
             dict_add_obj(res, "self", obj);
@@ -282,7 +282,7 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
             return res;
         }
 
-        if (mglo->ob_base.ob_type == mglo->context->MGLRenderbuffer_class) {
+        if (Py_TYPE(mglo) == mglo->context->MGLRenderbuffer_class) {
             MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)obj;
             PyObject * res = PyDict_New();
             dict_add_obj(res, "self", obj);
@@ -298,7 +298,7 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
             return res;
         }
 
-        if (mglo->ob_base.ob_type == mglo->context->MGLSampler_class) {
+        if (Py_TYPE(mglo) == mglo->context->MGLSampler_class) {
             MGLSampler * sampler = (MGLSampler *)obj;
             PyObject * res = PyDict_New();
             dict_add_obj(res, "self", obj);
@@ -308,7 +308,7 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
             return res;
         }
 
-        if (mglo->ob_base.ob_type == mglo->context->MGLScope_class) {
+        if (Py_TYPE(mglo) == mglo->context->MGLScope_class) {
             MGLScope * scope = (MGLScope *)obj;
             PyObject * res = PyDict_New();
             dict_add_obj(res, "self", obj);
@@ -354,7 +354,7 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
             return res;
         }
 
-        if (mglo->ob_base.ob_type == mglo->context->MGLTexture_class) {
+        if (Py_TYPE(mglo) == mglo->context->MGLTexture_class) {
             MGLTexture * texture = (MGLTexture *)obj;
             PyObject * res = PyDict_New();
             dict_add_obj(res, "self", obj);
@@ -371,7 +371,7 @@ PyObject * meth_inspect(PyObject * self, PyObject * obj) {
             return res;
         }
 
-        if (mglo->ob_base.ob_type == mglo->context->MGLVertexArray_class) {
+        if (Py_TYPE(mglo) == mglo->context->MGLVertexArray_class) {
             MGLVertexArray * vertex_array = (MGLVertexArray *)obj;
             PyObject * res = PyDict_New();
             dict_add_obj(res, "self", obj);

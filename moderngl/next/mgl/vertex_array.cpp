@@ -553,7 +553,7 @@ int MGLVertexArray_set_ibo(MGLVertexArray * self, PyObject * value) {
 }
 
 void MGLVertexArray_dealloc(MGLVertexArray * self) {
-    self->ob_base.ob_type->tp_free(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 #if PY_VERSION_HEX >= 0x03070000

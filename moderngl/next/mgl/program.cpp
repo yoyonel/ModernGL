@@ -415,7 +415,7 @@ PyObject * MGLProgram_meth_uniform(MGLProgram * self, PyObject * const * args, P
 }
 
 void MGLProgram_dealloc(MGLProgram * self) {
-    self->ob_base.ob_type->tp_free(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 #if PY_VERSION_HEX >= 0x03070000

@@ -430,7 +430,7 @@ int MGLTexture_set_swizzle(MGLTexture * self, PyObject * value) {
 }
 
 void MGLTexture_dealloc(MGLTexture * self) {
-    self->ob_base.ob_type->tp_free(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 #if PY_VERSION_HEX >= 0x03070000

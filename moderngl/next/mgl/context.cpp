@@ -346,7 +346,7 @@ MGLObject * _MGLObject_pop_mglo(PyObject * wrapper, int slot) {
 }
 
 void MGLContext_dealloc(MGLContext * self) {
-    self->ob_base.ob_type->tp_free(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 PyTypeObject * MGLContext_class;

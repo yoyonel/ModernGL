@@ -405,7 +405,7 @@ PyObject * MGLBuffer_meth_bind(MGLBuffer * self, PyObject * const * args, Py_ssi
 }
 
 void MGLBuffer_dealloc(MGLBuffer * self) {
-    self->ob_base.ob_type->tp_free(self);
+    Py_TYPE(self)->tp_free(self);
 }
 
 #if PY_VERSION_HEX >= 0x03070000
