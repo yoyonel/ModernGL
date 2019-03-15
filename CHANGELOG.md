@@ -462,7 +462,9 @@ For more information please see: [Differneces between ModernGL5 and ModernGL4](h
 
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.4.1...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.5.0...master
+[5.5.0]: https://github.com/cprogrammer1994/ModernGL/compare/5.4.2...5.5.0
+[5.4.2]: https://github.com/cprogrammer1994/ModernGL/compare/5.4.1...5.4.2
 [5.4.1]: https://github.com/cprogrammer1994/ModernGL/compare/5.4.0...5.4.1
 [5.4.0]: https://github.com/cprogrammer1994/ModernGL/compare/5.3.0...5.4.0
 [5.3.0]: https://github.com/cprogrammer1994/ModernGL/compare/5.2.1...5.3.0
