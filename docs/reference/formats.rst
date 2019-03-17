@@ -13,8 +13,8 @@ buffer array (VBO).
 A VBO often contains a homogeneous array of C-like structures. The buffer
 format describes what each element of the array looks like. For example,
 a buffer containing an array of 2D vertex positions might have the format
-string ``"2f4"`` - each element of the array consists of two floats, each
-float being 4 bytes wide.
+string ``"2f8"`` - each element of the array consists of two floats, each
+float being 8 bytes wide, ie a double.
 
 Buffer formats are used in the :py:meth:`Context.vertex_array()` constructor,
 as the 2nd component of the `content` arg. See the examples below.
