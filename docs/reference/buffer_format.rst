@@ -210,7 +210,7 @@ no shader attribute name.
 Example of multiple arrays with differing ``/usage``
 ....................................................
 
-To illustrate the trailing ``/usage`` portion, imagine rendering a dozen cubes
+To illustrate the trailing ``/usage`` portion, consider rendering a dozen cubes
 with instanced rendering. We will use:
 
 * ``vbo_verts_normals`` contains vertices (3 floats) and normals (3 floats)
