@@ -39,7 +39,12 @@ Where:
    - ``x`` padding
 - ``size`` is an optional number of bytes used to store the type.
   If omitted, it defaults to 4 for numeric types, or to 1 for padding bytes.
-- ``usage`` is optional. It may be preceded by a space, and then consists of
+
+  A format may contain multiple, space-separated ``[count]type[size]`` triples
+  (See the :ref:`example-of-single-interleaved-array-label`), followed by:
+
+
+- ``/usage`` is optional. It may be preceded by a space, and then consists of
   a slash followed by a single character, indicating how successive values in
   the buffer should be passed to the shader:
 
@@ -156,6 +161,8 @@ The ``"2f"`` format omits a ``size`` component, so the floats default to
 4-bytes each. The format also omits the trailing ``/usage`` component, which
 defaults to ``/v``, so successive (x, y) rows from the buffer are passed to
 successive vertices during the render call.
+
+.. _example-of-single-interleaved-array-label:
 
 Example of single interleaved array
 ...................................
