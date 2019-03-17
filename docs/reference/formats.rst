@@ -50,6 +50,10 @@ Where:
      the first buffer value is passed to every vertex of every instance.
      ie. behaves like a uniform.
 
+  See `the /usage example`_.
+
+.. _`the /usage example`: #example-of-multiple-arrays-with-differing-usage
+
 Valid combinations of type and size are:
 
 +----------+---------------+-------------------+-----------------+---------+
@@ -105,8 +109,8 @@ and then ``x`` - a single byte of padding, for alignment. The ``/v`` indicates
 successive elements in the buffer are passed to successive vertices during the
 render. This is the default, so the ``/v`` could be omitted.
 
-Simple usage example
-....................
+Example of simple usage
+.......................
 
 Consider a VBO containing 2D vertex positions, forming a single triangle::
 
@@ -144,8 +148,8 @@ successive vertices during the render call.
 
 .. _here: https://docs.python.org/3.7/library/struct.html
 
-Single interleaved array example
-................................
+Example of single interleaved array
+...................................
 
 A buffer array might contain elements consisting of multiple interleaved
 values.
@@ -184,6 +188,53 @@ get normalized to floats by ``f1``. These floats will be passed to the shader's
 
 Finally, the format ends with ``x``, a single byte of padding, which needs
 no shader attribute name.
+
+Example of multiple arrays with differing ``/usage``
+....................................................
+
+To illustrate the trailing ``/usage`` portion, imagine rendering a dozen cubes
+with instanced rendering. We will use:
+
+* ``vbo_verts_normals`` contains vertices (3 floats) and normals (3 floats)
+  for the vertices within a single cube.
+* ``vbo_offset_orientation`` contains offsets (3 floats) and orientations (9
+  float matrices) that are used to position and orient each cube.
+* ``vbo_colors`` contains one color (3 floats), that will be used for every
+  cube.
+
+Our shader will take all the above values as attributes, none of them are
+uniforms.
+
+We bind the above VBOs in a single VAO, to prepare for an instanced rendering
+call::
+
+    vao = ctx.vertex_array(
+        shader_program,
+        [
+            (vbo_verts_normals,      "3f 3f /v", in_vert, in_norm),
+            (vbo_offset_orientation, "3f 9f /i", in_offset, in_orientation),
+            (vbo_colors,             "3f /r",    in_color),
+        ]
+        index_buffer_object
+    )
+
+So, the vertices and normals, using ``/v``, are passed to each vertex within
+an instance. The offsets and orientations are passed to each successive
+instance. And the single color is passed to every vertex of every instance.
+
+If we had stored the color with ``/v`` or ``/i``, it would have needed
+needless duplication, once per vertex or once per instance. Using ``/r``,
+only one color is passed to every vertex of every instance for the whole render
+call.
+
+We could have achieved the same with a uniform, but doing it as an attribute
+allows us to reuse the same shader program, bound to a different buffer, to
+pass in color data which varies per instance, or per vertex.
+
+Another alternative would be to not specify the color in our render at all, and
+rely on a default color set in the OpenGL render state before the render call.
+But in general these default values don't have perfect support across all
+devices. Using attributes is more reliable.
 
 .. toctree::
     :maxdepth: 2
