@@ -79,7 +79,7 @@ for this combination only, the values are `normalized`, ie. unsigned bytes from
 time they reach the vertex shader. This is intended for passing in colors as
 unsigned bytes.
 
-There is no size 8 variant for types ``i`` and ``u``.
+There are no size 8 variants for types ``i`` and ``u``.
 
 This buffer format syntax is specific to ModernGL. As seen in the usage
 examples below, the formats sometimes look similar to the format strings passed
