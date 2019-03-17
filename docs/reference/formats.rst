@@ -24,13 +24,9 @@ Syntax
 
 A buffer format looks like:
 
-    ``cts [/usage]``
+    ``[count]type[size] [[count]type[size]...] [/usage]``
 
-Where ``cts`` is one or more space separated values of the form:
-
-    ``[count] type [size]``
-
-and:
+Where:
 
 - ``count`` is an optional integer. If omitted, it defaults to ``1``.
 - ``type`` is a single character indicating the data type:
