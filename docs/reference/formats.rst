@@ -50,27 +50,6 @@ Where:
      the first buffer value is passed to every vertex of every instance.
      ie. behaves like a uniform.
 
-Some example buffer formats:
-
-``"2f"`` has a count of ``2`` and a type of ``f`` (float). Hence it describes
-two floats. The size of the floats is unspecified, so it defaults to ``4``. The
-usage of the buffer is unspecified, so defaults to ``/v`` (vertex), meaning
-each successive pair of floats in the array are passed to successive vertices
-during the render call.
-
-``"3i2/i"`` means three ``i`` (integers). The size of each integer is ``2``
-bytes, ie. they are shorts. The trailing ``/i`` means that consecutive values
-in the buffer are passed to successive _instances_ during an instanced render
-call. So the same value is passed to every vertex within a particular instance.
-
-Buffers contining interleaved values are represented by multiple space
-separated count-type-size triples. Hence:
-
-``"2f 3u x /v"`` means two floats, followed by three ``u`` (unsigned bytes),
-and then ``x`` - a single byte of padding, for alignment. The ``/v`` indicates
-successive elements in the buffer are passed to successive vertices during the
-render. This is the default, so the ``/v`` could be omitted.
-
 Valid combinations of type and size are:
 
 +----------+---------------+-------------------+-----------------+---------+
@@ -97,10 +76,32 @@ unsigned bytes.
 
 There is no size 8 variant for types ``i`` and ``u``.
 
-Usage Examples
---------------
+Examples
+--------
 
-Single value example
+Example buffer formats
+......................
+
+``"2f"`` has a count of ``2`` and a type of ``f`` (float). Hence it describes
+two floats. The size of the floats is unspecified, so it defaults to ``4``. The
+usage of the buffer is unspecified, so defaults to ``/v`` (vertex), meaning
+each successive pair of floats in the array are passed to successive vertices
+during the render call.
+
+``"3i2/i"`` means three ``i`` (integers). The size of each integer is ``2``
+bytes, ie. they are shorts. The trailing ``/i`` means that consecutive values
+in the buffer are passed to successive _instances_ during an instanced render
+call. So the same value is passed to every vertex within a particular instance.
+
+Buffers contining interleaved values are represented by multiple space
+separated count-type-size triples. Hence:
+
+``"2f 3u x /v"`` means two floats, followed by three ``u`` (unsigned bytes),
+and then ``x`` - a single byte of padding, for alignment. The ``/v`` indicates
+successive elements in the buffer are passed to successive vertices during the
+render. This is the default, so the ``/v`` could be omitted.
+
+Simple usage example
 ....................
 
 Consider a VBO containing 2D vertex positions, forming a single triangle::
@@ -122,7 +123,7 @@ Consider a VBO containing 2D vertex positions, forming a single triangle::
     vao = ctx.vertex_array(
         shader_program,
         [
-            (vbo, "2f", "in_vert"), # the buffer format is the "2f" here
+            (vbo, "2f", "in_vert"), # <---- the "2f" is the buffer format
         ]
         index_buffer_object
     )
@@ -143,8 +144,8 @@ above, they sometimes look similar to the format strings passed to
 
 .. _here: https://docs.python.org/3.7/library/struct.html
 
-Multiple value example
-......................
+Single interleaved array example
+................................
 
 A buffer array might contain elements consisting of multiple interleaved
 values.
@@ -162,9 +163,16 @@ padding for alignment:
 |       |       | byte     | byte     | byte     |         |
 +-------+-------+----------+----------+----------+---------+
 
-This is passed as VAO content using::
+Such a buffer, however you choose to contruct it, would then be passed into
+a VAO using::
 
-    (vbo, "2f 3f1 x", "in_vert", "in_color")
+    vao = ctx.vertex_array(
+        shader_program,
+        [
+            (vbo, "2f 3f1 x", "in_vert", "in_color")
+        ]
+        index_buffer_object
+    )
 
 The format starts with ``2f``, for the two position floats, which will
 be passed to the shader's ``in_vert`` attribute, which must therfore be a
