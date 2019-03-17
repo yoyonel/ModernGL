@@ -76,6 +76,10 @@ unsigned bytes.
 
 There is no size 8 variant for types ``i`` and ``u``.
 
+Buffer formats use a syntax that is unique to ModernGL. As seen in the usage
+examples below, they sometimes look similar to the format strings passed to
+``struct.pack``, but that is a different syntax (documented here_.)
+
 Examples
 --------
 
@@ -137,10 +141,6 @@ The ``"2f"`` format omits a ``size`` component, so the floats default to
 4-bytes each. The format also omits the trailing ``/usage`` component, which
 defaults to ``/v``, so successive (x, y) rows from the buffer are passed to
 successive vertices during the render call.
-
-Buffer formats use a syntax that is unique to ModernGL. As in the example
-above, they sometimes look similar to the format strings passed to
-``struct.pack``, but that is a different syntax (documented here_.)
 
 .. _here: https://docs.python.org/3.7/library/struct.html
 
