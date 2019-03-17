@@ -107,7 +107,7 @@ during the render call.
 
 ``"3i2/i"`` means three ``i`` (integers). The size of each integer is ``2``
 bytes, ie. they are shorts. The trailing ``/i`` means that consecutive values
-in the buffer are passed to successive _instances_ during an instanced render
+in the buffer are passed to successive `instances` during an instanced render
 call. So the same value is passed to every vertex within a particular instance.
 
 Buffers contining interleaved values are represented by multiple space
