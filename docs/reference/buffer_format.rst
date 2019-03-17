@@ -58,9 +58,7 @@ Where:
      ie. behaves like a uniform.
 
   When passing multiple VBOs to a VAO, the first one must be of usage ``\v``,
-  as shown in `the /usage example`_.
-
-.. _`the /usage example`: #example-of-multiple-arrays-with-differing-usage
+  as shown in the :ref:`example-of-multiple-arrays-with-differing-usage-label`.
 
 Valid combinations of type and size are:
 
@@ -204,6 +202,8 @@ get normalized to floats by ``f1``. These floats will be passed to the shader's
 
 Finally, the format ends with ``x``, a single byte of padding, which needs
 no shader attribute name.
+
+.. _example-of-multiple-arrays-with-differing-usage-label:
 
 Example of multiple arrays with differing ``/usage``
 ....................................................
