@@ -19,7 +19,7 @@ the format ``"2f8"`` - each element of the array consists of two floats, each
 float being 8 bytes wide, ie. a double.
 
 Buffer formats are used in the :py:meth:`Context.vertex_array()` constructor,
-as the 2nd component of the `content` arg. See the examples below.
+as the 2nd component of the `content` arg. See the :ref:`example-of-simple-usage-label` below.
 
 Syntax
 ------
@@ -122,6 +122,8 @@ separated count-type-size triples. Hence:
 and then ``x`` - a single byte of padding, for alignment. The ``/v`` indicates
 successive elements in the buffer are passed to successive vertices during the
 render. This is the default, so the ``/v`` could be omitted.
+
+.. _example-of-simple-usage-label:
 
 Example of simple usage
 .......................
