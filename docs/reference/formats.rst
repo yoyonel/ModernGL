@@ -87,6 +87,12 @@ to ``struct.pack``, but that is a different syntax (documented here_.)
 
 .. _here: https://docs.python.org/3.7/library/struct.html
 
+Buffer formats can represent a wide range of vertex attribute formats.
+For rare cases of specialized attribute formats that are not expressible
+using buffer formats, there is a :py:meth:`VertexArray.bind()` method, to
+manually configure the underlying OpenGL binding calls. This is not generally
+recommended.
+
 Examples
 --------
 
