@@ -50,7 +50,8 @@ Where:
      the first buffer value is passed to every vertex of every instance.
      ie. behaves like a uniform.
 
-  See `the /usage example`_.
+  When passing multiple VBOs to a VAO, the first one must be of usage ``\v``,
+  as shown in `the /usage example`_.
 
 .. _`the /usage example`: #example-of-multiple-arrays-with-differing-usage
 
@@ -219,9 +220,14 @@ call::
     )
 
 So, the vertices and normals, using ``/v``, are passed to each vertex within
-an instance. The offsets and orientations are passed to each successive
-instance. And the single color is passed to every vertex of every instance.
+an instance. This fulfills the rule tha the first VBO in a VAO must have usage
+``/v``.
 
+The offsets and orientations pass the same value to each vertex within an
+instance, but then pass the next value in the buffer to the vertices of the
+next instance.
+
+And the single color is passed to every vertex of every instance.
 If we had stored the color with ``/v`` or ``/i``, it would have needed
 needless duplication, once per vertex or once per instance. Using ``/r``,
 only one color is passed to every vertex of every instance for the whole render
@@ -232,9 +238,9 @@ allows us to reuse the same shader program, bound to a different buffer, to
 pass in color data which varies per instance, or per vertex.
 
 Another alternative would be to not specify the color in our render at all, and
-rely on a default color set in the OpenGL render state before the render call.
-But in general these default values don't have perfect support across all
-devices. Using attributes is more reliable.
+rely on a default color set in the OpenGL state before the render call. But in
+general these default values don't have perfect support across all devices.
+Using attributes is more reliable.
 
 .. toctree::
     :maxdepth: 2
