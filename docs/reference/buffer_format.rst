@@ -217,11 +217,10 @@ with instanced rendering. We will use:
   for the vertices within a single cube.
 * ``vbo_offset_orientation`` contains offsets (3 floats) and orientations (9
   float matrices) that are used to position and orient each cube.
-* ``vbo_colors`` contains one color (3 floats), that will be used for every
-  cube.
+* ``vbo_colors`` contains colors (3 floats). In this example, there is only
+  one color in the buffer, that will be used for every vertex of every cube.
 
-Our shader will take all the above values as attributes, none of them are
-uniforms.
+Our shader will take all the above values as attributes.
 
 We bind the above VBOs in a single VAO, to prepare for an instanced rendering
 call::
@@ -244,20 +243,21 @@ The offsets and orientations pass the same value to each vertex within an
 instance, but then pass the next value in the buffer to the vertices of the
 next instance.
 
-And the single color is passed to every vertex of every instance.
+The single color is passed to every vertex of every instance.
 If we had stored the color with ``/v`` or ``/i``, it would have needed
-needless duplication, once per vertex or once per instance. Using ``/r``,
-only one color is passed to every vertex of every instance for the whole render
-call.
+needless duplication of the color in the buffer, once per vertex or once per
+instance. Using ``/r``, only one color is passed to every vertex of every
+instance for the whole render call.
 
-We could have achieved the same with a uniform, but doing it as an attribute
-allows us to reuse the same shader program, bound to a different buffer, to
-pass in color data which varies per instance, or per vertex.
+An alternative approach would be to pass in the color as a uniform, since
+it is constant. But doing it as an attribute is more flexible. It allows us to
+reuse the same shader program, bound to a different buffer, to pass in color
+data which varies per instance, or per vertex.
 
-Another alternative would be to not specify the color in our render at all, and
-rely on a default color set in the OpenGL state before the render call. But in
-general these default values don't have perfect support across all devices.
-Using attributes is more reliable.
+Another alternative approach would be to not specify the color in our render at
+all, and rely on a default color set in the OpenGL state before the render
+call. But in general these default values don't have perfect support across all
+devices. Using attributes is more reliable.
 
 .. toctree::
     :maxdepth: 2
