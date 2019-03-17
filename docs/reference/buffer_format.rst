@@ -1,3 +1,5 @@
+.. _buffer-format-label:
+
 Buffer Format
 =============
 
