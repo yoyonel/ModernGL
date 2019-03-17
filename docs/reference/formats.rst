@@ -186,7 +186,7 @@ a VAO using::
     )
 
 The format starts with ``2f``, for the two position floats, which will
-be passed to the shader's ``in_vert`` attribute, which must therfore be a
+be passed to the shader's ``in_vert`` attribute, which must therefore be a
 ``vec2``.
 
 Next, after a space, is ``3f1``, for the three color unsigned bytes, which
