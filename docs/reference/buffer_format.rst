@@ -105,23 +105,29 @@ Example buffer formats
 ......................
 
 ``"2f"`` has a count of ``2`` and a type of ``f`` (float). Hence it describes
-two floats. The size of the floats is unspecified, so it defaults to ``4``. The
-usage of the buffer is unspecified, so defaults to ``/v`` (vertex), meaning
-each successive pair of floats in the array are passed to successive vertices
-during the render call.
+two floats, passed to a ``vec2`` shader variable. The size of the
+floats is unspecified, so defaults to ``4`` bytes. The usage of the buffer is
+unspecified, so defaults to ``/v`` (vertex), meaning each successive pair of
+floats in the array are passed to successive vertices during the render call.
 
 ``"3i2/i"`` means three ``i`` (integers). The size of each integer is ``2``
-bytes, ie. they are shorts. The trailing ``/i`` means that consecutive values
+bytes, ie. they are shorts, passed to an ``ivec3`` shader variable.
+The trailing ``/i`` means that consecutive values
 in the buffer are passed to successive `instances` during an instanced render
 call. So the same value is passed to every vertex within a particular instance.
 
 Buffers contining interleaved values are represented by multiple space
 separated count-type-size triples. Hence:
 
-``"2f 3u x /v"`` means two floats, followed by three ``u`` (unsigned bytes),
-and then ``x`` - a single byte of padding, for alignment. The ``/v`` indicates
-successive elements in the buffer are passed to successive vertices during the
-render. This is the default, so the ``/v`` could be omitted.
+``"2f 3u x /v"`` means:
+
+    * ``2f``: two floats, passed to a ``vec2`` shader variable, followed by
+    * ``3u``: three unsigned bytes, passed to a ``uvec3``, then
+    * ``x``: a single byte of padding, for alignment.
+
+The ``/v`` indicates successive elements in the buffer are passed to successive
+vertices during the render. This is the default, so the ``/v`` could be
+omitted.
 
 .. _example-of-simple-usage-label:
 
@@ -154,8 +160,10 @@ Consider a VBO containing 2D vertex positions, forming a single triangle::
 
 The line ``(vbo, "2f", "in_vert")``, known as the VAO content, indicates that
 ``vbo`` contains an array of values, each of which consists of two floats.
-These values are passed to the shader's ``in_vert`` variable, which must
-therefore be a vec2.
+These values are passed to the shader's ``in_vert`` variable,
+declared in the shader as::
+
+    in vec2 in_vert;
 
 The ``"2f"`` format omits a ``size`` component, so the floats default to
 4-bytes each. The format also omits the trailing ``/usage`` component, which
@@ -195,12 +203,15 @@ a VAO using::
     )
 
 The format starts with ``2f``, for the two position floats, which will
-be passed to the shader's ``in_vert`` attribute, which must therefore be a
-``vec2``.
+be passed to the shader's ``in_vert`` attribute, declared as::
+
+    in vec2 in_vert;
 
 Next, after a space, is ``3f1``, for the three color unsigned bytes, which
 get normalized to floats by ``f1``. These floats will be passed to the shader's
-``in_color`` attribute, which must therefore be a ``vec3``.
+``in_color`` attribute::
+
+    in vec3 in_color;
 
 Finally, the format ends with ``x``, a single byte of padding, which needs
 no shader attribute name.
@@ -237,17 +248,25 @@ call::
 
 So, the vertices and normals, using ``/v``, are passed to each vertex within
 an instance. This fulfills the rule tha the first VBO in a VAO must have usage
-``/v``.
+``/v``. These are passed to shader variables::
+
+    in vec3 in_vert;
+    in vec3 in_norm;
 
 The offsets and orientations pass the same value to each vertex within an
 instance, but then pass the next value in the buffer to the vertices of the
-next instance.
+next instance. Passed to the shader::
+
+    in vec3 in_offset;
+    in mat3 in_orientation;
 
 The single color is passed to every vertex of every instance.
 If we had stored the color with ``/v`` or ``/i``, it would have needed
 needless duplication of the color in the buffer, once per vertex or once per
 instance. Using ``/r``, only one color is passed to every vertex of every
-instance for the whole render call.
+instance for the whole render call::
+
+    in vec3 in_color;
 
 An alternative approach would be to pass in the color as a uniform, since
 it is constant. But doing it as an attribute is more flexible. It allows us to
