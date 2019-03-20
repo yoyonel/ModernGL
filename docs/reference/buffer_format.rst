@@ -254,10 +254,5 @@ it is constant. But doing it as an attribute is more flexible. It allows us to
 reuse the same shader program, bound to a different buffer, to pass in color
 data which varies per instance, or per vertex.
 
-Another alternative approach would be to not specify the color in our render at
-all, and rely on a default color set in the OpenGL state before the render
-call. But in general these default values don't have perfect support across all
-devices. Using attributes is more reliable.
-
 .. toctree::
     :maxdepth: 2
