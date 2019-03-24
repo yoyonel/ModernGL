@@ -77,12 +77,19 @@ Valid combinations of type and size are:
 | x        | 1 byte        | 2 bytes           | 4 bytes         | 8 bytes |
 +----------+---------------+-------------------+-----------------+---------+
 
-The entry for ``f1`` looks unusual on first glance, in that its type is ``f``
-(for float), but it defines a buffer value containing unsigned bytes. However,
-for this combination only, the values are `normalized`, ie. unsigned bytes from
-0 to 255 in the buffer are converted to float values from 0.0 to 1.0 by the
-time they reach the vertex shader. This is intended for passing in colors as
-unsigned bytes.
+The entry ``f1`` has two unusual properties:
+
+1. Its type is ``f`` (for float), but it defines a buffer containing unsigned
+   bytes. For this size of floats only, the values are `normalized`, ie.
+   unsigned bytes from 0 to 255 in the buffer are converted to float values
+   from 0.0 to 1.0 by the time they reach the vertex shader. This is intended
+   for passing in colors as unsigned bytes.
+2. Three unsigned bytes, with a format of ``3f1``,
+   may be assigned to a ``vec3`` attribute, as one would expect.
+   But, from ModernGL v6.0,
+   they can alternatively be passed to a ``vec4`` attribute.
+   This is intended for passing a buffer of 3-byte RGB values
+   into an attribute which also contains an alpha channel.
 
 There are no size 8 variants for types ``i`` and ``u``.
 
@@ -105,13 +112,13 @@ Example buffer formats
 ......................
 
 ``"2f"`` has a count of ``2`` and a type of ``f`` (float). Hence it describes
-two floats, passed to a ``vec2`` shader variable. The size of the
+two floats, passed to a vertex shader's ``vec2`` attribute. The size of the
 floats is unspecified, so defaults to ``4`` bytes. The usage of the buffer is
 unspecified, so defaults to ``/v`` (vertex), meaning each successive pair of
 floats in the array are passed to successive vertices during the render call.
 
 ``"3i2/i"`` means three ``i`` (integers). The size of each integer is ``2``
-bytes, ie. they are shorts, passed to an ``ivec3`` shader variable.
+bytes, ie. they are shorts, passed to an ``ivec3`` attribute.
 The trailing ``/i`` means that consecutive values
 in the buffer are passed to successive `instances` during an instanced render
 call. So the same value is passed to every vertex within a particular instance.
@@ -121,7 +128,7 @@ separated count-type-size triples. Hence:
 
 ``"2f 3u x /v"`` means:
 
-    * ``2f``: two floats, passed to a ``vec2`` shader variable, followed by
+    * ``2f``: two floats, passed to a ``vec2`` attribute, followed by
     * ``3u``: three unsigned bytes, passed to a ``uvec3``, then
     * ``x``: a single byte of padding, for alignment.
 
@@ -160,8 +167,8 @@ Consider a VBO containing 2D vertex positions, forming a single triangle::
 
 The line ``(vbo, "2f", "in_vert")``, known as the VAO content, indicates that
 ``vbo`` contains an array of values, each of which consists of two floats.
-These values are passed to the shader's ``in_vert`` variable,
-declared in the shader as::
+These values are passed to an ``in_vert`` attribute,
+declared in the vertex shader as::
 
     in vec2 in_vert;
 
@@ -248,14 +255,14 @@ call::
 
 So, the vertices and normals, using ``/v``, are passed to each vertex within
 an instance. This fulfills the rule tha the first VBO in a VAO must have usage
-``/v``. These are passed to shader variables::
+``/v``. These are passed to vertex attributes as::
 
     in vec3 in_vert;
     in vec3 in_norm;
 
 The offsets and orientations pass the same value to each vertex within an
 instance, but then pass the next value in the buffer to the vertices of the
-next instance. Passed to the shader::
+next instance. Passed as::
 
     in vec3 in_offset;
     in mat3 in_orientation;
