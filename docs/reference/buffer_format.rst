@@ -10,7 +10,7 @@ Description
 -----------
 
 A buffer format is a short string describing the layout of data in a vertex
-buffer array (VBO).
+buffer object (VBO).
 
 A VBO often contains a homogeneous array of C-like structures. The buffer
 format describes what each element of the array looks like. For example,
@@ -44,7 +44,7 @@ Where:
   (See the :ref:`example-of-single-interleaved-array-label`), followed by:
 
 
-- ``/usage`` is optional. It may be preceded by a space, and then consists of
+- ``/usage`` is optional. It should be preceded by a space, and then consists of
   a slash followed by a single character, indicating how successive values in
   the buffer should be passed to the shader:
 
@@ -57,7 +57,7 @@ Where:
      the first buffer value is passed to every vertex of every instance.
      ie. behaves like a uniform.
 
-  When passing multiple VBOs to a VAO, the first one must be of usage ``\v``,
+  When passing multiple VBOs to a VAO, the first one must be of usage ``/v``,
   as shown in the :ref:`example-of-multiple-arrays-with-differing-usage-label`.
 
 Valid combinations of type and size are:
