@@ -181,6 +181,7 @@ Code is tested with [pep8], [flake8], [prospector] and [pylint]
 - [Tomi Aarnio](https://github.com/toaarnio)
 - [Joshua Reibert](https://github.com/joshua-r)
 - [Einar Forselv](https://github.com/einarf)
+- [Jonathan Hartley](https://github.com/tartley)
 
 and [many others](https://github.com/cprogrammer1994/ModernGL/graphs/contributors)
 
