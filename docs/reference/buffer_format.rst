@@ -268,10 +268,11 @@ next instance. Passed as::
     in mat3 in_orientation;
 
 The single color is passed to every vertex of every instance.
-If we had stored the color with ``/v`` or ``/i``, it would have needed
-needless duplication of the color in the buffer, once per vertex or once per
-instance. Using ``/r``, only one color is passed to every vertex of every
-instance for the whole render call::
+If we had stored the color with ``/v`` or ``/i``, then we would have had to
+store duplicate identical color values in vbo_colors - one per instance or
+one per vertex. To render all our cubes in a single color, this is needless
+duplication. Using ``/r``, only one color is require the buffer, and it is
+passed to every vertex of every instance for the whole render call::
 
     in vec3 in_color;
 
