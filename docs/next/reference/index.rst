@@ -5,6 +5,7 @@ Reference
     :maxdepth: 1
 
     buffer.rst
+    buffer_format.rst
     compute_shader.rst
     context.rst
     framebuffer.rst

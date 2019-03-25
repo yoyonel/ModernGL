@@ -697,7 +697,7 @@ class Context:
 
             Args:
                 program (Program): The program used when rendering.
-                content (list): A list of (buffer, format, attributes).
+                content (list): A list of (buffer, format, attributes). See :ref:`buffer-format-label`.
                 index_buffer (Buffer): An index buffer.
 
             Keyword Args:
