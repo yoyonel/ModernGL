@@ -279,6 +279,39 @@ void write_uni(const GLMethods & gl, int location, int type, int size, void * pt
         case GL_SAMPLER_CUBE_SHADOW: gl.Uniform1iv(location, size, (int *)ptr); break;
         case GL_SAMPLER_CUBE_MAP_ARRAY: gl.Uniform1iv(location, size, (int *)ptr); break;
         case GL_SAMPLER_CUBE_MAP_ARRAY_SHADOW: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_IMAGE_1D: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_IMAGE_2D: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_IMAGE_3D: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_IMAGE_2D_RECT: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_IMAGE_CUBE: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_IMAGE_BUFFER: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_IMAGE_1D_ARRAY: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_IMAGE_2D_ARRAY: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_IMAGE_CUBE_MAP_ARRAY: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_IMAGE_2D_MULTISAMPLE: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_IMAGE_2D_MULTISAMPLE_ARRAY: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_INT_IMAGE_1D: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_INT_IMAGE_2D: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_INT_IMAGE_3D: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_INT_IMAGE_2D_RECT: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_INT_IMAGE_CUBE: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_INT_IMAGE_BUFFER: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_INT_IMAGE_1D_ARRAY: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_INT_IMAGE_2D_ARRAY: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_INT_IMAGE_CUBE_MAP_ARRAY: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_INT_IMAGE_2D_MULTISAMPLE: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_INT_IMAGE_2D_MULTISAMPLE_ARRAY: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_UNSIGNED_INT_IMAGE_1D: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_UNSIGNED_INT_IMAGE_2D: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_UNSIGNED_INT_IMAGE_3D: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_UNSIGNED_INT_IMAGE_2D_RECT: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_UNSIGNED_INT_IMAGE_CUBE: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_UNSIGNED_INT_IMAGE_BUFFER: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_UNSIGNED_INT_IMAGE_1D_ARRAY: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_UNSIGNED_INT_IMAGE_2D_ARRAY: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_UNSIGNED_INT_IMAGE_CUBE_MAP_ARRAY: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_UNSIGNED_INT_IMAGE_2D_MULTISAMPLE: gl.Uniform1iv(location, size, (int *)ptr); break;
+        case GL_UNSIGNED_INT_IMAGE_2D_MULTISAMPLE_ARRAY: gl.Uniform1iv(location, size, (int *)ptr); break;
     }
 }
 
