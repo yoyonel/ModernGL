@@ -246,9 +246,9 @@ call::
     vao = ctx.vertex_array(
         shader_program,
         [
-            (vbo_verts_normals,      "3f 3f /v", in_vert, in_norm),
-            (vbo_offset_orientation, "3f 9f /i", in_offset, in_orientation),
-            (vbo_colors,             "3f /r",    in_color),
+            (vbo_verts_normals,      "3f 3f /v", "in_vert", "in_norm"),
+            (vbo_offset_orientation, "3f 9f /i", "in_offset", "in_orientation"),
+            (vbo_colors,             "3f /r",    "in_color"),
         ]
         index_buffer_object
     )
