@@ -5,6 +5,7 @@
 
 #include "internal/modules.hpp"
 #include "internal/tools.hpp"
+#include "internal/uniform.hpp"
 #include "internal/glsl.hpp"
 
 /* MGLContext.compute_shader(texture)
@@ -143,6 +144,18 @@ PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source) 
     return NEW_REF(compute_shader->wrapper);
 }
 
+/* MGLComputeShader.uniform(...)
+ */
+PyObject * MGLComputeShader_meth_uniform(MGLComputeShader * self, PyObject * const * args, Py_ssize_t nargs) {
+    if (nargs != 1 && nargs != 2) {
+        PyErr_Format(moderngl_error, "num args");
+        return 0;
+    }
+    const GLMethods & gl = self->context->gl;
+    self->context->use_program(self->program_obj);
+    return getset_uniform(gl, self->program_obj, args[0], nargs == 2 ? args[1] : 0);
+}
+
 /* MGLComputeShader.run(group_x, group_y, group_z)
  */
 PyObject * MGLComputeShader_meth_run(MGLComputeShader * self, PyObject * const * args, Py_ssize_t nargs) {
@@ -171,17 +184,23 @@ void MGLComputeShader_dealloc(MGLComputeShader * self) {
 #if PY_VERSION_HEX >= 0x03070000
 
 PyMethodDef MGLComputeShader_methods[] = {
+    {"uniform", (PyCFunction)MGLComputeShader_meth_uniform, METH_FASTCALL, 0},
     {"run", (PyCFunction)MGLComputeShader_meth_run, METH_FASTCALL, 0},
     {0},
 };
 
 #else
 
+PyObject * MGLComputeShader_meth_uniform_va(MGLComputeShader * self, PyObject * args) {
+    return MGLComputeShader_meth_uniform(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
+}
+
 PyObject * MGLComputeShader_meth_run_va(MGLComputeShader * self, PyObject * args) {
     return MGLComputeShader_meth_run(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
 }
 
 PyMethodDef MGLComputeShader_methods[] = {
+    {"uniform", (PyCFunction)MGLComputeShader_meth_uniform_va, METH_VARARGS, 0},
     {"run", (PyCFunction)MGLComputeShader_meth_run_va, METH_VARARGS, 0},
     {0},
 };
