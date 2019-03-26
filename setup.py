@@ -144,6 +144,7 @@ next_mgl = Extension(
         'moderngl/next/mgl/internal/glsl.cpp',
         'moderngl/next/mgl/internal/modules.cpp',
         'moderngl/next/mgl/internal/tools.cpp',
+        'moderngl/next/mgl/internal/uniform.cpp',
         'moderngl/next/mgl/internal/wrapper.cpp',
         'moderngl/next/mgl/internal/opengl/gl_context_%s.cpp' % target,
         'moderngl/next/mgl/internal/opengl/gl_methods.cpp',
