@@ -81,7 +81,6 @@ class WarpGridTex3D(Example):
         self.prog_hm = self.ctx.program(
             vertex_shader='''
                         #version 330
-                        #extension GL_EXT_gpu_shader4 : require
 
                         uniform float time;
 
@@ -111,7 +110,7 @@ class WarpGridTex3D(Example):
                         out vec4 f_color;
 
                         void main() {
-                            f_color = vec4(texture(tex_cooling_map, v_text).rrr*1.0, 1.0);
+                            f_color = vec4(texture(tex_cooling_map, v_text).r*10.0, 1, 1, 1);
                             //f_color = vec4(v_text, 0.0, 1.0);
                         }
                     ''',
@@ -139,7 +138,8 @@ class WarpGridTex3D(Example):
                         out vec4 f_color;
 
                         void main() {
-                            f_color = vec4(vec3(texture(Texture, v_text).r), 1.0);
+                            //f_color = vec4(vec3(texture(Texture, v_text).r), 1.0);
+                            f_color = vec4(vec3(texture(Texture, v_text).rgb), 1.0);
                         }
                     ''',
         )
@@ -164,6 +164,8 @@ class WarpGridTex3D(Example):
         logger.debug(f'self.final_render_size: {self.final_render_size}')
         self.tex_final_render = self.ctx.texture(self.final_render_size, 1,
                                                  dtype='f1')
+        self.tex_final_render.use(2)
+        self.render_final['Texture'].value = 2
         self.fbo_final_render = self.ctx.framebuffer(self.tex_final_render)
 
         # For HeightMap GPU object:
@@ -214,15 +216,20 @@ class WarpGridTex3D(Example):
         self.texture_grids.repeat_y = False
         self.texture_grids.repeat_z = True
         self.texture_grids.filter = (moderngl.LINEAR, moderngl.LINEAR)
+        self.texture_grids.use(0)
+        self.prog_render_tex3d['tex_grid'].value = 0
+        self.prog_hm['Heightmap'].value = 0
 
         self.texture_cooling_map = self.ctx.texture(img.size, 1, img.tobytes())
         self.texture_cooling_map.repeat_x = False
         self.texture_cooling_map.repeat_y = True
         self.texture_grids.filter = (moderngl.LINEAR, moderngl.LINEAR)
+        self.texture_cooling_map.use(1)
+        self.prog_hm['tex_cooling_map'].value = 1
 
     def render_grid(self):
-        self.texture_grids.use()
-        self.texture_cooling_map.use()
+        self.texture_grids.use(0)
+        self.texture_cooling_map.use(1)
         self.vao_hm.render(moderngl.TRIANGLE_STRIP)
 
     def update_grid(self, dt: float = None):
@@ -247,7 +254,7 @@ class WarpGridTex3D(Example):
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.disable(moderngl.DEPTH_TEST)
         self.ctx.wireframe = False
-        self.tex_final_render.use()
+        self.tex_final_render.use(2)
         self.vao_final_render.render(moderngl.TRIANGLE_STRIP)
 
 
