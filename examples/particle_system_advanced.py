@@ -1,3 +1,6 @@
+"""
+$ python particle_system_advanced -w glfw --vsync 1
+"""
 import time
 
 import moderngl
@@ -175,6 +178,7 @@ class Particles(Example):
 
         self.u_time = self.transform['Time']
         self.u_time.value = time.time()
+
 
     def render(self, _time, frame_time):
         self.ctx.clear(1.0, 1.0, 1.0)
