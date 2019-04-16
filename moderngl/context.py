@@ -24,7 +24,7 @@ __all__ = ['Context', 'create_context', 'create_standalone_context',
            'NOTHING', 'BLEND', 'DEPTH_TEST', 'CULL_FACE', 'RASTERIZER_DISCARD',
            'ZERO', 'ONE', 'SRC_COLOR', 'ONE_MINUS_SRC_COLOR', 'SRC_ALPHA', 'ONE_MINUS_SRC_ALPHA', 'DST_ALPHA',
            'ONE_MINUS_DST_ALPHA', 'DST_COLOR', 'ONE_MINUS_DST_COLOR',
-           'DEFAULT_BLENDING', 'PREMULTIPLIED_ALPHA',
+           'DEFAULT_BLENDING', 'PREMULTIPLIED_ALPHA', 'FIRST_VERTEX_CONVENTION', 'LAST_VERTEX_CONVENTION'
 ]
 
 
@@ -46,6 +46,8 @@ ONE_MINUS_DST_ALPHA = 0x0305
 DST_COLOR = 0x0306
 ONE_MINUS_DST_COLOR = 0x0307
 
+FIRST_VERTEX_CONVENTION = 0x8E4D
+LAST_VERTEX_CONVENTION = 0x8E4E
 
 DEFAULT_BLENDING = (SRC_ALPHA, ONE_MINUS_SRC_ALPHA)
 PREMULTIPLIED_ALPHA = (SRC_ALPHA, ONE)
@@ -97,6 +99,10 @@ class Context:
     @point_size.setter
     def point_size(self, value):
         self.mglo.point_size = value
+
+    @property
+    def provoking_vertex(self):
+        self.mglo.provoking_vertex()
 
     @property
     def depth_func(self) -> str:
@@ -158,6 +164,22 @@ class Context:
     @multisample.setter
     def multisample(self, value):
         self.mglo.multisample = value
+
+    @property
+    def provoking_vertex(self):
+        '''
+            This property is write only
+
+            Example::
+                
+                ctx.provoking_vertex = moderngl.FIRST_VERTEX_CONVENTION
+        '''
+        raise NotImplementedError()
+
+
+    @provoking_vertex.setter
+    def provoking_vertex(self, value):
+        self.mglo.provoking_vertex = value
 
     @property
     def viewport(self) -> Tuple[int, int, int, int]:
