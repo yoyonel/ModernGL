@@ -185,6 +185,7 @@ class WarpGrid(Example):
         self.prog_animate_warpgrid['time'].value = time * 0.025  # 4 hz record
 
         self.fbo_rtt.use()
+        self.fbo_rtt.clear(1.0, 1.0, 1.0)
         self.texture3d_grids.use(0)
         self.texture_cooling_map.use(1)
         # render textured warp grid
@@ -195,6 +196,7 @@ class WarpGrid(Example):
 
         # render rtt wrap grid
         self.ctx.screen.use()
+        self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.disable(moderngl.DEPTH_TEST)
         self.ctx.wireframe = False
         self.tex_rtt.use()

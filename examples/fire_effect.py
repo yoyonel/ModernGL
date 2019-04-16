@@ -342,10 +342,8 @@ class Fire(Example):
                                    shader_transform=self.transform,
                                    nb_max_particles=64)
 
-        #
-        self.ctx.point_size = 9.0
-
     def update_fire(self) -> moderngl.Texture:
+
         id_prev_frame = self.id_buffer
         id_cur_frame = 1 - id_prev_frame
 
@@ -370,35 +368,44 @@ class Fire(Example):
         return tex_cur_frame
 
     def render(self, time, frame_time):
-        try:
-            self.update_frame['time'].value = time
-        except KeyError:
-            logger.warning("", exc_info=True)
+        # OpenGL Timer Query
+        q_for_timer = self.ctx.query(time=True)
+        with q_for_timer:
+            try:
+                self.update_frame['time'].value = time
+            except KeyError:
+                logger.warning("", exc_info=True)
 
-        # update warp grid
-        self.warp_grid.update_grid(time)
+            # update warp grid
+            self.warp_grid.update_grid(time)
 
-        # update particles system
-        self.texture_src_fire_map.use(0)
-        self.particles.update_particles(time)
+            # update particles system
+            self.texture_src_fire_map.use(0)
+            self.particles.update_particles(time)
 
-        # update/render source fire map
-        self.vbo_fire_map.use()
-        # static sources fires
-        self.texture_src_fire_map.use(0)
-        # particles system for Sparkles fire
-        self.vao_render_tex.render(moderngl.TRIANGLE_STRIP)
+            # update/render source fire map
+            self.vbo_fire_map.use()
+            self.vbo_fire_map.clear(0.0, 0.0, 0.0)
+            # static sources fires
+            self.texture_src_fire_map.use(0)
+            # particles system for Sparkles fire
+            self.vao_render_tex.render(moderngl.TRIANGLE_STRIP)
 
-        self.particles.render_particles()
+            self.ctx.point_size = 9.0
+            self.particles.render_particles()
 
-        # update/render fire effect
-        tex_on_fire_updated = self.update_fire()
+            # update/render fire effect
+            tex_on_fire_updated = self.update_fire()
 
-        # show the result on 'screen' (main context)
-        self.ctx.screen.use()
-        tex_on_fire_updated.use(0)
-        self.texture_fire_colors.use(1)
-        self.vao_final_render.render(moderngl.TRIANGLE_STRIP)
+            # show the result on 'screen' (main context)
+            self.ctx.screen.use()
+            self.ctx.clear(1.0, 1.0, 1.0)
+            tex_on_fire_updated.use(0)
+            self.texture_fire_colors.use(1)
+            self.vao_final_render.render(moderngl.TRIANGLE_STRIP)
+
+        # logger.info(
+        #     f"Query on time elapsed (GPU side): {q_for_timer.elapsed / 1000000.0} ms")
 
 
 if __name__ == '__main__':
