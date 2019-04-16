@@ -342,6 +342,9 @@ class Fire(Example):
                                    shader_transform=self.transform,
                                    nb_max_particles=64)
 
+        #
+        self.ctx.point_size = 9.0
+
     def update_fire(self) -> moderngl.Texture:
         id_prev_frame = self.id_buffer
         id_cur_frame = 1 - id_prev_frame
@@ -381,13 +384,11 @@ class Fire(Example):
 
         # update/render source fire map
         self.vbo_fire_map.use()
-        self.vbo_fire_map.clear(0.0, 0.0, 0.0)
         # static sources fires
         self.texture_src_fire_map.use(0)
         # particles system for Sparkles fire
         self.vao_render_tex.render(moderngl.TRIANGLE_STRIP)
 
-        self.ctx.point_size = 9.0
         self.particles.render_particles()
 
         # update/render fire effect
@@ -395,7 +396,6 @@ class Fire(Example):
 
         # show the result on 'screen' (main context)
         self.ctx.screen.use()
-        self.ctx.clear(1.0, 1.0, 1.0)
         tex_on_fire_updated.use(0)
         self.texture_fire_colors.use(1)
         self.vao_final_render.render(moderngl.TRIANGLE_STRIP)
