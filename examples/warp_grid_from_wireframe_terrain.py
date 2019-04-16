@@ -11,11 +11,22 @@ from warp_grid import local
 from window import Example, run_example
 
 
-def terrain(size):
-    vertices = np.dstack(np.mgrid[0:size, 0:size][::-1]) / size
-    temp = np.dstack(
-        [np.arange(0, size * size - size), np.arange(size, size * size)])
-    index = np.pad(temp.reshape(size - 1, 2 * size), [[0, 0], [0, 1]],
+# def terrain(size):
+#     vertices = np.dstack(np.mgrid[0:size, 0:size][::-1]) / size
+#     temp = np.dstack(
+#         [np.arange(0, size * size - size), np.arange(size, size * size)])
+#     index = np.pad(temp.reshape(size - 1, 2 * size), [[0, 0], [0, 1]],
+#                    'constant', constant_values=-1)
+#     return vertices, index
+def terrain(size: tuple):
+    xv, yv = np.mgrid[0:size[0], 0:size[1]][::-1]
+    xv = xv / (size[1] - 1)
+    yv = yv / (size[0] - 1)
+    vertices = np.dstack((xv, yv))
+
+    temp = np.dstack([np.arange(0, size[0] * size[1] - size[1]),
+                      np.arange(size[1], size[0] * size[1])])
+    index = np.pad(temp.reshape(size[0] - 1, 2 * size[1]), [[0, 0], [0, 1]],
                    'constant', constant_values=-1)
     return vertices, index
 
@@ -27,7 +38,7 @@ class WarpGrid_From_WireframeTerrain(Example):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.prog = self.ctx.program(
+        self.prog_animate_warpgrid = self.ctx.program(
             vertex_shader='''
                 #version 330
 
@@ -67,25 +78,35 @@ class WarpGrid_From_WireframeTerrain(Example):
             ''',
         )
 
-        self.mvp = self.prog['Mvp']
+        self.mvp = self.prog_animate_warpgrid['Mvp']
 
-        vertices, index = terrain(16)
+        grid_size_x = 11
+        grid_size_y = 13
 
-        self.vbo = self.ctx.buffer(vertices.astype('f4').tobytes())
-        self.ibo = self.ctx.buffer(index.astype('i4').tobytes())
+        proj = Matrix44.orthogonal_projection(
+            0.0,
+            1.0 - 1 / float(grid_size_x),
+            1.0 - 1 / float(grid_size_y),
+            0.0,
+            -1.0, +1.0
+        )
+        lookat = Matrix44.identity()
+        self.mvp.write((proj * lookat).astype('f4').tobytes())
 
-        vao_content = [
-            (self.vbo, '2f', 'in_vert'),
+        vertices, index = terrain((grid_size_x, grid_size_y))
+
+        vbo_warpgrid = self.ctx.buffer(vertices.astype('f4').tobytes())
+        ibo_warpgrid = self.ctx.buffer(index.astype('i4').tobytes())
+        vao_warpgrid = [
+            (vbo_warpgrid, '2f', 'in_vert'),
         ]
-
-        self.vao = self.ctx.vertex_array(self.prog, vao_content, self.ibo)
+        self.vao_warpgrid = self.ctx.vertex_array(self.prog_animate_warpgrid,
+                                                  vao_warpgrid, ibo_warpgrid)
 
         # Load datas (precomputed) from Pymunk warp grid simulation
         # https://stackoverflow.com/questions/17623523/can-i-stream-a-python-pickle-list-tuple-or-other-iterable-data-type
         grids_array = []
         #
-        grid_size_x = 11
-        grid_size_y = 13
         grid_size_cell = 32
         #
         with open(local('data',
@@ -105,41 +126,80 @@ class WarpGrid_From_WireframeTerrain(Example):
         grids_array = np.array(grids_array)
 
         # https://moderngl.readthedocs.io/en/stable/reference/texture3d.html?highlight=write
-        self.texture_grids = self.ctx.texture3d(
-            (grids_array.shape[1], grids_array.shape[2],
-             grids_array.shape[0]),
+        self.texture3d_grids = self.ctx.texture3d(
+            (grids_array.shape[1], grids_array.shape[2], grids_array.shape[0]),
             components=grids_array.shape[3],
             data=grids_array.tobytes(),
             dtype='f4'
         )
-        self.texture_grids.repeat_x = False
-        self.texture_grids.repeat_y = False
-        self.texture_grids.repeat_z = True
-        self.texture_grids.filter = (moderngl.LINEAR, moderngl.LINEAR)
-        self.texture_grids.use(0)
-        self.prog['Heightmap'].value = 0
+        self.texture3d_grids.repeat_x = False
+        self.texture3d_grids.repeat_y = False
+        self.texture3d_grids.repeat_z = True
+        self.texture3d_grids.filter = (moderngl.LINEAR, moderngl.LINEAR)
+        self.texture3d_grids.use(0)
+        self.prog_animate_warpgrid['Heightmap'].value = 0
 
-        img = Image.open(local('data', 'fire_cooling_map.png')).transpose(Image.FLIP_TOP_BOTTOM)
-        self.texture_cooling_map = self.ctx.texture(img.size, 1,
-                                                    img.tobytes())
+        img = Image.open(local('data', 'fire_cooling_map.png'))
+        self.texture_cooling_map = self.ctx.texture(img.size, 1, img.tobytes())
         self.texture_cooling_map.repeat_x = False
         self.texture_cooling_map.repeat_y = True
         self.texture_cooling_map.filter = (moderngl.LINEAR, moderngl.LINEAR)
         self.texture_cooling_map.use(1)
-        self.prog['Texture'].value = 1
+        self.prog_animate_warpgrid['Texture'].value = 1
+
+        ########################################################################
+        self.prog_render_rtt = self.ctx.program(
+            vertex_shader='''
+                #version 330
+
+                in vec2 in_vert;
+                out vec2 v_text;
+
+                void main() {
+                    v_text = in_vert;
+                    gl_Position = vec4(in_vert * 2.0 - 1.0, 0.0, 1.0);
+                }
+            ''',
+            fragment_shader='''
+                #version 330
+
+                uniform sampler2D Texture;
+
+                in vec2 v_text;
+
+                out vec4 f_color;
+
+                void main() {
+                    f_color = vec4(vec3(texture(Texture, v_text).rgb), 1.0);
+                }
+            ''',
+        )
+
+        canvas = np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]).astype('f4')
+        vbo_rtt = self.ctx.buffer(canvas.tobytes())
+        self.vao_rtt = self.ctx.simple_vertex_array(self.prog_render_rtt,
+                                                    vbo_rtt, 'in_vert')
+        self.tex_rtt = self.ctx.texture(np.array(img.size), 1, dtype='f1')
+        self.fbo_rtt = self.ctx.framebuffer(self.tex_rtt)
+
+    def update_grid(self, time):
+        self.prog_animate_warpgrid['time'].value = time * 0.025  # 4 hz record
+
+        self.fbo_rtt.use()
+        self.fbo_rtt.clear(1.0, 1.0, 1.0)
+        # render textured warp grid
+        self.vao_warpgrid.render(moderngl.TRIANGLE_STRIP)
 
     def render(self, time, frame_time):
-        self.prog['time'].value = time * 0.025  # 4 hz record
+        self.update_grid(time)
 
+        # render rtt wrap grid
+        self.ctx.screen.use()
         self.ctx.clear(1.0, 1.0, 1.0)
-        self.ctx.enable(moderngl.DEPTH_TEST)
+        self.ctx.disable(moderngl.DEPTH_TEST)
         self.ctx.wireframe = False
-
-        proj = Matrix44.orthogonal_projection(0.0, 0.9, 0.9, 0.0, 0.1, 1000.0)
-        lookat = Matrix44.from_translation((0.0, 0.0, -1))
-
-        self.mvp.write((proj * lookat).astype('f4').tobytes())
-        self.vao.render(moderngl.TRIANGLE_STRIP)
+        self.tex_rtt.use()
+        self.vao_rtt.render(moderngl.TRIANGLE_STRIP)
 
 
 if __name__ == '__main__':

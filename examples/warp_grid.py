@@ -144,8 +144,6 @@ class WarpGridTex3D(Example):
                     ''',
         )
 
-        canvas = np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]).astype('f4')
-
         #######################################
         # [CPU side]
         #######################################
@@ -156,6 +154,7 @@ class WarpGridTex3D(Example):
         #######################################
         # [GPU side]
         #######################################
+        canvas = np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]).astype('f4')
         self.vbo = self.ctx.buffer(canvas.tobytes())
         self.vao_final_render = self.ctx.simple_vertex_array(self.render_final,
                                                              self.vbo,
