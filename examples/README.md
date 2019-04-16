@@ -78,6 +78,11 @@ Multiple instance rendering
 The examples directory also contains a **large amount of examples** contributed
 by varous people over time. Browse around and see what you can find :)
 
+Fire effect
+
+[![](preview_images/fire_effect.gif)](fire_effect.py)
+
+
 ## Dependencies
 
 ```
@@ -87,4 +92,3 @@ pip install -r requirements.txt
 ## Old examples
 
 Also see the [old examples](old-examples).
-
