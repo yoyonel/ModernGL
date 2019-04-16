@@ -1,8 +1,6 @@
 """
 $ python particle_system_advanced -w glfw --vsync 1
 """
-import time
-
 import moderngl
 import numpy as np
 
@@ -22,19 +20,26 @@ def particle(
     #
     return np.array(
         [
-            0.0, 0.0,               # position      [vec2]
-            1.0,                    # hotness       [float]
-            xv, yv,                 # velicity      [vec2]
-            float(id_particle)      # id particle   [float]
-        ]).astype('f4').tobytes()   # float32
+            0.0, 0.0,  # position      [vec2]
+            1.0,  # hotness       [float]
+            xv, yv,  # velicity      [vec2]
+            float(id_particle)  # id particle   [float]
+        ]).astype('f4').tobytes()  # float32
 
 
 class Particles(Example):
     title = "Particle System"
     gl_version = (3, 3)
 
-    def __init__(self, nb_max_particles=1024, **kwargs):
+    def __init__(self,
+                 ctx=None,
+                 shader_transform=None,
+                 nb_max_particles=1024,
+                 **kwargs):
         super().__init__(**kwargs)
+
+        if ctx is not None:
+            self.ctx = ctx
 
         self.prog = self.ctx.program(
             vertex_shader='''
@@ -67,70 +72,73 @@ class Particles(Example):
              ''',
         )
 
-        self.transform = self.ctx.program(
-            vertex_shader='''
-               #version 330
-               #define M_PI 3.14159265358979323846
-    
-               uniform vec2 Acc;
-               uniform float Time;
-    
-               in vec2 in_pos;
-               in float in_hot;
-               in vec2 in_vel;
-               in float in_id;
-    
-               out vec2 out_pos;
-               out float out_hot;
-               out vec2 out_vel;
-               out float out_id;
-    
-               float PHI = 1.61803398874989484820459 * 00000.1; // Golden Ratio   
-               float PI  = 3.14159265358979323846264 * 00000.1; // PI
-               float SQ2 = 1.41421356237309504880169 * 10000.0; // Square Root of Two
-    
-               float gold_noise(in vec2 coordinate, in float seed){
-                   return fract(sin(dot(coordinate*(seed+PHI), vec2(PHI, PI)))*SQ2);
-               }
-    
-               float map(float value, float inMin, float inMax, float outMin, float outMax) {
-                 return outMin + (outMax - outMin) * (value - inMin) / (inMax - inMin);
-               }
-    
-               void respawn() {
-    
-                   out_hot = map(gold_noise(vec2(in_id, Time), 25), 0.0, 1.0, 0.4, 1.0);
-    
-                   out_pos = vec2(
-                       map(gold_noise(vec2(in_id, Time), 0), 0, 1, -1, +1), 
-                       map(gold_noise(vec2(in_id, Time), 50), 0, 1, -1, +1)
-                   );
-    
-                   float r = gold_noise(vec2(in_id, Time), 100) * 0.015;
-                   out_vel = vec2(0.0, r);
-               }
-    
-               void update() {
-                   out_hot = in_hot - 0.006;
-                   out_pos = in_pos + in_vel + Acc;
-                   out_vel = in_vel * 0.98;
-               }
-    
-               void main() {
-                   if(in_hot <= 0.0) respawn();
-                   else if(abs(in_pos.x) > 1.0) respawn();
-                   else if(abs(in_pos.y) > 1.0) respawn();
-                   else update();
-    
-                   out_id = in_id;
-               }
-            ''',
-            varyings=['out_pos',
-                      'out_hot',
-                      'out_vel',
-                      'out_id',
-                      ]
-        )
+        if shader_transform is None:
+            self.transform = self.ctx.program(
+                vertex_shader='''
+                   #version 330
+                   #define M_PI 3.14159265358979323846
+        
+                   uniform vec2 Acc;
+                   uniform float Time;
+        
+                   in vec2 in_pos;
+                   in float in_hot;
+                   in vec2 in_vel;
+                   in float in_id;
+        
+                   out vec2 out_pos;
+                   out float out_hot;
+                   out vec2 out_vel;
+                   out float out_id;
+        
+                   float PHI = 1.61803398874989484820459 * 00000.1; // Golden Ratio   
+                   float PI  = 3.14159265358979323846264 * 00000.1; // PI
+                   float SQ2 = 1.41421356237309504880169 * 10000.0; // Square Root of Two
+        
+                   float gold_noise(in vec2 coordinate, in float seed){
+                       return fract(sin(dot(coordinate*(seed+PHI), vec2(PHI, PI)))*SQ2);
+                   }
+        
+                   float map(float value, float inMin, float inMax, float outMin, float outMax) {
+                     return outMin + (outMax - outMin) * (value - inMin) / (inMax - inMin);
+                   }
+        
+                   void respawn() {
+        
+                       out_hot = map(gold_noise(vec2(in_id, Time), 25), 0.0, 1.0, 0.4, 1.0);
+        
+                       out_pos = vec2(
+                           map(gold_noise(vec2(in_id, Time), 0), 0, 1, -1, +1), 
+                           map(gold_noise(vec2(in_id, Time), 50), 0, 1, -1, +1)
+                       );
+        
+                       float r = gold_noise(vec2(in_id, Time), 100) * 0.015;
+                       out_vel = vec2(0.0, r);
+                   }
+        
+                   void update() {
+                       out_hot = in_hot - 0.006;
+                       out_pos = in_pos + in_vel + Acc;
+                       out_vel = in_vel * 0.98;
+                   }
+        
+                   void main() {
+                       if(in_hot <= 0.0) respawn();
+                       else if(abs(in_pos.x) > 1.0) respawn();
+                       else if(abs(in_pos.y) > 1.0) respawn();
+                       else update();
+        
+                       out_id = in_id;
+                   }
+                ''',
+                varyings=['out_pos',
+                          'out_hot',
+                          'out_vel',
+                          'out_id',
+                          ]
+            )
+        else:
+            self.transform = shader_transform
 
         try:
             self.color_particle = self.prog['color_particle']
@@ -177,20 +185,24 @@ class Particles(Example):
         self.angle_main_axis = np.pi / 2.0
 
         self.u_time = self.transform['Time']
-        self.u_time.value = time.time()
+        self.u_time.value = 0.0
 
+    def render_particles(self):
+        self.render_vao.render(moderngl.POINTS, self.nb_particles)
 
-    def render(self, _time, frame_time):
+    def update_particles(self, time):
+        # Update particles system
+        self.u_time.value = time
+        self.vao1.transform(self.vbo2, moderngl.POINTS, self.nb_particles)
+        self.ctx.copy_buffer(self.vbo1, self.vbo2)
+
+    def render(self, time, frame_time):
+        self.update_particles(time)
+
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.point_size = 16.0
 
-        self.u_time.value = _time
-
-        self.render_vao.render(moderngl.POINTS, self.nb_particles)
-
-        # Update particles system
-        self.vao1.transform(self.vbo2, moderngl.POINTS, self.nb_particles)
-        self.ctx.copy_buffer(self.vbo1, self.vbo2)
+        self.render_particles()
 
 
 if __name__ == '__main__':
