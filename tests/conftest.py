@@ -76,7 +76,8 @@ def vbo_triangle(standalone_context):
 
 @pytest.fixture
 def vbo_quad(standalone_context):
-    canvas_fs_quad = np.array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]).astype('f4')
+    canvas_fs_quad = np.array(
+        [0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]).astype('f4')
     return standalone_context.buffer(canvas_fs_quad.tobytes())
 
 
@@ -113,7 +114,8 @@ def prog_shadow_test(standalone_context):
                     // Compute shadow coordinates + depth of caster
                     vec3 shadow_coord = vec3(uv, depth_shadow_caster);
                     shadow_coord += vec3(u_shadow_coord_offset, 0.0);
-                    // Compute visibility (shadow test: receiver (potential) vs caster)
+                    // Compute visibility:
+                    // -> shadow test: receiver (potential) vs caster
                     float visibility = texture(depth, shadow_coord);
                     // Output the visibility
                     fragColor = visibility;

@@ -7,7 +7,8 @@ import moderngl as mgl
 from scipy import ndimage
 
 
-def _build_fbo_with_rasterised_triangle(ctx, prog, vbo, size=(4, 4), depth_clear=1.0):
+def _build_fbo_with_rasterised_triangle(ctx, prog, vbo, size=(4, 4), 
+                                        depth_clear=1.0):
     """
 
     :param ctx:
@@ -29,7 +30,8 @@ def _build_fbo_with_rasterised_triangle(ctx, prog, vbo, size=(4, 4), depth_clear
     return fbo_depth, tex_depth
 
 
-def test_depth_sampler(standalone_context, prog_render_depth_pass, prog_draw_depth, vbo_triangle, vbo_quad):
+def test_depth_sampler(standalone_context, prog_render_depth_pass, 
+                       prog_draw_depth, vbo_triangle, vbo_quad):
     """
 
     :param standalone_context:
@@ -45,10 +47,10 @@ def test_depth_sampler(standalone_context, prog_render_depth_pass, prog_draw_dep
     size = (16,) * 2
     fbo_depth, tex_depth = _build_fbo_with_rasterised_triangle(ctx, prog_render_depth_pass, vbo_triangle, size)
 
-    ####################################################################################################################
+    ############################################################################
     # EXPECTED DATAS                                                                                                   #
     # It should have 0.5's where the triangle lies.                                                                    #
-    ####################################################################################################################
+    ############################################################################
     depth_from_dbo = np.frombuffer(tex_depth.read(), dtype=np.dtype('f4')).reshape(size[::-1])
     depth_value_from_triangle_vertices = 0.0
     # Map [-1, +1] -> [0, 1]
@@ -59,7 +61,7 @@ def test_depth_sampler(standalone_context, prog_render_depth_pass, prog_draw_dep
             for j in range(size[1])
         ]
     )
-    ####################################################################################################################
+    ############################################################################
 
     depth_tex_filter = (moderngl.NEAREST, moderngl.NEAREST)
     compare_func = ''
@@ -111,10 +113,10 @@ def test_sampler_shadow(standalone_context, prog_render_depth_pass, prog_shadow_
     size = (3,) * 2
     fbo_depth, tex_depth = _build_fbo_with_rasterised_triangle(ctx, prog_render_depth_pass, vbo_triangle, size)
 
-    ####################################################################################################################
+    ############################################################################
     # EXPECTED DATAS                                                                                                   #
     # It should have 1's where the triangle lies.                                                                      #
-    ####################################################################################################################
+    ############################################################################
     texel_shadowed = 1
     np_triangle_raster_visbility = np.array(
         [
@@ -122,7 +124,7 @@ def test_sampler_shadow(standalone_context, prog_render_depth_pass, prog_shadow_
             for j in range(size[1])
         ]
     )
-    ####################################################################################################################
+    ############################################################################
 
     # No offset - fetch the center pixel (NEAREST)
     prog_shadow_test['u_shadow_coord_offset'].value = (0,) * 2
@@ -181,9 +183,9 @@ def test_sampler_shadow_with_bilinear_interpolation(
 
     fbo_depth, tex_depth = _build_fbo_with_rasterised_triangle(ctx, prog_render_depth_pass, vbo_triangle, size)
 
-    ####################################################################################################################
-    # EXPECTED DATAS                                                                                                   #
-    ####################################################################################################################
+    ############################################################################
+    # EXPECTED DATAS                                                           #
+    ############################################################################
     # Box filter (2x2) on triangle visibility rasterisation
     # is similar to bilinear interpolation with samplerShadow
     # https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html#scipy.ndimage.uniform_filter
@@ -193,26 +195,32 @@ def test_sampler_shadow_with_bilinear_interpolation(
             for j in range(size[1])
         ]
     )
-    box_filter_on_triangle_raster_visibility = ndimage.uniform_filter(np_triangle_raster_visbility,
-                                                                      size=2, mode='constant', cval=0, origin=-1)
-    ####################################################################################################################
+    box_filter_on_triangle_raster_visibility = ndimage.uniform_filter(
+        np_triangle_raster_visbility,
+        size=2, mode='constant', cval=0, origin=-1)
+    ############################################################################
 
     half_pixel_size = (1.0/size[0]*0.5, 1.0/size[1]*0.5)
     prog_shadow_test['u_shadow_coord_offset'].value = tuple(half_pixel_size)
 
     def _do_test():
-        fbo_draw_depth = ctx.framebuffer(color_attachments=[ctx.renderbuffer(size, components=1, dtype='f4')])
+        fbo_draw_depth = ctx.framebuffer(
+            color_attachments=[ctx.renderbuffer(size,
+                                                components=1, dtype='f4')])
         fbo_draw_depth.use()
 
         tex_depth.use(location=0)
 
         # https://www.khronos.org/opengl/wiki/Sampler_(GLSL)#Shadow_samplers
-        vao_fs_shadow = ctx.simple_vertex_array(prog_shadow_test, vbo_quad, 'in_vert')
+        vao_fs_shadow = ctx.simple_vertex_array(prog_shadow_test, vbo_quad,
+                                                'in_vert')
         vao_fs_shadow.render(moderngl.TRIANGLE_STRIP)
 
         #
-        data = np.frombuffer(fbo_draw_depth.read(components=1, dtype='f4'), dtype=np.dtype('f4')).reshape(size[::-1])
-        np.testing.assert_array_almost_equal(data, box_filter_on_triangle_raster_visibility)
+        data = np.frombuffer(fbo_draw_depth.read(components=1, dtype='f4'),
+                             dtype=np.dtype('f4')).reshape(size[::-1])
+        np.testing.assert_array_almost_equal(
+            data, box_filter_on_triangle_raster_visibility)
 
     depth_tex_filter = (moderngl.LINEAR, moderngl.LINEAR)
     compare_func = '>='
@@ -224,8 +232,8 @@ def test_sampler_shadow_with_bilinear_interpolation(
             compare_func=compare_func,  # enable depth func
             # from context.py:
             #   border_color (tuple): The (r, g, b, a) color for the texture border.
-            #                         When this value is set the ``repeat_`` values are overriden
-            #                         setting the texture wrap to return the border color when outside ``[0, 1]`` range.
+            #   When this value is set the ``repeat_`` values are overriden
+            #   setting the texture wrap to return the border color when outside ``[0, 1]`` range.
             # border_color=(0, 0, 0, 0),    # seems not to work well ...
             repeat_x=False, repeat_y=False,
         )
