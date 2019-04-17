@@ -128,6 +128,8 @@ struct MGLContext {
 	bool wireframe;
 	bool multisample;
 
+	int provoking_vertex;
+
 	GLMethods gl;
 };
 

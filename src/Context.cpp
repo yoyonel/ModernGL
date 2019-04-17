@@ -588,6 +588,22 @@ int MGLContext_set_multisample(MGLContext * self, PyObject * value) {
 	return -1;
 }
 
+int MGLContext_get_provoking_vertex(MGLContext * self) {
+	return self->provoking_vertex;
+}
+
+int MGLContext_set_provoking_vertex(MGLContext * self, PyObject * value) {
+	int provoking_vertex_value = PyLong_AsLong(value);
+	const GLMethods & gl = self->gl;
+
+	if (provoking_vertex_value == GL_FIRST_VERTEX_CONVENTION || provoking_vertex_value == GL_LAST_VERTEX_CONVENTION) {
+		gl.ProvokingVertex(provoking_vertex_value);
+		self->provoking_vertex = provoking_vertex_value;
+		return 0;
+	}
+	return -1;
+}
+
 PyObject * MGLContext_get_default_texture_unit(MGLContext * self) {
 	return PyLong_FromLong(self->default_texture_unit);
 }
@@ -1255,6 +1271,8 @@ PyGetSetDef MGLContext_tp_getseters[] = {
 	{(char *)"blend_func", (getter)MGLContext_get_depth_func, (setter)MGLContext_set_blend_func, 0, 0},
 	{(char *)"multisample", (getter)MGLContext_get_multisample, (setter)MGLContext_set_multisample, 0, 0},
 
+	{(char *)"provoking_vertex", (getter)MGLContext_get_provoking_vertex, (setter)MGLContext_set_provoking_vertex, 0, 0},
+
 	{(char *)"default_texture_unit", (getter)MGLContext_get_default_texture_unit, (setter)MGLContext_set_default_texture_unit, 0, 0},
 	{(char *)"max_samples", (getter)MGLContext_get_max_samples, 0, 0, 0},
 	{(char *)"max_integer_samples", (getter)MGLContext_get_max_integer_samples, 0, 0, 0},
@@ -1429,5 +1447,7 @@ void MGLContext_Initialize(MGLContext * self) {
 
 	self->wireframe = false;
 	self->multisample = true;
+
+	self->provoking_vertex = GL_LAST_VERTEX_CONVENTION;
 	gl.GetError(); // clear errors
 }
