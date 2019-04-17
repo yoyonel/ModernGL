@@ -12,7 +12,7 @@ from pyrr.quaternion import create_from_eulers, apply_to_vector, inverse
 import time
 from typing import Tuple
 #
-from examples.example_window import Example, run_example
+from example_window import Example, run_example
 
 
 # Direction Definitions
