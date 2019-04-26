@@ -21,13 +21,10 @@ from pyrr import Matrix44
 from pyrr import Vector3
 #
 from draw_frustum import DrawFrustumExample
-from example_window import Example, run_example
-
+# from example_window import Example, run_example
+from window import Example, run_example
 
 logger = logging.getLogger(__name__)
-
-# Debug
-draw_bbox = True
 
 
 def local(*path):
@@ -53,9 +50,12 @@ def compute_bbox_from_vertices(vertices):
 
 class ShadowMappingSample(Example):
     WINDOW_SIZE = (512, 512)
+    gl_version = (3, 3)
 
-    def __init__(self):
-        self.ctx = moderngl.create_context(require=330)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        # self.ctx = moderngl.create_context(require=330)
 
         self.prog_render_model_with_shadow = self.ctx.program(
             vertex_shader='''
@@ -161,10 +161,6 @@ class ShadowMappingSample(Example):
         self.mvp_depth = self.prog_render_model_with_shadow['DepthBiasMVP']
         self.light = self.prog_render_model_with_shadow['Light']
         self.color = self.prog_render_model_with_shadow['Color']
-        try:
-            self.use_texture = self.prog_render_model_with_shadow['UseTexture']
-        except:
-            pass
         self.prog_render_model_with_shadow['Texture'].value = 0
 
         self.mvp_shadow = self.prog_depth['Mvp']
@@ -175,7 +171,7 @@ class ShadowMappingSample(Example):
 
         for name in ['ground', 'grass', 'billboard',
                      'billboard-holder', 'billboard-image']:
-            obj = Obj.open(local('data', 'scene-1-%s.obj' % name))
+            obj = Obj.open(local('data', f'scene-1-{name}.obj'))
 
             # vertices + normals
             vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz'))
@@ -204,10 +200,6 @@ class ShadowMappingSample(Example):
             self.objects_mat_bbox[name] = mat_bbox
             ##########################################
 
-            # TODO: (1) composents influenced the bug below
-        self.color_buffer = self.ctx.renderbuffer((1, 1), 3)
-        self.fbo = self.ctx.framebuffer(color_attachments=[self.color_buffer])
-
         ########################################################################
         shadow_size = tuple([1 << 9] * 2)
         logger.info(f"Depth texture size: {shadow_size}")
@@ -231,22 +223,29 @@ class ShadowMappingSample(Example):
 
         self.ctx.enable(moderngl.CULL_FACE)
 
-    def render(self):
-        self.ctx.viewport = self.wnd.viewport
+        self.draw_bbox = False
+
+    def key_event(self, key, action):
+        if action == self.wnd.keys.ACTION_PRESS:
+            if key == self.wnd.keys.SPACE:
+                self.draw_bbox = not self.draw_bbox
+
+    def render(self, time: float, frame_time: float):
+        # self.ctx.viewport = self.wnd.viewport
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.DEPTH_TEST)
 
-        cam_proj = Matrix44.perspective_projection(45.0, self.wnd.ratio,
-                                                   1.0, 100.0)
+        cam_proj = Matrix44.perspective_projection(45.0,
+                                                   self.wnd.aspect_ratio, 1.0, 100.0)
         scene_position = (47.697, -8.147, 24.498)
-        cam_lookat = Matrix44.look_at(
+        cam_look_at = Matrix44.look_at(
             scene_position,
             (0.0, 0.0, 8.0),
             (0.0, 0.0, 1.0),
         )
-        cam_rotate = Matrix44.from_z_rotation(self.wnd.time * 0.25)
+        cam_rotate = Matrix44.from_z_rotation(time * 0.25)
         # cam_rotate = Matrix44.identity()
-        cam_mvp = cam_proj * cam_lookat * cam_rotate
+        cam_mvp = cam_proj * cam_look_at * cam_rotate
         self.mvp.write(cam_mvp.astype('f4').tobytes())
 
         # light_rotate = Matrix44.from_z_rotation(
@@ -262,7 +261,7 @@ class ShadowMappingSample(Example):
                 [0.5, 0.5, 0.5, 1.0]
             ]
         )
-        light_proj = Matrix44.perspective_projection(20.0, self.wnd.ratio,
+        light_proj = Matrix44.perspective_projection(20.0, self.wnd.aspect_ratio,
                                                      60.0, 100.0)
         light_lookat = Matrix44.look_at(
             light_pos,
@@ -284,15 +283,9 @@ class ShadowMappingSample(Example):
 
         self.ctx.front_face = 'ccw'
 
-        # TODO: strange ..
-        #  need to 'use' this fbo to have a 'correct' rendering on screen ...
-        #  :/ see (1)
-        self.fbo.use()
         self.ctx.screen.use()
         self.sampler_depth.use(location=0)
         self.tex_depth.use(location=0)
-
-        # self.use_texture.value = False
 
         self.color.value = (0.67, 0.49, 0.29)
         self.objects['ground'].render()
@@ -305,12 +298,9 @@ class ShadowMappingSample(Example):
 
         self.color.value = (0.2, 0.2, 0.2)
         self.objects['billboard-holder'].render()
-
-        # self.use_texture.value = True
-        # self.texture1.use(0)
         self.objects['billboard-image'].render()
 
-        if draw_bbox:
+        if self.draw_bbox:
             # BBox objects frustums
             for mat_bbox in self.objects_mat_bbox.values():
                 self.render_light_frustum.render_frustum(
@@ -320,7 +310,6 @@ class ShadowMappingSample(Example):
                 )
             # Light Frustum
             self.render_light_frustum.render_frustum(cam_mvp, mpv_light.inverse)
-            pass
 
 
 run_example(ShadowMappingSample)
