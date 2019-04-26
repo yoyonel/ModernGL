@@ -4,9 +4,11 @@
 import logging
 import moderngl
 import numpy as np
+import operator
 import os
 from PIL import Image
 import time
+from typing import _alias, T
 #
 from warp_grid import WarpGrid
 from particle_system_advanced import Particles
@@ -18,6 +20,34 @@ logger = logging.getLogger(__name__)
 
 def local(*path):
     return os.path.join(os.path.dirname(__file__), *path)
+
+
+TCircularList = _alias(list, T, inst=False)
+
+
+class CircularList(list):
+    """
+    https://stackoverflow.com/a/47606550
+    """
+    def __getitem__(self, x):
+        if isinstance(x, slice):
+            return [self[x] for x in self._rangeify(x)]
+
+        index = operator.index(x)
+        try:
+            return super().__getitem__(index % len(self))
+        except ZeroDivisionError:
+            raise IndexError('list index out of range')
+
+    def _rangeify(self, slice_):
+        start, stop, step = slice_.start, slice_.stop, slice_.step
+        if start is None:
+            start = 0
+        if stop is None:
+            stop = len(self)
+        if step is None:
+            step = 1
+        return range(start, stop, step)
 
 
 class Fire(Example):
@@ -242,7 +272,7 @@ class Fire(Example):
         self.vao_render_tex = self.ctx.simple_vertex_array(self.render_tex,
                                                            self.vbo, 'in_vert')
 
-        map_fire_lut = {
+        map_fire_lut = self.map_fire_lut = {
             'fire_colors': ('lut/fire_colors.png', False),
             'nih-image-fire1': ('lut/nih-image-fire1.png', True),
             'HotRed': ('lut/HotRed.png', False),
@@ -250,19 +280,22 @@ class Fire(Example):
             'fire-ncsa': ('lut/fire-ncsa.png', True),
             'GreenFire': ('lut/GreenFire.png', False),
         }
-        lut_name = 'HotRed'
-        (fire_lut_fn,
-         transpose_img) = map_fire_lut.get(lut_name,
-                                           map_fire_lut['fire_colors'])
-        fire_lut_fn = local('data', fire_lut_fn)
-        logger.info(f"Load Fire LUT: {fire_lut_fn}")
-        img = Image.open(fire_lut_fn).convert('RGB')
-        if transpose_img:
-            img = img.transpose(Image.FLIP_LEFT_RIGHT)
+        self.cl_fire_lut = CircularList(map_fire_lut.keys())
+        self.current_id_lut = 0
+        self.textures_fire_lut = {}
+        for lut_name in map_fire_lut.keys():
+            fire_lut_fn, transpose_img = map_fire_lut.get(lut_name,
+                                                          map_fire_lut['fire_colors'])
+            fire_lut_fn = local('data', fire_lut_fn)
+            logger.info(f"Load Fire LUT: {fire_lut_fn}")
+            fire_lut_img = Image.open(fire_lut_fn).convert('RGB')
+            if transpose_img:
+                fire_lut_img = fire_lut_img.transpose(Image.FLIP_LEFT_RIGHT)
 
-        self.texture_fire_colors = self.ctx.texture(img.size, 3, img.tobytes())
-        self.texture_fire_colors.repeat_x = False
-        self.texture_fire_colors.repeat_y = False
+            self.textures_fire_lut[lut_name] = self.ctx.texture(fire_lut_img.size, 3,
+                                                                fire_lut_img.tobytes())
+            self.textures_fire_lut[lut_name].repeat_x = False
+            self.textures_fire_lut[lut_name].repeat_y = False
 
         fire_map_fn = local('data', 'fire_src_map.png')
         logger.info(f"Load Fire Source Map: {fire_map_fn}")
@@ -279,8 +312,7 @@ class Fire(Example):
         self.texture_cooling_map = self.ctx.texture(img.size, 1, img.tobytes())
 
         try:
-            self.update_frame['OffsetXY'].value = (
-                1.0 / img.size[0], 1.0 / img.size[1])
+            self.update_frame['OffsetXY'].value = (1.0 / img.size[0], 1.0 / img.size[1])
         except KeyError:
             logger.warning("", exc_info=True)
 
@@ -369,6 +401,17 @@ class Fire(Example):
         # Render fire on output buffer
         return tex_cur_frame
 
+    def key_event(self, key, action):
+        """
+        Handle key events in a generic way
+        supporting all window types.
+        """
+        if action == self.wnd.keys.ACTION_PRESS:
+            if key == self.wnd.keys.LEFT:
+                self.current_id_lut += 1
+            elif key == self.wnd.keys.RIGHT:
+                self.current_id_lut -= 1
+
     def render(self, time, frame_time):
         try:
             self.update_frame['time'].value = time
@@ -397,7 +440,7 @@ class Fire(Example):
         # show the result on 'screen' (main context)
         self.ctx.screen.use()
         tex_on_fire_updated.use(0)
-        self.texture_fire_colors.use(1)
+        self.textures_fire_lut[self.cl_fire_lut[self.current_id_lut]].use(1)
         self.vao_final_render.render(moderngl.TRIANGLE_STRIP)
 
 
