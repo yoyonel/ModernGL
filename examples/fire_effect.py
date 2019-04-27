@@ -29,6 +29,7 @@ class CircularList(list):
     """
     https://stackoverflow.com/a/47606550
     """
+
     def __getitem__(self, x):
         if isinstance(x, slice):
             return [self[x] for x in self._rangeify(x)]
@@ -283,9 +284,7 @@ class Fire(Example):
         self.cl_fire_lut = CircularList(map_fire_lut.keys())
         self.current_id_lut = 0
         self.textures_fire_lut = {}
-        for lut_name in map_fire_lut.keys():
-            fire_lut_fn, transpose_img = map_fire_lut.get(lut_name,
-                                                          map_fire_lut['fire_colors'])
+        for lut_name, (fire_lut_fn, transpose_img) in map_fire_lut.items():
             fire_lut_fn = local('data', fire_lut_fn)
             logger.info(f"Load Fire LUT: {fire_lut_fn}")
             fire_lut_img = Image.open(fire_lut_fn).convert('RGB')
@@ -311,12 +310,8 @@ class Fire(Example):
         img = Image.open(cooling_map_fn).transpose(Image.FLIP_TOP_BOTTOM)
         self.texture_cooling_map = self.ctx.texture(img.size, 1, img.tobytes())
 
-        try:
-            self.update_frame['OffsetXY'].value = (1.0 / img.size[0], 1.0 / img.size[1])
-        except KeyError:
-            logger.warning("", exc_info=True)
+        self.update_frame['OffsetXY'].value = (1.0 / img.size[0], 1.0 / img.size[1])
 
-        # fire_size = self.wnd.size
         fire_size = np.array(self.wnd.size) >> 1
 
         # Ping Pong Buffers
@@ -330,18 +325,12 @@ class Fire(Example):
             tex.repeat_x = False
             tex.repeat_y = False
 
-        try:
-            self.update_frame['tex_prev_frame'].value = 0
-            self.update_frame['tex_fire'].value = 1
-            self.update_frame['tex_warp_grid'].value = 2
-        except KeyError:
-            logger.warning("", exc_info=True)
+        self.update_frame['tex_prev_frame'].value = 0
+        self.update_frame['tex_fire'].value = 1
+        self.update_frame['tex_warp_grid'].value = 2
 
-        try:
-            self.render_final_fire['Texture'].value = 0
-            self.render_final_fire['tex_lut'].value = 1
-        except KeyError:
-            logger.warning("", exc_info=True)
+        self.render_final_fire['Texture'].value = 0
+        self.render_final_fire['tex_lut'].value = 1
 
         # Init Frame Buffer Object from textures attachment
         self.fbos = [
@@ -373,7 +362,6 @@ class Fire(Example):
         self.particles = Particles(self.ctx,
                                    shader_transform=self.transform,
                                    nb_max_particles=64)
-
         #
         self.ctx.point_size = 9.0
 
@@ -412,18 +400,15 @@ class Fire(Example):
             elif key == self.wnd.keys.RIGHT:
                 self.current_id_lut -= 1
 
-    def render(self, time, frame_time):
-        try:
-            self.update_frame['time'].value = time
-        except KeyError:
-            logger.warning("", exc_info=True)
+    def render(self, time_, frame_time):
+        self.update_frame['time'].value = time_
 
         # update warp grid
-        self.warp_grid.update_grid(time)
+        self.warp_grid.update_grid(time_)
 
         # update particles system
         self.texture_src_fire_map.use(0)
-        self.particles.update_particles(time)
+        self.particles.update_particles(time_)
 
         # update/render source fire map
         self.vbo_fire_map.use()
