@@ -1,7 +1,7 @@
 import importlib
 from typing import Any
 
-from . import mgl
+from .. import mgl
 from .buffer import Buffer
 from .compute_shader import ComputeShader
 from .framebuffer import Framebuffer
