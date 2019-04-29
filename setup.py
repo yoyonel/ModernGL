@@ -109,6 +109,17 @@ mgl = Extension(
         'src/UniformSetters.cpp',
         'src/VertexArray.cpp',
     ],
+    depends=[
+        'src/BufferFormat.hpp',
+        'src/Error.hpp',
+        'src/GLContext.hpp',
+        'src/GLMethods.hpp',
+        'src/InlineMethods.hpp',
+        'src/OpenGL.hpp',
+        'src/Python.hpp',
+        'src/Types.hpp',
+        'src/UniformGetSetters.hpp',
+    ],
 )
 
 short_description = 'ModernGL: High performance rendering for Python 3'
