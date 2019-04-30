@@ -37,10 +37,10 @@ int versions = sizeof(version) / sizeof(GLVersion);
 typedef int (WINAPI * my_ChoosePixelFormat_type)(HDC hdc, const int * piAttribIList, const float * pfAttribFList, unsigned nMaxFormats, int * piFormats, unsigned * nNumFormats);
 typedef HGLRC (WINAPI * my_CreateContextAttribs_type)(HDC hdc, HGLRC hglrc, const int * attribList);
 
-my_ChoosePixelFormat_type my_ChoosePixelFormat;
-my_CreateContextAttribs_type my_CreateContextAttribs;
+static my_ChoosePixelFormat_type my_ChoosePixelFormat;
+static my_CreateContextAttribs_type my_CreateContextAttribs;
 
-PIXELFORMATDESCRIPTOR pfd = {
+static PIXELFORMATDESCRIPTOR pfd = {
 	sizeof(PIXELFORMATDESCRIPTOR),  // nSize
 	1,                              // nVersion
 	PFD_DRAW_TO_WINDOW |
@@ -104,7 +104,7 @@ GLContext LoadCurrentGLContext() {
 	return context;
 }
 
-void InitModernContext() {
+static void InitModernContext() {
 	static bool initialized = false;
 
 	if (initialized) {

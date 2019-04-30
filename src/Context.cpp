@@ -1347,7 +1347,7 @@ void MGLContext_Invalidate(MGLContext * context) {
 void MGLContext_Initialize(MGLContext * self) {
 	GLMethods & gl = self->gl;
 
-	if (!gl.load()) {
+	if (!gl.load_old()) {
 		return;
 	}
 

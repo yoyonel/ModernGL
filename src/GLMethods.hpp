@@ -660,7 +660,7 @@ struct GLMethods {
 	PROC_glViewportIndexedf ViewportIndexedf;
 	PROC_glViewportIndexedfv ViewportIndexedfv;
 
-	bool load();
+	bool load_old();
 
 private:
 	GLMethods(const GLMethods & copy);

@@ -18,7 +18,7 @@ void GLAPI FakeGetProgramStageiv(GLuint program, GLenum shadertype, GLenum pname
 #undef MemoryBarrier
 #endif
 
-void * LoadMethod(const char * method) {
+static void * LoadMethod(const char * method) {
 	static HMODULE opengl32 = LoadLibrary("opengl32.dll");
 
 	void * proc = (void *)GetProcAddress(opengl32, method);
@@ -45,7 +45,7 @@ void * LoadMethod(const char * method) {
 #import <stdlib.h>
 #import <string.h>
 
-void * LoadMethod(const char * method) {
+static void * LoadMethod(const char * method) {
 	NSSymbol symbol = 0;
 
 	if (NSIsSymbolNameDefined(method)) {
@@ -65,7 +65,7 @@ void * LoadMethod(const char * method) {
 
 typedef const void * (* PROC_glXGetProcAddress)(const char *);
 
-void * LoadMethod(const char * method) {
+static void * LoadMethod(const char * method) {
 	static void * libgl = dlopen("libGL.so.1", RTLD_LAZY);
 	static PROC_glXGetProcAddress glXGetProcAddress = (PROC_glXGetProcAddress)dlsym(libgl, "glXGetProcAddress");
 
@@ -89,7 +89,7 @@ void * LoadMethod(const char * method) {
 
 #endif
 
-bool GLMethods::load() {
+bool GLMethods::load_old() {
 	this->ActiveShaderProgram = (PROC_glActiveShaderProgram)LoadMethod(PREFIX "glActiveShaderProgram");
 	this->ActiveTexture = (PROC_glActiveTexture)LoadMethod(PREFIX "glActiveTexture");
 	this->AttachShader = (PROC_glAttachShader)LoadMethod(PREFIX "glAttachShader");
