@@ -7,13 +7,10 @@ matrix:
       python: 3.6
       install:
         - export TRAVIS=True
-        - export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start
+        # - export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start
         - python -m pip install pip wheel setuptools numpy -U
-        - python extras/gltraces/setup.py develop
-        - python setup.py develop
-        - python tests/experimental/print_info.py
       script:
-        - python -m pytest tests/experimental
+        - python setup.py develop
 
     - language: python
       python: pypy3.5
