@@ -1,5 +1,4 @@
 #include "gl_context.hpp"
-#include "../modules.hpp"
 
 #include <OpenGL/OpenGL.h>
 #include <ApplicationServices/ApplicationServices.h>
@@ -47,7 +46,7 @@ bool GLContext::load(bool standalone) {
         }
 
         if (!pixelformat) {
-            PyErr_Format(moderngl_error, "cannot choose pixel format");
+            this->error = "cannot choose pixel format";
             return false;
         }
 
@@ -57,7 +56,7 @@ bool GLContext::load(bool standalone) {
         CGLDestroyPixelFormat(pixelformat);
 
         if (!cgl_context) {
-            PyErr_Format(moderngl_error, "cannot create OpenGL context");
+            this->error = "cannot create OpenGL context";
             return false;
         }
 
@@ -95,39 +94,38 @@ bool GLContext::load(bool standalone) {
         int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
         if (status != GL_FRAMEBUFFER_COMPLETE) {
-            const char * message = "the framebuffer is not complete";
+            this->error = "the framebuffer is not complete";
 
             switch (status) {
                 case GL_FRAMEBUFFER_UNDEFINED:
-                    message = "the framebuffer is not complete (UNDEFINED)";
+                    this->error = "the framebuffer is not complete (UNDEFINED)";
                     break;
 
                 case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-                    message = "the framebuffer is not complete (INCOMPLETE_ATTACHMENT)";
+                    this->error = "the framebuffer is not complete (INCOMPLETE_ATTACHMENT)";
                     break;
 
                 case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-                    message = "the framebuffer is not complete (INCOMPLETE_MISSING_ATTACHMENT)";
+                    this->error = "the framebuffer is not complete (INCOMPLETE_MISSING_ATTACHMENT)";
                     break;
 
                 case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
-                    message = "the framebuffer is not complete (INCOMPLETE_DRAW_BUFFER)";
+                    this->error = "the framebuffer is not complete (INCOMPLETE_DRAW_BUFFER)";
                     break;
 
                 case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
-                    message = "the framebuffer is not complete (INCOMPLETE_READ_BUFFER)";
+                    this->error = "the framebuffer is not complete (INCOMPLETE_READ_BUFFER)";
                     break;
 
                 case GL_FRAMEBUFFER_UNSUPPORTED:
-                    message = "the framebuffer is not complete (UNSUPPORTED)";
+                    this->error = "the framebuffer is not complete (UNSUPPORTED)";
                     break;
 
                 case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
-                    message = "the framebuffer is not complete (INCOMPLETE_MULTISAMPLE)";
+                    this->error = "the framebuffer is not complete (INCOMPLETE_MULTISAMPLE)";
                     break;
             }
 
-            PyErr_Format(moderngl_error, message);
             return false;
         }
     }
@@ -135,7 +133,7 @@ bool GLContext::load(bool standalone) {
     CGLContextObj ctx = CGLGetCurrentContext();
 
     if (!ctx) {
-        PyErr_Format(moderngl_error, "cannot detect OpenGL context");
+        this->error = "cannot detect OpenGL context";
         return false;
     }
 

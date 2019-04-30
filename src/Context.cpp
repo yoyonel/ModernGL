@@ -1339,7 +1339,6 @@ void MGLContext_Invalidate(MGLContext * context) {
 
 	// TODO: decref
 
-	DestroyGLContext(context->gl_context);
 	Py_TYPE(context) = &MGLInvalidObject_Type;
 	Py_DECREF(context);
 }
@@ -1347,7 +1346,7 @@ void MGLContext_Invalidate(MGLContext * context) {
 void MGLContext_Initialize(MGLContext * self) {
 	GLMethods & gl = self->gl;
 
-	if (!gl.load_old()) {
+	if (!gl.load()) {
 		return;
 	}
 

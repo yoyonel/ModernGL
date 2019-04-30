@@ -76,12 +76,15 @@ extra_linker_args = {
 
 mgl = Extension(
     name='moderngl.mgl',
-    include_dirs=['src'],
+    include_dirs=['src', 'moderngl', 'moderngl/mgl'],
     define_macros=[],
     libraries=libraries[target],
     extra_compile_args=extra_compile_args[target],
     extra_link_args=extra_linker_args[target],
     sources=[
+        'moderngl/mgl/internal/opengl/gl_context_%s.cpp' % target,
+        'moderngl/mgl/internal/opengl/gl_methods.cpp',
+
         'src/Sampler.cpp',
         'src/Attribute.cpp',
         'src/Buffer.cpp',
@@ -91,8 +94,6 @@ mgl = Extension(
         'src/DataType.cpp',
         'src/Error.cpp',
         'src/Framebuffer.cpp',
-        'src/GLContext.cpp',
-        'src/GLMethods.cpp',
         'src/InvalidObject.cpp',
         'src/ModernGL.cpp',
         'src/Program.cpp',
@@ -110,10 +111,12 @@ mgl = Extension(
         'src/VertexArray.cpp',
     ],
     depends=[
+        'moderngl/mgl/internal/opengl/gl_context.hpp',
+        'moderngl/mgl/internal/opengl/gl_methods.hpp',
+        'moderngl/mgl/internal/opengl/opengl.hpp',
+
         'src/BufferFormat.hpp',
         'src/Error.hpp',
-        'src/GLContext.hpp',
-        'src/GLMethods.hpp',
         'src/InlineMethods.hpp',
         'src/OpenGL.hpp',
         'src/Python.hpp',

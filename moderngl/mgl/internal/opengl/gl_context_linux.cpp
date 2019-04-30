@@ -1,5 +1,4 @@
 #include "gl_context.hpp"
-#include "../modules.hpp"
 
 #include <GL/glx.h>
 #include <GL/gl.h>
@@ -29,7 +28,7 @@ bool GLContext::load(bool standalone) {
         }
 
         if (!dpy) {
-            PyErr_Format(moderngl_error, "cannot detect the display");
+            this->error = "cannot detect the display";
             return context;
         }
 
@@ -38,7 +37,7 @@ bool GLContext::load(bool standalone) {
         GLXFBConfig * fbc = glXChooseFBConfig(dpy, DefaultScreen(dpy), 0, &nelements);
 
         if (!fbc) {
-            PyErr_Format(moderngl_error, "cannot read the display configuration");
+            this->error = "cannot read the display configuration";
             XCloseDisplay(dpy);
             return context;
         }
@@ -58,7 +57,7 @@ bool GLContext::load(bool standalone) {
         if (!vi) {
             XCloseDisplay(dpy);
 
-            PyErr_Format(moderngl_error, "cannot choose a visual info");
+            this->error = "cannot choose a visual info";
             return context;
         }
 
@@ -72,7 +71,7 @@ bool GLContext::load(bool standalone) {
         if (!win) {
             XCloseDisplay(dpy);
 
-            PyErr_Format(moderngl_error, "cannot create window");
+            this->error = "cannot create window";
             return context;
         }
 
@@ -109,7 +108,7 @@ bool GLContext::load(bool standalone) {
             XDestroyWindow(dpy, win);
             XCloseDisplay(dpy);
 
-            PyErr_Format(moderngl_error, "cannot create OpenGL context");
+            this->error = "cannot create OpenGL context";
             return context;
         }
 
@@ -122,7 +121,7 @@ bool GLContext::load(bool standalone) {
             XDestroyWindow(dpy, win);
             XCloseDisplay(dpy);
 
-            PyErr_Format(moderngl_error, "cannot select OpenGL context");
+            this->error = "cannot select OpenGL context";
             return context;
         }
     }
@@ -130,21 +129,21 @@ bool GLContext::load(bool standalone) {
     Display * dpy = glXGetCurrentDisplay();
 
     if (!dpy) {
-        PyErr_Format(moderngl_error, "cannot detect display");
+        this->error = "cannot detect display";
         return false;
     }
 
     Window win = glXGetCurrentDrawable();
 
     if (!win) {
-        PyErr_Format(moderngl_error, "cannot detect window");
+        this->error = "cannot detect window";
         return false;
     }
 
     GLXContext ctx = glXGetCurrentContext();
 
     if (!ctx) {
-        PyErr_Format(moderngl_error, "cannot detect OpenGL context");
+        this->error = "cannot detect OpenGL context";
         return false;
     }
 

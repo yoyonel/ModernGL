@@ -1,5 +1,4 @@
 #include "gl_context.hpp"
-#include "../modules.hpp"
 
 #include <Windows.h>
 
@@ -169,7 +168,7 @@ bool GLContext::load(bool standalone) {
         HINSTANCE inst = GetModuleHandle(0);
 
         if (!inst) {
-            PyErr_Format(moderngl_error, "module handle is null");
+            this->error = "module handle is null";
             return false;
         }
 
@@ -190,7 +189,7 @@ bool GLContext::load(bool standalone) {
             };
 
             if (!RegisterClass(&wndClass)) {
-                PyErr_Format(moderngl_error, "cannot register window class");
+                this->error = "cannot register window class";
                 return false;
             }
 
@@ -213,14 +212,14 @@ bool GLContext::load(bool standalone) {
         );
 
         if (!hwnd) {
-            PyErr_Format(moderngl_error, "cannot create window");
+            this->error = "cannot create window";
             return false;
         }
 
         HDC hdc = GetDC(hwnd);
 
         if (!hdc) {
-            PyErr_Format(moderngl_error, "cannot create device content");
+            this->error = "cannot create device content";
             return false;
         }
 
@@ -236,17 +235,17 @@ bool GLContext::load(bool standalone) {
             // WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB
 
             if (!my_ChoosePixelFormat(hdc, empty1, empty2, 1, &pixelformat, &num_formats)) {
-                PyErr_Format(moderngl_error, "cannot choose pixel format");
+                this->error = "cannot choose pixel format";
                 return false;
             }
 
             if (!num_formats) {
-                PyErr_Format(moderngl_error, "no pixel formats available");
+                this->error = "no pixel formats available";
                 return false;
             }
 
             if (!SetPixelFormat(hdc, pixelformat, &pfd)) {
-                PyErr_Format(moderngl_error, "cannot set pixel format");
+                this->error = "cannot set pixel format";
                 return false;
             }
 
@@ -268,14 +267,14 @@ bool GLContext::load(bool standalone) {
             int pf = ChoosePixelFormat(hdc, &pfd);
 
             if (!pf) {
-                PyErr_Format(moderngl_error, "cannot choose pixel format");
+                this->error = "cannot choose pixel format";
                 return false;
             }
 
             int set_pixel_format = SetPixelFormat(hdc, pf, &pfd);
 
             if (!set_pixel_format) {
-                PyErr_Format(moderngl_error, "cannot set pixel format");
+                this->error = "cannot set pixel format";
                 return false;
             }
 
@@ -283,14 +282,14 @@ bool GLContext::load(bool standalone) {
         }
 
         if (!hrc) {
-            PyErr_Format(moderngl_error, "cannot create OpenGL context");
+            this->error = "cannot create OpenGL context";
             return false;
         }
 
         int make_current = wglMakeCurrent(hdc, hrc);
 
         if (!make_current) {
-            PyErr_Format(moderngl_error, "cannot select OpenGL context");
+            this->error = "cannot select OpenGL context";
             return false;
         }
     }
@@ -298,21 +297,21 @@ bool GLContext::load(bool standalone) {
     HGLRC hrc = wglGetCurrentContext();
 
     if (!hrc) {
-        PyErr_Format(moderngl_error, "cannot detect context");
+        this->error = "cannot detect context";
         return false;
     }
 
     HDC hdc = wglGetCurrentDC();
 
     if (!hdc) {
-        PyErr_Format(moderngl_error, "cannot detect device content");
+        this->error = "cannot detect device content";
         return false;
     }
 
     HWND hwnd = WindowFromDC(hdc);
 
     if (!hwnd) {
-        PyErr_Format(moderngl_error, "cannot detect window");
+        this->error = "cannot detect window";
         return false;
     }
 

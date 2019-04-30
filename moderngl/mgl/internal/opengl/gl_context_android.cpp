@@ -1,5 +1,4 @@
 #include "gl_context.hpp"
-#include "../modules.hpp"
 
 bool GLContext::load(bool standalone) {
     this->standalone = standalone;
@@ -11,7 +10,7 @@ bool GLContext::load(bool standalone) {
     this->display = 0;
     this->context = 0;
 
-    PyErr_Format(moderngl_error, "android is not yet supported");
+    this->error = "android is not yet supported";
     return false;
 }
 

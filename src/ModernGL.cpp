@@ -3,8 +3,6 @@
 
 #include "BufferFormat.hpp"
 
-#include "GLContext.hpp"
-
 PyObject * strsize(PyObject * self, PyObject * args) {
 	const char * str;
 
@@ -115,7 +113,11 @@ PyObject * create_standalone_context(PyObject * self, PyObject * args) {
 
 	MGLContext * ctx = (MGLContext *)MGLContext_Type.tp_alloc(&MGLContext_Type, 0);
 
-	ctx->gl_context = CreateGLContext(settings);
+	ctx->gl_context.error = "unknown error";
+	if (!ctx->gl_context.load(true)) {
+		MGLError_Set(ctx->gl_context.error);
+		return 0;
+	}
 	ctx->wireframe = false;
 
 	if (PyErr_Occurred()) {
@@ -139,7 +141,7 @@ PyObject * create_standalone_context(PyObject * self, PyObject * args) {
 PyObject * create_context(PyObject * self) {
 	MGLContext * ctx = (MGLContext *)MGLContext_Type.tp_alloc(&MGLContext_Type, 0);
 
-	ctx->gl_context = LoadCurrentGLContext();
+	ctx->gl_context.load(false);
 	ctx->wireframe = false;
 
 	if (PyErr_Occurred()) {

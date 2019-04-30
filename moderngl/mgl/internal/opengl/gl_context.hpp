@@ -7,6 +7,7 @@ struct GLContext {
     void * old_context;
     void * old_window;
     void * old_display;
+    const char * error;
     bool standalone;
 
     bool load(bool standalone);
