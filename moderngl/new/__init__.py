@@ -13,6 +13,7 @@ from .scope import Scope
 from .texture import Texture
 from .uniform import Uniform
 from .vertex_array import VertexArray
+from .tools import compiler_error, linker_error, split_format
 
 from .constants import (
     NOTHING, BLEND, DEPTH_TEST, CULL_FACE, RASTERIZER_DISCARD, NEAREST, LINEAR,
@@ -26,3 +27,9 @@ from .constants import (
 )
 
 __version__ = '6.0.0'
+
+# TODO: remove
+class Refholder:
+    __slots__ = ['mglo', 'old']
+    def __init__(self, mglo):
+        self.mglo = mglo
