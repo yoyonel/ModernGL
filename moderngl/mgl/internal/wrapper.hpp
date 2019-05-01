@@ -1,6 +1,7 @@
 #pragma once
 
 #include "python.hpp"
+#include "intern.hpp"
 
 extern PyTypeObject * Attribute_class;
 extern int Attribute_class_type;

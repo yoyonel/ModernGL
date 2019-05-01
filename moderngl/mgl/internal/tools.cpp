@@ -1,5 +1,5 @@
 #include "tools.hpp"
-#include "modules.hpp"
+#include "intern.hpp"
 
 /* Takes an int or str and converts it into a Py_ssize_t.
  * Examples: 1000 -> 1000, '32KB' -> 32768, '1MB' -> 1048576.

@@ -4,7 +4,6 @@
 #include "scope.hpp"
 
 #include "internal/bytecode.hpp"
-#include "internal/modules.hpp"
 #include "internal/wrapper.hpp"
 #include "internal/tools.hpp"
 #include "internal/glsl.hpp"

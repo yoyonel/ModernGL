@@ -5,7 +5,6 @@
 #include "scope.hpp"
 
 #include "internal/wrapper.hpp"
-#include "internal/modules.hpp"
 
 /* MGLContext.vertex_array(program, content, index_buffer)
  */

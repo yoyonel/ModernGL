@@ -16,7 +16,6 @@
 
 #include "internal/wrapper.hpp"
 #include "internal/tools.hpp"
-#include "internal/modules.hpp"
 
 /* moderngl.core.create_context(standalone, debug, require, glhook, gc)
  * Returns a Context object.
@@ -33,19 +32,39 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
     static bool first_run = true;
 
     if (first_run) {
-        /* Load extenal modules */
-        if (!load_modules()) {
-            return 0;
+        PyObject * sys = PyImport_ImportModule("sys");
+        PyObject * sys_modules = PyObject_GetAttrString(sys, "modules");
+        PyObject * moderngl_parent = PyDict_GetItemString(sys_modules, "moderngl");
+        moderngl = PyObject_GetAttrString(moderngl_parent, "new");
+
+        moderngl_error = intern(PyObject_GetAttrString(moderngl, "Error"));
+        moderngl_compiler_error = intern(PyObject_GetAttrString(moderngl, "compiler_error"));
+        moderngl_linker_error = intern(PyObject_GetAttrString(moderngl, "linker_error"));
+        moderngl_split_format = intern(PyObject_GetAttrString(moderngl, "split_format"));
+
+        numpy = xintern(PyImport_ImportModule("numpy"));
+        if (!numpy) {
+            PyErr_Clear();
         }
 
-        /* Define MGLContext only */
+        if (numpy) {
+            numpy_frombuffer = xintern(PyObject_GetAttrString(numpy, "frombuffer"));
+        }
 
-        MGLContext_class = (PyTypeObject *)PyType_FromSpec(&MGLContext_spec);
+        pillow = xintern(PyImport_ImportModule("PIL.Image"));
+        if (!pillow) {
+            PyErr_Clear();
+        }
 
-        /* Detect wrapper classes for internal types */
+        if (pillow) {
+            pillow_image = xintern(PyObject_GetAttrString(pillow, "Image"));
+        }
 
-        init_wrappers();
-        init_recording();
+        tobytes_str = intern(PyUnicode_FromString("tobytes"));
+        size_str = intern(PyUnicode_FromString("size"));
+        mode_str = intern(PyUnicode_FromString("mode"));
+        points_long = intern(PyLong_FromLong(GL_POINTS));
+        triangles_long = intern(PyLong_FromLong(GL_TRIANGLES));
 
         /* Errors are not recoverable at this point */
 

@@ -1,8 +1,6 @@
 #pragma once
 #include "python.hpp"
 
-/* Python modules */
-
 extern PyObject * moderngl;
 extern PyObject * moderngl_error;
 extern PyObject * moderngl_compiler_error;
@@ -21,4 +19,14 @@ extern PyObject * mode_str;
 extern PyObject * points_long;
 extern PyObject * triangles_long;
 
-bool load_modules();
+extern PyObject * interns;
+inline PyObject * _intern(PyObject * obj) {
+    if (obj) {
+        PyList_Append(interns, obj);
+        Py_DECREF(obj);
+    }
+    return obj;
+}
+
+#define intern(obj) _intern(obj)
+#define xintern(obj) _intern(obj)

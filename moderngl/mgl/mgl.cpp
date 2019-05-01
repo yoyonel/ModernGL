@@ -123,6 +123,9 @@ PyModuleDef module_def = {PyModuleDef_HEAD_INIT, mgl_ext, 0, -1, module_methods,
 extern "C" PyObject * PyInit_mgl() {
     PyObject * module = PyModule_Create(&module_def);
 
+    interns = PyList_New(0);
+    PyModule_AddObject(module, "interns", interns);
+
     f1.numpy_dtype = PyUnicode_FromString("f1");
     f2.numpy_dtype = PyUnicode_FromString("f2");
     f4.numpy_dtype = PyUnicode_FromString("f4");

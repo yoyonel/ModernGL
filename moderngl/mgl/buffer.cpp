@@ -2,7 +2,6 @@
 #include "context.hpp"
 #include "internal/wrapper.hpp"
 
-#include "internal/modules.hpp"
 #include "internal/tools.hpp"
 
 /* MGLBuffer_core_write(...)

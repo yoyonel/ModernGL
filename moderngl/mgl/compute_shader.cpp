@@ -3,7 +3,6 @@
 
 #include "internal/wrapper.hpp"
 
-#include "internal/modules.hpp"
 #include "internal/tools.hpp"
 #include "internal/uniform.hpp"
 #include "internal/glsl.hpp"
