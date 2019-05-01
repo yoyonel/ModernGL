@@ -9,6 +9,13 @@
 #define mgl_ext mgl_mod ".mgl"
 
 typedef PyObject * (* fastcallmethod)(PyObject * self, PyObject * const * args, Py_ssize_t nargs);
+typedef void (* read_value)(void *& ptr, PyObject * value);
+
+void read_float(float *& ptr, PyObject * value);
+void read_int(int *& ptr, PyObject * value);
+void read_unsigned(unsigned *& ptr, PyObject * value);
+void read_double(double *& ptr, PyObject * value);
+void read_bool(int *& ptr, PyObject * value);
 
 #if PY_VERSION_HEX >= 0x03070000
 #define fastcallable(func)

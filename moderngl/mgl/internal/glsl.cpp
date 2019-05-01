@@ -184,23 +184,3 @@ GLTypeInfo type_info(int type) {
 
     return info;
 }
-
-void read_float(float *& ptr, PyObject * value) {
-    *ptr++ = (float)PyFloat_AsDouble(value);
-}
-
-void read_int(int *& ptr, PyObject * value) {
-    *ptr++ = PyLong_AsLong(value);
-}
-
-void read_unsigned(unsigned *& ptr, PyObject * value) {
-    *ptr++ = PyLong_AsUnsignedLong(value);
-}
-
-void read_double(double *& ptr, PyObject * value) {
-    *ptr++ = PyFloat_AsDouble(value);
-}
-
-void read_bool(int *& ptr, PyObject * value) {
-    *ptr++ = PyObject_IsTrue(value);
-}
