@@ -1,18 +1,22 @@
 #include "mgl.hpp"
 #include "extensions.hpp"
 
-#include "context.hpp"
 #include "buffer.hpp"
-#include "recorder.hpp"
+#include "compute_shader.hpp"
+#include "context.hpp"
 #include "framebuffer.hpp"
 #include "limits.hpp"
 #include "program.hpp"
 #include "query.hpp"
+#include "recorder.hpp"
 #include "renderbuffer.hpp"
 #include "sampler.hpp"
 #include "scope.hpp"
 #include "texture.hpp"
 #include "vertex_array.hpp"
+
+// TODO: remove
+#include "refholder.hpp"
 
 #include "internal/wrapper.hpp"
 #include "internal/data_type.hpp"
@@ -20,88 +24,140 @@
 /* moderngl.core.glprocs(context)
  */
 PyObject * meth_glprocs(PyObject * self, PyObject * context) {
-    if (context->ob_type != Context_class) {
+    if (!Context_Check(context)) {
         // TODO: error
         return 0;
     }
 
-    MGLContext * ctx = SLOT(context, MGLContext, Context_class_mglo);
+    MGLContext * ctx = (MGLContext *)get_slot(context, "mglo");
     return PyMemoryView_FromMemory((char *)&ctx->gl, sizeof(ctx->gl), PyBUF_WRITE);
+}
+
+void unchain_object(MGLContextObject * mglo, PyObject * obj) {
+    set_slot(obj, "mglo", new_ref(Py_None));
+    mglo->chain.prev->chain.next = mglo->chain.next;
+    mglo->chain.next->chain.prev = mglo->chain.prev;
+    mglo->wrapper = NULL;
 }
 
 /* moderngl.core.release(obj)
  */
 PyObject * meth_release(PyObject * self, PyObject * obj) {
-    if (obj->ob_type == Buffer_class) {
-        MGLBuffer * buffer = MGLObject_pop_mglo(Buffer, obj);
-        const GLMethods & gl = buffer->context->gl;
-        gl.DeleteBuffers(1, (GLuint *)&buffer->buffer_obj);
-        return MGLObject_release(buffer);
+    if (Context_Check(obj)) {
+        Py_RETURN_NONE;
     }
 
-    if (obj->ob_type == Framebuffer_class) {
-        MGLFramebuffer * framebuffer = MGLObject_pop_mglo(Framebuffer, obj);
-        const GLMethods & gl = framebuffer->context->gl;
-        gl.DeleteFramebuffers(1, (GLuint *)&framebuffer->framebuffer_obj);
-        return MGLObject_release(framebuffer);
+    if (Buffer_Check(obj)) {
+        MGLBuffer * mglo = (MGLBuffer *)new_ref(get_slot(obj, "mglo"));
+        unchain_object(mglo, obj);
+        mglo->context->gl.DeleteBuffers(1, (unsigned *)&mglo->buffer_obj);
+        mglo->buffer_obj = 0;
+        Py_DECREF(obj);
+        Py_DECREF(mglo);
+        Py_RETURN_NONE;
     }
 
-    if (obj->ob_type == Program_class) {
-        MGLProgram * program = MGLObject_pop_mglo(Program, obj);
-        const GLMethods & gl = program->context->gl;
-        gl.DeleteProgram(program->program_obj);
+    if (ComputeShader_Check(obj)) {
+        MGLComputeShader * mglo = (MGLComputeShader *)new_ref(get_slot(obj, "mglo"));
+        unchain_object(mglo, obj);
+        mglo->context->gl.DeleteProgram(mglo->program_obj);
+        mglo->program_obj = 0;
+        mglo->context->gl.DeleteShader(mglo->shader_obj);
+        mglo->shader_obj = 0;
+        Py_DECREF(obj);
+        Py_DECREF(mglo);
+        Py_RETURN_NONE;
+    }
+
+    if (Framebuffer_Check(obj)) {
+        MGLFramebuffer * mglo = (MGLFramebuffer *)new_ref(get_slot(obj, "mglo"));
+        if (mglo == mglo->context->default_framebuffer) {
+            PyErr_Format(moderngl_error, "releasing the default framebuffer");
+            return NULL;
+        }
+        unchain_object(mglo, obj);
+        mglo->context->gl.DeleteFramebuffers(1, (unsigned *)&mglo->framebuffer_obj);
+        mglo->framebuffer_obj = 0;
+        Py_DECREF(obj);
+        Py_DECREF(mglo);
+        Py_RETURN_NONE;
+    }
+
+    if (Program_Check(obj)) {
+        MGLProgram * mglo = (MGLProgram *)new_ref(get_slot(obj, "mglo"));
+        unchain_object(mglo, obj);
+        mglo->context->gl.DeleteProgram(mglo->program_obj);
+        mglo->program_obj = 0;
         for (int i = 0; i < 5; ++i) {
-            if (program->shader_obj[i]) {
-                gl.DeleteShader(program->shader_obj[i]);
+            mglo->context->gl.DeleteShader(mglo->shader_obj[i]);
+            mglo->shader_obj[i] = 0;
+        }
+        Py_DECREF(obj);
+        Py_DECREF(mglo);
+        Py_RETURN_NONE;
+    }
+
+    if (Query_Check(obj)) {
+        MGLQuery * mglo = (MGLQuery *)new_ref(get_slot(obj, "mglo"));
+        unchain_object(mglo, obj);
+        for (int i = 0; i < 4; ++i) {
+            if (mglo->query_obj[i]) {
+                mglo->context->gl.DeleteQueries(1, (unsigned *)&mglo->query_obj[i]);
+                mglo->query_obj[i] = 0;
             }
         }
-        return MGLObject_release(program);
+        Py_DECREF(obj);
+        Py_DECREF(mglo);
+        Py_RETURN_NONE;
     }
 
-    if (obj->ob_type == Query_class) {
-        MGLQuery * query = MGLObject_pop_mglo(Query, obj);
-        const GLMethods & gl = query->context->gl;
-        for (int i = 0; i < 5; ++i) {
-            if (query->query_obj[i]) {
-                gl.DeleteQueries(1, (GLuint *)&query->query_obj[i]);
-            }
+    if (Renderbuffer_Check(obj)) {
+        MGLRenderbuffer * mglo = (MGLRenderbuffer *)new_ref(get_slot(obj, "mglo"));
+        unchain_object(mglo, obj);
+        mglo->context->gl.DeleteRenderbuffers(1, (unsigned *)&mglo->renderbuffer_obj);
+        mglo->renderbuffer_obj = 0;
+        Py_DECREF(obj);
+        Py_DECREF(mglo);
+        Py_RETURN_NONE;
+    }
+
+    if (Sampler_Check(obj)) {
+        MGLSampler * mglo = (MGLSampler *)new_ref(get_slot(obj, "mglo"));
+        unchain_object(mglo, obj);
+        mglo->context->gl.DeleteSamplers(1, (unsigned *)&mglo->sampler_obj);
+        mglo->sampler_obj = 0;
+        Py_DECREF(obj);
+        Py_DECREF(mglo);
+        Py_RETURN_NONE;
+    }
+
+    if (Scope_Check(obj)) {
+        MGLScope * mglo = (MGLScope *)new_ref(get_slot(obj, "mglo"));
+        if (mglo == mglo->context->default_scope) {
+            PyErr_Format(moderngl_error, "releasing the default scope");
+            return NULL;
         }
-        return MGLObject_release(query);
+        unchain_object(mglo, obj);
+        Py_DECREF(obj);
+        Py_DECREF(mglo);
+        Py_RETURN_NONE;
     }
 
-    if (obj->ob_type == Renderbuffer_class) {
-        MGLRenderbuffer * renderbuffer = MGLObject_pop_mglo(Renderbuffer, obj);
-        const GLMethods & gl = renderbuffer->context->gl;
-        gl.DeleteRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
-        return MGLObject_release(renderbuffer);
+    if (Texture_Check(obj)) {
+        MGLTexture * mglo = (MGLTexture *)new_ref(get_slot(obj, "mglo"));
+        if (obj != mglo->wrapper) {
+            PyErr_Format(moderngl_error, "releasing texture levels or layers");
+            return NULL;
+        }
+        unchain_object(mglo, obj);
+        mglo->context->gl.DeleteTextures(1, (unsigned *)&mglo->texture_obj);
+        mglo->texture_obj = 0;
+        Py_DECREF(obj);
+        Py_DECREF(mglo);
+        Py_RETURN_NONE;
     }
 
-    if (obj->ob_type == Sampler_class) {
-        MGLSampler * sampler = MGLObject_pop_mglo(Sampler, obj);
-        const GLMethods & gl = sampler->context->gl;
-        gl.DeleteSamplers(1, (GLuint *)&sampler->sampler_obj);
-        return MGLObject_release(sampler);
-    }
-
-    if (obj->ob_type == Scope_class) {
-        MGLScope * scope = MGLObject_pop_mglo(Scope, obj);
-        return MGLObject_release(scope);
-    }
-
-    if (obj->ob_type == Texture_class) {
-        MGLTexture * texture = MGLObject_pop_mglo(Texture, obj);
-        const GLMethods & gl = texture->context->gl;
-        gl.DeleteTextures(1, (GLuint *)&texture->texture_obj);
-        return MGLObject_release(texture);
-    }
-
-    if (obj->ob_type == VertexArray_class) {
-        MGLVertexArray * vertex_array = MGLObject_pop_mglo(VertexArray, obj);
-        const GLMethods & gl = vertex_array->context->gl;
-        gl.DeleteVertexArrays(1, (GLuint *)&vertex_array->vertex_array_obj);
-        return MGLObject_release(vertex_array);
-    }
-
+    PyErr_BadInternalCall();
     return 0;
 }
 
@@ -111,6 +167,7 @@ PyMethodDef module_methods[] = {
     {"create_context", fastcall(meth_create_context), fastcall_flags, NULL},
     {"extensions", (PyCFunction)meth_extensions, METH_O, 0},
     {"hwinfo", (PyCFunction)meth_hwinfo, METH_O, 0},
+    // {"inspect", (PyCFunction)meth_inspect, METH_O, 0},
     {"glprocs", (PyCFunction)meth_glprocs, METH_O, 0},
     {"release", (PyCFunction)meth_release, METH_O, 0},
     {0},
@@ -118,23 +175,47 @@ PyMethodDef module_methods[] = {
 
 /* Module definition */
 
-PyModuleDef module_def = {PyModuleDef_HEAD_INIT, mgl_ext, 0, -1, module_methods, 0, 0, 0, 0};
+PyModuleDef module_def = {PyModuleDef_HEAD_INIT, "moderngl.mgl.new", 0, -1, module_methods, 0, 0, 0, 0};
 
-extern "C" PyObject * PyInit_mgl() {
+inline PyTypeObject * _new_type(PyObject * module, const char * name, PyType_Spec * spec) {
+    PyObject * type = must_have(PyType_FromSpec(spec));
+    PyModule_AddObject(module, name, new_ref(type));
+    return (PyTypeObject *)type;
+};
+
+#define new_type(name) name ## _class = _new_type(module, #name, &name ## _spec)
+
+PyObject * PyInit_mgl_new() {
     PyObject * module = PyModule_Create(&module_def);
 
     interns = PyList_New(0);
     PyModule_AddObject(module, "interns", interns);
 
-    f1.numpy_dtype = PyUnicode_FromString("f1");
-    f2.numpy_dtype = PyUnicode_FromString("f2");
-    f4.numpy_dtype = PyUnicode_FromString("f4");
-    u1.numpy_dtype = PyUnicode_FromString("u1");
-    u2.numpy_dtype = PyUnicode_FromString("u2");
-    u4.numpy_dtype = PyUnicode_FromString("u4");
-    i1.numpy_dtype = PyUnicode_FromString("i1");
-    i2.numpy_dtype = PyUnicode_FromString("i2");
-    i4.numpy_dtype = PyUnicode_FromString("i4");
+    new_type(MGLBuffer);
+    new_type(MGLComputeShader);
+    new_type(MGLContext);
+    new_type(MGLFramebuffer);
+    new_type(MGLProgram);
+    new_type(MGLQuery);
+    new_type(MGLRecorder);
+    new_type(MGLRenderbuffer);
+    new_type(MGLSampler);
+    new_type(MGLScope);
+    new_type(MGLTexture);
+    new_type(MGLVertexArray);
+
+    // TODO: remove
+    new_type(MGLRefholder);
+
+    f1.numpy_dtype = intern(PyUnicode_FromString("f1"));
+    f2.numpy_dtype = intern(PyUnicode_FromString("f2"));
+    f4.numpy_dtype = intern(PyUnicode_FromString("f4"));
+    u1.numpy_dtype = intern(PyUnicode_FromString("u1"));
+    u2.numpy_dtype = intern(PyUnicode_FromString("u2"));
+    u4.numpy_dtype = intern(PyUnicode_FromString("u4"));
+    i1.numpy_dtype = intern(PyUnicode_FromString("i1"));
+    i2.numpy_dtype = intern(PyUnicode_FromString("i2"));
+    i4.numpy_dtype = intern(PyUnicode_FromString("i4"));
 
     return module;
 }

@@ -5,10 +5,7 @@
 
 #include "internal/bytecode.hpp"
 #include "internal/wrapper.hpp"
-#include "internal/tools.hpp"
 #include "internal/glsl.hpp"
-
-PyTypeObject * MGLRecorder_class;
 
 PyObject * MGLContext_meth_replay(MGLContext * self, PyObject * bytecode) {
     if (MGLBytecode::ptr != MGLBytecode::buffer) {
@@ -81,7 +78,7 @@ MGLRecorder * MGLRecorder_meth_enter(MGLRecorder * self) {
             dst[i] = src[i];
         }
     }
-    return NEW_REF(self);
+    return new_ref(self);
 }
 
 PyObject * MGLRecorder_meth_exit(MGLRecorder * self) {
@@ -161,7 +158,8 @@ PyType_Spec MGLRecorder_spec = {
     MGLRecorder_slots,
 };
 
+PyTypeObject * MGLRecorder_class;
+
 void init_recording() {
     MGLBytecode::init();
-    MGLRecorder_class = (PyTypeObject *)PyType_FromSpec(&MGLRecorder_spec);
 }

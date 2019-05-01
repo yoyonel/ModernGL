@@ -2,8 +2,6 @@
 #include "context.hpp"
 #include "internal/wrapper.hpp"
 
-#include "internal/tools.hpp"
-
 /* MGLBuffer_core_write(...)
  */
 int MGLBuffer_core_write(MGLBuffer * self, const Py_ssize_t & offset, Py_buffer * view, bool contiguous) {
@@ -33,12 +31,12 @@ PyObject * MGLContext_meth_copy_buffer(MGLContext * self, PyObject * const * arg
     PyObject * dst = args[0];
     PyObject * src = args[1];
 
-    if (dst->ob_type != Buffer_class) {
+    if (!Buffer_Check(dst)) {
         PyErr_Format(moderngl_error, "not a Buffer");
         return 0;
     }
 
-    if (src->ob_type != Buffer_class) {
+    if (!Buffer_Check(src)) {
         PyErr_Format(moderngl_error, "not a Buffer");
         return 0;
     }
@@ -47,8 +45,8 @@ PyObject * MGLContext_meth_copy_buffer(MGLContext * self, PyObject * const * arg
     Py_ssize_t read_offset = PyLong_AsSsize_t(args[3]);
     Py_ssize_t write_offset = PyLong_AsSsize_t(args[4]);
 
-    MGLBuffer * src_buffer = SLOT(src, MGLBuffer, Buffer_class_mglo);
-    MGLBuffer * dst_buffer = SLOT(dst, MGLBuffer, Buffer_class_mglo);
+    MGLBuffer * src_buffer = (MGLBuffer *)get_slot(src, "mglo");
+    MGLBuffer * dst_buffer = (MGLBuffer *)get_slot(dst, "mglo");
 
     if (size < 0) {
         size = src_buffer->size - read_offset;
@@ -94,7 +92,9 @@ PyObject * MGLContext_meth_buffer(MGLContext * self, PyObject * const * args, Py
         return 0;
     }
 
-    MGLBuffer * buffer = MGLContext_new_object(self, Buffer);
+    MGLBuffer * buffer = PyObject_New(MGLBuffer, MGLBuffer_class);
+    chain_objects(self, buffer);
+    buffer->context = self;
 
     buffer->flags = (readable ? MGL_BUFFER_READABLE : 0) | (writable ? MGL_BUFFER_WRITABLE : 0) | (local ? MGL_BUFFER_LOCAL : 0);
 
@@ -154,8 +154,8 @@ PyObject * MGLContext_meth_buffer(MGLContext * self, PyObject * const * args, Py
         PyBuffer_Release(&view);
     }
 
-    SLOT(buffer->wrapper, PyObject, Buffer_class_size) = PyLong_FromSsize_t(buffer->size);
-    return NEW_REF(buffer->wrapper);
+    buffer->wrapper = Buffer_New("Nn", buffer, buffer->size);
+    return new_ref(buffer->wrapper);
 }
 
 /* MGLBuffer.write(data, offset)
@@ -417,3 +417,5 @@ PyType_Spec MGLBuffer_spec = {
     Py_TPFLAGS_DEFAULT,
     MGLBuffer_slots,
 };
+
+PyTypeObject * MGLBuffer_class;

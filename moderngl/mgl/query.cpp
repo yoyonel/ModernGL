@@ -3,7 +3,6 @@
 
 #include "internal/wrapper.hpp"
 
-#include "internal/tools.hpp"
 #include "internal/glsl.hpp"
 
 /* MGLContext.query(time_elapsed, primitives_generated, samples_passed, any_samples_passed)
@@ -27,30 +26,33 @@ PyObject * MGLContext_meth_query(MGLContext * self, PyObject * const * args, Py_
         any_samples_passed = false;
     }
 
-    MGLQuery * query = MGLContext_new_object(self, Query);
+    MGLQuery * query = PyObject_New(MGLQuery, MGLQuery_class);
+    chain_objects(self, query);
+    query->context = self;
 
     const GLMethods & gl = self->gl;
 
     if (time_elapsed) {
         gl.GenQueries(1, (GLuint *)&query->query_obj[TIME_ELAPSED]);
-        SLOT(query->wrapper, PyObject, Query_class_elapsed) = PyLong_FromLong(0);
+        // SLOT(query->wrapper, PyObject, Query_class_elapsed) = PyLong_FromLong(0);
     }
 
     if (primitives_generated) {
         gl.GenQueries(1, (GLuint *)&query->query_obj[PRIMITIVES_GENERATED]);
-        SLOT(query->wrapper, PyObject, Query_class_primitives) = PyLong_FromLong(0);
+        // SLOT(query->wrapper, PyObject, Query_class_primitives) = PyLong_FromLong(0);
     }
 
     if (samples_passed) {
         gl.GenQueries(1, (GLuint *)&query->query_obj[SAMPLES_PASSED]);
-        SLOT(query->wrapper, PyObject, Query_class_samples) = PyLong_FromLong(0);
+        // SLOT(query->wrapper, PyObject, Query_class_samples) = PyLong_FromLong(0);
     }
 
     if (any_samples_passed) {
         gl.GenQueries(1, (GLuint *)&query->query_obj[ANY_SAMPLES_PASSED]);
     }
 
-    return NEW_REF(query->wrapper);
+    query->wrapper = Query_New("N", query);
+    return new_ref(query->wrapper);
 }
 
 /* MGLQuery.begin()
@@ -86,27 +88,27 @@ PyObject * MGLQuery_meth_end(MGLQuery * self) {
         int elapsed = 0;
         gl.EndQuery(GL_TIME_ELAPSED);
         self->context->gl.GetQueryObjectiv(self->query_obj[TIME_ELAPSED], GL_QUERY_RESULT, &elapsed);
-        PyObject *& elapsed_slot = SLOT(self->wrapper, PyObject, Query_class_elapsed);
-        Py_DECREF(elapsed_slot);
-        elapsed_slot = PyLong_FromLong(elapsed);
+        // PyObject *& elapsed_slot = SLOT(self->wrapper, PyObject, Query_class_elapsed);
+        // Py_DECREF(elapsed_slot);
+        // elapsed_slot = PyLong_FromLong(elapsed);
     }
 
     if (self->query_obj[PRIMITIVES_GENERATED]) {
         int primitives = 0;
         gl.EndQuery(GL_PRIMITIVES_GENERATED);
         self->context->gl.GetQueryObjectiv(self->query_obj[PRIMITIVES_GENERATED], GL_QUERY_RESULT, &primitives);
-        PyObject *& primitives_slot = SLOT(self->wrapper, PyObject, Query_class_primitives);
-        Py_DECREF(primitives_slot);
-        primitives_slot = PyLong_FromLong(primitives);
+        // PyObject *& primitives_slot = SLOT(self->wrapper, PyObject, Query_class_primitives);
+        // Py_DECREF(primitives_slot);
+        // primitives_slot = PyLong_FromLong(primitives);
     }
 
     if (self->query_obj[SAMPLES_PASSED]) {
         int samples = 0;
         gl.EndQuery(GL_SAMPLES_PASSED);
         self->context->gl.GetQueryObjectiv(self->query_obj[SAMPLES_PASSED], GL_QUERY_RESULT, &samples);
-        PyObject *& samples_slot = SLOT(self->wrapper, PyObject, Query_class_samples);
-        Py_DECREF(samples_slot);
-        samples_slot = PyLong_FromLong(samples);
+        // PyObject *& samples_slot = SLOT(self->wrapper, PyObject, Query_class_samples);
+        // Py_DECREF(samples_slot);
+        // samples_slot = PyLong_FromLong(samples);
     }
 
     if (self->query_obj[ANY_SAMPLES_PASSED]) {
@@ -162,3 +164,5 @@ PyType_Spec MGLQuery_spec = {
     Py_TPFLAGS_DEFAULT,
     MGLQuery_slots,
 };
+
+PyTypeObject * MGLQuery_class;

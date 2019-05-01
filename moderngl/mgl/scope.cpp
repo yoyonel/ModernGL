@@ -7,7 +7,6 @@
 
 #include "internal/wrapper.hpp"
 
-#include "internal/tools.hpp"
 #include "internal/glsl.hpp"
 
 void MGLScope_begin_core(MGLScope * self) {
@@ -53,27 +52,27 @@ void MGLScope_end_core(MGLScope * self) {
 PyObject * MGLContext_meth_scope(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
     ensure_num_args(5);
 
-    MGLScope * scope = MGLContext_new_object(self, Scope);
+    MGLScope * scope = PyObject_New(MGLScope, MGLScope_class);
+    chain_objects(self, scope);
+    scope->context = self;
+
     scope->framebuffer = 0;
     scope->samplers = 0;
     scope->buffers = 0;
 
     int enable_only = PyLong_AsLong(args[0]);
-
-    if (PyErr_Occurred()) {
-        return 0;
-    }
+    ensure_no_error();
 
     scope->enable_only = enable_only;
 
-    if (args[1] != Py_None && Py_TYPE(args[1]) != Framebuffer_class) {
+    if (args[1] != Py_None && !Framebuffer_Check(args[1])) {
         return 0;
     }
 
     if (args[1] == Py_None) {
         scope->framebuffer = 0;
     } else {
-        scope->framebuffer = NEW_REF(SLOT(args[1], MGLFramebuffer, Framebuffer_class_mglo));
+        scope->framebuffer = (MGLFramebuffer *)get_slot(args[1], "mglo");
     }
 
     PyObject * samplers = 0;
@@ -118,10 +117,10 @@ PyObject * MGLContext_meth_scope(MGLContext * self, PyObject * const * args, Py_
             PyObject * wrapper = PySequence_Fast_GET_ITEM(tuple, 0);
             int binding = PyLong_AsLong(PySequence_Fast_GET_ITEM(tuple, 1));
             Py_DECREF(tuple);
-            if (wrapper->ob_type != Sampler_class) {
+            if (!Sampler_Check(wrapper)) {
                 return 0;
             }
-            scope->samplers[i].sampler = SLOT(wrapper, MGLSampler, Sampler_class_mglo);
+            scope->samplers[i].sampler = (MGLSampler *)get_slot(wrapper, "mglo");
             scope->samplers[i].binding = binding;
         }
     }
@@ -141,10 +140,10 @@ PyObject * MGLContext_meth_scope(MGLContext * self, PyObject * const * args, Py_
             PyObject * wrapper = PySequence_Fast_GET_ITEM(tuple, 0);
             int binding = PyLong_AsLong(PySequence_Fast_GET_ITEM(tuple, 1));
             Py_DECREF(tuple);
-            if (wrapper->ob_type != Buffer_class) {
+            if (!Buffer_Check(wrapper)) {
                 return 0;
             }
-            scope->buffers[i].buffer = SLOT(wrapper, MGLBuffer, Buffer_class_mglo);
+            scope->buffers[i].buffer = (MGLBuffer *)get_slot(wrapper, "mglo");
             scope->buffers[i].binding = binding;
         }
     }
@@ -152,7 +151,8 @@ PyObject * MGLContext_meth_scope(MGLContext * self, PyObject * const * args, Py_
     Py_XDECREF(samplers);
     Py_XDECREF(buffers);
 
-    return NEW_REF(scope->wrapper);
+    scope->wrapper = Scope_New("N", scope);
+    return new_ref(scope->wrapper);
 }
 
 /* MGLScope.begin()
@@ -192,3 +192,5 @@ PyType_Spec MGLScope_spec = {
     Py_TPFLAGS_DEFAULT,
     MGLScope_slots,
 };
+
+PyTypeObject * MGLScope_class;

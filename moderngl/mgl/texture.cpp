@@ -4,7 +4,6 @@
 
 #include "internal/wrapper.hpp"
 
-#include "internal/tools.hpp"
 #include "internal/glsl.hpp"
 #include "internal/data_type.hpp"
 
@@ -69,7 +68,9 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
         texture_type = MGL_TEXTURE_3D;
     }
 
-    MGLTexture * texture = MGLContext_new_object(self, Texture);
+    MGLTexture * texture = PyObject_New(MGLTexture, MGLTexture_class);
+    chain_objects(self, texture);
+    texture->context = self;
 
     switch (texture_type) {
         case MGL_TEXTURE_2D:
@@ -263,11 +264,9 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
         free(buf);
     }
 
-    SLOT(texture->wrapper, PyObject, Texture_class_level) = PyLong_FromLong(0);
-    SLOT(texture->wrapper, PyObject, Texture_class_layer) = PyLong_FromLong(-1);
-    SLOT(texture->wrapper, PyObject, Texture_class_swizzle) = PyUnicode_FromStringAndSize("RGBA", components);
-    SLOT(texture->wrapper, PyObject, Texture_class_size) = dims == 3 ? int_tuple(width, height, depth) : int_tuple(width, height);
-    return NEW_REF(texture->wrapper);
+    PyObject * size_arg = dims == 3 ? int_tuple(width, height, depth) : int_tuple(width, height);
+    texture->wrapper = Texture_New("NiiN", texture, 0, -1, size_arg);
+    return new_ref(texture->wrapper);
 }
 
 /* MGLTexture.write(data, viewport, alignment, level)
@@ -332,8 +331,8 @@ PyObject * MGLTexture_meth_write(MGLTexture * self, PyObject * const * args, Py_
     self->context->bind_temp_texture(self->texture_target, self->texture_obj);
     self->context->set_alignment(alignment);
 
-    if (data->ob_type == Buffer_class) {
-        MGLBuffer * buffer = SLOT(data, MGLBuffer, Buffer_class_mglo);
+    if (Buffer_Check(data)) {
+        MGLBuffer * buffer = (MGLBuffer *)get_slot(data, "mglo");
         gl.BindBuffer(GL_PIXEL_UNPACK_BUFFER, buffer->buffer_obj);
         if (self->texture_target == GL_TEXTURE_3D) {
             gl.TexSubImage3D(self->texture_target, level, x, y, z, width, height, depth, format, pixel_type, 0);
@@ -380,6 +379,25 @@ PyObject * MGLTexture_meth_bind(MGLTexture * self, PyObject * const * args, Py_s
     Py_RETURN_NONE;
 }
 
+/* MGLTexture.sub(level, layer)
+ */
+PyObject * MGLTexture_meth_sub(MGLTexture * self, PyObject * const * args, Py_ssize_t nargs) {
+    ensure_num_args(2);
+	int level = PyLong_AsLong(args[0]);
+	int layer = PyLong_AsLong(args[1]);
+    int width = self->width / (1 << level);
+    int height = self->height / (1 << level);
+    width = width > 1 ? width : 1;
+    height = height > 1 ? height : 1;
+    if (self->dimensions == 2) {
+        return Texture_New("Oii(ii)", self, level, layer, width, height);
+    } else {
+        int depth = self->depth / (1 << level);
+        depth = depth > 1 ? depth : 1;
+        return Texture_New("Oii(ii)", self, level, layer, width, height, depth);
+    }
+}
+
 int MGLTexture_set_swizzle(MGLTexture * self, PyObject * value) {
 	const char * swizzle = PyUnicode_AsUTF8(value);
 
@@ -413,9 +431,9 @@ int MGLTexture_set_swizzle(MGLTexture * self, PyObject * value) {
 		chr_from_swizzle(tex_swizzle[3]),
 	};
 
-    PyObject *& swizzle_slot = SLOT(self->wrapper, PyObject, Texture_class_swizzle);
-    Py_DECREF(swizzle_slot);
-	swizzle_slot = PyUnicode_FromStringAndSize(swizzle_str, 4);
+    // PyObject *& swizzle_slot = get_slot(self->wrapper, "swizzle");
+    // Py_DECREF(swizzle_slot);
+	// swizzle_slot = PyUnicode_FromStringAndSize(swizzle_str, 4);
     return 0;
 }
 
@@ -425,10 +443,12 @@ void MGLTexture_dealloc(MGLTexture * self) {
 
 fastcallable(MGLTexture_meth_write)
 fastcallable(MGLTexture_meth_bind)
+fastcallable(MGLTexture_meth_sub)
 
 PyMethodDef MGLTexture_methods[] = {
     {"write", fastcall(MGLTexture_meth_write), fastcall_flags, NULL},
     {"bind", fastcall(MGLTexture_meth_bind), fastcall_flags, NULL},
+    {"sub", fastcall(MGLTexture_meth_sub), fastcall_flags, NULL},
     {0},
 };
 
@@ -451,3 +471,5 @@ PyType_Spec MGLTexture_spec = {
     Py_TPFLAGS_DEFAULT,
     MGLTexture_slots,
 };
+
+PyTypeObject * MGLTexture_class;

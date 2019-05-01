@@ -3,14 +3,15 @@
 
 #include "internal/wrapper.hpp"
 
-#include "internal/tools.hpp"
 #include "internal/uniform.hpp"
 #include "internal/glsl.hpp"
 
 /* MGLContext.compute_shader(texture)
  */
 PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source) {
-    MGLComputeShader * compute_shader = MGLContext_new_object(self, ComputeShader);
+    MGLComputeShader * compute_shader = PyObject_New(MGLComputeShader, MGLComputeShader_class);
+    chain_objects(self, compute_shader);
+    compute_shader->context = self;
 
     const GLMethods & gl = self->gl;
 
@@ -45,11 +46,7 @@ PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source) 
         char * log_text = (char *)malloc(log_len + 1);
         gl.GetShaderInfoLog(shader_obj, log_len, 0, log_text);
 
-        PyObject * name = PyUnicode_FromString("ComputeShader");
-        PyObject * info = PyUnicode_FromStringAndSize(log_text, log_len);
-        PyObject * res = call_function(self->glsl_compiler_error, name, source, info);
-        Py_DECREF(name);
-        Py_DECREF(info);
+        PyObject * res = PyObject_CallFunction(self->glsl_compiler_error, "ss#", "ComputeShader", log_text, log_len);
         Py_XDECREF(res);
 
         gl.DeleteProgram(program_obj);
@@ -71,9 +68,7 @@ PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source) 
         char * log_text = (char *)malloc(log_len + 1);
         gl.GetProgramInfoLog(program_obj, log_len, 0, log_text);
 
-        PyObject * info = PyUnicode_FromStringAndSize(log_text, log_len);
-        PyObject * res = call_function(self->glsl_linker_error, info);
-        Py_DECREF(info);
+        PyObject * res = PyObject_CallFunction(self->glsl_linker_error, "s#", log_text, log_len);
         Py_XDECREF(res);
 
         gl.DeleteProgram(program_obj);
@@ -85,74 +80,21 @@ PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source) 
 
     self->use_program(program_obj);
 
-    PyObject * uniforms = PyDict_New();
-
-    int uniforms_len = 0;
-    int uniform_blocks_len = 0;
-
-    gl.GetProgramiv(program_obj, GL_ACTIVE_UNIFORMS, &uniforms_len);
-    gl.GetProgramiv(program_obj, GL_ACTIVE_UNIFORM_BLOCKS, &uniform_blocks_len);
-
-    for (int i = 0; i < uniforms_len; ++i) {
-        int type = 0;
-        int size = 0;
-        int name_len = 0;
-        char name[256];
-
-        gl.GetActiveUniform(compute_shader->program_obj, i, 256, &name_len, &size, (GLenum *)&type, name);
-        int location = gl.GetUniformLocation(compute_shader->program_obj, name);
-        clean_glsl_name2(name, name_len);
-
-        if (location < 0) {
-            continue;
-        }
-
-        GLTypeInfo info = type_info(type);
-
-        PyObject * uniform = new_object(PyObject, Uniform_class);
-        SLOT(uniform, PyObject, Uniform_class_type) = PyLong_FromLong(type);
-        SLOT(uniform, PyObject, Uniform_class_location) = PyLong_FromLong(location);
-        SLOT(uniform, PyObject, Uniform_class_cols) = PyLong_FromLong(info.cols);
-        SLOT(uniform, PyObject, Uniform_class_rows) = PyLong_FromLong(info.rows);
-        SLOT(uniform, PyObject, Uniform_class_size) = PyLong_FromLong(size);
-        SLOT(uniform, PyObject, Uniform_class_shape) = PyLong_FromLong(info.shape);
-        PyDict_SetItemString(uniforms, name, uniform);
-    }
-
-    for (int i = 0; i < uniform_blocks_len; ++i) {
-        int size = 0;
-        int name_len = 0;
-        char name[256];
-
-        gl.GetActiveUniformBlockName(compute_shader->program_obj, i, 256, &name_len, name);
-        int index = gl.GetUniformBlockIndex(compute_shader->program_obj, name);
-        gl.GetActiveUniformBlockiv(compute_shader->program_obj, index, GL_UNIFORM_BLOCK_DATA_SIZE, &size);
-        clean_glsl_name2(name, name_len);
-
-        PyObject * uniform = new_object(PyObject, Uniform_class);
-        SLOT(uniform, PyObject, Uniform_class_type) = 0;
-        SLOT(uniform, PyObject, Uniform_class_location) = PyLong_FromLong(index);
-        SLOT(uniform, PyObject, Uniform_class_cols) = 0;
-        SLOT(uniform, PyObject, Uniform_class_rows) = 0;
-        SLOT(uniform, PyObject, Uniform_class_size) = PyLong_FromLong(size);
-        SLOT(uniform, PyObject, Uniform_class_shape) = PyLong_FromLong(0);
-        PyDict_SetItemString(uniforms, name, uniform);
-    }
-
-    SLOT(compute_shader->wrapper, PyObject, ComputeShader_class_uniforms) = uniforms;
-    return NEW_REF(compute_shader->wrapper);
+    PyObject * uniforms = get_uniforms(gl, program_obj);
+    compute_shader->wrapper = ComputeShader_New("NN", compute_shader, uniforms);
+    return new_ref(compute_shader->wrapper);
 }
 
 /* MGLComputeShader.uniform(...)
  */
 PyObject * MGLComputeShader_meth_uniform(MGLComputeShader * self, PyObject * const * args, Py_ssize_t nargs) {
     if (nargs != 1 && nargs != 2) {
-        PyErr_Format(moderngl_error, "num args");
+        PyErr_BadInternalCall();
         return 0;
     }
     const GLMethods & gl = self->context->gl;
     self->context->use_program(self->program_obj);
-    return getset_uniform(gl, self->program_obj, args[0], nargs == 2 ? args[1] : 0);
+    return getset_uniform(gl, self->program_obj, args[0], nargs == 2 ? args[1] : NULL);
 }
 
 /* MGLComputeShader.run(group_x, group_y, group_z)
@@ -164,9 +106,7 @@ PyObject * MGLComputeShader_meth_run(MGLComputeShader * self, PyObject * const *
     unsigned y = PyLong_AsUnsignedLong(args[1]);
     unsigned z = PyLong_AsUnsignedLong(args[2]);
 
-    if (PyErr_Occurred()) {
-        return 0;
-    }
+    ensure_no_error();
 
     self->context->use_program(self->program_obj);
 	self->context->gl.DispatchCompute(x, y, z);
@@ -199,3 +139,5 @@ PyType_Spec MGLComputeShader_spec = {
     Py_TPFLAGS_DEFAULT,
     MGLComputeShader_slots,
 };
+
+PyTypeObject * MGLComputeShader_class;

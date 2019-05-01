@@ -3,7 +3,6 @@
 
 #include "internal/wrapper.hpp"
 
-#include "internal/tools.hpp"
 #include "internal/glsl.hpp"
 #include "internal/data_type.hpp"
 
@@ -26,7 +25,9 @@ PyObject * MGLContext_meth_renderbuffer(MGLContext * self, PyObject * const * ar
     int height = PyLong_AsLong(PySequence_Fast_GET_ITEM(size, 1));
     int format = dtype->internal_format[components];
 
-    MGLRenderbuffer * renderbuffer = MGLContext_new_object(self, Renderbuffer);
+    MGLRenderbuffer * renderbuffer = PyObject_New(MGLRenderbuffer, MGLRenderbuffer_class);
+    chain_objects(self, renderbuffer);
+    renderbuffer->context = self;
 
     const GLMethods & gl = self->gl;
     gl.GenRenderbuffers(1, (GLuint *)&renderbuffer->renderbuffer_obj);
@@ -51,8 +52,8 @@ PyObject * MGLContext_meth_renderbuffer(MGLContext * self, PyObject * const * ar
     renderbuffer->data_type = dtype;
     renderbuffer->depth = false;
 
-    SLOT(renderbuffer->wrapper, PyObject, Renderbuffer_class_size) = int_tuple(width, height);
-    return NEW_REF(renderbuffer->wrapper);
+    renderbuffer->wrapper = Renderbuffer_New("N(ii)", renderbuffer, width, height);
+    return new_ref(renderbuffer->wrapper);
 }
 
 void MGLRenderbuffer_dealloc(MGLRenderbuffer * self) {
@@ -71,3 +72,5 @@ PyType_Spec MGLRenderbuffer_spec = {
     Py_TPFLAGS_DEFAULT,
     MGLRenderbuffer_slots,
 };
+
+PyTypeObject * MGLRenderbuffer_class;
