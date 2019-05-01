@@ -102,7 +102,7 @@ PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source) 
 
         gl.GetActiveUniform(compute_shader->program_obj, i, 256, &name_len, &size, (GLenum *)&type, name);
         int location = gl.GetUniformLocation(compute_shader->program_obj, name);
-        clean_glsl_name(name, name_len);
+        clean_glsl_name2(name, name_len);
 
         if (location < 0) {
             continue;
@@ -128,7 +128,7 @@ PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source) 
         gl.GetActiveUniformBlockName(compute_shader->program_obj, i, 256, &name_len, name);
         int index = gl.GetUniformBlockIndex(compute_shader->program_obj, name);
         gl.GetActiveUniformBlockiv(compute_shader->program_obj, index, GL_UNIFORM_BLOCK_DATA_SIZE, &size);
-        clean_glsl_name(name, name_len);
+        clean_glsl_name2(name, name_len);
 
         PyObject * uniform = new_object(PyObject, Uniform_class);
         SLOT(uniform, PyObject, Uniform_class_type) = 0;

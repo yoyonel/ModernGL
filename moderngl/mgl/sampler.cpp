@@ -265,7 +265,7 @@ int MGLSampler_set_compare_func(MGLSampler * self, PyObject * value) {
     }
 
     const char * compare_func_str = PyUnicode_AsUTF8(value);
-	int compare_func = compare_func_from_string(compare_func_str);
+	int compare_func = compare_func_from_str(compare_func_str);
 	if (!compare_func) {
         PyErr_Format(moderngl_error, "invalid compare_func");
         return -1;

@@ -162,7 +162,7 @@ PyObject * MGLContext_meth_program(MGLContext * self, PyObject * const * args, P
 
         gl.GetActiveAttrib(program_obj, i, 256, &name_len, &size, (GLenum *)&type, name);
         int location = gl.GetAttribLocation(program_obj, name);
-        clean_glsl_name(name, name_len);
+        clean_glsl_name2(name, name_len);
 
         GLTypeInfo info = type_info(type);
 
@@ -184,7 +184,7 @@ PyObject * MGLContext_meth_program(MGLContext * self, PyObject * const * args, P
 
         gl.GetActiveUniform(program->program_obj, i, 256, &name_len, &size, (GLenum *)&type, name);
         int location = gl.GetUniformLocation(program->program_obj, name);
-        clean_glsl_name(name, name_len);
+        clean_glsl_name2(name, name_len);
 
         if (location < 0) {
             continue;
@@ -210,7 +210,7 @@ PyObject * MGLContext_meth_program(MGLContext * self, PyObject * const * args, P
         gl.GetActiveUniformBlockName(program->program_obj, i, 256, &name_len, name);
         int index = gl.GetUniformBlockIndex(program->program_obj, name);
         gl.GetActiveUniformBlockiv(program->program_obj, index, GL_UNIFORM_BLOCK_DATA_SIZE, &size);
-        clean_glsl_name(name, name_len);
+        clean_glsl_name2(name, name_len);
 
         PyObject * uniform = new_object(PyObject, Uniform_class);
         SLOT(uniform, PyObject, Uniform_class_type) = 0;

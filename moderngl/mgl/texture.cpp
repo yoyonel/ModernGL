@@ -392,7 +392,7 @@ int MGLTexture_set_swizzle(MGLTexture * self, PyObject * value) {
 	int tex_swizzle[4] = {GL_ZERO, GL_ZERO, GL_ZERO, GL_ONE};
 
 	for (int i = 0; i < swizzle[i]; ++i) {
-		tex_swizzle[i] = swizzle_from_char(swizzle[i]);
+		tex_swizzle[i] = swizzle_from_chr(swizzle[i]);
 		if (tex_swizzle[i] == -1) {
             PyErr_Format(PyExc_Exception, "error -- %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
 			return -1;
@@ -408,10 +408,10 @@ int MGLTexture_set_swizzle(MGLTexture * self, PyObject * value) {
 	gl.TexParameteriv(texture_target, GL_TEXTURE_SWIZZLE_RGBA, tex_swizzle);
 
 	char swizzle_str[4] = {
-		char_from_swizzle(tex_swizzle[0]),
-		char_from_swizzle(tex_swizzle[1]),
-		char_from_swizzle(tex_swizzle[2]),
-		char_from_swizzle(tex_swizzle[3]),
+		chr_from_swizzle(tex_swizzle[0]),
+		chr_from_swizzle(tex_swizzle[1]),
+		chr_from_swizzle(tex_swizzle[2]),
+		chr_from_swizzle(tex_swizzle[3]),
 	};
 
     PyObject *& swizzle_slot = SLOT(self->wrapper, PyObject, Texture_class_swizzle);
