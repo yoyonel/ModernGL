@@ -31,6 +31,9 @@ PyObject * MGLContext_meth_copy_buffer(MGLContext * self, PyObject * const * arg
     PyObject * dst = args[0];
     PyObject * src = args[1];
 
+    dst = get_new_wrapper(dst);
+    src = get_new_wrapper(src);
+
     if (!Buffer_Check(dst)) {
         PyErr_Format(moderngl_error, "not a Buffer");
         return 0;

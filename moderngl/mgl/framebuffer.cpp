@@ -22,6 +22,8 @@ PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * arg
     PyObject * color_attachments = args[0];
     PyObject * depth_attachment = args[1];
 
+    depth_attachment = get_new_wrapper(depth_attachment);
+
     if (!PySequence_Check(color_attachments)) {
         PyObject * tuple = PyTuple_New(1);
         PyTuple_SET_ITEM(tuple, 0, color_attachments);
@@ -49,6 +51,7 @@ PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * arg
 
     for (int i = 0; i < color_attachments_len; ++i) {
         PyObject * attachment = PySequence_Fast_GET_ITEM(color_attachments, i);
+        attachment = get_new_wrapper(attachment);
         if (Renderbuffer_Check(attachment)) {
             MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)get_slot(attachment, "mglo");
             framebuffer->attachment_type[i] = renderbuffer->data_type->shape;
@@ -165,7 +168,7 @@ PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * arg
         	case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
         		PyErr_Format(moderngl_error, "the framebuffer is not complete (INCOMPLETE_LAYER_TARGETS)");
         		return 0;
-
+            
             default:
                 PyErr_Format(moderngl_error, "the framebuffer is not complete");
         		return 0;

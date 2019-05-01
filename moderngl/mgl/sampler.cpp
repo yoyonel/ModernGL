@@ -367,6 +367,8 @@ int MGLSampler_set_texture2(MGLSampler * self, PyObject * value) {
         return -1;
     }
 
+    value = get_new_wrapper(value);
+
     Py_DECREF(self->slots.texture);
     self->slots.texture = new_ref(value);
 

@@ -43,6 +43,8 @@ void unchain_object(MGLContextObject * mglo, PyObject * obj) {
 /* moderngl.core.release(obj)
  */
 PyObject * meth_release(PyObject * self, PyObject * obj) {
+    obj = get_new_wrapper(obj);
+
     if (Context_Check(obj)) {
         Py_RETURN_NONE;
     }
@@ -170,6 +172,14 @@ PyMethodDef module_methods[] = {
     // {"inspect", (PyCFunction)meth_inspect, METH_O, 0},
     {"glprocs", (PyCFunction)meth_glprocs, METH_O, 0},
     {"release", (PyCFunction)meth_release, METH_O, 0},
+
+    {"extend_context", (PyCFunction)meth_extend_context, METH_VARARGS, 0},
+    {"extend_buffer", (PyCFunction)meth_extend_buffer, METH_VARARGS, 0},
+    {"extend_framebuffer", (PyCFunction)meth_extend_framebuffer, METH_VARARGS, 0},
+    {"extend_program", (PyCFunction)meth_extend_program, METH_VARARGS, 0},
+    {"extend_renderbuffer", (PyCFunction)meth_extend_renderbuffer, METH_VARARGS, 0},
+    {"extend_texture", (PyCFunction)meth_extend_texture, METH_VARARGS, 0},
+    {"extend_refholder", (PyCFunction)meth_extend_refholder, METH_VARARGS, 0},
     {0},
 };
 

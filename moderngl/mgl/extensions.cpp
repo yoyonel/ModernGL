@@ -7,6 +7,8 @@
  * Returns a list of supported extensions.
  */
 PyObject * meth_extensions(PyObject * self, PyObject * context) {
+    context = get_new_wrapper(context);
+
     if (!Context_Check(context)) {
         // TODO: error
         return 0;
@@ -40,6 +42,8 @@ PyObject * meth_extensions(PyObject * self, PyObject * context) {
 /* moderngl.core.hwinfo(context)
  */
 PyObject * meth_hwinfo(PyObject * self, PyObject * context) {
+    context = get_new_wrapper(context);
+
     if (!Context_Check(context)) {
         // TODO: error
         return 0;
