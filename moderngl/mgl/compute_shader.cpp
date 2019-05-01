@@ -178,31 +178,14 @@ void MGLComputeShader_dealloc(MGLComputeShader * self) {
     Py_TYPE(self)->tp_free(self);
 }
 
-#if PY_VERSION_HEX >= 0x03070000
+fastcallable(MGLComputeShader_meth_uniform)
+fastcallable(MGLComputeShader_meth_run)
 
 PyMethodDef MGLComputeShader_methods[] = {
-    {"uniform", (PyCFunction)MGLComputeShader_meth_uniform, METH_FASTCALL, 0},
-    {"run", (PyCFunction)MGLComputeShader_meth_run, METH_FASTCALL, 0},
+    {"uniform", fastcall(MGLComputeShader_meth_uniform), fastcall_flags, NULL},
+    {"run", fastcall(MGLComputeShader_meth_run), fastcall_flags, NULL},
     {0},
 };
-
-#else
-
-PyObject * MGLComputeShader_meth_uniform_va(MGLComputeShader * self, PyObject * args) {
-    return MGLComputeShader_meth_uniform(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLComputeShader_meth_run_va(MGLComputeShader * self, PyObject * args) {
-    return MGLComputeShader_meth_run(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyMethodDef MGLComputeShader_methods[] = {
-    {"uniform", (PyCFunction)MGLComputeShader_meth_uniform_va, METH_VARARGS, 0},
-    {"run", (PyCFunction)MGLComputeShader_meth_run_va, METH_VARARGS, 0},
-    {0},
-};
-
-#endif
 
 PyType_Slot MGLComputeShader_slots[] = {
     {Py_tp_methods, MGLComputeShader_methods},

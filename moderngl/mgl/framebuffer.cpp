@@ -352,33 +352,15 @@ void MGLFramebuffer_dealloc(MGLFramebuffer * self) {
     Py_TYPE(self)->tp_free(self);
 }
 
-#if PY_VERSION_HEX >= 0x03070000
+fastcallable(MGLFramebuffer_meth_read)
+fastcallable(MGLFramebuffer_meth_clear)
 
 PyMethodDef MGLFramebuffer_methods[] = {
-    {"read", (PyCFunction)MGLFramebuffer_meth_read, METH_FASTCALL, 0},
+    {"read", fastcall(MGLFramebuffer_meth_read), fastcall_flags, NULL},
     {"use", (PyCFunction)MGLFramebuffer_meth_use, METH_NOARGS, 0},
-    {"clear", (PyCFunction)MGLFramebuffer_meth_clear, METH_FASTCALL, 0},
+    {"clear", fastcall(MGLFramebuffer_meth_clear), fastcall_flags, NULL},
     {0},
 };
-
-#else
-
-PyObject * MGLFramebuffer_meth_read_va(MGLFramebuffer * self, PyObject * args) {
-    return MGLFramebuffer_meth_read(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLFramebuffer_meth_clear_va(MGLFramebuffer * self, PyObject * args) {
-    return MGLFramebuffer_meth_clear(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyMethodDef MGLFramebuffer_methods[] = {
-    {"read", (PyCFunction)MGLFramebuffer_meth_read_va, METH_VARARGS, 0},
-    {"use", (PyCFunction)MGLFramebuffer_meth_use, METH_NOARGS, 0},
-    {"clear", (PyCFunction)MGLFramebuffer_meth_clear_va, METH_VARARGS, 0},
-    {0},
-};
-
-#endif
 
 PyGetSetDef MGLFramebuffer_getset[] = {
     {"viewport", 0, (setter)MGLFramebuffer_set_viewport, 0, 0},

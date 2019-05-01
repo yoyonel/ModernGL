@@ -8,6 +8,18 @@
 #define mgl_mod _mgl_xstr(MODERNGL_MODULE)
 #define mgl_ext mgl_mod ".mgl"
 
+typedef PyObject * (* fastcallmethod)(PyObject * self, PyObject * const * args, Py_ssize_t nargs);
+
+#if PY_VERSION_HEX >= 0x03070000
+#define fastcallable(func)
+#define fastcall(func) (PyCFunction)func
+#define fastcall_flags METH_FASTCALL
+#else
+#define fastcallable(func) PyObject * func ## _va(PyObject * self, PyObject * args) { return ((fastcallmethod)func)(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size); }
+#define fastcall(func) (PyCFunction)(func ## _va)
+#define fastcall_flags METH_VARARGS
+#endif
+
 #define ensure_num_args(count) if (nargs != count) { PyErr_BadInternalCall(); return NULL; }
 
 /* Wrapper classes for internal objects are defined in python. They must have __slots__ defined.

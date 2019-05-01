@@ -541,43 +541,18 @@ void MGLVertexArray_dealloc(MGLVertexArray * self) {
     Py_TYPE(self)->tp_free(self);
 }
 
-#if PY_VERSION_HEX >= 0x03070000
+fastcallable(MGLVertexArray_meth_render)
+fastcallable(MGLVertexArray_meth_render_indirect)
+fastcallable(MGLVertexArray_meth_transform)
+fastcallable(MGLVertexArray_meth_transform_indirect)
 
 PyMethodDef MGLVertexArray_methods[] = {
-    {"render", (PyCFunction)MGLVertexArray_meth_render, METH_FASTCALL, 0},
-    {"render_indirect", (PyCFunction)MGLVertexArray_meth_render_indirect, METH_FASTCALL, 0},
-    {"transform", (PyCFunction)MGLVertexArray_meth_transform, METH_FASTCALL, 0},
-    {"transform_indirect", (PyCFunction)MGLVertexArray_meth_transform_indirect, METH_FASTCALL, 0},
+    {"render", fastcall(MGLVertexArray_meth_render), fastcall_flags, NULL},
+    {"render_indirect", fastcall(MGLVertexArray_meth_render_indirect), fastcall_flags, NULL},
+    {"transform", fastcall(MGLVertexArray_meth_transform), fastcall_flags, NULL},
+    {"transform_indirect", fastcall(MGLVertexArray_meth_transform_indirect), fastcall_flags, NULL},
     {0},
 };
-
-#else
-
-PyObject * MGLVertexArray_meth_render_va(MGLVertexArray * self, PyObject * args) {
-    return MGLVertexArray_meth_render(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLVertexArray_meth_render_indirect_va(MGLVertexArray * self, PyObject * args) {
-    return MGLVertexArray_meth_render_indirect(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLVertexArray_meth_transform_va(MGLVertexArray * self, PyObject * args) {
-    return MGLVertexArray_meth_transform(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLVertexArray_meth_transform_indirect_va(MGLVertexArray * self, PyObject * args) {
-    return MGLVertexArray_meth_transform_indirect(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyMethodDef MGLVertexArray_methods[] = {
-    {"render", (PyCFunction)MGLVertexArray_meth_render_va, METH_VARARGS, 0},
-    {"render_indirect", (PyCFunction)MGLVertexArray_meth_render_indirect_va, METH_VARARGS, 0},
-    {"transform", (PyCFunction)MGLVertexArray_meth_transform_va, METH_VARARGS, 0},
-    {"transform_indirect", (PyCFunction)MGLVertexArray_meth_transform_indirect_va, METH_VARARGS, 0},
-    {0},
-};
-
-#endif
 
 PyGetSetDef MGLVertexArray_getset[] = {
     {"ibo", 0, (setter)MGLVertexArray_set_ibo, 0, 0},

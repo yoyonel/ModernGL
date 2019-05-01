@@ -346,90 +346,34 @@ void MGLContext_dealloc(MGLContext * self) {
     Py_TYPE(self)->tp_free(self);
 }
 
-PyTypeObject * MGLContext_class;
-
-#if PY_VERSION_HEX >= 0x03070000
+fastcallable(MGLContext_meth_copy_buffer)
+fastcallable(MGLContext_meth_buffer)
+fastcallable(MGLContext_meth_framebuffer)
+fastcallable(MGLContext_meth_program)
+fastcallable(MGLContext_meth_query)
+fastcallable(MGLContext_meth_renderbuffer)
+fastcallable(MGLContext_meth_sampler)
+fastcallable(MGLContext_meth_scope)
+fastcallable(MGLContext_meth_texture)
+fastcallable(MGLContext_meth_vertex_array)
 
 PyMethodDef MGLContext_methods[] = {
-    {"copy_buffer", (PyCFunction)MGLContext_meth_copy_buffer, METH_FASTCALL, 0},
-    {"buffer", (PyCFunction)MGLContext_meth_buffer, METH_FASTCALL, 0},
+    {"copy_buffer", fastcall(MGLContext_meth_copy_buffer), fastcall_flags, NULL},
+    {"buffer", fastcall(MGLContext_meth_buffer), fastcall_flags, NULL},
     {"compute_shader", (PyCFunction)MGLContext_meth_compute_shader, METH_O, 0},
     {"configure", (PyCFunction)MGLContext_meth_configure, METH_O, 0},
-    {"framebuffer", (PyCFunction)MGLContext_meth_framebuffer, METH_FASTCALL, 0},
-    {"program", (PyCFunction)MGLContext_meth_program, METH_FASTCALL, 0},
-    {"query", (PyCFunction)MGLContext_meth_query, METH_FASTCALL, 0},
-    {"renderbuffer", (PyCFunction)MGLContext_meth_renderbuffer, METH_FASTCALL, 0},
-    {"depth_renderbuffer", (PyCFunction)MGLContext_meth_depth_renderbuffer, METH_FASTCALL, 0},
-    {"sampler", (PyCFunction)MGLContext_meth_sampler, METH_FASTCALL, 0},
-    {"scope", (PyCFunction)MGLContext_meth_scope, METH_FASTCALL, 0},
-    {"texture", (PyCFunction)MGLContext_meth_texture, METH_FASTCALL, 0},
-    {"vertex_array", (PyCFunction)MGLContext_meth_vertex_array, METH_FASTCALL, 0},
+    {"framebuffer", fastcall(MGLContext_meth_framebuffer), fastcall_flags, NULL},
+    {"program", fastcall(MGLContext_meth_program), fastcall_flags, NULL},
+    {"query", fastcall(MGLContext_meth_query), fastcall_flags, NULL},
+    {"renderbuffer", fastcall(MGLContext_meth_renderbuffer), fastcall_flags, NULL},
+    {"sampler", fastcall(MGLContext_meth_sampler), fastcall_flags, NULL},
+    {"scope", fastcall(MGLContext_meth_scope), fastcall_flags, NULL},
+    {"texture", fastcall(MGLContext_meth_texture), fastcall_flags, NULL},
+    {"vertex_array", fastcall(MGLContext_meth_vertex_array), fastcall_flags, NULL},
     {"replay", (PyCFunction)MGLContext_meth_replay, METH_O, 0},
     {"make_current", (PyCFunction)MGLContext_meth_make_current, METH_NOARGS, 0},
     {0},
 };
-
-#else
-
-PyObject * MGLContext_meth_copy_buffer_va(MGLContext * self, PyObject * args) {
-    return MGLContext_meth_copy_buffer(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLContext_meth_buffer_va(MGLContext * self, PyObject * args) {
-    return MGLContext_meth_buffer(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLContext_meth_framebuffer_va(MGLContext * self, PyObject * args) {
-    return MGLContext_meth_framebuffer(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLContext_meth_program_va(MGLContext * self, PyObject * args) {
-    return MGLContext_meth_program(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLContext_meth_query_va(MGLContext * self, PyObject * args) {
-    return MGLContext_meth_query(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLContext_meth_renderbuffer_va(MGLContext * self, PyObject * args) {
-    return MGLContext_meth_renderbuffer(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLContext_meth_sampler_va(MGLContext * self, PyObject * args) {
-    return MGLContext_meth_sampler(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLContext_meth_scope_va(MGLContext * self, PyObject * args) {
-    return MGLContext_meth_scope(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLContext_meth_texture_va(MGLContext * self, PyObject * args) {
-    return MGLContext_meth_texture(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLContext_meth_vertex_array_va(MGLContext * self, PyObject * args) {
-    return MGLContext_meth_vertex_array(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyMethodDef MGLContext_methods[] = {
-    {"copy_buffer", (PyCFunction)MGLContext_meth_copy_buffer_va, METH_VARARGS, 0},
-    {"buffer", (PyCFunction)MGLContext_meth_buffer_va, METH_VARARGS, 0},
-    {"compute_shader", (PyCFunction)MGLContext_meth_compute_shader, METH_O, 0},
-    {"configure", (PyCFunction)MGLContext_meth_configure, METH_O, 0},
-    {"framebuffer", (PyCFunction)MGLContext_meth_framebuffer_va, METH_VARARGS, 0},
-    {"program", (PyCFunction)MGLContext_meth_program_va, METH_VARARGS, 0},
-    {"query", (PyCFunction)MGLContext_meth_query_va, METH_VARARGS, 0},
-    {"renderbuffer", (PyCFunction)MGLContext_meth_renderbuffer_va, METH_VARARGS, 0},
-    {"sampler", (PyCFunction)MGLContext_meth_sampler_va, METH_VARARGS, 0},
-    {"scope", (PyCFunction)MGLContext_meth_scope_va, METH_VARARGS, 0},
-    {"texture", (PyCFunction)MGLContext_meth_texture_va, METH_VARARGS, 0},
-    {"vertex_array", (PyCFunction)MGLContext_meth_vertex_array_va, METH_VARARGS, 0},
-    {"replay", (PyCFunction)MGLContext_meth_replay, METH_O, 0},
-    {"make_current", (PyCFunction)MGLContext_meth_make_current, METH_NOARGS, 0},
-    {0},
-};
-
-#endif
 
 PyType_Slot MGLContext_slots[] = {
     {Py_tp_methods, MGLContext_methods},

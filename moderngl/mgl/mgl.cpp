@@ -106,10 +106,10 @@ PyObject * meth_release(PyObject * self, PyObject * obj) {
     return 0;
 }
 
-#if PY_VERSION_HEX >= 0x03070000
+fastcallable(meth_create_context)
 
 PyMethodDef module_methods[] = {
-    {"create_context", (PyCFunction)meth_create_context, METH_FASTCALL, 0},
+    {"create_context", fastcall(meth_create_context), fastcall_flags, NULL},
     {"extensions", (PyCFunction)meth_extensions, METH_O, 0},
     {"hwinfo", (PyCFunction)meth_hwinfo, METH_O, 0},
     {"inspect", (PyCFunction)meth_inspect, METH_O, 0},
@@ -117,24 +117,6 @@ PyMethodDef module_methods[] = {
     {"release", (PyCFunction)meth_release, METH_O, 0},
     {0},
 };
-
-#else
-
-PyObject * meth_create_context_va(PyObject * self, PyObject * args) {
-    return meth_create_context(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyMethodDef module_methods[] = {
-    {"create_context", (PyCFunction)meth_create_context_va, METH_VARARGS, 0},
-    {"extensions", (PyCFunction)meth_extensions, METH_O, 0},
-    {"hwinfo", (PyCFunction)meth_hwinfo, METH_O, 0},
-    {"inspect", (PyCFunction)meth_inspect, METH_O, 0},
-    {"glprocs", (PyCFunction)meth_glprocs, METH_O, 0},
-    {"release", (PyCFunction)meth_release, METH_O, 0},
-    {0},
-};
-
-#endif
 
 /* Module definition */
 

@@ -173,23 +173,11 @@ void MGLScope_dealloc(MGLScope * self) {
     Py_TYPE(self)->tp_free(self);
 }
 
-#if PY_VERSION_HEX >= 0x03070000
-
 PyMethodDef MGLScope_methods[] = {
     {"begin", (PyCFunction)MGLScope_meth_begin, METH_NOARGS, 0},
     {"end", (PyCFunction)MGLScope_meth_end, METH_NOARGS, 0},
     {0},
 };
-
-#else
-
-PyMethodDef MGLScope_methods[] = {
-    {"begin", (PyCFunction)MGLScope_meth_begin, METH_NOARGS, 0},
-    {"end", (PyCFunction)MGLScope_meth_end, METH_NOARGS, 0},
-    {0},
-};
-
-#endif
 
 PyType_Slot MGLScope_slots[] = {
     {Py_tp_methods, MGLScope_methods},

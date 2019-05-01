@@ -243,25 +243,12 @@ void MGLProgram_dealloc(MGLProgram * self) {
     Py_TYPE(self)->tp_free(self);
 }
 
-#if PY_VERSION_HEX >= 0x03070000
+fastcallable(MGLProgram_meth_uniform)
 
 PyMethodDef MGLProgram_methods[] = {
-    {"uniform", (PyCFunction)MGLProgram_meth_uniform, METH_FASTCALL, 0},
+    {"uniform", fastcall(MGLProgram_meth_uniform), fastcall_flags, NULL},
     {0},
 };
-
-#else
-
-PyObject * MGLProgram_meth_uniform_va(MGLProgram * self, PyObject * args) {
-    return MGLProgram_meth_uniform(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyMethodDef MGLProgram_methods[] = {
-    {"uniform", (PyCFunction)MGLProgram_meth_uniform_va, METH_VARARGS, 0},
-    {0},
-};
-
-#endif
 
 PyType_Slot MGLProgram_slots[] = {
     {Py_tp_methods, MGLProgram_methods},

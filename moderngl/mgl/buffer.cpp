@@ -390,47 +390,20 @@ void MGLBuffer_dealloc(MGLBuffer * self) {
     Py_TYPE(self)->tp_free(self);
 }
 
-#if PY_VERSION_HEX >= 0x03070000
+fastcallable(MGLBuffer_meth_write)
+fastcallable(MGLBuffer_meth_read)
+fastcallable(MGLBuffer_meth_map)
+fastcallable(MGLBuffer_meth_bind)
 
 PyMethodDef MGLBuffer_methods[] = {
-    {"write", (PyCFunction)MGLBuffer_meth_write, METH_FASTCALL, 0},
-    {"read", (PyCFunction)MGLBuffer_meth_read, METH_FASTCALL, 0},
-    {"map", (PyCFunction)MGLBuffer_meth_map, METH_FASTCALL, 0},
+    {"write", fastcall(MGLBuffer_meth_write), fastcall_flags, NULL},
+    {"read", fastcall(MGLBuffer_meth_read), fastcall_flags, NULL},
+    {"map", fastcall(MGLBuffer_meth_map), fastcall_flags, NULL},
     {"unmap", (PyCFunction)MGLBuffer_meth_unmap, METH_NOARGS, 0},
     {"clear", (PyCFunction)MGLBuffer_meth_clear, METH_NOARGS, 0},
-    {"bind", (PyCFunction)MGLBuffer_meth_bind, METH_FASTCALL, 0},
+    {"bind", fastcall(MGLBuffer_meth_bind), fastcall_flags, NULL},
     {0},
 };
-
-#else
-
-PyObject * MGLBuffer_meth_write_va(MGLBuffer * self, PyObject * args) {
-    return MGLBuffer_meth_write(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLBuffer_meth_read_va(MGLBuffer * self, PyObject * args) {
-    return MGLBuffer_meth_read(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLBuffer_meth_map_va(MGLBuffer * self, PyObject * args) {
-    return MGLBuffer_meth_map(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLBuffer_meth_bind_va(MGLBuffer * self, PyObject * args) {
-    return MGLBuffer_meth_bind(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyMethodDef MGLBuffer_methods[] = {
-    {"write", (PyCFunction)MGLBuffer_meth_write_va, METH_VARARGS, 0},
-    {"read", (PyCFunction)MGLBuffer_meth_read_va, METH_VARARGS, 0},
-    {"map", (PyCFunction)MGLBuffer_meth_map_va, METH_VARARGS, 0},
-    {"unmap", (PyCFunction)MGLBuffer_meth_unmap, METH_NOARGS, 0},
-    {"clear", (PyCFunction)MGLBuffer_meth_clear, METH_NOARGS, 0},
-    {"bind", (PyCFunction)MGLBuffer_meth_bind_va, METH_VARARGS, 0},
-    {0},
-};
-
-#endif
 
 PyType_Slot MGLBuffer_slots[] = {
     {Py_tp_methods, MGLBuffer_methods},

@@ -424,31 +424,14 @@ void MGLTexture_dealloc(MGLTexture * self) {
     Py_TYPE(self)->tp_free(self);
 }
 
-#if PY_VERSION_HEX >= 0x03070000
+fastcallable(MGLTexture_meth_write)
+fastcallable(MGLTexture_meth_bind)
 
 PyMethodDef MGLTexture_methods[] = {
-    {"write", (PyCFunction)MGLTexture_meth_write, METH_FASTCALL, 0},
-    {"bind", (PyCFunction)MGLTexture_meth_bind, METH_FASTCALL, 0},
+    {"write", fastcall(MGLTexture_meth_write), fastcall_flags, NULL},
+    {"bind", fastcall(MGLTexture_meth_bind), fastcall_flags, NULL},
     {0},
 };
-
-#else
-
-PyObject * MGLTexture_meth_write_va(MGLTexture * self, PyObject * args) {
-    return MGLTexture_meth_write(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyObject * MGLTexture_meth_bind_va(MGLTexture * self, PyObject * args) {
-    return MGLTexture_meth_bind(self, ((PyTupleObject *)args)->ob_item, ((PyVarObject *)args)->ob_size);
-}
-
-PyMethodDef MGLTexture_methods[] = {
-    {"write", (PyCFunction)MGLTexture_meth_write_va, METH_VARARGS, 0},
-    {"bind", (PyCFunction)MGLTexture_meth_bind_va, METH_VARARGS, 0},
-    {0},
-};
-
-#endif
 
 PyGetSetDef MGLTexture_getset[] = {
     {"swizzle", 0, (setter)MGLTexture_set_swizzle, 0, 0},

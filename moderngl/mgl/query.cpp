@@ -142,8 +142,6 @@ void MGLQuery_dealloc(MGLQuery * self) {
     Py_TYPE(self)->tp_free(self);
 }
 
-#if PY_VERSION_HEX >= 0x03070000
-
 PyMethodDef MGLQuery_methods[] = {
     {"begin", (PyCFunction)MGLQuery_meth_begin, METH_NOARGS, 0},
     {"end", (PyCFunction)MGLQuery_meth_end, METH_NOARGS, 0},
@@ -151,18 +149,6 @@ PyMethodDef MGLQuery_methods[] = {
     {"end_render", (PyCFunction)MGLQuery_meth_end_render, METH_NOARGS, 0},
     {0},
 };
-
-#else
-
-PyMethodDef MGLQuery_methods[] = {
-    {"begin", (PyCFunction)MGLQuery_meth_begin, METH_NOARGS, 0},
-    {"end", (PyCFunction)MGLQuery_meth_end, METH_NOARGS, 0},
-    {"begin_render", (PyCFunction)MGLQuery_meth_begin_render, METH_NOARGS, 0},
-    {"end_render", (PyCFunction)MGLQuery_meth_end_render, METH_NOARGS, 0},
-    {0},
-};
-
-#endif
 
 PyType_Slot MGLQuery_slots[] = {
     {Py_tp_methods, MGLQuery_methods},
