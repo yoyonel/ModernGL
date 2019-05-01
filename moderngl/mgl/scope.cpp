@@ -3,6 +3,7 @@
 #include "context.hpp"
 #include "sampler.hpp"
 #include "texture.hpp"
+#include "framebuffer.hpp"
 
 #include "internal/wrapper.hpp"
 

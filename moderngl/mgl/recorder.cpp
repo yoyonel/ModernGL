@@ -1,6 +1,7 @@
 #include "recorder.hpp"
 
 #include "context.hpp"
+#include "scope.hpp"
 
 #include "internal/bytecode.hpp"
 #include "internal/modules.hpp"

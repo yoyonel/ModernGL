@@ -1,12 +1,10 @@
 #pragma once
-#include "mgl.hpp"
+#include "context.hpp"
 
-struct MGLContext;
+struct MGLBuffer;
 
-struct MGLVertexArray {
-    PyObject_HEAD
-    PyObject * wrapper;
-    MGLContext * context;
+struct MGLVertexArray : public MGLContextObject {
+    MGLBuffer * index_buffer;
     int vertex_array_obj;
     int max_vertices;
 };

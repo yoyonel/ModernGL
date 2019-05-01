@@ -1,7 +1,5 @@
 #pragma once
 #include "mgl.hpp"
-#include "framebuffer.hpp"
-#include "scope.hpp"
 
 #include "internal/opengl/gl_context.hpp"
 #include "internal/opengl/gl_methods.hpp"
@@ -14,8 +12,14 @@ enum MGLEnableFlag {
     MGL_RASTERIZER_DISCARD = 8,
 };
 
-struct MGLContext {
+struct MGLBaseObject {
     PyObject_HEAD
+};
+
+struct MGLFramebuffer;
+struct MGLScope;
+
+struct MGLContext : public MGLBaseObject {
     PyObject * wrapper;
     GLContext gl_context;
     GLMethods gl;
@@ -69,6 +73,11 @@ struct MGLContext {
 
     void set_alignment(int alignment);
     void set_write_mask(unsigned long long color_mask, bool depth_mask);
+};
+
+struct MGLContextObject : public MGLBaseObject {
+    PyObject * wrapper;
+    MGLContext * context;
 };
 
 extern PyType_Spec MGLContext_spec;

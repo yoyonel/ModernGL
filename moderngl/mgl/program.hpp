@@ -1,12 +1,7 @@
 #pragma once
-#include "mgl.hpp"
+#include "context.hpp"
 
-struct MGLContext;
-
-struct MGLProgram {
-    PyObject_HEAD
-    PyObject * wrapper;
-    MGLContext * context;
+struct MGLProgram : public MGLContextObject {
     int program_obj;
     int shader_obj[5];
 };

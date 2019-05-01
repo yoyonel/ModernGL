@@ -1,12 +1,7 @@
 #pragma once
-#include "mgl.hpp"
+#include "context.hpp"
 
-struct MGLContext;
-
-struct MGLBuffer {
-    PyObject_HEAD
-    PyObject * wrapper;
-    MGLContext * context;
+struct MGLBuffer : public MGLContextObject {
     int buffer_obj;
     int flags;
     Py_ssize_t size;

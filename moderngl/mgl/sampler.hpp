@@ -1,13 +1,9 @@
 #pragma once
-#include "mgl.hpp"
+#include "context.hpp"
 
-struct MGLContext;
 struct MGLTexture;
 
-struct MGLSampler {
-    PyObject_HEAD
-    PyObject * wrapper;
-    MGLContext * context;
+struct MGLSampler : public MGLContextObject {
     MGLTexture * texture;
     int sampler_obj;
 };

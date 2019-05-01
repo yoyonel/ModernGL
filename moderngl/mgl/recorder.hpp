@@ -1,16 +1,12 @@
 #pragma once
-#include "mgl.hpp"
+#include "context.hpp"
 
 #include "internal/opengl/gl_methods.hpp"
 
-struct MGLContext;
 struct MGLFramebuffer;
 struct MGLScope;
 
-struct MGLRecorder {
-    PyObject_HEAD
-    MGLContext * context;
-
+struct MGLRecorder : public MGLContextObject {
     int old_enable_only;
     int old_program_obj;
     int old_array_buffer_obj;

@@ -1,7 +1,6 @@
 #pragma once
-#include "mgl.hpp"
+#include "context.hpp"
 
-struct MGLContext;
 struct MGLFramebuffer;
 struct MGLSampler;
 struct MGLBuffer;
@@ -25,10 +24,7 @@ struct MGLScopeBufferBinding {
     Py_ssize_t size;
 };
 
-struct MGLScope {
-    PyObject_HEAD
-    PyObject * wrapper;
-    MGLContext * context;
+struct MGLScope : public MGLContextObject {
     MGLFramebuffer * framebuffer;
     MGLFramebuffer * old_framebuffer;
     MGLScopeSamplerBinding * samplers;

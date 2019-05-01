@@ -1,7 +1,5 @@
 #pragma once
-#include "mgl.hpp"
-
-struct MGLContext;
+#include "context.hpp"
 
 enum MGLQueryKeys {
     TIME_ELAPSED,
@@ -10,10 +8,7 @@ enum MGLQueryKeys {
     ANY_SAMPLES_PASSED,
 };
 
-struct MGLQuery {
-    PyObject_HEAD
-    PyObject * wrapper;
-    MGLContext * context;
+struct MGLQuery : public MGLContextObject {
     int query_obj[4];
 };
 
