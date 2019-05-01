@@ -1,6 +1,5 @@
 #include "mgl.hpp"
 #include "extensions.hpp"
-#include "inspect.hpp"
 
 #include "context.hpp"
 #include "buffer.hpp"
@@ -112,7 +111,6 @@ PyMethodDef module_methods[] = {
     {"create_context", fastcall(meth_create_context), fastcall_flags, NULL},
     {"extensions", (PyCFunction)meth_extensions, METH_O, 0},
     {"hwinfo", (PyCFunction)meth_hwinfo, METH_O, 0},
-    {"inspect", (PyCFunction)meth_inspect, METH_O, 0},
     {"glprocs", (PyCFunction)meth_glprocs, METH_O, 0},
     {"release", (PyCFunction)meth_release, METH_O, 0},
     {0},
