@@ -154,7 +154,7 @@ PyType_Slot MGLRecorder_slots[] = {
 };
 
 PyType_Spec MGLRecorder_spec = {
-    mgl_ext ".Recorder",
+    "moderngl.mgl.new.MGLRecorder",
     sizeof(MGLRecorder),
     0,
     Py_TPFLAGS_DEFAULT,

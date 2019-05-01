@@ -393,7 +393,7 @@ PyType_Slot MGLFramebuffer_slots[] = {
 };
 
 PyType_Spec MGLFramebuffer_spec = {
-    mgl_ext ".Framebuffer",
+    "moderngl.mgl.new.MGLFramebuffer",
     sizeof(MGLFramebuffer),
     0,
     Py_TPFLAGS_DEFAULT,

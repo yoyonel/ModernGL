@@ -211,7 +211,7 @@ PyType_Slot MGLComputeShader_slots[] = {
 };
 
 PyType_Spec MGLComputeShader_spec = {
-    mgl_ext ".ComputeShader",
+    "moderngl.mgl.new.MGLComputeShader",
     sizeof(MGLComputeShader),
     0,
     Py_TPFLAGS_DEFAULT,

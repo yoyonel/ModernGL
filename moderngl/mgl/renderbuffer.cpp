@@ -122,7 +122,7 @@ PyType_Slot MGLRenderbuffer_slots[] = {
 };
 
 PyType_Spec MGLRenderbuffer_spec = {
-    mgl_ext ".Renderbuffer",
+    "moderngl.mgl.new.MGLRenderbuffer",
     sizeof(MGLRenderbuffer),
     0,
     Py_TPFLAGS_DEFAULT,

@@ -463,7 +463,7 @@ PyType_Slot MGLTexture_slots[] = {
 };
 
 PyType_Spec MGLTexture_spec = {
-    mgl_ext ".Texture",
+    "moderngl.mgl.new.MGLTexture",
     sizeof(MGLTexture),
     0,
     Py_TPFLAGS_DEFAULT,

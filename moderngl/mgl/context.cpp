@@ -438,7 +438,7 @@ PyType_Slot MGLContext_slots[] = {
 };
 
 PyType_Spec MGLContext_spec = {
-    mgl_ext ".Context",
+    "moderngl.mgl.new.MGLContext",
     sizeof(MGLContext),
     0,
     Py_TPFLAGS_DEFAULT,

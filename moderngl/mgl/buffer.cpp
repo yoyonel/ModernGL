@@ -439,7 +439,7 @@ PyType_Slot MGLBuffer_slots[] = {
 };
 
 PyType_Spec MGLBuffer_spec = {
-    mgl_ext ".Buffer",
+    "moderngl.mgl.new.MGLBuffer",
     sizeof(MGLBuffer),
     0,
     Py_TPFLAGS_DEFAULT,

@@ -373,7 +373,7 @@ PyType_Slot MGLSampler_slots[] = {
 };
 
 PyType_Spec MGLSampler_spec = {
-    mgl_ext ".Sampler",
+    "moderngl.mgl.new.MGLSampler",
     sizeof(MGLSampler),
     0,
     Py_TPFLAGS_DEFAULT,

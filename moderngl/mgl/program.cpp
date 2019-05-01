@@ -270,7 +270,7 @@ PyType_Slot MGLProgram_slots[] = {
 };
 
 PyType_Spec MGLProgram_spec = {
-    mgl_ext ".Program",
+    "moderngl.mgl.new.MGLProgram",
     sizeof(MGLProgram),
     0,
     Py_TPFLAGS_DEFAULT,

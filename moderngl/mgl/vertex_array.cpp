@@ -592,7 +592,7 @@ PyType_Slot MGLVertexArray_slots[] = {
 };
 
 PyType_Spec MGLVertexArray_spec = {
-    mgl_ext ".VertexArray",
+    "moderngl.mgl.new.MGLVertexArray",
     sizeof(MGLVertexArray),
     0,
     Py_TPFLAGS_DEFAULT,

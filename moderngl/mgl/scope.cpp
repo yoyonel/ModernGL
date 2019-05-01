@@ -198,7 +198,7 @@ PyType_Slot MGLScope_slots[] = {
 };
 
 PyType_Spec MGLScope_spec = {
-    mgl_ext ".Scope",
+    "moderngl.mgl.new.MGLScope",
     sizeof(MGLScope),
     0,
     Py_TPFLAGS_DEFAULT,

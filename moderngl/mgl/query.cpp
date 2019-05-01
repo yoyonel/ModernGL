@@ -171,7 +171,7 @@ PyType_Slot MGLQuery_slots[] = {
 };
 
 PyType_Spec MGLQuery_spec = {
-    mgl_ext ".Query",
+    "moderngl.mgl.new.MGLQuery",
     sizeof(MGLQuery),
     0,
     Py_TPFLAGS_DEFAULT,
