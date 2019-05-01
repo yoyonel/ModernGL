@@ -203,6 +203,16 @@ PyObject * MGLContext_meth_make_current(MGLContext * self) {
     Py_RETURN_NONE;
 }
 
+PyObject * MGLContext_meth_objects(MGLContext * self) {
+    PyObject * lst = PyList_New(0);
+    MGLBaseObject * current = self->chain.next;
+    while (current != self) {
+        PyList_Append(lst, (PyObject *)current);
+        current = current->chain.next;
+    }
+    return lst;
+}
+
 /*inline*/ void MGLContext::enable(int enable_only) {
     if (int changed_flags = current_enable_only ^ enable_only) {
         if (changed_flags & MGL_BLEND) {
@@ -344,6 +354,7 @@ PyMethodDef MGLContext_methods[] = {
     {"vertex_array", fastcall(MGLContext_meth_vertex_array), fastcall_flags, NULL},
     {"replay", (PyCFunction)MGLContext_meth_replay, METH_O, 0},
     {"make_current", (PyCFunction)MGLContext_meth_make_current, METH_NOARGS, 0},
+    {"objects", (PyCFunction)MGLContext_meth_objects, METH_NOARGS, 0},
     {0},
 };
 

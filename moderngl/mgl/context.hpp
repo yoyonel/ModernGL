@@ -14,7 +14,18 @@ enum MGLEnableFlag {
 
 struct MGLBaseObject {
     PyObject_HEAD
+    struct {
+        MGLBaseObject * prev;
+        MGLBaseObject * next;
+    } chain;
 };
+
+inline void chain_objects(MGLBaseObject * a, MGLBaseObject * b) {
+    b->chain.prev = a->chain.prev;
+    b->chain.next = a;
+    a->chain.prev->chain.next = b;
+    a->chain.prev = b;
+}
 
 struct MGLFramebuffer;
 struct MGLScope;
