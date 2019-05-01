@@ -10,4 +10,6 @@ struct MGLVertexArray : public MGLContextObject {
 };
 
 extern PyType_Spec MGLVertexArray_spec;
+extern PyTypeObject * MGLVertexArray_class;
+
 PyObject * MGLContext_meth_vertex_array(MGLContext * self, PyObject * const * args, Py_ssize_t nargs);

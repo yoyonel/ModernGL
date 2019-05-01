@@ -9,4 +9,6 @@ struct MGLSampler : public MGLContextObject {
 };
 
 extern PyType_Spec MGLSampler_spec;
+extern PyTypeObject * MGLSampler_class;
+
 PyObject * MGLContext_meth_sampler(MGLContext * self, PyObject * const * args, Py_ssize_t nargs);

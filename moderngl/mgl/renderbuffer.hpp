@@ -15,5 +15,7 @@ struct MGLRenderbuffer : public MGLContextObject {
 };
 
 extern PyType_Spec MGLRenderbuffer_spec;
+extern PyTypeObject * MGLRenderbuffer_class;
+
 PyObject * MGLContext_meth_renderbuffer(MGLContext * self, PyObject * const * args, Py_ssize_t nargs);
 PyObject * MGLContext_meth_depth_renderbuffer(MGLContext * self, PyObject * const * args, Py_ssize_t nargs);

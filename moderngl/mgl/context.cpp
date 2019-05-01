@@ -116,16 +116,16 @@ PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssiz
     gl.Enable(GL_PRIMITIVE_RESTART);
     gl.PrimitiveRestartIndex(-1);
 
-    context->MGLBuffer_class = (PyTypeObject *)PyType_FromSpec(&MGLBuffer_spec);
-    context->MGLComputeShader_class = (PyTypeObject *)PyType_FromSpec(&MGLComputeShader_spec);
-    context->MGLFramebuffer_class = (PyTypeObject *)PyType_FromSpec(&MGLFramebuffer_spec);
-    context->MGLProgram_class = (PyTypeObject *)PyType_FromSpec(&MGLProgram_spec);
-    context->MGLQuery_class = (PyTypeObject *)PyType_FromSpec(&MGLQuery_spec);
-    context->MGLRenderbuffer_class = (PyTypeObject *)PyType_FromSpec(&MGLRenderbuffer_spec);
-    context->MGLSampler_class = (PyTypeObject *)PyType_FromSpec(&MGLSampler_spec);
-    context->MGLScope_class = (PyTypeObject *)PyType_FromSpec(&MGLScope_spec);
-    context->MGLTexture_class = (PyTypeObject *)PyType_FromSpec(&MGLTexture_spec);
-    context->MGLVertexArray_class = (PyTypeObject *)PyType_FromSpec(&MGLVertexArray_spec);
+    MGLBuffer_class = (PyTypeObject *)PyType_FromSpec(&MGLBuffer_spec);
+    MGLComputeShader_class = (PyTypeObject *)PyType_FromSpec(&MGLComputeShader_spec);
+    MGLFramebuffer_class = (PyTypeObject *)PyType_FromSpec(&MGLFramebuffer_spec);
+    MGLProgram_class = (PyTypeObject *)PyType_FromSpec(&MGLProgram_spec);
+    MGLQuery_class = (PyTypeObject *)PyType_FromSpec(&MGLQuery_spec);
+    MGLRenderbuffer_class = (PyTypeObject *)PyType_FromSpec(&MGLRenderbuffer_spec);
+    MGLSampler_class = (PyTypeObject *)PyType_FromSpec(&MGLSampler_spec);
+    MGLScope_class = (PyTypeObject *)PyType_FromSpec(&MGLScope_spec);
+    MGLTexture_class = (PyTypeObject *)PyType_FromSpec(&MGLTexture_spec);
+    MGLVertexArray_class = (PyTypeObject *)PyType_FromSpec(&MGLVertexArray_spec);
 
     MGLFramebuffer * default_framebuffer = MGLContext_new_object(context, Framebuffer);
 

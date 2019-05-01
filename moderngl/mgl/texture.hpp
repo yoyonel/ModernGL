@@ -18,4 +18,6 @@ struct MGLTexture : public MGLContextObject {
 };
 
 extern PyType_Spec MGLTexture_spec;
+extern PyTypeObject * MGLTexture_class;
+
 PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, Py_ssize_t nargs);

@@ -13,4 +13,6 @@ struct MGLQuery : public MGLContextObject {
 };
 
 extern PyType_Spec MGLQuery_spec;
+extern PyTypeObject * MGLQuery_class;
+
 PyObject * MGLContext_meth_query(MGLContext * self, PyObject * const * args, Py_ssize_t nargs);

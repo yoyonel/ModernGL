@@ -7,4 +7,6 @@ struct MGLProgram : public MGLContextObject {
 };
 
 extern PyType_Spec MGLProgram_spec;
+extern PyTypeObject * MGLProgram_class;
+
 PyObject * MGLContext_meth_program(MGLContext * self, PyObject * const * args, Py_ssize_t nargs);

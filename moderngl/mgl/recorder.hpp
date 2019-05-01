@@ -24,6 +24,8 @@ struct MGLRecorder : public MGLContextObject {
     MGLScope * old_bound_scope;
 };
 
+extern PyType_Spec MGLRecorder_spec;
 extern PyTypeObject * MGLRecorder_class;
+
 PyObject * MGLContext_meth_replay(MGLContext * self, PyObject * bytecode);
 void init_recording();

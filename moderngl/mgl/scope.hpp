@@ -37,6 +37,8 @@ struct MGLScope : public MGLContextObject {
 };
 
 extern PyType_Spec MGLScope_spec;
+extern PyTypeObject * MGLScope_class;
+
 PyObject * MGLContext_meth_scope(MGLContext * self, PyObject * const * args, Py_ssize_t nargs);
 void MGLScope_begin_core(MGLScope * self);
 void MGLScope_end_core(MGLScope * self);

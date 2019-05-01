@@ -19,5 +19,7 @@ struct MGLFramebuffer : public MGLContextObject {
 };
 
 extern PyType_Spec MGLFramebuffer_spec;
+extern PyTypeObject * MGLFramebuffer_class;
+
 PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * args, Py_ssize_t nargs);
 void MGLFramebuffer_use_core(MGLFramebuffer * self);

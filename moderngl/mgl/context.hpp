@@ -46,17 +46,6 @@ struct MGLContext : public MGLBaseObject {
     MGLScope * active_scope;
     MGLScope * bound_scope;
 
-    PyTypeObject * MGLBuffer_class;
-    PyTypeObject * MGLComputeShader_class;
-    PyTypeObject * MGLFramebuffer_class;
-    PyTypeObject * MGLProgram_class;
-    PyTypeObject * MGLQuery_class;
-    PyTypeObject * MGLRenderbuffer_class;
-    PyTypeObject * MGLSampler_class;
-    PyTypeObject * MGLScope_class;
-    PyTypeObject * MGLTexture_class;
-    PyTypeObject * MGLVertexArray_class;
-
     PyObject * glsl_compiler_error;
     PyObject * glsl_linker_error;
     PyObject * gc;
@@ -81,6 +70,8 @@ struct MGLContextObject : public MGLBaseObject {
 };
 
 extern PyType_Spec MGLContext_spec;
+extern PyTypeObject * MGLContext_class;
+
 PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssize_t nargs);
 
 /* Every objects derived from a Context must have the following HEAD */
@@ -102,7 +93,7 @@ MGLObject * _MGLContext_new_object(MGLContext * self, PyTypeObject * type, PyTyp
 MGLObject * _MGLObject_pop_mglo(PyObject * wrapper, int slot);
 PyObject * _MGLObject_release(MGLObject * self);
 
-#define MGLContext_new_object(self, name) (MGL ## name *)_MGLContext_new_object(self, self->MGL ## name ## _class, name ## _class, name ## _class_mglo, sizeof(MGL ## name))
+#define MGLContext_new_object(self, name) (MGL ## name *)_MGLContext_new_object(self, MGL ## name ## _class, name ## _class, name ## _class_mglo, sizeof(MGL ## name))
 #define MGLObject_pop_mglo(name, obj) (MGL ## name *)_MGLObject_pop_mglo(obj, name ## _class_mglo)
 #define MGLObject_release(obj) _MGLObject_release((MGLObject *)obj);
 

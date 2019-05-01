@@ -7,4 +7,6 @@ struct MGLComputeShader : public MGLContextObject {
 };
 
 extern PyType_Spec MGLComputeShader_spec;
+extern PyTypeObject * MGLComputeShader_class;
+
 PyObject * MGLContext_meth_compute_shader(MGLContext * self, PyObject * source);
