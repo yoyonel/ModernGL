@@ -29,10 +29,7 @@ int MGLBuffer_core_write(MGLBuffer * self, const Py_ssize_t & offset, Py_buffer 
 /* MGLContext.copy_buffer(dst, src, size, read_offset, write_offset)
  */
 PyObject * MGLContext_meth_copy_buffer(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 5) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(5);
 
     PyObject * dst = args[0];
     PyObject * src = args[1];
@@ -79,10 +76,7 @@ PyObject * MGLContext_meth_copy_buffer(MGLContext * self, PyObject * const * arg
  * Returns a Buffer object.
  */
 PyObject * MGLContext_meth_buffer(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 5) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(5);
 
     PyObject * data = args[0];
     PyObject * reserve = args[1];
@@ -168,10 +162,7 @@ PyObject * MGLContext_meth_buffer(MGLContext * self, PyObject * const * args, Py
 /* MGLBuffer.write(data, offset)
  */
 PyObject * MGLBuffer_meth_write(MGLBuffer * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 2) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(2);
 
     PyObject * data = args[0];
     Py_ssize_t offset = PyLong_AsSsize_t(args[1]);
@@ -209,10 +200,7 @@ PyObject * MGLBuffer_meth_write(MGLBuffer * self, PyObject * const * args, Py_ss
 /* MGLBuffer.read(size, offset, dtype)
  */
 PyObject * MGLBuffer_meth_read(MGLBuffer * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 3) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(3);
 
     Py_ssize_t size = PyLong_AsSsize_t(args[0]);
     Py_ssize_t offset = PyLong_AsSsize_t(args[1]);
@@ -268,10 +256,7 @@ PyObject * MGLBuffer_meth_read(MGLBuffer * self, PyObject * const * args, Py_ssi
 /* MGLBuffer.map(size, offset, readable, writable, dtype)
  */
 PyObject * MGLBuffer_meth_map(MGLBuffer * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 5) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(5);
 
     Py_ssize_t size = PyLong_AsSsize_t(args[0]);
     Py_ssize_t offset = PyLong_AsSsize_t(args[1]);
@@ -389,10 +374,7 @@ PyObject * MGLBuffer_meth_clear(MGLBuffer * self) {
 /* MGLBuffer.bind(binding, offset, size)
  */
 PyObject * MGLBuffer_meth_bind(MGLBuffer * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 4) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(4);
 
 	int binding = PyLong_AsLong(args[0]);
 	Py_ssize_t offset = PyLong_AsSsize_t(args[1]);

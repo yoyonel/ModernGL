@@ -51,10 +51,7 @@ void MGLScope_end_core(MGLScope * self) {
 /* MGLContext.scope(enable_only, framebuffer, samplers, uniform_buffers, storage_buffers)
  */
 PyObject * MGLContext_meth_scope(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 5) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(5);
 
     MGLScope * scope = MGLContext_new_object(self, Scope);
     scope->framebuffer = 0;

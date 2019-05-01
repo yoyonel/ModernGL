@@ -10,10 +10,7 @@
 /* MGLContext.query(time_elapsed, primitives_generated, samples_passed, any_samples_passed)
  */
 PyObject * MGLContext_meth_query(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 4) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(4);
 
     int time_elapsed = PyObject_IsTrue(args[0]);
     int primitives_generated = PyObject_IsTrue(args[1]);

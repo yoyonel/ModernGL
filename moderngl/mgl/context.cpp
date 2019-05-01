@@ -22,10 +22,7 @@
  * Returns a Context object.
  */
 PyObject * meth_create_context(PyObject * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 5) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(3);
 
     bool standalone = (bool)PyObject_IsTrue(args[0]);
     bool debug = (bool)PyObject_IsTrue(args[1]);

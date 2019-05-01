@@ -10,10 +10,7 @@
 /* MGLContext.vertex_array(program, content, index_buffer)
  */
 PyObject * MGLContext_meth_vertex_array(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 3) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(3);
 
     PyObject * program = args[0];
     PyObject * content = args[1];
@@ -199,10 +196,7 @@ PyObject * MGLContext_meth_vertex_array(MGLContext * self, PyObject * const * ar
 /* MGLVertexArray.render(mode, vertices, first, instances, color_mask, depth_mask)
  */
 PyObject * MGLVertexArray_meth_render(MGLVertexArray * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 6) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(6);
 
     PyObject * mode = args[0];
     int vertices = PyLong_AsLong(args[1]);
@@ -267,10 +261,7 @@ PyObject * MGLVertexArray_meth_render(MGLVertexArray * self, PyObject * const * 
 /* MGLVertexArray.render_indirect(buffer, mode, count, first, color_mask, depth_mask)
  */
 PyObject * MGLVertexArray_meth_render_indirect(MGLVertexArray * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 4) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(4);
 
     if (args[0]->ob_type != Buffer_class) {
         // TODO: error
@@ -345,10 +336,7 @@ PyObject * MGLVertexArray_meth_render_indirect(MGLVertexArray * self, PyObject *
 /* MGLVertexArray.transform(output, mode, vertices, first, instances, flush)
  */
 PyObject * MGLVertexArray_meth_transform(MGLVertexArray * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 6) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(6);
 
     if (args[0]->ob_type != Buffer_class) {
         // TODO: error
@@ -430,10 +418,7 @@ PyObject * MGLVertexArray_meth_transform(MGLVertexArray * self, PyObject * const
 /* MGLVertexArray.transform_indirect(output, buffer, mode, count, first, flush)
  */
 PyObject * MGLVertexArray_meth_transform_indirect(MGLVertexArray * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 6) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(6);
 
     if (args[0]->ob_type != Buffer_class) {
         // TODO: error

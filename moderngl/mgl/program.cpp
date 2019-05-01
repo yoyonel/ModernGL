@@ -27,10 +27,7 @@ const int SHADER_TYPE[] = {
 /* MGLContext.program(vertex_shader, fragment_shader, geometry_shader, tess_control_shader, tess_evaluation_shader, varyings)
  */
 PyObject * MGLContext_meth_program(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 6) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(6);
 
     MGLProgram * program = MGLContext_new_object(self, Program);
 

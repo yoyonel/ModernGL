@@ -21,10 +21,7 @@ int MGLSampler_set_texture(MGLSampler * self, PyObject * value);
 /* MGLContext.sampler(texture)
  */
 PyObject * MGLContext_meth_sampler(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 8) {
-		PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(8);
 
     MGLSampler * sampler = MGLContext_new_object(self, Sampler);
 

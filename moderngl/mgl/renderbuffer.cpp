@@ -11,10 +11,7 @@
 /* MGLContext.renderbuffer(size, components, samples, dtype)
  */
 PyObject * MGLContext_meth_renderbuffer(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 4) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(4);
 
     PyObject * size = args[0];
     int components = PyLong_AsLong(args[1]);

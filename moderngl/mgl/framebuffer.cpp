@@ -19,10 +19,7 @@ void MGLFramebuffer_use_core(MGLFramebuffer * self) {
 /* MGLContext.framebuffer(...)
  */
 PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 2) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(2);
 
     PyObject * color_attachments = args[0];
     PyObject * depth_attachment = args[1];
@@ -187,10 +184,7 @@ PyObject * MGLContext_meth_framebuffer(MGLContext * self, PyObject * const * arg
 /* MGLFramebuffer.read(viewport, components, alignment, attachment, data_type, np)
  */
 PyObject * MGLFramebuffer_meth_read(MGLFramebuffer * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 4) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(4);
 
     PyObject * viewport = args[0];
     int components = PyLong_AsLong(args[1]);
@@ -241,10 +235,7 @@ PyObject * MGLFramebuffer_meth_use(MGLFramebuffer * self) {
 /* MGLFramebuffer.clear(attachment, value, viewport, color_mask)
  */
 PyObject * MGLFramebuffer_meth_clear(MGLFramebuffer * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 4) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(4);
 
     int attachment = PyLong_AsLong(args[0]);
     PyObject * value = args[1];

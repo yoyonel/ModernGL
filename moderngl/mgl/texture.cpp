@@ -20,10 +20,7 @@ enum MGLTextureTypes {
 /* MGLContext.texture(size, components, data, levels, samples, aligment, dtype)
  */
 PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 8) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(8);
 
     int texture_type = PyLong_AsLong(args[0]);
     PyObject * size = args[1];
@@ -277,10 +274,7 @@ PyObject * MGLContext_meth_texture(MGLContext * self, PyObject * const * args, P
 /* MGLTexture.write(data, viewport, alignment, level)
  */
 PyObject * MGLTexture_meth_write(MGLTexture * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 4) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(4);
 
     PyObject * data = args[0];
     PyObject * viewport = args[1];
@@ -376,10 +370,7 @@ PyObject * MGLTexture_meth_write(MGLTexture * self, PyObject * const * args, Py_
 /* MGLTexture.bind(...)
  */
 PyObject * MGLTexture_meth_bind(MGLTexture * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 3) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(3);
 
 	int binding = PyLong_AsLong(args[0]);
 	int access = PyLong_AsLong(args[1]);

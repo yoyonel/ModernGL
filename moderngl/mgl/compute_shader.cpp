@@ -159,10 +159,7 @@ PyObject * MGLComputeShader_meth_uniform(MGLComputeShader * self, PyObject * con
 /* MGLComputeShader.run(group_x, group_y, group_z)
  */
 PyObject * MGLComputeShader_meth_run(MGLComputeShader * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 3) {
-        PyErr_Format(moderngl_error, "num args");
-        return 0;
-    }
+    ensure_num_args(3);
 
     unsigned x = PyLong_AsUnsignedLong(args[0]);
     unsigned y = PyLong_AsUnsignedLong(args[1]);

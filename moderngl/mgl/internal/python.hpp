@@ -8,6 +8,8 @@
 #define mgl_mod _mgl_xstr(MODERNGL_MODULE)
 #define mgl_ext mgl_mod ".mgl"
 
+#define ensure_num_args(count) if (nargs != count) { PyErr_BadInternalCall(); return NULL; }
+
 /* Wrapper classes for internal objects are defined in python. They must have __slots__ defined.
  * A slot can be accessed in O(1) once detect_class(...) and slot_offset(...) is called.
  */
