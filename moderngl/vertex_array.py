@@ -33,7 +33,7 @@ class VertexArray:
         to create one.
     '''
 
-    __slots__ = ['mglo', '_program', '_index_buffer', '_index_element_size', '_glo', 'ctx', 'extra']
+    __slots__ = ['mglo', '_program', '_index_buffer', '_index_element_size', '_glo', 'ctx', 'extra', 'new']
 
     def __init__(self):
         self.mglo = None
@@ -43,6 +43,7 @@ class VertexArray:
         self._glo = None
         self.ctx = None
         self.extra = None  #: Any - Attribute for storing user defined objects
+        self.new = None
         raise TypeError()
 
     def __repr__(self):
@@ -143,6 +144,8 @@ class VertexArray:
                 first (int): The index of the first indirect draw command.
         '''
 
+        buffer = getattr(buffer, 'old', buffer)
+
         if mode is None:
             mode = TRIANGLES
 
@@ -165,6 +168,8 @@ class VertexArray:
                 instances (int): The number of instances.
         '''
 
+        buffer = getattr(buffer, 'old', buffer)
+
         if mode is None:
             mode = POINTS
 
@@ -186,6 +191,8 @@ class VertexArray:
                 divisor (int): The divisor.
                 normalize (bool): The normalize parameter, if applicable.
         '''
+
+        buffer = getattr(buffer, 'old', buffer)
 
         self.mglo.bind(attribute, cls, buffer.mglo, fmt, offset, stride, divisor, normalize)
 

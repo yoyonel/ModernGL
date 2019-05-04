@@ -1,6 +1,7 @@
 from typing import Dict, Tuple, Union
 
 from .buffer import Buffer
+from .new.buffer import Buffer as NewBuffer
 from .renderbuffer import Renderbuffer
 from .texture import Texture
 
@@ -15,7 +16,7 @@ class Framebuffer:
         Create a :py:class:`Framebuffer` using :py:meth:`Context.framebuffer`.
     '''
 
-    __slots__ = ['mglo', '_color_attachments', '_depth_attachment', '_size', '_samples', '_glo', 'ctx', 'extra']
+    __slots__ = ['mglo', '_color_attachments', '_depth_attachment', '_size', '_samples', '_glo', 'ctx', 'extra', 'new']
 
     def __init__(self):
         self.mglo = None
@@ -26,6 +27,7 @@ class Framebuffer:
         self._glo = None
         self.ctx = None
         self.extra = None  #: Any - Attribute for storing user defined objects
+        self.new = None
         raise TypeError()
 
     def __repr__(self):
@@ -206,6 +208,9 @@ class Framebuffer:
                 dtype (str): Data type.
                 write_offset (int): The write offset.
         '''
+
+        if type(buffer) is NewBuffer:
+            buffer = getattr(buffer, 'old', buffer)
 
         if type(buffer) is Buffer:
             buffer = buffer.mglo

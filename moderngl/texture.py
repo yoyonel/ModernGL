@@ -1,6 +1,7 @@
 from typing import Tuple
 
 from .buffer import Buffer
+from .new.buffer import Buffer as NewBuffer
 
 __all__ = ['Texture',
            'NEAREST', 'LINEAR', 'NEAREST_MIPMAP_NEAREST', 'LINEAR_MIPMAP_NEAREST', 'NEAREST_MIPMAP_LINEAR',
@@ -27,7 +28,7 @@ class Texture:
         to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_depth', '_glo', 'ctx', 'extra']
+    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_depth', '_glo', 'ctx', 'extra', 'new']
 
     def __init__(self):
         self.mglo = None
@@ -39,6 +40,7 @@ class Texture:
         self._glo = None
         self.ctx = None
         self.extra = None  #: Any - Attribute for storing user defined objects
+        self.new = None
         raise TypeError()
 
     def __repr__(self):
@@ -294,6 +296,9 @@ class Texture:
                 write_offset (int): The write offset.
         '''
 
+        if type(buffer) is NewBuffer:
+            buffer = getattr(buffer, 'old', buffer)
+
         if type(buffer) is Buffer:
             buffer = buffer.mglo
 
@@ -311,6 +316,9 @@ class Texture:
                 level (int): The mipmap level.
                 alignment (int): The byte alignment of the pixels.
         '''
+
+        if type(data) is NewBuffer:
+            data = getattr(data, 'old', data)
 
         if type(data) is Buffer:
             data = data.mglo
