@@ -1096,7 +1096,7 @@ class Context:
         self.mglo.release()
 
 
-def create_context(require=None) -> Context:
+def create_context(require=None, standalone=False, **settings) -> Context:
     '''
         Create a ModernGL context by loading OpenGL functions from an existing OpenGL context.
         An OpenGL context must exists. If rendering is done without a window please use the
@@ -1116,6 +1116,9 @@ def create_context(require=None) -> Context:
         Returns:
             :py:class:`Context` object
     '''
+
+    if standalone:
+        return create_standalone_context(require=require, **settings)
 
     import moderngl.mgl as mgl
 
