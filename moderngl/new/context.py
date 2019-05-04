@@ -1,9 +1,8 @@
-import importlib
 from typing import Any
-from .. import mgl
-mgl = mgl.new
+
 from .buffer import Buffer
 from .compute_shader import ComputeShader
+from .constants import NEAREST
 from .framebuffer import Framebuffer
 from .limits import Limits
 from .program import Program
@@ -13,8 +12,6 @@ from .sampler import Sampler
 from .scope import Scope
 from .texture import Texture
 from .vertex_array import VertexArray
-
-from .constants import NEAREST
 
 
 def _attr_fmt(attr):
@@ -106,24 +103,30 @@ class Context:
 
 
 def create_context(standalone=False, require=None, glhook=None):
-    return mgl.create_context(standalone, require, glhook)
+    import moderngl.mgl as mgl
+    return mgl.new.create_context(standalone, require, glhook)
 
 
 def extensions(context):
-    return mgl.extensions(context)
+    import moderngl.mgl as mgl
+    return mgl.new.extensions(context)
 
 
 def hwinfo(context):
-    return mgl.hwinfo(context)
+    import moderngl.mgl as mgl
+    return mgl.new.hwinfo(context)
 
 
 def glprocs(context):
-    return mgl.glprocs(context)
+    import moderngl.mgl as mgl
+    return mgl.new.glprocs(context)
 
 
 def release(obj):
-    return mgl.release(obj)
+    import moderngl.mgl as mgl
+    return mgl.new.release(obj)
 
 
 def inspect(obj):
-    return mgl.inspect(obj)
+    import moderngl.mgl as mgl
+    return mgl.new.inspect(obj)

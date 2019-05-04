@@ -2,7 +2,6 @@ import os
 import warnings
 from typing import Dict, Tuple
 
-from . import mgl
 from .buffer import Buffer
 from .compute_shader import ComputeShader
 from .conditional_render import ConditionalRender
@@ -571,7 +570,8 @@ class Context:
         '''
 
         if type(reserve) is str:
-            reserve = mgl.strsize(reserve)
+            from moderngl.mgl import strsize
+            reserve = strsize(reserve)
 
         res = Buffer.__new__(Buffer)
         res.mglo, res._size, res._glo = self.mglo.buffer(data, reserve, dynamic)
@@ -1117,6 +1117,8 @@ def create_context(require=None) -> Context:
             :py:class:`Context` object
     '''
 
+    import moderngl.mgl as mgl
+
     ctx = Context.__new__(Context)
     ctx.mglo, ctx.version_code = mgl.create_context()
     ctx._screen = ctx.detect_framebuffer(0)
@@ -1150,6 +1152,8 @@ def create_standalone_context(require=None, **settings) -> 'Context':
         Returns:
             :py:class:`Context` object
     '''
+
+    import moderngl.mgl as mgl
 
     backend = os.environ.get('MODERNGL_BACKEND')
     if backend is not None:

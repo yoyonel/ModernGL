@@ -2,13 +2,6 @@
     ModernGL: PyOpenGL alternative
 '''
 
-import os
-
-if os.environ.get('READTHEDOCS') == 'True':
-    import sys
-    from .mock import mgl
-    sys.modules['moderngl.mgl'] = mgl
-
 from .error import *
 from .buffer import *
 from .compute_shader import *
