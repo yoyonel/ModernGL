@@ -2,16 +2,18 @@
 
 """
 import logging
-import moderngl
-import numpy as np
 import operator
 import os
-from PIL import Image
 import time
 from typing import _alias, T
+
+import numpy as np
+from PIL import Image
+
+import moderngl
+from particle_system_advanced import Particles
 #
 from warp_grid import WarpGrid
-from particle_system_advanced import Particles
 #
 from window import Example, run_example
 
@@ -291,15 +293,20 @@ class Fire(Example):
             if transpose_img:
                 fire_lut_img = fire_lut_img.transpose(Image.FLIP_LEFT_RIGHT)
 
-            self.textures_fire_lut[lut_name] = self.ctx.texture(fire_lut_img.size, 3,
-                                                                fire_lut_img.tobytes())
+            self.textures_fire_lut[lut_name] = self.ctx.texture(
+                fire_lut_img.size, 3,
+                fire_lut_img.tobytes())
             self.textures_fire_lut[lut_name].repeat_x = False
             self.textures_fire_lut[lut_name].repeat_y = False
 
         fire_map_fn = local('data', 'fire_src_map.png')
         logger.info(f"Load Fire Source Map: {fire_map_fn}")
-        img = Image.open(
-            fire_map_fn).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
+        img = (
+            Image.open(fire_map_fn)
+            .transpose(Image.FLIP_TOP_BOTTOM)
+            .convert('RGB')
+        )
+
         self.texture_src_fire_map = self.ctx.texture(img.size, 3, img.tobytes())
         self.texture_fire_map = self.ctx.texture(img.size, 1, dtype='f1')
         self.vbo_fire_map = self.ctx.framebuffer(self.texture_fire_map)
@@ -310,7 +317,8 @@ class Fire(Example):
         img = Image.open(cooling_map_fn).transpose(Image.FLIP_TOP_BOTTOM)
         self.texture_cooling_map = self.ctx.texture(img.size, 1, img.tobytes())
 
-        self.update_frame['OffsetXY'].value = (1.0 / img.size[0], 1.0 / img.size[1])
+        self.update_frame['OffsetXY'].value = (1.0 / img.size[0],
+                                               1.0 / img.size[1])
 
         fire_size = np.array(self.wnd.size) >> 1
 
@@ -365,7 +373,14 @@ class Fire(Example):
         #
         self.ctx.point_size = 9.0
 
-    def update_fire(self) -> moderngl.Texture:
+    def update_fire(self, app_time) -> moderngl.Texture:
+        # update warp grid
+        self.warp_grid.update_grid(app_time)
+
+        # update particles system
+        self.texture_src_fire_map.use(0)
+        self.particles.update_particles(app_time)
+
         id_prev_frame = self.id_buffer
         id_cur_frame = 1 - id_prev_frame
 
@@ -400,15 +415,8 @@ class Fire(Example):
             elif key == self.wnd.keys.RIGHT:
                 self.current_id_lut -= 1
 
-    def render(self, time_, frame_time):
-        self.update_frame['time'].value = time_
-
-        # update warp grid
-        self.warp_grid.update_grid(time_)
-
-        # update particles system
-        self.texture_src_fire_map.use(0)
-        self.particles.update_particles(time_)
+    def render(self, app_time, frame_time):
+        self.update_frame['time'].value = app_time
 
         # update/render source fire map
         self.vbo_fire_map.use()
@@ -420,7 +428,7 @@ class Fire(Example):
         self.particles.render_particles()
 
         # update/render fire effect
-        tex_on_fire_updated = self.update_fire()
+        tex_on_fire_updated = self.update_fire(app_time)
 
         # show the result on 'screen' (main context)
         self.ctx.screen.use()
