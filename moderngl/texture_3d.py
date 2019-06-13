@@ -1,6 +1,7 @@
 from typing import Tuple
 
 from .buffer import Buffer
+from .new.buffer import Buffer as NewBuffer
 
 __all__ = ['Texture3D']
 
@@ -16,7 +17,7 @@ class Texture3D:
         Use :py:meth:`Context.texture3d` to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_glo', 'ctx', 'extra']
+    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_glo', 'ctx', 'extra', 'new']
 
     def __init__(self):
         self.mglo = None
@@ -27,6 +28,7 @@ class Texture3D:
         self._glo = None
         self.ctx = None
         self.extra = None  #: Any - Attribute for storing user defined objects
+        self.new = None
         raise TypeError()
 
     def __repr__(self):
@@ -223,6 +225,9 @@ class Texture3D:
                 write_offset (int): The write offset.
         '''
 
+        if type(buffer) is NewBuffer:
+            buffer = getattr(buffer, 'old', buffer)
+
         if type(buffer) is Buffer:
             buffer = buffer.mglo
 
@@ -239,6 +244,9 @@ class Texture3D:
             Keyword Args:
                 alignment (int): The byte alignment of the pixels.
         '''
+
+        if type(data) is NewBuffer:
+            data = getattr(data, 'old', data)
 
         if type(data) is Buffer:
             data = data.mglo

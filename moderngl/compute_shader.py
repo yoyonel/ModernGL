@@ -12,7 +12,7 @@ class ComputeShader:
         While it can do rendering, it is generally used for tasks not directly related to drawing.
     '''
 
-    __slots__ = ['mglo', '_members', '_glo', 'ctx', 'extra']
+    __slots__ = ['mglo', '_members', '_glo', 'ctx', 'extra', 'new']
 
     def __init__(self):
         self.mglo = None
@@ -20,6 +20,7 @@ class ComputeShader:
         self._glo = None
         self.ctx = None
         self.extra = None  #: Any - Attribute for storing user defined objects
+        self.new = None
         raise TypeError()
 
     def __repr__(self):

@@ -6,13 +6,14 @@ class Query:
         This class represents a Query object.
     '''
 
-    __slots__ = ['mglo', 'crender', 'ctx', 'extra']
+    __slots__ = ['mglo', 'crender', 'ctx', 'extra', 'new']
 
     def __init__(self):
         self.mglo = None
         self.crender = None  #: ConditionalRender: Can be used in a ``with`` statement.
         self.ctx = None
         self.extra = None  #: Any - Attribute for storing user defined objects
+        self.new = None
         raise TypeError()
 
     def __repr__(self):
