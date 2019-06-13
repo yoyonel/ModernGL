@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [5.5.2] - 2019-06-13
+
+### Fixed
+
+- missing packange in setup.py
+
 ## [5.5.1] - 2019-06-12
 
 ### Fixed
@@ -468,7 +474,8 @@ For more information please see: [Differneces between ModernGL5 and ModernGL4](h
 
 - It was a tool for me to develop games in python
 
-[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.5.1...master
+[Unreleased]: https://github.com/cprogrammer1994/ModernGL/compare/5.5.2...master
+[5.5.2]: https://github.com/cprogrammer1994/ModernGL/compare/5.5.1...5.5.2
 [5.5.1]: https://github.com/cprogrammer1994/ModernGL/compare/5.5.0...5.5.1
 [5.5.0]: https://github.com/cprogrammer1994/ModernGL/compare/5.4.2...5.5.0
 [5.4.2]: https://github.com/cprogrammer1994/ModernGL/compare/5.4.1...5.4.2

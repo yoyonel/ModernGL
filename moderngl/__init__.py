@@ -21,4 +21,4 @@ from .vertex_array import *
 from .sampler import *
 from . import new
 
-__version__ = '5.5.1'
+__version__ = '5.5.2'
