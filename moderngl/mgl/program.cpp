@@ -44,6 +44,7 @@ PyObject * MGLContext_meth_program(MGLContext * self, PyObject * const * args, P
 
     for (int i = 0; i < 5; ++i) {
         if (args[i] == Py_None) {
+            program->shader_obj[i] = 0;
             continue;
         }
 
