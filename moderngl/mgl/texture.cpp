@@ -401,7 +401,7 @@ PyObject * MGLTexture_meth_sub(MGLTexture * self, PyObject * const * args, Py_ss
 int MGLTexture_set_swizzle(MGLTexture * self, PyObject * value) {
 	const char * swizzle = PyUnicode_AsUTF8(value);
 
-    if (PyUnicode_GetSize(value) > 4) {
+    if (PyUnicode_GetLength(value) > 4) {
         PyErr_Format(PyExc_Exception, "error -- %s (%s:%d)", __FUNCTION__, __FILE__, __LINE__);
         return -1;
     }
