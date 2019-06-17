@@ -19,5 +19,5 @@ matrix:
       services:
         - docker
       script:
-        - python setup.py sdist -d extras/docker-build
+        - python3 setup.py sdist -d extras/docker-build
         - cd extras/docker-build && docker build .
