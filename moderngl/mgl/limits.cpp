@@ -93,9 +93,12 @@ PyObject * get_limits(const GLMethods & gl, int version_code) {
         set_slot(limits, "max_texture_image_units", query_limit<int, 1>(gl, GL_MAX_TEXTURE_IMAGE_UNITS));
         set_slot(limits, "max_fragment_uniform_components", query_limit<int, 1>(gl, GL_MAX_FRAGMENT_UNIFORM_COMPONENTS));
         set_slot(limits, "max_vertex_uniform_components", query_limit<int, 1>(gl, GL_MAX_VERTEX_UNIFORM_COMPONENTS));
-        set_slot(limits, "max_varying_floats", query_limit<int, 1>(gl, GL_MAX_VARYING_FLOATS));
         set_slot(limits, "max_combined_texture_image_units", query_limit<int, 1>(gl, GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS));
         set_slot(limits, "max_vertex_texture_image_units", query_limit<int, 1>(gl, GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS));
+    }
+
+    if (version_code >= 200 && version_code < 440) {
+        set_slot(limits, "max_varying_floats", query_limit<int, 1>(gl, GL_MAX_VARYING_FLOATS));
     }
 
     if (version_code >= 300) {
@@ -105,10 +108,13 @@ PyObject * get_limits(const GLMethods & gl, int version_code) {
         set_slot(limits, "max_array_texture_layers", query_limit<int, 1>(gl, GL_MAX_ARRAY_TEXTURE_LAYERS));
         set_slot(limits, "min_program_texel_offset", query_limit<float, 1>(gl, GL_MIN_PROGRAM_TEXEL_OFFSET));
         set_slot(limits, "max_program_texel_offset", query_limit<float, 1>(gl, GL_MAX_PROGRAM_TEXEL_OFFSET));
-        set_slot(limits, "max_varying_components", query_limit<int, 1>(gl, GL_MAX_VARYING_COMPONENTS));
         set_slot(limits, "max_renderbuffer_size", query_limit<int, 1>(gl, GL_MAX_RENDERBUFFER_SIZE));
         set_slot(limits, "max_color_attachments", query_limit<int, 1>(gl, GL_MAX_COLOR_ATTACHMENTS));
         set_slot(limits, "max_samples", query_limit<int, 1>(gl, GL_MAX_SAMPLES));
+    }
+
+    if (version_code >= 300 && version_code < 440) {
+        set_slot(limits, "max_varying_components", query_limit<int, 1>(gl, GL_MAX_VARYING_COMPONENTS));
     }
 
     if (version_code >= 310) {
