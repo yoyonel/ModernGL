@@ -13,8 +13,7 @@
 /docs/next/_build
 
 /.vscode/*
-!/.vscode/extensions.json
-!/.vscode/snippets
+!/.vscode/tasks.json
 
 __pycache__
 
@@ -29,3 +28,4 @@ examples/output
 *.so
 *.a
 *.dll
+*.tar.gz
