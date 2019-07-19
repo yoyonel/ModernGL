@@ -75,7 +75,9 @@ PyObject * MGLContext_meth_program(MGLContext * self, PyObject * const * args, P
 
             char * log_text = (char *)malloc(log_len + 1);
             gl.GetShaderInfoLog(shader_obj, log_len, 0, log_text);
-            PyObject_CallFunction(self->glsl_compiler_error, "sOs#", SHADER_NAME[i], args[i], log_text, log_len);
+            PyObject * log = PyBytes_FromString(log_text);
+            PyObject_CallFunction(self->glsl_compiler_error, "sOO", SHADER_NAME[i], args[i], log);
+            Py_DECREF(log);
             // Py_DECREF(program);
             free(log_text);
             return 0;

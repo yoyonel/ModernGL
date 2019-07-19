@@ -11,7 +11,7 @@ def number_source(source):
 
 
 def compiler_error(name, source, info):
-    message = 'compiler error (%s)\n\n%s\n\n%s' % (name, number_source(source), info)
+    message = 'compiler error (%s)\n\n%s\n\n%s' % (name, number_source(source), info.decode())
     raise Error(message)
 
 
