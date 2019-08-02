@@ -1075,7 +1075,7 @@ class Context:
         return res
 
     def sampler(self, repeat_x=True, repeat_y=True, repeat_z=True, filter=None, anisotropy=1.0,
-                compare_func='?', border_color=None, min_lod=-1000.0, max_lod=1000.0) -> Sampler:
+                compare_func='?', border_color=None, min_lod=-1000.0, max_lod=1000.0, texture=None) -> Sampler:
         '''
             Create a :py:class:`Sampler` object.
 
@@ -1109,6 +1109,7 @@ class Context:
         res.min_lod = min_lod
         res.max_lod = max_lod
         res.extra = None
+        res.texture = texture
 
         mgl.new.extend_refholder(res, self.new)
 

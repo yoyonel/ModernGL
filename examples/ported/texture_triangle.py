@@ -23,7 +23,8 @@ class Example(_simple_2d_example.Example):
 
         img = Image.open('examples/data/wood.jpg')
         texture = self.ctx.texture(img.size, 3, img.tobytes())
-        texture.use()
+        sampler = self.ctx.sampler(texture=texture)
+        sampler.use()
 
         self.vbo = self.ctx.buffer(vertices.astype('f4').tobytes())
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert', 'in_text')
