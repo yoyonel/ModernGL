@@ -8,16 +8,18 @@ PyObject * MGLContext_scope(MGLContext * self, PyObject * args) {
 	PyObject * textures;
 	PyObject * uniform_buffers;
 	PyObject * shader_storage_buffers;
+	PyObject * samplers;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O!OOOO",
+		"O!OOOOO",
 		&MGLFramebuffer_Type,
 		&framebuffer,
 		&enable_flags,
 		&textures,
 		&uniform_buffers,
-		&shader_storage_buffers
+		&shader_storage_buffers,
+		&samplers
 	);
 
 	if (!args_ok) {
@@ -54,6 +56,8 @@ PyObject * MGLContext_scope(MGLContext * self, PyObject * args) {
 	scope->textures = new int[scope->num_textures * 3];
 	scope->num_buffers = num_uniform_buffers + num_shader_storage_buffers;
 	scope->buffers = new int[scope->num_buffers * 3];
+
+	scope->samplers = PySequence_Fast(samplers, "not iterable");
 
 	for (int i = 0; i < num_textures; ++i) {
 		PyObject * tup = PyTuple_GET_ITEM(textures, i);
@@ -162,6 +166,19 @@ PyObject * MGLScope_begin(MGLScope * self, PyObject * args) {
 
 	for (int i = 0; i < self->num_buffers; ++i) {
 		gl.BindBufferBase(self->buffers[i * 3], self->buffers[i * 3 + 1], self->buffers[i * 3 + 2]);
+	}
+
+	int num_samplers = (int)PySequence_Fast_GET_SIZE(self->samplers);
+	for (int i = 0; i < num_samplers; ++i) {
+		PyObject * pair = PySequence_Fast(PySequence_Fast_GET_ITEM(self->samplers, i), "not iterable");
+		if (PySequence_Fast_GET_SIZE(pair) != 2) {
+			return NULL;
+		}
+		PyObject * call = PyObject_CallMethod(PySequence_Fast_GET_ITEM(pair, 0), "use", "O", PySequence_Fast_GET_ITEM(pair, 1));
+		Py_XDECREF(call);
+		if (!call) {
+			return NULL;
+		}
 	}
 
 	if (flags & MGL_BLEND) {

@@ -896,7 +896,7 @@ class Context:
 
         return res
 
-    def scope(self, framebuffer, enable_only=None, *, textures=(), uniform_buffers=(), storage_buffers=()) -> 'Scope':
+    def scope(self, framebuffer, enable_only=None, *, textures=(), uniform_buffers=(), storage_buffers=(), samplers=()) -> 'Scope':
         '''
             Create a :py:class:`Scope` object.
 
@@ -917,7 +917,7 @@ class Context:
         storage_buffers = tuple((getattr(buf, 'old', buf).mglo, idx) for buf, idx in storage_buffers)
 
         res = Scope.__new__(Scope)
-        res.mglo = self.mglo.scope(framebuffer.mglo, enable_only, textures, uniform_buffers, storage_buffers)
+        res.mglo = self.mglo.scope(framebuffer.mglo, enable_only, textures, uniform_buffers, storage_buffers, samplers)
         res.ctx = self
         res.extra = None
 

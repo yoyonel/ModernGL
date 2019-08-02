@@ -224,6 +224,7 @@ struct MGLScope {
 
 	int * textures;
 	int * buffers;
+	PyObject * samplers;
 
 	int num_textures;
 	int num_buffers;
