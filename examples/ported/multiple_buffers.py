@@ -29,9 +29,13 @@ class Example(_simple_2d_example.Example):
 
         self.vbo1 = self.ctx.buffer(vertices.astype('f4').tobytes())
         self.vbo2 = self.ctx.buffer(colors.astype('f4').tobytes())
+        # self.vao = self.ctx.vertex_array(self.prog, [
+        #     (self.vbo1, '2f', 'in_vert'),
+        #     (self.vbo2, '3f', 'in_color'),
+        # ])
         self.vao = self.ctx.vertex_array(self.prog, [
-            (self.vbo1, '2f', 'in_vert'),
-            (self.vbo2, '3f', 'in_color'),
+            self.vbo1.bind('in_vert', layout='2f'),
+            self.vbo2.bind('in_color', layout='3f'),
         ])
 
     def render(self, time: float, frame_time: float):
