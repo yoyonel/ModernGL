@@ -43,6 +43,9 @@ class Program:
     def __getitem__(self, key) -> Union[Uniform, UniformBlock, Subroutine, Attribute, Varying]:
         return self._members[key]
 
+    def __setitem__(self, key, value):
+        self._members[key].value = value
+
     def __iter__(self):
         yield from self._members
 

@@ -24,6 +24,7 @@ class Example(_simple_2d_example.Example):
     def render(self, time: float, frame_time: float):
         self.ctx.clear(1.0, 1.0, 1.0)
         self.prog['Color'].value = 0.2, 0.4, 0.7
+        # self.prog['Color'] = 0.2, 0.4, 0.7
         self.vao.render()
 
 
