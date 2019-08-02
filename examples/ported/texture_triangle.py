@@ -25,17 +25,16 @@ class Example(_simple_2d_example.Example):
         texture = self.ctx.texture(img.size, 3, img.tobytes())
         sampler = self.ctx.sampler(texture=texture)
 
-        self.scope = self.ctx.scope(samplers=[
-            (sampler, 0),
-        ])
-
         self.vbo = self.ctx.buffer(vertices.astype('f4').tobytes())
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert', 'in_text')
 
+        self.vao.scope = self.ctx.scope(samplers=[
+            (sampler, 0),
+        ])
+
     def render(self, time: float, frame_time: float):
         self.ctx.clear(1.0, 1.0, 1.0)
-        with self.scope:
-            self.vao.render()
+        self.vao.render()
 
 
 if __name__ == '__main__':

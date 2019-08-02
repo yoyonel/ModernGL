@@ -777,6 +777,7 @@ class Context:
         res._index_element_size = index_element_size
         res.ctx = self
         res.extra = None
+        res.scope = None
 
         mgl.new.extend_refholder(res, self.new)
 
