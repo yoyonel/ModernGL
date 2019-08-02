@@ -25,7 +25,7 @@ class Example(_simple_2d_example.Example):
         texture = self.ctx.texture(img.size, 3, img.tobytes())
         sampler = self.ctx.sampler(texture=texture)
 
-        self.scope = self.ctx.scope(self.ctx.screen, samplers=[
+        self.scope = self.ctx.scope(samplers=[
             (sampler, 0),
         ])
 
