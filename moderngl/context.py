@@ -896,7 +896,7 @@ class Context:
 
         return res
 
-    def scope(self, framebuffer=None, enable_only=None, *, textures=(), uniform_buffers=(), storage_buffers=(), samplers=()) -> 'Scope':
+    def scope(self, framebuffer=None, enable_only=None, *, textures=(), uniform_buffers=(), storage_buffers=(), samplers=(), enable=None) -> 'Scope':
         '''
             Create a :py:class:`Scope` object.
 
@@ -909,6 +909,9 @@ class Context:
                 uniform_buffers (list): List of (buffer, binding) tuples.
                 storage_buffers (list): List of (buffer, binding) tuples.
         '''
+
+        if enable is not None:
+            enable_only = enable
 
         if framebuffer is None:
             framebuffer = self.screen
