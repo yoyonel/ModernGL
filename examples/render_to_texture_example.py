@@ -7,7 +7,6 @@ from pyrr import Matrix44
 
 import data
 import moderngl
-from moderngl_window import run_window_config as run_example
 from ported._example import Example
 
 
@@ -135,4 +134,4 @@ class RenderToTexture(Example):
 
 
 if __name__ == '__main__':
-    run_example(RenderToTexture)
+    RenderToTexture.run()

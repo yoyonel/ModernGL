@@ -9,7 +9,6 @@ import struct
 import numpy as np
 
 import moderngl
-from moderngl_window import run_window_config as run_example
 from ported._example import Example
 
 
@@ -284,4 +283,4 @@ void main()
 
 
 if __name__ == '__main__':
-    run_example(Raymarching)
+    Raymarching.run()

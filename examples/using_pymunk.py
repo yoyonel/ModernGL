@@ -8,7 +8,6 @@ from pymunk import Vec2d
 
 import data
 import moderngl
-from moderngl_window import run_window_config as run_example
 from ported._example import Example
 
 
@@ -132,7 +131,7 @@ class PymunkExample(Example):
     def mouse_press_event(self, x: int, y: int, button: int):
         self.shoot()
 
-    def key_event(self, key, action):
+    def key_event(self, key, action, modifiers):
         if action == self.wnd.keys.ACTION_PRESS:
             self.shoot()
 
@@ -161,4 +160,4 @@ class PymunkExample(Example):
 
 
 if __name__ == '__main__':
-    run_example(PymunkExample)
+    PymunkExample.run()

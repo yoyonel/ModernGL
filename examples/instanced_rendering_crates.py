@@ -6,7 +6,6 @@ from PIL import Image
 from pyrr import Matrix44
 
 import moderngl
-from moderngl_window import run_window_config as run_example
 from ported._example import Example
 
 
@@ -112,4 +111,4 @@ class InstancedCrates(Example):
 
 
 if __name__ == '__main__':
-    run_example(InstancedCrates)
+    InstancedCrates.run()

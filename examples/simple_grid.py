@@ -2,7 +2,6 @@ import numpy as np
 from pyrr import Matrix44
 
 import moderngl
-from moderngl_window import run_window_config as run_example
 from ported._example import Example
 
 
@@ -64,4 +63,4 @@ class SimpleGrid(Example):
 
 
 if __name__ == '__main__':
-    run_example(SimpleGrid)
+    SimpleGrid.run()

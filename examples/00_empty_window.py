@@ -1,6 +1,5 @@
 
 import moderngl
-from moderngl_window import run_window_config as run_example
 from ported._example import Example
 
 
@@ -24,11 +23,12 @@ class EmptyWindow(Example):
         """
         print("Window resized to", width, heigh)
 
-    def key_event(self, key, action):
+    def key_event(self, key, action, modifiers):
         """
         Handle key events in a generic way
         supporting all window types.
         """
+        print("KEY", key, action, modifiers)
         if action == self.wnd.keys.ACTION_PRESS:
             if key == self.wnd.keys.SPACE:
                 print("Space was pressed")
@@ -60,4 +60,4 @@ class EmptyWindow(Example):
 
 
 if __name__ == '__main__':
-    run_example(EmptyWindow)
+    EmptyWindow.run()

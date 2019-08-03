@@ -5,7 +5,6 @@
 import numpy as np
 
 import moderngl
-from moderngl_window import run_window_config as run_example
 from ported._example import Example
 
 
@@ -63,4 +62,4 @@ class SimpleColorTriangle(Example):
 
 
 if __name__ == '__main__':
-    run_example(SimpleColorTriangle)
+    SimpleColorTriangle.run()
