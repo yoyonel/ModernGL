@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- The `Framebuffer.clear` have an optional `color` parameter to replace the old `red, green, blue, alpha` parameters.
 - Samplers and Buffers have an `assing` method to simplify the scope creation.
 - Samplers have an optional `texture` parameter that will be used together with the sampler when given.
 - The Scope's `enable_only` keyword argument is deprecated in favor of the `enable` keyword argument. 
