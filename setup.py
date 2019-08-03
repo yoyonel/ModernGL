@@ -161,7 +161,7 @@ setup(
     description=short_description,
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/cprogrammer1994/ModernGL',
+    url='https://github.com/moderngl/moderngl',
     author='Szabolcs Dombi',
     author_email='cprogrammer1994@gmail.com',
     license='MIT',
