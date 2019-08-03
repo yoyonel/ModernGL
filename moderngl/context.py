@@ -747,7 +747,12 @@ class Context:
 
         return res
 
-    def vertex_array(self, program, content,
+    def vertex_array(self, *args, **kwargs) -> 'VertexArray':
+        if len(args) > 2 and type(args[1]) is Buffer:
+            return self.simple_vertex_array(*args, **kwargs)
+        return self._vertex_array(*args, **kwargs)
+
+    def _vertex_array(self, program, content,
                      index_buffer=None, index_element_size=4, *, skip_errors=False) -> 'VertexArray':
         '''
             Create a :py:class:`VertexArray` object.
