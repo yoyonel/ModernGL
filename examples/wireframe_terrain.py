@@ -5,7 +5,6 @@ from PIL import Image
 from pyrr import Matrix44
 
 import moderngl
-from moderngl_window import run_window_config as run_example
 from ported._example import Example
 
 
@@ -65,10 +64,7 @@ class WireframeTerrain(Example):
         ]
 
         self.vao = self.ctx.vertex_array(self.prog, vao_content, self.ibo)
-
-        self.img = Image.open('examples/data/noise.jpg').convert('L')
-        texture = self.ctx.texture(self.img.size, 1, self.img.tobytes())
-        texture.use()
+        self.texture = self.load_texture_2d('noise.jpg')
 
     def render(self, time, frame_time):
         angle = time * 0.2
@@ -84,9 +80,11 @@ class WireframeTerrain(Example):
             (0.0, 0.0, 1.0),
         )
 
+        self.texture.use()
         self.mvp.write((proj * lookat).astype('f4').tobytes())
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
 
 if __name__ == '__main__':
-    run_example(WireframeTerrain)
+    WireframeTerrain.run()
+
