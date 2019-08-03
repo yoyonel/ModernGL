@@ -226,3 +226,6 @@ class Sampler:
     @max_lod.setter
     def max_lod(self, value):
         self.mglo.max_lod = value
+
+    def assign(self, index):
+        return (self, index)
