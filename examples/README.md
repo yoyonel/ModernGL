@@ -1,16 +1,25 @@
 # ModernGL Examples
 
-Most examples are currently using the [standard example system](https://github.com/cprogrammer1994/ModernGL/tree/master/examples/window).
-It's recommended to use this as your example will be able to run on all supported platforms and window types (sdl2, pyglet, pyqt, glfw etc..)
+Before running examples make sure you install the requirmenets:
+
+```bash
+pip install -r examples/requirements.txt
+```
+
+
+## Running Examples
+
+All examples should use [moderngl_window] to make window creation and resource loading as simple
+as possible and ensures all supported platforms and covered.
 
 **Examples should work out of the box on Windows, Linux and OS X.**
 
-## Example Options
+## Options
 
 ```
 optional arguments:
   -h, --help            show this help message and exit
-  -w {glfw,pyglet,pyqt5,sdl2}, --window {glfw,pyglet,pyqt5,sdl2}
+  -w {pyglet,pyside2,glfw,sdl2,pyqt5}, --window {glfw,pyglet,pyqt5,sdl2}
                         Name for the window type to use
   -fs, --fullscreen     Open the window in fullscreen mode
   -vs VSYNC, --vsync VSYNC
@@ -31,12 +40,11 @@ python 03_alpha_blending.py --fullscreen --samples 8 --cursor off --vsync on
 # Run example using SDL2
 python 03_alpha_blending.py --window sdl2
 
-# Run example using pyglet
-python 03_alpha_blending.py --window pyglet
+# Run example using PySide2
+python 03_alpha_blending.py --window pyside2
 
 # Run example using glfw
 python 03_alpha_blending.py --window glfw
-
 ```
 
 ## Basic Examples
@@ -88,3 +96,5 @@ pip install -r requirements.txt
 
 Also see the [old examples](old-examples).
 
+
+[moderngl_window]: (https://github.com/moderngl/moderngl_window)
