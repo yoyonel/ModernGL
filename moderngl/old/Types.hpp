@@ -378,6 +378,7 @@ struct MGLVertexArray {
 
 	int vertex_array_obj;
 	int num_vertices;
+	int num_instances;
 };
 
 struct MGLSampler {

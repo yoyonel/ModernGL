@@ -126,6 +126,9 @@ PyObject * MGLContext_vertex_array(MGLContext * self, PyObject * args) {
 
 	MGLVertexArray * array = (MGLVertexArray *)MGLVertexArray_Type.tp_alloc(&MGLVertexArray_Type, 0);
 
+	array->num_vertices = 0;
+	array->num_instances = 1;
+
 	Py_INCREF(program);
 	array->program = program;
 
@@ -265,6 +268,10 @@ PyObject * MGLVertexArray_render(MGLVertexArray * self, PyObject * args) {
 		vertices = self->num_vertices;
 	}
 
+	if (instances < 0) {
+		instances = self->num_instances;
+	}
+
 	const GLMethods & gl = self->context->gl;
 
 	gl.UseProgram(self->program->program_obj);
@@ -359,6 +366,10 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 		}
 
 		vertices = self->num_vertices;
+	}
+
+	if (instances < 0) {
+		instances = self->num_instances;
 	}
 
 	const GLMethods & gl = self->context->gl;
@@ -511,6 +522,23 @@ int MGLVertexArray_set_vertices(MGLVertexArray * self, PyObject * value, void * 
 	return 0;
 }
 
+PyObject * MGLVertexArray_get_instances(MGLVertexArray * self, void * closure) {
+	return PyLong_FromLong(self->num_instances);
+}
+
+int MGLVertexArray_set_instances(MGLVertexArray * self, PyObject * value, void * closure) {
+	int instances = PyLong_AsUnsignedLong(value);
+
+	if (PyErr_Occurred()) {
+		MGLError_Set("invalid value for instances");
+		return -1;
+	}
+
+	self->num_instances = instances;
+
+	return 0;
+}
+
 int MGLVertexArray_set_subroutines(MGLVertexArray * self, PyObject * value, void * closure) {
 	if (PyTuple_GET_SIZE(value) != self->num_subroutines) {
 		MGLError_Set("the number of subroutines is %d not %d", self->num_subroutines, PyTuple_GET_SIZE(value));
@@ -543,6 +571,7 @@ int MGLVertexArray_set_subroutines(MGLVertexArray * self, PyObject * value, void
 PyGetSetDef MGLVertexArray_tp_getseters[] = {
 	{(char *)"index_buffer", 0, (setter)MGLVertexArray_set_index_buffer, 0, 0},
 	{(char *)"vertices", (getter)MGLVertexArray_get_vertices, (setter)MGLVertexArray_set_vertices, 0, 0},
+	{(char *)"instances", (getter)MGLVertexArray_get_instances, (setter)MGLVertexArray_set_instances, 0, 0},
 	{(char *)"subroutines", 0, (setter)MGLVertexArray_set_subroutines, 0, 0},
 	{0},
 };
