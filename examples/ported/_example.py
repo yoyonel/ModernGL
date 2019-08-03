@@ -8,7 +8,7 @@ class Example(mglw.WindowConfig):
     title = "ModernGL Example"
     window_size = (1280, 720)
     aspect_ratio = 16 / 9
-    resizable = False
+    resizable = True
 
     resource_dir = os.path.normpath(os.path.join(__file__, '../../data'))
 
