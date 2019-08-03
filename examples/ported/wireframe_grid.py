@@ -21,11 +21,11 @@ class Example(_simple_3d_example.Example):
         # self.prog = self.ctx.program(...)
 
         self.vbo = self.ctx.buffer(grid(2.0, 10).astype('f4').tobytes())
-        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert')
+        self.vao = self.ctx.vertex_array(self.prog, self.vbo, 'in_vert')
 
     def render(self, time: float, frame_time: float):
-        self.ctx.clear(1.0, 1.0, 1.0)
-        self.prog['Color'].value = (0.0, 0.0, 0.0)
+        self.ctx.screen.clear(color=(1.0, 1.0, 1.0))
+        self.prog['Color'] = (0.0, 0.0, 0.0)
         self.set_camera(fov=60.0, eye=(4, 3, 2), target=(0, 0, 0))
         self.vao.render(moderngl.LINES)
 

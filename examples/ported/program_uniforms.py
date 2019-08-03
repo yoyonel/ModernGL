@@ -36,8 +36,8 @@ class Example(_example.Example):
             ''',
         )
 
-        self.prog['WindowSize'].value = self.window_size
-        self.prog['Color'].value = (0.2, 0.4, 0.7)
+        self.prog['WindowSize'] = self.window_size
+        self.prog['Color'] = (0.2, 0.4, 0.7)
 
         vertices = np.array([
             100.0, 100.0,
@@ -46,10 +46,10 @@ class Example(_example.Example):
         ])
 
         self.vbo = self.ctx.buffer(vertices.astype('f4').tobytes())
-        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert')
+        self.vao = self.ctx.vertex_array(self.prog, self.vbo, 'in_vert')
 
     def render(self, time: float, frame_time: float):
-        self.ctx.clear(1.0, 1.0, 1.0)
+        self.ctx.screen.clear(color=(1.0, 1.0, 1.0))
         self.vao.render()
 
 
