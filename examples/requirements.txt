@@ -1,9 +1,6 @@
 moderngl_window
 
 objloader
-numpy
-pillow
-pyrr
 pymunk
 matplotlib
 imageio
