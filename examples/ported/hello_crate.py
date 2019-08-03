@@ -23,7 +23,7 @@ class Example(_simple_3d_example.Example):
 
         self.vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
         self.vao = self.ctx.vertex_array(self.prog, self.vbo, 'in_vert', 'in_norm', 'in_text')
-        self.vao.scope = self.ctx.scope(enable=moderngl.DEPTH_TEST, samplers=[
+        self.vao.scope = self.ctx.scope(enable=self.ctx.DEPTH_TEST, samplers=[
             self.sampler.assign(0),
         ])
 
