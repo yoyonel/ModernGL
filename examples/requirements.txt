@@ -1,12 +1,15 @@
-moderngl_window
+moderngl_window<2
 
-objloader
 pymunk
 matplotlib
 imageio
 
+# Window types
 glfw<2.0
 pyglet>1.4,<2.0
 PySDL2
 PyQt5<6
 PySide2<6
+
+# Resource loaders
+pywavefront<2
