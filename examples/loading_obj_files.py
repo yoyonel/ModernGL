@@ -1,11 +1,12 @@
 import os
 
-import moderngl
 from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
-from window import Example, run_example
+import moderngl
+from moderngl_window import run_window_config as run_example
+from ported._example import Example
 
 
 class LoadingOBJ(Example):

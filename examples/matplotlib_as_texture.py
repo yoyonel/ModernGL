@@ -1,14 +1,14 @@
 import io
 import os
 
-import moderngl
 import numpy as np
 from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
-import data
-from window import Example, run_example
+import moderngl
+from moderngl_window import run_window_config as run_example
+from ported._example import Example
 
 import matplotlib
 matplotlib.use('svg')
@@ -76,7 +76,7 @@ class MatplotlibTexture(Example):
         self.objects = {}
 
         for name in ['ground', 'grass', 'billboard', 'billboard-holder', 'billboard-image']:
-            obj = Obj.open(data.find('scene-1-%s.obj' % name))
+            obj = Obj.open('examples/data/scene-1-%s.obj' % name)
             vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
             vao = self.ctx.simple_vertex_array(self.prog, vbo, 'in_vert', 'in_norm', 'in_text')
             self.objects[name] = vao

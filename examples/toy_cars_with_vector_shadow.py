@@ -3,13 +3,14 @@ import struct
 from colorsys import hls_to_rgb as hls
 from random import uniform
 
-import moderngl
 import numpy as np
 from objloader import Obj
 from pyrr import Matrix44
 
 import data
-from window import Example, run_example
+import moderngl
+from moderngl_window import run_window_config as run_example
+from ported._example import Example
 
 
 def random_color():

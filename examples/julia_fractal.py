@@ -1,8 +1,8 @@
-import moderngl
-
 import numpy as np
 
-from window import Example, run_example
+import moderngl
+from moderngl_window import run_window_config as run_example
+from ported._example import Example
 
 
 class Fractal(Example):

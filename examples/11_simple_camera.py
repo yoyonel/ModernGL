@@ -26,11 +26,12 @@
     adopted by: Alex Zakrividoroga
 '''
 
-import moderngl
 import numpy as np
-from pyrr import Matrix44, Vector3, vector, Quaternion
+from pyrr import Matrix44, Quaternion, Vector3, vector
 
-from window import Example, run_example
+import moderngl
+from moderngl_window import run_window_config as run_example
+from ported._example import Example
 
 
 class Camera():

@@ -1,13 +1,13 @@
 import os
 
-import moderngl
 import numpy as np
 from objloader import Obj
 from PIL import Image
 from pyrr import Matrix44
 
-import data
-from window import Example, run_example
+import moderngl
+from moderngl_window import run_window_config as run_example
+from ported._example import Example
 
 
 class InstancedCrates(Example):
@@ -67,8 +67,8 @@ class InstancedCrates(Example):
         self.mvp = self.prog['Mvp']
         self.light = self.prog['Light']
 
-        obj = Obj.open(data.find('crate.obj'))
-        img = Image.open(data.find('crate.png')).transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
+        obj = Obj.open('examples/data/crate.obj')
+        img = Image.open('examples/data/crate.png').transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
         self.texture = self.ctx.texture(img.size, 3, img.tobytes())
         self.texture.build_mipmaps()
         self.texture.use()

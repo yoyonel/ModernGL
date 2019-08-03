@@ -1,14 +1,15 @@
 import os
 import struct
 
-import moderngl
 import numpy as np
 import pymunk
 from PIL import Image
 from pymunk import Vec2d
 
 import data
-from window import Example, run_example
+import moderngl
+from moderngl_window import run_window_config as run_example
+from ported._example import Example
 
 
 class PymunkExample(Example):

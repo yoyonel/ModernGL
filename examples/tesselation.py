@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 '''Simple example of using tesselation to render a cubic Bézier curve'''
 
-import moderngl
 import numpy as np
 
-from window import Example, run_example
+import moderngl
+from moderngl_window import run_window_config as run_example
+from ported._example import Example
 
 
 class Tessellation(Example):

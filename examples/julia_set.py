@@ -1,11 +1,11 @@
 import os
 
-import moderngl
 import numpy as np
 from PIL import Image
 
-import data
-from window import Example, run_example
+import moderngl
+from moderngl_window import run_window_config as run_example
+from ported._example import Example
 
 
 class Fractal(Example):
@@ -63,7 +63,7 @@ class Fractal(Example):
         self.seed = self.prog['Seed']
         self.iter = self.prog['Iter']
 
-        img = Image.open(data.find('pal.png')).convert('RGB')
+        img = Image.open('examples/data/pal.png').convert('RGB')
         self.texture = self.ctx.texture(img.size, 3, img.tobytes())
         self.texture.use()
 

@@ -1,12 +1,12 @@
 import os
 
-import moderngl
 import numpy as np
 from PIL import Image
 from pyrr import Matrix44
 
-import data
-from window import Example, run_example
+import moderngl
+from moderngl_window import run_window_config as run_example
+from ported._example import Example
 
 
 def terrain(size):
@@ -66,7 +66,7 @@ class WireframeTerrain(Example):
 
         self.vao = self.ctx.vertex_array(self.prog, vao_content, self.ibo)
 
-        self.img = Image.open(data.find('noise.jpg')).convert('L')
+        self.img = Image.open('examples/data/noise.jpg').convert('L')
         texture = self.ctx.texture(self.img.size, 1, self.img.tobytes())
         texture.use()
 
