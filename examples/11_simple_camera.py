@@ -30,7 +30,6 @@ import numpy as np
 from pyrr import Matrix44, Quaternion, Vector3, vector
 
 import moderngl
-from moderngl_window import run_window_config as run_example
 from ported._example import Example
 
 
@@ -197,7 +196,7 @@ class PerspectiveProjection(Example):
         if self.states.get(self.wnd.keys.X):
             self.camera.zoom_out()
 
-    def key_event(self, key, action):
+    def key_event(self, key, action, modifiers):
         if key not in self.states:
             print(key, action)
             return        
@@ -218,4 +217,5 @@ class PerspectiveProjection(Example):
 
 
 if __name__ == '__main__':
-    run_example(PerspectiveProjection)
+    PerspectiveProjection.run()
+
