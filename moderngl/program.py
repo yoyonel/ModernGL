@@ -21,7 +21,7 @@ class Program:
         Use :py:meth:`Context.program` to create one.
     '''
 
-    __slots__ = ['mglo', '_members', '_subroutines', '_geom', '_glo', 'ctx', 'extra', 'new']
+    __slots__ = ['mglo', '_members', '_subroutines', '_geom', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None

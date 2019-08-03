@@ -6,7 +6,7 @@ class Query:
         This class represents a Query object.
     '''
 
-    __slots__ = ['mglo', 'crender', 'ctx', 'extra', 'new']
+    __slots__ = ['mglo', 'crender', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None

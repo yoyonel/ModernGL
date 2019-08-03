@@ -82,7 +82,7 @@ class Context:
     FIRST_VERTEX_CONVENTION = 0x8E4D
     LAST_VERTEX_CONVENTION = 0x8E4E
 
-    __slots__ = ['mglo', '_screen', '_info', 'version_code', 'fbo', 'extra', 'new']
+    __slots__ = ['mglo', '_screen', '_info', 'version_code', 'fbo', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -587,7 +587,7 @@ class Context:
         res.ctx = self
         res.extra = None
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -615,7 +615,7 @@ class Context:
         res.ctx = self
         res.extra = None
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -647,7 +647,7 @@ class Context:
         res.ctx = self
         res.extra = None
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -677,7 +677,7 @@ class Context:
         res.ctx = self
         res.extra = None
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -703,7 +703,7 @@ class Context:
         res.ctx = self
         res.extra = None
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -732,7 +732,7 @@ class Context:
         res.ctx = self
         res.extra = None
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -762,7 +762,7 @@ class Context:
         res.ctx = self
         res.extra = None
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -806,7 +806,7 @@ class Context:
         res.extra = None
         res.scope = None
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -894,7 +894,7 @@ class Context:
         res.ctx = self
         res.extra = None
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -920,7 +920,7 @@ class Context:
         res.ctx = self
         res.extra = None
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -955,7 +955,7 @@ class Context:
         res.ctx = self
         res.extra = None
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -1009,7 +1009,7 @@ class Context:
         res.ctx = self
         res.extra = None
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -1040,7 +1040,7 @@ class Context:
         res.ctx = self
         res.extra = None
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -1069,7 +1069,7 @@ class Context:
         res.ctx = self
         res.extra = None
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -1104,7 +1104,7 @@ class Context:
         res.ctx = self
         res.extra = None
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -1145,7 +1145,7 @@ class Context:
         res.extra = None
         res.texture = texture
 
-        mgl.new.extend_refholder(res, self.new)
+        # mgl.new.extend_refholder(res, self.new)
 
         return res
 
@@ -1233,7 +1233,7 @@ def create_context(require=None, standalone=False, **settings) -> Context:
         raise ValueError('Requested OpenGL version {}, got version {}'.format(
             require, ctx.version_code))
 
-    mgl.new.extend_context(ctx, None)
+    # mgl.new.extend_context(ctx, None)
 
     ctx._screen = ctx.detect_framebuffer(0)
     ctx.fbo = ctx.detect_framebuffer()
@@ -1276,6 +1276,6 @@ def create_standalone_context(require=None, **settings) -> 'Context':
         raise ValueError('Requested OpenGL version {}, got version {}'.format(
             require, ctx.version_code))
 
-    mgl.new.extend_context(ctx, None)
+    # mgl.new.extend_context(ctx, None)
 
     return ctx

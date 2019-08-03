@@ -16,7 +16,7 @@ class Framebuffer:
         Create a :py:class:`Framebuffer` using :py:meth:`Context.framebuffer`.
     '''
 
-    __slots__ = ['mglo', '_color_attachments', '_depth_attachment', '_size', '_samples', '_glo', 'ctx', 'extra', 'new']
+    __slots__ = ['mglo', '_color_attachments', '_depth_attachment', '_size', '_samples', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None

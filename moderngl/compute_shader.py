@@ -12,7 +12,7 @@ class ComputeShader:
         While it can do rendering, it is generally used for tasks not directly related to drawing.
     '''
 
-    __slots__ = ['mglo', '_members', '_glo', 'ctx', 'extra', 'new']
+    __slots__ = ['mglo', '_members', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None

@@ -21,7 +21,7 @@ class Sampler:
         need at least one bind/use per frame.
     '''
 
-    __slots__ = ['mglo', '_glo', 'ctx', 'extra', 'new', 'texture']
+    __slots__ = ['mglo', '_glo', 'ctx', 'extra', 'texture']
 
     def __init__(self):
         self.mglo = None

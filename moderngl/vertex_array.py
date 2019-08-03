@@ -33,7 +33,7 @@ class VertexArray:
         to create one.
     '''
 
-    __slots__ = ['mglo', '_program', '_index_buffer', '_index_element_size', '_glo', 'ctx', 'extra', 'new', 'scope']
+    __slots__ = ['mglo', '_program', '_index_buffer', '_index_element_size', '_glo', 'ctx', 'extra', 'scope']
 
     def __init__(self):
         self.mglo = None

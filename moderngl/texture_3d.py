@@ -17,7 +17,7 @@ class Texture3D:
         Use :py:meth:`Context.texture3d` to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_glo', 'ctx', 'extra', 'new']
+    __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None

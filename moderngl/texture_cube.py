@@ -15,7 +15,7 @@ class TextureCube:
         Use :py:meth:`Context.texture_cube` to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_dtype', '_glo', 'ctx', 'extra', 'new']
+    __slots__ = ['mglo', '_size', '_components', '_dtype', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
