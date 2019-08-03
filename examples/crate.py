@@ -2,8 +2,6 @@ import os
 
 import moderngl
 import numpy as np
-from objloader import Obj
-from PIL import Image
 from pyrr import Matrix44
 
 import moderngl
@@ -21,19 +19,19 @@ class CrateExample(Example):
 
                 uniform mat4 Mvp;
 
-                in vec3 in_vert;
-                in vec3 in_norm;
-                in vec2 in_text;
+                in vec3 in_position;
+                in vec3 in_normal;
+                in vec2 in_texcoord_0;
 
                 out vec3 v_vert;
                 out vec3 v_norm;
                 out vec2 v_text;
 
                 void main() {
-                    gl_Position = Mvp * vec4(in_vert, 1.0);
-                    v_vert = in_vert;
-                    v_norm = in_norm;
-                    v_text = in_text;
+                    gl_Position = Mvp * vec4(in_position, 1.0);
+                    v_vert = in_position;
+                    v_norm = in_normal;
+                    v_text = in_texcoord_0;
                 }
             ''',
             fragment_shader='''
@@ -58,22 +56,18 @@ class CrateExample(Example):
         self.mvp = self.prog['Mvp']
         self.light = self.prog['Light']
 
-        obj = Obj.open('examples/data/crate.obj')
-        img = Image.open('examples/data/crate.png').transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
-        self.texture = self.ctx.texture(img.size, 3, img.tobytes())
-        self.texture.use()
-
-        self.vbo = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
-        self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert', 'in_norm', 'in_text')
+        self.scene = self.load_scene('crate.obj')
+        self.vao = self.scene.root_nodes[0].mesh.vao.instance(self.prog)
+        self.texture = self.load_texture_2d('crate.png')
 
     def render(self, time, frame_time):
         angle = time
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.DEPTH_TEST)
 
-        camera_pos = (np.cos(angle) * 5.0, np.sin(angle) * 5.0, 2.0)
+        camera_pos = (np.cos(angle) * 3.0, np.sin(angle) * 3.0, 2.0)
 
-        proj = Matrix44.perspective_projection(45.0, self.aspect_ratio, 0.1, 1000.0)
+        proj = Matrix44.perspective_projection(45.0, self.aspect_ratio, 0.1, 100.0)
         lookat = Matrix44.look_at(
             camera_pos,
             (0.0, 0.0, 0.5),
@@ -82,6 +76,7 @@ class CrateExample(Example):
 
         self.mvp.write((proj * lookat).astype('f4').tobytes())
         self.light.value = camera_pos
+        self.texture.use()
         self.vao.render()
 
 
