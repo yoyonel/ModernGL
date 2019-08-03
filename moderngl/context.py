@@ -409,7 +409,7 @@ class Context:
 
         return self._info
 
-    def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, *, viewport=None) -> None:
+    def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, *, viewport=None, color=None) -> None:
         '''
             Clear the bound framebuffer. By default clears the :py:data:`screen`.
 
@@ -431,6 +431,9 @@ class Context:
             Keyword Args:
                 viewport (tuple): The viewport.
         '''
+
+        if color is not None:
+            red, green, blue, alpha, *_ = tuple(color) + (0.0, 0.0, 0.0, 0.0)
 
         self.mglo.fbo.clear(red, green, blue, alpha, depth, viewport)
 
