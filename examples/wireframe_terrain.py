@@ -1,7 +1,6 @@
 import os
 
 import numpy as np
-from PIL import Image
 from pyrr import Matrix44
 
 import moderngl
@@ -87,4 +86,3 @@ class WireframeTerrain(Example):
 
 if __name__ == '__main__':
     WireframeTerrain.run()
-
