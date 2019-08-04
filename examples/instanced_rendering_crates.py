@@ -1,8 +1,6 @@
 import os
 
 import numpy as np
-from objloader import Obj
-from PIL import Image
 from pyrr import Matrix44
 
 import moderngl
@@ -29,19 +27,19 @@ class InstancedCrates(Example):
 
                 in vec3 in_move;
 
-                in vec3 in_vert;
-                in vec3 in_norm;
-                in vec2 in_text;
+                in vec3 in_position;
+                in vec3 in_normal;
+                in vec2 in_texcoord_0;
 
                 out vec3 v_vert;
                 out vec3 v_norm;
                 out vec2 v_text;
 
                 void main() {
-                    gl_Position = Mvp * vec4(in_vert + in_move, 1.0);
-                    v_vert = in_vert + in_move;
-                    v_norm = in_norm;
-                    v_text = in_text;
+                    gl_Position = Mvp * vec4(in_position + in_move, 1.0);
+                    v_vert = in_position + in_move;
+                    v_norm = in_normal;
+                    v_text = in_texcoord_0;
                 }
             ''',
             fragment_shader='''
@@ -66,18 +64,17 @@ class InstancedCrates(Example):
         self.mvp = self.prog['Mvp']
         self.light = self.prog['Light']
 
-        obj = Obj.open('examples/data/crate.obj')
-        img = Image.open('examples/data/crate.png').transpose(Image.FLIP_TOP_BOTTOM).convert('RGB')
-        self.texture = self.ctx.texture(img.size, 3, img.tobytes())
-        self.texture.build_mipmaps()
-        self.texture.use()
+        self.scene = self.load_scene('crate.obj')
+        self.texture = self.load_texture_2d('crate.png')
 
-        self.vbo1 = self.ctx.buffer(obj.pack('vx vy vz nx ny nz tx ty'))
-        self.vbo2 = self.ctx.buffer(reserve=12 * 1024)
-        self.vao = self.ctx.vertex_array(self.prog, [
-            (self.vbo1, '3f 3f 2f', 'in_vert', 'in_norm', 'in_text'),
-            (self.vbo2, '3f/i', 'in_move'),
-        ])
+        # Add a new buffer into the VAO wrapper in the scene.
+        # This is simply a collection of named buffers that is auto mapped
+        # to attributes in the vertex shader with the same name.
+        self.instance_data = self.ctx.buffer(reserve=12 * 1024)
+        vao_wrapper = self.scene.root_nodes[0].mesh.vao
+        vao_wrapper.buffer(self.instance_data, '3f', 'in_move', per_instance=True)
+        # Create the actual vao instance (auto mapping in action)
+        self.vao = vao_wrapper.instance(self.prog)
 
         self.crate_a = np.random.uniform(0.7, 0.8, 32 * 32)
         self.crate_b = np.random.uniform(0.0, 6.3, 32 * 32)
@@ -106,7 +103,8 @@ class InstancedCrates(Example):
         crate_z = np.sin(self.crate_a * time + self.crate_b) * 0.2
         coordinates = np.dstack([self.crate_x, self.crate_y, crate_z])
 
-        self.vbo2.write(coordinates.astype('f4').tobytes())
+        self.instance_data.write(coordinates.astype('f4').tobytes())
+        self.texture.use()
         self.vao.render(instances=1024)
 
 
