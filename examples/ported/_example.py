@@ -9,6 +9,7 @@ class Example(mglw.WindowConfig):
     window_size = (1280, 720)
     aspect_ratio = 16 / 9
     resizable = True
+    samples = 4
 
     resource_dir = os.path.normpath(os.path.join(__file__, '../../data'))
 
