@@ -1,7 +1,6 @@
 import os
 
 import numpy as np
-from PIL import Image
 
 import moderngl
 from ported._example import Example
@@ -69,9 +68,7 @@ class Fractal(Example):
         self.ratio = self.prog['Ratio']
         self.iter = self.prog['Iter']
 
-        img = Image.open('examples/data/pal.png').convert('RGB')
-        self.texture = self.ctx.texture(img.size, 3, img.tobytes())
-        self.texture.use()
+        self.texture = self.load_texture_2d('pal.png')
 
         vertices = np.array([-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0])
 
@@ -86,6 +83,7 @@ class Fractal(Example):
         self.scale.value = 1.5
         self.ratio.value = self.aspect_ratio
 
+        self.texture.use()
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
 
