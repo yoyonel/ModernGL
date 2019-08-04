@@ -3,7 +3,6 @@ import struct
 
 import numpy as np
 import pymunk
-from PIL import Image
 from pymunk import Vec2d
 
 import data
@@ -67,12 +66,10 @@ class PymunkExample(Example):
             ''',
         )
 
-        img = Image.open(data.find('crate.png')).convert('RGBA')
-        self.tex1 = self.ctx.texture(img.size, 4, img.tobytes())
+        self.tex1 = self.load_texture_2d('crate.png')
         self.tex1.use(0)
 
-        img = Image.open(data.find('ball.png')).convert('RGBA')
-        self.tex2 = self.ctx.texture(img.size, 4, img.tobytes())
+        self.tex2 = self.load_texture_2d('ball.png')
         self.tex2.use(1)
 
         vertices = np.array([
