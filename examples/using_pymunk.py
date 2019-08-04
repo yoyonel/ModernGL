@@ -5,7 +5,6 @@ import numpy as np
 import pymunk
 from pymunk import Vec2d
 
-import data
 import moderngl
 from ported._example import Example
 
