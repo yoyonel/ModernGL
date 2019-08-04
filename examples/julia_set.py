@@ -1,7 +1,6 @@
 import os
 
 import numpy as np
-from PIL import Image
 
 import moderngl
 from ported._example import Example
@@ -62,9 +61,7 @@ class Fractal(Example):
         self.seed = self.prog['Seed']
         self.iter = self.prog['Iter']
 
-        img = Image.open('examples/data/pal.png').convert('RGB')
-        self.texture = self.ctx.texture(img.size, 3, img.tobytes())
-        self.texture.use()
+        self.texture = self.load_texture_2d('pal.png')
 
         vertices = np.array([-1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0])
 
@@ -77,6 +74,7 @@ class Fractal(Example):
         self.seed.value = (-0.8, 0.156)
         self.iter.value = 100
 
+        self.texture.use()
         self.vao.render(moderngl.TRIANGLE_STRIP)
 
 
