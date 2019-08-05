@@ -1,12 +1,8 @@
 import io
-import os
 
 import numpy as np
-from pyrr import Matrix44
 from PIL import Image
 
-import moderngl
-from ported._example import Example
 from basic_colors_and_texture import ColorsAndTexture
 
 import matplotlib
