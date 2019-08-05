@@ -1,10 +1,6 @@
-import os
-
 import numpy as np
-from PIL import Image
 from pyrr import Matrix44
 
-import data
 import moderngl
 from ported._example import Example
 
@@ -85,29 +81,11 @@ class MultiTextireTerrain(Example):
 
         self.vao = self.ctx.vertex_array(self.prog, vao_content, self.ibo)
 
-        img0 = Image.open(data.find('heightmap.jpg')).convert('L').transpose(Image.FLIP_TOP_BOTTOM)
-        img1 = Image.open(data.find('grass.jpg')).convert('RGB').transpose(Image.FLIP_TOP_BOTTOM)
-        img2 = Image.open(data.find('rock.jpg')).convert('RGB').transpose(Image.FLIP_TOP_BOTTOM)
-        img3 = Image.open(data.find('cracks.jpg')).convert('L').transpose(Image.FLIP_TOP_BOTTOM)
-        img4 = Image.open(data.find('checked.jpg')).convert('L').transpose(Image.FLIP_TOP_BOTTOM)
-
-        tex0 = self.ctx.texture(img0.size, 1, img0.tobytes())
-        tex1 = self.ctx.texture(img1.size, 3, img1.tobytes())
-        tex2 = self.ctx.texture(img2.size, 3, img2.tobytes())
-        tex3 = self.ctx.texture(img3.size, 1, img3.tobytes())
-        tex4 = self.ctx.texture(img4.size, 1, img4.tobytes())
-
-        tex0.build_mipmaps()
-        tex1.build_mipmaps()
-        tex2.build_mipmaps()
-        tex3.build_mipmaps()
-        tex4.build_mipmaps()
-
-        tex0.use(0)
-        tex1.use(1)
-        tex2.use(2)
-        tex3.use(3)
-        tex4.use(4)
+        self.tex0 = self.load_texture_2d('heightmap.jpg')
+        self.tex1 = self.load_texture_2d('grass.jpg')
+        self.tex2 = self.load_texture_2d('rock.jpg')
+        self.tex3 = self.load_texture_2d('cracks.jpg')
+        self.tex4 = self.load_texture_2d('checked.jpg')
 
         self.prog['Heightmap'].value = 0
         self.prog['Color1'].value = 1
@@ -119,6 +97,12 @@ class MultiTextireTerrain(Example):
         angle = time * 0.2
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.DEPTH_TEST)
+
+        self.tex0.use(0)
+        self.tex1.use(1)
+        self.tex2.use(2)
+        self.tex3.use(3)
+        self.tex4.use(4)
 
         proj = Matrix44.perspective_projection(45.0, self.aspect_ratio, 0.1, 1000.0)
         lookat = Matrix44.look_at(
