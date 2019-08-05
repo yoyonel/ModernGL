@@ -1,13 +1,10 @@
-import os
 import struct
 from colorsys import hls_to_rgb as hls
 from random import uniform
 
 import numpy as np
-from objloader import Obj
 from pyrr import Matrix44
 
-import data
 import moderngl
 from ported._example import Example
 
@@ -17,8 +14,13 @@ def random_color():
 
 
 cars = []
-cars += [{'color': random_color(), 'pos': (1.5, i * 2.0 - 9.0, 0.0), 'angle': uniform(-0.5, 0.5)} for i in range(10)]
-cars += [{'color': random_color(), 'pos': (-1.5, i * 2.0 - 9.0, 0.0), 'angle': uniform(-0.5, 0.5)} for i in range(10)]
+cars += [{'color': random_color(),
+          'pos': (1.5, i * 2.0 - 9.0, 0.0),
+          'angle': uniform(-0.5, 0.5)} for i in range(10)]
+
+cars += [{'color': random_color(),
+          'pos': (-1.5, i * 2.0 - 9.0, 0.0),
+          'angle': uniform(-0.5, 0.5)} for i in range(10)]
 
 
 class ToyCars(Example):
@@ -34,8 +36,8 @@ class ToyCars(Example):
 
                 uniform mat4 Mvp;
 
-                in vec3 in_vert;
-                in vec3 in_norm;
+                in vec3 in_position;
+                in vec3 in_normal;
 
                 in vec3 in_color;
                 in vec3 in_origin;
@@ -46,8 +48,8 @@ class ToyCars(Example):
                 out vec3 v_color;
 
                 void main() {
-                    v_vert = in_origin + in_basis * in_vert;
-                    v_norm = in_basis * in_norm;
+                    v_vert = in_origin + in_basis * in_position;
+                    v_norm = in_basis * in_normal;
                     v_color = in_color;
                     gl_Position = Mvp * vec4(v_vert, 1.0);
                 }
@@ -74,10 +76,9 @@ class ToyCars(Example):
         self.mvp = self.prog['Mvp']
         self.light = self.prog['Light']
 
-        obj = Obj.open(data.find('lowpoly_toy_car.obj'))
+        obj = self.load_scene('lowpoly_toy_car.obj')
 
-        self.vbo1 = self.ctx.buffer(obj.pack('vx vy vz nx ny nz'))
-        self.vbo2 = self.ctx.buffer(struct.pack(
+        self.vbo = self.ctx.buffer(struct.pack(
             '15f',
             1.0, 1.0, 1.0,
             0.0, 0.0, 0.0,
@@ -85,10 +86,10 @@ class ToyCars(Example):
             0.0, 1.0, 0.0,
             0.0, 0.0, 1.0,
         ) * len(cars))
-        self.vao = self.ctx.vertex_array(self.prog, [
-            (self.vbo1, '3f 3f', 'in_vert', 'in_norm'),
-            (self.vbo2, '3f 3f 9f/i', 'in_color', 'in_origin', 'in_basis'),
-        ])
+
+        vao_wrapper = obj.root_nodes[0].mesh.vao
+        vao_wrapper.buffer(self.vbo, '3f 3f 9f/i', ['in_color', 'in_origin', 'in_basis'])
+        self.vao = vao_wrapper.instance(self.prog)
 
     def render(self, time, frame_time):
         angle = time
@@ -107,8 +108,7 @@ class ToyCars(Example):
         self.mvp.write((proj * lookat).astype('f4').tobytes())
         self.light.value = camera_pos
 
-        # self.vbo2.write(Matrix33.from_z_rotation(self.wnd.time).astype('f4').tobytes(), offset=24)
-        self.vbo2.write(b''.join(struct.pack(
+        self.vbo.write(b''.join(struct.pack(
             '15f',
             *car['color'],
             *car['pos'],
@@ -117,7 +117,8 @@ class ToyCars(Example):
             0.0, 0.0, 1.0,
         ) for car in cars))
         self.vao.render(instances=len(cars))
-        self.vbo2.write(b''.join(struct.pack(
+
+        self.vbo.write(b''.join(struct.pack(
             '15f',
             0.0, 0.0, 0.0,
             *car['pos'],
