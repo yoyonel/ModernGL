@@ -72,7 +72,7 @@ class InstancedCrates(Example):
         # to attributes in the vertex shader with the same name.
         self.instance_data = self.ctx.buffer(reserve=12 * 1024)
         vao_wrapper = self.scene.root_nodes[0].mesh.vao
-        vao_wrapper.buffer(self.instance_data, '3f', 'in_move', per_instance=True)
+        vao_wrapper.buffer(self.instance_data, '3f/i', 'in_move')
         # Create the actual vao instance (auto mapping in action)
         self.vao = vao_wrapper.instance(self.prog)
 
