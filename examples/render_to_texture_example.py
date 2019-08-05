@@ -1,10 +1,4 @@
-import os
-
-import numpy as np
-from pyrr import Matrix44
-
 import moderngl
-from ported._example import Example
 from basic_colors_and_texture import ColorsAndTexture
 
 
@@ -22,15 +16,6 @@ class RenderToTexture(ColorsAndTexture):
     def render(self, time, frame_time):
         self.ctx.clear(1.0, 1.0, 1.0)
         self.ctx.enable(moderngl.DEPTH_TEST)
-
-        proj = Matrix44.perspective_projection(45.0, self.aspect_ratio, 0.1, 1000.0)
-        lookat = Matrix44.look_at(
-            (47.697, -8.147, 24.498),
-            (0.0, 0.0, 8.0),
-            (0.0, 0.0, 1.0),
-        )
-
-        rotate = Matrix44.from_z_rotation(np.sin(time) * 0.5 + 0.2)
 
         for mode in ['render_to_texture', 'render_to_window']:
             if mode == 'render_to_texture':
