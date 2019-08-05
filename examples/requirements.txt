@@ -1,4 +1,4 @@
-moderngl_window<2
+moderngl_window>=1.1.0<2
 
 pymunk
 matplotlib
