@@ -1,9 +1,6 @@
 '''
     Renders a floating, oscillating, 3d islans with lights
 '''
-
-import os
-
 import numpy as np
 from pyrr import Matrix44
 
@@ -127,4 +124,3 @@ class ColorsAndTexture(Example):
 
 if __name__ == '__main__':
     ColorsAndTexture.run()
-

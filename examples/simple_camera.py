@@ -3,12 +3,12 @@
     The camera class is built using following tutorials:
        https://learnopengl.com/Getting-started/Camera
        http://in2gpu.com/2016/03/14/opengl-fps-camera-quaternion/
-   
+
     Controls:
         Move:
             Forward - W
             Backwards - S
-    
+
         Strafe:
             Up - up arrow
             Down - down arrow
@@ -18,11 +18,11 @@
         Rotate:
             Left - Q
             Right - E
-        
+
         Zoom:
             In - X
             Out - Z
-    
+
     adopted by: Alex Zakrividoroga
 '''
 
@@ -34,7 +34,7 @@ from ported._example import Example
 
 
 class Camera():
-    
+
     def __init__(self, ratio):
         self._zoom_step = 0.1
         self._move_vertically = 0.1
@@ -48,9 +48,9 @@ class Camera():
         self._ratio = ratio
         self.build_projection()
 
-        self._camera_position = Vector3 ([0.0, 0.0, -40.0])
-        self._camera_front = Vector3 ([0.0, 0.0, 1.0])
-        self._camera_up = Vector3 ([0.0, 1.0, 0.0])
+        self._camera_position = Vector3([0.0, 0.0, -40.0])
+        self._camera_front = Vector3([0.0, 0.0, 1.0])
+        self._camera_up = Vector3([0.0, 1.0, 0.0])
         self._cameras_target = (self._camera_position + self._camera_front)
         self.build_look_at()
 
@@ -87,17 +87,17 @@ class Camera():
         self.build_look_at()
 
     def rotate_left(self):
-        rotation = Quaternion.from_y_rotation(2 * float (self._rotate_horizontally) * np.pi / 180)
+        rotation = Quaternion.from_y_rotation(2 * float(self._rotate_horizontally) * np.pi / 180)
         self._camera_front = rotation * self._camera_front
         self.build_look_at()
 
     def rotate_right(self):
-        rotation = Quaternion.from_y_rotation(- 2 * float (self._rotate_horizontally) * np.pi / 180)
+        rotation = Quaternion.from_y_rotation(-2 * float(self._rotate_horizontally) * np.pi / 180)
         self._camera_front = rotation * self._camera_front
         self.build_look_at()
 
     def build_look_at(self):
-        self._cameras_target = (self._camera_position + self._camera_front)   
+        self._cameras_target = (self._camera_position + self._camera_front)
         self.mat_lookat = Matrix44.look_at(
             self._camera_position,
             self._cameras_target,
@@ -116,7 +116,7 @@ def grid(size, steps):
     v = np.tile([-size, size], steps)
     w = np.zeros(steps * 2)
     return np.concatenate([np.dstack([u, v, w]), np.dstack([v, u, w])])
- 
+
 
 class PerspectiveProjection(Example):
     gl_version = (3, 3)
@@ -179,7 +179,7 @@ class PerspectiveProjection(Example):
             self.camera.strafe_down()
 
         if self.states.get(self.wnd.keys.A):
-           self.camera.strafe_left()
+            self.camera.strafe_left()
 
         if self.states.get(self.wnd.keys.D):
             self.camera.strafe_right()
@@ -199,7 +199,7 @@ class PerspectiveProjection(Example):
     def key_event(self, key, action, modifiers):
         if key not in self.states:
             print(key, action)
-            return        
+            return
 
         if action == self.wnd.keys.ACTION_PRESS:
             self.states[key] = True
@@ -218,4 +218,3 @@ class PerspectiveProjection(Example):
 
 if __name__ == '__main__':
     PerspectiveProjection.run()
-

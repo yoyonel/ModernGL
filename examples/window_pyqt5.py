@@ -1,4 +1,3 @@
-import moderngl
 import numpy as np
 
 from qtmoderngl import QModernGLWidget

@@ -1,5 +1,4 @@
 
-import moderngl
 from ported._example import Example
 
 

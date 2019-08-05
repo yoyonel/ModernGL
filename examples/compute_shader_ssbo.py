@@ -242,7 +242,6 @@ class Renderer(QtWidgets.QOpenGLWidget):
             self.index_buffer,
         )
 
-
     def paintGL(self):
         self.context.viewport = self.viewport
         data = np.frombuffer(self.target_buffer.read(), dtype='f4')
@@ -283,6 +282,7 @@ def main():
     mainwin.setCentralWidget(root)
     mainwin.show()
     app.exec()
+
 
 if __name__ == "__main__":
     main()

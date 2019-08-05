@@ -24,6 +24,7 @@ def source(uri, consts):
         content = content.replace(f"%%{key}%%", str(value))
     return content
 
+
 # W = X * Y  // for each run, handles a row of pixels
 # execute compute shader for H times to complete
 W = 512

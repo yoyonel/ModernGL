@@ -1,11 +1,9 @@
-import os
-
 import moderngl
 import numpy as np
 from pyrr import Matrix44
 
-import moderngl
 from ported._example import Example
+
 
 class CrateExample(Example):
     title = "Crate"

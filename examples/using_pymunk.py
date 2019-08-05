@@ -1,6 +1,3 @@
-import os
-import struct
-
 import numpy as np
 import pymunk
 from pymunk import Vec2d

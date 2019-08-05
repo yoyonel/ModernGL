@@ -1,5 +1,3 @@
-import os
-
 from pyrr import Matrix44
 
 import moderngl
