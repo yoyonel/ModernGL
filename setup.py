@@ -82,8 +82,8 @@ mgl = Extension(
     extra_compile_args=extra_compile_args[target],
     extra_link_args=extra_linker_args[target],
     sources=[
-        'moderngl/mgl/internal/opengl/gl_context_%s.cpp' % target,
-        'moderngl/mgl/internal/opengl/gl_methods.cpp',
+        'moderngl/old/gl_context_%s.cpp' % target,
+        'moderngl/old/gl_methods.cpp',
         'moderngl/old/Sampler.cpp',
         'moderngl/old/Attribute.cpp',
         'moderngl/old/Buffer.cpp',
@@ -110,9 +110,9 @@ mgl = Extension(
         'moderngl/old/VertexArray.cpp',
     ],
     depends=[
-        'moderngl/mgl/internal/opengl/gl_context.hpp',
-        'moderngl/mgl/internal/opengl/gl_methods.hpp',
-        'moderngl/mgl/internal/opengl/opengl.hpp',
+        'moderngl/old/gl_context.hpp',
+        'moderngl/old/gl_methods.hpp',
+        'moderngl/old/opengl.hpp',
 
         'moderngl/old/BufferFormat.hpp',
         'moderngl/old/Error.hpp',
