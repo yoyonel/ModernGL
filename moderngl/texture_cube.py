@@ -1,5 +1,4 @@
 from .buffer import Buffer
-from .new.buffer import Buffer as NewBuffer
 
 __all__ = ['TextureCube']
 
@@ -15,7 +14,7 @@ class TextureCube:
         Use :py:meth:`Context.texture_cube` to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_dtype', '_glo', 'ctx', 'extra', 'new']
+    __slots__ = ['mglo', '_size', '_components', '_dtype', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -25,7 +24,6 @@ class TextureCube:
         self._glo = None
         self.ctx = None
         self.extra = None  #: Any - Attribute for storing user defined objects
-        self.new = None
         raise TypeError()
 
     def __repr__(self):
@@ -164,9 +162,6 @@ class TextureCube:
                 write_offset (int): The write offset.
         '''
 
-        if type(buffer) is NewBuffer:
-            buffer = getattr(buffer, 'old', buffer)
-
         if type(buffer) is Buffer:
             buffer = buffer.mglo
 
@@ -184,9 +179,6 @@ class TextureCube:
             Keyword Args:
                 alignment (int): The byte alignment of the pixels.
         '''
-
-        if type(data) is NewBuffer:
-            data = getattr(data, 'old', data)
 
         if type(data) is Buffer:
             data = data.mglo

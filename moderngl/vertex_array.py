@@ -33,7 +33,7 @@ class VertexArray:
         to create one.
     '''
 
-    __slots__ = ['mglo', '_program', '_index_buffer', '_index_element_size', '_glo', 'ctx', 'extra', 'new']
+    __slots__ = ['mglo', '_program', '_index_buffer', '_index_element_size', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -43,7 +43,6 @@ class VertexArray:
         self._glo = None
         self.ctx = None
         self.extra = None  #: Any - Attribute for storing user defined objects
-        self.new = None
         raise TypeError()
 
     def __repr__(self):

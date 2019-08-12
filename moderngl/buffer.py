@@ -14,7 +14,7 @@ class Buffer:
         Copy buffer content using :py:meth:`Context.copy_buffer`.
     '''
 
-    __slots__ = ['mglo', '_size', '_dynamic', '_glo', 'ctx', 'extra', 'new']
+    __slots__ = ['mglo', '_size', '_dynamic', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -23,7 +23,6 @@ class Buffer:
         self._glo = None
         self.ctx = None
         self.extra = None  #: Any - Attribute for storing user defined objects
-        self.new = None
         raise TypeError()
 
     def __repr__(self):

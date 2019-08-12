@@ -384,11 +384,8 @@ PyModuleDef MGL_moduledef = {
 	0,
 };
 
-PyObject * PyInit_mgl_new();
-
 extern "C" PyObject * PyInit_mgl() {
 	PyObject * module = PyModule_Create(&MGL_moduledef);
-	PyModule_AddObject(module, "new", PyInit_mgl_new());
 
 	if (!MGL_InitializeModule(module)) {
 		return 0;

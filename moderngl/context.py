@@ -63,7 +63,7 @@ class Context:
         ModernGL objects can be created from this class.
     '''
 
-    __slots__ = ['mglo', '_screen', '_info', 'version_code', 'fbo', 'extra', 'new']
+    __slots__ = ['mglo', '_screen', '_info', 'version_code', 'fbo', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -72,7 +72,6 @@ class Context:
         self.version_code = None  #: int: The OpenGL version code. Reports ``410`` for OpenGL 4.1
         self.fbo = None  #: Framebuffer: The active framebuffer. Set every time ``Framebuffer.use()`` is called.
         self.extra = None  #: Any - Attribute for storing user defined objects
-        self.new = None
         raise TypeError()
 
     def __repr__(self):
@@ -564,9 +563,6 @@ class Context:
         res._depth_attachment = None
         res.ctx = self
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def buffer(self, data=None, *, reserve=0, dynamic=False) -> Buffer:
@@ -592,9 +588,6 @@ class Context:
         res._dynamic = dynamic
         res.ctx = self
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def texture(self, size, components, data=None, *, samples=0, alignment=1, dtype='f1') -> 'Texture':
@@ -624,9 +617,6 @@ class Context:
         res._depth = False
         res.ctx = self
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def texture_array(self, size, components, data=None, *, alignment=1, dtype='f1') -> 'TextureArray':
@@ -654,9 +644,6 @@ class Context:
         res._dtype = dtype
         res.ctx = self
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def texture3d(self, size, components, data=None, *, alignment=1, dtype='f1') -> 'Texture3D':
@@ -680,9 +667,6 @@ class Context:
         res.mglo, res._glo = self.mglo.texture3d(size, components, data, alignment, dtype)
         res.ctx = self
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def texture_cube(self, size, components, data=None, *, alignment=1, dtype='f1') -> 'TextureCube':
@@ -709,9 +693,6 @@ class Context:
         res._dtype = dtype
         res.ctx = self
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def depth_texture(self, size, data=None, *, samples=0, alignment=4) -> 'Texture':
@@ -739,9 +720,6 @@ class Context:
         res._depth = True
         res.ctx = self
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def vertex_array(self, program, content,
@@ -777,9 +755,6 @@ class Context:
         res._index_element_size = index_element_size
         res.ctx = self
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def simple_vertex_array(self, program, buffer, *attributes,
@@ -865,9 +840,6 @@ class Context:
         res._members = members
         res.ctx = self
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def query(self, *, samples=False, any_samples=False, time=False, primitives=False) -> 'Query':
@@ -891,9 +863,6 @@ class Context:
 
         res.ctx = self
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def scope(self, framebuffer, enable_only=None, *, textures=(), uniform_buffers=(), storage_buffers=()) -> 'Scope':
@@ -920,9 +889,6 @@ class Context:
         res.mglo = self.mglo.scope(framebuffer.mglo, enable_only, textures, uniform_buffers, storage_buffers)
         res.ctx = self
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def simple_framebuffer(self, size, components=4, *, samples=0, dtype='f1') -> 'Framebuffer':
@@ -974,9 +940,6 @@ class Context:
         res._depth_attachment = depth_attachment
         res.ctx = self
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def renderbuffer(self, size, components=4, *, samples=0, dtype='f1') -> 'Renderbuffer':
@@ -1005,9 +968,6 @@ class Context:
         res._depth = False
         res.ctx = self
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def depth_renderbuffer(self, size, *, samples=0) -> 'Renderbuffer':
@@ -1034,9 +994,6 @@ class Context:
         res._depth = True
         res.ctx = self
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def compute_shader(self, source) -> 'ComputeShader':
@@ -1069,9 +1026,6 @@ class Context:
         res._members = members
         res.ctx = self
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def sampler(self, repeat_x=True, repeat_y=True, repeat_z=True, filter=None, anisotropy=1.0,
@@ -1109,9 +1063,6 @@ class Context:
         res.min_lod = min_lod
         res.max_lod = max_lod
         res.extra = None
-
-        mgl.new.extend_refholder(res, self.new)
-
         return res
 
     def clear_samplers(self, start=0, end=-1):
@@ -1198,8 +1149,6 @@ def create_context(require=None, standalone=False, **settings) -> Context:
         raise ValueError('Requested OpenGL version {}, got version {}'.format(
             require, ctx.version_code))
 
-    mgl.new.extend_context(ctx, None)
-
     ctx._screen = ctx.detect_framebuffer(0)
     ctx.fbo = ctx.detect_framebuffer()
     ctx.mglo.fbo = ctx.fbo.mglo
@@ -1240,7 +1189,5 @@ def create_standalone_context(require=None, **settings) -> 'Context':
     if require is not None and ctx.version_code < require:
         raise ValueError('Requested OpenGL version {}, got version {}'.format(
             require, ctx.version_code))
-
-    mgl.new.extend_context(ctx, None)
 
     return ctx

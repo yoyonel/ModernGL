@@ -19,13 +19,12 @@ class Scope:
         - Restore the framebuffer.
     '''
 
-    __slots__ = ['mglo', 'ctx', 'extra', 'new']
+    __slots__ = ['mglo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
         self.ctx = None
         self.extra = None  #: Any - Attribute for storing user defined objects
-        self.new = None
         raise TypeError()
 
     def __repr__(self):

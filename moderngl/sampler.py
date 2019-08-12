@@ -21,14 +21,13 @@ class Sampler:
         need at least one bind/use per frame.
     '''
 
-    __slots__ = ['mglo', '_glo', 'ctx', 'extra', 'new']
+    __slots__ = ['mglo', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
         self._glo = None
         self.ctx = None
         self.extra = None  #: Any - Attribute for storing user defined objects
-        self.new = None
         raise TypeError()
 
     def use(self, location=0) -> None:

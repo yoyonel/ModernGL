@@ -21,7 +21,7 @@ class Program:
         Use :py:meth:`Context.program` to create one.
     '''
 
-    __slots__ = ['mglo', '_members', '_subroutines', '_geom', '_glo', 'ctx', 'extra', 'new']
+    __slots__ = ['mglo', '_members', '_subroutines', '_geom', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None
@@ -31,7 +31,6 @@ class Program:
         self._glo = None
         self.ctx = None
         self.extra = None  #: Any - Attribute for storing user defined objects
-        self.new = None
         raise TypeError()
 
     def __repr__(self):
