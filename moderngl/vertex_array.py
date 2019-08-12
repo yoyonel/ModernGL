@@ -43,7 +43,6 @@ class VertexArray:
         self._glo = None
         self.ctx = None
         self.extra = None  #: Any - Attribute for storing user defined objects
-        self.new = None
         self.scope = None
         raise TypeError()
 

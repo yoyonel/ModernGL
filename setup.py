@@ -167,7 +167,7 @@ setup(
     license='MIT',
     classifiers=classifiers,
     keywords=keywords,
-    packages=['moderngl', 'moderngl.new', 'moderngl.program_members'],
+    packages=['moderngl', 'moderngl.program_members'],
     ext_modules=[mgl],
     platforms=['any'],
 )

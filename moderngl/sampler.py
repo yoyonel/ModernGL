@@ -28,7 +28,6 @@ class Sampler:
         self._glo = None
         self.ctx = None
         self.extra = None  #: Any - Attribute for storing user defined objects
-        self.new = None
         raise TypeError()
 
     def use(self, location=0) -> None:

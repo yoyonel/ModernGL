@@ -19,6 +19,5 @@ from .texture_array import *
 from .texture_cube import *
 from .vertex_array import *
 from .sampler import *
-from . import new
 
 __version__ = '5.5.2'
