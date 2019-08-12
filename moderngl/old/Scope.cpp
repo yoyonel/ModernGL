@@ -165,7 +165,7 @@ PyObject * MGLScope_begin(MGLScope * self, PyObject * args) {
 	}
 
 	for (int i = 0; i < self->num_buffers; ++i) {
-		gl.BindBufferBase(self->buffers[i * 3], self->buffers[i * 3 + 1], self->buffers[i * 3 + 2]);
+		gl.BindBufferBase(self->buffers[i * 3], self->buffers[i * 3 + 2], self->buffers[i * 3 + 1]);
 	}
 
 	int num_samplers = (int)PySequence_Fast_GET_SIZE(self->samplers);
