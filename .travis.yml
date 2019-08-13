@@ -2,17 +2,19 @@ matrix:
   include:
     - language: python
       python: 3.6
+      sudo: required
       install:
-        - export TRAVIS=True
-        # - export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start
+        - apt-get install libmesa-dev
         - python -m pip install pip wheel setuptools numpy -U
       script:
         - python setup.py develop
 
     - language: python
       python: pypy3.5
+      install:
+        - apt-get install libmesa-dev
+        - python -m pip install pip wheel setuptools numpy -U
       script:
-        - export TRAVIS=True
         - python setup.py develop
 
     - language: python
