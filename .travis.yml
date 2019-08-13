@@ -4,7 +4,8 @@ matrix:
       python: 3.6
       sudo: required
       install:
-        - apt-get install libmesa-dev
+        - sudo apt-get update -q
+        - sudo apt-get install -y libmesa-dev
         - python -m pip install pip wheel setuptools numpy -U
       script:
         - python setup.py develop
@@ -12,7 +13,8 @@ matrix:
     - language: python
       python: pypy3.5
       install:
-        - apt-get install libmesa-dev
+        - sudo apt-get update -q
+        - sudo apt-get install -y libmesa-dev
         - python -m pip install pip wheel setuptools numpy -U
       script:
         - python setup.py develop
