@@ -427,7 +427,7 @@ class Context:
 
         return self._info
 
-    def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, *, viewport=None) -> None:
+    def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, *, viewport=None, color=None) -> None:
         '''
             Clear the bound framebuffer. By default clears the :py:data:`screen`.
 
@@ -449,6 +449,9 @@ class Context:
             Keyword Args:
                 viewport (tuple): The viewport.
         '''
+
+        if color is not None:
+            red, green, blue, alpha, *_ = tuple(color) + (0.0, 0.0, 0.0, 0.0)
 
         self.mglo.fbo.clear(red, green, blue, alpha, depth, viewport)
 
@@ -735,7 +738,12 @@ class Context:
         res.extra = None
         return res
 
-    def vertex_array(self, program, content,
+    def vertex_array(self, *args, **kwargs) -> 'VertexArray':
+        if len(args) > 2 and type(args[1]) is Buffer:
+            return self.simple_vertex_array(*args, **kwargs)
+        return self._vertex_array(*args, **kwargs)
+
+    def _vertex_array(self, program, content,
                      index_buffer=None, index_element_size=4, *, skip_errors=False) -> 'VertexArray':
         '''
             Create a :py:class:`VertexArray` object.
@@ -765,6 +773,7 @@ class Context:
         res._index_element_size = index_element_size
         res.ctx = self
         res.extra = None
+        res.scope = None
         return res
 
     def simple_vertex_array(self, program, buffer, *attributes,
@@ -875,7 +884,7 @@ class Context:
         res.extra = None
         return res
 
-    def scope(self, framebuffer=None, enable_only=None, *, textures=(), uniform_buffers=(), storage_buffers=(), samplers=()) -> 'Scope':
+    def scope(self, framebuffer=None, enable_only=None, *, textures=(), uniform_buffers=(), storage_buffers=(), samplers=(), enable=None) -> 'Scope':
         '''
             Create a :py:class:`Scope` object.
 
@@ -888,6 +897,9 @@ class Context:
                 uniform_buffers (list): List of (buffer, binding) tuples.
                 storage_buffers (list): List of (buffer, binding) tuples.
         '''
+
+        if enable is not None:
+            enable_only = enable
 
         if framebuffer is None:
             framebuffer = self.screen
@@ -1038,7 +1050,7 @@ class Context:
         return res
 
     def sampler(self, repeat_x=True, repeat_y=True, repeat_z=True, filter=None, anisotropy=1.0,
-                compare_func='?', border_color=None, min_lod=-1000.0, max_lod=1000.0) -> Sampler:
+                compare_func='?', border_color=None, min_lod=-1000.0, max_lod=1000.0, texture=None) -> Sampler:
         '''
             Create a :py:class:`Sampler` object.
 
@@ -1072,6 +1084,7 @@ class Context:
         res.min_lod = min_lod
         res.max_lod = max_lod
         res.extra = None
+        res.texture = texture
         return res
 
     def clear_samplers(self, start=0, end=-1):

@@ -221,3 +221,6 @@ class Buffer:
         '''
 
         self.mglo.release()
+
+    def bind(self, *attribs, layout=None):
+        return (self, layout, *attribs)
