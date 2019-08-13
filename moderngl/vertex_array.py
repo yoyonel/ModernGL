@@ -160,8 +160,6 @@ class VertexArray:
                 first (int): The index of the first indirect draw command.
         '''
 
-        buffer = getattr(buffer, 'old', buffer)
-
         if mode is None:
             mode = TRIANGLES
 
@@ -188,8 +186,6 @@ class VertexArray:
                 instances (int): The number of instances.
         '''
 
-        buffer = getattr(buffer, 'old', buffer)
-
         if mode is None:
             mode = POINTS
 
@@ -215,8 +211,6 @@ class VertexArray:
                 divisor (int): The divisor.
                 normalize (bool): The normalize parameter, if applicable.
         '''
-
-        buffer = getattr(buffer, 'old', buffer)
 
         self.mglo.bind(attribute, cls, buffer.mglo, fmt, offset, stride, divisor, normalize)
 

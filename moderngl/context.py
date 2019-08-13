@@ -542,9 +542,6 @@ class Context:
                 write_offset (int): The write offset.
         '''
 
-        dst = getattr(dst, 'old', dst)
-        src = getattr(src, 'old', src)
-
         self.mglo.copy_buffer(dst.mglo, src.mglo, size, read_offset, write_offset)
 
     def copy_framebuffer(self, dst, src) -> None:
@@ -562,9 +559,6 @@ class Context:
                 dst (Framebuffer or Texture): Destination framebuffer or texture.
                 src (Framebuffer): Source framebuffer.
         '''
-
-        dst = getattr(dst, 'old', dst)
-        src = getattr(src, 'old', src)
 
         self.mglo.copy_framebuffer(dst.mglo, src.mglo)
 
@@ -767,12 +761,9 @@ class Context:
                 :py:class:`VertexArray` object
         '''
 
-        program = getattr(program, 'old', program)
-        index_buffer = getattr(index_buffer, 'old', index_buffer)
-
         members = program._members
         index_buffer_mglo = None if index_buffer is None else index_buffer.mglo
-        content = tuple((getattr(a, 'old', a).mglo, b) + tuple(getattr(members.get(x), 'mglo', None) for x in c) for a, b, *c in content)
+        content = tuple((a.mglo, b) + tuple(getattr(members.get(x), 'mglo', None) for x in c) for a, b, *c in content)
 
         res = VertexArray.__new__(VertexArray)
         res.mglo, res._glo = self.mglo.vertex_array(program.mglo, content, index_buffer_mglo,
@@ -913,11 +904,9 @@ class Context:
         if framebuffer is None:
             framebuffer = self.screen
 
-        framebuffer = getattr(framebuffer, 'old', framebuffer)
-
-        textures = tuple((getattr(tex, 'old', tex).mglo, idx) for tex, idx in textures)
-        uniform_buffers = tuple((getattr(buf, 'old', buf).mglo, idx) for buf, idx in uniform_buffers)
-        storage_buffers = tuple((getattr(buf, 'old', buf).mglo, idx) for buf, idx in storage_buffers)
+        textures = tuple((tex.mglo, idx) for tex, idx in textures)
+        uniform_buffers = tuple((buf.mglo, idx) for buf, idx in uniform_buffers)
+        storage_buffers = tuple((buf.mglo, idx) for buf, idx in storage_buffers)
 
         res = Scope.__new__(Scope)
         res.mglo = self.mglo.scope(framebuffer.mglo, enable_only, textures, uniform_buffers, storage_buffers, samplers)
@@ -960,12 +949,10 @@ class Context:
                 :py:class:`Framebuffer` object
         '''
 
-        depth_attachment = getattr(depth_attachment, 'old', depth_attachment)
-
         if type(color_attachments) is Texture or type(color_attachments) is Renderbuffer:
             color_attachments = (color_attachments,)
 
-        ca_mglo = tuple(getattr(x, 'old', x).mglo for x in color_attachments)
+        ca_mglo = tuple(x.mglo for x in color_attachments)
         da_mglo = None if depth_attachment is None else depth_attachment.mglo
 
         res = Framebuffer.__new__(Framebuffer)
