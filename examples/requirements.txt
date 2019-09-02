@@ -6,7 +6,7 @@ imageio
 
 # Window types
 glfw<2.0
-pyglet>1.4,<2.0
+pyglet>1.4.2<2.0
 PySDL2
 PyQt5<6
 PySide2<6
