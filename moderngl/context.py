@@ -1200,13 +1200,15 @@ def create_standalone_context(require=None, **settings) -> 'Context':
         Returns:
             :py:class:`Context` object
     '''
+    if require is None:
+        require = 0
 
     backend = os.environ.get('MODERNGL_BACKEND')
     if backend is not None:
         settings['backend'] = backend
 
     ctx = Context.__new__(Context)
-    ctx.mglo, ctx.version_code = mgl.create_standalone_context(settings)
+    ctx.mglo, ctx.version_code = mgl.create_context(None, True, require)
     ctx._screen = None
     ctx.fbo = None
     ctx._info = None
