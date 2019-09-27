@@ -1157,23 +1157,27 @@ def create_context(require=None, standalone=False, **settings) -> Context:
             :py:class:`Context` object
     '''
 
-    if standalone:
-        return create_standalone_context(require=require, **settings)
+    if require is None:
+        require = 0
 
     import moderngl.mgl as mgl
 
     ctx = Context.__new__(Context)
-    ctx.mglo, ctx.version_code = mgl.create_context()
+    ctx.mglo, ctx.version_code = mgl.create_context(None, standalone, require)
     ctx._info = None
     ctx.extra = None
 
-    if require is not None and ctx.version_code < require:
+    if ctx.version_code < require:
         raise ValueError('Requested OpenGL version {}, got version {}'.format(
             require, ctx.version_code))
 
-    ctx._screen = ctx.detect_framebuffer(0)
-    ctx.fbo = ctx.detect_framebuffer()
-    ctx.mglo.fbo = ctx.fbo.mglo
+    if standalone:
+        ctx._screen = None
+        ctx.fbo = None
+    else:
+        ctx._screen = ctx.detect_framebuffer(0)
+        ctx.fbo = ctx.detect_framebuffer()
+        ctx.mglo.fbo = ctx.fbo.mglo
 
     return ctx
 

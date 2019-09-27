@@ -98,57 +98,164 @@ PyObject * fmtdebug(PyObject * self, PyObject * args) {
 	return res;
 }
 
-PyObject * create_standalone_context(PyObject * self, PyObject * args) {
-	PyObject * settings;
+PyObject * create_context(PyObject * self, PyObject * args) {
+	PyObject * backend;
+	PyObject * standalone;
+	int glversion;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O",
-		&settings
+		"OOi",
+		&backend,
+		&standalone,
+		&glversion
 	);
 
 	if (!args_ok) {
 		return 0;
 	}
 
+    if (backend == Py_None) {
+        PyObject * glcontext = PyImport_ImportModule("glcontext");
+        if (!glcontext) {
+            return NULL;
+        }
+        backend = PyObject_CallMethod(glcontext, "default_backend", "O", standalone);
+        if (!backend) {
+            return NULL;
+        }
+    }
+
 	MGLContext * ctx = (MGLContext *)MGLContext_Type.tp_alloc(&MGLContext_Type, 0);
 
-	ctx->gl_context.error = "unknown error";
-	if (!ctx->gl_context.load(true)) {
-		MGLError_Set(ctx->gl_context.error);
-		return 0;
-	}
 	ctx->wireframe = false;
 
-	if (PyErr_Occurred()) {
-		return 0;
+    ctx->ctx = PyObject_CallFunction(backend, "i", glversion);
+    if (!ctx->ctx) {
+        return NULL;
+    }
+
+    ctx->enter_func = PyObject_GetAttrString(ctx->ctx, "__enter__");
+    if (!ctx->enter_func) {
+        return NULL;
+    }
+
+    ctx->exit_func = PyObject_GetAttrString(ctx->ctx, "__exit__");
+    if (!ctx->exit_func) {
+        return NULL;
+    }
+
+    void ** gl_function = (void **)&ctx->gl;
+    for (int i = 0; GL_FUNCTIONS[i]; ++i) {
+        PyObject * val = PyObject_CallMethod(ctx->ctx, "load", "s", GL_FUNCTIONS[i]);
+        if (!val) {
+            return NULL;
+        }
+        gl_function[i] = PyLong_AsVoidPtr(val);
+        Py_DECREF(val);
+    }
+
+    const GLMethods & gl = ctx->gl;
+
+	int major = 0;
+	int minor = 0;
+
+	gl.GetIntegerv(GL_MAJOR_VERSION, &major);
+	gl.GetIntegerv(GL_MINOR_VERSION, &minor);
+
+	ctx->version_code = major * 100 + minor * 10;
+
+	gl.BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	gl.Enable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+
+	gl.Enable(GL_PRIMITIVE_RESTART);
+	gl.PrimitiveRestartIndex(-1);
+
+	ctx->max_samples = 0;
+	gl.GetIntegerv(GL_MAX_SAMPLES, (GLint *)&ctx->max_samples);
+
+	ctx->max_integer_samples = 0;
+	gl.GetIntegerv(GL_MAX_INTEGER_SAMPLES, (GLint *)&ctx->max_integer_samples);
+
+	ctx->max_color_attachments = 0;
+	gl.GetIntegerv(GL_MAX_COLOR_ATTACHMENTS, (GLint *)&ctx->max_color_attachments);
+
+	ctx->max_texture_units = 0;
+	gl.GetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, (GLint *)&ctx->max_texture_units);
+	ctx->default_texture_unit = ctx->max_texture_units - 1;
+
+	ctx->max_anisotropy = 0.0;
+	gl.GetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY, (GLfloat *)&ctx->max_anisotropy);
+
+	int bound_framebuffer = 0;
+	gl.GetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &bound_framebuffer);
+
+	{
+		MGLFramebuffer * framebuffer = (MGLFramebuffer *)MGLFramebuffer_Type.tp_alloc(&MGLFramebuffer_Type, 0);
+
+		framebuffer->framebuffer_obj = 0;
+
+		framebuffer->draw_buffers_len = 1;
+		framebuffer->draw_buffers = new unsigned[1];
+
+		// According to glGet docs:
+		// The initial value is GL_BACK if there are back buffers, otherwise it is GL_FRONT.
+
+		// According to glDrawBuffer docs:
+		// The symbolic constants GL_FRONT, GL_BACK, GL_LEFT, GL_RIGHT, and GL_FRONT_AND_BACK
+		// are not allowed in the bufs array since they may refer to multiple buffers.
+
+		// GL_COLOR_ATTACHMENT0 is causes error: 1282
+		// This value is temporarily ignored
+
+		// framebuffer->draw_buffers[0] = GL_COLOR_ATTACHMENT0;
+		// framebuffer->draw_buffers[0] = GL_BACK_LEFT;
+
+		gl.BindFramebuffer(GL_FRAMEBUFFER, 0);
+		gl.GetIntegerv(GL_DRAW_BUFFER, (int *)&framebuffer->draw_buffers[0]);
+		gl.BindFramebuffer(GL_FRAMEBUFFER, bound_framebuffer);
+
+		framebuffer->color_mask = new bool[4];
+		framebuffer->color_mask[0] = true;
+		framebuffer->color_mask[1] = true;
+		framebuffer->color_mask[2] = true;
+		framebuffer->color_mask[3] = true;
+
+		framebuffer->depth_mask = true;
+
+		framebuffer->context = ctx;
+
+		int scrissor_box[4] = {};
+		gl.GetIntegerv(GL_SCISSOR_BOX, scrissor_box);
+
+		framebuffer->viewport_x = scrissor_box[0];
+		framebuffer->viewport_y = scrissor_box[1];
+		framebuffer->viewport_width = scrissor_box[2];
+		framebuffer->viewport_height = scrissor_box[3];
+
+		framebuffer->width = scrissor_box[2];
+		framebuffer->height = scrissor_box[3];
+
+		Py_INCREF(framebuffer);
+		ctx->default_framebuffer = framebuffer;
 	}
 
-	MGLContext_Initialize(ctx);
+	Py_INCREF(ctx->default_framebuffer);
+	ctx->bound_framebuffer = ctx->default_framebuffer;
 
-	if (PyErr_Occurred()) {
-		return 0;
-	}
+	ctx->enable_flags = 0;
+	ctx->front_face = GL_CCW;
 
-	Py_INCREF(ctx);
+	ctx->depth_func = GL_LEQUAL;
+	ctx->blend_func_src = GL_SRC_ALPHA;
+	ctx->blend_func_dst = GL_ONE_MINUS_SRC_ALPHA;
 
-	PyObject * result = PyTuple_New(2);
-	PyTuple_SET_ITEM(result, 0, (PyObject *)ctx);
-	PyTuple_SET_ITEM(result, 1, PyLong_FromLong(ctx->version_code));
-	return result;
-}
-
-PyObject * create_context(PyObject * self) {
-	MGLContext * ctx = (MGLContext *)MGLContext_Type.tp_alloc(&MGLContext_Type, 0);
-
-	ctx->gl_context.load(false);
 	ctx->wireframe = false;
+	ctx->multisample = true;
 
-	if (PyErr_Occurred()) {
-		return 0;
-	}
-
-	MGLContext_Initialize(ctx);
+	ctx->provoking_vertex = GL_LAST_VERTEX_CONVENTION;
+	gl.GetError(); // clear errors
 
 	if (PyErr_Occurred()) {
 		return 0;
@@ -164,8 +271,7 @@ PyObject * create_context(PyObject * self) {
 
 PyMethodDef MGL_module_methods[] = {
 	{"strsize", (PyCFunction)strsize, METH_VARARGS, 0},
-	{"create_standalone_context", (PyCFunction)create_standalone_context, METH_VARARGS, 0},
-	{"create_context", (PyCFunction)create_context, METH_NOARGS, 0},
+	{"create_context", (PyCFunction)create_context, METH_VARARGS, 0},
 	{"fmtdebug", (PyCFunction)fmtdebug, METH_VARARGS, 0},
 	{0},
 };

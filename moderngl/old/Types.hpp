@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Python.hpp"
-#include "gl_context.hpp"
 #include "gl_methods.hpp"
 #include "Error.hpp"
 
@@ -103,10 +102,12 @@ struct MGLComputeShader {
 struct MGLContext {
 	PyObject_HEAD
 
+	PyObject * ctx;
+	PyObject * enter_func;
+	PyObject * exit_func;
+
 	MGLFramebuffer * default_framebuffer;
 	MGLFramebuffer * bound_framebuffer;
-
-	GLContext gl_context;
 
 	int version_code;
 
