@@ -7,6 +7,7 @@ UniformBlock
 .. autoclass:: moderngl.UniformBlock
 
 .. autoattribute:: UniformBlock.binding
+.. autoattribute:: UniformBlock.value
 .. autoattribute:: UniformBlock.name
 .. autoattribute:: UniformBlock.index
 .. autoattribute:: UniformBlock.size

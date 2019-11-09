@@ -156,6 +156,7 @@ class Framebuffer:
 
             Keyword Args:
                 viewport (tuple): The viewport.
+                color (tuple): Optional tuple replacing the red, green, blue and alpha arguments
         '''
 
         if color is not None:

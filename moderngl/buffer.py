@@ -223,7 +223,17 @@ class Buffer:
         self.mglo.release()
 
     def bind(self, *attribs, layout=None):
+        """Helper method for binding a buffer.
+
+        Returns:
+            (self, layout, *attribs) tuple
+        """
         return (self, layout, *attribs)
 
     def assign(self, index):
+        """Helper method for assigning a buffer.
+
+        Returns:
+            (self, index) tuple
+        """
         return (self, index)

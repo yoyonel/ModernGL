@@ -43,7 +43,7 @@ class VertexArray:
         self._glo = None
         self.ctx = None
         self.extra = None  #: Any - Attribute for storing user defined objects
-        self.scope = None
+        self.scope = None  #: The :py:cls:`moderngl.Scope`.
         raise TypeError()
 
     def __repr__(self):

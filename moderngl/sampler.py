@@ -227,4 +227,15 @@ class Sampler:
         self.mglo.max_lod = value
 
     def assign(self, index):
+        """Helper method for assigning samplers to scopes.
+
+        Example::
+
+            s1 = ctx.sampler(...)
+            s2 = ctx.sampler(...)
+            ctx.scope(samplers=(s1.assign(0), s1.assign(1)), ...)
+
+        Returns:
+            (self, index) tuple
+        """
         return (self, index)

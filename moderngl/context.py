@@ -87,6 +87,13 @@ class Context:
     DST_COLOR = 0x0306
     ONE_MINUS_DST_COLOR = 0x0307
 
+    # Blend equations
+    FUNC_ADD = 0x8006
+    FUNC_SUBTRACT = 0x800A
+    FUNC_REVERSE_SUBTRACT = 0x800B
+    MIN = 0x8007
+    MAX = 0x8008
+
     FIRST_VERTEX_CONVENTION = 0x8E4D
     LAST_VERTEX_CONVENTION = 0x8E4E
 
@@ -165,7 +172,7 @@ class Context:
             tuple: Set the blend func (write only)
             Blend func can be set for rgb and alpha separately if needed.
 
-            Supported blend functions are:
+            Supported blend functions are::
 
                 moderngl.ZERO
                 moderngl.ONE
@@ -176,7 +183,7 @@ class Context:
                 moderngl.SRC_ALPHA
                 moderngl.ONE_MINUS_SRC_ALPHA
                 moderngl.DST_ALPHA
-                moderngl.ONE_MINUS_DST_ALPHA,
+                moderngl.ONE_MINUS_DST_ALPHA
 
             Example::
 
@@ -956,6 +963,8 @@ class Context:
                 textures (list): List of (texture, binding) tuples.
                 uniform_buffers (list): List of (buffer, binding) tuples.
                 storage_buffers (list): List of (buffer, binding) tuples.
+                samplers (list): List of sampler bindings
+                enable (int): Flags to enable for this vao such as depth testing and blending
         '''
 
         if enable is not None:
@@ -1128,6 +1137,7 @@ class Context:
                                  This floating-point value limits the selection of highest resolution mipmap (lowest mipmap level)
                 max_lod (float): Minimum level-of-detail parameter (Default ``1000.0``).
                                  This floating-point value limits the selection of the lowest resolution mipmap (highest mipmap level)
+                texture (Texture): The texture for this sampler
         '''
 
         res = Sampler.__new__(Sampler)

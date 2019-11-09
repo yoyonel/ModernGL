@@ -15,6 +15,8 @@ Create
 Methods
 -------
 
+.. automethod:: Buffer.assign(index)
+.. automethod:: Buffer.bind(*attribs, layout=None)
 .. automethod:: Buffer.write(data, offset=0)
 .. automethod:: Buffer.write_chunks(data, start, step, count)
 .. automethod:: Buffer.read(size=-1, offset=0) -> bytes

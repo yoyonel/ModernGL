@@ -17,7 +17,7 @@ ModernGL Objects
 
 .. automethod:: Context.program(vertex_shader, fragment_shader=None, geometry_shader=None, tess_control_shader=None, tess_evaluation_shader=None, varyings=()) -> Program
 .. automethod:: Context.simple_vertex_array(program, buffer, *attributes, index_buffer=None, index_element_size=4) -> VertexArray
-.. automethod:: Context.vertex_array(program, content, index_buffer=None, index_element_size=4, skip_errors=False) -> VertexArray
+.. automethod:: Context.vertex_array(*args, **kwargs) -> VertexArray
 .. automethod:: Context.buffer(data=None, reserve=0, dynamic=False) -> Buffer
 .. automethod:: Context.texture(size, components, data=None, samples=0, alignment=1, dtype='f1') -> Texture
 .. automethod:: Context.depth_texture(size, data=None, samples=0, alignment=4) -> Texture
@@ -28,16 +28,16 @@ ModernGL Objects
 .. automethod:: Context.framebuffer(color_attachments=(), depth_attachment=None) -> Framebuffer
 .. automethod:: Context.renderbuffer(size, components=4, samples=0, dtype='f1') -> Renderbuffer
 .. automethod:: Context.depth_renderbuffer(size, samples=0) -> Renderbuffer
-.. automethod:: Context.scope(framebuffer, enable_only=None, textures=(), uniform_buffers=(), storage_buffers=()) -> Scope
+.. automethod:: Context.scope(framebuffer=None, enable_only=None, textures=(), uniform_buffers=(), storage_buffers=(), samplers=(), enable=None) -> Scope
 .. automethod:: Context.query(samples=False, any_samples=False, time=False, primitives=False) -> Query
 .. automethod:: Context.compute_shader(source) -> ComputeShader
-.. automethod:: Context.sampler(repeat_x=True, repeat_y=True, repeat_z=True, filter=None, anisotropy=1.0, compare_func='?', border_color=None, min_lod=-1000.0, max_lod=1000.0) -> Sampler
+.. automethod:: Context.sampler(repeat_x=True, repeat_y=True, repeat_z=True, filter=None, anisotropy=1.0, compare_func='?', border_color=None, min_lod=-1000.0, max_lod=1000.0, texture=None) -> Sampler
 .. automethod:: Context.clear_samplers(start=0, end=-1)
 
 Methods
 -------
 
-.. automethod:: Context.clear(red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, viewport=None)
+.. automethod:: Context.clear(red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, viewport=None, color=None)
 .. automethod:: Context.enable_only(flags)
 .. automethod:: Context.enable(flags)
 .. automethod:: Context.disable(flags)
@@ -71,6 +71,34 @@ Attributes
 .. autoattribute:: Context.error
 .. autoattribute:: Context.info
 .. autoattribute:: Context.extra
+
+OpenGL enums
+------------
+
+.. autoattribute:: Context.BLEND
+.. autoattribute:: Context.DEPTH_TEST
+.. autoattribute:: Context.CULL_FACE
+
+.. autoattribute:: Context.ZERO
+.. autoattribute:: Context.ONE
+
+.. autoattribute:: Context.SRC_COLOR
+.. autoattribute:: Context.ONE_MINUS_SRC_COLOR
+.. autoattribute:: Context.SRC_ALPHA
+.. autoattribute:: Context.ONE_MINUS_SRC_ALPHA
+.. autoattribute:: Context.DST_ALPHA
+.. autoattribute:: Context.ONE_MINUS_DST_ALPHA
+.. autoattribute:: Context.DST_COLOR
+.. autoattribute:: Context.ONE_MINUS_DST_COLOR
+
+.. autoattribute:: Context.FUNC_ADD
+.. autoattribute:: Context.FUNC_SUBTRACT
+.. autoattribute:: Context.FUNC_REVERSE_SUBTRACT
+.. autoattribute:: Context.MIN
+.. autoattribute:: Context.MAX
+
+.. autoattribute:: Context.FIRST_VERTEX_CONVENTION
+.. autoattribute:: Context.LAST_VERTEX_CONVENTION
 
 Examples
 --------

@@ -18,7 +18,7 @@ Create
 Methods
 -------
 
-.. automethod:: Framebuffer.clear(red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, viewport=None)
+.. automethod:: Framebuffer.clear(red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, viewport=None, color=None)
 .. automethod:: Framebuffer.read(viewport=None, components=3, attachment=0, alignment=1, dtype='f1') -> bytes
 .. automethod:: Framebuffer.read_into(buffer, viewport=None, components=3, attachment=0, alignment=1, dtype='f1', write_offset=0)
 .. automethod:: Framebuffer.use()
