@@ -83,10 +83,10 @@ class TextureArray:
 
             Example::
 
-                texture.filter == (monderngl.NEAREST, moderngl.NEAREST)
-                texture.filter == (monderngl.LINEAR_MIPMAP_LINEAR, moderngl.LINEAR)
-                texture.filter == (monderngl.NEAREST_MIPMAP_LINEAR, moderngl.NEAREST)
-                texture.filter == (monderngl.LINEAR_MIPMAP_NEAREST, moderngl.NEAREST)
+                texture.filter == (moderngl.NEAREST, moderngl.NEAREST)
+                texture.filter == (moderngl.LINEAR_MIPMAP_LINEAR, moderngl.LINEAR)
+                texture.filter == (moderngl.NEAREST_MIPMAP_LINEAR, moderngl.NEAREST)
+                texture.filter == (moderngl.LINEAR_MIPMAP_NEAREST, moderngl.NEAREST)
         '''
 
         return self.mglo.filter

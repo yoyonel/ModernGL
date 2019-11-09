@@ -105,7 +105,7 @@ class Buffer:
             Read the content into a buffer.
 
             Args:
-                buffer (bytarray): The buffer that will receive the content.
+                buffer (bytearray): The buffer that will receive the content.
                 size (int): The size. Value ``-1`` means all.
 
             Keyword Args:
@@ -142,7 +142,7 @@ class Buffer:
             using offsets calculated from start, step and stop.
 
             Args:
-                buffer (bytarray): The buffer that will receive the content.
+                buffer (bytearray): The buffer that will receive the content.
                 chunk_size (int): The chunk size.
                 start (int): First offset.
                 step (int): Offset increment.

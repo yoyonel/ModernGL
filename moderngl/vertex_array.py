@@ -55,7 +55,7 @@ class VertexArray:
     @property
     def program(self) -> 'Program':
         '''
-            Program: The program assinged to the VertexArray.
+            Program: The program assigned to the VertexArray.
             The program used when rendering or transforming primitives.
         '''
 
@@ -102,7 +102,7 @@ class VertexArray:
     @property
     def subroutines(self) -> Tuple[int, ...]:
         '''
-            tuple: The subroutines assinged to the VertexArray.
+            tuple: The subroutines assigned to the VertexArray.
             The subroutines used when rendering or transforming primitives.
         '''
 
