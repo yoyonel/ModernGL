@@ -1218,7 +1218,7 @@ def create_context(require=None, standalone=False, **settings) -> Context:
     '''
 
     if require is None:
-        require = 0
+        require = 330
 
     import moderngl.mgl as mgl
 
