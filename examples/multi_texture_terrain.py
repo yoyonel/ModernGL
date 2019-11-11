@@ -82,10 +82,15 @@ class MultiTextireTerrain(Example):
         self.vao = self.ctx.vertex_array(self.prog, vao_content, self.ibo)
 
         self.tex0 = self.load_texture_2d('heightmap.jpg')
+        self.tex0.build_mipmaps()
         self.tex1 = self.load_texture_2d('grass.jpg')
+        self.tex1.build_mipmaps()
         self.tex2 = self.load_texture_2d('rock.jpg')
+        self.tex2.build_mipmaps()
         self.tex3 = self.load_texture_2d('cracks.jpg')
+        self.tex3.build_mipmaps()
         self.tex4 = self.load_texture_2d('checked.jpg')
+        self.tex4.build_mipmaps()
 
         self.prog['Heightmap'].value = 0
         self.prog['Color1'].value = 1

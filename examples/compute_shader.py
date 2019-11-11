@@ -41,13 +41,15 @@ consts = {
 }
 
 FRAMES = 50
-OUTPUT_DIRPATH = "./output"
+SOURCE_PATH = os.path.dirname(__file__)
+OUTPUT_DIRPATH = os.path.join(SOURCE_PATH, "output")
 
 if not os.path.isdir(OUTPUT_DIRPATH):
     os.makedirs(OUTPUT_DIRPATH)
 
+glsl_file = os.path.join(SOURCE_PATH, 'gl/median_5x5.gl')
 context = moderngl.create_standalone_context(require=430)
-compute_shader = context.compute_shader(source('./gl/median_5x5.gl', consts))
+compute_shader = context.compute_shader(source(glsl_file, consts))
 
 # init buffers
 buffer_a_data = np.random.uniform(0.0, 1.0, (H, W, 4)).astype('f4')
