@@ -15,6 +15,7 @@ pip install moderngl
 - [ModernGL on Github](https://github.com/moderngl/moderngl/)
 - [ModernGL on PyPI](https://pypi.org/project/ModernGL/)
 - [ModernGL Discord Server](https://discord.gg/UEMtW8D)
+- [glcontext](https://github.com/moderngl/glcontext)
 - [moderngl-window] (Window creation, resource loading, ..)
 
 ## Features
