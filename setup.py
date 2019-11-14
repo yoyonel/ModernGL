@@ -167,5 +167,5 @@ setup(
     packages=['moderngl', 'moderngl.program_members'],
     ext_modules=[mgl],
     platforms=['any'],
-    install_requires=['glcontext==0.2.*'],
+    install_requires=['glcontext==1.0.*'],
 )
