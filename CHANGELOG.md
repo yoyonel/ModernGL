@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## 5.6.0 [Unreleased]
+
+From moderngl 5.6 context creation is done by the [glcontext](https://github.com/moderngl/glcontext)
+package. This means we can keep improving context creation without releasing new
+moderngl versions. The bar for contributing to context creation is also lower.
+Backends can be written in C++ or by simply using ctypes.
 
 ### Added
 
