@@ -6,6 +6,8 @@
 
 # ModernGL
 
+[![pypi](https://badge.fury.io/py/moderngl.svg)](https://pypi.python.org/pypi/moderngl) [![python](https://raw.githubusercontent.com/moderngl/moderngl/master/.github/python-versions.svg)] [![rtd](https://readthedocs.org/projects/moderngl/badge/?version=latest)](https://moderngl.readthedocs.io)
+
 ```sh
 pip install moderngl
 ```
@@ -87,30 +89,40 @@ python setup.py build_ext --inplace
 
 ### Is ModernGL faster than PyOpenGL?
 
-In some cases **yes**, the core functions of ModernGL are written in C++, OpenGL functions are called in quick succession so these calls together count as a single python function call.
+In some cases **yes**, the core functions of ModernGL are written in C++,
+OpenGL functions are called in quick succession so these calls together
+count as a single python function call.
 
 ### What version of OpenGL is used?
 
-Most of the calls only require **OpenGL 3.3** but Subroutines and Compute Shaders require **OpenGL 4.0** and **OpenGL 4.3**
+Most of the calls only require **OpenGL 3.3** but Subroutines and Compute
+Shaders require **OpenGL 4.0** and **OpenGL 4.3**
 
 ### Is my old PC supported?
 
-OpenGL 3.3 came out in February 2010. With **up to date drivers** you will be able to use the most of the ModernGL functions, even on integrated graphics cards. _(No, Compute Shaders won't work)_
+OpenGL 3.3 came out in February 2010. With **up to date drivers** you will
+be able to use the most of the ModernGL functions, even on integrated 
+graphics cards. _(No, Compute Shaders won't work)_
 
 ### Where can I use ModernGL?
 
-**Anywhere where OpenGL is supported.** ModernGL is capable of rendering using a [standalone_context] as well. Rendering to a window only requires a valid OpenGL context.
+**Anywhere where OpenGL is supported.** ModernGL is capable of rendering
+using a [standalone_context] as well. Rendering to a window only requires
+a valid OpenGL context.
 
 [standalone_context]: https://github.com/cprogrammer1994/ModernGL/tree/master/examples/old-examples/standalone
 
 ### Can ModernGL create a Window?
 
-**NO**, but we provide a utility library [moderngl-window] making window creation and
-resource loading very simple.
+**NO**, but we provide a utility library [moderngl-window] making window
+creation and resource loading very simple.
 
 ### Limitations using ModernGL over PyOpenGL?
 
-All the necessary calls are (or can be) implemented in ModernGL. However you can interract with the ModernGL objects from PyOpenGL. If something is missing write an [issue](https://github.com/cprogrammer1994/ModernGL/issues) or raise a [PR](https://github.com/cprogrammer1994/ModernGL/pulls).
+All the necessary calls are (or can be) implemented in ModernGL. However
+you can interact with the ModernGL objects from PyOpenGL. If something is
+missing write an [issue](https://github.com/cprogrammer1994/ModernGL/issues)
+or raise a [PR](https://github.com/cprogrammer1994/ModernGL/pulls).
 
 ## Supported platforms
 
