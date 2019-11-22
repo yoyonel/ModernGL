@@ -6,7 +6,7 @@
 
 # ModernGL
 
-[![pypi](https://badge.fury.io/py/moderngl.svg)](https://pypi.python.org/pypi/moderngl) [![python](https://raw.githubusercontent.com/moderngl/moderngl/master/.github/python-versions.svg)] [![rtd](https://readthedocs.org/projects/moderngl/badge/?version=latest)](https://moderngl.readthedocs.io)
+[![pypi](https://badge.fury.io/py/moderngl.svg)](https://pypi.python.org/pypi/moderngl) <img src="https://raw.githubusercontent.com/moderngl/moderngl/master/.github/python-versions.svg?sanitize=true"> [![rtd](https://readthedocs.org/projects/moderngl/badge/?version=latest)](https://moderngl.readthedocs.io)
 
 ```sh
 pip install moderngl
