@@ -70,7 +70,7 @@ extra_linker_args = {
     'windows': [],
     'linux': [],
     'cygwin': [],
-    'darwin': ['-framework', 'OpenGL', '-Wno-deprecated'],
+    'darwin': [],
     'android': [],
 }
 
