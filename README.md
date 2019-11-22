@@ -178,7 +178,7 @@ Code is tested with [pep8], [flake8], [prospector] and [pylint]
 [prospector]: https://prospector.readthedocs.io/en/master/
 [pylint]: https://www.pylint.org/
 [moderngl-window]: https://github.com/moderngl/moderngl-window
-[glcontext]: (https://github.com/moderngl/glcontext)
+[glcontext]: https://github.com/moderngl/glcontext
 
 ## Community
 
