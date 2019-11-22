@@ -51,8 +51,7 @@ if target in ['linux', 'cygwin']:
             sysconfig._config_vars['CFLAGS'] = cvars['CFLAGS'].replace('-Wimplicit-function-declaration', '')
 
 libraries = {
-    # 'windows': ['gdi32', 'opengl32', 'user32'],
-    'windows': ['gdi32', 'opengl32', 'user32'],
+    'windows': [],
     'linux': [],
     'cygwin': [],
     'darwin': [],
