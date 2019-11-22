@@ -17,8 +17,14 @@ pip install moderngl
 - [ModernGL on Github](https://github.com/moderngl/moderngl/)
 - [ModernGL on PyPI](https://pypi.org/project/ModernGL/)
 - [ModernGL Discord Server](https://discord.gg/UEMtW8D)
-- [glcontext](https://github.com/moderngl/glcontext)
+- [glcontext]
 - [moderngl-window] (Window creation, resource loading, ..)
+
+> **NOTE: From moderngl 5.6 context creation is delegated to the [glcontext] package.
+  This makes us able to expand and improve context creation without releasing new
+  versions of moderngl. It also makes it possible for users to customize their own
+  context creation and the bar for contributing should be lower. New backends
+  can be created using ctypes or C++.**
 
 ## Features
 
@@ -172,6 +178,7 @@ Code is tested with [pep8], [flake8], [prospector] and [pylint]
 [prospector]: https://prospector.readthedocs.io/en/master/
 [pylint]: https://www.pylint.org/
 [moderngl-window]: https://github.com/moderngl/moderngl-window
+[glcontext]: (https://github.com/moderngl/glcontext)
 
 ## Community
 
