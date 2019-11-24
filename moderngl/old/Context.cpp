@@ -1038,14 +1038,8 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		int gl_max_uniform_block_size = 0;
 		gl.GetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE, &gl_max_uniform_block_size);
 
-		int gl_max_varying_components = 0;
-		gl.GetIntegerv(GL_MAX_VARYING_COMPONENTS, &gl_max_varying_components);
-
 		int gl_max_varying_vectors = 0;
 		gl.GetIntegerv(GL_MAX_VARYING_VECTORS, &gl_max_varying_vectors);
-
-		int gl_max_varying_floats = 0;
-		gl.GetIntegerv(GL_MAX_VARYING_FLOATS, &gl_max_varying_floats);
 
 		int gl_max_vertex_attribs = 0;
 		gl.GetIntegerv(GL_MAX_VERTEX_ATTRIBS, &gl_max_vertex_attribs);
@@ -1108,9 +1102,7 @@ PyObject * MGLContext_get_info(MGLContext * self, void * closure) {
 		PyDict_SetItemString(info, "GL_MAX_TEXTURE_SIZE", PyLong_FromLong(gl_max_texture_size));
 		PyDict_SetItemString(info, "GL_MAX_UNIFORM_BUFFER_BINDINGS", PyLong_FromLong(gl_max_uniform_buffer_bindings));
 		PyDict_SetItemString(info, "GL_MAX_UNIFORM_BLOCK_SIZE", PyLong_FromLong(gl_max_uniform_block_size));
-		PyDict_SetItemString(info, "GL_MAX_VARYING_COMPONENTS", PyLong_FromLong(gl_max_varying_components));
 		PyDict_SetItemString(info, "GL_MAX_VARYING_VECTORS", PyLong_FromLong(gl_max_varying_vectors));
-		PyDict_SetItemString(info, "GL_MAX_VARYING_FLOATS", PyLong_FromLong(gl_max_varying_floats));
 		PyDict_SetItemString(info, "GL_MAX_VERTEX_ATTRIBS", PyLong_FromLong(gl_max_vertex_attribs));
 		PyDict_SetItemString(info, "GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS", PyLong_FromLong(gl_max_vertex_texture_image_units));
 		PyDict_SetItemString(info, "GL_MAX_VERTEX_UNIFORM_COMPONENTS", PyLong_FromLong(gl_max_vertex_uniform_components));
