@@ -14,6 +14,8 @@ Backends can be written in C++ or by simply using ctypes.
 
 ### Added
 
+- Scissor test support. `Framebuffer.scissor` and `Context.scissor` can now be used
+  to set and enable scissor testing per framebuffer.
 - The `Framebuffer.clear` have an optional `color` parameter to replace the old `red, green, blue, alpha` parameters.
 - Samplers and Buffers have an `assign` method to simplify the scope creation.
 - Samplers have an optional `texture` parameter that will be used together with the sampler when given.
