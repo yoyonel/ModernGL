@@ -274,8 +274,7 @@ class Context:
     @property
     def viewport(self) -> Tuple[int, int, int, int]:
         '''
-            tuple: The viewport of the active framebuffer.
-            Modifies or gets the viewport.
+            tuple: Get or set the viewport of the active framebuffer.
 
             Example::
 
@@ -293,6 +292,28 @@ class Context:
     @viewport.setter
     def viewport(self, value):
         self.mglo.fbo.viewport = tuple(value)
+
+    @property
+    def scissor(self) -> Tuple[int, int, int, int]:
+        '''
+            tuple: Get or set the the scissor box for the active framebuffer
+
+            When this value is set scissor testing is enabled.
+            setting the scissor attribute to `None` disables
+            the scissor testing.
+
+            Example::
+
+                >>> ctx.scissor = 100, 100, 200, 100
+                >>> ctx.scissor = None
+
+            If no framebuffer is bound ``(0, 0, 0, 0)`` will be returned.
+        '''
+        return self.mglo.fbo.scissor
+
+    @scissor.setter
+    def scissor(self, value):
+        self.mglo.fbo.scissor = tuple(value)
 
     @property
     def max_samples(self) -> int:
@@ -500,6 +521,8 @@ class Context:
 
             If the `viewport` is not ``None`` then scissor test
             will be used to clear the given viewport.
+            If `viewport` is not `None` it will take precedence
+            over any scissoring set in the framebuffer.
 
             If the `viewport` is a 2-tuple it will clear the
             ``(0, 0, width, height)`` where ``(width, height)`` is the 2-tuple.

@@ -37,7 +37,7 @@ class Framebuffer:
     @property
     def viewport(self) -> Tuple[int, int, int, int]:
         '''
-            tuple: The viewport of the framebuffer.
+            tuple: Get or set the viewport of the framebuffer.
         '''
 
         return self.mglo.viewport
@@ -45,6 +45,18 @@ class Framebuffer:
     @viewport.setter
     def viewport(self, value):
         self.mglo.viewport = tuple(value)
+
+    @property
+    def scissor(self) -> Tuple[int, int, int, int]:
+        '''
+            tuple: Get or set the scissor of the framebuffer.
+        '''
+
+        return self.mglo.scissor
+
+    @scissor.setter
+    def scissor(self, value):
+        self.mglo.scissor = tuple(value)
 
     @property
     def color_mask(self) -> Tuple[bool, bool, bool, bool]:
@@ -141,6 +153,8 @@ class Framebuffer:
 
             If the `viewport` is not ``None`` then scissor test
             will be used to clear the given viewport.
+            If `viewport` is not `None` it will take precedence
+            over any scissoring set in the framebuffer.
 
             If the `viewport` is a 2-tuple it will clear the
             ``(0, 0, width, height)`` where ``(width, height)`` is the 2-tuple.

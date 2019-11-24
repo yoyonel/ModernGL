@@ -379,6 +379,12 @@ PyObject * MGLContext_detect_framebuffer(MGLContext * self, PyObject * args) {
 	framebuffer->viewport_width = width;
 	framebuffer->viewport_height = height;
 
+	framebuffer->scissor_enabled = false;
+	framebuffer->scissor_x = 0;
+	framebuffer->scissor_y = 0;
+	framebuffer->scissor_width = width;
+	framebuffer->scissor_height = height;
+
 	framebuffer->width = width;
 	framebuffer->height = height;
 

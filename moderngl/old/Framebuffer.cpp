@@ -276,6 +276,12 @@ PyObject * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	framebuffer->viewport_width = width;
 	framebuffer->viewport_height = height;
 
+	framebuffer->scissor_enabled = false;
+	framebuffer->scissor_x = 0;
+	framebuffer->scissor_y = 0;
+	framebuffer->scissor_width = width;
+	framebuffer->scissor_height = height;
+
 	framebuffer->width = width;
 	framebuffer->height = height;
 	framebuffer->samples = samples;
@@ -309,6 +315,15 @@ PyObject * MGLFramebuffer_tp_new(PyTypeObject * type, PyObject * args, PyObject 
 
 void MGLFramebuffer_tp_dealloc(MGLFramebuffer * self) {
 	MGLFramebuffer_Type.tp_free((PyObject *)self);
+}
+
+bool MGLFramebuffer_scissor_enabled(MGLFramebuffer * framebuffer) {
+	if (framebuffer->scissor_x == 0 && framebuffer->scissor_y == 0
+	    && framebuffer->scissor_width == framebuffer->width
+		&& framebuffer->scissor_height == framebuffer->height) {
+			return false;
+		}
+		return true;
 }
 
 PyObject * MGLFramebuffer_release(MGLFramebuffer * self) {
@@ -395,12 +410,30 @@ PyObject * MGLFramebuffer_clear(MGLFramebuffer * self, PyObject * args) {
 
 	gl.DepthMask(self->depth_mask);
 
+	// Respect the passed in viewport even with scissor enabled
 	if (viewport != Py_None) {
 		gl.Enable(GL_SCISSOR_TEST);
 		gl.Scissor(x, y, width, height);
 		gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-		gl.Disable(GL_SCISSOR_TEST);
+
+		// restore scissor if enabled
+		if (self->scissor_enabled) {
+			gl.Scissor(
+				self->scissor_x, self->scissor_y,
+				self->scissor_width, self->scissor_height
+			);
+		} else {
+			gl.Disable(GL_SCISSOR_TEST);
+		}
 	} else {
+		// clear with scissor if enabled
+		if (self->scissor_enabled) {
+			gl.Enable(GL_SCISSOR_TEST);
+			gl.Scissor(
+				self->scissor_x, self->scissor_y,
+				self->scissor_width, self->scissor_height
+			);
+		}
 		gl.Clear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	}
 
@@ -424,6 +457,14 @@ PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
 			self->viewport_y,
 			self->viewport_width,
 			self->viewport_height
+		);
+	}
+
+	if (self->scissor_enabled) {
+		gl.Enable(GL_SCISSOR_TEST);
+		gl.Scissor(
+			self->scissor_x, self->scissor_y,
+			self->scissor_width, self->scissor_height
 		);
 	}
 
@@ -753,6 +794,54 @@ int MGLFramebuffer_set_viewport(MGLFramebuffer * self, PyObject * value, void * 
 	return 0;
 }
 
+PyObject * MGLFramebuffer_get_scissor(MGLFramebuffer * self, void * closure) {
+	PyObject * x = PyLong_FromLong(self->scissor_x);
+	PyObject * y = PyLong_FromLong(self->scissor_y);
+	PyObject * width = PyLong_FromLong(self->scissor_width);
+	PyObject * height = PyLong_FromLong(self->scissor_height);
+	return PyTuple_Pack(4, x, y, width, height);
+}
+
+int MGLFramebuffer_set_scissor(MGLFramebuffer * self, PyObject * value, void * closure) {
+	if (PyTuple_GET_SIZE(value) != 4) {
+		MGLError_Set("scissor must be a 4-tuple not %d-tuple", PyTuple_GET_SIZE(value));
+		return -1;
+	}
+
+	int scissor_x = PyLong_AsLong(PyTuple_GET_ITEM(value, 0));
+	int scissor_y = PyLong_AsLong(PyTuple_GET_ITEM(value, 1));
+	int scissor_width = PyLong_AsLong(PyTuple_GET_ITEM(value, 2));
+	int scissor_height = PyLong_AsLong(PyTuple_GET_ITEM(value, 3));
+
+	if (PyErr_Occurred()) {
+		MGLError_Set("the scissor is invalid");
+		return -1;
+	}
+
+	self->scissor_x = scissor_x;
+	self->scissor_y = scissor_y;
+	self->scissor_width = scissor_width;
+	self->scissor_height = scissor_height;
+
+	if (self->framebuffer_obj == self->context->bound_framebuffer->framebuffer_obj) {
+		const GLMethods & gl = self->context->gl;
+
+		self->scissor_enabled = MGLFramebuffer_scissor_enabled(self);
+
+		if (self->scissor_enabled) {
+			gl.Enable(GL_SCISSOR_TEST);
+		}
+		gl.Scissor(
+			self->scissor_x,
+			self->scissor_y,
+			self->scissor_width,
+			self->scissor_height
+		);
+	}
+
+	return 0;
+}
+
 PyObject * MGLFramebuffer_get_color_mask(MGLFramebuffer * self, void * closure) {
 	if (self->draw_buffers_len == 1) {
 		PyObject * color_mask = PyTuple_New(4);
@@ -967,6 +1056,7 @@ PyObject * MGLFramebuffer_get_bits(MGLFramebuffer * self, void * closure) {
 
 PyGetSetDef MGLFramebuffer_tp_getseters[] = {
 	{(char *)"viewport", (getter)MGLFramebuffer_get_viewport, (setter)MGLFramebuffer_set_viewport, 0, 0},
+	{(char *)"scissor", (getter)MGLFramebuffer_get_scissor, (setter)MGLFramebuffer_set_scissor, 0, 0},
 	{(char *)"color_mask", (getter)MGLFramebuffer_get_color_mask, (setter)MGLFramebuffer_set_color_mask, 0, 0},
 	{(char *)"depth_mask", (getter)MGLFramebuffer_get_depth_mask, (setter)MGLFramebuffer_set_depth_mask, 0, 0},
 

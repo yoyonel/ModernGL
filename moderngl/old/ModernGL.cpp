@@ -234,6 +234,12 @@ PyObject * create_context(PyObject * self, PyObject * args) {
 		framebuffer->viewport_width = scrissor_box[2];
 		framebuffer->viewport_height = scrissor_box[3];
 
+		framebuffer->scissor_enabled = false;
+		framebuffer->scissor_x = scrissor_box[0];
+		framebuffer->scissor_y = scrissor_box[1];
+		framebuffer->scissor_width = scrissor_box[2];
+		framebuffer->scissor_height = scrissor_box[3];
+
 		framebuffer->width = scrissor_box[2];
 		framebuffer->height = scrissor_box[3];
 

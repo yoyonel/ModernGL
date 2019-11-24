@@ -151,6 +151,12 @@ struct MGLFramebuffer {
 	int viewport_width;
 	int viewport_height;
 
+	bool scissor_enabled;
+	int scissor_x;
+	int scissor_y;
+	int scissor_width;
+	int scissor_height;
+
 	int width;
 	int height;
 	int samples;
