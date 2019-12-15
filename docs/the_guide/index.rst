@@ -7,6 +7,7 @@ The Guide
     intro.rst
     install.rst
     context.rst
+    buffer_format.rst
     program.rst
     vertex_array.rst
     rendering.rst
