@@ -803,25 +803,33 @@ PyObject * MGLFramebuffer_get_scissor(MGLFramebuffer * self, void * closure) {
 }
 
 int MGLFramebuffer_set_scissor(MGLFramebuffer * self, PyObject * value, void * closure) {
-	if (PyTuple_GET_SIZE(value) != 4) {
-		MGLError_Set("scissor must be a 4-tuple not %d-tuple", PyTuple_GET_SIZE(value));
-		return -1;
+
+	if (value == Py_None) {
+		self->scissor_x = 0;
+		self->scissor_y = 0;
+		self->scissor_width = self->width;
+		self->scissor_height = self->height;
+	} else {
+		if (PyTuple_GET_SIZE(value) != 4) {
+			MGLError_Set("scissor must be a 4-tuple not %d-tuple", PyTuple_GET_SIZE(value));
+			return -1;
+		}
+
+		int scissor_x = PyLong_AsLong(PyTuple_GET_ITEM(value, 0));
+		int scissor_y = PyLong_AsLong(PyTuple_GET_ITEM(value, 1));
+		int scissor_width = PyLong_AsLong(PyTuple_GET_ITEM(value, 2));
+		int scissor_height = PyLong_AsLong(PyTuple_GET_ITEM(value, 3));
+
+		if (PyErr_Occurred()) {
+			MGLError_Set("the scissor is invalid");
+			return -1;
+		}
+
+		self->scissor_x = scissor_x;
+		self->scissor_y = scissor_y;
+		self->scissor_width = scissor_width;
+		self->scissor_height = scissor_height;
 	}
-
-	int scissor_x = PyLong_AsLong(PyTuple_GET_ITEM(value, 0));
-	int scissor_y = PyLong_AsLong(PyTuple_GET_ITEM(value, 1));
-	int scissor_width = PyLong_AsLong(PyTuple_GET_ITEM(value, 2));
-	int scissor_height = PyLong_AsLong(PyTuple_GET_ITEM(value, 3));
-
-	if (PyErr_Occurred()) {
-		MGLError_Set("the scissor is invalid");
-		return -1;
-	}
-
-	self->scissor_x = scissor_x;
-	self->scissor_y = scissor_y;
-	self->scissor_width = scissor_width;
-	self->scissor_height = scissor_height;
 
 	if (self->framebuffer_obj == self->context->bound_framebuffer->framebuffer_obj) {
 		const GLMethods & gl = self->context->gl;
