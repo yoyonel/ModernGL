@@ -55,6 +55,7 @@ Attributes
 .. autoattribute:: Context.blend_func
 .. autoattribute:: Context.blend_equation
 .. autoattribute:: Context.viewport
+.. autoattribute:: Context.scissor
 .. autoattribute:: Context.version_code
 .. autoattribute:: Context.screen
 .. autoattribute:: Context.fbo

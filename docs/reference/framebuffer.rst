@@ -27,6 +27,7 @@ Attributes
 ----------
 
 .. autoattribute:: Framebuffer.viewport
+.. autoattribute:: Framebuffer.scissor
 .. autoattribute:: Framebuffer.color_mask
 .. autoattribute:: Framebuffer.depth_mask
 .. autoattribute:: Framebuffer.width
