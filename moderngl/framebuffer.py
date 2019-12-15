@@ -68,7 +68,10 @@ class Framebuffer:
 
     @scissor.setter
     def scissor(self, value):
-        self.mglo.scissor = tuple(value)
+        if value is None:
+            self.mglo.scissor = None
+        else:
+            self.mglo.scissor = tuple(value)
 
     @property
     def color_mask(self) -> Tuple[bool, bool, bool, bool]:

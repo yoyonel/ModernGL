@@ -316,7 +316,10 @@ class Context:
 
     @scissor.setter
     def scissor(self, value):
-        self.mglo.fbo.scissor = tuple(value)
+        if value is None:
+            self.mglo.fbo.scissor = None
+        else:
+            self.mglo.fbo.scissor = tuple(value)
 
     @property
     def max_samples(self) -> int:
