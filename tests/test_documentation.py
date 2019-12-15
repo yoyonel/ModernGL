@@ -33,61 +33,62 @@ class TestCase(unittest.TestCase):
             self.assertEqual(docsig, sig, msg=filename + '::' + method)
 
     def test_context_docs(self):
-        self.validate('context.rst', 'Context', ['release', 'mglo', 'core_profile_check'])
+        self.validate('context.rst', 'Context', ['core_profile_check'])
 
     def test_program_docs(self):
-        self.validate('program.rst', 'Program', ['release', 'mglo', 'glo', 'ctx'], ['__getitem__', '__setitem__', '__eq__', '__iter__'])
+        self.validate('program.rst', 'Program', [], ['__getitem__', '__setitem__', '__eq__', '__iter__'])
 
     def test_vertex_array_docs(self):
-        self.validate('vertex_array.rst', 'VertexArray', ['release', 'mglo', 'glo', 'ctx'])
+        self.validate('vertex_array.rst', 'VertexArray', [])
 
     def test_buffer_docs(self):
-        self.validate('buffer.rst', 'Buffer', ['release', 'mglo', 'glo', 'ctx'])
+        self.validate('buffer.rst', 'Buffer', [])
 
     def test_texture_docs(self):
-        self.validate('texture.rst', 'Texture', ['release', 'mglo', 'glo', 'ctx'])
+        self.validate('texture.rst', 'Texture', [])
 
     def test_texture_array_docs(self):
-        self.validate('texture_array.rst', 'TextureArray', ['release', 'mglo', 'glo', 'ctx'])
+        self.validate('texture_array.rst', 'TextureArray', [])
 
     def test_texture3d_docs(self):
-        self.validate('texture3d.rst', 'Texture3D', ['release', 'mglo', 'glo', 'ctx'])
+        self.validate('texture3d.rst', 'Texture3D', [])
 
     def test_texture_cube_docs(self):
-        self.validate('texture_cube.rst', 'TextureCube', ['release', 'mglo', 'glo', 'ctx'])
+        self.validate('texture_cube.rst', 'TextureCube', [])
 
     def test_framebuffer_docs(self):
-        self.validate('framebuffer.rst', 'Framebuffer', ['release', 'mglo', 'glo', 'ctx'])
+        self.validate('framebuffer.rst', 'Framebuffer', [])
 
     def test_renderbuffer_docs(self):
-        self.validate('renderbuffer.rst', 'Renderbuffer', ['release', 'mglo', 'glo', 'ctx'])
+        self.validate('renderbuffer.rst', 'Renderbuffer', [])
 
     def test_query_docs(self):
-        self.validate('query.rst', 'Query', ['mglo', 'ctx'])
+        self.validate('query.rst', 'Query', [])
 
     def test_scope_docs(self):
-        self.validate('scope.rst', 'Scope', ['mglo', 'ctx'])
+        self.validate('scope.rst', 'Scope', [])
 
     def test_compute_shader_docs(self):
-        self.validate('compute_shader.rst', 'ComputeShader', ['release', 'mglo', 'glo', 'ctx'])
+        self.validate('compute_shader.rst', 'ComputeShader', [])
 
     def test_subroutine_docs(self):
-        self.validate('subroutine.rst', 'Subroutine', ['mglo', 'ctx'])
+        self.validate('subroutine.rst', 'Subroutine', [])
 
     def test_uniform_docs(self):
-        self.validate('uniform.rst', 'Uniform', ['mglo'])
+        self.validate('uniform.rst', 'Uniform', [])
 
     def test_uniform_block_docs(self):
-        self.validate('uniform_block.rst', 'UniformBlock', ['mglo'])
+        self.validate('uniform_block.rst', 'UniformBlock', [])
 
     def test_varying_docs(self):
-        self.validate('varying.rst', 'Varying', ['mglo'])
+        self.validate('varying.rst', 'Varying', [])
 
     def test_conditional_render_docs(self):
-        self.validate('conditional_render.rst', 'ConditionalRender', ['mglo'])
+        self.validate('conditional_render.rst', 'ConditionalRender', [])
 
     def test_sampler_docs(self):
-        self.validate('sampler.rst', 'Sampler', ['release', 'mglo', 'glo', 'ctx'])
+        self.validate('sampler.rst', 'Sampler', [])
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -22,8 +22,8 @@ class Scope:
     __slots__ = ['mglo', 'ctx', 'extra']
 
     def __init__(self):
-        self.mglo = None
-        self.ctx = None
+        self.mglo = None  #: Internal representation
+        self.ctx = None  #: The context this object belongs to
         self.extra = None  #: Any - Attribute for storing user defined objects
         raise TypeError()
 

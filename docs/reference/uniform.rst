@@ -21,6 +21,7 @@ Attributes
 .. autoattribute:: Uniform.name
 .. autoattribute:: Uniform.value
 .. autoattribute:: Uniform.extra
+.. autoattribute:: Uniform.mglo
 
 .. toctree::
     :maxdepth: 2

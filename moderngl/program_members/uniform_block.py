@@ -9,7 +9,7 @@ class UniformBlock:
     __slots__ = ['mglo', '_index', '_size', '_name', 'extra']
 
     def __init__(self):
-        self.mglo = None
+        self.mglo = None  #: Internal representation
         self._index = None
         self._size = None
         self._name = None

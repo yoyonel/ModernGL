@@ -20,6 +20,7 @@ Methods
 .. automethod:: Texture3D.write(data, viewport=None, alignment=1)
 .. automethod:: Texture3D.build_mipmaps(base=0, max_level=1000)
 .. automethod:: Texture3D.use(location=0)
+.. automethod:: Texture3D.release()
 
 Attributes
 ----------
@@ -36,7 +37,9 @@ Attributes
 .. autoattribute:: Texture3D.dtype
 .. autoattribute:: Texture3D.components
 .. autoattribute:: Texture3D.glo
+.. autoattribute:: Texture3D.mglo
 .. autoattribute:: Texture3D.extra
+.. autoattribute:: Texture3D.ctx
 
 .. toctree::
     :maxdepth: 2

@@ -26,33 +26,9 @@ Methods
 .. automethod:: Buffer.clear(size=-1, offset=0, chunk=None)
 .. automethod:: Buffer.bind_to_uniform_block(binding=0, offset=0, size=-1)
 .. automethod:: Buffer.bind_to_storage_buffer(binding=0, offset=0, size=-1)
-
 .. automethod:: Buffer.orphan()
+.. automethod:: Buffer.release()
 
-    .. rubric:: Example
-
-    .. code-block:: python
-
-        # For simplicity the VertexArray creation is omitted
-
-        >>> vbo = ctx.buffer(reserve=1024)
-
-        # Fill the buffer
-
-        >>> vbo.write(some_temorary_data)
-
-        # Issue a render call that uses the vbo
-
-        >>> vao.render(...)
-
-        # Orphan the buffer
-
-        >>> vbo.orphan()
-
-        # Issue another render call without waiting for the previous one
-
-        >>> vbo.write(some_temorary_data)
-        >>> vao.render(...)
 
 Attributes
 ----------
@@ -60,7 +36,9 @@ Attributes
 .. autoattribute:: Buffer.size
 .. autoattribute:: Buffer.dynamic
 .. autoattribute:: Buffer.glo
+.. autoattribute:: Buffer.mglo
 .. autoattribute:: Buffer.extra
+.. autoattribute:: Buffer.ctx
 
 .. toctree::
     :maxdepth: 2

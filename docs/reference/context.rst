@@ -33,6 +33,8 @@ ModernGL Objects
 .. automethod:: Context.compute_shader(source) -> ComputeShader
 .. automethod:: Context.sampler(repeat_x=True, repeat_y=True, repeat_z=True, filter=None, anisotropy=1.0, compare_func='?', border_color=None, min_lod=-1000.0, max_lod=1000.0, texture=None) -> Sampler
 .. automethod:: Context.clear_samplers(start=0, end=-1)
+.. automethod:: Context.release()
+
 
 Methods
 -------
@@ -71,6 +73,7 @@ Attributes
 .. autoattribute:: Context.provoking_vertex
 .. autoattribute:: Context.error
 .. autoattribute:: Context.info
+.. autoattribute:: Context.mglo
 .. autoattribute:: Context.extra
 
 OpenGL enums

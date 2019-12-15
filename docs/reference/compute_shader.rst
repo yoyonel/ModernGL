@@ -17,13 +17,16 @@ Methods
 
 .. automethod:: ComputeShader.run(group_x=1, group_y=1, group_z=1)
 .. automethod:: ComputeShader.get(key, default) -> Union[Uniform, UniformBlock, Subroutine, Attribute, Varying]
+.. automethod:: ComputeShader.release()
 
 Attributes
 ----------
 
 .. autoattribute:: ComputeShader.source
 .. autoattribute:: ComputeShader.glo
+.. autoattribute:: ComputeShader.mglo
 .. autoattribute:: ComputeShader.extra
+.. autoattribute:: ComputeShader.ctx
 
 .. toctree::
     :maxdepth: 2

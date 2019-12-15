@@ -13,7 +13,7 @@ class Uniform:
     __slots__ = ['mglo', '_location', '_array_length', '_dimension', '_name', 'extra']
 
     def __init__(self):
-        self.mglo = None
+        self.mglo = None  #: Internal representation
         self._location = None
         self._array_length = None
         self._dimension = None

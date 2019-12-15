@@ -18,13 +18,13 @@ class Framebuffer:
     __slots__ = ['mglo', '_color_attachments', '_depth_attachment', '_size', '_samples', '_glo', 'ctx', 'extra']
 
     def __init__(self):
-        self.mglo = None
+        self.mglo = None  #: The internal representation
         self._color_attachments = None
         self._depth_attachment = None
         self._size = (None, None)
         self._samples = None
         self._glo = None
-        self.ctx = None
+        self.ctx = None  #: The context this object belongs to
         self.extra = None  #: Any - Attribute for storing user defined objects
         raise TypeError()
 

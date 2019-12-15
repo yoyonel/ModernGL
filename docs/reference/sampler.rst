@@ -33,3 +33,5 @@ Attributes
 .. autoattribute:: Sampler.min_lod
 .. autoattribute:: Sampler.max_lod
 .. autoattribute:: Sampler.extra
+.. autoattribute:: Sampler.mglo
+.. autoattribute:: Sampler.ctx

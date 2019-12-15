@@ -22,6 +22,7 @@ Methods
 .. automethod:: Framebuffer.read(viewport=None, components=3, attachment=0, alignment=1, dtype='f1') -> bytes
 .. automethod:: Framebuffer.read_into(buffer, viewport=None, components=3, attachment=0, alignment=1, dtype='f1', write_offset=0)
 .. automethod:: Framebuffer.use()
+.. automethod:: Framebuffer.release()
 
 Attributes
 ----------
@@ -38,7 +39,9 @@ Attributes
 .. autoattribute:: Framebuffer.color_attachments
 .. autoattribute:: Framebuffer.depth_attachment
 .. autoattribute:: Framebuffer.glo
+.. autoattribute:: Framebuffer.mglo
 .. autoattribute:: Framebuffer.extra
+.. autoattribute:: Framebuffer.ctx
 
 .. toctree::
     :maxdepth: 2

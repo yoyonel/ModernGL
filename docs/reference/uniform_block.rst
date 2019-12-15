@@ -12,6 +12,7 @@ UniformBlock
 .. autoattribute:: UniformBlock.index
 .. autoattribute:: UniformBlock.size
 .. autoattribute:: UniformBlock.extra
+.. autoattribute:: UniformBlock.mglo
 
 .. toctree::
     :maxdepth: 2

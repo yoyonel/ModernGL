@@ -20,6 +20,8 @@ Methods
 .. automethod:: Program.__setitem__(key, value)
 .. automethod:: Program.__iter__() -> Generator[str, NoneType, NoneType]
 .. automethod:: Program.__eq__(other) -> bool
+.. automethod:: Program.release()
+
 
 Attributes
 ----------
@@ -29,7 +31,9 @@ Attributes
 .. autoattribute:: Program.geometry_vertices
 .. autoattribute:: Program.subroutines
 .. autoattribute:: Program.glo
+.. autoattribute:: Program.mglo
 .. autoattribute:: Program.extra
+.. autoattribute:: Program.ctx
 
 Examples
 --------

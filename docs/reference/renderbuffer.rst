@@ -15,6 +15,11 @@ Create
 .. automethod:: Context.depth_renderbuffer(size, samples=0) -> Renderbuffer
     :noindex:
 
+Methods
+-------
+
+.. automethod:: Renderbuffer.release()
+
 Attributes
 ----------
 
@@ -26,7 +31,9 @@ Attributes
 .. autoattribute:: Renderbuffer.depth
 .. autoattribute:: Renderbuffer.dtype
 .. autoattribute:: Renderbuffer.glo
+.. autoattribute:: Renderbuffer.mglo
 .. autoattribute:: Renderbuffer.extra
+.. autoattribute:: Renderbuffer.ctx
 
 .. toctree::
     :maxdepth: 2

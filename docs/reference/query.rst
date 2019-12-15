@@ -20,6 +20,8 @@ Attributes
 .. autoattribute:: Query.elapsed
 .. autoattribute:: Query.crender
 .. autoattribute:: Query.extra
+.. autoattribute:: Query.mglo
+.. autoattribute:: Query.ctx
 
 Examples
 --------

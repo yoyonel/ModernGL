@@ -36,14 +36,14 @@ class VertexArray:
     __slots__ = ['mglo', '_program', '_index_buffer', '_index_element_size', '_glo', 'ctx', 'extra', 'scope']
 
     def __init__(self):
-        self.mglo = None
+        self.mglo = None  #: Internal representation
         self._program = None
         self._index_buffer = None
         self._index_element_size = None
         self._glo = None
-        self.ctx = None
+        self.ctx = None  #: The context this object belongs to
         self.extra = None  #: Any - Attribute for storing user defined objects
-        self.scope = None  #: The :py:cls:`moderngl.Scope`.
+        self.scope = None  #: The :py:class:`moderngl.Scope`.
         raise TypeError()
 
     def __repr__(self):
@@ -93,6 +93,7 @@ class VertexArray:
 
     @property
     def instances(self) -> int:
+        """int: Get or set the number of instances to render"""
         return self.mglo.instances
 
     @instances.setter

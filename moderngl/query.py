@@ -9,9 +9,9 @@ class Query:
     __slots__ = ['mglo', 'crender', 'ctx', 'extra']
 
     def __init__(self):
-        self.mglo = None
+        self.mglo = None  #: Internal representation
         self.crender = None  #: ConditionalRender: Can be used in a ``with`` statement.
-        self.ctx = None
+        self.ctx = None  #: The context this object belongs to
         self.extra = None  #: Any - Attribute for storing user defined objects
         raise TypeError()
 

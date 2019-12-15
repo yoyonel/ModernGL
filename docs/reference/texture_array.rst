@@ -20,6 +20,7 @@ Methods
 .. automethod:: TextureArray.write(data, viewport=None, alignment=1)
 .. automethod:: TextureArray.build_mipmaps(base=0, max_level=1000)
 .. automethod:: TextureArray.use(location=0)
+.. automethod:: TextureArray.release()
 
 Attributes
 ----------
@@ -36,7 +37,9 @@ Attributes
 .. autoattribute:: TextureArray.dtype
 .. autoattribute:: TextureArray.components
 .. autoattribute:: TextureArray.glo
+.. autoattribute:: TextureArray.mglo
 .. autoattribute:: TextureArray.extra
+.. autoattribute:: TextureArray.ctx
 
 .. toctree::
     :maxdepth: 2

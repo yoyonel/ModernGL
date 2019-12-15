@@ -18,14 +18,14 @@ class Renderbuffer:
     __slots__ = ['mglo', '_size', '_components', '_samples', '_depth', '_dtype', '_glo', 'ctx', 'extra']
 
     def __init__(self):
-        self.mglo = None
+        self.mglo = None  #: The internal representation
         self._size = (None, None)
         self._components = None
         self._samples = None
         self._depth = None
         self._dtype = None
         self._glo = None
-        self.ctx = None
+        self.ctx = None  #: The context this object belongs to
         self.extra = None  #: Any - Attribute for storing user defined objects
         raise TypeError()
 

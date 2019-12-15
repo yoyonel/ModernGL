@@ -19,6 +19,7 @@ Methods
 .. automethod:: TextureCube.read_into(buffer, face, alignment=1, write_offset=0)
 .. automethod:: TextureCube.write(face, data, viewport=None, alignment=1)
 .. automethod:: TextureCube.use(location=0)
+.. automethod:: TextureCube.release()
 
 Attributes
 ----------
@@ -30,7 +31,9 @@ Attributes
 .. autoattribute:: TextureCube.swizzle
 .. autoattribute:: TextureCube.anisotropy
 .. autoattribute:: TextureCube.glo
+.. autoattribute:: TextureCube.mglo
 .. autoattribute:: TextureCube.extra
+.. autoattribute:: TextureCube.ctx
 
 .. toctree::
     :maxdepth: 2

@@ -17,11 +17,11 @@ class Buffer:
     __slots__ = ['mglo', '_size', '_dynamic', '_glo', 'ctx', 'extra']
 
     def __init__(self):
-        self.mglo = None
+        self.mglo = None  #: Internal representation
         self._size = None
         self._dynamic = None
         self._glo = None
-        self.ctx = None
+        self.ctx = None  #: The context this object belongs to
         self.extra = None  #: Any - Attribute for storing user defined objects
         raise TypeError()
 
@@ -211,6 +211,31 @@ class Buffer:
             It is likely that the GL driver will not be doing any allocation at all,
             but will just be pulling an old free block off the unused buffer queue and use it,
             so it is likely to be very efficient.
+
+            .. rubric:: Example
+
+            .. code-block:: python
+
+                # For simplicity the VertexArray creation is omitted
+
+                >>> vbo = ctx.buffer(reserve=1024)
+
+                # Fill the buffer
+
+                >>> vbo.write(some_temorary_data)
+
+                # Issue a render call that uses the vbo
+
+                >>> vao.render(...)
+
+                # Orphan the buffer
+
+                >>> vbo.orphan()
+
+                # Issue another render call without waiting for the previous one
+
+                >>> vbo.write(some_temorary_data)
+                >>> vao.render(...)
         '''
 
         self.mglo.orphan()

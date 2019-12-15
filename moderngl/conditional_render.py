@@ -11,7 +11,7 @@ class ConditionalRender:
     __slots__ = ['mglo']
 
     def __init__(self):
-        self.mglo = None
+        self.mglo = None  #: Internal representation
         raise TypeError()
 
     def __repr__(self):

@@ -16,6 +16,8 @@ Attributes
 ----------
 
 .. autoattribute:: Scope.extra
+.. autoattribute:: Scope.mglo
+.. autoattribute:: Scope.ctx
 
 Examples
 --------
