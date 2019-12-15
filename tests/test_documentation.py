@@ -36,7 +36,7 @@ class TestCase(unittest.TestCase):
         self.validate('context.rst', 'Context', ['release', 'mglo', 'core_profile_check'])
 
     def test_program_docs(self):
-        self.validate('program.rst', 'Program', ['release', 'mglo', 'glo', 'ctx'], ['__getitem__', '__eq__', '__iter__'])
+        self.validate('program.rst', 'Program', ['release', 'mglo', 'glo', 'ctx'], ['__getitem__', '__setitem__', '__eq__', '__iter__'])
 
     def test_vertex_array_docs(self):
         self.validate('vertex_array.rst', 'VertexArray', ['release', 'mglo', 'glo', 'ctx'])
