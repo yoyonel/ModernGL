@@ -466,6 +466,8 @@ PyObject * MGLFramebuffer_use(MGLFramebuffer * self) {
 			self->scissor_x, self->scissor_y,
 			self->scissor_width, self->scissor_height
 		);
+	} else {
+		gl.Disable(GL_SCISSOR_TEST);
 	}
 
 	for (int i = 0; i < self->draw_buffers_len; ++i) {
@@ -811,7 +813,7 @@ int MGLFramebuffer_set_scissor(MGLFramebuffer * self, PyObject * value, void * c
 		self->scissor_height = self->height;
 	} else {
 		if (PyTuple_GET_SIZE(value) != 4) {
-			MGLError_Set("scissor must be a 4-tuple not %d-tuple", PyTuple_GET_SIZE(value));
+			MGLError_Set("scissor must be None or a 4-tuple not %d-tuple", PyTuple_GET_SIZE(value));
 			return -1;
 		}
 
@@ -831,14 +833,17 @@ int MGLFramebuffer_set_scissor(MGLFramebuffer * self, PyObject * value, void * c
 		self->scissor_height = scissor_height;
 	}
 
+	self->scissor_enabled = MGLFramebuffer_scissor_enabled(self);
+
 	if (self->framebuffer_obj == self->context->bound_framebuffer->framebuffer_obj) {
 		const GLMethods & gl = self->context->gl;
 
-		self->scissor_enabled = MGLFramebuffer_scissor_enabled(self);
-
 		if (self->scissor_enabled) {
 			gl.Enable(GL_SCISSOR_TEST);
+		} else {
+			gl.Disable(GL_SCISSOR_TEST);
 		}
+
 		gl.Scissor(
 			self->scissor_x,
 			self->scissor_y,
