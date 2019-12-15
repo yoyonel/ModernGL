@@ -226,22 +226,22 @@ PyObject * create_context(PyObject * self, PyObject * args) {
 
 		framebuffer->context = ctx;
 
-		int scrissor_box[4] = {};
-		gl.GetIntegerv(GL_SCISSOR_BOX, scrissor_box);
+		int scissor_box[4] = {};
+		gl.GetIntegerv(GL_SCISSOR_BOX, scissor_box);
 
-		framebuffer->viewport_x = scrissor_box[0];
-		framebuffer->viewport_y = scrissor_box[1];
-		framebuffer->viewport_width = scrissor_box[2];
-		framebuffer->viewport_height = scrissor_box[3];
+		framebuffer->viewport_x = scissor_box[0];
+		framebuffer->viewport_y = scissor_box[1];
+		framebuffer->viewport_width = scissor_box[2];
+		framebuffer->viewport_height = scissor_box[3];
 
 		framebuffer->scissor_enabled = false;
-		framebuffer->scissor_x = scrissor_box[0];
-		framebuffer->scissor_y = scrissor_box[1];
-		framebuffer->scissor_width = scrissor_box[2];
-		framebuffer->scissor_height = scrissor_box[3];
+		framebuffer->scissor_x = scissor_box[0];
+		framebuffer->scissor_y = scissor_box[1];
+		framebuffer->scissor_width = scissor_box[2];
+		framebuffer->scissor_height = scissor_box[3];
 
-		framebuffer->width = scrissor_box[2];
-		framebuffer->height = scrissor_box[3];
+		framebuffer->width = scissor_box[2];
+		framebuffer->height = scissor_box[3];
 
 		Py_INCREF(framebuffer);
 		ctx->default_framebuffer = framebuffer;
