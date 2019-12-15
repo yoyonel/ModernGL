@@ -51,10 +51,14 @@ class Framebuffer:
         '''
             tuple: Get or set the scissor box of the framebuffer.
 
+            When scissor testing is enabled fragments outside
+            the defined scissor box will be discarded. This
+            applies to rendered geometry or :py:meth:`Framebuffer.clear`.
+
             When this value is equal to the frambuffer size
             scissor testing is disabled.
 
-            Setting the scissor attribute to `None` disables
+            Setting the scissor attribute to ``None`` disables
             the scissor testing. It's a shortcut for setting
             the scissor values back to the framebuffer size.
 
