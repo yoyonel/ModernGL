@@ -17,6 +17,7 @@ Methods
 
 .. automethod:: Program.get(key, default) -> Union[Uniform, UniformBlock, Subroutine, Attribute, Varying]
 .. automethod:: Program.__getitem__(key) -> Union[Uniform, UniformBlock, Subroutine, Attribute, Varying]
+.. automethod:: Program.__setitem__(key)
 .. automethod:: Program.__iter__() -> Generator[str, NoneType, NoneType]
 .. automethod:: Program.__eq__(other) -> bool
 

@@ -51,9 +51,30 @@ class Program:
         return type(self) is type(other) and self.mglo is other.mglo
 
     def __getitem__(self, key) -> Union[Uniform, UniformBlock, Subroutine, Attribute, Varying]:
-        return self._members[key]
+        """Get a member such as uniforms, uniform blocks, subroutines,
+        attributes and varyings by name.
+
+        .. code-block:: python
+
+            # Get a uniform
+            uniform = program['color]
+        """
 
     def __setitem__(self, key, value):
+        """Set a value of uniform or uniform block
+
+        .. code-block:: python
+
+            # Set a vec4 uniform
+            uniform['color'] = 1.0, 1.0, 1.0, 1.0
+
+            # Optionally we can store references to a member and set the value directly
+            uniform = program['color']
+            uniform.value = 1.0, 0.0, 0.0, 0.0
+
+            uniform = program['cameraMatrix']
+            uniform.write(camera_matrix)
+        """
         self._members[key].value = value
 
     def __iter__(self) -> Generator[str, None, None]:
