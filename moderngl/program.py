@@ -59,6 +59,7 @@ class Program:
             # Get a uniform
             uniform = program['color]
         """
+        return self._members[key]
 
     def __setitem__(self, key, value):
         """Set a value of uniform or uniform block
