@@ -10,6 +10,9 @@ class TextureCube:
         be the source of a texture access from a Shader, or it can be used
         as a render target.
 
+        .. Note:: ModernGL enables ``GL_TEXTURE_CUBE_MAP_SEAMLESS`` globally
+                  to ensure filtering will be done across the cube faces.
+
         A Texture3D object cannot be instantiated directly, it requires a context.
         Use :py:meth:`Context.texture_cube` to create one.
     '''
