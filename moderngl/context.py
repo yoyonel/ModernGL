@@ -296,11 +296,14 @@ class Context:
     @property
     def scissor(self) -> Tuple[int, int, int, int]:
         '''
-            tuple: Get or set the the scissor box for the active framebuffer
+            tuple: Get or set the scissor box for the active framebuffer
 
-            When this value is set scissor testing is enabled.
-            setting the scissor attribute to `None` disables
-            the scissor testing.
+            When this value is equal to the frambuffer size
+            scissor testing is disabled.
+
+            Setting the scissor attribute to `None` disables
+            the scissor testing. It's a shortcut for setting
+            the scissor values back to the framebuffer size.
 
             Example::
 

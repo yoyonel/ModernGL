@@ -49,7 +49,19 @@ class Framebuffer:
     @property
     def scissor(self) -> Tuple[int, int, int, int]:
         '''
-            tuple: Get or set the scissor of the framebuffer.
+            tuple: Get or set the scissor box of the framebuffer.
+
+            When this value is equal to the frambuffer size
+            scissor testing is disabled.
+
+            Setting the scissor attribute to `None` disables
+            the scissor testing. It's a shortcut for setting
+            the scissor values back to the framebuffer size.
+
+            Example::
+
+                >>> fbo.scissor = 100, 100, 200, 100
+                >>> fbo.scissor = None
         '''
 
         return self.mglo.scissor
