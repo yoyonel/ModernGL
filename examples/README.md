@@ -76,4 +76,4 @@ by various people over time. Browse around and see what you can find :)
 Also see the [old examples](old-examples).
 
 
-[moderngl-window]: (https://github.com/moderngl/moderngl-window)
+[moderngl-window]: https://github.com/moderngl/moderngl-window
