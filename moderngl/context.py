@@ -26,12 +26,11 @@ except ImportError:
 
 __all__ = ['Context', 'create_context', 'create_standalone_context',
            'NOTHING', 'BLEND', 'DEPTH_TEST', 'CULL_FACE', 'RASTERIZER_DISCARD',
-           'ZERO', 'ONE', 'SRC_COLOR', 'ONE_MINUS_SRC_COLOR', 'SRC_ALPHA', 'ONE_MINUS_SRC_ALPHA', 'DST_ALPHA',
-           'ONE_MINUS_DST_ALPHA', 'DST_COLOR', 'ONE_MINUS_DST_COLOR',
+           'ZERO', 'ONE', 'SRC_COLOR', 'ONE_MINUS_SRC_COLOR', 'SRC_ALPHA', 'ONE_MINUS_SRC_ALPHA',
+           'DST_ALPHA', 'ONE_MINUS_DST_ALPHA', 'DST_COLOR', 'ONE_MINUS_DST_COLOR',
            'FUNC_ADD', 'FUNC_SUBTRACT', 'FUNC_REVERSE_SUBTRACT', 'MIN', 'MAX',
-           'DEFAULT_BLENDING', 'PREMULTIPLIED_ALPHA', 'FIRST_VERTEX_CONVENTION', 'LAST_VERTEX_CONVENTION'
-]
-
+           'DEFAULT_BLENDING', 'PREMULTIPLIED_ALPHA', 'FIRST_VERTEX_CONVENTION',
+           'LAST_VERTEX_CONVENTION']
 
 NOTHING = 0
 BLEND = 1
@@ -104,7 +103,9 @@ class Context:
         self._screen = None
         self._info = None
         self.version_code = None  #: int: The OpenGL version code. Reports ``410`` for OpenGL 4.1
-        self.fbo = None  #: Framebuffer: The active framebuffer. Set every time ``Framebuffer.use()`` is called.
+        #: Framebuffer: The active framebuffer.
+        #: Set every time :py:meth:`Framebuffer.use()` is called.
+        self.fbo = None
         self.extra = None  #: Any - Attribute for storing user defined objects
         raise TypeError()
 
@@ -139,10 +140,6 @@ class Context:
         self.mglo.point_size = value
 
     @property
-    def provoking_vertex(self):
-        self.mglo.provoking_vertex()
-
-    @property
     def depth_func(self) -> str:
         '''
             int: Set the default depth func.
@@ -154,10 +151,10 @@ class Context:
                 ctx.depth_func = '<'   # GL_LESS
                 ctx.depth_func = '>='  # GL_GEQUAL
                 ctx.depth_func = '>'   # GL_GREATER
-                ctx.depth_func = '=='  # GL_EQUAL 
-                ctx.depth_func = '!='  # GL_NOTEQUAL 
-                ctx.depth_func = '0'   # GL_NEVER 
-                ctx.depth_func = '1'   # GL_ALWAYS 
+                ctx.depth_func = '=='  # GL_EQUAL
+                ctx.depth_func = '!='  # GL_NOTEQUAL
+                ctx.depth_func = '0'   # GL_NEVER
+                ctx.depth_func = '1'   # GL_ALWAYS
         '''
 
         raise NotImplementedError()
@@ -261,11 +258,10 @@ class Context:
             This property is write only
 
             Example::
-                
+
                 ctx.provoking_vertex = moderngl.FIRST_VERTEX_CONVENTION
         '''
         raise NotImplementedError()
-
 
     @provoking_vertex.setter
     def provoking_vertex(self, value):
@@ -446,76 +442,76 @@ class Context:
             Example::
 
                 {
-                    'GL_VENDOR': 'NVIDIA Corporation', 
-                    'GL_RENDERER': 'NVIDIA GeForce GT 650M OpenGL Engine', 
-                    'GL_VERSION': '4.1 NVIDIA-10.32.0 355.11.10.10.40.102', 
-                    'GL_POINT_SIZE_RANGE': (1.0, 2047.0), 
-                    'GL_SMOOTH_LINE_WIDTH_RANGE': (0.5, 1.0), 
-                    'GL_ALIASED_LINE_WIDTH_RANGE': (1.0, 1.0), 
-                    'GL_POINT_FADE_THRESHOLD_SIZE': 1.0, 
-                    'GL_POINT_SIZE_GRANULARITY': 0.125, 
-                    'GL_SMOOTH_LINE_WIDTH_GRANULARITY': 0.125, 
-                    'GL_MIN_PROGRAM_TEXEL_OFFSET': -8.0, 
-                    'GL_MAX_PROGRAM_TEXEL_OFFSET': 7.0, 
-                    'GL_MINOR_VERSION': 1, 
-                    'GL_MAJOR_VERSION': 4, 
-                    'GL_SAMPLE_BUFFERS': 0, 
-                    'GL_SUBPIXEL_BITS': 8, 
-                    'GL_CONTEXT_PROFILE_MASK': 1, 
-                    'GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT': 256, 
-                    'GL_DOUBLEBUFFER': False, 
-                    'GL_STEREO': False, 
-                    'GL_MAX_VIEWPORT_DIMS': (16384, 16384), 
-                    'GL_MAX_3D_TEXTURE_SIZE': 2048, 
-                    'GL_MAX_ARRAY_TEXTURE_LAYERS': 2048, 
-                    'GL_MAX_CLIP_DISTANCES': 8, 
-                    'GL_MAX_COLOR_ATTACHMENTS': 8, 
-                    'GL_MAX_COLOR_TEXTURE_SAMPLES': 8, 
-                    'GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS': 233472, 
-                    'GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS': 231424, 
-                    'GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS': 80, 
-                    'GL_MAX_COMBINED_UNIFORM_BLOCKS': 70, 
-                    'GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS': 233472, 
-                    'GL_MAX_CUBE_MAP_TEXTURE_SIZE': 16384, 
-                    'GL_MAX_DEPTH_TEXTURE_SAMPLES': 8, 
-                    'GL_MAX_DRAW_BUFFERS': 8, 
-                    'GL_MAX_DUAL_SOURCE_DRAW_BUFFERS': 1, 
-                    'GL_MAX_ELEMENTS_INDICES': 150000, 
-                    'GL_MAX_ELEMENTS_VERTICES': 1048575, 
-                    'GL_MAX_FRAGMENT_INPUT_COMPONENTS': 128, 
-                    'GL_MAX_FRAGMENT_UNIFORM_COMPONENTS': 4096, 
-                    'GL_MAX_FRAGMENT_UNIFORM_VECTORS': 1024, 
-                    'GL_MAX_FRAGMENT_UNIFORM_BLOCKS': 14, 
-                    'GL_MAX_GEOMETRY_INPUT_COMPONENTS': 128, 
-                    'GL_MAX_GEOMETRY_OUTPUT_COMPONENTS': 128, 
-                    'GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS': 16, 
-                    'GL_MAX_GEOMETRY_UNIFORM_BLOCKS': 14, 
-                    'GL_MAX_GEOMETRY_UNIFORM_COMPONENTS': 2048, 
-                    'GL_MAX_INTEGER_SAMPLES': 1, 
-                    'GL_MAX_SAMPLES': 8, 
-                    'GL_MAX_RECTANGLE_TEXTURE_SIZE': 16384, 
-                    'GL_MAX_RENDERBUFFER_SIZE': 16384, 
-                    'GL_MAX_SAMPLE_MASK_WORDS': 1, 
-                    'GL_MAX_SERVER_WAIT_TIMEOUT': -1, 
-                    'GL_MAX_TEXTURE_BUFFER_SIZE': 134217728, 
-                    'GL_MAX_TEXTURE_IMAGE_UNITS': 16, 
-                    'GL_MAX_TEXTURE_LOD_BIAS': 15, 
-                    'GL_MAX_TEXTURE_SIZE': 16384, 
-                    'GL_MAX_UNIFORM_BUFFER_BINDINGS': 70, 
-                    'GL_MAX_UNIFORM_BLOCK_SIZE': 65536, 
-                    'GL_MAX_VARYING_COMPONENTS': 0, 
-                    'GL_MAX_VARYING_VECTORS': 31, 
-                    'GL_MAX_VARYING_FLOATS': 0, 
-                    'GL_MAX_VERTEX_ATTRIBS': 16, 
-                    'GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS': 16, 
-                    'GL_MAX_VERTEX_UNIFORM_COMPONENTS': 4096, 
-                    'GL_MAX_VERTEX_UNIFORM_VECTORS': 1024, 
-                    'GL_MAX_VERTEX_OUTPUT_COMPONENTS': 128, 
-                    'GL_MAX_VERTEX_UNIFORM_BLOCKS': 14, 
-                    'GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET': 0, 
-                    'GL_MAX_VERTEX_ATTRIB_BINDINGS': 0, 
-                    'GL_VIEWPORT_BOUNDS_RANGE': (-32768, 32768), 
-                    'GL_VIEWPORT_SUBPIXEL_BITS': 0, 
+                    'GL_VENDOR': 'NVIDIA Corporation',
+                    'GL_RENDERER': 'NVIDIA GeForce GT 650M OpenGL Engine',
+                    'GL_VERSION': '4.1 NVIDIA-10.32.0 355.11.10.10.40.102',
+                    'GL_POINT_SIZE_RANGE': (1.0, 2047.0),
+                    'GL_SMOOTH_LINE_WIDTH_RANGE': (0.5, 1.0),
+                    'GL_ALIASED_LINE_WIDTH_RANGE': (1.0, 1.0),
+                    'GL_POINT_FADE_THRESHOLD_SIZE': 1.0,
+                    'GL_POINT_SIZE_GRANULARITY': 0.125,
+                    'GL_SMOOTH_LINE_WIDTH_GRANULARITY': 0.125,
+                    'GL_MIN_PROGRAM_TEXEL_OFFSET': -8.0,
+                    'GL_MAX_PROGRAM_TEXEL_OFFSET': 7.0,
+                    'GL_MINOR_VERSION': 1,
+                    'GL_MAJOR_VERSION': 4,
+                    'GL_SAMPLE_BUFFERS': 0,
+                    'GL_SUBPIXEL_BITS': 8,
+                    'GL_CONTEXT_PROFILE_MASK': 1,
+                    'GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT': 256,
+                    'GL_DOUBLEBUFFER': False,
+                    'GL_STEREO': False,
+                    'GL_MAX_VIEWPORT_DIMS': (16384, 16384),
+                    'GL_MAX_3D_TEXTURE_SIZE': 2048,
+                    'GL_MAX_ARRAY_TEXTURE_LAYERS': 2048,
+                    'GL_MAX_CLIP_DISTANCES': 8,
+                    'GL_MAX_COLOR_ATTACHMENTS': 8,
+                    'GL_MAX_COLOR_TEXTURE_SAMPLES': 8,
+                    'GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS': 233472,
+                    'GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS': 231424,
+                    'GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS': 80,
+                    'GL_MAX_COMBINED_UNIFORM_BLOCKS': 70,
+                    'GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS': 233472,
+                    'GL_MAX_CUBE_MAP_TEXTURE_SIZE': 16384,
+                    'GL_MAX_DEPTH_TEXTURE_SAMPLES': 8,
+                    'GL_MAX_DRAW_BUFFERS': 8,
+                    'GL_MAX_DUAL_SOURCE_DRAW_BUFFERS': 1,
+                    'GL_MAX_ELEMENTS_INDICES': 150000,
+                    'GL_MAX_ELEMENTS_VERTICES': 1048575,
+                    'GL_MAX_FRAGMENT_INPUT_COMPONENTS': 128,
+                    'GL_MAX_FRAGMENT_UNIFORM_COMPONENTS': 4096,
+                    'GL_MAX_FRAGMENT_UNIFORM_VECTORS': 1024,
+                    'GL_MAX_FRAGMENT_UNIFORM_BLOCKS': 14,
+                    'GL_MAX_GEOMETRY_INPUT_COMPONENTS': 128,
+                    'GL_MAX_GEOMETRY_OUTPUT_COMPONENTS': 128,
+                    'GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS': 16,
+                    'GL_MAX_GEOMETRY_UNIFORM_BLOCKS': 14,
+                    'GL_MAX_GEOMETRY_UNIFORM_COMPONENTS': 2048,
+                    'GL_MAX_INTEGER_SAMPLES': 1,
+                    'GL_MAX_SAMPLES': 8,
+                    'GL_MAX_RECTANGLE_TEXTURE_SIZE': 16384,
+                    'GL_MAX_RENDERBUFFER_SIZE': 16384,
+                    'GL_MAX_SAMPLE_MASK_WORDS': 1,
+                    'GL_MAX_SERVER_WAIT_TIMEOUT': -1,
+                    'GL_MAX_TEXTURE_BUFFER_SIZE': 134217728,
+                    'GL_MAX_TEXTURE_IMAGE_UNITS': 16,
+                    'GL_MAX_TEXTURE_LOD_BIAS': 15,
+                    'GL_MAX_TEXTURE_SIZE': 16384,
+                    'GL_MAX_UNIFORM_BUFFER_BINDINGS': 70,
+                    'GL_MAX_UNIFORM_BLOCK_SIZE': 65536,
+                    'GL_MAX_VARYING_COMPONENTS': 0,
+                    'GL_MAX_VARYING_VECTORS': 31,
+                    'GL_MAX_VARYING_FLOATS': 0,
+                    'GL_MAX_VERTEX_ATTRIBS': 16,
+                    'GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS': 16,
+                    'GL_MAX_VERTEX_UNIFORM_COMPONENTS': 4096,
+                    'GL_MAX_VERTEX_UNIFORM_VECTORS': 1024,
+                    'GL_MAX_VERTEX_OUTPUT_COMPONENTS': 128,
+                    'GL_MAX_VERTEX_UNIFORM_BLOCKS': 14,
+                    'GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET': 0,
+                    'GL_MAX_VERTEX_ATTRIB_BINDINGS': 0,
+                    'GL_VIEWPORT_BOUNDS_RANGE': (-32768, 32768),
+                    'GL_VIEWPORT_SUBPIXEL_BITS': 0,
                     'GL_MAX_VIEWPORTS': 16
                 }
         '''
@@ -525,7 +521,8 @@ class Context:
 
         return self._info
 
-    def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, *, viewport=None, color=None) -> None:
+    def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, *,
+              viewport=None, color=None) -> None:
         '''
             Clear the bound framebuffer. By default clears the :py:data:`screen`.
 
@@ -706,7 +703,8 @@ class Context:
         res.extra = None
         return res
 
-    def texture(self, size, components, data=None, *, samples=0, alignment=1, dtype='f1') -> 'Texture':
+    def texture(self, size, components, data=None, *, samples=0, alignment=1,
+                dtype='f1') -> 'Texture':
         '''
             Create a :py:class:`Texture` object.
 
@@ -735,7 +733,8 @@ class Context:
         res.extra = None
         return res
 
-    def texture_array(self, size, components, data=None, *, alignment=1, dtype='f1') -> 'TextureArray':
+    def texture_array(self, size, components, data=None, *, alignment=1,
+                      dtype='f1') -> 'TextureArray':
         '''
             Create a :py:class:`TextureArray` object.
 
@@ -785,12 +784,14 @@ class Context:
         res.extra = None
         return res
 
-    def texture_cube(self, size, components, data=None, *, alignment=1, dtype='f1') -> 'TextureCube':
+    def texture_cube(self, size, components, data=None, *, alignment=1,
+                     dtype='f1') -> 'TextureCube':
         '''
             Create a :py:class:`TextureCube` object.
 
             Args:
-                size (tuple): The width, height of the texture. Each side of the cube will have this size.
+                size (tuple): The width, height of the texture. Each side of
+                              the cube will have this size.
                 components (int): The number of components 1, 2, 3 or 4.
                 data (bytes): Content of the texture.
 
@@ -844,13 +845,15 @@ class Context:
         return self._vertex_array(*args, **kwargs)
 
     def _vertex_array(self, program, content,
-                     index_buffer=None, index_element_size=4, *, skip_errors=False) -> 'VertexArray':
+                      index_buffer=None, index_element_size=4, *,
+                      skip_errors=False) -> 'VertexArray':
         '''
             Create a :py:class:`VertexArray` object.
 
             Args:
                 program (Program): The program used when rendering.
-                content (list): A list of (buffer, format, attributes). See :ref:`buffer-format-label`.
+                content (list): A list of (buffer, format, attributes).
+                                See :ref:`buffer-format-label`.
                 index_buffer (Buffer): An index buffer.
 
             Keyword Args:
@@ -863,7 +866,8 @@ class Context:
 
         members = program._members
         index_buffer_mglo = None if index_buffer is None else index_buffer.mglo
-        content = tuple((a.mglo, b) + tuple(getattr(members.get(x), 'mglo', None) for x in c) for a, b, *c in content)
+        content = tuple((a.mglo, b) + tuple(getattr(members.get(x), 'mglo', None)
+                        for x in c) for a, b, *c in content)
 
         res = VertexArray.__new__(VertexArray)
         res.mglo, res._glo = self.mglo.vertex_array(program.mglo, content, index_buffer_mglo,
@@ -984,7 +988,8 @@ class Context:
         res.extra = None
         return res
 
-    def scope(self, framebuffer=None, enable_only=None, *, textures=(), uniform_buffers=(), storage_buffers=(), samplers=(), enable=None) -> 'Scope':
+    def scope(self, framebuffer=None, enable_only=None, *, textures=(),
+              uniform_buffers=(), storage_buffers=(), samplers=(), enable=None) -> 'Scope':
         '''
             Create a :py:class:`Scope` object.
 
@@ -1011,15 +1016,17 @@ class Context:
         storage_buffers = tuple((buf.mglo, idx) for buf, idx in storage_buffers)
 
         res = Scope.__new__(Scope)
-        res.mglo = self.mglo.scope(framebuffer.mglo, enable_only, textures, uniform_buffers, storage_buffers, samplers)
+        res.mglo = self.mglo.scope(framebuffer.mglo, enable_only, textures,
+                                   uniform_buffers, storage_buffers, samplers)
         res.ctx = self
         res.extra = None
         return res
 
     def simple_framebuffer(self, size, components=4, *, samples=0, dtype='f1') -> 'Framebuffer':
         '''
-            A :py:class:`Framebuffer` is a collection of buffers that can be used as the destination for rendering.
-            The buffers for Framebuffer objects reference images from either Textures or Renderbuffers.
+            A :py:class:`Framebuffer` is a collection of buffers that can be
+            used as the destination for rendering. The buffers for Framebuffer
+            objects reference images from either Textures or Renderbuffers.
 
             Args:
                 size (tuple): The width and height of the renderbuffer.
@@ -1040,11 +1047,13 @@ class Context:
 
     def framebuffer(self, color_attachments=(), depth_attachment=None) -> 'Framebuffer':
         '''
-            A :py:class:`Framebuffer` is a collection of buffers that can be used as the destination for rendering.
-            The buffers for Framebuffer objects reference images from either Textures or Renderbuffers.
+            A :py:class:`Framebuffer` is a collection of buffers that can be
+            used as the destination for rendering. The buffers for Framebuffer
+            objects reference images from either Textures or Renderbuffers.
 
             Args:
-                color_attachments (list): A list of :py:class:`Texture` or :py:class:`Renderbuffer` objects.
+                color_attachments (list): A list of :py:class:`Texture` or
+                                          :py:class:`Renderbuffer` objects.
                 depth_attachment (Renderbuffer or Texture): The depth attachment.
 
             Returns:
@@ -1121,8 +1130,9 @@ class Context:
 
     def compute_shader(self, source) -> 'ComputeShader':
         '''
-            A :py:class:`ComputeShader` is a Shader Stage that is used entirely for computing arbitrary information.
-            While it can do rendering, it is generally used for tasks not directly related to drawing.
+            A :py:class:`ComputeShader` is a Shader Stage that is used entirely
+            for computing arbitrary information. While it can do rendering, it
+            is generally used for tasks not directly related to drawing.
 
             Args:
                 source (str): The source of the compute shader.
@@ -1151,8 +1161,9 @@ class Context:
         res.extra = None
         return res
 
-    def sampler(self, repeat_x=True, repeat_y=True, repeat_z=True, filter=None, anisotropy=1.0,
-                compare_func='?', border_color=None, min_lod=-1000.0, max_lod=1000.0, texture=None) -> Sampler:
+    def sampler(self, repeat_x=True, repeat_y=True, repeat_z=True, filter=None,
+                anisotropy=1.0, compare_func='?', border_color=None,
+                min_lod=-1000.0, max_lod=1000.0, texture=None) -> Sampler:
         '''
             Create a :py:class:`Sampler` object.
 
@@ -1161,15 +1172,20 @@ class Context:
                 repeat_y (bool): Repeat texture on y
                 repeat_z (bool): Repeat texture on z
                 filter (tuple): The min and max filter
-                anisotropy (float): Number of samples for anisotropic filtering. Any value greater than 1.0 counts as a use of anisotropic filtering
+                anisotropy (float): Number of samples for anisotropic filtering.
+                                    Any value greater than 1.0 counts as a use of
+                                    anisotropic filtering
                 compare_func: Compare function for depth textures
                 border_color (tuple): The (r, g, b, a) color for the texture border.
-                                      When this value is set the ``repeat_`` values are overridden
-                                      setting the texture wrap to return the border color when outside ``[0, 1]`` range.
+                                      When this value is set the ``repeat_`` values are
+                                      overridden setting the texture wrap to return the
+                                      border color when outside ``[0, 1]`` range.
                 min_lod (float): Minimum level-of-detail parameter (Default ``-1000.0``).
-                                 This floating-point value limits the selection of highest resolution mipmap (lowest mipmap level)
+                                 This floating-point value limits the selection of highest
+                                 resolution mipmap (lowest mipmap level)
                 max_lod (float): Minimum level-of-detail parameter (Default ``1000.0``).
-                                 This floating-point value limits the selection of the lowest resolution mipmap (highest mipmap level)
+                                 This floating-point value limits the selection of the
+                                 lowest resolution mipmap (highest mipmap level)
                 texture (Texture): The texture for this sampler
         '''
 
@@ -1194,14 +1210,15 @@ class Context:
         '''
             Unbinds samplers from texture units.
             Sampler bindings do clear automatically between every frame,
-            but lingering samplers can still be a source of weird bugs during the frame rendering.
-            This methods provides a fairly brute force and efficient way to ensure texture units are clear.
+            but lingering samplers can still be a source of weird bugs during
+            the frame rendering. This methods provides a fairly brute force
+            and efficient way to ensure texture units are clear.
 
             Keyword Arguments:
 
                 start (int): The texture unit index to start the clearing samplers
                 stop (int): The texture unit index to stop clearing samplers
-            
+
             Example::
 
                 # Clear texture unit 0, 1, 2, 3, 4
