@@ -222,7 +222,7 @@ class Buffer:
 
                 # Fill the buffer
 
-                >>> vbo.write(some_temorary_data)
+                >>> vbo.write(some_temporary_data)
 
                 # Issue a render call that uses the vbo
 
@@ -234,7 +234,7 @@ class Buffer:
 
                 # Issue another render call without waiting for the previous one
 
-                >>> vbo.write(some_temorary_data)
+                >>> vbo.write(some_temporary_data)
                 >>> vao.render(...)
         '''
 
