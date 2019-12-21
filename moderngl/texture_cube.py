@@ -20,7 +20,7 @@ class TextureCube:
     __slots__ = ['mglo', '_size', '_components', '_dtype', '_glo', 'ctx', 'extra']
 
     def __init__(self):
-        self.mglo = None  #: The internal representation
+        self.mglo = None  #: Internal representation for debug purposes only.
         self._size = (None, None)
         self._components = None
         self._dtype = None

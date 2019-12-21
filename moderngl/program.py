@@ -24,7 +24,7 @@ class Program:
     __slots__ = ['mglo', '_members', '_subroutines', '_geom', '_glo', 'ctx', 'extra']
 
     def __init__(self):
-        self.mglo = None  #: The internal representation
+        self.mglo = None  #: Internal representation for debug purposes only.
         self._members = {}
         self._subroutines = None
         self._geom = (None, None, None)

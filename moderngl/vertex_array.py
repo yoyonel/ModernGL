@@ -36,7 +36,7 @@ class VertexArray:
     __slots__ = ['mglo', '_program', '_index_buffer', '_index_element_size', '_glo', 'ctx', 'extra', 'scope']
 
     def __init__(self):
-        self.mglo = None  #: Internal representation
+        self.mglo = None  #: Internal representation for debug purposes only.
         self._program = None
         self._index_buffer = None
         self._index_element_size = None

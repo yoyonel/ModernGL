@@ -17,7 +17,7 @@ class Buffer:
     __slots__ = ['mglo', '_size', '_dynamic', '_glo', 'ctx', 'extra']
 
     def __init__(self):
-        self.mglo = None  #: Internal representation
+        self.mglo = None  #: Internal representation for debug purposes only.
         self._size = None
         self._dynamic = None
         self._glo = None

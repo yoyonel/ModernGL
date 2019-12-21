@@ -18,7 +18,7 @@ class TextureArray:
     __slots__ = ['mglo', '_size', '_components', '_samples', '_dtype', '_depth', '_glo', 'ctx', 'extra']
 
     def __init__(self):
-        self.mglo = None  #: The internal representation
+        self.mglo = None  #: Internal representation for debug purposes only.
         self._size = (None, None, None)
         self._components = None
         self._samples = None

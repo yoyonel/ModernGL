@@ -18,7 +18,7 @@ class Framebuffer:
     __slots__ = ['mglo', '_color_attachments', '_depth_attachment', '_size', '_samples', '_glo', 'ctx', 'extra']
 
     def __init__(self):
-        self.mglo = None  #: The internal representation
+        self.mglo = None  #: Internal representation for debug purposes only.
         self._color_attachments = None
         self._depth_attachment = None
         self._size = (None, None)

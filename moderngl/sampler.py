@@ -24,7 +24,7 @@ class Sampler:
     __slots__ = ['mglo', '_glo', 'ctx', 'extra', 'texture']
 
     def __init__(self):
-        self.mglo = None  #: Internal representation
+        self.mglo = None  #: Internal representation for debug purposes only.
         self._glo = None
         self.ctx = None  #: The context this object belongs to
         self.extra = None  #: Any - Attribute for storing user defined objects

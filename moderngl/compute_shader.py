@@ -15,7 +15,7 @@ class ComputeShader:
     __slots__ = ['mglo', '_members', '_glo', 'ctx', 'extra']
 
     def __init__(self):
-        self.mglo = None  #: Internal representation
+        self.mglo = None  #: Internal representation for debug purposes only.
         self._members = {}
         self._glo = None
         self.ctx = None  #: The context this object belongs to

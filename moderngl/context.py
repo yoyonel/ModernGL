@@ -100,7 +100,7 @@ class Context:
     __slots__ = ['mglo', '_screen', '_info', 'version_code', 'fbo', 'extra']
 
     def __init__(self):
-        self.mglo = None  #: The internal context representation
+        self.mglo = None  #: Internal representation for debug purposes only.
         self._screen = None
         self._info = None
         self.version_code = None  #: int: The OpenGL version code. Reports ``410`` for OpenGL 4.1
