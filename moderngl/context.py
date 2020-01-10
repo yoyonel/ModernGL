@@ -1321,7 +1321,7 @@ def create_standalone_context(require=None, **settings) -> 'Context':
             :py:class:`Context` object
     '''
     if require is None:
-        require = 0
+        require = 330
 
     backend = os.environ.get('MODERNGL_BACKEND')
     if backend is not None:
