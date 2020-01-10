@@ -480,7 +480,23 @@ PyObject * MGLBuffer_clear(MGLBuffer * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLBuffer_orphan(MGLBuffer * self) {
+PyObject * MGLBuffer_orphan(MGLBuffer * self, PyObject * args) {
+	Py_ssize_t size;
+
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"n",
+		&size
+	);
+
+	if (!args_ok) {
+		return 0;
+	}
+
+	if (size > 0) {
+		self->size = size;
+	}
+
 	const GLMethods & gl = self->context->gl;
 	gl.BindBuffer(GL_ARRAY_BUFFER, self->buffer_obj);
 	gl.BufferData(GL_ARRAY_BUFFER, self->size, 0, self->dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
@@ -544,6 +560,10 @@ PyObject * MGLBuffer_release(MGLBuffer * self) {
 	Py_RETURN_NONE;
 }
 
+PyObject * MGLBuffer_size(MGLBuffer * self) {
+	return PyLong_FromLong(self->size); 
+}
+
 PyMethodDef MGLBuffer_tp_methods[] = {
 	{"write", (PyCFunction)MGLBuffer_write, METH_VARARGS, 0},
 	{"read", (PyCFunction)MGLBuffer_read, METH_VARARGS, 0},
@@ -552,10 +572,11 @@ PyMethodDef MGLBuffer_tp_methods[] = {
 	{"read_chunks", (PyCFunction)MGLBuffer_read_chunks, METH_VARARGS, 0},
 	{"read_chunks_into", (PyCFunction)MGLBuffer_read_chunks_into, METH_VARARGS, 0},
 	{"clear", (PyCFunction)MGLBuffer_clear, METH_VARARGS, 0},
-	{"orphan", (PyCFunction)MGLBuffer_orphan, METH_NOARGS, 0},
+	{"orphan", (PyCFunction)MGLBuffer_orphan, METH_VARARGS, 0},
 	{"bind_to_uniform_block", (PyCFunction)MGLBuffer_bind_to_uniform_block, METH_VARARGS, 0},
 	{"bind_to_storage_buffer", (PyCFunction)MGLBuffer_bind_to_storage_buffer, METH_VARARGS, 0},
 	{"release", (PyCFunction)MGLBuffer_release, METH_NOARGS, 0},
+	{"size", (PyCFunction)MGLBuffer_size, METH_NOARGS, 0},
 	{0},
 };
 
