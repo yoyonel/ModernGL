@@ -139,9 +139,9 @@ class Particles(Example):
         self.mouse_velocity = 0.001, 0.001  # default value must not be 0. any number is fine
         self.prog['projection'].write(self.projection)
         self.transform['gravity'].value = -.01  # affects the velocity of the particles over time
-        self.ctx.point_size = 1.0  # point size
+        self.ctx.point_size = self.wnd.pixel_ratio  # point size
 
-        self.N = 100_000  # particle count
+        self.N = 25_000  # particle count
         self.active_particles = self.N // 100  # Initial / current number of active particles
         self.max_emit_count = self.N // 100  # Maximum number of particles to emit per frame
         self.stride = 28  # byte stride for each vertex
@@ -235,7 +235,7 @@ class Particles(Example):
         # Cycle emit methods per frame
         method = self.wnd.frames % 3 + 1
         # ---> HARDCODE METHOD HERE <---
-        method = 3
+        # method = 3
         if method == 1:
             self.emit_cpu_simple(time, frame_time)
         elif method == 2:
