@@ -95,7 +95,7 @@ python setup.py build_ext --inplace
 
 ### Is ModernGL faster than PyOpenGL?
 
-In some cases **yes**, the core functions of ModernGL are written in C++,
+In many cases **yes**, the core functions of ModernGL are written in C++,
 OpenGL functions are called in quick succession so these calls together
 count as a single python function call.
 
@@ -108,7 +108,8 @@ Shaders require **OpenGL 4.0** and **OpenGL 4.3**
 
 OpenGL 3.3 came out in February 2010. With **up to date drivers** you will
 be able to use the most of the ModernGL functions, even on integrated 
-graphics cards. _(No, Compute Shaders won't work)_
+graphics cards. _(Compute Shaders will likely not work
+depending on how old your PC is.)_
 
 ### Where can I use ModernGL?
 
