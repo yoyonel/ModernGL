@@ -52,7 +52,7 @@ class Particles(Example):
     title = "Particle System Emitter"
     gl_version = (3, 3)
     aspect_ratio = None
-    mouse_control = True
+    mouse_control = False
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
