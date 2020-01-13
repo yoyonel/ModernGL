@@ -339,16 +339,18 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	int vertices;
 	int first;
 	int instances;
+	int buffer_offset;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"O!IIII",
+		"O!IIIII",
 		&MGLBuffer_Type,
 		&output,
 		&mode,
 		&vertices,
 		&first,
-		&instances
+		&instances,
+		&buffer_offset
 	);
 
 	if (!args_ok) {
@@ -378,7 +380,11 @@ PyObject * MGLVertexArray_transform(MGLVertexArray * self, PyObject * args) {
 	gl.UseProgram(self->program->program_obj);
 	gl.BindVertexArray(self->vertex_array_obj);
 
-	gl.BindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, output->buffer_obj);
+	if (buffer_offset > 0) {
+		gl.BindBufferRange(GL_TRANSFORM_FEEDBACK_BUFFER, 0, output->buffer_obj, buffer_offset, output->size - buffer_offset);
+	} else {
+		gl.BindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, buffer_offset, output->buffer_obj);
+	}
 
 	gl.Enable(GL_RASTERIZER_DISCARD);
 	gl.BeginTransformFeedback(mode);
