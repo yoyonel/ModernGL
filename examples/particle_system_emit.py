@@ -166,7 +166,7 @@ class Particles(Example):
         )
 
         # Data needed for emit method #2. A smaller emit buffer (10% of the original buffer)
-        self.emit_buffer_elements = self.N // 100
+        self.emit_buffer_elements = self.max_emit_count
         self.emit_buffer = self.ctx.buffer(reserve=self.emit_buffer_elements * self.stride)
         self.emit_buffer_prog = self.ctx.program(  # Siple shader just emitting a buffer
             vertex_shader='''
