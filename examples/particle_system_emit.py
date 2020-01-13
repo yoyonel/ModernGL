@@ -5,7 +5,10 @@ adding the current velocity of the mouse pointer.
 Shows how you can use transform feedback with custom emitting.
 You can emit with the gpu or cpu. The main trick is to use
 transform() with the buffer_offset parameter writing to be back
-of the buffer.
+of the buffer. We use a query object in this example that can
+potentially stall rendering a bit, but it's still orders of
+magnitude faster than doing everything on the cpu. using
+transform() with a buffer offset can be used in many creative ways.
 
 This is simliar to pausing and resuming transform feedbacks,
 but works in GL 3.3 core.
@@ -24,7 +27,8 @@ We show 3 different emit methods:
              Here we fill a smaller emit buffer and render that to the end of the output buffer
              to greatly reduce the amount of data we stream to the gpu per frame.
 * Method #3: GPU emitting. A shader simply calculates the new values.
-             No buffer streaming. All is on the gpu side.
+             No buffer streaming. All is on the gpu side. This method is
+             orders of magnitude faster than method 1 and 2
 
 Emit particles from mouse positions:
 
@@ -39,6 +43,7 @@ import math
 import numpy as np
 
 import moderngl
+from moderngl_window import screenshot
 from ported._example import Example
 from pyrr import matrix44
 
@@ -134,16 +139,18 @@ class Particles(Example):
         self.mouse_velocity = 0.001, 0.001  # default value must not be 0. any number is fine
         self.prog['projection'].write(self.projection)
         self.transform['gravity'].value = -.01  # affects the velocity of the particles over time
-        self.ctx.point_size = 3.0  # Boost the rendered point size a bit
+        self.ctx.point_size = 1.0  # point size
 
-        self.N = 50_000  # particle count
+        self.N = 100_000  # particle count
         self.active_particles = self.N // 100  # Initial / current number of active particles
         self.max_emit_count = self.N // 100  # Maximum number of particles to emit per frame
         self.stride = 28  # byte stride for each vertex
         self.floats = 7
         # Note that passing dynamic=True probably doesn't mean anything to most drivers today
-        self.vbo1 = self.ctx.buffer(np.fromiter(self.gen_particles(self.N), count=self.N * self.floats, dtype='f4'), dynamic=True)
-        self.vbo2 = self.ctx.buffer(self.vbo1.read(), dynamic=True)
+        self.vbo1 = self.ctx.buffer(reserve=self.N * self.stride)
+        self.vbo2 = self.ctx.buffer(reserve=self.N * self.stride)
+        # Write some initial particles
+        self.vbo1.write(np.fromiter(self.gen_particles(self.active_particles), count=self.active_particles * self.floats, dtype='f4'))
 
         # Transform vaos. We transform data back and forth to avoid buffer copy
         self.transform_vao1 = self.ctx.vertex_array(
@@ -165,7 +172,7 @@ class Particles(Example):
             [(self.vbo2, '2f 2x4 3f', 'in_pos', 'in_color')],
         )
 
-        # Data needed for emit method #2. A smaller emit buffer (10% of the original buffer)
+        # Setup for emit method #2. The emit buffer size is only max_emit_count.
         self.emit_buffer_elements = self.max_emit_count
         self.emit_buffer = self.ctx.buffer(reserve=self.emit_buffer_elements * self.stride)
         self.emit_buffer_prog = self.ctx.program(  # Siple shader just emitting a buffer
@@ -190,6 +197,32 @@ class Particles(Example):
             [(self.emit_buffer, '2f 2f 3f', 'in_pos', 'in_vel', 'in_color')],
         )
 
+        # Setup for method #3: GPU emitting
+        self.gpu_emitter_prog = self.ctx.program(
+            vertex_shader='''
+            # version 330
+            #define M_PI 3.1415926535897932384626433832795
+            uniform vec2 mouse_pos;
+            uniform vec2 mouse_vel;
+            uniform float time;
+
+            out vec2 out_pos;
+            out vec2 out_vel;
+            out vec3 out_color;
+
+            float rand(float n){return fract(sin(n) * 43758.5453123);}
+            void main() {
+                float a = mod(time * gl_VertexID, M_PI * 2);
+                float r = clamp(rand(time + gl_VertexID), 0.1, 0.9);
+                out_pos = mouse_pos;
+                out_vel = vec2(sin(a), cos(a)) * r + mouse_vel;
+                out_color = vec3(rand(time * 1.3 + gl_VertexID), rand(time * 3.4 + gl_VertexID), rand(time * 2.0 + gl_VertexID));
+            }
+            ''',
+            varyings=['out_pos', 'out_vel', 'out_color'],
+        )
+        self.gpu_emitter_vao = self.ctx._vertex_array(self.gpu_emitter_prog, [])
+
         # Query object to inspect render calls
         self.query = self.ctx.query(primitives=True)
 
@@ -200,11 +233,15 @@ class Particles(Example):
             self.move_mouse(time)
 
         # Cycle emit methods per frame
-        f = self.wnd.frames % 2
-        if f == 0:
+        method = self.wnd.frames % 3 + 1
+        # ---> HARDCODE METHOD HERE <---
+        method = 3
+        if method == 1:
             self.emit_cpu_simple(time, frame_time)
-        elif f == 1:
+        elif method == 2:
             self.emit_cpu_buffer(time, frame_time)
+        elif method == 3:
+            self.emit_gpu(time, frame_time)
 
         # Swap around objects for next frame
         self.transform_vao1, self.transform_vao2 = self.transform_vao2, self.transform_vao1
@@ -258,11 +295,23 @@ class Particles(Example):
         self.active_particles = self.query.primitives + emit_count
         self.render_vao2.render(moderngl.POINTS, vertices=self.active_particles)
 
-    def emit_gpu(self):
+    def emit_gpu(self, time, frame_time):
         """Method #3
         Emit new particles using a shader.
         """
-        pass
+        # Transform all particles recoding how many elements were emitted by geometry shader
+        with self.query:
+            self.transform_vao1.transform(self.vbo2, moderngl.POINTS, vertices=self.active_particles)
+
+        emit_count = min(self.N - self.query.primitives, self.emit_buffer_elements, self.max_emit_count)
+        if emit_count > 0:
+            self.gpu_emitter_prog['mouse_pos'].value = self.mouse_pos
+            self.gpu_emitter_prog['mouse_vel'].value = self.mouse_velocity
+            self.gpu_emitter_prog['time'].value = max(time, 0)
+            self.gpu_emitter_vao.transform(self.vbo2, vertices=emit_count, buffer_offset=self.query.primitives * self.stride)
+
+        self.active_particles = self.query.primitives + emit_count
+        self.render_vao2.render(moderngl.POINTS, vertices=self.active_particles)
 
     def gen_particles(self, n):
         for _ in range(n):
@@ -312,6 +361,12 @@ class Particles(Example):
             (new_pos[1] - self.mouse_pos[1]) * 10,
         )
         self.mouse_pos = new_pos
+
+    def key_event(self, key, action, modifiers):
+        keys = self.wnd.keys
+
+        if action == keys.ACTION_PRESS and key == keys.F1:
+            screenshot.create(self.wnd.fbo)
 
 
 if __name__ == '__main__':
