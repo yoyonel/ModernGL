@@ -6,6 +6,8 @@
 
 # ModernGL
 
+ModernGL is a wrapper over OpenGL that simplifies the creation of simple graphics applications like scientific simulations, games or user interfaces. Usually, acquiring in-depth knowledge of OpenGL requires a steep learning curve. In contrast, ModernGL is easy to learn and use, moreover it is capable of rendering with high performance and quality, with less code written.
+
 [![pypi](https://badge.fury.io/py/moderngl.svg)](https://pypi.python.org/pypi/moderngl) <img src="https://raw.githubusercontent.com/moderngl/moderngl/master/.github/python-versions.svg?sanitize=true"> [![rtd](https://readthedocs.org/projects/moderngl/badge/?version=latest)](https://moderngl.readthedocs.io)
 
 ```sh
