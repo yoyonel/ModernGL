@@ -298,7 +298,7 @@ class Context:
             the defined scissor box will be discarded. This
             applies to rendered geometry or :py:meth:`Context.clear`.
 
-            When this value is equal to the frambuffer size
+            When this value is equal to the framebuffer size
             scissor testing is disabled.
 
             Setting the scissor attribute to ``None`` disables
@@ -524,12 +524,16 @@ class Context:
     def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, *,
               viewport=None, color=None) -> None:
         '''
-            Clear the bound framebuffer. By default clears the :py:data:`screen`.
+            Clear the bound framebuffer.
 
-            If the `viewport` is not ``None`` then scissor test
-            will be used to clear the given viewport.
-            If `viewport` is not `None` it will take precedence
-            over any scissoring set in the framebuffer.
+            If a `viewport` passed in, a scissor test will be used to clear the given viewport.
+            This viewport take prescense over the framebuffers :py:attr:`~moderngl.Framebuffer.scissor`.
+            Clearing can still be done with scissor if no viewport is passed in.
+
+            This method also respects the
+            :py:attr:`~moderngl.Framebuffer.color_mask` and
+            :py:attr:`~moderngl.Framebuffer.depth_mask`. It can for example be used to only clear
+            the depth or color buffer or specific components in the color buffer.
 
             If the `viewport` is a 2-tuple it will clear the
             ``(0, 0, width, height)`` where ``(width, height)`` is the 2-tuple.
