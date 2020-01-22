@@ -25,20 +25,30 @@ except ImportError:
     pass
 
 __all__ = ['Context', 'create_context', 'create_standalone_context',
-           'NOTHING', 'BLEND', 'DEPTH_TEST', 'CULL_FACE', 'RASTERIZER_DISCARD',
+           'NOTHING', 'BLEND', 'DEPTH_TEST', 'CULL_FACE', 'RASTERIZER_DISCARD', 'PROGRAM_POINT_SIZE',
            'ZERO', 'ONE', 'SRC_COLOR', 'ONE_MINUS_SRC_COLOR', 'SRC_ALPHA', 'ONE_MINUS_SRC_ALPHA',
            'DST_ALPHA', 'ONE_MINUS_DST_ALPHA', 'DST_COLOR', 'ONE_MINUS_DST_COLOR',
            'FUNC_ADD', 'FUNC_SUBTRACT', 'FUNC_REVERSE_SUBTRACT', 'MIN', 'MAX',
            'DEFAULT_BLENDING', 'PREMULTIPLIED_ALPHA', 'FIRST_VERTEX_CONVENTION',
            'LAST_VERTEX_CONVENTION']
 
+# Context Flags
+# Context Flags
+#: Represents no states. Can be used with :py:meth:`Context.enable_only` to disable all states.
 NOTHING = 0
+#: Enable/disable blending
 BLEND = 1
+#: Enable/disable depth testing
 DEPTH_TEST = 2
+#: Enable/disable face culling
 CULL_FACE = 4
+#: Enable/disable rasterization
 RASTERIZER_DISCARD = 8
+#: When enabled we can write to ``gl_PointSize`` in the vertex shader to specify the point size.
+#: When disabled :py:attr:`Context.point_size` is used.
+PROGRAM_POINT_SIZE = 16
 
-
+# Blend functions
 ZERO = 0x0000
 ONE = 0x0001
 SRC_COLOR = 0x0300
@@ -51,11 +61,17 @@ DST_COLOR = 0x0306
 ONE_MINUS_DST_COLOR = 0x0307
 
 # Blend equations
+#: source + destination
 FUNC_ADD = 0x8006
+#: source - destination
 FUNC_SUBTRACT = 0x800A
+#: destination - source
 FUNC_REVERSE_SUBTRACT = 0x800B
+#: Minimum of source and destination
 MIN = 0x8007
+#: Maximum of source and destination
 MAX = 0x8008
+
 
 FIRST_VERTEX_CONVENTION = 0x8E4D
 LAST_VERTEX_CONVENTION = 0x8E4E
@@ -69,14 +85,24 @@ class Context:
         Class exposing OpenGL features.
         ModernGL objects can be created from this class.
     '''
-
+    # Context Flags
+    #: Represents no states. Can be used with :py:meth:`Context.enable_only` to disable all states.
+    NOTHING = 0
+    #: Enable/disable blending
     BLEND = 1
+    #: Enable/disable depth testing
     DEPTH_TEST = 2
+    #: Enable/disable face culling
     CULL_FACE = 4
+    #: Enable/disable rasterization
+    RASTERIZER_DISCARD = 8
+    #: When enabled we can write to ``gl_PointSize`` in the vertex shader to specify the point size.
+    #: When disabled :py:attr:`Context.point_size` is used.
+    PROGRAM_POINT_SIZE = 16
 
+    # Blend functions
     ZERO = 0x0000
     ONE = 0x0001
-
     SRC_COLOR = 0x0300
     ONE_MINUS_SRC_COLOR = 0x0301
     SRC_ALPHA = 0x0302
@@ -87,12 +113,18 @@ class Context:
     ONE_MINUS_DST_COLOR = 0x0307
 
     # Blend equations
+    #: source + destination
     FUNC_ADD = 0x8006
+    #: source - destination
     FUNC_SUBTRACT = 0x800A
+    #: destination - source
     FUNC_REVERSE_SUBTRACT = 0x800B
+    #: Minimum of source and destination
     MIN = 0x8007
+    #: Maximum of source and destination
     MAX = 0x8008
 
+    # Provoking vertex
     FIRST_VERTEX_CONVENTION = 0x8E4D
     LAST_VERTEX_CONVENTION = 0x8E4E
 
@@ -204,15 +236,19 @@ class Context:
     def blend_equation(self):
         '''
             tuple: Set the blend equation (write only).
+
+            Blend equations specify how source and destination colors are combined
+            in blending operations. By default ``FUNC_ADD`` is used.
+
             Blend equation can be set for rgb and alpha separately if needed.
 
             Supported functions are::
 
-                moderngl.FUNC_ADD
-                moderngl.FUNC_SUBTRACT
-                moderngl.FUNC_REVERSE_SUBTRACT
-                moderngl.MIN
-                moderngl.MAX
+                moderngl.FUNC_ADD               # source + destination
+                moderngl.FUNC_SUBTRACT          # source - destination
+                moderngl.FUNC_REVERSE_SUBTRACT  # destination - source
+                moderngl.MIN                    # Minimum of source and destination
+                moderngl.MAX                    # Maximum of source and destination
 
             Example::
 
@@ -558,7 +594,12 @@ class Context:
 
     def enable_only(self, flags) -> None:
         '''
-            Clears all existing flags applying new ones
+            Clears all existing flags applying new ones.
+
+            Note that the enum values defined in moderngl
+            are not the same as the ones in opengl.
+            These are defined as bit flags so we can logical
+            `or` them together.
 
             Available flags:
 
@@ -567,6 +608,7 @@ class Context:
             - :py:data:`moderngl.DEPTH_TEST`
             - :py:data:`moderngl.CULL_FACE`
             - :py:data:`moderngl.RASTERIZER_DISCARD`
+            - :py:data:`moderngl.PROGRAM_POINT_SIZE`
 
             Examples::
 
@@ -585,6 +627,11 @@ class Context:
     def enable(self, flags) -> None:
         '''
             Enable flags.
+
+            Note that the enum values defined in moderngl
+            are not the same as the ones in opengl.
+            These are defined as bit flags so we can logical
+            `or` them together.
 
             For valid flags, please see :py:meth:`enable_only`.
 
