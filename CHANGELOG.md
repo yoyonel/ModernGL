@@ -7,13 +7,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 5.6.0 [Unreleased]
 
-From moderngl 5.6 context creation is done by the [glcontext](https://github.com/moderngl/glcontext)
+From ModernGL 5.6 context creation is done by the [glcontext](https://github.com/moderngl/glcontext)
 package. This means we can keep improving context creation without releasing new
 moderngl versions. The bar for contributing to context creation is also lower.
 Backends can be written in C++ or by simply using ctypes.
 
+This version also has a lot of improvements to docsstrings, api docs and documentation in general.
+Still we have a lot more work to do in this area.
+
 ### Added
 
+- `VertexBuffer.transform` now as a `buffer_offset` parameter
+  for setting the start byte offset of the output buffer.
+  This can be used in many creative ways in for example particle
+  emitting.
+- `Framebuffer` supports having only depth buffer. This makes things like shadow mapping easier to work with.
+- Support for `PROGRAM_POINT_SIZE` context flag so point sizes can be set in the vertex shader
 - Scissor test support. `Framebuffer.scissor` and `Context.scissor` can now be used
   to set and enable scissor testing per framebuffer.
 - The `Framebuffer.clear` have an optional `color` parameter to replace the old `red, green, blue, alpha` parameters.
