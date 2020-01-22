@@ -95,6 +95,10 @@ PyObject * MGLContext_enable(MGLContext * self, PyObject * args) {
 		self->gl.Enable(GL_RASTERIZER_DISCARD);
 	}
 
+	if (flags & MGL_PROGRAM_POINT_SIZE) {
+		self->gl.Enable(GL_PROGRAM_POINT_SIZE);
+	}
+
 	Py_RETURN_NONE;
 }
 
@@ -127,6 +131,10 @@ PyObject * MGLContext_disable(MGLContext * self, PyObject * args) {
 
 	if (flags & MGL_RASTERIZER_DISCARD) {
 		self->gl.Disable(GL_RASTERIZER_DISCARD);
+	}
+
+	if (flags & MGL_PROGRAM_POINT_SIZE) {
+		self->gl.Disable(GL_PROGRAM_POINT_SIZE);
 	}
 
 	Py_RETURN_NONE;
