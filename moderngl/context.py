@@ -72,15 +72,19 @@ MIN = 0x8007
 #: Maximum of source and destination
 MAX = 0x8008
 
+#: Shotcut for the default blending ``SRC_ALPHA, ONE_MINUS_SRC_ALPHA``
+DEFAULT_BLENDING = (SRC_ALPHA, ONE_MINUS_SRC_ALPHA)
+#: Shotcut for additive blending ``ONE, ONE``
+ADDITIVE_BLENDING = (ONE, ONE)
+#: Shotcut for blend mode when using premultiplied alpha ``SRC_ALPHA, ONE``
+PREMULTIPLIED_ALPHA = (SRC_ALPHA, ONE)
+
 #: Specifies the first vertex should be used as the source of data for flat shaded varyings.
 #: Used with :py:attr:`Context.provoking_vertex`.
 FIRST_VERTEX_CONVENTION = 0x8E4D
 #: Specifies the last vertex should be used as the source of data for flat shaded varyings.
 #: Used with :py:attr:`Context.provoking_vertex`.
 LAST_VERTEX_CONVENTION = 0x8E4E
-
-DEFAULT_BLENDING = (SRC_ALPHA, ONE_MINUS_SRC_ALPHA)
-PREMULTIPLIED_ALPHA = (SRC_ALPHA, ONE)
 
 
 class Context:
@@ -114,6 +118,14 @@ class Context:
     ONE_MINUS_DST_ALPHA = 0x0305
     DST_COLOR = 0x0306
     ONE_MINUS_DST_COLOR = 0x0307
+
+    #: Shotcut for the default blending ``SRC_ALPHA, ONE_MINUS_SRC_ALPHA``
+    DEFAULT_BLENDING = (SRC_ALPHA, ONE_MINUS_SRC_ALPHA)
+    #: Shotcut for additive blending ``ONE, ONE``
+    ADDITIVE_BLENDING = (ONE, ONE)
+    #: Shotcut for blend mode when using premultiplied alpha ``SRC_ALPHA, ONE``
+    PREMULTIPLIED_ALPHA = (SRC_ALPHA, ONE)
+
 
     # Blend equations
     #: source + destination

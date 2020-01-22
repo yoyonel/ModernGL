@@ -126,6 +126,13 @@ to control blending operations.
 .. autoattribute:: Context.DST_COLOR
 .. autoattribute:: Context.ONE_MINUS_DST_COLOR
 
+Blend Function Shortcuts
+------------------------
+
+.. autoattribute:: Context.DEFAULT_BLENDING
+.. autoattribute:: Context.ADDITIVE_BLENDING
+.. autoattribute:: Context.PREMULTIPLIED_ALPHA
+
 Blend Equations
 ---------------
 
