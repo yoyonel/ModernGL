@@ -206,9 +206,9 @@ PyObject * MGLScope_begin(MGLScope * self, PyObject * args) {
 	}
 
 	if (flags & MGL_PROGRAM_POINT_SIZE) {
-		self->gl.Enable(GL_PROGRAM_POINT_SIZE);
+		gl.Enable(GL_PROGRAM_POINT_SIZE);
 	} else {
-		self->gl.Disable(GL_PROGRAM_POINT_SIZE);
+		gl.Disable(GL_PROGRAM_POINT_SIZE);
 	}
 
 	Py_RETURN_NONE;
@@ -256,9 +256,9 @@ PyObject * MGLScope_end(MGLScope * self, PyObject * args) {
 	}
 
 	if (flags & MGL_PROGRAM_POINT_SIZE) {
-		self->gl.Enable(GL_PROGRAM_POINT_SIZE);
+		gl.Enable(GL_PROGRAM_POINT_SIZE);
 	} else {
-		self->gl.Disable(GL_PROGRAM_POINT_SIZE);
+		gl.Disable(GL_PROGRAM_POINT_SIZE);
 	}
 
 	Py_RETURN_NONE;
