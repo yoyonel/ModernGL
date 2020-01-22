@@ -55,6 +55,12 @@ PyObject * MGLContext_enable_only(MGLContext * self, PyObject * args) {
 		self->gl.Disable(GL_RASTERIZER_DISCARD);
 	}
 
+	if (flags & MGL_PROGRAM_POINT_SIZE) {
+		self->gl.Enable(GL_PROGRAM_POINT_SIZE);
+	} else {
+		self->gl.Disable(GL_PROGRAM_POINT_SIZE);
+	}
+
 	Py_RETURN_NONE;
 }
 
