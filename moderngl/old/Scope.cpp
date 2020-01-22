@@ -205,6 +205,12 @@ PyObject * MGLScope_begin(MGLScope * self, PyObject * args) {
 		gl.Disable(GL_RASTERIZER_DISCARD);
 	}
 
+	if (flags & MGL_PROGRAM_POINT_SIZE) {
+		self->gl.Enable(GL_PROGRAM_POINT_SIZE);
+	} else {
+		self->gl.Disable(GL_PROGRAM_POINT_SIZE);
+	}
+
 	Py_RETURN_NONE;
 }
 
@@ -247,6 +253,12 @@ PyObject * MGLScope_end(MGLScope * self, PyObject * args) {
 		gl.Enable(GL_RASTERIZER_DISCARD);
 	} else {
 		gl.Disable(GL_RASTERIZER_DISCARD);
+	}
+
+	if (flags & MGL_PROGRAM_POINT_SIZE) {
+		self->gl.Enable(GL_PROGRAM_POINT_SIZE);
+	} else {
+		self->gl.Disable(GL_PROGRAM_POINT_SIZE);
 	}
 
 	Py_RETURN_NONE;
