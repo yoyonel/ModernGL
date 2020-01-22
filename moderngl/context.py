@@ -72,8 +72,11 @@ MIN = 0x8007
 #: Maximum of source and destination
 MAX = 0x8008
 
-
+#: Specifies the first vertex should be used as the source of data for flat shaded varyings.
+#: Used with :py:attr:`Context.provoking_vertex`.
 FIRST_VERTEX_CONVENTION = 0x8E4D
+#: Specifies the last vertex should be used as the source of data for flat shaded varyings.
+#: Used with :py:attr:`Context.provoking_vertex`.
 LAST_VERTEX_CONVENTION = 0x8E4E
 
 DEFAULT_BLENDING = (SRC_ALPHA, ONE_MINUS_SRC_ALPHA)
@@ -125,7 +128,12 @@ class Context:
     MAX = 0x8008
 
     # Provoking vertex
+
+    #: Specifies the first vertex should be used as the source of data for flat shaded varyings.
+    #: Used with :py:attr:`Context.provoking_vertex`.
     FIRST_VERTEX_CONVENTION = 0x8E4D
+    #: Specifies the last vertex should be used as the source of data for flat shaded varyings.
+    #: Used with :py:attr:`Context.provoking_vertex`.
     LAST_VERTEX_CONVENTION = 0x8E4E
 
     __slots__ = ['mglo', '_screen', '_info', 'version_code', 'fbo', 'extra']
@@ -290,12 +298,23 @@ class Context:
 
     @property
     def provoking_vertex(self):
-        '''
-            This property is write only
+        '''int: Specifies the vertex to be used as the source of data for flat shaded varyings.
+
+            Flatshading a vertex shader varying output (ie. ``flat out vec3 pos``) means to assign
+            all vetices of the primitive the same value for that output. The vertex from which
+            these values is derived is known as the provoking vertex.
+
+            It can be configured to be the first or the last vertex.
+
+            This property is write only.
 
             Example::
 
+                # Use first vertex
                 ctx.provoking_vertex = moderngl.FIRST_VERTEX_CONVENTION
+
+                # Use last vertex
+                ctx.provoking_vertex = moderngl.LAST_VERTEX_CONVENTION 
         '''
         raise NotImplementedError()
 
