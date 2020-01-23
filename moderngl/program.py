@@ -57,7 +57,7 @@ class Program:
         .. code-block:: python
 
             # Get a uniform
-            uniform = program['color]
+            uniform = program['color']
         """
         return self._members[key]
 
