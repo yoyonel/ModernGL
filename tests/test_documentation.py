@@ -69,7 +69,7 @@ class TestCase(unittest.TestCase):
         self.validate('scope.rst', 'Scope', [])
 
     def test_compute_shader_docs(self):
-        self.validate('compute_shader.rst', 'ComputeShader', [])
+        self.validate('compute_shader.rst', 'ComputeShader', [], ['__getitem__', '__setitem__', '__eq__', '__iter__'])
 
     def test_subroutine_docs(self):
         self.validate('subroutine.rst', 'Subroutine', [])
