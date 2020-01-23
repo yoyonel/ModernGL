@@ -58,6 +58,13 @@ class Program:
 
             # Get a uniform
             uniform = program['color']
+
+            # Uniform values can be set on the returned object
+            # or the `__setitem__` shortcut can be used.
+            program['color'].value = 1.0, 1.0, 1.0, 1.0
+
+            # Still when writing byte data we need to use the `write()` method
+            program['color'].write(buffer)
         """
         return self._members[key]
 
