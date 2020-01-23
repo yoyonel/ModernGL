@@ -922,9 +922,28 @@ class Context:
         return res
 
     def vertex_array(self, *args, **kwargs) -> 'VertexArray':
+        '''
+            Create a :py:class:`VertexArray` object.
+
+            This method also supports arguments for :py:meth:`Context.simple_vertex_array`.
+
+            Args:
+                program (Program): The program used when rendering.
+                content (list): A list of (buffer, format, attributes).
+                                See :ref:`buffer-format-label`.
+                index_buffer (Buffer): An index buffer.
+
+            Keyword Args:
+                index_element_size (int): byte size of each index element, 1, 2 or 4.
+                skip_errors (bool): Ignore skip_errors varyings.
+
+            Returns:
+                :py:class:`VertexArray` object
+        '''
         if len(args) > 2 and type(args[1]) is Buffer:
             return self.simple_vertex_array(*args, **kwargs)
         return self._vertex_array(*args, **kwargs)
+
 
     def _vertex_array(self, program, content,
                       index_buffer=None, index_element_size=4, *,
@@ -966,6 +985,10 @@ class Context:
                             index_buffer=None, index_element_size=4) -> 'VertexArray':
         '''
             Create a :py:class:`VertexArray` object.
+
+            .. Warning:: This method is deprecated and may be removed in the future.
+                         Use :py:meth:`Context.vertex_array` instead. It also supports
+                         the argument format this method describes.
 
             Args:
                 program (Program): The program used when rendering.
