@@ -22,6 +22,7 @@ Methods
 .. automethod:: Texture.read_into(buffer, level=0, alignment=1, write_offset=0)
 .. automethod:: Texture.write(data, viewport=None, level=0, alignment=1)
 .. automethod:: Texture.build_mipmaps(base=0, max_level=1000)
+.. automethod:: Texture.bind_to_image(binding, access, format)
 .. automethod:: Texture.use(location=0)
 .. automethod:: Texture.release()
 
