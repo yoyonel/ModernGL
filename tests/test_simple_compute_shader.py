@@ -22,7 +22,6 @@ class TestCase(unittest.TestCase):
         '''
 
         compute_shader = self.ctx.compute_shader(src)
-        self.assertEqual(compute_shader.source, src)
         compute_shader.release()
 
 

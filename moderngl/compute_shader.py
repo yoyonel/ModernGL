@@ -77,13 +77,13 @@ class ComputeShader:
         """
         yield from self._members
 
-    @property
-    def source(self) -> str:
-        '''
-            str: The source code of the compute shader.
-        '''
+    # @property
+    # def source(self) -> str:
+    #     '''
+    #         str: The source code of the compute shader.
+    #     '''
 
-        return self.mglo.source
+    #     return self.mglo.source
 
     @property
     def glo(self) -> int:

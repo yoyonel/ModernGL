@@ -26,7 +26,6 @@ Methods
 Attributes
 ----------
 
-.. autoattribute:: ComputeShader.source
 .. autoattribute:: ComputeShader.glo
 .. autoattribute:: ComputeShader.mglo
 .. autoattribute:: ComputeShader.extra
