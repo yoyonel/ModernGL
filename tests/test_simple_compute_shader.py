@@ -7,8 +7,8 @@ class TestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        raise unittest.SkipTest('NYI')
-        cls.ctx = get_context()
+        # raise unittest.SkipTest('NYI')
+        cls.ctx = get_context(require=430)
 
     def test_compute_shader(self):
         if self.ctx.version_code < 430:
@@ -23,6 +23,7 @@ class TestCase(unittest.TestCase):
 
         compute_shader = self.ctx.compute_shader(src)
         self.assertEqual(compute_shader.source, src)
+        compute_shader.release()
 
 
 if __name__ == '__main__':

@@ -1,15 +1,20 @@
 import moderngl
 
-_static = {
-    'context': None,
-}
+_static = {}
 
 
-def get_context() -> moderngl.Context:
+def get_context(require=330) -> moderngl.Context:
+    """Caches contexts for each gl version"""
+
     ctx = _static.get('context')
 
     if ctx is None:
-        ctx = moderngl.create_context(standalone=True, size=(100, 100))
-        _static['context'] = ctx
+        try:
+            ctx = moderngl.create_context(require=require, standalone=True, size=(100, 100))
+            _static['context_{}'.format(require)] = ctx
+        except Exception as ex:
+            print(ex)
+            return None
 
     return ctx
+ 
