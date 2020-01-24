@@ -19,6 +19,10 @@ class Program:
 
         A Program object cannot be instantiated directly, it requires a context.
         Use :py:meth:`Context.program` to create one.
+
+        Uniform buffers can be bound using :py:meth:`Buffer.bind_to_uniform_block`
+        or can be set individually. For more complex binding yielding higher
+        performance consider using :py:class:`moderngl.Scope`.
     '''
 
     __slots__ = ['mglo', '_members', '_subroutines', '_geom', '_glo', 'ctx', 'extra']
