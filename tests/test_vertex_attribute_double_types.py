@@ -92,11 +92,10 @@ class TestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        raise unittest.SkipTest('')
         cls.ctx = get_context()
 
-        if cls.ctx.vendor.startswith('Intel'):
-            raise unittest.SkipTest('')
+        # if cls.ctx.vendor.startswith('Intel'):
+        #     raise unittest.SkipTest('')
 
     def test_simple(self):
         vert_src = '''

@@ -8,13 +8,11 @@ class TestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        raise unittest.SkipTest('NYI')
-        cls.ctx = get_context()
+        cls.ctx = get_context(require=430)
+        if not cls.ctx:
+            raise unittest.SkipTest('compute shaders not supported')
 
     def test_1(self):
-        if self.ctx.version_code < 430:
-            self.skipTest('OpenGL 4.3 is not supported')
-
         compute_shader = self.ctx.compute_shader('''
             #version 430
 

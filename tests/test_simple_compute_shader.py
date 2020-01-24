@@ -8,8 +8,9 @@ class TestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # raise unittest.SkipTest('NYI')
         cls.ctx = get_context(require=430)
+        if not cls.ctx:
+            raise unittest.SkipTest('Compute shader not supported')
 
     def test_compute_shader(self):
         if self.ctx.version_code < 430:
