@@ -96,6 +96,8 @@ PyObject * MGLContext_compute_shader(MGLContext * self, PyObject * args) {
 	compute_shader->shader_obj = shader_obj;
 	compute_shader->program_obj = program_obj;
 
+	Py_INCREF(compute_shader);
+
 	int num_uniforms = 0;
 	int num_uniform_blocks = 0;
 	int num_subroutines = 0;
@@ -270,9 +272,14 @@ PyObject * MGLComputeShader_run(MGLComputeShader * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
+PyObject * MGLComputeShader_release(MGLComputeShader * self) {
+	MGLComputeShader_Invalidate(self);
+	Py_RETURN_NONE;
+}
+
 PyMethodDef MGLComputeShader_tp_methods[] = {
 	{"run", (PyCFunction)MGLComputeShader_run, METH_VARARGS, 0},
-	// // {"release", (PyCFunction)MGLComputeShader_release, METH_VARARGS, 0},
+	{"release", (PyCFunction)MGLComputeShader_release, METH_VARARGS, 0},
 	{0},
 };
 
@@ -320,3 +327,18 @@ PyTypeObject MGLComputeShader_Type = {
 	0,                                                      // tp_alloc
 	MGLComputeShader_tp_new,                                // tp_new
 };
+
+void MGLComputeShader_Invalidate(MGLComputeShader * compute_shader) {
+	if (Py_TYPE(compute_shader) == &MGLInvalidObject_Type) {
+		return;
+	}
+
+	// TODO: decref
+
+	const GLMethods & gl = compute_shader->context->gl;
+	gl.DeleteProgram(compute_shader->program_obj);
+
+	Py_DECREF(compute_shader->context);
+	Py_TYPE(compute_shader) = &MGLInvalidObject_Type;
+	Py_DECREF(compute_shader);
+}
