@@ -148,6 +148,11 @@ PyObject * create_context(PyObject * self, PyObject * args) {
         return NULL;
     }
 
+    ctx->release_func = PyObject_GetAttrString(ctx->ctx, "release");
+    if (!ctx->release_func) {
+        return NULL;
+    }
+
 	// Map OpenGL functions
     void ** gl_function = (void **)&ctx->gl;
     for (int i = 0; GL_FUNCTIONS[i]; ++i) {
