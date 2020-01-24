@@ -467,8 +467,7 @@ PyObject * MGLContext_scope(MGLContext * self, PyObject * args);
 PyObject * MGLContext_sampler(MGLContext * self, PyObject * args);
 
 PyObject * MGLContext_release(MGLContext * self) {
-	// TODO:
-	// MGLContext_Invalidate(self);
+	PyObject_CallMethod(self->ctx, "release", NULL);
 	Py_RETURN_NONE;
 }
 

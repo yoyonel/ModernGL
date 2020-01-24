@@ -132,6 +132,7 @@ PyObject * create_context(PyObject * self, PyObject * args) {
 
 	ctx->wireframe = false;
 
+	// Create context
     ctx->ctx = PyObject_CallFunction(backend, "i", glversion);
     if (!ctx->ctx) {
         return NULL;
@@ -147,6 +148,7 @@ PyObject * create_context(PyObject * self, PyObject * args) {
         return NULL;
     }
 
+	// Map OpenGL functions
     void ** gl_function = (void **)&ctx->gl;
     for (int i = 0; GL_FUNCTIONS[i]; ++i) {
         PyObject * val = PyObject_CallMethod(ctx->ctx, "load", "s", GL_FUNCTIONS[i]);

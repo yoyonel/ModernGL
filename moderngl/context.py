@@ -1356,6 +1356,12 @@ class Context:
     def release(self) -> None:
         '''
             Release the ModernGL context.
+
+            If the context is not standalone the standard
+            backends in ``glcontext`` will not do anything
+            because the context was not created by moderngl.
+
+            Standalone contexts can normally be released.
         '''
 
         self.mglo.release()
