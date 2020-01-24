@@ -118,10 +118,12 @@ PyObject * create_context(PyObject * self, PyObject * args) {
     if (backend == Py_None) {
         PyObject * glcontext = PyImport_ImportModule("glcontext");
         if (!glcontext) {
+			// Displayed to user: ModuleNotFoundError: No module named 'glcontext'
             return NULL;
         }
         backend = PyObject_CallMethod(glcontext, "default_backend", "O", standalone);
-        if (!backend) {
+        if (backend == Py_None) {
+			MGLError_Set("glcontext: Could not get a default backend");
             return NULL;
         }
     }
