@@ -331,6 +331,9 @@ class Texture:
 
         self.mglo.build_mipmaps(base, max_level)
 
+    def bind_to_image(self, binding, access, format) -> None:
+        self.mglo.bind(binding, access, format)
+
     def use(self, location=0) -> None:
         '''
             Bind the texture.
