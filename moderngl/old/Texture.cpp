@@ -678,7 +678,7 @@ PyObject * MGLTexture_release(MGLTexture * self) {
 
 PyMethodDef MGLTexture_tp_methods[] = {
 	{"write", (PyCFunction)MGLTexture_write, METH_VARARGS, 0},
-	{"bind", (PyCFunction)MGLTexture_meth_bind, METH_FASTCALL, 0},
+	{"bind", (PyCFunction)MGLTexture_meth_bind, METH_VARARGS, 0},
 	{"use", (PyCFunction)MGLTexture_use, METH_VARARGS, 0},
 	{"build_mipmaps", (PyCFunction)MGLTexture_build_mipmaps, METH_VARARGS, 0},
 	{"read", (PyCFunction)MGLTexture_read, METH_VARARGS, 0},
