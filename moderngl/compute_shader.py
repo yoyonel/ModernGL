@@ -8,8 +8,15 @@ __all__ = ['ComputeShader']
 
 class ComputeShader:
     '''
-        A Compute Shader is a Shader Stage that is used entirely for computing arbitrary information.
-        While it can do rendering, it is generally used for tasks not directly related to drawing.
+        A Compute Shader is a Shader Stage that is used entirely for computing
+        arbitrary information. While it can do rendering, it is generally used
+        for tasks not directly related to drawing.
+
+        - Compute shaders support uniforms are other member object just like a
+          :py:class:`moderngl.Program`.
+        - Storage buffers can be bound using :py:meth:`Buffer.bind_to_storage_buffer`.
+        - Uniform buffers can be bound using :py:meth:`Buffer.bind_to_uniform_block`.
+        - Images can be bound using :py:meth:`Texture.bind_to_image`.
     '''
 
     __slots__ = ['mglo', '_members', '_glo', 'ctx', 'extra']
