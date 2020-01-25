@@ -92,7 +92,9 @@ class TestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.ctx = get_context()
+        cls.ctx = get_context(require=410)
+        if not cls.ctx:
+            raise unittest.SkipTest('double types not supported')
 
         # if cls.ctx.vendor.startswith('Intel'):
         #     raise unittest.SkipTest('')
@@ -117,11 +119,11 @@ class TestCase(unittest.TestCase):
 
                 prog = self.ctx.program(vertex_shader=vert_src % vtype, varyings=['v_out'])
 
-                if 'v_in' not in [attr for attr in prog if isinstance(attr, moderngl.Attribute)]:
+                if prog.get('v_in', None) is None:
                     warnings.warn('skipping %s' % vtype['type'])
                     continue
 
-                fmt = moderngl.detect_format(prog, ['v_in'])
+                fmt = moderngl.detect_format(prog, ['v_in'], mode='struct')
                 vbo1 = self.ctx.buffer(struct.pack(fmt, *vtype['input']))
                 vbo2 = self.ctx.buffer(b'\xAA' * struct.calcsize(fmt))
                 vao = self.ctx.simple_vertex_array(prog, vbo1, 'v_in')
@@ -151,14 +153,14 @@ class TestCase(unittest.TestCase):
 
                 prog = self.ctx.program(vertex_shader=vert_src % vtype, varyings=['v_out'])
 
-                if 'v_in' not in [attr for attr in prog if isinstance(attr, moderngl.Attribute)]:
+                if prog.get('v_in', None) is None:
                     warnings.warn('skipping %s' % vtype['type'])
                     continue
 
-                fmt = moderngl.detect_format(prog, ['v_in'])
+                fmt = moderngl.detect_format(prog, ['v_in'], mode='struct')
                 vbo1 = self.ctx.buffer(struct.pack(fmt, *(vtype['input'] * 2)))
                 vbo2 = self.ctx.buffer(b'\xAA' * struct.calcsize(fmt))
-                vao = self.ctx.simple_vertex_array(prog, vbo1, 'v_in')
+                vao = self.ctx.vertex_array(prog, vbo1, 'v_in')
                 vao.transform(vbo2, moderngl.POINTS, 1)
 
                 for a, b in zip(struct.unpack(fmt, vbo2.read()), vtype['output'] * 2):

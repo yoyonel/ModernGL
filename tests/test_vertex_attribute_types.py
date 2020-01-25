@@ -167,7 +167,7 @@ class TestCase(unittest.TestCase):
                     warnings.warn('skipping %s' % vtype['type'])
                     continue
 
-                fmt = moderngl.detect_format(prog, ['v_in'])
+                fmt = moderngl.detect_format(prog, ['v_in'], mode='struct')
                 vbo1 = self.ctx.buffer(struct.pack(fmt, *vtype['input']))
                 vbo2 = self.ctx.buffer(b'\xAA' * struct.calcsize(fmt))
                 vao = self.ctx.simple_vertex_array(prog, vbo1, 'v_in')
@@ -201,7 +201,7 @@ class TestCase(unittest.TestCase):
                     warnings.warn('skipping %s' % vtype['type'])
                     continue
 
-                fmt = moderngl.detect_format(prog, ['v_in'])
+                fmt = moderngl.detect_format(prog, ['v_in'], mode='struct')
                 vbo1 = self.ctx.buffer(struct.pack(fmt, *(vtype['input'] * 2)))
                 vbo2 = self.ctx.buffer(b'\xAA' * struct.calcsize(fmt))
                 vao = self.ctx.simple_vertex_array(prog, vbo1, 'v_in')
