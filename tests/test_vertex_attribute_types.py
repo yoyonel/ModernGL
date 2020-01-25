@@ -140,8 +140,7 @@ class TestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        raise unittest.SkipTest('')
-        cls.ctx = get_context()
+        cls.ctx = get_context(require=330)
 
     def test_simple(self):
         vert_src = '''
@@ -163,7 +162,7 @@ class TestCase(unittest.TestCase):
 
                 prog = self.ctx.program(vertex_shader=vert_src % vtype, varyings=['v_out'])
 
-                if 'v_in' not in prog:
+                if prog.get('v_in', None) is None:
                     warnings.warn('skipping %s' % vtype['type'])
                     continue
 
@@ -197,7 +196,7 @@ class TestCase(unittest.TestCase):
 
                 prog = self.ctx.program(vertex_shader=vert_src % vtype, varyings=['v_out'])
 
-                if 'v_in' not in prog.attributes:
+                if prog.get('v_in', None) is None:
                     warnings.warn('skipping %s' % vtype['type'])
                     continue
 
