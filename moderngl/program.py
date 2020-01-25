@@ -195,7 +195,7 @@ class Program:
         self.mglo.release()
 
 
-def detect_format(program, attributes) -> str:
+def detect_format(program, attributes, mode='mgl') -> str:
     '''
         Detect format for vertex attributes.
         The format returned does not contain padding.
@@ -212,7 +212,18 @@ def detect_format(program, attributes) -> str:
         '''
             For internal use only.
         '''
-
-        return attr.array_length * attr.dimension, attr.shape
+        # Translate shape format into attribute format
+        mgl_fmt = {
+            'd': 'f8',
+            'I': 'u'
+        }
+        # moderngl attribute format uses f, i and u
+        if mode == 'mgl':
+            return attr.array_length * attr.dimension, mgl_fmt.get(attr.shape) or attr.shape
+        # struct attribute format uses f, d, i and I
+        elif mode == 'struct':
+            return attr.array_length * attr.dimension, attr.shape
+        else:
+            raise ValueError('invalid format mode: {}'.format(mode))
 
     return ' '.join('%d%s' % fmt(program[a]) for a in attributes)
