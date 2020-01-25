@@ -117,7 +117,7 @@ class TestCase(unittest.TestCase):
 
                 prog = self.ctx.program(vertex_shader=vert_src % vtype, varyings=['v_out'])
 
-                if 'v_in' not in prog.attributes:
+                if 'v_in' not in [attr for attr in prog if isinstance(attr, moderngl.Attribute)]:
                     warnings.warn('skipping %s' % vtype['type'])
                     continue
 
@@ -151,7 +151,7 @@ class TestCase(unittest.TestCase):
 
                 prog = self.ctx.program(vertex_shader=vert_src % vtype, varyings=['v_out'])
 
-                if 'v_in' not in prog.attributes:
+                if 'v_in' not in [attr for attr in prog if isinstance(attr, moderngl.Attribute)]:
                     warnings.warn('skipping %s' % vtype['type'])
                     continue
 
