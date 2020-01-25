@@ -1129,9 +1129,8 @@ class Context:
 
     def simple_framebuffer(self, size, components=4, *, samples=0, dtype='f1') -> 'Framebuffer':
         '''
-            A :py:class:`Framebuffer` is a collection of buffers that can be
-            used as the destination for rendering. The buffers for Framebuffer
-            objects reference images from either Textures or Renderbuffers.
+            Creates a :py:class:`Framebuffer` with a single color attachment
+            and depth buffer using :py:class:`moderngl.Renderbuffer` attachments.
 
             Args:
                 size (tuple): The width and height of the renderbuffer.
