@@ -17,6 +17,7 @@ Still we have a lot more work to do in this area.
 
 ### Added
 
+- Compute shaders can now write to textures. Bind using `Texture.bind_to_image`
 - `VertexBuffer.transform` now as a `buffer_offset` parameter
   for setting the start byte offset of the output buffer.
   This can be used in many creative ways in for example particle
@@ -41,6 +42,10 @@ Still we have a lot more work to do in this area.
 - The `ctx.simple_vertex_array` is deprecated in favor of using `ctx.vertex_array` with the same parameters.
 - The `prog[uniform].value = value` is deprecated in favor of using `prog[uniform] = value`.
 - The `prog[uniform].write(bytes_value)` is deprecated in favor of using the `prog[uniform] = bytes_value`.
+
+### Bugs
+
+- Fixed an issue with attribute format detection causing integer and double types to fail
 
 ## [5.5.4] - 2019-11-10
 
