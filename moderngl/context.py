@@ -162,7 +162,7 @@ class Context:
         raise TypeError()
 
     def __repr__(self):
-        return '<Context version_code={}>'.format(self.version_code)
+        return '<Context {} version_code={}>'.format(id(self), self.version_code)
 
     def __eq__(self, other):
         return type(self) is type(other) and self.mglo is other.mglo
