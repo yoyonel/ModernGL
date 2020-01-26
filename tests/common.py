@@ -22,7 +22,7 @@ _static = {}
 
 
 def get_context(require=330) -> moderngl.Context:
-    """Caches contexts for each gl version"""
+    """Gets a context, cache it and activate it"""
     key = 'context_{}'.format(require)
 
     entry = _static.get(key)
@@ -37,5 +37,6 @@ def get_context(require=330) -> moderngl.Context:
             return None
 
     entry['fbo'].use()
+    entry['ctx'].__enter__()
     return entry['ctx']
  
