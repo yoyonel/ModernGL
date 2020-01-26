@@ -1352,6 +1352,13 @@ class Context:
         if version_code < 330:
             warnings.warn('The window should support OpenGL 3.3+ (version_code=%d)' % version_code)
 
+    def __enter__(self):
+        self.mglo.__enter__()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.mglo.__exit__(exc_type, exc_val, exc_tb)
+
     def release(self) -> None:
         '''
             Release the ModernGL context.

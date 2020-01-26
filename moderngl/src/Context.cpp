@@ -466,6 +466,16 @@ PyObject * MGLContext_query(MGLContext * self, PyObject * args);
 PyObject * MGLContext_scope(MGLContext * self, PyObject * args);
 PyObject * MGLContext_sampler(MGLContext * self, PyObject * args);
 
+PyObject * MGLContext_enter(MGLContext * self) {
+	PyObject_CallMethod(self->ctx, "__enter__", NULL);
+	Py_RETURN_NONE;
+}
+
+PyObject * MGLContext_exit(MGLContext * self) {
+	PyObject_CallMethod(self->ctx, "__exit__", NULL);
+	Py_RETURN_NONE;
+}
+
 PyObject * MGLContext_release(MGLContext * self) {
 	PyObject_CallMethod(self->ctx, "release", NULL);
 	Py_RETURN_NONE;
@@ -498,8 +508,9 @@ PyMethodDef MGLContext_tp_methods[] = {
 	{"scope", (PyCFunction)MGLContext_scope, METH_VARARGS, 0},
 	{"sampler", (PyCFunction)MGLContext_sampler, METH_VARARGS, 0},
 
+	{"__enter__", (PyCFunction)MGLContext_enter, METH_NOARGS, 0},
+	{"__exit__", (PyCFunction)MGLContext_exit, METH_VARARGS, 0},
 	{"release", (PyCFunction)MGLContext_release, METH_NOARGS, 0},
-
 	{0},
 };
 
