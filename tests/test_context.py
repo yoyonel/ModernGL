@@ -43,7 +43,7 @@ class ContextTests(TestCase):
 
     def test_share(self):
         """Create resources with shared context"""
-        if platform.system().lower() == "darwin":
+        if platform.system().lower() in ["darwin", "linux"]:
             self.skipTest('Context sharing not supported on darwin')
 
         data1 = numpy.array([1, 2, 3, 4], dtype='u1')
