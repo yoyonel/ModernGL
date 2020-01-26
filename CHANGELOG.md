@@ -17,24 +17,32 @@ Still we have a lot more work to do in this area.
 
 ### Added
 
-- Compute shaders can now write to textures. Bind using `Texture.bind_to_image`
+- Standalone `Context` can now be destroyed on all platforms
+- Compute shaders can now write to texture using `Texture*.bind_to_image`
 - `VertexBuffer.transform` now as a `buffer_offset` parameter
   for setting the start byte offset of the output buffer.
   This can be used in many creative ways in for example particle
   emitting.
-- `Framebuffer` supports having only depth buffer. This makes things like shadow mapping easier to work with.
-- Support for `PROGRAM_POINT_SIZE` context flag so point sizes can be set in the vertex shader
+- `Framebuffer` supports having only depth buffer. This makes things like shadow
+  mapping easier to work with.
+- Support for `PROGRAM_POINT_SIZE` context flag so point sizes can be set in
+  the vertex shader
 - Scissor test support. `Framebuffer.scissor` and `Context.scissor` can now be used
   to set and enable scissor testing per framebuffer.
-- The `Framebuffer.clear` have an optional `color` parameter to replace the old `red, green, blue, alpha` parameters.
+- The `Framebuffer.clear` have an optional `color` parameter to replace the
+  old `red, green, blue, alpha` parameters.
 - Samplers and Buffers have an `assign` method to simplify the scope creation.
-- Samplers have an optional `texture` parameter that will be used together with the sampler when given.
-- The Scope's `enable_only` keyword argument is deprecated in favor of the `enable` keyword argument. 
+- Samplers have an optional `texture` parameter that will be used together with
+  the sampler when given.
+- The Scope's `enable_only` keyword argument is deprecated in favor of the
+  `enable` keyword argument. 
 - Buffers have a `bind` method that replaces the tuples in the VertexArray creation.
 - VertexArrays have an optional `scope` property that will be used when rendering.
 - The VertexArray's `vertices` property is now writeable.
-- VertexArrays have an `instances` property to control the default number of instances when rendering.
-- The Context object contains the constants provided by the moderngl module. The constants are: (TRIANGLE, LINES, DEPTH_TEST, ...)
+- VertexArrays have an `instances` property to control the default number of
+  instances when rendering.
+- The Context object contains the constants provided by the moderngl module.
+  The constants are: (TRIANGLE, LINES, DEPTH_TEST, ...)
 
 ### Changed
 
