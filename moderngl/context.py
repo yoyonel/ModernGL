@@ -1366,7 +1366,7 @@ class Context:
         self.mglo.release()
 
 
-def create_context(require=None, standalone=False, **settings) -> Context:
+def create_context(require=None, standalone=False, share=False, **settings) -> Context:
     '''
         Create a ModernGL context by loading OpenGL functions from an existing OpenGL context.
         An OpenGL context must exists. If rendering is done without a window please use the
@@ -1390,10 +1390,14 @@ def create_context(require=None, standalone=False, **settings) -> Context:
     if require is None:
         require = 330
 
+    mode = 'standalone' if standalone is True else 'detect'
+    if share is True:
+        mode = 'share'
+
     import moderngl.mgl as mgl
 
     ctx = Context.__new__(Context)
-    ctx.mglo, ctx.version_code = mgl.create_context(None, standalone, require)
+    ctx.mglo, ctx.version_code = mgl.create_context(glversion=require, mode=mode, **settings)
     ctx._info = None
     ctx.extra = None
 
@@ -1412,7 +1416,7 @@ def create_context(require=None, standalone=False, **settings) -> Context:
     return ctx
 
 
-def create_standalone_context(require=None, **settings) -> 'Context':
+def create_standalone_context(require=None, share=False, **settings) -> 'Context':
     '''
         Create a standalone ModernGL context.
 
@@ -1433,12 +1437,10 @@ def create_standalone_context(require=None, **settings) -> 'Context':
     if require is None:
         require = 330
 
-    backend = os.environ.get('MODERNGL_BACKEND')
-    if backend is not None:
-        settings['backend'] = backend
+    mode = 'share' if share is True else 'standalone' 
 
     ctx = Context.__new__(Context)
-    ctx.mglo, ctx.version_code = mgl.create_context(None, True, require)
+    ctx.mglo, ctx.version_code = mgl.create_context(glversion=require, mode=mode, **settings)
     ctx._screen = None
     ctx.fbo = None
     ctx._info = None

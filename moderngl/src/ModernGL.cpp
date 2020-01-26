@@ -98,43 +98,43 @@ PyObject * fmtdebug(PyObject * self, PyObject * args) {
 	return res;
 }
 
-PyObject * create_context(PyObject * self, PyObject * args) {
+PyObject * create_context(PyObject * self, PyObject * args, PyObject * kwargs) {
 	PyObject * backend;
-	PyObject * standalone;
-	int glversion;
+	PyObject * backend_name = PyDict_GetItemString(kwargs, "backend");
+	PyErr_Clear();
 
-	int args_ok = PyArg_ParseTuple(
-		args,
-		"OOi",
-		&backend,
-		&standalone,
-		&glversion
-	);
+	// Use the specified backend
+    if (backend_name) {
+		MGLError_Set("Specifying backend not implemented");
+		return NULL;
 
-	if (!args_ok) {
-		return 0;
-	}
-
-    if (backend == Py_None) {
-        PyObject * glcontext = PyImport_ImportModule("glcontext");
-        if (!glcontext) {
+	// Use default backend
+	} else {
+		PyObject * glcontext = PyImport_ImportModule("glcontext");
+		if (!glcontext) {
 			// Displayed to user: ModuleNotFoundError: No module named 'glcontext'
-            return NULL;
-        }
-        backend = PyObject_CallMethod(glcontext, "default_backend", "O", standalone);
-        if (backend == Py_None) {
+			return NULL;
+		}
+		backend = PyObject_CallMethod(glcontext, "default_backend", NULL);
+		if (backend == Py_None || backend == NULL) {
 			MGLError_Set("glcontext: Could not get a default backend");
-            return NULL;
-        }
-    }
+			return NULL;
+		}
+	}
 
 	MGLContext * ctx = (MGLContext *)MGLContext_Type.tp_alloc(&MGLContext_Type, 0);
 
 	ctx->wireframe = false;
 
-	// Create context
-    ctx->ctx = PyObject_CallFunction(backend, "i", glversion);
+	// Ensure we have a callable
+	if (!PyCallable_Check(backend)) {
+		MGLError_Set("The returned glcontext is not a callable");
+		return NULL;
+	}
+	// Create context by simply forwarding all arguments
+    ctx->ctx = PyObject_Call(backend, args, kwargs);
     if (!ctx->ctx) {
+		
         return NULL;
     }
 
@@ -286,7 +286,7 @@ PyObject * create_context(PyObject * self, PyObject * args) {
 
 PyMethodDef MGL_module_methods[] = {
 	{"strsize", (PyCFunction)strsize, METH_VARARGS, 0},
-	{"create_context", (PyCFunction)create_context, METH_VARARGS, 0},
+	{"create_context", (PyCFunction)create_context, METH_VARARGS | METH_KEYWORDS, 0},
 	{"fmtdebug", (PyCFunction)fmtdebug, METH_VARARGS, 0},
 	{0},
 };
