@@ -103,18 +103,20 @@ PyObject * create_context(PyObject * self, PyObject * args, PyObject * kwargs) {
 	PyObject * backend_name = PyDict_GetItemString(kwargs, "backend");
 	PyErr_Clear();
 
+	PyObject * glcontext = PyImport_ImportModule("glcontext");
+	if (!glcontext) {
+		// Displayed to user: ModuleNotFoundError: No module named 'glcontext'
+		return NULL;
+	}
+
 	// Use the specified backend
     if (backend_name) {
-		MGLError_Set("Specifying backend not implemented");
-		return NULL;
-
-	// Use default backend
-	} else {
-		PyObject * glcontext = PyImport_ImportModule("glcontext");
-		if (!glcontext) {
-			// Displayed to user: ModuleNotFoundError: No module named 'glcontext'
+		backend = PyObject_CallMethod(glcontext, "get_backend_by_name", "O", backend_name);
+		if (backend == Py_None || backend == NULL) {
 			return NULL;
 		}
+	// Use default backend
+	} else {
 		backend = PyObject_CallMethod(glcontext, "default_backend", NULL);
 		if (backend == Py_None || backend == NULL) {
 			MGLError_Set("glcontext: Could not get a default backend");
