@@ -1,5 +1,6 @@
 from unittest import TestCase
 import moderngl
+import platform
 
 
 class ContextTests(TestCase):
@@ -40,4 +41,5 @@ class ContextTests(TestCase):
         ctx2.release()
 
     def test_share(self):
-        self.skipTest('Context sharing not supported on darwin')
+        if platform.system().lower() == "darwin":
+            self.skipTest('Context sharing not supported on darwin')
