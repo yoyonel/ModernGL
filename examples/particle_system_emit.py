@@ -139,7 +139,7 @@ class Particles(Example):
         self.mouse_velocity = 0.001, 0.001  # default value must not be 0. any number is fine
         self.prog['projection'].write(self.projection)
         self.transform['gravity'].value = -.01  # affects the velocity of the particles over time
-        self.ctx.point_size = self.wnd.pixel_ratio  # point size
+        self.ctx.point_size = self.wnd.pixel_ratio * 2 # point size
 
         self.N = 25_000  # particle count
         self.active_particles = self.N // 100  # Initial / current number of active particles
