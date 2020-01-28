@@ -18,7 +18,7 @@ class RenderTextureCompute(Example):
             #version 430
 
             layout (local_size_x = 16, local_size_y = 16) in;
-            layout(rg32f,location=0) writeonly uniform image2D destTex;
+            layout(rg32f, location=0) writeonly uniform image2D destTex;
 
             uniform float time;
 
@@ -56,7 +56,9 @@ class RenderTextureCompute(Example):
             """,
         )
 
-        self.texture = self.ctx.texture((512, 512), 1, dtype='f4')
+        # GL_R32F texture
+        self.texture = self.ctx.texture((256, 256), 1, dtype='f4')
+        self.texture.filter = mgl.LINEAR, mgl.LINEAR
         self.quad_fs = geometry.quad_fs()
 
     def render(self, time, frame_time):
@@ -66,10 +68,9 @@ class RenderTextureCompute(Example):
         gw, gh = 16, 16
         nx, ny, nz = int(w/gw), int(h/gh), 1
 
-        self.compute['time'] = 0  #time
-        GL_WRITE_ONLY = 0x88B9
-        GL_R32F = 0x822E
-        self.texture.bind_to_image(0, GL_WRITE_ONLY, GL_R32F)
+        self.compute['time'] = time
+        # Automatically binds as a GL_R32F / r32f (read from the texture)
+        self.texture.bind_to_image(0, read=False, write=True)
         self.compute.run(nx, ny, nz)
 
         # Render texture
