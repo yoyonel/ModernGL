@@ -50,7 +50,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'ModernGL'
-copyright = '2018, Szabolcs Dombi'
+copyright = '2020, Szabolcs Dombi'
 author = 'Szabolcs Dombi'
 
 # The version info for the project you're documenting, acts as replacement for
