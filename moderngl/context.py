@@ -1353,10 +1353,27 @@ class Context:
             warnings.warn('The window should support OpenGL 3.3+ (version_code=%d)' % version_code)
 
     def __enter__(self):
+        """Enters the context.
+        
+        This should ideally be used with the ``with`` statement::
+
+            with other_context as ctx:
+                # Do something in this context
+
+        When exiting the context the previously bound context is activated again.
+
+        .. Warning:: Context switching can be risky unless you know what you are doing.
+                     ModernGL objects are not aware of what context is currently active.
+                     Use with care.
+        """
         self.mglo.__enter__()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Exit the context.
+
+        See :py:meth:`Context.__enter__`
+        """
         self.mglo.__exit__(exc_type, exc_val, exc_tb)
 
     def release(self) -> None:
