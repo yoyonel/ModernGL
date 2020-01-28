@@ -592,18 +592,38 @@ PyObject * MGLTexture_write(MGLTexture * self, PyObject * args) {
 	Py_RETURN_NONE;
 }
 
-PyObject * MGLTexture_meth_bind(MGLTexture * self, PyObject * const * args, Py_ssize_t nargs) {
-    if (nargs != 3) {
-        // TODO: error
-        return 0;
-    }
+PyObject * MGLTexture_meth_bind(MGLTexture * self, PyObject * args) {
+	int unit;
+	int read;
+	int write;
+	int level;
+	int format;
 
-	int binding = PyLong_AsLong(args[0]);
-	int access = PyLong_AsLong(args[1]);
-	int format = PyLong_AsLong(args[2]);
+	int args_ok = PyArg_ParseTuple(
+		args,
+		"IppII",
+		&unit,
+		&read,
+		&write,
+		&level,
+		&format
+	);
+
+	if (!args_ok) {
+		return NULL;
+	}
+
+	int access = GL_READ_WRITE;
+	if (read && !write) access = GL_READ_ONLY;
+	else if (!read && write) access = GL_WRITE_ONLY;
+	else {
+		MGLError_Set("Illegal access mode. Read or write needs to be enabled.");
+	}
+
+	int frmt = format ? format : self->data_type->internal_format[self->components];
 
     const GLMethods & gl = self->context->gl;
-	gl.BindImageTexture(binding, self->texture_obj, 0, 0, 0, access, format);
+	gl.BindImageTexture(unit, self->texture_obj, level, 0, 0, access, frmt);
     Py_RETURN_NONE;
 }
 
