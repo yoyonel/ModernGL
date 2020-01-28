@@ -616,8 +616,9 @@ PyObject * MGLTexture_meth_bind(MGLTexture * self, PyObject * args) {
 	int access = GL_READ_WRITE;
 	if (read && !write) access = GL_READ_ONLY;
 	else if (!read && write) access = GL_WRITE_ONLY;
-	else {
+	else if (!read && !write) {
 		MGLError_Set("Illegal access mode. Read or write needs to be enabled.");
+		return NULL;
 	}
 
 	int frmt = format ? format : self->data_type->internal_format[self->components];
