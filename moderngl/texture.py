@@ -343,7 +343,7 @@ class Texture:
         in ways that they cannot with textures. 
 
         It's important to specify the right access type for the image.
-        This can be set with the ```read`` and ``write`` arguments.
+        This can be set with the ``read`` and ``write`` arguments.
         Allowed combinations are:
 
         - **Read-only**: ``read=True`` and ``write=False``
@@ -356,7 +356,7 @@ class Texture:
         of the texture is passed in. The format parameter is only needed
         when overriding this behavior.**
 
-        For more information:
+        More information:
 
         - https://www.khronos.org/opengl/wiki/Image_Load_Store
         - https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBindImageTexture.xhtml
