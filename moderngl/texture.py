@@ -331,7 +331,7 @@ class Texture:
 
         self.mglo.build_mipmaps(base, max_level)
 
-    def bind_to_image(self, unit, read=True, write=True, level=0, format=0) -> None:
+    def bind_to_image(self, unit: int, read: bool = True, write: bool = True, level: int = 0, format: int = 0) -> None:
         """Bind a texture to an image unit (OpenGL 4.2 required)
 
         This is used to bind textures to image units for shaders.
