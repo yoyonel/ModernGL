@@ -49,6 +49,24 @@ class TestCase(unittest.TestCase):
         self.assertAlmostEqual(c, 2.0)
         self.assertAlmostEqual(d, 1.0)
 
+    def test_image(self):
+        texture = self.ctx.texture((100, 100), 4)
+        texture.bind_to_image(0, read=True, write=True)
+        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
+        texture.release()
+
+    def test_image_float(self):
+        texture = self.ctx.texture((100, 100), 4, dtype='f4')
+        texture.bind_to_image(0, read=True, write=True)
+        self.assertEqual(self.ctx.error, 'GL_NO_ERROR')
+        texture.release()
+
+    def test_image_wrong_format(self):
+        texture = self.ctx.texture((100, 100), 4)
+        texture.bind_to_image(0, read=True, write=True, format=13371337)
+        self.assertEqual(self.ctx.error, 'GL_INVALID_VALUE')
+        texture.release()
+
 
 if __name__ == '__main__':
     unittest.main()
