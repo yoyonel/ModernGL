@@ -335,7 +335,6 @@ class Texture:
         """Bind a texture to an image unit (OpenGL 4.2 required)
 
         This is used to bind textures to image units for shaders.
-        Not to be confused with sampler uniforms.
         The idea with image load/store is that the user can bind
         one of the images in a Texture to a number of image binding points 
         (which are separate from texture image units). Shaders can read 
