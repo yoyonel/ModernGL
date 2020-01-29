@@ -331,6 +331,28 @@ class Texture:
 
         self.mglo.build_mipmaps(base, max_level)
 
+    def use(self, location=0) -> None:
+        '''
+            Bind the texture to a texture unit.
+
+            The location is the texture unit we want to bind the texture.
+            This should correspond with the value of the ``sampler2D``
+            uniform in the shader because samplers read from the texture
+            unit we assign to them::
+
+                # Define what texture unit our two sampler2D uniforms should represent
+                program['texture_a'] = 0
+                program['texture_b'] = 1
+                # Bind textures to the texture units
+                first_texture.use(location=0)
+                second_texture.use(location=1)
+
+            Args:
+                location (int): The texture location/unit.
+        '''
+
+        self.mglo.use(location)
+
     def bind_to_image(self, unit: int, read: bool = True, write: bool = True, level: int = 0, format: int = 0) -> None:
         """Bind a texture to an image unit (OpenGL 4.2 required)
 
@@ -370,19 +392,6 @@ class Texture:
             format (int): (optional) The OpenGL enum value representing the format (defaults to the texture's format)
         """
         self.mglo.bind(unit, read, write, level, format)
-
-    def use(self, location=0) -> None:
-        '''
-            Bind the texture.
-
-            Args:
-                location (int): The texture location.
-                    Same as the integer value that is used for sampler2D
-                    uniforms in the shaders. The value ``0`` will bind the
-                    texture to the ``GL_TEXTURE0`` binding point.
-        '''
-
-        self.mglo.use(location)
 
     def release(self) -> None:
         '''
