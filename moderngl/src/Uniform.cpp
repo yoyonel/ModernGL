@@ -35,7 +35,7 @@ int MGLUniform_set_data(MGLUniform * self, PyObject * value, void * closure) {
 
 	int get_buffer = PyObject_GetBuffer(value, &buffer_view, PyBUF_SIMPLE);
 	if (get_buffer < 0) {
-		MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(value)->tp_name);
+		// Propagate error from the objects own getbuffer method
 		return -1;
 	}
 
