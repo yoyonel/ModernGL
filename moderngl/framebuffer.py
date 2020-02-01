@@ -127,6 +127,9 @@ class Framebuffer:
     def width(self) -> int:
         '''
             int: The width of the framebuffer.
+
+            Framebuffers created by a window will only report its initial size.
+            It's better get size information from the window itself.
         '''
 
         return self._size[0]
@@ -135,6 +138,9 @@ class Framebuffer:
     def height(self) -> int:
         '''
             int: The height of the framebuffer.
+
+            Framebuffers created by a window will only report its initial size.
+            It's better get size information from the window itself.
         '''
 
         return self._size[1]
@@ -143,6 +149,9 @@ class Framebuffer:
     def size(self) -> tuple:
         '''
             tuple: The size of the framebuffer.
+
+            Framebuffers created by a window will only report its initial size.
+            It's better get size information from the window itself.
         '''
 
         return self._size
