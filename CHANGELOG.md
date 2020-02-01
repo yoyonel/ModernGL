@@ -18,7 +18,7 @@ Still we have a lot more work to do in this area.
 ### Added
 
 - Standalone `Context` can now be destroyed on all platforms
-- Compute shaders can now write to texture using `Texture*.bind_to_image`
+- Compute shaders can now write to textures using `Texture*.bind_to_image`
 - `VertexBuffer.transform` now as a `buffer_offset` parameter
   for setting the start byte offset of the output buffer.
   This can be used in many creative ways in for example particle
@@ -54,6 +54,7 @@ Still we have a lot more work to do in this area.
 ### Bugs
 
 - Fixed an issue with attribute format detection causing integer and double types to fail
+- Several minor bug fixes
 
 ## [5.5.4] - 2019-11-10
 
