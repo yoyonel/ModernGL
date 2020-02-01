@@ -365,16 +365,15 @@ class Context:
             the defined scissor box will be discarded. This
             applies to rendered geometry or :py:meth:`Context.clear`.
 
-            When this value is equal to the framebuffer size
-            scissor testing is disabled.
-
-            Setting the scissor attribute to ``None`` disables
-            the scissor testing. It's a shortcut for setting
-            the scissor values back to the framebuffer size.
+            Setting is value enables scissor testing in the framebuffer.
+            Setting the scissor to ``None`` disables scissor testing
+            and reverts the scissor box to match the framebuffer size.
 
             Example::
 
+                # Enable scissor testing
                 >>> ctx.scissor = 100, 100, 200, 100
+                # Disable scissor testing
                 >>> ctx.scissor = None
 
             If no framebuffer is bound ``(0, 0, 0, 0)`` will be returned.
