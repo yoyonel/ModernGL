@@ -253,6 +253,7 @@ PyObject * create_context(PyObject * self, PyObject * args, PyObject * kwargs) {
 
 		framebuffer->width = scissor_box[2];
 		framebuffer->height = scissor_box[3];
+		framebuffer->dynamic = true;
 
 		Py_INCREF(framebuffer);
 		ctx->default_framebuffer = framebuffer;

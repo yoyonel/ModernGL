@@ -293,6 +293,7 @@ PyObject * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	framebuffer->viewport_y = 0;
 	framebuffer->viewport_width = width;
 	framebuffer->viewport_height = height;
+	framebuffer->dynamic = false;
 
 	framebuffer->scissor_enabled = false;
 	framebuffer->scissor_x = 0;

@@ -401,6 +401,7 @@ PyObject * MGLContext_detect_framebuffer(MGLContext * self, PyObject * args) {
 
 	framebuffer->width = width;
 	framebuffer->height = height;
+	framebuffer->dynamic = true;
 
 	gl.BindFramebuffer(GL_FRAMEBUFFER, bound_framebuffer);
 

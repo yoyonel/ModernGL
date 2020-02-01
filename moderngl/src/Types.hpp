@@ -159,6 +159,8 @@ struct MGLFramebuffer {
 	int scissor_width;
 	int scissor_height;
 
+	// Flags this as a detected framebuffer we don't control the size of
+	bool dynamic;
 	int width;
 	int height;
 	int samples;
