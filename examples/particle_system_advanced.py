@@ -4,7 +4,7 @@ $ python particle_system_advanced -w glfw --vsync 1
 import moderngl
 import numpy as np
 
-from window import Example, run_example
+from examples.window import run_example, Example
 
 
 def particle(
@@ -20,10 +20,10 @@ def particle(
     #
     return np.array(
         [
-            0.0, 0.0,  # position      [vec2]
-            1.0,  # hotness       [float]
-            xv, yv,  # velicity      [vec2]
-            float(id_particle)  # id particle   [float]
+            0.0, 0.0,  # position [vec2]
+            1.0,  # hotness [float]
+            xv, yv,  # velocity [vec2]
+            float(id_particle)  # id particle [float]
         ]).astype('f4').tobytes()  # float32
 
 

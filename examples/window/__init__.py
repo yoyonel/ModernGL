@@ -6,7 +6,7 @@ from importlib import import_module
 from pathlib import Path
 from typing import List
 
-from window.base import Example, BaseWindow
+from examples.window.base import Example, BaseWindow
 
 OPTIONS_TRUE = ['yes', 'on', 'true', 't', 'y', '1']
 OPTIONS_FALSE = ['no', 'off', 'false', 'f', 'n', '0']
