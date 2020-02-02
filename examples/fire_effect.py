@@ -27,12 +27,20 @@ def local(*path):
 TCircularList = _alias(list, T, inst=False)
 
 
+
 class CircularList(list):
     """
     https://stackoverflow.com/a/47606550
+
+    >>> CircularList([])[0]
+    >>> CircularList(range(5))[1:10]
+    [1, 2, 3, 4, 0, 1, 2, 3, 4]
     """
 
     def __getitem__(self, x):
+        if not len(self):
+            return
+
         if isinstance(x, slice):
             return [self[x] for x in self._rangeify(x)]
 
@@ -51,7 +59,6 @@ class CircularList(list):
         if step is None:
             step = 1
         return range(start, stop, step)
-
 
 class Fire(Example):
     gl_version = (3, 3)
@@ -235,10 +242,10 @@ class Fire(Example):
                         
                         out_hot = map(gold_noise(vec2(in_id, Time), 25), 0.0, 1.0, 0.4, 1.0);
                         out_hot *= texture(tex_fire, vec2(pos_x, pos_y)).r;
-                         
+
                         out_pos = vec2(
-                            map(pos_x, 0, 1, -1, +1) * 1.0, 
-                            map(pos_y, 0, 1, -1, +1) * 1.0
+                            float(out_hot > 0.0) * map(pos_x, 0, 1, -1, +1) * 1.0, 
+                            float(out_hot > 0.0) * map(pos_y, 0, 1, -1, +1) * 1.0
                         );                        
 
                         float r = gold_noise(vec2(in_id, Time), 100) * 0.015;
