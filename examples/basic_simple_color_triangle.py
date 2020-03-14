@@ -48,9 +48,9 @@ class SimpleColorTriangle(Example):
             0.0, 0.8, 1.0, 0.0, 0.0,
             -0.6, -0.8, 0.0, 1.0, 0.0,
             0.6, -0.8, 0.0, 0.0, 1.0,
-        ])
+        ], dtype='f4')
 
-        self.vbo = self.ctx.buffer(vertices.astype('f4').tobytes())
+        self.vbo = self.ctx.buffer(vertices)
 
         # We control the 'in_vert' and `in_color' variables
         self.vao = self.ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert', 'in_color')
