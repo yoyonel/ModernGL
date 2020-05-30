@@ -32,7 +32,8 @@ PyObject * MGLContext_buffer(MGLContext * self, PyObject * args) {
 	if (data != Py_None) {
 		int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
 		if (get_buffer < 0) {
-			MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+			// NOTE: Just stick with the default error message from cpython
+			// MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
 			return 0;
 		}
 	} else {
@@ -41,10 +42,10 @@ PyObject * MGLContext_buffer(MGLContext * self, PyObject * args) {
 	}
 
 	if (!buffer_view.len) {
-		MGLError_Set("the buffer cannot be empty");
 		if (data != Py_None) {
 			PyBuffer_Release(&buffer_view);
 		}
+		MGLError_Set("the buffer cannot be empty");
 		return 0;
 	}
 
