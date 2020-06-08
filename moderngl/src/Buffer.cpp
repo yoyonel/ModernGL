@@ -32,8 +32,7 @@ PyObject * MGLContext_buffer(MGLContext * self, PyObject * args) {
 	if (data != Py_None) {
 		int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
 		if (get_buffer < 0) {
-			// NOTE: Just stick with the default error message from cpython
-			// MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+			// Propagate the default error
 			return 0;
 		}
 	} else {
@@ -115,8 +114,8 @@ PyObject * MGLBuffer_write(MGLBuffer * self, PyObject * args) {
 	Py_buffer buffer_view;
 
 	int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
-	if (get_buffer < 0) {
-		MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+	if (get_buffer < 0) {		
+		// Propagate the default error
 		return 0;
 	}
 
@@ -206,7 +205,7 @@ PyObject * MGLBuffer_read_into(MGLBuffer * self, PyObject * args) {
 
 	int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_WRITABLE);
 	if (get_buffer < 0) {
-		MGLError_Set("the buffer (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+		// Propagate the default error
 		return 0;
 	}
 
@@ -255,7 +254,7 @@ PyObject * MGLBuffer_write_chunks(MGLBuffer * self, PyObject * args) {
 
 	int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_SIMPLE);
 	if (get_buffer < 0) {
-		MGLError_Set("data (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+		// Propagate the default error
 		return 0;
 	}
 
@@ -383,7 +382,7 @@ PyObject * MGLBuffer_read_chunks_into(MGLBuffer * self, PyObject * args) {
 
 	int get_buffer = PyObject_GetBuffer(data, &buffer_view, PyBUF_WRITABLE);
 	if (get_buffer < 0) {
-		MGLError_Set("the buffer (%s) does not support buffer interface", Py_TYPE(data)->tp_name);
+		// Propagate the default error
 		return 0;
 	}
 
@@ -437,7 +436,7 @@ PyObject * MGLBuffer_clear(MGLBuffer * self, PyObject * args) {
 	if (chunk != Py_None) {
 		int get_buffer = PyObject_GetBuffer(chunk, &buffer_view, PyBUF_SIMPLE);
 		if (get_buffer < 0) {
-			MGLError_Set("the chunk (%s) does not support buffer interface", Py_TYPE(chunk)->tp_name);
+			// Propagate the default error
 			return 0;
 		}
 

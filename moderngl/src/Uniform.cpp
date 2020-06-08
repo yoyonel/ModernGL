@@ -35,7 +35,7 @@ int MGLUniform_set_data(MGLUniform * self, PyObject * value, void * closure) {
 
 	int get_buffer = PyObject_GetBuffer(value, &buffer_view, PyBUF_SIMPLE);
 	if (get_buffer < 0) {
-		// Propagate error from the objects own getbuffer method
+		// Propagate the default error
 		return -1;
 	}
 
