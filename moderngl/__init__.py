@@ -1,5 +1,5 @@
 '''
-    ModernGL: PyOpenGL alternative
+    ModernGL: High performance rendering for Python 3
 '''
 
 from .error import *
