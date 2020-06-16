@@ -232,19 +232,17 @@ PyObject * MGLContext_depth_texture(MGLContext * self, PyObject * args) {
 
 	gl.BindTexture(texture_target, texture->texture_obj);
 
-	gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
 	if (samples) {
 		gl.TexImage2DMultisample(texture_target, samples, GL_DEPTH_COMPONENT24, width, height, true);
 	} else {
+		gl.TexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		gl.TexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		gl.PixelStorei(GL_PACK_ALIGNMENT, alignment);
 		gl.PixelStorei(GL_UNPACK_ALIGNMENT, alignment);
 		gl.TexImage2D(texture_target, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, pixel_type, buffer_view.buf);
+		gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+		gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 	}
-
-	gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-	gl.TexParameteri(texture_target, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 
 	if (data != Py_None) {
 		PyBuffer_Release(&buffer_view);
