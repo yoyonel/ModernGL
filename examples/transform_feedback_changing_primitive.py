@@ -79,7 +79,6 @@ class GenerateData(Example):
         self.buffer = self.ctx.buffer(reserve=N * 12 * 6)  # N * 6 x vec3
         self.transform_vao = self.ctx.vertex_array(self.transform_prog, [])
         self.transform_vao.transform(self.buffer, mode=moderngl.POINTS, vertices=N)
-        print(self.ctx.error)
 
         self.vao = self.ctx.vertex_array(
             self.prog,
