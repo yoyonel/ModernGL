@@ -124,10 +124,10 @@ class HeightmapOnTheFly(Example):
                 }
             """,
         )
-        self.dim = 256
         self.heightmap = self.load_texture_2d('heightmap_detailed.png')
         self.heightmap.repeat_x = False
         self.heightmap.repeat_y = False
+        self.dim = self.heightmap.width
         self.vao = self.ctx.vertex_array(self.prog, [])
 
         projection = Matrix44.perspective_projection(45.0, self.aspect_ratio, 0.1, 1000.0, dtype='f4')
