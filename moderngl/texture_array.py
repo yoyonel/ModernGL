@@ -241,11 +241,12 @@ class TextureArray:
         '''
             Update the content of the texture array.
 
-            The ``viewport`` can be used to control what layer we are writing
-            the data an how many layers to write. The valid versions are::
+            The ``viewport`` can be used for finer control of where the
+            data should be written in the array. The valid versions are::
 
                 # Writing multiple layers from the begining of the texture
                 texture.write(data, viewport=(width, hight, num_layers))
+
                 # Writing sub-sections of the array
                 texture.write(data, viewport=(x, y, layer, width, height, num_layers))
 
