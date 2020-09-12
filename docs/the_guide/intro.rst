@@ -8,11 +8,11 @@ A short introduction
 
 To get something rendered, you will need a :py:class:`VertexArray`.
 
-VertexArrays can be created from a :py:class:`Program` object and several
+VertexArrays can be created from a :py:class:`Program` object and one or several
 :py:class:`Buffer` objects.
 
-To create a :py:class:`Program` object, you will need some :py:class:`Shader`
-objects.
+To create a :py:class:`Program` object, you will need supply it your shader(s)
+as strings.
 
 Once you have your :py:class:`Program` object, you can fill a
 :py:class:`Buffer` with your data,
