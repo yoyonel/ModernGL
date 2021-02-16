@@ -213,10 +213,6 @@ class ShadowMappingWithPoissonFilteringSample(Example):
         self.texture1 = self.ctx.texture(img.size, 3, img.tobytes())
         self.texture1.build_mipmaps()
 
-        # TODO: (1) composents influenced the bug below
-        self.texture2 = self.ctx.texture((1, 1), 3)
-        self.fbo = self.ctx.framebuffer(color_attachments=[self.texture2])
-
         ########################################################################
         shadow_size = tuple([1 << 9] * 2)
         print(f"Depth texture size: {shadow_size}")
@@ -275,10 +271,6 @@ class ShadowMappingWithPoissonFilteringSample(Example):
         for vao_shadow in self.objects_shadow.values():
             vao_shadow.render()
 
-        # TODO: strange ..
-        #  need to 'use' this fbo to have a 'correct' rendering on screen ...
-        #  :/ see (1)
-        self.fbo.use()
         self.ctx.screen.use()
         self.tex_depth.use()
 
