@@ -1,6 +1,5 @@
 import time
 
-import moderngl as mgl
 import numpy as np
 from PyQt5 import QtOpenGL, QtWidgets, QtCore
 
@@ -40,7 +39,7 @@ class ExampleWindow(QtOpenGL.QGLWidget):
         self.move(QtWidgets.QDesktopWidget().rect().center() - self.rect().center())
         self.setWindowTitle(title)
 
-        self.start_time = time.clock()
+        self.start_time = time.time()
         self.example = lambda: None
         self.ex = None
 
@@ -68,7 +67,7 @@ class ExampleWindow(QtOpenGL.QGLWidget):
     def paintGL(self):
         if self.ex is None:
             self.ex = self.example()
-        self.wnd.time = time.clock() - self.start_time
+        self.wnd.time = time.time() - self.start_time
         self.ex.render()
         self.wnd.old_keys = np.copy(self.wnd.keys)
         self.wnd.wheel = 0

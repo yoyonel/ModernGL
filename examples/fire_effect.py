@@ -27,7 +27,6 @@ def local(*path):
 TCircularList = _alias(list, T, inst=False)
 
 
-
 class CircularList(list):
     """
     https://stackoverflow.com/a/47606550
@@ -59,6 +58,7 @@ class CircularList(list):
         if step is None:
             step = 1
         return range(start, stop, step)
+
 
 class Fire(Example):
     gl_version = (3, 3)
@@ -310,8 +310,8 @@ class Fire(Example):
         logger.info(f"Load Fire Source Map: {fire_map_fn}")
         img = (
             Image.open(fire_map_fn)
-            .transpose(Image.FLIP_TOP_BOTTOM)
-            .convert('RGB')
+                .transpose(Image.FLIP_TOP_BOTTOM)
+                .convert('RGB')
         )
 
         self.texture_src_fire_map = self.ctx.texture(img.size, 3, img.tobytes())
