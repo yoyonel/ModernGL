@@ -825,8 +825,8 @@ class Context:
 
         return self._info
 
-    def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, *,
-              viewport=None, color=None) -> None:
+    def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0,
+              stencil=0, *, viewport=None, color=None) -> None:
         '''
             Clear the bound framebuffer.
 
@@ -850,6 +850,7 @@ class Context:
                 blue (float): color component.
                 alpha (float): alpha component.
                 depth (float): depth value.
+                stencil (int): stencil value.
 
             Keyword Args:
                 viewport (tuple): The viewport.
@@ -1021,6 +1022,7 @@ class Context:
         res.mglo, res._size, res._samples, res._glo = self.mglo.detect_framebuffer(glo)
         res._color_attachments = None
         res._depth_attachment = None
+        res._stencil_attachment = None
         res.ctx = self
         res._is_reference = True
         res.extra = None
@@ -1082,6 +1084,7 @@ class Context:
         res._samples = samples
         res._dtype = dtype
         res._depth = False
+        res._stencil = False
         res.ctx = self
         res.extra = None
         return res
@@ -1189,6 +1192,7 @@ class Context:
         res._samples = samples
         res._dtype = 'f4'
         res._depth = True
+        res._stencil = False
         res.ctx = self
         res.extra = None
         return res
@@ -1462,7 +1466,7 @@ class Context:
             self.depth_renderbuffer(size, samples=samples),
         )
 
-    def framebuffer(self, color_attachments=(), depth_attachment=None) -> 'Framebuffer':
+    def framebuffer(self, color_attachments=(), depth_attachment=None, stencil_attachment=None) -> 'Framebuffer':
         '''
             A :py:class:`Framebuffer` is a collection of buffers that can be
             used as the destination for rendering. The buffers for Framebuffer
@@ -1472,6 +1476,7 @@ class Context:
                 color_attachments (list): A list of :py:class:`Texture` or
                                           :py:class:`Renderbuffer` objects.
                 depth_attachment (Renderbuffer or Texture): The depth attachment.
+                stencil_attachment (Renderbuffer or Texture): The stencil attachment.
 
             Returns:
                 :py:class:`Framebuffer` object
@@ -1482,11 +1487,13 @@ class Context:
 
         ca_mglo = tuple(x.mglo for x in color_attachments)
         da_mglo = None if depth_attachment is None else depth_attachment.mglo
+        sa_mglo = None if stencil_attachment is None else stencil_attachment.mglo
 
         res = Framebuffer.__new__(Framebuffer)
-        res.mglo, res._size, res._samples, res._glo = self.mglo.framebuffer(ca_mglo, da_mglo)
+        res.mglo, res._size, res._samples, res._glo = self.mglo.framebuffer(ca_mglo, da_mglo, sa_mglo)
         res._color_attachments = tuple(color_attachments)
         res._depth_attachment = depth_attachment
+        res._stencil_attachment = stencil_attachment
         res.ctx = self
         res._is_reference = False
         res.extra = None
@@ -1516,6 +1523,7 @@ class Context:
         res._samples = samples
         res._dtype = dtype
         res._depth = False
+        res._stencil = False
         res.ctx = self
         res.extra = None
         return res
@@ -1542,6 +1550,7 @@ class Context:
         res._samples = samples
         res._dtype = 'f4'
         res._depth = True
+        res._stencil = False
         res.ctx = self
         res.extra = None
         return res

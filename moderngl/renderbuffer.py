@@ -20,7 +20,7 @@ class Renderbuffer:
         to create one.
     '''
 
-    __slots__ = ['mglo', '_size', '_components', '_samples', '_depth', '_dtype', '_glo', 'ctx', 'extra']
+    __slots__ = ['mglo', '_size', '_components', '_samples', '_depth', '_stencil', '_dtype', '_glo', 'ctx', 'extra']
 
     def __init__(self):
         self.mglo = None  #: Internal representation for debug purposes only.
@@ -28,6 +28,7 @@ class Renderbuffer:
         self._components = None
         self._samples = None
         self._depth = None
+        self._stencil = None
         self._dtype = None
         self._glo = None
         self.ctx = None  #: The context this object belongs to

@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List, Tuple, Union, TYPE_CHECKING
+from typing import Any, Dict, List, Tuple, Union, TYPE_CHECKING, Optional
 
 from moderngl.mgl import InvalidObject  # type: ignore
 from .buffer import Buffer
@@ -23,7 +23,7 @@ class Framebuffer:
     '''
 
     __slots__ = [
-        'mglo', '_color_attachments', '_depth_attachment', '_size', '_samples', '_glo',
+        'mglo', '_color_attachments', '_depth_attachment', '_stencil_attachment', '_size', '_samples', '_glo',
         'ctx', '_is_reference', 'extra'
     ]
 
@@ -31,10 +31,11 @@ class Framebuffer:
         self.mglo = None  #: Internal representation for debug purposes only.
         self._color_attachments = None
         self._depth_attachment = None
+        self._stencil_attachment = None
         self._size = (None, None)
-        self._samples: int = None
-        self._glo: int = None
-        self.ctx: Context = None  #: The context this object belongs to
+        self._samples: Optional[int] = None
+        self._glo: Optional[int] = None
+        self.ctx: Optional[Context] = None  #: The context this object belongs to
         self._is_reference = None  #: Detected framebuffers we should not delete
         self.extra: Any = None  #: Attribute for storing user defined objects
         raise TypeError()
@@ -225,7 +226,7 @@ class Framebuffer:
 
         return self._glo
 
-    def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, *, viewport=None, color=None) -> None:
+    def clear(self, red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, stencil=0, *, viewport=None, color=None) -> None:
         '''
             Clear the framebuffer.
 
@@ -249,6 +250,7 @@ class Framebuffer:
                 blue (float): color component.
                 alpha (float): alpha component.
                 depth (float): depth value.
+                stencil (int): stencil value.
 
             Keyword Args:
                 viewport (tuple): The viewport.
@@ -261,7 +263,7 @@ class Framebuffer:
         if viewport is not None:
             viewport = tuple(viewport)
 
-        self.mglo.clear(red, green, blue, alpha, depth, viewport)
+        self.mglo.clear(red, green, blue, alpha, depth, stencil, viewport)
 
     def use(self) -> None:
         '''

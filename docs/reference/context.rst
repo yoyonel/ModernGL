@@ -25,7 +25,7 @@ ModernGL Objects
 .. automethod:: Context.texture_array(size, components, data=None, alignment=1, dtype='f1') -> TextureArray
 .. automethod:: Context.texture_cube(size, components, data=None, alignment=1, dtype='f1') -> TextureCube
 .. automethod:: Context.simple_framebuffer(size, components=4, samples=0, dtype='f1') -> Framebuffer
-.. automethod:: Context.framebuffer(color_attachments=(), depth_attachment=None) -> Framebuffer
+.. automethod:: Context.framebuffer(color_attachments=(), depth_attachment=None, stencil_attachment=None) -> Framebuffer
 .. automethod:: Context.renderbuffer(size, components=4, samples=0, dtype='f1') -> Renderbuffer
 .. automethod:: Context.depth_renderbuffer(size, samples=0) -> Renderbuffer
 .. automethod:: Context.scope(framebuffer=None, enable_only=None, textures=(), uniform_buffers=(), storage_buffers=(), samplers=(), enable=None) -> Scope
@@ -39,7 +39,7 @@ ModernGL Objects
 Methods
 -------
 
-.. automethod:: Context.clear(red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, viewport=None, color=None)
+.. automethod:: Context.clear(red=0.0, green=0.0, blue=0.0, alpha=0.0, depth=1.0, stencil=0, viewport=None, color=None)
 .. automethod:: Context.enable_only(flags)
 .. automethod:: Context.enable(flags: int)
 .. automethod:: Context.disable(flags: int)

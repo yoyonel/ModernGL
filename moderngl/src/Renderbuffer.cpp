@@ -72,6 +72,7 @@ PyObject * MGLContext_renderbuffer(MGLContext * self, PyObject * args) {
 	renderbuffer->samples = samples;
 	renderbuffer->data_type = data_type;
 	renderbuffer->depth = false;
+	renderbuffer->stencil = false;
 
 	Py_INCREF(self);
 	renderbuffer->context = self;

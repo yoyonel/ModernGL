@@ -3,12 +3,14 @@
 PyObject * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 	PyObject * color_attachments;
 	PyObject * depth_attachment;
+	PyObject * stencil_attachment;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"OO",
+		"OOO",
 		&color_attachments,
-		&depth_attachment
+		&depth_attachment,
+		&stencil_attachment
 	);
 
 	if (!args_ok) {
@@ -44,6 +46,11 @@ PyObject * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 
 			if (texture->depth) {
 				MGLError_Set("color_attachments[%d] is a depth attachment", i);
+				return 0;
+			}
+
+			if (texture->stencil) {
+				MGLError_Set("color_attachments[%d] is a stencil attachment", i);
 				return 0;
 			}
 
@@ -149,6 +156,62 @@ PyObject * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		}
 	}
 
+	if (stencil_attachment != Py_None) {
+
+		if (Py_TYPE(stencil_attachment) == &MGLTexture_Type) {
+			MGLTexture * texture = (MGLTexture *)stencil_attachment;
+
+			if (!texture->stencil) {
+				MGLError_Set("the stencil_attachment is a color attachment");
+				return 0;
+			}
+
+			if (texture->context != self) {
+				MGLError_Set("the stencil_attachment belongs to a different context");
+				return 0;
+			}
+
+			if (color_attachments_len) {
+				if (texture->width != width || texture->height != height || texture->samples != samples) {
+					MGLError_Set("the stencil_attachment have different sizes or samples");
+					return 0;
+				}
+			}
+			else {
+				width = texture->width;
+				height = texture->height;
+				samples = texture->samples;
+			}
+		} else if (Py_TYPE(depth_attachment) == &MGLRenderbuffer_Type) {
+			MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)stencil_attachment;
+
+			if (!renderbuffer->stencil) {
+				MGLError_Set("the stencil_attachment is a color attachment");
+				return 0;
+			}
+
+			if (renderbuffer->context != self) {
+				MGLError_Set("the stencil_attachment belongs to a different context");
+				return 0;
+			}
+
+			if (color_attachments_len) {
+				if (renderbuffer->width != width || renderbuffer->height != height || renderbuffer->samples != samples) {
+					MGLError_Set("the stencil_attachment have different sizes or samples");
+					return 0;
+				}
+			}
+			else {
+				width = renderbuffer->width;
+				height = renderbuffer->height;
+				samples = renderbuffer->samples;
+			}
+		} else {
+			MGLError_Set("the stencil_attachment must be a Renderbuffer or Texture not %s", Py_TYPE(depth_attachment)->tp_name);
+			return 0;
+		}
+	}
+
 	MGLFramebuffer * framebuffer = (MGLFramebuffer *)MGLFramebuffer_Type.tp_alloc(&MGLFramebuffer_Type, 0);
 
 	framebuffer->framebuffer_obj = 0;
@@ -211,6 +274,28 @@ PyObject * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
 		gl.FramebufferRenderbuffer(
 			GL_FRAMEBUFFER,
 			GL_DEPTH_ATTACHMENT,
+			GL_RENDERBUFFER,
+			renderbuffer->renderbuffer_obj
+		);
+	}
+
+	if (Py_TYPE(stencil_attachment) == &MGLTexture_Type) {
+		MGLTexture * texture = (MGLTexture *)stencil_attachment;
+
+		gl.FramebufferTexture2D(
+			GL_FRAMEBUFFER,
+			GL_STENCIL_ATTACHMENT,
+			GL_TEXTURE_2D,
+			texture->texture_obj,
+			0
+		);
+
+	} else if (Py_TYPE(stencil_attachment) == &MGLRenderbuffer_Type) {
+		MGLRenderbuffer * renderbuffer = (MGLRenderbuffer *)stencil_attachment;
+
+		gl.FramebufferRenderbuffer(
+			GL_FRAMEBUFFER,
+			GL_STENCIL_ATTACHMENT,
 			GL_RENDERBUFFER,
 			renderbuffer->renderbuffer_obj
 		);
@@ -343,16 +428,18 @@ PyObject * MGLFramebuffer_release(MGLFramebuffer * self) {
 
 PyObject * MGLFramebuffer_clear(MGLFramebuffer * self, PyObject * args) {
 	float r, g, b, a, depth;
+	int stencil;
 	PyObject * viewport;
 
 	int args_ok = PyArg_ParseTuple(
 		args,
-		"fffffO",
+		"fffffiO",
 		&r,
 		&g,
 		&b,
 		&a,
 		&depth,
+		&stencil,
 		&viewport
 	);
 

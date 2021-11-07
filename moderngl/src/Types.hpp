@@ -227,6 +227,7 @@ struct MGLRenderbuffer {
 
 	int samples;
 	bool depth;
+	bool stencil;
 };
 
 struct MGLScope {
@@ -272,6 +273,7 @@ struct MGLTexture {
 	float anisotropy;
 
 	bool depth;
+	bool stencil;
 
 	bool repeat_x;
 	bool repeat_y;

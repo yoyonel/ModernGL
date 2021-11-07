@@ -39,6 +39,12 @@ class TestCase(unittest.TestCase):
         self.assertEqual(rbo.samples, 2)
         self.assertEqual(rbo.depth, True)
 
+    # def test_stencil_renderbuffer(self):
+    #     rbo = self.ctx.stencil_renderbuffer((4, 4))
+    #     self.assertTupleEqual(rbo.size, (4, 4))
+    #     self.assertEqual(rbo.samples, 0)
+    #     self.assertEqual(rbo.stencil, True)
+
     def test_renderbuffer_invalid_samples(self):
         if self.ctx.max_samples < 2:
             self.skipTest('multisampling is not supported')
