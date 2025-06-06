@@ -1099,6 +1099,30 @@ class TextureCube:
             self.ctx.objects.append(self.mglo)
 
     @property
+    def repeat_x(self):
+        return self.mglo.repeat_x
+
+    @repeat_x.setter
+    def repeat_x(self, value):
+        self.mglo.repeat_x = value
+
+    @property
+    def repeat_y(self):
+        return self.mglo.repeat_y
+
+    @repeat_y.setter
+    def repeat_y(self, value):
+        self.mglo.repeat_y = value
+
+    @property
+    def repeat_z(self):
+        return self.mglo.repeat_z
+
+    @repeat_z.setter
+    def repeat_z(self, value):
+        self.mglo.repeat_z = value
+
+    @property
     def size(self):
         return self._size
 

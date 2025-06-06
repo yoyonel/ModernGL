@@ -7,6 +7,9 @@ def test_0(ctx):
     assert texture.size == (16, 16)
     assert texture.components == 4
     assert texture.filter == (moderngl.LINEAR, moderngl.LINEAR)
+    assert texture.repeat_x is True
+    assert texture.repeat_y is True
+    assert texture.repeat_z is True
     assert texture.swizzle == "RGBA"
     assert texture.glo > 0
     assert texture.dtype == "f1"
@@ -24,6 +27,12 @@ def test_0(ctx):
     assert texture.swizzle == "BGRA"
     texture.anisotropy = ctx.max_anisotropy
     assert texture.anisotropy == ctx.max_anisotropy
+    texture.repeat_x = False
+    texture.repeat_y = False
+    texture.repeat_z = False
+    assert texture.repeat_x is False
+    assert texture.repeat_y is False
+    assert texture.repeat_z is False
 
     texture.label = "six times the faces, six times the fun"
     assert texture.label == "six times the faces, six times the fun"

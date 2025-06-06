@@ -384,6 +384,9 @@ struct MGLTextureCube {
     int mag_filter;
     int max_level;
     int compare_func;
+    bool repeat_x;
+    bool repeat_y;
+    bool repeat_z;
     float anisotropy;
     bool released;
 };
@@ -1559,31 +1562,24 @@ static PyObject * MGLContext_framebuffer(MGLContext * self, PyObject * args) {
         case GL_FRAMEBUFFER_UNDEFINED:
             MGLError_Set("the framebuffer is not complete (UNDEFINED)");
             return NULL;
-
         case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
             MGLError_Set("the framebuffer is not complete (INCOMPLETE_ATTACHMENT)");
             return NULL;
-
         case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
             MGLError_Set("the framebuffer is not complete (INCOMPLETE_MISSING_ATTACHMENT)");
             return NULL;
-
         case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
             MGLError_Set("the framebuffer is not complete (INCOMPLETE_DRAW_BUFFER)");
             return NULL;
-
         case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
             MGLError_Set("the framebuffer is not complete (INCOMPLETE_READ_BUFFER)");
             return NULL;
-
         case GL_FRAMEBUFFER_UNSUPPORTED:
             MGLError_Set("the framebuffer is not complete (UNSUPPORTED)");
             return NULL;
-
         case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
             MGLError_Set("the framebuffer is not complete (INCOMPLETE_MULTISAMPLE)");
             return NULL;
-
         case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
             MGLError_Set("the framebuffer is not complete (INCOMPLETE_LAYER_TARGETS)");
             return NULL;
@@ -6046,6 +6042,10 @@ static PyObject * MGLContext_texture_cube(MGLContext * self, PyObject * args) {
     texture->max_level = 0;
     texture->anisotropy = 0.0;
 
+    texture->repeat_x = true;
+    texture->repeat_y = true;
+    texture->repeat_z = true;
+
     Py_INCREF(self);
     texture->context = self;
 
@@ -6528,6 +6528,81 @@ static PyObject * MGLTextureCube_release(MGLTextureCube * self, PyObject * args)
 
     Py_DECREF(self);
     Py_RETURN_NONE;
+}
+
+static PyObject * MGLTextureCube_get_repeat_x(MGLTextureCube * self, void * closure) {
+    return PyBool_FromLong(self->repeat_x);
+}
+
+static int MGLTextureCube_set_repeat_x(MGLTextureCube * self, PyObject * value, void * closure) {
+
+    const GLMethods & gl = self->context->gl;
+
+    gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+    gl.BindTexture(GL_TEXTURE_CUBE_MAP, self->texture_obj);
+
+    if (value == Py_True) {
+        gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        self->repeat_x = true;
+        return 0;
+    } else if (value == Py_False) {
+        gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        self->repeat_x = false;
+        return 0;
+    } else {
+        MGLError_Set("invalid value for texture_x");
+        return -1;
+    }
+}
+
+static PyObject * MGLTextureCube_get_repeat_y(MGLTextureCube * self, void * closure) {
+    return PyBool_FromLong(self->repeat_y);
+}
+
+static int MGLTextureCube_set_repeat_y(MGLTextureCube * self, PyObject * value, void * closure) {
+
+    const GLMethods & gl = self->context->gl;
+
+    gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+    gl.BindTexture(GL_TEXTURE_CUBE_MAP, self->texture_obj);
+
+    if (value == Py_True) {
+        gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        self->repeat_y = true;
+        return 0;
+    } else if (value == Py_False) {
+        gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        self->repeat_y = false;
+        return 0;
+    } else {
+        MGLError_Set("invalid value for texture_y");
+        return -1;
+    }
+}
+
+static PyObject * MGLTextureCube_get_repeat_z(MGLTextureCube * self, void * closure) {
+    return PyBool_FromLong(self->repeat_z);
+}
+
+static int MGLTextureCube_set_repeat_z(MGLTextureCube * self, PyObject * value, void * closure) {
+
+    const GLMethods & gl = self->context->gl;
+
+    gl.ActiveTexture(GL_TEXTURE0 + self->context->default_texture_unit);
+    gl.BindTexture(GL_TEXTURE_CUBE_MAP, self->texture_obj);
+
+    if (value == Py_True) {
+        gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_REPEAT);
+        self->repeat_z = true;
+        return 0;
+    } else if (value == Py_False) {
+        gl.TexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+        self->repeat_z = false;
+        return 0;
+    } else {
+        MGLError_Set("invalid value for texture_z");
+        return -1;
+    }
 }
 
 static PyObject * MGLTextureCube_get_filter(MGLTextureCube * self, void * closure) {
@@ -9387,6 +9462,9 @@ static PyMethodDef MGLTextureArray_methods[] = {
 };
 
 static PyGetSetDef MGLTextureCube_getset[] = {
+    {(char *)"repeat_x", (getter)MGLTextureCube_get_repeat_x, (setter)MGLTextureCube_set_repeat_x},
+    {(char *)"repeat_y", (getter)MGLTextureCube_get_repeat_y, (setter)MGLTextureCube_set_repeat_y},
+    {(char *)"repeat_z", (getter)MGLTextureCube_get_repeat_z, (setter)MGLTextureCube_set_repeat_z},
     {(char *)"filter", (getter)MGLTextureCube_get_filter, (setter)MGLTextureCube_set_filter},
     {(char *)"swizzle", (getter)MGLTextureCube_get_swizzle, (setter)MGLTextureCube_set_swizzle},
     {(char *)"compare_func", (getter)MGLTextureCube_get_compare_func, (setter)MGLTextureCube_set_compare_func},
