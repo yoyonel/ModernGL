@@ -1,5 +1,8 @@
 from array import array
 import struct
+from itertools import chain
+from string import Template
+
 import pytest
 
 
@@ -169,6 +172,54 @@ def test_texture_cube_image(ctx):
 
     for face in range(0, 6):
         assert struct.unpack("64B", tex_in.read(face)) == struct.unpack("64B", tex_out.read(face))
+
+
+def test_texture_cube_float_image(ctx):
+    if ctx.version_code < 430:
+        pytest.skip('compute shaders not supported')
+
+    width, height = 64, 64
+
+    # config for compute shader
+    w, h = (width, height)
+    gw, gh = 32, 32
+    nx, ny, nz = int(w / gw), int(h / gh), 6
+
+    program = ctx.compute_shader(Template(
+        """
+        #version 450        
+
+        #define X $X
+        #define Y $Y
+        
+        layout(local_size_x=X, local_size_y=Y, local_size_z=1) in;
+        
+        layout(rgba32f, binding=0) uniform imageCube img_in;
+        layout(rgba32f, binding=1) restrict writeonly uniform imageCube img_out;
+        
+        void main() {
+            for (int i = 0; i < 6; i++) {
+                vec4 fragment = imageLoad(img_in, ivec3(gl_LocalInvocationID.xy, i));
+                imageStore(img_out, ivec3(gl_GlobalInvocationID.xy, i), fragment);
+            }
+        }
+        """).substitute(X=gw, Y=gh)
+    )
+    size = (width, height)
+    internal_format = "RGBA"
+    buf_size = (width * height) * len(internal_format)
+    data = chain.from_iterable([([float(i), ] * buf_size) for i in range(1, 7)])
+    tex_in = ctx.texture_cube(size, len(internal_format), data=array('f', data), dtype="f4")
+    tex_out = ctx.texture_cube(size, len(internal_format), data=None, dtype="f4")
+
+    tex_in.bind_to_image(0, read=True, write=False)
+    tex_out.bind_to_image(1, read=False, write=True)
+    program.run(nx, ny, nz)
+
+    for face in range(0, 6):
+        unpack_tex_in = struct.unpack(f"{buf_size}f", tex_in.read(face))
+        unpack_tex_out = struct.unpack(f"{buf_size}f", tex_out.read(face))
+        assert unpack_tex_in == unpack_tex_out
 
 
 def test_ssbo_binding(ctx):

@@ -7852,6 +7852,38 @@ static PyObject * MGLContext_copy_framebuffer(MGLContext * self, PyObject * args
     Py_RETURN_NONE;
 }
 
+static PyObject * MGLContext_copy_texture_cube(MGLContext * self, PyObject * args) {
+    MGLTextureCube * dst_texture;
+    MGLTextureCube * src_texture;
+    int srcLevel;
+
+    int args_ok = PyArg_ParseTuple(
+        args,
+        "OOI",
+        &dst_texture,
+        &src_texture,
+        &srcLevel
+    );
+
+    if (!args_ok) {
+        return 0;
+    }
+
+    const GLMethods & gl = self->gl;
+
+    // https://registry.khronos.org/OpenGL-Refpages/gl4/html/glCopyImageSubData.xhtml
+    // srcLevel
+    //     The mipmap level to read from the source.
+
+    gl.CopyImageSubData(
+        src_texture->texture_obj, GL_TEXTURE_CUBE_MAP, srcLevel, 0, 0, 0,
+        dst_texture->texture_obj, GL_TEXTURE_CUBE_MAP, 0, 0, 0, 0,
+        dst_texture->width, dst_texture->height, 6
+    );
+
+    Py_RETURN_NONE;
+}
+
 static PyObject * MGLContext_detect_framebuffer(MGLContext * self, PyObject * args) {
     PyObject * glo;
 
@@ -9234,6 +9266,7 @@ static PyMethodDef MGLContext_methods[] = {
     {(char *)"finish", (PyCFunction)MGLContext_finish, METH_NOARGS},
     {(char *)"copy_buffer", (PyCFunction)MGLContext_copy_buffer, METH_VARARGS},
     {(char *)"copy_framebuffer", (PyCFunction)MGLContext_copy_framebuffer, METH_VARARGS},
+    {(char *)"copy_texture_cube", (PyCFunction)MGLContext_copy_texture_cube, METH_VARARGS},
     {(char *)"detect_framebuffer", (PyCFunction)MGLContext_detect_framebuffer, METH_VARARGS},
     {(char *)"clear_samplers", (PyCFunction)MGLContext_clear_samplers, METH_VARARGS},
 

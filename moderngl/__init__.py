@@ -523,7 +523,7 @@ class Program:
 
     def draw_mesh_tasks_indirect(self, buffer, offset=0, drawcount=1, stride=0):
         return self.mglo.draw_mesh_tasks_indirect(buffer.mglo, offset, drawcount, stride)
-    
+
     def draw_mesh_tasks_indirect_count(self, buffer, offset, drawcount_offset, maxdrawcount, stride=0):
         return self.mglo.draw_mesh_tasks_indirect_count(buffer.mglo, offset, drawcount_offset, maxdrawcount, stride)
 
@@ -1908,6 +1908,10 @@ class Context:
 
     def copy_framebuffer(self, dst, src):
         self.mglo.copy_framebuffer(dst.mglo, src.mglo)
+
+    def copy_texture_cube(self, dst, src, src_level=0):
+        # TODO: need to check if dst size match src size with src_level
+        self.mglo.copy_texture_cube(dst.mglo, src.mglo, src_level)
 
     def detect_framebuffer(self, glo=None):
         res = Framebuffer.__new__(Framebuffer)
